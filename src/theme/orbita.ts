@@ -200,6 +200,8 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
     components: {
       /* Titres display : chasse resserrée Orbita */
       heading: {
+        // titre de carte (maquette 12/19/24) : indépendant du niveau h3/h4 choisi en admin
+        'type:card': {fontSize: '18px', fontWeight: 'var(--font-weight-bold)', lineHeight: '1.3', letterSpacing: '-0.015em'},
         'type:display-1': {letterSpacing: '-0.025em'},
         'type:display-2': {letterSpacing: '-0.025em'},
         'type:display-3': {letterSpacing: '-0.02em'},
@@ -227,6 +229,25 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           lineHeight: 'inherit',
           letterSpacing: '-0.01em',
         },
+        // Grand nombre de carte (card-num) : Schibsted 800, couleur silo
+        'type:number': {
+          fontFamily: 'var(--font-family-heading)',
+          fontWeight: '800',
+          fontSize: 'clamp(40px, 3.4vw, 52px)',
+          lineHeight: '1',
+          letterSpacing: '-0.03em',
+          color: 'var(--color-text-accent)',
+        },
+        // Résultat chiffré des réalisations (work-result)
+        'type:result': {
+          fontSize: '12px',
+          fontWeight: 'var(--font-weight-semibold)',
+          letterSpacing: '0.02em',
+          color: 'light-dark(var(--color-text-accent), var(--color-highlight))',
+          whiteSpace: 'nowrap',
+        },
+        // Date d'article (post-date)
+        'type:date': {fontSize: '12px', color: 'var(--color-text-disabled)', whiteSpace: 'nowrap'},
         // Étiquette mono-like (ex-Geist Mono) : Geist, espacée
         'type:tag': {
           fontSize: '0.7rem',
@@ -464,6 +485,39 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         },
       },
       'input-clear-icon': {base: {width: '16px', height: '16px'}},
+
+      /* Chips Orbita (maquette .c-chip*) : variantes ajoutées au Badge Astryx */
+      badge: {
+        base: {borderRadius: '0'},
+        'variant:chip': {
+          height: '28px', padding: '0 11px', lineHeight: '1',
+          borderWidth: 'var(--border-width)', borderStyle: 'solid', borderColor: 'var(--color-border-emphasized)',
+          backgroundColor: 'var(--color-background-surface)', color: 'var(--color-text-secondary)',
+          fontSize: '11px', fontWeight: 'var(--font-weight-semibold)', letterSpacing: '0.03em',
+        },
+        'variant:chip-high': {
+          height: '28px', padding: '0 11px', lineHeight: '1', borderWidth: '0',
+          backgroundColor: 'color-mix(in srgb, var(--color-highlight) 18%, transparent)',
+          color: 'light-dark(var(--color-highlight-deep), var(--color-highlight))',
+          fontSize: '11px', fontWeight: 'var(--font-weight-semibold)', letterSpacing: '0.03em',
+        },
+        'variant:chip-accent': {
+          height: '28px', padding: '0 11px', lineHeight: '1', borderWidth: '0',
+          backgroundColor: 'light-dark(var(--color-accent-muted), rgba(255,255,255,.1))',
+          color: 'light-dark(var(--color-text-accent), var(--color-highlight))',
+          fontSize: '11px', fontWeight: 'var(--font-weight-semibold)', letterSpacing: '0.03em',
+        },
+        'variant:chip-cat': {
+          height: '28px', padding: '0 13px', lineHeight: '1', borderWidth: '0',
+          backgroundColor: 'var(--color-accent)', color: 'var(--color-on-accent)',
+          fontSize: '11px', fontWeight: 'var(--font-weight-medium)', letterSpacing: '0.16em', textTransform: 'uppercase',
+        },
+        'variant:chip-danger': {
+          height: '28px', padding: '0 11px', lineHeight: '1', borderWidth: '0',
+          backgroundColor: 'var(--color-error-muted)', color: 'var(--color-error)',
+          fontSize: '11px', fontWeight: 'var(--font-weight-semibold)', letterSpacing: '0.03em',
+        },
+      },
 
       card: {base: {borderRadius: '0'}},
 

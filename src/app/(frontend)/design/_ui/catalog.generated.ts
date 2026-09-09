@@ -120,7 +120,7 @@ export const CATALOG: CatalogCategory[] = [
         "label": "Card",
         "slug": "card",
         "href": "/design/composants/card",
-        "dressed": false,
+        "dressed": true,
         "parent": null,
         "doc": "card"
       },
@@ -343,7 +343,7 @@ export const CATALOG: CatalogCategory[] = [
         "label": "Badge",
         "slug": "badge",
         "href": "/design/composants/badge",
-        "dressed": false,
+        "dressed": true,
         "parent": null,
         "doc": "badge"
       },

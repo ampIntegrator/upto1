@@ -197,6 +197,12 @@ export const orbitaOrangeTheme = {
         "fontSize": "var(--text-display-3-size)",
         "lineHeight": "var(--text-display-3-leading)",
         "letterSpacing": "-0.02em"
+      },
+      "type:card": {
+        "fontSize": "18px",
+        "fontWeight": "var(--font-weight-bold)",
+        "lineHeight": "1.3",
+        "letterSpacing": "-0.015em"
       }
     },
     "text": {
@@ -256,6 +262,26 @@ export const orbitaOrangeTheme = {
         "fontSize": "inherit",
         "lineHeight": "inherit",
         "letterSpacing": "-0.01em"
+      },
+      "type:number": {
+        "fontFamily": "var(--font-family-heading)",
+        "fontWeight": "800",
+        "fontSize": "clamp(40px, 3.4vw, 52px)",
+        "lineHeight": "1",
+        "letterSpacing": "-0.03em",
+        "color": "var(--color-text-accent)"
+      },
+      "type:result": {
+        "fontSize": "12px",
+        "fontWeight": "var(--font-weight-semibold)",
+        "letterSpacing": "0.02em",
+        "color": "light-dark(var(--color-text-accent), var(--color-highlight))",
+        "whiteSpace": "nowrap"
+      },
+      "type:date": {
+        "fontSize": "12px",
+        "color": "var(--color-text-disabled)",
+        "whiteSpace": "nowrap"
       },
       "type:tag": {
         "fontSize": "0.7rem",
@@ -862,6 +888,69 @@ export const orbitaOrangeTheme = {
       "base": {
         "width": "16px",
         "height": "16px"
+      }
+    },
+    "badge": {
+      "base": {
+        "borderRadius": "0"
+      },
+      "variant:chip": {
+        "height": "28px",
+        "padding": "0 11px",
+        "lineHeight": "1",
+        "borderWidth": "var(--border-width)",
+        "borderStyle": "solid",
+        "borderColor": "var(--color-border-emphasized)",
+        "backgroundColor": "var(--color-background-surface)",
+        "color": "var(--color-text-secondary)",
+        "fontSize": "11px",
+        "fontWeight": "var(--font-weight-semibold)",
+        "letterSpacing": "0.03em"
+      },
+      "variant:chip-high": {
+        "height": "28px",
+        "padding": "0 11px",
+        "lineHeight": "1",
+        "borderWidth": "0",
+        "backgroundColor": "color-mix(in srgb, var(--color-highlight) 18%, transparent)",
+        "color": "light-dark(var(--color-highlight-deep), var(--color-highlight))",
+        "fontSize": "11px",
+        "fontWeight": "var(--font-weight-semibold)",
+        "letterSpacing": "0.03em"
+      },
+      "variant:chip-accent": {
+        "height": "28px",
+        "padding": "0 11px",
+        "lineHeight": "1",
+        "borderWidth": "0",
+        "backgroundColor": "light-dark(var(--color-accent-muted), rgba(255,255,255,.1))",
+        "color": "light-dark(var(--color-text-accent), var(--color-highlight))",
+        "fontSize": "11px",
+        "fontWeight": "var(--font-weight-semibold)",
+        "letterSpacing": "0.03em"
+      },
+      "variant:chip-cat": {
+        "height": "28px",
+        "padding": "0 13px",
+        "lineHeight": "1",
+        "borderWidth": "0",
+        "backgroundColor": "var(--color-accent)",
+        "color": "var(--color-on-accent)",
+        "fontSize": "11px",
+        "fontWeight": "var(--font-weight-medium)",
+        "letterSpacing": "0.16em",
+        "textTransform": "uppercase"
+      },
+      "variant:chip-danger": {
+        "height": "28px",
+        "padding": "0 11px",
+        "lineHeight": "1",
+        "borderWidth": "0",
+        "backgroundColor": "var(--color-error-muted)",
+        "color": "var(--color-error)",
+        "fontSize": "11px",
+        "fontWeight": "var(--font-weight-semibold)",
+        "letterSpacing": "0.03em"
       }
     },
     "card": {

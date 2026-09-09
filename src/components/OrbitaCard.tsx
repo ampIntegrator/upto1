@@ -1,0 +1,138 @@
+'use client';
+
+/**
+ * OrbitaCard — la carte du site, un seul châssis et trois préréglages
+ * (maquettes 12 cardBlocks / 14 mosaic, 19 blogCards, 24 portfolioCards).
+ *
+ *   preset="bloc"        média (image, icône, nombre ou rien) + titre centré
+ *                        avec ornement + texte + barre d'action
+ *   preset="article"     image 16/10, chip + date, titre (2 lignes), barre d'action
+ *   preset="realisation" image 16/10, chip + résultat, titre, client · ville, barre
+ *
+ * Le titre est un Heading Astryx de type `card` : son style ne dépend pas du
+ * niveau (h3 par défaut, h4 possible en admin). L'ornement au losange fait
+ * partie du titre (preset bloc). Le survol de la carte remplit la barre
+ * d'action ; en article / réalisation la carte entière est cliquable.
+ * Nuit : poser la carte dans un <Theme mode="dark">.
+ */
+import {Heading} from '@astryxdesign/core/Heading';
+import {Text} from '@astryxdesign/core/Text';
+import NextLink from 'next/link';
+import React from 'react';
+
+import {ArrowRightIcon, NUCLEO_ICONS, PinIcon, type NucleoIconKey} from '@/theme/icons/nucleo';
+import {IconSquare} from './IconSquare';
+import {OrbitaChip, type OrbitaChipTone} from './OrbitaChip';
+import styles from './OrbitaCard.module.css';
+
+export type OrbitaCardMedia =
+  | {type: 'image'; src: string; alt?: string}
+  | {type: 'icon'; iconKey: NucleoIconKey}
+  | {type: 'number'; value: string; sign?: string}
+  | {type: 'none'};
+
+export type OrbitaCardProps = {
+  preset?: 'bloc' | 'article' | 'realisation';
+  media?: OrbitaCardMedia;
+  title: string;
+  /** niveau HTML du titre (SEO) ; l'apparence ne change pas */
+  level?: 3 | 4;
+  /** bloc : titre en couleur silo (cas « titre seul ») */
+  accentTitle?: boolean;
+  text?: string;
+  /** article / réalisation : chip de catégorie */
+  chip?: {label: string; tone?: OrbitaChipTone};
+  /** article : date affichée */
+  date?: string;
+  /** réalisation : résultat chiffré (« +34 % closing ») */
+  result?: string;
+  /** réalisation : client et ville */
+  client?: {name: string; location?: string};
+  /** barre d'action */
+  cta?: {label: string; href: string};
+  style?: React.CSSProperties;
+};
+
+export function OrbitaCard({preset = 'bloc', media = {type: 'none'}, title, level = 3, accentTitle, text, chip, date, result, client, cta, style}: OrbitaCardProps) {
+  const editorial = preset !== 'bloc';
+  const href = cta?.href ?? '#';
+
+  const mediaNode = (() => {
+    switch (media.type) {
+      case 'image':
+        return editorial ? (
+          <div className={styles.postImg}>
+            <img src={media.src} alt={media.alt ?? ''} loading="lazy" />
+          </div>
+        ) : (
+          <div className={styles.img} role={media.alt ? 'img' : undefined} aria-label={media.alt} style={{backgroundImage: `url("${media.src}")`}} />
+        );
+      case 'icon':
+        return <IconSquare iconKey={media.iconKey} size={64} style={{alignSelf: 'center', marginBottom: 28}} />;
+      case 'number':
+        return (
+          <div className={styles.numberMedia}>
+            <Text type="number">
+              {media.value}
+              {media.sign ? <span className={styles.sign}>{media.sign}</span> : null}
+            </Text>
+          </div>
+        );
+      default:
+        return null;
+    }
+  })();
+
+  const titleNode = editorial ? (
+    <NextLink href={href} className={styles.titleLink}>
+      {title}
+    </NextLink>
+  ) : (
+    title
+  );
+
+  return (
+    <article className={styles.card} data-preset={preset} style={style}>
+      <div className={styles.body}>
+        {media.type === 'image' ? mediaNode : null}
+        <div className={styles.inner}>
+          {media.type !== 'image' ? mediaNode : null}
+          {editorial && (chip || date || result) ? (
+            <div className={styles.meta}>
+              {chip ? <OrbitaChip label={chip.label} tone={chip.tone ?? 'high'} /> : <span />}
+              {preset === 'article' && date ? <Text type="date">{date}</Text> : null}
+              {preset === 'realisation' && result ? <Text type="result">{result}</Text> : null}
+            </div>
+          ) : null}
+          <Heading level={level} type="card" color={accentTitle && !editorial ? 'accent' : 'primary'} className={styles.title}>
+            {titleNode}
+          </Heading>
+          {!editorial ? (
+            <div className={styles.ornament} aria-hidden="true">
+              <i />
+            </div>
+          ) : null}
+          {text ? <p className={styles.text}>{text}</p> : null}
+          {preset === 'realisation' && client ? (
+            <div className={styles.client}>
+              <PinIcon />
+              <span>
+                {client.name}
+                {client.location ? ` · ${client.location}` : ''}
+              </span>
+            </div>
+          ) : null}
+        </div>
+      </div>
+      {cta ? (
+        <NextLink href={cta.href} className={styles.cta} tabIndex={editorial ? -1 : undefined} aria-hidden={editorial || undefined}>
+          <span>{cta.label}</span>
+          <ArrowRightIcon />
+        </NextLink>
+      ) : null}
+    </article>
+  );
+}
+
+/** Icônes de contenu proposées par défaut à l'éditeur pour le média « icône ». */
+export const CARD_ICON_KEYS = Object.keys(NUCLEO_ICONS) as NucleoIconKey[];

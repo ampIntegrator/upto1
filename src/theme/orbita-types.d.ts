@@ -13,5 +13,11 @@ declare module '@astryxdesign/core/theme' {
     serif: true;
     /** Étiquette technique espacée (ex-Geist Mono) */
     tag: true;
+    /** Grand nombre de carte, Schibsted 800, couleur silo */
+    number: true;
+    /** Résultat chiffré d'une réalisation */
+    result: true;
+    /** Date d'article */
+    date: true;
   }
 }

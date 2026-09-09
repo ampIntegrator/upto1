@@ -1,0 +1,146 @@
+/*
+ * OrbitaCard — châssis unique des cartes (maquettes 12 cardBlocks, 14 mosaic,
+ * 19 blogCards, 24 portfolioCards) : média, métadonnées, titre + ornement,
+ * texte, barre d'action. Le survol de la carte remplit la barre d'action.
+ */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--color-background-surface);
+  transition: box-shadow var(--duration-medium) var(--ease-standard);
+}
+.body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  border: var(--border-width) solid var(--color-border);
+  border-bottom: 0;
+}
+.inner {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  padding: var(--spacing-6);
+}
+.card[data-preset='article'] .inner,
+.card[data-preset='realisation'] .inner { padding: 15px 18px 13px; }
+
+/* médias */
+.img {
+  height: 230px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: var(--color-background-muted);
+}
+.postImg {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: light-dark(var(--color-background-muted), rgba(255, 255, 255, 0.06));
+}
+.postImg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.iconMedia { align-self: center; margin-bottom: 28px; }
+.numberMedia { text-align: center; margin-bottom: 16px; }
+.sign { color: light-dark(var(--color-highlight-deep), var(--color-highlight)); font-size: 0.62em; font-weight: 600; letter-spacing: 0; }
+
+/* métadonnées (article / réalisation) */
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+/* titre + ornement */
+.title { margin: 0; }
+.card[data-preset='bloc'] .title { text-align: center; margin-bottom: 10px; }
+.card[data-preset='article'] .title,
+.card[data-preset='realisation'] .title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.titleLink {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--duration-medium) var(--ease-standard);
+}
+/* toute la carte cliquable via le lien du titre (article / réalisation) */
+.titleLink::after { content: ''; position: absolute; inset: 0; z-index: 2; }
+.card:hover .titleLink { color: var(--color-text-accent); }
+.card[data-preset='article']:hover,
+.card[data-preset='realisation']:hover { box-shadow: 0 20px 44px -20px rgba(12, 20, 40, 0.32); }
+
+.ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin: 0 auto 16px;
+}
+.ornament::before,
+.ornament::after { content: ''; width: 30px; height: 1px; background: var(--color-border-emphasized); }
+.ornament i {
+  display: block;
+  width: 6px;
+  height: 6px;
+  background: var(--color-highlight);
+  transform: rotate(45deg);
+  animation: orbitaSepMorph 4.8s ease-in-out infinite;
+}
+@keyframes orbitaSepMorph {
+  0%   { transform: rotate(45deg);  border-radius: 0;   background: var(--color-highlight); }
+  20%  { transform: rotate(117deg); border-radius: 3px; background: var(--color-highlight); }
+  40%  { transform: rotate(189deg); border-radius: 0;   background: var(--color-accent); }
+  60%  { transform: rotate(261deg); border-radius: 3px; background: var(--color-accent); }
+  80%  { transform: rotate(333deg); border-radius: 0;   background: var(--color-highlight); }
+  100% { transform: rotate(405deg); border-radius: 3px; background: var(--color-highlight); }
+}
+@media (prefers-reduced-motion: reduce) { .ornament i { animation: none; } }
+
+.text {
+  flex: 1 1 auto;
+  margin: 0 0 20px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+.client {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 11px;
+  font-size: 13px;
+  color: var(--color-text-disabled);
+}
+.client svg { width: 14px; height: 14px; flex: 0 0 auto; }
+
+/* barre d'action : bordée, couleur silo, se remplit au survol de la carte */
+.cta {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 24px;
+  border: var(--border-width) solid var(--color-border);
+  color: var(--color-text-accent);
+  font-size: 13.5px;
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color var(--duration-medium) var(--ease-standard),
+    color var(--duration-medium) var(--ease-standard),
+    border-color var(--duration-medium) var(--ease-standard);
+}
+.cta svg { width: 16px; height: 16px; transition: transform var(--duration-medium) var(--ease-standard); }
+@media (hover: hover) {
+  .card:hover .cta { background: var(--color-accent); color: var(--color-on-accent); border-color: var(--color-accent); }
+  .card:hover .cta svg { transform: translateX(3px); }
+}

@@ -14,11 +14,22 @@ declare module '@astryxdesign/core/Heading' {
     'display-1': true;
     'display-2': true;
     'display-3': true;
+    'card': true;
   }
 }
 
 declare module '@astryxdesign/core/Button' {
   interface ButtonVariantMap {
     'high': true;
+  }
+}
+
+declare module '@astryxdesign/core/Badge' {
+  interface BadgeVariantMap {
+    'chip': true;
+    'chip-high': true;
+    'chip-accent': true;
+    'chip-cat': true;
+    'chip-danger': true;
   }
 }
