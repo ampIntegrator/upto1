@@ -138,7 +138,7 @@ export const CATALOG: CatalogCategory[] = [
         "label": "Clickable Card",
         "slug": "clickable-card",
         "href": "/design/composants/clickable-card",
-        "dressed": false,
+        "dressed": true,
         "parent": null,
         "doc": "clickable-card"
       },
