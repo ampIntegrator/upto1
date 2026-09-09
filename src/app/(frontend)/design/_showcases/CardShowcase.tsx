@@ -52,12 +52,35 @@ export default function CardShowcase() {
         Un seul châssis de carte, trois préréglages. Bloc : quatre médias au choix, titre centré avec son ornement au losange, texte, barre d'action qui se remplit au survol. Article et réalisation : image 16/10, métadonnées, titre sur deux lignes, carte entière cliquable. Le titre est un Heading de type card : h3 ou h4 en admin, même rendu.
       </Text>
 
-      <Section title="Bloc · quatre médias" note="Image pleine largeur, icône, nombre, titre seul en couleur silo.">
+      <Section title="Bloc · image" note="Image pleine largeur de 230 px, titre centré avec son ornement, texte, barre d'action.">
         <Grid columns={{minWidth: 220, max: 4}} gap={4}>
-          <OrbitaCard media={{type: 'image', src: IMG('bloc1')}} title="Chiffrage instantané" text={LOREM} cta={{label: 'Découvrir', href: '#'}} />
-          <OrbitaCard media={{type: 'icon', iconKey: 'clipboard-check'}} title="Devis en 20 minutes" text={LOREM} cta={{label: 'Découvrir', href: '#'}} />
-          <OrbitaCard media={{type: 'number', value: '850', sign: '+'}} title="Courtiers équipés" text={LOREM} cta={{label: 'Découvrir', href: '#'}} />
-          <OrbitaCard media={{type: 'none'}} accentTitle title="Suivi de chantier" text={LOREM} cta={{label: 'Découvrir', href: '#'}} />
+          {[['bloc-a', 'Chiffrage instantané'], ['bloc-b', 'Suivi de chantier'], ['bloc-c', 'Devis client'], ['bloc-d', 'Maintenance multitechnique']].map(([seed, t]) => (
+            <OrbitaCard key={seed} media={{type: 'image', src: IMG(seed)}} title={t} text={LOREM} cta={{label: 'Découvrir', href: '#'}} />
+          ))}
+        </Grid>
+      </Section>
+
+      <Section title="Bloc · icône" note="Icône Nucleo dans un carré de 32 px, couleur silo.">
+        <Grid columns={{minWidth: 220, max: 4}} gap={4}>
+          {([['clipboard-check', 'Chiffrage instantané'], ['gauge', 'Suivi des coûts'], ['table', 'Devis structurés'], ['shield', 'Données sécurisées']] as const).map(([k, t]) => (
+            <OrbitaCard key={k} media={{type: 'icon', iconKey: k}} title={t} text={LOREM} cta={{label: 'Découvrir', href: '#'}} />
+          ))}
+        </Grid>
+      </Section>
+
+      <Section title="Bloc · nombre" note="Grand nombre en Schibsted 800 couleur silo, unité en highlight.">
+        <Grid columns={{minWidth: 220, max: 4}} gap={4}>
+          {[['850', '+', 'Courtiers équipés'], ['34', '%', 'De closing en plus'], ['20', 'min', 'Par chiffrage'], ['48', 'h', 'De délai moyen']].map(([v, sign, t]) => (
+            <OrbitaCard key={t} media={{type: 'number', value: v, sign}} title={t} text={LOREM} cta={{label: 'Découvrir', href: '#'}} />
+          ))}
+        </Grid>
+      </Section>
+
+      <Section title="Bloc · titre seul" note="Sans média : le titre passe en couleur silo.">
+        <Grid columns={{minWidth: 220, max: 4}} gap={4}>
+          {['Architectes', "Maîtres d'œuvre", 'Promoteurs', 'Bailleurs sociaux'].map((t) => (
+            <OrbitaCard key={t} media={{type: 'none'}} accentTitle title={t} text={LOREM} cta={{label: 'Découvrir', href: '#'}} />
+          ))}
         </Grid>
       </Section>
 

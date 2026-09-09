@@ -68,7 +68,7 @@ export function OrbitaCard({preset = 'bloc', media = {type: 'none'}, title, leve
           <div className={styles.img} role={media.alt ? 'img' : undefined} aria-label={media.alt} style={{backgroundImage: `url("${media.src}")`}} />
         );
       case 'icon':
-        return <IconSquare iconKey={media.iconKey} size={64} style={{alignSelf: 'center', marginBottom: 28}} />;
+        return <IconSquare iconKey={media.iconKey} size={32} style={{alignSelf: 'center', marginBottom: 24}} />;
       case 'number':
         return (
           <div className={styles.numberMedia}>
