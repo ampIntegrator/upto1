@@ -296,7 +296,7 @@ export const orbitaBriqueTheme = {
         "borderStyle": "solid",
         "borderColor": "light-dark(var(--color-border-emphasized), rgba(255,255,255,.5))",
         "backgroundColor": "light-dark(var(--color-background-surface), rgba(255,255,255,.04))",
-        "color": "var(--color-text-accent)",
+        "color": "light-dark(var(--color-text-accent), #FFFFFF)",
         ":hover": {
           "borderColor": "light-dark(var(--color-accent), #FFFFFF)",
           "color": "light-dark(var(--color-accent), #FFFFFF)",

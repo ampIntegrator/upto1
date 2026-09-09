@@ -270,8 +270,8 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           borderStyle: 'solid',
           borderColor: 'light-dark(var(--color-border-emphasized), rgba(255,255,255,.5))',
           backgroundColor: 'light-dark(var(--color-background-surface), rgba(255,255,255,.04))',
-          // texte et icône couleur silo au repos (éclaircie en nuit), bordure sombre
-          color: 'var(--color-text-accent)',
+          // texte et icône couleur silo au repos ; sur nuit, blanc (maquette .on-dark .c-btn-ghost)
+          color: 'light-dark(var(--color-text-accent), #FFFFFF)',
           ':hover': {
             borderColor: 'light-dark(var(--color-accent), #FFFFFF)',
             color: 'light-dark(var(--color-accent), #FFFFFF)',
