@@ -18,6 +18,8 @@
   border: var(--border-width) solid var(--color-border);
   border-bottom: 0;
 }
+/* sans barre d'action, le corps ferme la carte */
+.card:not([data-link]) .body { border-bottom: var(--border-width) solid var(--color-border); }
 .inner {
   display: flex;
   flex-direction: column;
