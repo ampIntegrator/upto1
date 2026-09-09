@@ -44,8 +44,8 @@
   --primary: #40916C;
   --primary-deep: #2F6E51;
   --primary-soft: rgba(64,145,108,.12);
-  --highlight: #90D150;
-  --highlight-deep: #5AA81F;
+  --highlight: #F5B841;
+  --highlight-deep: #B8800A;
   --night: #0E2C2E;
 }
 
@@ -55,8 +55,8 @@
   --primary: #DC5A20;
   --primary-deep: #B5470F;
   --primary-soft: rgba(220,90,32,.12);
-  --highlight: #F5C403;
-  --highlight-deep: #C99700;
+  --highlight: #38BDF8;
+  --highlight-deep: #0F7FC0;
   --night: #2A1409;
 }
 
@@ -66,8 +66,8 @@
   --primary: #8B47BE;
   --primary-deep: #6E2FA0;
   --primary-soft: rgba(139,71,190,.12);
-  --highlight: #C77DFF;
-  --highlight-deep: #9D4EDD;
+  --highlight: #A3E635;
+  --highlight-deep: #5C9A0A;
   --night: #241038;
 }
 
@@ -77,8 +77,8 @@
   --primary: #C2362F;
   --primary-deep: #9F2620;
   --primary-soft: rgba(194,54,47,.11);
-  --highlight: #FF8A5B;
-  --highlight-deep: #C24A22;
+  --highlight: #2ED3C3;
+  --highlight-deep: #0E9C8F;
   --night: #2A1012;
 }
 
@@ -88,8 +88,8 @@
   --primary: #C42E86;
   --primary-deep: #9E2068;
   --primary-soft: rgba(196,46,134,.11);
-  --highlight: #FF7AC4;
-  --highlight-deep: #C42E86;
+  --highlight: #4ADE9B;
+  --highlight-deep: #158F5E;
   --night: #2A0E22;
 }
 
@@ -99,8 +99,8 @@
   --primary: #C99016;
   --primary-deep: #9E6F08;
   --primary-soft: rgba(201,144,22,.12);
-  --highlight: #F5CE5B;
-  --highlight-deep: #B5810F;
+  --highlight: #4DA3F0;
+  --highlight-deep: #1F6FCC;
   --night: #241B06;
 }
 
