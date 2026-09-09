@@ -52,18 +52,15 @@ export function DesignShell({children}: {children: React.ReactNode}) {
             ))}
           </SideNavSection>
           <SideNavSection title="Composants">
-            {CATALOG.map((cat) => {
-              const inside = pathname === cat.href || pathname.startsWith(cat.href + '/');
-              return (
-                <SideNavItem key={cat.slug} label={cat.label} href={cat.href} isSelected={pathname === cat.href}>
-                  {inside
-                    ? cat.items.map((it) => (
-                        <SideNavItem key={it.slug} label={it.label} href={it.href} isSelected={pathname === it.href} />
-                      ))
-                    : null}
-                </SideNavItem>
-              );
-            })}
+            <SideNavItem label="Vue d'ensemble" href="/design/composants" isSelected={pathname === '/design/composants'} />
+            {CATALOG.map((cat) => (
+              <React.Fragment key={cat.slug}>
+                <span className={styles.groupLabel}>{cat.label}</span>
+                {cat.items.map((it) => (
+                  <SideNavItem key={it.slug} label={it.label} href={it.href} isSelected={pathname === it.href} />
+                ))}
+              </React.Fragment>
+            ))}
           </SideNavSection>
         </SideNav>
       }>

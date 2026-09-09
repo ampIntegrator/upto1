@@ -10,3 +10,16 @@
   color: var(--color-text-accent) !important;
   line-height: 1.2 !important;
 }
+
+/* Titres de catégorie dans la liste des composants : texte simple, non cliquable
+   (comme astryx.atmeta.com/components) */
+.groupLabel {
+  display: block;
+  margin: var(--spacing-5) 0 var(--spacing-1);
+  padding-inline: var(--spacing-3);
+  font-size: 11.5px;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}

@@ -6,13 +6,13 @@ export const CATALOG: CatalogCategory[] = [
     "slug": "actions",
     "label": "Actions",
     "lead": "Boutons, menus et contrôles qui déclenchent une action.",
-    "href": "/design/composants/actions",
+    "href": "/design/composants#actions",
     "items": [
       {
         "name": "Button",
         "label": "Button",
         "slug": "button",
-        "href": "/design/composants/actions/button",
+        "href": "/design/composants/button",
         "dressed": true,
         "parent": null,
         "doc": "button"
@@ -21,7 +21,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "ButtonGroup",
         "label": "Button Group",
         "slug": "button-group",
-        "href": "/design/composants/actions/button-group",
+        "href": "/design/composants/button-group",
         "dressed": false,
         "parent": null,
         "doc": "button-group"
@@ -30,7 +30,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "DropdownMenu",
         "label": "Dropdown Menu",
         "slug": "dropdown-menu",
-        "href": "/design/composants/actions/dropdown-menu",
+        "href": "/design/composants/dropdown-menu",
         "dressed": false,
         "parent": null,
         "doc": "dropdown-menu"
@@ -39,7 +39,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "DropdownMenuItem",
         "label": "Dropdown Menu Item",
         "slug": "dropdown-menu-item",
-        "href": "/design/composants/actions/dropdown-menu-item",
+        "href": "/design/composants/dropdown-menu-item",
         "dressed": false,
         "parent": "DropdownMenu",
         "doc": "dropdown-menu"
@@ -48,7 +48,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "IconButton",
         "label": "Icon Button",
         "slug": "icon-button",
-        "href": "/design/composants/actions/icon-button",
+        "href": "/design/composants/icon-button",
         "dressed": false,
         "parent": null,
         "doc": "icon-button"
@@ -57,7 +57,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Link",
         "label": "Link",
         "slug": "link",
-        "href": "/design/composants/actions/link",
+        "href": "/design/composants/link",
         "dressed": false,
         "parent": null,
         "doc": "link"
@@ -66,7 +66,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "MoreMenu",
         "label": "More Menu",
         "slug": "more-menu",
-        "href": "/design/composants/actions/more-menu",
+        "href": "/design/composants/more-menu",
         "dressed": false,
         "parent": null,
         "doc": "more-menu"
@@ -75,7 +75,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "SegmentedControl",
         "label": "Segmented Control",
         "slug": "segmented-control",
-        "href": "/design/composants/actions/segmented-control",
+        "href": "/design/composants/segmented-control",
         "dressed": false,
         "parent": null,
         "doc": "segmented-control"
@@ -84,7 +84,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "SegmentedControlItem",
         "label": "Segmented Control Item",
         "slug": "segmented-control-item",
-        "href": "/design/composants/actions/segmented-control-item",
+        "href": "/design/composants/segmented-control-item",
         "dressed": false,
         "parent": "SegmentedControl",
         "doc": "segmented-control"
@@ -93,7 +93,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "ToggleButton",
         "label": "Toggle Button",
         "slug": "toggle-button",
-        "href": "/design/composants/actions/toggle-button",
+        "href": "/design/composants/toggle-button",
         "dressed": false,
         "parent": null,
         "doc": "toggle-button"
@@ -102,7 +102,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "ToggleButtonGroup",
         "label": "Toggle Button Group",
         "slug": "toggle-button-group",
-        "href": "/design/composants/actions/toggle-button-group",
+        "href": "/design/composants/toggle-button-group",
         "dressed": false,
         "parent": null,
         "doc": "toggle-button-group"
@@ -113,13 +113,13 @@ export const CATALOG: CatalogCategory[] = [
     "slug": "conteneurs",
     "label": "Conteneurs",
     "lead": "Cartes et surfaces qui regroupent du contenu.",
-    "href": "/design/composants/conteneurs",
+    "href": "/design/composants#conteneurs",
     "items": [
       {
         "name": "Card",
         "label": "Card",
         "slug": "card",
-        "href": "/design/composants/conteneurs/card",
+        "href": "/design/composants/card",
         "dressed": false,
         "parent": null,
         "doc": "card"
@@ -128,7 +128,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Carousel",
         "label": "Carousel",
         "slug": "carousel",
-        "href": "/design/composants/conteneurs/carousel",
+        "href": "/design/composants/carousel",
         "dressed": false,
         "parent": null,
         "doc": "carousel"
@@ -137,7 +137,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "ClickableCard",
         "label": "Clickable Card",
         "slug": "clickable-card",
-        "href": "/design/composants/conteneurs/clickable-card",
+        "href": "/design/composants/clickable-card",
         "dressed": false,
         "parent": null,
         "doc": "clickable-card"
@@ -146,7 +146,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Collapsible",
         "label": "Collapsible",
         "slug": "collapsible",
-        "href": "/design/composants/conteneurs/collapsible",
+        "href": "/design/composants/collapsible",
         "dressed": false,
         "parent": null,
         "doc": "collapsible"
@@ -155,7 +155,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "CollapsibleGroup",
         "label": "Collapsible Group",
         "slug": "collapsible-group",
-        "href": "/design/composants/conteneurs/collapsible-group",
+        "href": "/design/composants/collapsible-group",
         "dressed": false,
         "parent": "Collapsible",
         "doc": "collapsible"
@@ -164,7 +164,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "SelectableCard",
         "label": "Selectable Card",
         "slug": "selectable-card",
-        "href": "/design/composants/conteneurs/selectable-card",
+        "href": "/design/composants/selectable-card",
         "dressed": false,
         "parent": null,
         "doc": "selectable-card"
@@ -175,13 +175,13 @@ export const CATALOG: CatalogCategory[] = [
     "slug": "contenu",
     "label": "Contenu",
     "lead": "Texte, titres, médias et éléments éditoriaux.",
-    "href": "/design/composants/contenu",
+    "href": "/design/composants#contenu",
     "items": [
       {
         "name": "Avatar",
         "label": "Avatar",
         "slug": "avatar",
-        "href": "/design/composants/contenu/avatar",
+        "href": "/design/composants/avatar",
         "dressed": false,
         "parent": null,
         "doc": "avatar"
@@ -190,7 +190,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "AvatarGroup",
         "label": "Avatar Group",
         "slug": "avatar-group",
-        "href": "/design/composants/contenu/avatar-group",
+        "href": "/design/composants/avatar-group",
         "dressed": false,
         "parent": null,
         "doc": "avatar-group"
@@ -199,7 +199,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "AvatarGroupOverflow",
         "label": "Avatar Group Overflow",
         "slug": "avatar-group-overflow",
-        "href": "/design/composants/contenu/avatar-group-overflow",
+        "href": "/design/composants/avatar-group-overflow",
         "dressed": false,
         "parent": "AvatarGroup",
         "doc": "avatar-group"
@@ -208,7 +208,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "AvatarStatusDot",
         "label": "Avatar Status Dot",
         "slug": "avatar-status-dot",
-        "href": "/design/composants/contenu/avatar-status-dot",
+        "href": "/design/composants/avatar-status-dot",
         "dressed": false,
         "parent": "Avatar",
         "doc": "avatar"
@@ -217,7 +217,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Blockquote",
         "label": "Blockquote",
         "slug": "blockquote",
-        "href": "/design/composants/contenu/blockquote",
+        "href": "/design/composants/blockquote",
         "dressed": false,
         "parent": null,
         "doc": "blockquote"
@@ -226,7 +226,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Citation",
         "label": "Citation",
         "slug": "citation",
-        "href": "/design/composants/contenu/citation",
+        "href": "/design/composants/citation",
         "dressed": false,
         "parent": null,
         "doc": "citation"
@@ -235,7 +235,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Code",
         "label": "Code",
         "slug": "code",
-        "href": "/design/composants/contenu/code",
+        "href": "/design/composants/code",
         "dressed": false,
         "parent": null,
         "doc": "code"
@@ -244,7 +244,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "CodeBlock",
         "label": "Code Block",
         "slug": "code-block",
-        "href": "/design/composants/contenu/code-block",
+        "href": "/design/composants/code-block",
         "dressed": false,
         "parent": null,
         "doc": "code-block"
@@ -253,7 +253,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "EmptyState",
         "label": "Empty State",
         "slug": "empty-state",
-        "href": "/design/composants/contenu/empty-state",
+        "href": "/design/composants/empty-state",
         "dressed": false,
         "parent": null,
         "doc": "empty-state"
@@ -262,7 +262,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Heading",
         "label": "Heading",
         "slug": "heading",
-        "href": "/design/composants/contenu/heading",
+        "href": "/design/composants/heading",
         "dressed": false,
         "parent": null,
         "doc": "heading"
@@ -271,7 +271,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Icon",
         "label": "Icon",
         "slug": "icon",
-        "href": "/design/composants/contenu/icon",
+        "href": "/design/composants/icon",
         "dressed": false,
         "parent": null,
         "doc": "icon"
@@ -280,7 +280,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Kbd",
         "label": "Kbd",
         "slug": "kbd",
-        "href": "/design/composants/contenu/kbd",
+        "href": "/design/composants/kbd",
         "dressed": false,
         "parent": null,
         "doc": "kbd"
@@ -289,7 +289,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Markdown",
         "label": "Markdown",
         "slug": "markdown",
-        "href": "/design/composants/contenu/markdown",
+        "href": "/design/composants/markdown",
         "dressed": false,
         "parent": null,
         "doc": "markdown"
@@ -298,7 +298,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Text",
         "label": "Text",
         "slug": "text",
-        "href": "/design/composants/contenu/text",
+        "href": "/design/composants/text",
         "dressed": false,
         "parent": null,
         "doc": "text"
@@ -307,7 +307,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Thumbnail",
         "label": "Thumbnail",
         "slug": "thumbnail",
-        "href": "/design/composants/contenu/thumbnail",
+        "href": "/design/composants/thumbnail",
         "dressed": false,
         "parent": null,
         "doc": "thumbnail"
@@ -316,7 +316,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Timestamp",
         "label": "Timestamp",
         "slug": "timestamp",
-        "href": "/design/composants/contenu/timestamp",
+        "href": "/design/composants/timestamp",
         "dressed": false,
         "parent": null,
         "doc": "timestamp"
@@ -325,7 +325,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Token",
         "label": "Token",
         "slug": "token",
-        "href": "/design/composants/contenu/token",
+        "href": "/design/composants/token",
         "dressed": false,
         "parent": null,
         "doc": "token"
@@ -336,13 +336,13 @@ export const CATALOG: CatalogCategory[] = [
     "slug": "retours",
     "label": "Retours & statuts",
     "lead": "Signaler un état, un progrès ou une information.",
-    "href": "/design/composants/retours",
+    "href": "/design/composants#retours",
     "items": [
       {
         "name": "Badge",
         "label": "Badge",
         "slug": "badge",
-        "href": "/design/composants/retours/badge",
+        "href": "/design/composants/badge",
         "dressed": false,
         "parent": null,
         "doc": "badge"
@@ -351,7 +351,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Banner",
         "label": "Banner",
         "slug": "banner",
-        "href": "/design/composants/retours/banner",
+        "href": "/design/composants/banner",
         "dressed": false,
         "parent": null,
         "doc": "banner"
@@ -360,7 +360,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "ProgressBar",
         "label": "Progress Bar",
         "slug": "progress-bar",
-        "href": "/design/composants/retours/progress-bar",
+        "href": "/design/composants/progress-bar",
         "dressed": false,
         "parent": null,
         "doc": "progress-bar"
@@ -369,7 +369,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Skeleton",
         "label": "Skeleton",
         "slug": "skeleton",
-        "href": "/design/composants/retours/skeleton",
+        "href": "/design/composants/skeleton",
         "dressed": false,
         "parent": null,
         "doc": "skeleton"
@@ -378,7 +378,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Spinner",
         "label": "Spinner",
         "slug": "spinner",
-        "href": "/design/composants/retours/spinner",
+        "href": "/design/composants/spinner",
         "dressed": false,
         "parent": null,
         "doc": "spinner"
@@ -387,7 +387,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "StatusDot",
         "label": "Status Dot",
         "slug": "status-dot",
-        "href": "/design/composants/retours/status-dot",
+        "href": "/design/composants/status-dot",
         "dressed": false,
         "parent": null,
         "doc": "status-dot"
@@ -396,7 +396,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Toast",
         "label": "Toast",
         "slug": "toast",
-        "href": "/design/composants/retours/toast",
+        "href": "/design/composants/toast",
         "dressed": false,
         "parent": null,
         "doc": "toast"
@@ -407,13 +407,13 @@ export const CATALOG: CatalogCategory[] = [
     "slug": "formulaires",
     "label": "Formulaires",
     "lead": "Champs, sélecteurs et contrôles de saisie.",
-    "href": "/design/composants/formulaires",
+    "href": "/design/composants#formulaires",
     "items": [
       {
         "name": "Calendar",
         "label": "Calendar",
         "slug": "calendar",
-        "href": "/design/composants/formulaires/calendar",
+        "href": "/design/composants/calendar",
         "dressed": false,
         "parent": null,
         "doc": "calendar"
@@ -422,7 +422,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "CheckboxInput",
         "label": "Checkbox Input",
         "slug": "checkbox-input",
-        "href": "/design/composants/formulaires/checkbox-input",
+        "href": "/design/composants/checkbox-input",
         "dressed": true,
         "parent": null,
         "doc": "checkbox-input"
@@ -431,7 +431,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "CheckboxList",
         "label": "Checkbox List",
         "slug": "checkbox-list",
-        "href": "/design/composants/formulaires/checkbox-list",
+        "href": "/design/composants/checkbox-list",
         "dressed": false,
         "parent": null,
         "doc": "checkbox-list"
@@ -440,7 +440,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "CheckboxListItem",
         "label": "Checkbox List Item",
         "slug": "checkbox-list-item",
-        "href": "/design/composants/formulaires/checkbox-list-item",
+        "href": "/design/composants/checkbox-list-item",
         "dressed": false,
         "parent": "CheckboxList",
         "doc": "checkbox-list"
@@ -449,7 +449,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "DateInput",
         "label": "Date Input",
         "slug": "date-input",
-        "href": "/design/composants/formulaires/date-input",
+        "href": "/design/composants/date-input",
         "dressed": true,
         "parent": null,
         "doc": "date-input"
@@ -458,7 +458,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "DateRangeInput",
         "label": "Date Range Input",
         "slug": "date-range-input",
-        "href": "/design/composants/formulaires/date-range-input",
+        "href": "/design/composants/date-range-input",
         "dressed": true,
         "parent": null,
         "doc": "date-range-input"
@@ -467,7 +467,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "DateTimeInput",
         "label": "Date Time Input",
         "slug": "date-time-input",
-        "href": "/design/composants/formulaires/date-time-input",
+        "href": "/design/composants/date-time-input",
         "dressed": true,
         "parent": null,
         "doc": "date-time-input"
@@ -476,7 +476,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Field",
         "label": "Field",
         "slug": "field",
-        "href": "/design/composants/formulaires/field",
+        "href": "/design/composants/field",
         "dressed": false,
         "parent": null,
         "doc": "field"
@@ -485,7 +485,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "FieldLabel",
         "label": "Field Label",
         "slug": "field-label",
-        "href": "/design/composants/formulaires/field-label",
+        "href": "/design/composants/field-label",
         "dressed": false,
         "parent": "Field",
         "doc": "field"
@@ -494,7 +494,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "FieldStatus",
         "label": "Field Status",
         "slug": "field-status",
-        "href": "/design/composants/formulaires/field-status",
+        "href": "/design/composants/field-status",
         "dressed": false,
         "parent": "Field",
         "doc": "field"
@@ -503,7 +503,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "FileInput",
         "label": "File Input",
         "slug": "file-input",
-        "href": "/design/composants/formulaires/file-input",
+        "href": "/design/composants/file-input",
         "dressed": true,
         "parent": null,
         "doc": "file-input"
@@ -512,7 +512,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "FormLayout",
         "label": "Form Layout",
         "slug": "form-layout",
-        "href": "/design/composants/formulaires/form-layout",
+        "href": "/design/composants/form-layout",
         "dressed": true,
         "parent": null,
         "doc": "form-layout"
@@ -521,7 +521,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "InputGroup",
         "label": "Input Group",
         "slug": "input-group",
-        "href": "/design/composants/formulaires/input-group",
+        "href": "/design/composants/input-group",
         "dressed": true,
         "parent": null,
         "doc": "input-group"
@@ -530,7 +530,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "NumberInput",
         "label": "Number Input",
         "slug": "number-input",
-        "href": "/design/composants/formulaires/number-input",
+        "href": "/design/composants/number-input",
         "dressed": true,
         "parent": null,
         "doc": "number-input"
@@ -539,7 +539,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "PowerSearch",
         "label": "Power Search",
         "slug": "power-search",
-        "href": "/design/composants/formulaires/power-search",
+        "href": "/design/composants/power-search",
         "dressed": true,
         "parent": null,
         "doc": "power-search"
@@ -548,7 +548,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "RadioList",
         "label": "Radio List",
         "slug": "radio-list",
-        "href": "/design/composants/formulaires/radio-list",
+        "href": "/design/composants/radio-list",
         "dressed": true,
         "parent": null,
         "doc": "radio-list"
@@ -557,7 +557,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "RadioListItem",
         "label": "Radio List Item",
         "slug": "radio-list-item",
-        "href": "/design/composants/formulaires/radio-list-item",
+        "href": "/design/composants/radio-list-item",
         "dressed": false,
         "parent": "RadioList",
         "doc": "radio-list"
@@ -566,7 +566,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Select",
         "label": "Select",
         "slug": "select",
-        "href": "/design/composants/formulaires/select",
+        "href": "/design/composants/select",
         "dressed": true,
         "parent": null,
         "doc": "selector"
@@ -575,7 +575,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Slider",
         "label": "Slider",
         "slug": "slider",
-        "href": "/design/composants/formulaires/slider",
+        "href": "/design/composants/slider",
         "dressed": true,
         "parent": null,
         "doc": "slider"
@@ -584,7 +584,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Switch",
         "label": "Switch",
         "slug": "switch",
-        "href": "/design/composants/formulaires/switch",
+        "href": "/design/composants/switch",
         "dressed": true,
         "parent": null,
         "doc": "switch"
@@ -593,7 +593,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "TextArea",
         "label": "Text Area",
         "slug": "text-area",
-        "href": "/design/composants/formulaires/text-area",
+        "href": "/design/composants/text-area",
         "dressed": true,
         "parent": null,
         "doc": "text-area"
@@ -602,7 +602,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "TextInput",
         "label": "Text Input",
         "slug": "text-input",
-        "href": "/design/composants/formulaires/text-input",
+        "href": "/design/composants/text-input",
         "dressed": true,
         "parent": null,
         "doc": "text-input"
@@ -611,7 +611,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "TimeInput",
         "label": "Time Input",
         "slug": "time-input",
-        "href": "/design/composants/formulaires/time-input",
+        "href": "/design/composants/time-input",
         "dressed": true,
         "parent": null,
         "doc": "time-input"
@@ -622,13 +622,13 @@ export const CATALOG: CatalogCategory[] = [
     "slug": "mise-en-page",
     "label": "Mise en page",
     "lead": "Coquille d'application, grilles, piles et sections.",
-    "href": "/design/composants/mise-en-page",
+    "href": "/design/composants#mise-en-page",
     "items": [
       {
         "name": "AppShell",
         "label": "App Shell",
         "slug": "app-shell",
-        "href": "/design/composants/mise-en-page/app-shell",
+        "href": "/design/composants/app-shell",
         "dressed": false,
         "parent": null,
         "doc": "app-shell"
@@ -637,7 +637,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "AspectRatio",
         "label": "Aspect Ratio",
         "slug": "aspect-ratio",
-        "href": "/design/composants/mise-en-page/aspect-ratio",
+        "href": "/design/composants/aspect-ratio",
         "dressed": false,
         "parent": null,
         "doc": "aspect-ratio"
@@ -646,7 +646,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Center",
         "label": "Center",
         "slug": "center",
-        "href": "/design/composants/mise-en-page/center",
+        "href": "/design/composants/center",
         "dressed": false,
         "parent": null,
         "doc": "center"
@@ -655,7 +655,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Divider",
         "label": "Divider",
         "slug": "divider",
-        "href": "/design/composants/mise-en-page/divider",
+        "href": "/design/composants/divider",
         "dressed": false,
         "parent": null,
         "doc": "divider"
@@ -664,7 +664,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Grid",
         "label": "Grid",
         "slug": "grid",
-        "href": "/design/composants/mise-en-page/grid",
+        "href": "/design/composants/grid",
         "dressed": false,
         "parent": null,
         "doc": "grid"
@@ -673,7 +673,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "GridSpan",
         "label": "Grid Span",
         "slug": "grid-span",
-        "href": "/design/composants/mise-en-page/grid-span",
+        "href": "/design/composants/grid-span",
         "dressed": false,
         "parent": "Grid",
         "doc": "grid"
@@ -682,7 +682,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "HStack",
         "label": "HStack",
         "slug": "hstack",
-        "href": "/design/composants/mise-en-page/hstack",
+        "href": "/design/composants/hstack",
         "dressed": false,
         "parent": "Stack",
         "doc": "stack"
@@ -691,7 +691,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Layout",
         "label": "Layout",
         "slug": "layout",
-        "href": "/design/composants/mise-en-page/layout",
+        "href": "/design/composants/layout",
         "dressed": false,
         "parent": null,
         "doc": "layout"
@@ -700,7 +700,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "LayoutContent",
         "label": "Layout Content",
         "slug": "layout-content",
-        "href": "/design/composants/mise-en-page/layout-content",
+        "href": "/design/composants/layout-content",
         "dressed": false,
         "parent": "Layout",
         "doc": "layout"
@@ -709,7 +709,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "LayoutFooter",
         "label": "Layout Footer",
         "slug": "layout-footer",
-        "href": "/design/composants/mise-en-page/layout-footer",
+        "href": "/design/composants/layout-footer",
         "dressed": false,
         "parent": "Layout",
         "doc": "layout"
@@ -718,7 +718,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "LayoutHeader",
         "label": "Layout Header",
         "slug": "layout-header",
-        "href": "/design/composants/mise-en-page/layout-header",
+        "href": "/design/composants/layout-header",
         "dressed": false,
         "parent": "Layout",
         "doc": "layout"
@@ -727,7 +727,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "LayoutPanel",
         "label": "Layout Panel",
         "slug": "layout-panel",
-        "href": "/design/composants/mise-en-page/layout-panel",
+        "href": "/design/composants/layout-panel",
         "dressed": false,
         "parent": "Layout",
         "doc": "layout"
@@ -736,7 +736,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Resizable",
         "label": "Resizable",
         "slug": "resizable",
-        "href": "/design/composants/mise-en-page/resizable",
+        "href": "/design/composants/resizable",
         "dressed": false,
         "parent": null,
         "doc": "resizable"
@@ -745,7 +745,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "StackItem",
         "label": "Stack Item",
         "slug": "stack-item",
-        "href": "/design/composants/mise-en-page/stack-item",
+        "href": "/design/composants/stack-item",
         "dressed": false,
         "parent": "Stack",
         "doc": "stack"
@@ -754,7 +754,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "VStack",
         "label": "VStack",
         "slug": "vstack",
-        "href": "/design/composants/mise-en-page/vstack",
+        "href": "/design/composants/vstack",
         "dressed": false,
         "parent": "Stack",
         "doc": "stack"
@@ -765,13 +765,13 @@ export const CATALOG: CatalogCategory[] = [
     "slug": "navigation",
     "label": "Navigation",
     "lead": "Se déplacer dans le site ou dans la page.",
-    "href": "/design/composants/navigation",
+    "href": "/design/composants#navigation",
     "items": [
       {
         "name": "Breadcrumbs",
         "label": "Breadcrumbs",
         "slug": "breadcrumbs",
-        "href": "/design/composants/navigation/breadcrumbs",
+        "href": "/design/composants/breadcrumbs",
         "dressed": false,
         "parent": null,
         "doc": "breadcrumbs"
@@ -780,7 +780,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "BreadcrumbItem",
         "label": "Breadcrumb Item",
         "slug": "breadcrumb-item",
-        "href": "/design/composants/navigation/breadcrumb-item",
+        "href": "/design/composants/breadcrumb-item",
         "dressed": false,
         "parent": "Breadcrumbs",
         "doc": "breadcrumbs"
@@ -789,7 +789,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "MobileNav",
         "label": "Mobile Nav",
         "slug": "mobile-nav",
-        "href": "/design/composants/navigation/mobile-nav",
+        "href": "/design/composants/mobile-nav",
         "dressed": false,
         "parent": null,
         "doc": "mobile-nav"
@@ -798,7 +798,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "MobileNavToggle",
         "label": "Mobile Nav Toggle",
         "slug": "mobile-nav-toggle",
-        "href": "/design/composants/navigation/mobile-nav-toggle",
+        "href": "/design/composants/mobile-nav-toggle",
         "dressed": false,
         "parent": "MobileNav",
         "doc": "mobile-nav"
@@ -807,7 +807,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "NavHeadingMenu",
         "label": "Nav Heading Menu",
         "slug": "nav-heading-menu",
-        "href": "/design/composants/navigation/nav-heading-menu",
+        "href": "/design/composants/nav-heading-menu",
         "dressed": false,
         "parent": "SideNav",
         "doc": "side-nav"
@@ -816,7 +816,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "NavIcon",
         "label": "Nav Icon",
         "slug": "nav-icon",
-        "href": "/design/composants/navigation/nav-icon",
+        "href": "/design/composants/nav-icon",
         "dressed": false,
         "parent": null,
         "doc": "nav-icon"
@@ -825,7 +825,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Outline",
         "label": "Outline",
         "slug": "outline",
-        "href": "/design/composants/navigation/outline",
+        "href": "/design/composants/outline",
         "dressed": false,
         "parent": null,
         "doc": "outline"
@@ -834,7 +834,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "SideNav",
         "label": "Side Nav",
         "slug": "side-nav",
-        "href": "/design/composants/navigation/side-nav",
+        "href": "/design/composants/side-nav",
         "dressed": false,
         "parent": null,
         "doc": "side-nav"
@@ -843,7 +843,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "SideNavCollapseButton",
         "label": "Side Nav Collapse Button",
         "slug": "side-nav-collapse-button",
-        "href": "/design/composants/navigation/side-nav-collapse-button",
+        "href": "/design/composants/side-nav-collapse-button",
         "dressed": false,
         "parent": "SideNav",
         "doc": "side-nav"
@@ -852,7 +852,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "SideNavHeading",
         "label": "Side Nav Heading",
         "slug": "side-nav-heading",
-        "href": "/design/composants/navigation/side-nav-heading",
+        "href": "/design/composants/side-nav-heading",
         "dressed": false,
         "parent": "SideNav",
         "doc": "side-nav"
@@ -861,7 +861,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "SideNavItem",
         "label": "Side Nav Item",
         "slug": "side-nav-item",
-        "href": "/design/composants/navigation/side-nav-item",
+        "href": "/design/composants/side-nav-item",
         "dressed": false,
         "parent": "SideNav",
         "doc": "side-nav"
@@ -870,7 +870,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "SideNavSection",
         "label": "Side Nav Section",
         "slug": "side-nav-section",
-        "href": "/design/composants/navigation/side-nav-section",
+        "href": "/design/composants/side-nav-section",
         "dressed": false,
         "parent": "SideNav",
         "doc": "side-nav"
@@ -879,7 +879,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Step",
         "label": "Step",
         "slug": "step",
-        "href": "/design/composants/navigation/step",
+        "href": "/design/composants/step",
         "dressed": false,
         "parent": "Stepper",
         "doc": "stepper"
@@ -888,7 +888,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Stepper",
         "label": "Stepper",
         "slug": "stepper",
-        "href": "/design/composants/navigation/stepper",
+        "href": "/design/composants/stepper",
         "dressed": false,
         "parent": null,
         "doc": "stepper"
@@ -897,7 +897,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Tab",
         "label": "Tab",
         "slug": "tab",
-        "href": "/design/composants/navigation/tab",
+        "href": "/design/composants/tab",
         "dressed": false,
         "parent": "TabList",
         "doc": "tab-list"
@@ -906,7 +906,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "TabList",
         "label": "Tab List",
         "slug": "tab-list",
-        "href": "/design/composants/navigation/tab-list",
+        "href": "/design/composants/tab-list",
         "dressed": false,
         "parent": null,
         "doc": "tab-list"
@@ -915,7 +915,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "TabMenu",
         "label": "Tab Menu",
         "slug": "tab-menu",
-        "href": "/design/composants/navigation/tab-menu",
+        "href": "/design/composants/tab-menu",
         "dressed": false,
         "parent": "TabList",
         "doc": "tab-list"
@@ -924,7 +924,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "TopNav",
         "label": "Top Nav",
         "slug": "top-nav",
-        "href": "/design/composants/navigation/top-nav",
+        "href": "/design/composants/top-nav",
         "dressed": false,
         "parent": null,
         "doc": "top-nav"
@@ -933,7 +933,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "TopNavHeading",
         "label": "Top Nav Heading",
         "slug": "top-nav-heading",
-        "href": "/design/composants/navigation/top-nav-heading",
+        "href": "/design/composants/top-nav-heading",
         "dressed": false,
         "parent": "TopNav",
         "doc": "top-nav"
@@ -942,7 +942,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "TopNavItem",
         "label": "Top Nav Item",
         "slug": "top-nav-item",
-        "href": "/design/composants/navigation/top-nav-item",
+        "href": "/design/composants/top-nav-item",
         "dressed": false,
         "parent": "TopNav",
         "doc": "top-nav"
@@ -951,7 +951,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "TopNavMegaMenu",
         "label": "Top Nav Mega Menu",
         "slug": "top-nav-mega-menu",
-        "href": "/design/composants/navigation/top-nav-mega-menu",
+        "href": "/design/composants/top-nav-mega-menu",
         "dressed": false,
         "parent": "TopNav",
         "doc": "top-nav"
@@ -960,7 +960,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "TopNavMegaMenuFeaturedCard",
         "label": "Top Nav Mega Menu Featured Card",
         "slug": "top-nav-mega-menu-featured-card",
-        "href": "/design/composants/navigation/top-nav-mega-menu-featured-card",
+        "href": "/design/composants/top-nav-mega-menu-featured-card",
         "dressed": false,
         "parent": "TopNavMegaMenu",
         "doc": "top-nav-mega-menu"
@@ -969,7 +969,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "TopNavMegaMenuItem",
         "label": "Top Nav Mega Menu Item",
         "slug": "top-nav-mega-menu-item",
-        "href": "/design/composants/navigation/top-nav-mega-menu-item",
+        "href": "/design/composants/top-nav-mega-menu-item",
         "dressed": false,
         "parent": "TopNavMegaMenu",
         "doc": "top-nav-mega-menu"
@@ -978,7 +978,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "TopNavMenu",
         "label": "Top Nav Menu",
         "slug": "top-nav-menu",
-        "href": "/design/composants/navigation/top-nav-menu",
+        "href": "/design/composants/top-nav-menu",
         "dressed": false,
         "parent": "TopNav",
         "doc": "top-nav"
@@ -989,13 +989,13 @@ export const CATALOG: CatalogCategory[] = [
     "slug": "surcouches",
     "label": "Surcouches",
     "lead": "Dialogues, popovers, infobulles et panneaux flottants.",
-    "href": "/design/composants/surcouches",
+    "href": "/design/composants#surcouches",
     "items": [
       {
         "name": "BottomSheet",
         "label": "Bottom Sheet",
         "slug": "bottom-sheet",
-        "href": "/design/composants/surcouches/bottom-sheet",
+        "href": "/design/composants/bottom-sheet",
         "dressed": false,
         "parent": null,
         "doc": "bottom-sheet"
@@ -1004,7 +1004,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "BottomSheetSwitcher",
         "label": "Bottom Sheet Switcher",
         "slug": "bottom-sheet-switcher",
-        "href": "/design/composants/surcouches/bottom-sheet-switcher",
+        "href": "/design/composants/bottom-sheet-switcher",
         "dressed": false,
         "parent": null,
         "doc": "bottom-sheet-switcher"
@@ -1013,7 +1013,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "CommandPalette",
         "label": "Command Palette",
         "slug": "command-palette",
-        "href": "/design/composants/surcouches/command-palette",
+        "href": "/design/composants/command-palette",
         "dressed": false,
         "parent": null,
         "doc": "command-palette"
@@ -1022,7 +1022,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "CommandPaletteEmpty",
         "label": "Command Palette Empty",
         "slug": "command-palette-empty",
-        "href": "/design/composants/surcouches/command-palette-empty",
+        "href": "/design/composants/command-palette-empty",
         "dressed": false,
         "parent": "CommandPalette",
         "doc": "command-palette"
@@ -1031,7 +1031,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "CommandPaletteFooter",
         "label": "Command Palette Footer",
         "slug": "command-palette-footer",
-        "href": "/design/composants/surcouches/command-palette-footer",
+        "href": "/design/composants/command-palette-footer",
         "dressed": false,
         "parent": "CommandPalette",
         "doc": "command-palette"
@@ -1040,7 +1040,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "CommandPaletteGroup",
         "label": "Command Palette Group",
         "slug": "command-palette-group",
-        "href": "/design/composants/surcouches/command-palette-group",
+        "href": "/design/composants/command-palette-group",
         "dressed": false,
         "parent": "CommandPalette",
         "doc": "command-palette"
@@ -1049,7 +1049,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "CommandPaletteInput",
         "label": "Command Palette Input",
         "slug": "command-palette-input",
-        "href": "/design/composants/surcouches/command-palette-input",
+        "href": "/design/composants/command-palette-input",
         "dressed": false,
         "parent": "CommandPalette",
         "doc": "command-palette"
@@ -1058,7 +1058,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "CommandPaletteItem",
         "label": "Command Palette Item",
         "slug": "command-palette-item",
-        "href": "/design/composants/surcouches/command-palette-item",
+        "href": "/design/composants/command-palette-item",
         "dressed": false,
         "parent": "CommandPalette",
         "doc": "command-palette"
@@ -1067,7 +1067,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "CommandPaletteList",
         "label": "Command Palette List",
         "slug": "command-palette-list",
-        "href": "/design/composants/surcouches/command-palette-list",
+        "href": "/design/composants/command-palette-list",
         "dressed": false,
         "parent": "CommandPalette",
         "doc": "command-palette"
@@ -1076,7 +1076,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "ContextMenu",
         "label": "Context Menu",
         "slug": "context-menu",
-        "href": "/design/composants/surcouches/context-menu",
+        "href": "/design/composants/context-menu",
         "dressed": false,
         "parent": null,
         "doc": "context-menu"
@@ -1085,7 +1085,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "ContextMenuItem",
         "label": "Context Menu Item",
         "slug": "context-menu-item",
-        "href": "/design/composants/surcouches/context-menu-item",
+        "href": "/design/composants/context-menu-item",
         "dressed": false,
         "parent": "ContextMenu",
         "doc": "context-menu"
@@ -1094,7 +1094,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Dialog",
         "label": "Dialog",
         "slug": "dialog",
-        "href": "/design/composants/surcouches/dialog",
+        "href": "/design/composants/dialog",
         "dressed": true,
         "parent": null,
         "doc": "dialog"
@@ -1103,7 +1103,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "DialogHeader",
         "label": "Dialog Header",
         "slug": "dialog-header",
-        "href": "/design/composants/surcouches/dialog-header",
+        "href": "/design/composants/dialog-header",
         "dressed": false,
         "parent": "Dialog",
         "doc": "dialog"
@@ -1112,7 +1112,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "HoverCard",
         "label": "Hover Card",
         "slug": "hover-card",
-        "href": "/design/composants/surcouches/hover-card",
+        "href": "/design/composants/hover-card",
         "dressed": false,
         "parent": null,
         "doc": "hover-card"
@@ -1121,7 +1121,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Lightbox",
         "label": "Lightbox",
         "slug": "lightbox",
-        "href": "/design/composants/surcouches/lightbox",
+        "href": "/design/composants/lightbox",
         "dressed": false,
         "parent": null,
         "doc": "lightbox"
@@ -1130,7 +1130,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Overlay",
         "label": "Overlay",
         "slug": "overlay",
-        "href": "/design/composants/surcouches/overlay",
+        "href": "/design/composants/overlay",
         "dressed": false,
         "parent": null,
         "doc": "overlay"
@@ -1139,7 +1139,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Popover",
         "label": "Popover",
         "slug": "popover",
-        "href": "/design/composants/surcouches/popover",
+        "href": "/design/composants/popover",
         "dressed": false,
         "parent": null,
         "doc": "popover"
@@ -1148,7 +1148,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Tooltip",
         "label": "Tooltip",
         "slug": "tooltip",
-        "href": "/design/composants/surcouches/tooltip",
+        "href": "/design/composants/tooltip",
         "dressed": false,
         "parent": null,
         "doc": "tooltip"
@@ -1159,13 +1159,13 @@ export const CATALOG: CatalogCategory[] = [
     "slug": "tables-listes",
     "label": "Tables & listes",
     "lead": "Données en lignes : tables, listes, arborescences.",
-    "href": "/design/composants/tables-listes",
+    "href": "/design/composants#tables-listes",
     "items": [
       {
         "name": "Item",
         "label": "Item",
         "slug": "item",
-        "href": "/design/composants/tables-listes/item",
+        "href": "/design/composants/item",
         "dressed": false,
         "parent": null,
         "doc": "item"
@@ -1174,7 +1174,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "List",
         "label": "List",
         "slug": "list",
-        "href": "/design/composants/tables-listes/list",
+        "href": "/design/composants/list",
         "dressed": false,
         "parent": null,
         "doc": "list"
@@ -1183,7 +1183,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "ListItem",
         "label": "List Item",
         "slug": "list-item",
-        "href": "/design/composants/tables-listes/list-item",
+        "href": "/design/composants/list-item",
         "dressed": false,
         "parent": "List",
         "doc": "list"
@@ -1192,7 +1192,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "MetadataList",
         "label": "Metadata List",
         "slug": "metadata-list",
-        "href": "/design/composants/tables-listes/metadata-list",
+        "href": "/design/composants/metadata-list",
         "dressed": false,
         "parent": null,
         "doc": "metadata-list"
@@ -1201,7 +1201,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "MetadataListItem",
         "label": "Metadata List Item",
         "slug": "metadata-list-item",
-        "href": "/design/composants/tables-listes/metadata-list-item",
+        "href": "/design/composants/metadata-list-item",
         "dressed": false,
         "parent": "MetadataList",
         "doc": "metadata-list"
@@ -1210,7 +1210,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "OverflowList",
         "label": "Overflow List",
         "slug": "overflow-list",
-        "href": "/design/composants/tables-listes/overflow-list",
+        "href": "/design/composants/overflow-list",
         "dressed": false,
         "parent": null,
         "doc": "overflow-list"
@@ -1219,7 +1219,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "Table",
         "label": "Table",
         "slug": "table",
-        "href": "/design/composants/tables-listes/table",
+        "href": "/design/composants/table",
         "dressed": false,
         "parent": null,
         "doc": "table"
@@ -1228,7 +1228,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "TreeList",
         "label": "Tree List",
         "slug": "tree-list",
-        "href": "/design/composants/tables-listes/tree-list",
+        "href": "/design/composants/tree-list",
         "dressed": false,
         "parent": null,
         "doc": "tree-list"
@@ -1239,13 +1239,13 @@ export const CATALOG: CatalogCategory[] = [
     "slug": "utilitaires",
     "label": "Utilitaires",
     "lead": "Thème, accessibilité et aides de rendu.",
-    "href": "/design/composants/utilitaires",
+    "href": "/design/composants#utilitaires",
     "items": [
       {
         "name": "Theme",
         "label": "Theme",
         "slug": "theme",
-        "href": "/design/composants/utilitaires/theme",
+        "href": "/design/composants/theme",
         "dressed": false,
         "parent": null,
         "doc": "theme"
@@ -1254,7 +1254,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "MediaTheme",
         "label": "Media Theme",
         "slug": "media-theme",
-        "href": "/design/composants/utilitaires/media-theme",
+        "href": "/design/composants/media-theme",
         "dressed": false,
         "parent": null,
         "doc": "media-theme"
@@ -1263,7 +1263,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "SyntaxTheme",
         "label": "Syntax Theme",
         "slug": "syntax-theme",
-        "href": "/design/composants/utilitaires/syntax-theme",
+        "href": "/design/composants/syntax-theme",
         "dressed": false,
         "parent": null,
         "doc": "syntax-theme"
@@ -1272,7 +1272,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "VisuallyHidden",
         "label": "Visually Hidden",
         "slug": "visually-hidden",
-        "href": "/design/composants/utilitaires/visually-hidden",
+        "href": "/design/composants/visually-hidden",
         "dressed": false,
         "parent": null,
         "doc": "visually-hidden"
@@ -1283,13 +1283,13 @@ export const CATALOG: CatalogCategory[] = [
     "slug": "chat",
     "label": "Chat",
     "lead": "Composants conversationnels (assistant IA). Hors périmètre du site vitrine, listés pour référence.",
-    "href": "/design/composants/chat",
+    "href": "/design/composants#chat",
     "items": [
       {
         "name": "ChatLayout",
         "label": "Chat Layout",
         "slug": "chat-layout",
-        "href": "/design/composants/chat/chat-layout",
+        "href": "/design/composants/chat-layout",
         "dressed": false,
         "parent": null,
         "doc": "chat-layout"
@@ -1298,7 +1298,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "ChatComposer",
         "label": "Chat Composer",
         "slug": "chat-composer",
-        "href": "/design/composants/chat/chat-composer",
+        "href": "/design/composants/chat-composer",
         "dressed": false,
         "parent": null,
         "doc": "chat-composer"
@@ -1307,7 +1307,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "ChatComposerDrawer",
         "label": "Chat Composer Drawer",
         "slug": "chat-composer-drawer",
-        "href": "/design/composants/chat/chat-composer-drawer",
+        "href": "/design/composants/chat-composer-drawer",
         "dressed": false,
         "parent": "ChatComposer",
         "doc": "chat-composer"
@@ -1316,7 +1316,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "ChatComposerInput",
         "label": "Chat Composer Input",
         "slug": "chat-composer-input",
-        "href": "/design/composants/chat/chat-composer-input",
+        "href": "/design/composants/chat-composer-input",
         "dressed": false,
         "parent": "ChatComposer",
         "doc": "chat-composer"
@@ -1325,7 +1325,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "ChatDictationButton",
         "label": "Chat Dictation Button",
         "slug": "chat-dictation-button",
-        "href": "/design/composants/chat/chat-dictation-button",
+        "href": "/design/composants/chat-dictation-button",
         "dressed": false,
         "parent": "ChatComposer",
         "doc": "chat-composer"
@@ -1334,7 +1334,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "ChatMessage",
         "label": "Chat Message",
         "slug": "chat-message",
-        "href": "/design/composants/chat/chat-message",
+        "href": "/design/composants/chat-message",
         "dressed": false,
         "parent": null,
         "doc": "chat-message"
@@ -1343,7 +1343,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "ChatMessageBubble",
         "label": "Chat Message Bubble",
         "slug": "chat-message-bubble",
-        "href": "/design/composants/chat/chat-message-bubble",
+        "href": "/design/composants/chat-message-bubble",
         "dressed": false,
         "parent": "ChatMessage",
         "doc": "chat-message"
@@ -1352,7 +1352,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "ChatMessageList",
         "label": "Chat Message List",
         "slug": "chat-message-list",
-        "href": "/design/composants/chat/chat-message-list",
+        "href": "/design/composants/chat-message-list",
         "dressed": false,
         "parent": null,
         "doc": "chat-message-list"
@@ -1361,7 +1361,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "ChatMessageMetadata",
         "label": "Chat Message Metadata",
         "slug": "chat-message-metadata",
-        "href": "/design/composants/chat/chat-message-metadata",
+        "href": "/design/composants/chat-message-metadata",
         "dressed": false,
         "parent": "ChatMessage",
         "doc": "chat-message"
@@ -1370,7 +1370,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "ChatSendButton",
         "label": "Chat Send Button",
         "slug": "chat-send-button",
-        "href": "/design/composants/chat/chat-send-button",
+        "href": "/design/composants/chat-send-button",
         "dressed": false,
         "parent": "ChatComposer",
         "doc": "chat-composer"
@@ -1379,7 +1379,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "ChatSystemMessage",
         "label": "Chat System Message",
         "slug": "chat-system-message",
-        "href": "/design/composants/chat/chat-system-message",
+        "href": "/design/composants/chat-system-message",
         "dressed": false,
         "parent": null,
         "doc": "chat-system-message"
@@ -1388,7 +1388,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "ChatTokenizedText",
         "label": "Chat Tokenized Text",
         "slug": "chat-tokenized-text",
-        "href": "/design/composants/chat/chat-tokenized-text",
+        "href": "/design/composants/chat-tokenized-text",
         "dressed": false,
         "parent": "ChatMessage",
         "doc": "chat-message"
@@ -1397,7 +1397,7 @@ export const CATALOG: CatalogCategory[] = [
         "name": "ChatToolCalls",
         "label": "Chat Tool Calls",
         "slug": "chat-tool-calls",
-        "href": "/design/composants/chat/chat-tool-calls",
+        "href": "/design/composants/chat-tool-calls",
         "dressed": false,
         "parent": null,
         "doc": "chat-tool-calls"

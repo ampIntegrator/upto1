@@ -1,9 +1,11 @@
 /**
  * Génère le catalogue de composants (src/app/(frontend)/design/composants/…)
  * à partir des showcases présents dans _showcases/ :
- *   - une page par composant : composants/<catégorie>/<composant>/page.tsx
- *   - une page d'index par catégorie : composants/<catégorie>/page.tsx
- *   - la table de navigation : _ui/catalog.generated.ts (menu, accueil)
+ *   - une page par composant : composants/<composant>/page.tsx
+ *   - la vue d'ensemble : composants/page.tsx (grille par catégorie, ancres)
+ *   - la table de navigation : _ui/catalog.generated.ts (menu plat par catégorie)
+ * Même logique que astryx.atmeta.com/components : menu plat sous des titres de
+ * catégorie non cliquables, tout visible, une URL par composant.
  * Une seule liste : un composant habillé Orbita (DRESSED) remplace la démo
  * Astryx d'origine sous le même nom.
  *
@@ -49,20 +51,20 @@ if (existsSync(`${ROOT}/composants`)) rmSync(`${ROOT}/composants`, {recursive: t
 for (const [slug, cat] of Object.entries(CATS)) {
   const comps = cat.comps.filter(c => { const ok = files.has(c + 'Showcase'); if (!ok) console.warn(`(pas de showcase) ${c}`); return ok; });
   comps.forEach(c => used.add(c + 'Showcase'));
-  const items = comps.map(c => ({name: c, label: spaced(c), slug: kebab(c), href: `/design/composants/${slug}/${kebab(c)}`, dressed: DRESSED.has(c), parent: PARENTS[c] ?? null, doc: DOC[c] ?? kebab(PARENTS[c] ?? c)}));
-  catalog.push({slug, label: cat.label, lead: cat.lead, href: `/design/composants/${slug}`, items});
+  const items = comps.map(c => ({name: c, label: spaced(c), slug: kebab(c), href: `/design/composants/${kebab(c)}`, dressed: DRESSED.has(c), parent: PARENTS[c] ?? null, doc: DOC[c] ?? kebab(PARENTS[c] ?? c)}));
+  catalog.push({slug, label: cat.label, lead: cat.lead, href: `/design/composants#${slug}`, items});
 
   // page par composant
   for (const it of items) {
-    const dir = `${ROOT}/composants/${slug}/${it.slug}`;
+    const dir = `${ROOT}/composants/${it.slug}`;
     mkdirSync(dir, {recursive: true});
     writeFileSync(`${dir}/page.tsx`, `/* Page générée par scripts/gen-catalog.mjs (pnpm catalog:build). */
 import {VStack} from '@astryxdesign/core/Stack';
 import React from 'react';
 
-import ${it.name}Showcase from '../../../_showcases/${it.name}Showcase';
-import {ShowcaseBlock} from '../../../_ui/ShowcaseBlock';
-import {ComponentNav} from '../../../_ui/ComponentNav';
+import ${it.name}Showcase from '../../_showcases/${it.name}Showcase';
+import {ComponentNav} from '../../_ui/ComponentNav';
+import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
 export const metadata = {title: '${it.label} — Orbita × Astryx'};
 
@@ -79,22 +81,21 @@ export default function Page() {
 `);
   }
 
-  // index de catégorie
-  const dir = `${ROOT}/composants/${slug}`;
-  mkdirSync(dir, {recursive: true});
-  writeFileSync(`${dir}/page.tsx`, `/* Page générée par scripts/gen-catalog.mjs (pnpm catalog:build). */
-import React from 'react';
-
-import {CategoryIndex} from '../../_ui/CategoryIndex';
-
-export const metadata = {title: '${cat.label} — Orbita × Astryx'};
-
-export default function Page() {
-  return <CategoryIndex slug="${slug}" />;
-}
-`);
   console.log(`${slug}: ${comps.length}`);
 }
+
+// vue d'ensemble
+writeFileSync(`${ROOT}/composants/page.tsx`, `/* Page générée par scripts/gen-catalog.mjs (pnpm catalog:build). */
+import React from 'react';
+
+import {LibraryOverview} from '../_ui/LibraryOverview';
+
+export const metadata = {title: 'Composants — Orbita × Astryx'};
+
+export default function Page() {
+  return <LibraryOverview />;
+}
+`);
 
 writeFileSync(`${ROOT}/_ui/catalog.generated.ts`, `/* @generated par scripts/gen-catalog.mjs — ne pas éditer. */
 export type CatalogItem = {name: string; label: string; slug: string; href: string; dressed: boolean; parent: string | null; doc: string};
