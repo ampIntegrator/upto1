@@ -1,7 +1,6 @@
 'use client';
 
 import {AppShell} from '@astryxdesign/core/AppShell';
-import {SegmentedControl, SegmentedControlItem} from '@astryxdesign/core/SegmentedControl';
 import {Selector} from '@astryxdesign/core/Selector';
 import {SideNav, SideNavHeading, SideNavItem, SideNavSection} from '@astryxdesign/core/SideNav';
 import {Icon} from '@astryxdesign/core/Icon';
@@ -12,7 +11,7 @@ import React, {useMemo, useState} from 'react';
 
 import {SearchIcon} from '@/theme/icons/nucleo';
 
-import {type ColorMode, SILO_LABELS, SILO_NAMES, type SiloName} from '@/theme';
+import {SILO_LABELS, SILO_NAMES, type SiloName} from '@/theme';
 import {useOrbitaTheme} from '@/theme/OrbitaThemeProvider';
 import styles from './DesignShell.module.css';
 import {CATALOG} from './catalog.generated';
@@ -22,7 +21,7 @@ import {FOUNDATIONS} from './nav';
 const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 
 function ThemeControls({query, onQuery}: {query: string; onQuery: (q: string) => void}) {
-  const {silo, setSilo, mode, setMode} = useOrbitaTheme();
+  const {silo, setSilo} = useOrbitaTheme();
   return (
     <VStack gap={2} padding={2}>
       <Selector
@@ -32,11 +31,6 @@ function ThemeControls({query, onQuery}: {query: string; onQuery: (q: string) =>
         options={SILO_NAMES.map((s) => ({value: s, label: SILO_LABELS[s]}))}
         size="sm"
       />
-      <SegmentedControl label="Mode" value={mode} onChange={(v) => setMode(v as ColorMode)}>
-        <SegmentedControlItem value="light" label="Clair" />
-        <SegmentedControlItem value="dark" label="Nuit" />
-        <SegmentedControlItem value="system" label="Auto" />
-      </SegmentedControl>
       <TextInput
         label="Filtrer le catalogue"
         isLabelHidden

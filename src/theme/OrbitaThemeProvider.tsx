@@ -7,8 +7,13 @@
  *   système) courants ;
  * - branche next/link dans tous les liens Astryx (LinkProvider) ;
  * - passe les composants Astryx en français (InternationalizationProvider) ;
- * - expose `useOrbitaTheme()` pour changer de silo ou de mode (catalogue,
- *   futur sélecteur back-office). Le choix est mémorisé dans localStorage.
+ * - expose `useOrbitaTheme()` pour changer de silo (catalogue, futur sélecteur
+ *   back-office). Le silo est mémorisé dans localStorage.
+ *
+ * Le site n'a qu'un mode : clair. Les sections « nuit » sont des blocs qui
+ * imbriquent leur propre <Theme mode="dark"> (voir les composants habillés).
+ * `mode` reste dans l'API pour ces imbrications, mais n'est plus changé
+ * globalement.
  *
  * Les 7 CSS compilés sont chargés ici : ~17 Ko chacun. En production, une page
  * n'a besoin que de son silo — à affiner quand le silo sera fixé par Payload.
@@ -71,11 +76,10 @@ export function OrbitaThemeProvider({
   const [silo, setSiloState] = useState<SiloName>(initialSilo);
   const [mode, setModeState] = useState<ColorMode>(initialMode);
 
-  // Restauration du choix mémorisé (après hydratation, pour rester SSR-safe).
+  // Restauration du silo mémorisé (après hydratation, pour rester SSR-safe).
   useEffect(() => {
     const stored = readStored();
     if (stored.silo) setSiloState(stored.silo);
-    if (stored.mode) setModeState(stored.mode);
   }, []);
 
   const persist = useCallback((next: {silo: SiloName; mode: ColorMode}) => {
