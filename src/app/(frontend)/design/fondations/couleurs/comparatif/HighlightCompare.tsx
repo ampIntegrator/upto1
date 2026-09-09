@@ -11,16 +11,15 @@ import {OrbitaButton} from '@/components/OrbitaButton';
 import {OrbitaCard} from '@/components/OrbitaCard';
 import {ORBITA_THEMES, SILO_LABELS, SILO_NAMES, SILOS, type SiloName} from '@/theme';
 
-/** Proposition : highlight / highlight-deep par silo, en complémentaire franche
- *  (référence : bleu indigo → turquoise, écart de teinte ~70°). */
-const PROPOSAL: Record<SiloName, {highlight: string; highlightDeep: string}> = {
-  blue:    {highlight: SILOS.blue.highlight, highlightDeep: SILOS.blue.highlightDeep},
-  green:   {highlight: '#F5B841', highlightDeep: '#B8800A'}, // vert → or
-  orange:  {highlight: '#38BDF8', highlightDeep: '#0F7FC0'}, // orange → bleu ciel
-  violet:  {highlight: '#A3E635', highlightDeep: '#5C9A0A'}, // violet → lime
-  brique:  {highlight: '#2ED3C3', highlightDeep: '#0E9C8F'}, // brique → turquoise
-  magenta: {highlight: '#4ADE9B', highlightDeep: '#158F5E'}, // magenta → menthe
-  ambre:   {highlight: '#4DA3F0', highlightDeep: '#1F6FCC'}, // ambre → bleu
+/** Valeurs de la maquette Orbita (orbita.css), avant l'harmonisation du 9 sept. 2026. */
+const BEFORE: Record<SiloName, {highlight: string; highlightDeep: string}> = {
+  blue:    {highlight: '#10E0C8', highlightDeep: '#0A9E8E'},
+  green:   {highlight: '#90D150', highlightDeep: '#5AA81F'},
+  orange:  {highlight: '#F5C403', highlightDeep: '#C99700'},
+  violet:  {highlight: '#C77DFF', highlightDeep: '#9D4EDD'},
+  brique:  {highlight: '#FF8A5B', highlightDeep: '#C24A22'},
+  magenta: {highlight: '#FF7AC4', highlightDeep: '#C42E86'},
+  ambre:   {highlight: '#F5CE5B', highlightDeep: '#B5810F'},
 };
 
 const LOREM = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.';
@@ -33,7 +32,8 @@ function overrides(h: string, hd: string): React.CSSProperties {
   } as React.CSSProperties;
 }
 
-function Cell({silo, mode, label, h, hd, after}: {silo: SiloName; mode: 'light' | 'dark'; label: string; h: string; hd: string; after?: boolean}) {
+function Cell({silo, mode, label, h, hd, after}: {silo: SiloName; mode: 'light' | 'dark'; label: string; h: string; hd: string; /** surcharge locale des tokens (valeurs « avant ») ; sinon thème compilé */
+  after?: boolean}) {
   return (
     <Theme theme={ORBITA_THEMES[silo]} mode={mode}>
       <VStack gap={3} padding={4} style={{background: 'var(--color-background-body)', ...(after ? overrides(h, hd) : {})}}>
@@ -55,20 +55,20 @@ export function HighlightCompare() {
   return (
     <VStack gap={10}>
       {SILO_NAMES.map((silo) => {
-        const cur = SILOS[silo];
-        const prop = PROPOSAL[silo];
+        const cur = BEFORE[silo];
+        const prop = {highlight: SILOS[silo].highlight, highlightDeep: SILOS[silo].highlightDeep};
         const same = cur.highlight === prop.highlight && cur.highlightDeep === prop.highlightDeep;
         return (
           <VStack key={silo} gap={3}>
             <HStack gap={3} align="end">
               <Heading level={3}>{SILO_LABELS[silo]}</Heading>
-              <Text type="supporting">silo {cur.primary}{same ? ' · proposition : inchangé' : ''}</Text>
+              <Text type="supporting">silo {SILOS[silo].primary}{same ? ' · inchangé' : ''}</Text>
             </HStack>
             <Grid columns={{minWidth: 260, max: 4}} gap={3}>
-              <Cell silo={silo} mode="light" label="Avant · clair" h={cur.highlight} hd={cur.highlightDeep} />
-              <Cell silo={silo} mode="light" label="Après · clair" h={prop.highlight} hd={prop.highlightDeep} after />
-              <Cell silo={silo} mode="dark" label="Avant · nuit" h={cur.highlight} hd={cur.highlightDeep} />
-              <Cell silo={silo} mode="dark" label="Après · nuit" h={prop.highlight} hd={prop.highlightDeep} after />
+              <Cell silo={silo} mode="light" label="Avant · clair" h={cur.highlight} hd={cur.highlightDeep} after />
+              <Cell silo={silo} mode="light" label="Après · clair" h={prop.highlight} hd={prop.highlightDeep} />
+              <Cell silo={silo} mode="dark" label="Avant · nuit" h={cur.highlight} hd={cur.highlightDeep} after />
+              <Cell silo={silo} mode="dark" label="Après · nuit" h={prop.highlight} hd={prop.highlightDeep} />
             </Grid>
           </VStack>
         );

@@ -12,7 +12,7 @@ export default function Page() {
       <PageIntro
         eyebrow="Fondations · Couleurs"
         title="Comparatif highlight"
-        lead="Page de travail : pour chaque silo, les valeurs actuelles de highlight / highlight-deep (avant) et la proposition (après), en clair et en nuit, sur les éléments qui les consomment : signe des nombres, ornement, bouton high. Les valeurs retenues iront dans src/theme/silos/palettes.ts."
+        lead="Trace de l'harmonisation du 9 sept. 2026 : pour chaque silo, les valeurs de la maquette Orbita (avant) et celles en vigueur dans src/theme/silos/palettes.ts (après), en clair et en nuit, sur les éléments qui consomment highlight : signe des nombres, ornement, bouton high."
       />
       <HighlightCompare />
     </VStack>

@@ -262,9 +262,9 @@
     --focus-outline-offset: 2px;
     --font-family-serif: var(--font-cormorant), Georgia, serif;
     --icon-stroke-width: 1.25;
-    --color-highlight: light-dark(#90D150, #90D150);
-    --color-highlight-deep: light-dark(#5AA81F, #90D150);
-    --color-highlight-muted: light-dark(color-mix(in srgb, #90D150 14%, transparent), color-mix(in srgb, #90D150 22%, transparent));
+    --color-highlight: light-dark(#F5B841, #F5B841);
+    --color-highlight-deep: light-dark(#B8800A, #F5B841);
+    --color-highlight-muted: light-dark(color-mix(in srgb, #F5B841 14%, transparent), color-mix(in srgb, #F5B841 22%, transparent));
     --color-editorial: light-dark(#C7972E, #C7972E);
     --color-editorial-deep: light-dark(#A37B1F, #C7972E);
     --color-night: light-dark(#0E2C2E, #0E2C2E);
