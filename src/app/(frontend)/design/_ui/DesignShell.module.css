@@ -11,15 +11,23 @@
   line-height: 1.2 !important;
 }
 
-/* Titres de catégorie dans la liste des composants : texte simple, non cliquable
-   (comme astryx.atmeta.com/components) */
+/* Titres de catégorie dans la liste des composants : même traitement que
+   Fondations / Composants, en 20 px */
 .groupLabel {
   display: block;
   margin: var(--spacing-5) 0 var(--spacing-1);
-  padding-inline: var(--spacing-3);
-  font-size: 11.5px;
+  padding-inline: 0; /* aligné sur Fondations / Composants */
+  font-family: var(--font-family-heading);
+  font-size: 20px;
   font-weight: var(--font-weight-semibold);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
   text-transform: uppercase;
+  color: var(--color-text-accent);
+}
+.empty {
+  display: block;
+  padding: var(--spacing-3);
+  font-size: 13px;
   color: var(--color-text-secondary);
 }
