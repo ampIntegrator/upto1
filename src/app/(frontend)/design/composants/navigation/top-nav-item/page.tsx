@@ -1,0 +1,20 @@
+/* Page générée par scripts/gen-catalog.mjs (pnpm catalog:build). */
+import {VStack} from '@astryxdesign/core/Stack';
+import React from 'react';
+
+import TopNavItemShowcase from '../../../_showcases/TopNavItemShowcase';
+import {ShowcaseBlock} from '../../../_ui/ShowcaseBlock';
+import {ComponentNav} from '../../../_ui/ComponentNav';
+
+export const metadata = {title: 'Top Nav Item — Orbita × Astryx'};
+
+export default function Page() {
+  return (
+    <VStack gap={8}>
+      <ShowcaseBlock name="TopNavItem" id="top-nav-item" doc="top-nav" parent="TopNav" category="Navigation">
+        <TopNavItemShowcase />
+      </ShowcaseBlock>
+      <ComponentNav category="navigation" current="top-nav-item" />
+    </VStack>
+  );
+}

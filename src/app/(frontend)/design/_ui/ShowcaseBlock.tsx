@@ -13,6 +13,7 @@ export function ShowcaseBlock({
   doc,
   parent,
   dressed = false,
+  category,
   children,
 }: {
   name: string;
@@ -23,14 +24,17 @@ export function ShowcaseBlock({
   parent?: string;
   /** habillé Orbita : démo maison à la place de celle d'Astryx */
   dressed?: boolean;
+  /** catégorie (affichée en eyebrow) */
+  category?: string;
   children: React.ReactNode;
 }) {
   return (
     <VStack gap={3}>
       <HStack gap={3} vAlign="center" hAlign="between" wrap="wrap">
         <VStack gap={0.5}>
+          {category ? <Text type="eyebrow">{category}</Text> : null}
           <HStack gap={3} vAlign="center">
-            <Heading level={2} id={id}>
+            <Heading level={1} type="display-3" id={id}>
               {name}
             </Heading>
             <Badge label={dressed ? 'Habillé Orbita' : 'Démo Astryx'} variant={dressed ? 'success' : 'neutral'} />

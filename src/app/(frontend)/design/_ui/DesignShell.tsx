@@ -11,7 +11,8 @@ import React from 'react';
 import {type ColorMode, SILO_LABELS, SILO_NAMES, type SiloName} from '@/theme';
 import {useOrbitaTheme} from '@/theme/OrbitaThemeProvider';
 import styles from './DesignShell.module.css';
-import {CATEGORIES, FOUNDATIONS} from './nav';
+import {CATALOG} from './catalog.generated';
+import {FOUNDATIONS} from './nav';
 
 function ThemeControls() {
   const {silo, setSilo, mode, setMode} = useOrbitaTheme();
@@ -51,9 +52,18 @@ export function DesignShell({children}: {children: React.ReactNode}) {
             ))}
           </SideNavSection>
           <SideNavSection title="Composants">
-            {CATEGORIES.map((e) => (
-              <SideNavItem key={e.slug} label={e.label} href={e.href} isSelected={pathname === e.href} />
-            ))}
+            {CATALOG.map((cat) => {
+              const inside = pathname === cat.href || pathname.startsWith(cat.href + '/');
+              return (
+                <SideNavItem key={cat.slug} label={cat.label} href={cat.href} isSelected={pathname === cat.href}>
+                  {inside
+                    ? cat.items.map((it) => (
+                        <SideNavItem key={it.slug} label={it.label} href={it.href} isSelected={pathname === it.href} />
+                      ))
+                    : null}
+                </SideNavItem>
+              );
+            })}
           </SideNavSection>
         </SideNav>
       }>

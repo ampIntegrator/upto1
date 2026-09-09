@@ -8,7 +8,8 @@ import {Text} from '@astryxdesign/core/Text';
 import React from 'react';
 
 import {PageIntro} from './_ui/PageIntro';
-import {CATEGORIES, FOUNDATIONS} from './_ui/nav';
+import {CATALOG} from './_ui/catalog.generated';
+import {FOUNDATIONS} from './_ui/nav';
 
 export default function DesignHome() {
   return (
@@ -58,11 +59,13 @@ export default function DesignHome() {
       <VStack gap={4}>
         <Heading level={2}>Composants</Heading>
         <Grid columns={{minWidth: 220}} gap={3}>
-          {CATEGORIES.map((e) => (
-            <ClickableCard key={e.slug} href={e.href} padding={5} label={e.label}>
+          {CATALOG.map((c) => (
+            <ClickableCard key={c.slug} href={c.href} padding={5} label={c.label}>
               <VStack gap={1}>
-                <Heading level={3}>{e.label}</Heading>
-                <Text type="supporting">Démos Astryx et composants habillés</Text>
+                <Heading level={3}>{c.label}</Heading>
+                <Text type="supporting">
+                  {c.items.length} composants · {c.items.filter((i) => i.dressed).length} habillés
+                </Text>
               </VStack>
             </ClickableCard>
           ))}
