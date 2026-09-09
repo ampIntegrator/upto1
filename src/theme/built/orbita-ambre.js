@@ -872,6 +872,7 @@ export const orbitaAmbreTheme = {
     "dialog": {
       "base": {
         "borderRadius": "0",
+        "backgroundColor": "var(--color-background-surface)",
         "boxShadow": "0 30px 80px -24px rgba(7,9,26,.6)",
         "::backdrop": {
           "backgroundImage": "radial-gradient(120% 120% at 50% -10%, color-mix(in srgb, var(--color-accent) 40%, transparent), transparent 66%)",

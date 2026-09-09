@@ -1070,6 +1070,7 @@
 
   .astryx-dialog {
     border-radius: 0;
+    background-color: var(--color-background-surface);
     box-shadow: 0 30px 80px -24px rgba(7,9,26,.6);
     --_dialog-radius: 0;
   }

@@ -471,6 +471,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
       dialog: {
         base: {
           borderRadius: '0',
+          backgroundColor: 'var(--color-background-surface)', // nuit : carte nuit, pas le popover plus clair
           boxShadow: '0 30px 80px -24px rgba(7,9,26,.6)',
           '::backdrop': {
             backgroundImage:

@@ -4,13 +4,26 @@
  * qui passe en accent au survol.
  */
 .eyebrow {
-  color: light-dark(var(--color-editorial), var(--color-highlight)) !important;
+  color: light-dark(var(--color-editorial), var(--color-text-accent)) !important;
+}
+.title {
+  color: light-dark(var(--color-text-accent), #ffffff) !important;
+}
+.footer {
+  background: light-dark(var(--color-background-muted), rgba(0, 0, 0, 0.2));
 }
 
 .close {
   width: 38px !important;
   height: 38px !important;
   min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  aspect-ratio: 1 / 1 !important;
+  flex: 0 0 38px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   border: var(--border-width) solid light-dark(var(--color-border-emphasized), rgba(255, 255, 255, 0.18)) !important;
   background: light-dark(var(--color-background-surface), rgba(255, 255, 255, 0.06)) !important;
   color: light-dark(var(--color-text-secondary), rgba(255, 255, 255, 0.7)) !important;

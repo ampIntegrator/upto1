@@ -84,7 +84,7 @@ export function OrbitaDialog({
             {eyebrow}
           </Text>
         ) : null}
-        <Heading level={2} id={titleId} color="accent" style={{fontSize: '1.25rem', letterSpacing: '-0.02em', lineHeight: 1.12}}>
+        <Heading level={2} id={titleId} color="accent" className={styles.title} style={{fontSize: '1.25rem', letterSpacing: '-0.02em', lineHeight: 1.12}}>
           {title}
         </Heading>
       </VStack>
@@ -100,7 +100,7 @@ export function OrbitaDialog({
   );
 
   const footer = actions ? (
-    <VStack gap={0} style={{background: 'var(--color-background-muted)'}}>
+    <VStack gap={0} className={styles.footer}>
       {/* filet dégradé highlight → accent → highlight, suit le silo */}
       <VStack
         aria-hidden="true"

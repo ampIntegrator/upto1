@@ -59,3 +59,4 @@ node_modules/
 # Maquette Orbita : on ne versionne que la référence design (orbita/), pas les captures ni les exports de travail
 /Orbita/*
 !/Orbita/orbita/
+/consignes.md

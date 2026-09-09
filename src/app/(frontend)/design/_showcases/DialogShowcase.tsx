@@ -83,7 +83,7 @@ export default function DialogShowcase() {
           title="Supprimer ce chiffrage ?"
           actions={
             <>
-              <OrbitaButton label="Annuler" variant="secondary" onClick={close} />
+              <OrbitaButton label="Annuler" variant="ghost" onClick={close} />
               <OrbitaButton label="Supprimer" variant="destructive" onClick={close} />
             </>
           }>
@@ -104,7 +104,7 @@ export default function DialogShowcase() {
           title="Démarrer une estimation"
           actions={
             <>
-              <OrbitaButton label="Annuler" variant="secondary" onClick={close} />
+              <OrbitaButton label="Annuler" variant="ghost" onClick={close} />
               <OrbitaButton label="Créer le chiffrage" variant="primary" onClick={close} />
             </>
           }>
@@ -138,7 +138,7 @@ export default function DialogShowcase() {
           title="Conditions générales d'utilisation"
           actions={
             <>
-              <OrbitaButton label="Refuser" variant="secondary" onClick={close} />
+              <OrbitaButton label="Refuser" variant="ghost" onClick={close} />
               <OrbitaButton label="Accepter" variant="primary" onClick={close} />
             </>
           }>
