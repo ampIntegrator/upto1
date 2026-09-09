@@ -1,12 +1,16 @@
 'use client';
 
-/** IconSquare — carré teinté avec une icône Nucleo au centre (cartes, zone de dépôt, mega-menu). */
-import {Icon} from '@astryxdesign/core/Icon';
+/**
+ * IconSquare — carré teinté avec une icône Nucleo au centre (cartes, zone de
+ * dépôt, mega-menu). `size` est le côté du carré, `iconSize` celui de l'icône.
+ */
 import React from 'react';
 
 import {NUCLEO_ICONS, type NucleoIconKey} from '@/theme/icons/nucleo';
 
-export function IconSquare({iconKey, size = 40, style}: {iconKey: NucleoIconKey; size?: 32 | 40 | 64; style?: React.CSSProperties}) {
+export function IconSquare({iconKey, size = 40, iconSize, style}: {iconKey: NucleoIconKey; size?: 32 | 40 | 64; iconSize?: number; style?: React.CSSProperties}) {
+  const Glyph = NUCLEO_ICONS[iconKey];
+  const glyph = iconSize ?? (size === 64 ? 28 : size === 40 ? 20 : 16);
   return (
     <span
       aria-hidden="true"
@@ -21,7 +25,7 @@ export function IconSquare({iconKey, size = 40, style}: {iconKey: NucleoIconKey;
         color: 'light-dark(var(--color-text-accent), var(--color-night))',
         ...style,
       }}>
-      <Icon icon={NUCLEO_ICONS[iconKey]} size={size === 64 ? 'lg' : size === 32 ? 'sm' : 'md'} />
+      <Glyph width={glyph} height={glyph} />
     </span>
   );
 }

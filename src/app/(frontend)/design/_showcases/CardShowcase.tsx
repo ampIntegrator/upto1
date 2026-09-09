@@ -60,7 +60,7 @@ export default function CardShowcase() {
         </Grid>
       </Section>
 
-      <Section title="Bloc · icône" note="Icône Nucleo dans un carré de 32 px, couleur silo.">
+      <Section title="Bloc · icône" note="Icône Nucleo de 32 px dans son carré de 64 px, couleur silo.">
         <Grid columns={{minWidth: 220, max: 4}} gap={4}>
           {([['clipboard-check', 'Chiffrage instantané'], ['gauge', 'Suivi des coûts'], ['table', 'Devis structurés'], ['shield', 'Données sécurisées']] as const).map(([k, t]) => (
             <OrbitaCard key={k} media={{type: 'icon', iconKey: k}} title={t} text={LOREM} cta={{label: 'Découvrir', href: '#'}} />
