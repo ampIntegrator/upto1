@@ -6,11 +6,12 @@ import {Grid} from '@astryxdesign/core/Grid';
 import {Heading} from '@astryxdesign/core/Heading';
 import {HStack, VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
-import {TextInput} from '@astryxdesign/core/TextInput';
 import React, {useState} from 'react';
 
 import {OrbitaButton} from '@/components/OrbitaButton';
 import {OrbitaDialog, type OrbitaDialogSize, type OrbitaDialogTone} from '@/components/OrbitaDialog';
+import {OrbitaField} from '@/components/OrbitaField';
+import {OrbitaSelect} from '@/components/OrbitaSelect';
 
 type Demo = {
   id: string;
@@ -37,6 +38,8 @@ export default function DialogShowcase() {
   const [open, setOpen] = useState<string | null>(null);
   const [withEyebrow, setWithEyebrow] = useState(true);
   const [projet, setProjet] = useState('Réhabilitation — 14 rue des Lilas');
+  const [bien, setBien] = useState<string | null>('collectif');
+  const [surface, setSurface] = useState('320');
   const close = () => setOpen(null);
   const eyebrow = withEyebrow ? 'Nouveau chiffrage' : undefined;
 
@@ -106,10 +109,19 @@ export default function DialogShowcase() {
             </>
           }>
           <Text type="body">Renseignez les bases du projet, vous pourrez affiner chaque poste ensuite.</Text>
-          <TextInput label="Intitulé du projet" value={projet} onChange={(v) => setProjet(v)} />
+          <OrbitaField label="Intitulé du projet" value={projet} onChange={setProjet} />
           <Grid columns={2} gap={4}>
-            <TextInput label="Type de bien" value="Logement collectif" onChange={() => {}} />
-            <TextInput label="Surface (m²)" value="320" onChange={() => {}} />
+            <OrbitaSelect
+              label="Type de bien"
+              options={[
+                {value: 'collectif', label: 'Logement collectif'},
+                {value: 'maison', label: 'Maison individuelle'},
+                {value: 'tertiaire', label: 'Tertiaire'},
+              ]}
+              value={bien}
+              onChange={setBien}
+            />
+            <OrbitaField label="Surface (m²)" value={surface} onChange={setSurface} />
           </Grid>
         </OrbitaDialog>
       ))}

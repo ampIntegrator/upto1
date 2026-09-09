@@ -1,0 +1,30 @@
+/*
+ * OrbitaDialog — signature de l'en-tête (maquette 20-modal) :
+ * eyebrow or en clair / highlight en nuit ; bouton fermer carré 38 px bordé,
+ * qui passe en accent au survol.
+ */
+.eyebrow {
+  color: light-dark(var(--color-editorial), var(--color-highlight)) !important;
+}
+
+.close {
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 0 !important;
+  border: var(--border-width) solid light-dark(var(--color-border-emphasized), rgba(255, 255, 255, 0.18)) !important;
+  background: light-dark(var(--color-background-surface), rgba(255, 255, 255, 0.06)) !important;
+  color: light-dark(var(--color-text-secondary), rgba(255, 255, 255, 0.7)) !important;
+  border-radius: 0 !important;
+  transition:
+    color var(--duration-medium) var(--ease-standard),
+    border-color var(--duration-medium) var(--ease-standard),
+    background-color var(--duration-medium) var(--ease-standard);
+}
+@media (hover: hover) {
+  .close:hover {
+    background: var(--color-accent) !important;
+    border-color: var(--color-accent) !important;
+    color: var(--color-on-accent) !important;
+  }
+}
+.close svg { width: 17px; height: 17px; }

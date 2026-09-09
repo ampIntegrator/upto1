@@ -24,6 +24,7 @@ import React, {useId} from 'react';
 
 import {CloseIcon} from '@/theme/icons/nucleo';
 import {useOrbitaTheme} from '@/theme/OrbitaThemeProvider';
+import styles from './OrbitaDialog.module.css';
 
 export type OrbitaDialogSize = 'sm' | 'md' | 'lg';
 export type OrbitaDialogTone = 'light' | 'night';
@@ -78,7 +79,11 @@ export function OrbitaDialog({
         background: 'var(--color-background-surface)',
       }}>
       <VStack gap={1} vAlign="center">
-        {eyebrow ? <Text type="eyebrow">{eyebrow}</Text> : null}
+        {eyebrow ? (
+          <Text type="eyebrow" className={styles.eyebrow}>
+            {eyebrow}
+          </Text>
+        ) : null}
         <Heading level={2} id={titleId} color="accent" style={{fontSize: '1.25rem', letterSpacing: '-0.02em', lineHeight: 1.12}}>
           {title}
         </Heading>
@@ -88,6 +93,7 @@ export function OrbitaDialog({
         variant="secondary"
         icon={<Icon icon={CloseIcon} />}
         onClick={() => onOpenChange(false)}
+        className={styles.close}
         style={{flex: '0 0 auto'}}
       />
     </HStack>
