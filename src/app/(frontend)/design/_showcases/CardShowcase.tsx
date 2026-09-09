@@ -49,7 +49,7 @@ export default function CardShowcase() {
   return (
     <VStack gap={8}>
       <Text type="body" color="secondary">
-        Un seul châssis de carte, trois préréglages. Bloc : quatre médias au choix, titre centré avec son ornement au losange, texte, barre d'action qui se remplit au survol. Article et réalisation : image 16/10, métadonnées, titre sur deux lignes, carte entière cliquable. Le titre est un Heading de type card : h3 ou h4 en admin, même rendu.
+        Un seul châssis de carte, trois préréglages. Bloc : quatre médias au choix, titre centré avec son ornement au losange, texte ; avec un lien, la carte entière est cliquable et la barre d'action se remplit au survol. Article et réalisation : image 16/10, métadonnées, titre sur deux lignes, carte entière cliquable. Le titre est un Heading de type card : h3 ou h4 en admin, même rendu.
       </Text>
 
       <Section title="Bloc · image" note="Image pleine largeur de 230 px, titre centré avec son ornement, texte, barre d'action.">
@@ -60,7 +60,7 @@ export default function CardShowcase() {
         </Grid>
       </Section>
 
-      <Section title="Bloc · icône" note="Icône Nucleo de 32 px dans son carré de 64 px, couleur silo.">
+      <Section title="Bloc · icône" note="Icône Nucleo de 28 px dans son carré de 64 px, couleur silo.">
         <Grid columns={{minWidth: 220, max: 4}} gap={4}>
           {([['clipboard-check', 'Chiffrage instantané'], ['gauge', 'Suivi des coûts'], ['table', 'Devis structurés'], ['shield', 'Données sécurisées']] as const).map(([k, t]) => (
             <OrbitaCard key={k} media={{type: 'icon', iconKey: k}} title={t} text={LOREM} cta={{label: 'Découvrir', href: '#'}} />
@@ -68,11 +68,12 @@ export default function CardShowcase() {
         </Grid>
       </Section>
 
-      <Section title="Bloc · nombre" note="Grand nombre en Schibsted 800 couleur silo, unité en highlight.">
+      <Section title="Bloc · nombre" note="Grand nombre en Schibsted 800 couleur silo, préfixe et suffixe en highlight, espacés.">
         <Grid columns={{minWidth: 220, max: 4}} gap={4}>
-          {[['850', '+', 'Courtiers équipés'], ['34', '%', 'De closing en plus'], ['20', 'min', 'Par chiffrage'], ['48', 'h', 'De délai moyen']].map(([v, sign, t]) => (
-            <OrbitaCard key={t} media={{type: 'number', value: v, sign}} title={t} text={LOREM} cta={{label: 'Découvrir', href: '#'}} />
-          ))}
+          <OrbitaCard media={{type: 'number', value: '1 000', suffix: 'm²'}} title="Seuil d'application" text={LOREM} cta={{label: 'En savoir plus', href: '#'}} />
+          <OrbitaCard media={{type: 'number', value: '40', prefix: '−', suffix: '%'}} title="Objectif 2030" text={LOREM} cta={{label: 'En savoir plus', href: '#'}} />
+          <OrbitaCard media={{type: 'number', value: '30/09'}} title="Date limite annuelle" text={LOREM} cta={{label: 'En savoir plus', href: '#'}} />
+          <OrbitaCard media={{type: 'number', value: '850', prefix: '+'}} title="Courtiers équipés" text={LOREM} cta={{label: 'En savoir plus', href: '#'}} />
         </Grid>
       </Section>
 
@@ -81,6 +82,15 @@ export default function CardShowcase() {
           {['Architectes', "Maîtres d'œuvre", 'Promoteurs', 'Bailleurs sociaux'].map((t) => (
             <OrbitaCard key={t} media={{type: 'none'}} accentTitle title={t} text={LOREM} cta={{label: 'Découvrir', href: '#'}} />
           ))}
+        </Grid>
+      </Section>
+
+      <Section title="Bloc · sans lien" note="Les quatre médias sans appel à l'action : ni barre, ni survol, ni clic.">
+        <Grid columns={{minWidth: 220, max: 4}} gap={4}>
+          <OrbitaCard media={{type: 'image', src: IMG('static-a')}} title="Chiffrage instantané" text={LOREM} />
+          <OrbitaCard media={{type: 'icon', iconKey: 'coins'}} title="Suivi des coûts" text={LOREM} />
+          <OrbitaCard media={{type: 'number', value: '2026'}} title="Premier contrôle" text={LOREM} />
+          <OrbitaCard media={{type: 'none'}} accentTitle title="Promoteurs" text={LOREM} />
         </Grid>
       </Section>
 
@@ -97,7 +107,7 @@ export default function CardShowcase() {
           <VStack gap={6} padding={6} style={{background: 'var(--color-background-body)'}}>
             <Grid columns={{minWidth: 220, max: 4}} gap={4}>
               <OrbitaCard media={{type: 'icon', iconKey: 'gauge'}} title="Devis en 20 minutes" text={LOREM} cta={{label: 'Découvrir', href: '#'}} />
-              <OrbitaCard media={{type: 'number', value: '34', sign: '%'}} title="De closing en plus" text={LOREM} cta={{label: 'Découvrir', href: '#'}} />
+              <OrbitaCard media={{type: 'number', value: '34', prefix: '+', suffix: '%'}} title="De closing en plus" text={LOREM} cta={{label: 'Découvrir', href: '#'}} />
             </Grid>
             <Realisations />
           </VStack>

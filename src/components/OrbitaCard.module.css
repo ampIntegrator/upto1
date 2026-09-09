@@ -43,7 +43,7 @@
 .postImg img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .iconMedia { align-self: center; margin-bottom: 28px; }
 .numberMedia { text-align: center; margin-bottom: 16px; }
-.sign { color: light-dark(var(--color-highlight-deep), var(--color-highlight)); font-size: 0.62em; font-weight: 600; letter-spacing: 0; }
+.sign { color: light-dark(var(--color-highlight-deep), var(--color-highlight)); font-size: 0.62em; font-weight: 600; letter-spacing: 0; white-space: pre; }
 
 /* métadonnées (article / réalisation) */
 .meta {
@@ -70,8 +70,11 @@
   text-decoration: none;
   transition: color var(--duration-medium) var(--ease-standard);
 }
-/* toute la carte cliquable via le lien du titre (article / réalisation) */
-.titleLink::after { content: ''; position: absolute; inset: 0; z-index: 2; }
+/* toute la carte cliquable : via le lien du titre (article / réalisation),
+   via la barre d'action (bloc avec lien) */
+.titleLink::after,
+.card[data-preset='bloc'][data-link] .cta::after { content: ''; position: absolute; inset: 0; z-index: 2; }
+.card[data-link] { cursor: pointer; }
 .card:hover .titleLink { color: var(--color-text-accent); }
 .card[data-preset='article']:hover,
 .card[data-preset='realisation']:hover { box-shadow: 0 20px 44px -20px rgba(12, 20, 40, 0.32); }

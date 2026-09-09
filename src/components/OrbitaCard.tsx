@@ -11,8 +11,8 @@
  *
  * Le titre est un Heading Astryx de type `card` : son style ne dépend pas du
  * niveau (h3 par défaut, h4 possible en admin). L'ornement au losange fait
- * partie du titre (preset bloc). Le survol de la carte remplit la barre
- * d'action ; en article / réalisation la carte entière est cliquable.
+ * partie du titre (preset bloc). Avec `cta`, la carte entière est cliquable et
+ * son survol remplit la barre d'action ; sans `cta`, pas de barre ni de lien.
  * Nuit : poser la carte dans un <Theme mode="dark">.
  */
 import {Heading} from '@astryxdesign/core/Heading';
@@ -28,7 +28,7 @@ import styles from './OrbitaCard.module.css';
 export type OrbitaCardMedia =
   | {type: 'image'; src: string; alt?: string}
   | {type: 'icon'; iconKey: NucleoIconKey}
-  | {type: 'number'; value: string; sign?: string}
+  | {type: 'number'; value: string; prefix?: string; suffix?: string}
   | {type: 'none'};
 
 export type OrbitaCardProps = {
@@ -68,13 +68,14 @@ export function OrbitaCard({preset = 'bloc', media = {type: 'none'}, title, leve
           <div className={styles.img} role={media.alt ? 'img' : undefined} aria-label={media.alt} style={{backgroundImage: `url("${media.src}")`}} />
         );
       case 'icon':
-        return <IconSquare iconKey={media.iconKey} size={64} iconSize={32} style={{alignSelf: 'center', marginBottom: 28}} />;
+        return <IconSquare iconKey={media.iconKey} size={64} iconSize={28} style={{alignSelf: 'center', marginBottom: 28}} />;
       case 'number':
         return (
           <div className={styles.numberMedia}>
-            <Text type="number">
+            <Text type="number" color="accent">
+              {media.prefix ? <span className={styles.sign}>{media.prefix} </span> : null}
               {media.value}
-              {media.sign ? <span className={styles.sign}>{media.sign}</span> : null}
+              {media.suffix ? <span className={styles.sign}> {media.suffix}</span> : null}
             </Text>
           </div>
         );
@@ -92,7 +93,7 @@ export function OrbitaCard({preset = 'bloc', media = {type: 'none'}, title, leve
   );
 
   return (
-    <article className={styles.card} data-preset={preset} style={style}>
+    <article className={styles.card} data-preset={preset} data-link={cta ? 'true' : undefined} style={style}>
       <div className={styles.body}>
         {media.type === 'image' ? mediaNode : null}
         <div className={styles.inner}>
