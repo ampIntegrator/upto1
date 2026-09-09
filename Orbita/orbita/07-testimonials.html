@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="blue">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbita — testimonials</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="orbita.css" />
+  <link rel="stylesheet" href="icons.css" />
+  <script src="icons.js"></script>
+  <style type="text/tailwindcss">
+    @theme inline {
+      --font-sans: "Geist", system-ui, sans-serif;
+      --font-serif: "Cormorant Garamond", serif;
+      --font-display: "Schibsted Grotesk", system-ui, sans-serif;
+      --font-mono: "Geist Mono", monospace;
+      --color-bg: var(--bg); --color-bg-2: var(--bg-2); --color-paper: var(--paper);
+      --color-ink: var(--ink); --color-ink-2: var(--ink-2); --color-ink-3: var(--ink-3);
+      --color-line: var(--line); --color-line-2: var(--line-2);
+      --color-primary: var(--primary); --color-primary-deep: var(--primary-deep); --color-primary-soft: var(--primary-soft);
+      --color-editorial: var(--editorial); --color-highlight: var(--highlight); --color-highlight-deep: var(--highlight-deep); --color-night: var(--night);
+    }
+  </style>
+  <style>
+body { margin:0; background:var(--bg); color:var(--ink); font-family:"Geist",system-ui,sans-serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+    /* ghost text contouré (signature DS) */
+    .c-ghost { font-family:"Schibsted Grotesk",system-ui,sans-serif; font-weight:800; letter-spacing:-.02em; line-height:.96; white-space:nowrap; color:transparent; -webkit-text-stroke:1.2px var(--highlight-deep); opacity:.38; user-select:none; pointer-events:none; }
+    /* carousel : .track/.slide/.seg/.nav-arw centralisés dans orbita.css */
+  </style>
+</head>
+<body data-theme="blue">
+
+  <!-- reserved header space — dark (night du silo) + sélecteurs -->
+  <div class="flex items-center h-[112px] bg-night">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 w-full flex items-center justify-end gap-6">
+      <!-- accent switcher -->
+      <div class="flex items-center gap-2" id="siloSwitch">
+        <span class="font-mono text-[11px] tracking-[.14em] uppercase mr-1 text-white/40">Accent</span>
+        <button class="silo-btn" data-silo="blue">Bleu</button>
+        <button class="silo-btn" data-silo="green">Vert</button>
+        <button class="silo-btn" data-silo="orange">Orange</button>
+        <button class="silo-btn" data-silo="violet">Violet</button>
+        <button class="silo-btn" data-silo="brique">Brique</button>
+        <button class="silo-btn" data-silo="magenta">Magenta</button>
+        <button class="silo-btn" data-silo="ambre">Ambre</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ testimonials ============================ -->
+  <section class="py-14 sm:py-20" id="preuves">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+
+      <!-- heading -->
+      <div class="text-center mb-16">
+        <div class="mb-8"><span class="c-head-eyebrow"><span class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial">Ils ont arrêté d'attendre</span></span></div>
+        <div class="relative inline-block">
+          <span class="c-ghost absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[clamp(56px,8vw,104px)]" aria-hidden="true">CLOSENT</span>
+          <h2 class="relative font-display font-extrabold tracking-[-0.025em] leading-[1] text-ink m-0 text-[clamp(40px,6vw,72px)]">
+            Ils <span class="c-serif-i text-primary" style="font-weight:600;">closent.</span>
+          </h2>
+        </div>
+      </div>
+
+      <!-- carousel stage -->
+      <div class="stage" id="stage">
+        <div class="track" id="track">
+          <!-- cartes générées par JS -->
+        </div>
+
+        <!-- contrôles : segments + flèches -->
+        <div class="carousel-ui hidden sm:flex items-center justify-between gap-6 mt-7" id="carouselUi">
+          <div class="flex items-center gap-2.5" id="segs" role="tablist" aria-label="Pages d'avis"></div>
+          <div class="flex items-center gap-2.5">
+            <button class="nav-arw" id="prev" aria-label="Avis précédents"><o-icon name="arrow-left" size="18"></o-icon></button>
+            <button class="nav-arw" id="next" aria-label="Avis suivants"><o-icon name="arrow-right" size="18"></o-icon></button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    /* ---------- données ---------- */
+    const DATA = [
+      { q:"Avant, j'attendais 3 semaines le devis. Maintenant je chiffre en visite. Le client est bluffé.", name:"Sophie M.", role:"Courtière · Lyon", result:"+ 12 000 € / trimestre" },
+      { q:"Un vendeur hésitait entre 3 agences. J'ai sorti un chiffrage détaillé. « Vous êtes le seul à avoir pensé à ça. » Mandat signé.", name:"Marc D.", role:"Agent immobilier · Paris", result:"4 mandats / mois" },
+      { q:"J'ai viré l'artisan de mon process. Plus d'attente, plus de relances. Mes clients me recommandent deux fois plus.", name:"Julie R.", role:"Chasseuse · Bordeaux", result:"× 2 recommandations" },
+      { q:"Mon premier chiffrage était prêt avant la fin du rendez-vous. Le client a signé sur place, sans réfléchir.", name:"Thomas L.", role:"Courtier · Nantes", result:"Closing en 1 visite" },
+      { q:"Je ne sous-traite plus aucune estimation. Marge récupérée, délais divisés par trois sur chaque dossier.", name:"Inès B.", role:"Agence · Toulouse", result:"Délais ÷ 3" },
+      { q:"Le rapport validé par un expert rassure mes clients. Mon taux de transformation a tout simplement bondi.", name:"Karim Z.", role:"Mandataire · Lille", result:"+ 28 % de closing" },
+    ];
+
+    const track = document.getElementById('track');
+    track.innerHTML = DATA.map(t => `
+      <article class="slide bg-paper border border-line p-8 flex flex-col">
+        <div class="c-serif text-primary leading-[0.5] mb-3" style="font-size:48px;">"</div>
+        <p class="text-[14.5px] leading-[1.6] text-ink-2 m-0 mb-6 flex-1">${t.q}</p>
+        <div class="pt-[18px] border-t border-line">
+          <div class="font-semibold text-[14px] text-primary">${t.name}</div>
+          <div class="text-[11px] font-semibold tracking-[.08em] uppercase text-ink-3 mt-1">${t.role}</div>
+          <span class="inline-flex items-center mt-4 px-3 py-1.5 text-[12px] font-semibold text-highlight-deep whitespace-nowrap" style="background:color-mix(in srgb, var(--highlight) 18%, transparent);">${t.result}</span>
+        </div>
+      </article>`).join('');
+
+    /* ---------- carousel ---------- */
+    const stage = document.getElementById('stage');
+    const segsWrap = document.getElementById('segs');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    const slides = () => [...track.querySelectorAll('.slide')];
+
+    const cpv = () => window.matchMedia('(min-width:1280px)').matches ? 3
+                    : window.matchMedia('(min-width:640px)').matches ? 2 : 1;
+    const pageCount = () => Math.ceil(DATA.length / cpv());
+
+    function pageTargets(){
+      const c = cpv(), s = slides(), x0 = s[0].offsetLeft, out = [];
+      for (let p = 0; p < pageCount(); p++){
+        const i = Math.min(p * c, s.length - 1);
+        out.push(s[i].offsetLeft - x0);
+      }
+      return out;
+    }
+    function activePage(){
+      const t = pageTargets(); let best = 0, bd = Infinity;
+      t.forEach((v, p) => { const d = Math.abs(v - track.scrollLeft); if (d < bd){ bd = d; best = p; } });
+      return best;
+    }
+    function go(p){
+      const t = pageTargets();
+      track.scrollTo({ left: t[Math.max(0, Math.min(p, t.length - 1))] });
+    }
+    function buildSegs(){
+      const n = pageCount();
+      segsWrap.innerHTML = '';
+      for (let p = 0; p < n; p++){
+        const b = document.createElement('button');
+        b.className = 'seg'; b.setAttribute('role','tab'); b.setAttribute('aria-label', 'Page ' + (p+1));
+        b.addEventListener('click', () => go(p));
+        segsWrap.appendChild(b);
+      }
+      sync();
+    }
+    function sync(){
+      const p = activePage(), n = pageCount();
+      [...segsWrap.children].forEach((b, i) => {
+        const on = i === p;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-selected', on);
+      });
+      prevBtn.disabled = p <= 0;
+      nextBtn.disabled = p >= n - 1;
+    }
+
+    prevBtn.addEventListener('click', () => go(activePage() - 1));
+    nextBtn.addEventListener('click', () => go(activePage() + 1));
+    let raf;
+    track.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(sync); }, { passive:true });
+    let rt;
+    window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(buildSegs, 120); });
+    // clavier quand le carrousel a le focus
+    track.tabIndex = 0;
+    track.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight'){ e.preventDefault(); go(activePage() + 1); }
+      if (e.key === 'ArrowLeft'){ e.preventDefault(); go(activePage() - 1); }
+    });
+    buildSegs();
+
+    /* ---------- switchers ---------- */
+    const root = document.documentElement, body = document.body;
+    const siloBtns = [...document.querySelectorAll('#siloSwitch .silo-btn')];
+    function setSilo(s){
+      root.setAttribute('data-theme', s); body.setAttribute('data-theme', s);
+      siloBtns.forEach(b => b.classList.toggle('is-active', b.dataset.silo === s));
+    }
+    siloBtns.forEach(b => b.addEventListener('click', () => setSilo(b.dataset.silo)));
+    setSilo('blue');
+  </script>
+</body>
+</html>

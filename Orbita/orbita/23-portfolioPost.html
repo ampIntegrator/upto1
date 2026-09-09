@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="blue">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbita — modèle de post portfolio (étude de cas)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="orbita.css" />
+  <link rel="stylesheet" href="icons.css" />
+  <script src="icons.js"></script>
+  <style type="text/tailwindcss">
+    @theme inline {
+      --font-sans: "Geist", system-ui, sans-serif;
+      --font-serif: "Cormorant Garamond", serif;
+      --font-display: "Schibsted Grotesk", system-ui, sans-serif;
+      --font-mono: "Geist Mono", monospace;
+      --color-bg: var(--bg); --color-bg-2: var(--bg-2); --color-paper: var(--paper);
+      --color-ink: var(--ink); --color-ink-2: var(--ink-2); --color-ink-3: var(--ink-3);
+      --color-line: var(--line); --color-line-2: var(--line-2);
+      --color-primary: var(--primary); --color-primary-deep: var(--primary-deep); --color-primary-soft: var(--primary-soft);
+      --color-editorial: var(--editorial); --color-highlight: var(--highlight); --color-highlight-deep: var(--highlight-deep); --color-night: var(--night);
+    }
+  </style>
+  <style>
+    body { margin:0; background:var(--bg); color:var(--ink); font-family:"Geist",system-ui,sans-serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+
+    /* ===== image à la une — full-bleed avec voile nuit ===== */
+    .case-hero { position:relative; min-height:clamp(440px,58vh,640px); display:flex; align-items:flex-end; overflow:hidden; background:var(--night); }
+    .case-hero > img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .case-hero::after { content:''; position:absolute; inset:0;
+      background:linear-gradient(180deg, rgba(8,10,26,.18) 0%, rgba(8,10,26,.30) 40%, rgba(8,10,26,.88) 100%); }
+    .case-hero-inner { position:relative; z-index:1; width:100%; }
+    .case-cap-abs { position:absolute; right:14px; bottom:12px; z-index:1; font-family:"Geist Mono",monospace; font-size:10.5px; letter-spacing:.06em; color:rgba(255,255,255,.6); }
+
+    /* ===== layout 2 colonnes ===== */
+    .case-layout { display:grid; grid-template-columns:1fr; gap:44px; }
+    @media (min-width:1024px){ .case-layout { grid-template-columns:300px minmax(0,1fr); gap:64px; } }
+    .case-main { max-width:760px; }
+
+    /* ===== fiche projet (sticky) ===== */
+    .case-info { border:1px solid var(--line); background:var(--paper); box-shadow:var(--shadow); }
+    @media (min-width:1024px){ .case-info-sticky { position:sticky; top:88px; } }
+    .case-row { display:flex; flex-direction:column; gap:3px; padding:8px 0; border-top:1px solid var(--line); }
+    .case-row:first-of-type { border-top:0; }
+    .case-row dt { font-family:"Geist Mono",monospace; font-size:10px; font-weight:500; letter-spacing:.15em; text-transform:uppercase; color:var(--editorial); }
+    .case-row dd { margin:0; font-size:14.5px; font-weight:500; color:var(--ink); line-height:1.4; }
+
+    /* ===== bandeau résultats chiffrés (nuit, dans la colonne) ===== */
+    .case-stats { margin:44px 0; border:1px solid rgba(255,255,255,.12);
+      background-color:var(--night);
+      background-image:radial-gradient(120% 130% at 88% -20%, color-mix(in srgb, var(--highlight) 20%, transparent), transparent 60%); }
+    .case-stat { padding:24px 22px; border-top:1px solid rgba(255,255,255,.1); border-left:1px solid rgba(255,255,255,.1); }
+    .case-stat-num { font-family:"Schibsted Grotesk",system-ui,sans-serif; font-weight:800; letter-spacing:-.03em; line-height:1; font-size:clamp(30px,3.6vw,42px); color:var(--highlight); white-space:nowrap; }
+    .case-stat-lbl { margin-top:9px; font-family:"Geist Mono",monospace; font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; color:rgba(255,255,255,.6); line-height:1.4; }
+
+    /* ===== galerie ===== */
+    .case-gallery { margin:40px 0; }
+    .case-gallery-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .case-gallery-grid img { width:100%; aspect-ratio:4/3; object-fit:cover; display:block; border:1px solid var(--line); background:var(--bg-2); }
+    .case-gallery-grid .span2 { grid-column:1 / -1; aspect-ratio:16/8; }
+    .case-gallery figcaption { font-family:"Geist Mono",monospace; font-size:11px; letter-spacing:.04em; color:var(--ink-3); margin-top:11px; }
+
+    /* ===== carte témoignage ===== */
+    .case-quote { display:flex; flex-direction:column; gap:20px; border:1px solid var(--line-2); background:var(--paper); padding:30px 32px; margin:44px 0; box-shadow:var(--shadow); position:relative; }
+    .case-quote::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--editorial); }
+    .prose .case-quote-text { font-family:var(--f-serif); font-style:italic; font-weight:500; font-size:clamp(21px,2.4vw,26px); line-height:1.4; color:var(--ink); margin:0; }
+    .case-quote-by { display:flex; align-items:center; gap:13px; }
+    .case-quote-av { width:48px; height:48px; object-fit:cover; border:1px solid var(--line-2); flex:0 0 auto; }
+  </style>
+</head>
+<body data-theme="blue">
+
+  <!-- ============ HEADER STICKY (condensé au scroll) ============ -->
+  <header class="post-hdr fixed inset-x-0 top-0 z-[60] bg-night" id="postHdr">
+    <div class="post-hdr-bar max-w-[1280px] mx-auto px-5 sm:px-8 flex items-center gap-6">
+      <a href="#" class="inline-flex items-center gap-[13px] no-underline shrink-0">
+        <span class="w-10 h-10 shrink-0 bg-primary flex items-center justify-center relative">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="7" stroke="#fff" stroke-width="2"/></svg>
+          <span class="c-orbit-dot absolute top-1/2 left-1/2 w-[5px] h-[5px] -m-[2.5px] rounded-full bg-highlight"></span>
+        </span>
+        <span class="font-serif font-medium text-[18px] leading-[1.15] tracking-[1px] text-white">ORBITA<br>SYSTÈME</span>
+      </a>
+      <div class="flex items-center gap-2 ml-auto" id="siloSwitch">
+        <span class="font-mono text-[11px] tracking-[.14em] uppercase mr-1 text-white/40 hidden sm:inline">Accent</span>
+        <button class="silo-btn" data-silo="blue">Bleu</button>
+        <button class="silo-btn" data-silo="green">Vert</button>
+        <button class="silo-btn" data-silo="orange">Orange</button>
+        <button class="silo-btn" data-silo="violet">Violet</button>
+        <button class="silo-btn" data-silo="brique">Brique</button>
+        <button class="silo-btn" data-silo="magenta">Magenta</button>
+        <button class="silo-btn" data-silo="ambre">Ambre</button>
+      </div>
+    </div>
+    <div class="read-bar" id="readBar"></div>
+  </header>
+  <div class="post-hdr-spacer"></div>
+
+  <!-- ============ BREADCRUMB ============ -->
+  <nav class="border-b border-line bg-paper" aria-label="Fil d'ariane">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 py-3.5 crumb">
+      <a href="#">Accueil</a>
+      <o-icon name="chevron-right" size="12"></o-icon>
+      <a href="#">Réalisations</a>
+      <o-icon name="chevron-right" size="12"></o-icon>
+      <span class="current">Vasseur Construction</span>
+    </div>
+  </nav>
+
+  <!-- ============================ IMAGE À LA UNE — FULL-BLEED ============================ -->
+  <section class="case-hero">
+    <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1920&q=80&auto=format&fit=crop" alt="Chantier de rénovation Vasseur Construction" />
+    <div class="case-hero-inner on-dark pb-10 sm:pb-14">
+      <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+        <div class="flex items-center gap-2.5 mb-5">
+          <span class="c-chip c-chip-cat">Étude de cas</span>
+          <span class="c-chip" style="border-color:transparent; color:var(--highlight-deep); background:color-mix(in srgb, var(--highlight) 16%, #fff);">Rénovation</span>
+        </div>
+        <h1 class="font-display font-extrabold tracking-[-0.025em] leading-[1.03] text-white m-0 max-w-[940px] text-[clamp(32px,5vw,60px)]">
+          Comment Vasseur Construction a <span class="c-serif-i text-highlight">divisé par trois</span> son temps de chiffrage
+        </h1>
+        <p class="mt-5 max-w-[620px] text-[18px] leading-[1.55] text-white/80">
+          Estimer un chantier de rénovation prenait jusqu'à trois jours. En six semaines, l'équipe a ramené ce délai à quelques heures — sans embaucher, sans rogner sur la précision.
+        </p>
+      </div>
+    </div>
+    <span class="case-cap-abs">img · à la une — full-bleed, ~1920px</span>
+  </section>
+
+  <!-- ============================ CORPS : FICHE + RÉCIT ============================ -->
+  <div class="max-w-[1280px] mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-20 sm:pb-28">
+    <div class="case-layout">
+
+      <!-- ===== COLONNE GAUCHE — FICHE PROJET (sticky) ===== -->
+      <aside>
+        <div class="case-info-sticky">
+          <div class="case-info px-6 pt-5 pb-5">
+            <dl class="m-0">
+              <div class="case-row"><dt>Client</dt><dd class="flex items-center justify-between gap-3"><span>Vasseur Construction</span><a href="#" aria-label="Site de Vasseur Construction" class="text-primary shrink-0 transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)] hover:text-primary-deep"><o-icon name="globe" size="16"></o-icon></a></dd></div>
+              <div class="case-row"><dt>Secteur</dt><dd>Rénovation &amp; gros œuvre</dd></div>
+              <div class="case-row"><dt>Localisation</dt><dd>Nantes (44)</dd></div>
+              <div class="case-row"><dt>Déploiement</dt><dd>6 semaines · mars 2025</dd></div>
+              <div class="case-row">
+                <dt>Modules Orbita</dt>
+                <dd class="flex flex-wrap gap-1.5 mt-1">
+                  <span class="c-chip c-chip-accent">Chiffrage instantané</span>
+                  <span class="c-chip c-chip-accent">Métré auto</span>
+                  <span class="c-chip c-chip-accent">Devis client</span>
+                </dd>
+              </div>
+            </dl>
+
+            <!-- mini-résultats -->
+            <div class="mt-4 pt-4 border-t border-line grid grid-cols-2 gap-4">
+              <div>
+                <div class="c-num text-primary text-[26px]">−68 %</div>
+                <div class="font-mono text-[9.5px] tracking-[.12em] uppercase text-ink-3 mt-1.5 leading-[1.4]">Temps de chiffrage</div>
+              </div>
+              <div>
+                <div class="c-num text-primary text-[26px]">×2,4</div>
+                <div class="font-mono text-[9.5px] tracking-[.12em] uppercase text-ink-3 mt-1.5 leading-[1.4]">Devis envoyés</div>
+              </div>
+            </div>
+
+            <!-- CTA -->
+            <a class="c-btn-split is-block mt-4" href="#" style="font-weight:600;">
+              <span class="lbl flex-1 justify-center text-[14px]">Réserver une démo</span>
+              <span class="arw"><o-icon name="arrow-right" size="16"></o-icon></span>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- ===== COLONNE DROITE — RÉCIT (prose) ===== -->
+      <article class="case-main prose" id="article">
+
+        <p class="lead">
+          Vasseur Construction signe une centaine de chantiers par an, de la rénovation énergétique au gros œuvre. Mais derrière chaque affaire signée, un même goulot d'étranglement : le chiffrage. Récit d'un déploiement qui a déverrouillé tout le cycle commercial.
+        </p>
+
+        <h2>Le contexte : un seul métreur, cent chantiers</h2>
+        <p>
+          Comme beaucoup d'entreprises de sa taille, Vasseur reposait sur l'expérience d'un unique métreur pour estimer l'ensemble de ses chantiers. Une compétence précieuse — mais un point de passage obligé qui ralentissait toute l'agence. Quand les demandes s'accumulaient, les devis partaient en retard, et les <strong>meilleures affaires filaient chez le concurrent le plus réactif</strong>.
+        </p>
+        <ul>
+          <li>Un seul métreur expérimenté pour toute l'agence</li>
+          <li>Trois jours de délai moyen entre la visite et le devis</li>
+          <li>Près d'une affaire sur quatre perdue, faute de réactivité</li>
+        </ul>
+
+        <blockquote>
+          <p>« On perdait des chantiers non pas sur le prix, mais sur le délai. Le premier qui chiffre, c'est souvent celui qui signe. »</p>
+          <cite>Julien Vasseur — gérant, Vasseur Construction</cite>
+        </blockquote>
+
+        <h2>L'approche : industrialiser sans dénaturer</h2>
+        <p>
+          L'enjeu n'était pas de remplacer le savoir-faire du métreur, mais de le <em>démultiplier</em>. Plutôt que d'imposer une nouvelle bibliothèque de prix, Orbita a repris celle de Vasseur — ses ouvrages, ses ratios, ses marges — pour que l'équipe retrouve ses repères dès le premier devis.
+        </p>
+        <p>
+          Le métré, lui, a été branché directement sur les plans : surfaces, linéaires et quantités se calculent automatiquement, puis alimentent un devis structuré, prêt à envoyer. Chaque estimation reste relue par un humain — mais part le jour même.
+        </p>
+
+        <h2>Le déploiement, étape par étape</h2>
+        <p>
+          Inutile de tout changer d'un coup. Le déploiement s'est fait en six semaines, levier après levier, sans interrompre l'activité :
+        </p>
+        <ol>
+          <li><strong>Reprise de la bibliothèque de prix</strong> existante, telle quelle, pour une adoption immédiate.</li>
+          <li><strong>Paramétrage des ouvrages types</strong> les plus fréquents — isolation, maçonnerie, second œuvre.</li>
+          <li><strong>Métré automatique</strong> connecté aux plans PDF et DWG fournis par les clients.</li>
+          <li><strong>Formation de l'équipe</strong> en deux demi-journées, sur des chantiers réels.</li>
+          <li><strong>Bascule progressive</strong>, chantier par chantier, jusqu'à 100 % des devis.</li>
+        </ol>
+
+        <!-- bandeau résultats chiffrés -->
+        <div class="case-stats on-dark grid grid-cols-2 sm:grid-cols-4">
+          <div class="case-stat"><div class="case-stat-num">−68 %</div><div class="case-stat-lbl">Temps de chiffrage</div></div>
+          <div class="case-stat"><div class="case-stat-num">×2,4</div><div class="case-stat-lbl">Devis envoyés / mois</div></div>
+          <div class="case-stat"><div class="case-stat-num">+31 %</div><div class="case-stat-lbl">Taux de signature</div></div>
+          <div class="case-stat"><div class="case-stat-num">48 h</div><div class="case-stat-lbl">Délai moyen d'envoi</div></div>
+        </div>
+
+        <h2>Sur le terrain</h2>
+        <p>
+          Six mois après la bascule, le métreur n'est plus un goulot mais un chef d'orchestre : il valide, ajuste, arbitre — pendant que les estimations courantes sortent en quelques heures.
+        </p>
+
+        <!-- galerie -->
+        <figure class="case-gallery">
+          <div class="case-gallery-grid">
+            <img class="span2" src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1280&q=80&auto=format&fit=crop" alt="Chantier de rénovation en cours" />
+            <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80&auto=format&fit=crop" alt="Façade en rénovation" />
+            <img src="https://images.unsplash.com/photo-1416339306562-f3d12fefd36f?w=800&q=80&auto=format&fit=crop" alt="Équipe sur le chantier" />
+          </div>
+          <figcaption>img · galerie — chantiers chiffrés avec Orbita (Nantes, 2025)</figcaption>
+        </figure>
+
+        <!-- encart à retenir -->
+        <div class="callout">
+          <div class="callout-head"><span>À retenir</span></div>
+          <ul>
+            <li>Le gain le plus net vient du <strong>métré automatique</strong>, pas du calcul de prix.</li>
+            <li>Une bibliothèque de prix reprise <strong>telle quelle</strong> = adoption immédiate par l'équipe.</li>
+            <li>Mesurez le <strong>délai visite → devis</strong> avant tout autre indicateur.</li>
+          </ul>
+        </div>
+
+        <h2>Les résultats, six mois après</h2>
+        <p>
+          Le délai moyen d'envoi d'un devis est passé de trois jours à moins de quarante-huit heures. Le volume de devis émis a plus que doublé, sans embauche. Et surtout, le taux de transformation a grimpé de près d'un tiers : à offre égale, la réactivité fait la différence.
+        </p>
+        <p>
+          Au-delà des chiffres, c'est la sérénité de l'équipe qui a changé. Les pics de demandes ne se traduisent plus par des nuits de métré, et le métreur peut enfin se concentrer sur les chantiers complexes, là où son expertise compte vraiment.
+        </p>
+
+        <!-- témoignage -->
+        <div class="case-quote">
+          <p class="case-quote-text">
+            « En six semaines, on a transformé notre point faible en avantage commercial. Aujourd'hui, on répond plus vite que tout le monde — et ça se voit sur le carnet de commandes. »
+          </p>
+          <div class="case-quote-by">
+            <img class="case-quote-av" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=96&h=96&q=80&auto=format&fit=crop" alt="" />
+            <div class="leading-tight">
+              <div class="text-[14.5px] font-semibold text-ink">Julien Vasseur</div>
+              <div class="text-[12.5px] text-ink-3 mt-0.5">Gérant · Vasseur Construction</div>
+            </div>
+          </div>
+        </div>
+
+        <h2>Conclusion</h2>
+        <p>
+          Industrialiser le chiffrage ne consiste pas à retirer l'humain de l'équation, mais à le placer là où il crée le plus de valeur. Pour Vasseur Construction, c'est la différence entre subir le flux des demandes et le piloter — un levier de croissance autant qu'un confort de travail retrouvé.
+        </p>
+
+      </article>
+    </div>
+  </div>
+
+  <script>
+    /* ===== chrome de lecture : progression + condensation + accent ===== */
+    (function () {
+      const bar = document.getElementById('readBar');
+      function progress() {
+        const doc = document.documentElement;
+        const max = doc.scrollHeight - doc.clientHeight;
+        bar.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + '%';
+      }
+      const postHdr = document.getElementById('postHdr');
+      function condense() { postHdr.classList.toggle('is-scrolled', window.scrollY > 24); }
+
+      let ticking = false;
+      function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => { progress(); condense(); ticking = false; });
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
+      progress(); condense();
+    })();
+
+    /* ===== sélecteur d'accent (démo) ===== */
+    (function () {
+      const root = document.documentElement, body = document.body;
+      const siloBtns = [...document.querySelectorAll('.silo-btn')];
+      function setSilo(s){
+        root.setAttribute('data-theme', s); body.setAttribute('data-theme', s);
+        siloBtns.forEach(b => b.classList.toggle('is-active', b.dataset.silo === s));
+      }
+      siloBtns.forEach(b => b.addEventListener('click', () => setSilo(b.dataset.silo)));
+      setSilo('blue');
+    })();
+  </script>
+</body>
+</html>

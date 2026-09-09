@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="blue">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbita — final CTA · dark</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="orbita.css" />
+  <link rel="stylesheet" href="icons.css" />
+  <script src="icons.js"></script>
+  <style type="text/tailwindcss">
+    @theme inline {
+      --font-sans: "Geist", system-ui, sans-serif;
+      --font-serif: "Cormorant Garamond", serif;
+      --font-display: "Schibsted Grotesk", system-ui, sans-serif;
+      --font-mono: "Geist Mono", monospace;
+      --color-primary: var(--primary); --color-primary-deep: var(--primary-deep); --color-primary-soft: var(--primary-soft);
+      --color-editorial: var(--editorial); --color-highlight: var(--highlight); --color-night: var(--night);
+    }
+  </style>
+  <style>
+body { margin:0; background:var(--night); color:#fff; font-family:"Geist",system-ui,sans-serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+  </style>
+</head>
+<body data-theme="blue">
+
+  <!-- reserved header space — dark + sélecteur d'accent -->
+  <div class="flex items-center h-[112px]" style="background:rgba(0,0,0,.25);">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 w-full flex items-center justify-end gap-6">
+      <div class="flex items-center gap-2" id="siloSwitch">
+        <span class="font-mono text-[11px] tracking-[.14em] uppercase mr-1 text-white/40">Accent</span>
+        <button class="silo-btn" data-silo="blue">Bleu</button>
+        <button class="silo-btn" data-silo="green">Vert</button>
+        <button class="silo-btn" data-silo="orange">Orange</button>
+        <button class="silo-btn" data-silo="violet">Violet</button>
+        <button class="silo-btn" data-silo="brique">Brique</button>
+        <button class="silo-btn" data-silo="magenta">Magenta</button>
+        <button class="silo-btn" data-silo="ambre">Ambre</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ final CTA · dark ============================ -->
+  <section class="c-darkbg" style="padding:120px 0;">
+    <div class="max-w-[860px] mx-auto px-5 sm:px-8 text-center">
+
+      <!-- Heading 3 lignes — UNE seule balise tag-agnostique.
+           Ici un <h2> porte .o-headline ; le back-office peut le
+           remplacer par n'importe quelle balise (h1…h6, p, span, div)
+           pour le SEO sans changer l'apparence.
+           La ligne du milieu est un <span> en display:block : c'est
+           lui qui scinde le texte en 3 lignes. -->
+      <h2 class="o-headline" style="margin-bottom:24px;">
+        Vous serez le courtier
+        <span class="o-headline__accent">qui chiffre.</span>
+        Pas celui qui attend.
+      </h2>
+
+      <!-- sous-titre -->
+      <p class="text-[17px] leading-[1.55] mx-auto max-w-[560px] mb-9" style="color:#fff;">
+        Première estimation offerte. Rapport PDF validé par un ingénieur BTP, sous 48 h, à votre nom.
+      </p>
+
+      <!-- CTA -->
+      <div class="inline-flex">
+        <a class="c-btn-split c-btn-split--ondark" href="#">
+          <span class="lbl">Faire mon 1er chiffrage gratuit</span>
+          <span class="arw"><o-icon name="arrow-right" size="16"></o-icon></span>
+        </a>
+      </div>
+
+      <!-- preuve -->
+      <div class="font-mono text-[11.5px] tracking-[.16em] uppercase mt-9" style="color:#fff;">
+        850 + courtiers en ont déjà fait l'expérience
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    const root = document.documentElement, body = document.body;
+    const siloBtns = [...document.querySelectorAll('.silo-btn')];
+    function setSilo(s){
+      root.setAttribute('data-theme', s); body.setAttribute('data-theme', s);
+      siloBtns.forEach(b => b.classList.toggle('is-active', b.dataset.silo === s));
+    }
+    siloBtns.forEach(b => b.addEventListener('click', () => setSilo(b.dataset.silo)));
+    setSilo('blue');
+  </script>
+</body>
+</html>

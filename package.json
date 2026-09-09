@@ -15,23 +15,31 @@
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "test": "pnpm run test:int && pnpm run test:e2e",
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
-    "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts"
+    "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
+    "theme:build": "node scripts/build-themes.mjs",
+    "icons:build": "node scripts/build-icons.mjs",
+    "catalog:build": "node scripts/gen-catalog.mjs"
   },
   "dependencies": {
+    "@astryxdesign/core": "0.5.4",
+    "@heroicons/react": "^2.2.0",
+    "@payloadcms/db-sqlite": "3.88.0",
     "@payloadcms/next": "3.88.0",
     "@payloadcms/richtext-lexical": "3.88.0",
     "@payloadcms/ui": "3.88.0",
+    "@stylexjs/stylex": "0.19.0",
     "cross-env": "^7.0.3",
     "dotenv": "16.4.7",
     "graphql": "^16.8.1",
+    "lucide-react": "^1.41.0",
     "next": "16.3.3",
     "payload": "3.88.0",
     "react": "19.2.6",
     "react-dom": "19.2.6",
-    "sharp": "0.34.2",
-    "@payloadcms/db-sqlite": "3.88.0"
+    "sharp": "0.34.2"
   },
   "devDependencies": {
+    "@astryxdesign/cli": "0.5.4",
     "@playwright/test": "1.58.2",
     "@testing-library/react": "16.3.0",
     "@types/node": "22.19.9",

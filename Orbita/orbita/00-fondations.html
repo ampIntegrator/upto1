@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="blue">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbita — Fondations du design system</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @theme inline {
+      --font-sans: "Geist", system-ui, sans-serif;
+      --font-serif: "Cormorant Garamond", serif;
+      --font-mono: "Geist Mono", monospace;
+      --font-display: var(--f-display);
+
+      --color-bg: var(--bg);
+      --color-bg-2: var(--bg-2);
+      --color-paper: var(--paper);
+      --color-ink: var(--ink);
+      --color-ink-2: var(--ink-2);
+      --color-ink-3: var(--ink-3);
+      --color-line: var(--line);
+      --color-line-2: var(--line-2);
+      --color-primary: var(--primary);
+      --color-primary-deep: var(--primary-deep);
+      --color-editorial: var(--editorial);
+      --color-editorial-deep: var(--editorial-deep);
+      --color-highlight: var(--highlight);
+      --color-highlight-deep: var(--highlight-deep);
+      --color-night: var(--night);
+      --color-danger: var(--danger);
+    }
+  </style>
+  <style>
+    /* ===== Neutres (constants) ===== */
+    :root {
+      --t-dur: .25s; --t-ease: ease-in-out;
+      --chip-h: 28px;
+      --paper: #FFFFFF;
+      --ink: #0C1424; --ink-2: #3A4456; --ink-3: #6A7486;
+      --line: #E1E6F1; --line-2: #CCD4E4;
+      --editorial: #C7972E; --editorial-deep: #A37B1F;  /* OR — fil de marque, constant */
+      --danger: #D0342C;                                /* danger neutre, constant */
+      --f-display: "Schibsted Grotesk", system-ui, sans-serif;
+      --f-serif: "Cormorant Garamond", Georgia, serif;  /* serif accent — verrouillé, italique 500 */
+      --shadow: 0 2px 6px rgba(12,20,40,.05), 0 14px 36px rgba(12,20,40,.07);
+    }
+
+    /* ===== Triades par silo ===== */
+    [data-theme="blue"]{
+      --bg:#F4F6FB; --bg-2:#E8ECF6;
+      --primary:#4F46E5; --primary-deep:#3D34C9; --primary-soft:rgba(79,70,229,.09);
+      --highlight:#10E0C8; --highlight-deep:#0A9E8E;
+      --night:#1B1A4E;  --tint:rgba(79,70,229,.06);
+      --badge-bg:rgba(16,184,160,.16); --badge-fg:#0E8E7E;
+    }
+    [data-theme="green"]{
+      --bg:#F1F6F2; --bg-2:#E4EFE7;
+      --primary:#40916C; --primary-deep:#2F6E51; --primary-soft:rgba(64,145,108,.10);
+      --highlight:#90D150; --highlight-deep:#5E9B22;
+      --night:#0E2C2E;  --tint:rgba(64,145,108,.07);
+      --badge-bg:rgba(74,144,226,.12); --badge-fg:#3370C2;
+    }
+    [data-theme="orange"]{
+      --bg:#FBF5EF; --bg-2:#F4E8DC;
+      --primary:#DC5A20; --primary-deep:#B5470F; --primary-soft:rgba(220,90,32,.10);
+      --highlight:#F5C403; --highlight-deep:#B58A00;
+      --night:#2A1409;  --tint:rgba(220,90,32,.07);
+      --badge-bg:var(--primary-soft); --badge-fg:var(--primary);
+    }
+    [data-theme="violet"]{
+      --bg:#F7F3FB; --bg-2:#EDE4F5;
+      --primary:#8B47BE; --primary-deep:#6E2FA0; --primary-soft:rgba(139,71,190,.10);
+      --highlight:#C77DFF; --highlight-deep:#9333D6;
+      --night:#241038;  --tint:rgba(139,71,190,.07);
+      --badge-bg:var(--primary-soft); --badge-fg:var(--primary);
+    }
+    [data-theme="brique"]{
+      --bg:#FBF2F1; --bg-2:#F4DFDC;
+      --primary:#C2362F; --primary-deep:#9F2620; --primary-soft:rgba(194,54,47,.11);
+      --highlight:#FF8A5B; --highlight-deep:#C24A22;
+      --night:#2A1012;  --tint:rgba(194,54,47,.07);
+      --badge-bg:var(--primary-soft); --badge-fg:var(--primary);
+    }
+    [data-theme="magenta"]{
+      --bg:#FBF1F7; --bg-2:#F4DCEC;
+      --primary:#C42E86; --primary-deep:#9E2068; --primary-soft:rgba(196,46,134,.11);
+      --highlight:#FF7AC4; --highlight-deep:#C42E86;
+      --night:#2A0E22;  --tint:rgba(196,46,134,.07);
+      --badge-bg:var(--primary-soft); --badge-fg:var(--primary);
+    }
+    [data-theme="ambre"]{
+      --bg:#FBF6EC; --bg-2:#F3E7CC;
+      --primary:#C99016; --primary-deep:#9E6F08; --primary-soft:rgba(201,144,22,.12);
+      --highlight:#F5CE5B; --highlight-deep:#B5810F;
+      --night:#241B06;  --tint:rgba(201,144,22,.07);
+      --badge-bg:var(--primary-soft); --badge-fg:var(--primary);
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; background: var(--bg); color: var(--ink);
+      font-family: "Geist", system-ui, sans-serif; font-size: 15px; line-height: 1.5;
+      -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+    }
+
+    .c-serif   { font-family: var(--f-serif); }
+    .c-serif-i { font-family: var(--f-serif); font-style: italic; font-weight: 600; }
+    .c-mono    { font-family: "Geist Mono", monospace; }
+
+    /* display heading */
+    .c-display {
+      font-family: var(--f-display);
+      font-weight: 800; line-height: 0.98; letter-spacing: -0.025em;
+      color: var(--ink); margin: 0;
+    }
+
+    /* eyebrow */
+    .c-eyebrow {
+      font-size: 11.5px; font-weight: 600; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--ink-3);
+    }
+    .c-eyebrow-accent { color: var(--editorial); }
+    .c-head-eyebrow { display:inline-flex; align-items:center; gap:14px; }
+    .c-head-eyebrow::before, .c-head-eyebrow::after {
+      content:''; width:40px; height:1px; background:var(--editorial); opacity:.6;
+    }
+
+    /* buttons */
+    .c-btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      padding:14px 24px; font-family:"Geist",sans-serif; font-size:14.5px; font-weight:600;
+      letter-spacing:-.005em; border:none; background:transparent; color:inherit; cursor:pointer;
+      transition:background .18s, box-shadow .18s, border-color .18s, color .18s, transform .12s;
+      text-decoration:none; border-radius:0;
+    }
+    .c-btn:active { transform: translateY(1px); }
+    .c-btn-primary { background:var(--ink); color:#fff; }
+    .c-btn-primary:hover { background:var(--primary); }
+    .c-btn-accent { background:var(--primary); color:#fff; box-shadow:0 10px 24px var(--primary-soft); }
+    .c-btn-accent:hover { background:var(--primary-deep); }
+    .c-btn-ghost { border:1px solid var(--line-2); color:var(--ink); background:var(--paper); }
+    .c-btn-ghost:hover { border-color:var(--primary); color:var(--primary); }
+    .c-btn-lg { padding:18px 32px; font-size:16px; }
+
+    /* split button — cadre intérieur qui s'étend au survol + cellule flèche (arwPop) */
+    .c-btn-split { display:inline-flex; align-items:stretch; position:relative; color:#fff; background:var(--primary); box-shadow:0 10px 24px var(--primary-soft); border:none; cursor:pointer; font-family:"Geist",sans-serif; font-weight:600; font-size:15px; text-decoration:none; transition:background var(--t-dur) var(--t-ease); }
+    .c-btn-split .lbl { display:flex; align-items:center; padding:15px 26px; white-space:nowrap; }
+    .c-btn-split .arw { display:flex; align-items:center; justify-content:center; flex:0 0 54px; width:54px; align-self:stretch; border-left:1px solid rgba(255,255,255,.38); transition:border-color var(--t-dur) var(--t-ease); }
+    .c-btn-split .arw svg { transition:transform var(--t-dur) var(--t-ease); }
+    .c-btn-split:hover { background:var(--primary-deep); }
+    .c-btn-split:hover .arw { border-left-color:transparent; }
+    .c-btn-split:hover .arw svg { transform:scale(1.25); animation:arwPop .45s var(--t-ease); }
+    .c-btn-split::before { content:''; position:absolute; inset:5px; border:1px solid rgba(255,255,255,.34); pointer-events:none; transition:inset var(--t-dur) var(--t-ease), opacity var(--t-dur) var(--t-ease); }
+    .c-btn-split:hover::before { inset:0; opacity:0; }
+    @keyframes arwPop { 0%{ transform:scale(1);} 45%{ transform:scale(.8);} 100%{ transform:scale(1.25);} }
+    .c-btn-split--ondark { box-shadow:0 14px 36px rgba(0,0,0,.34); }
+
+    /* chips — carrés */
+    .c-chip { display:inline-flex; align-items:center; gap:6px; height:var(--chip-h); padding:0 11px; line-height:1; border:1px solid var(--line-2); background:var(--paper); font-size:11px; font-weight:600; letter-spacing:.03em; color:var(--ink-2); border-radius:0; }
+    .c-chip-accent  { border-color:transparent; color:var(--primary); background:var(--primary-soft); }
+    .c-chip-high    { border-color:transparent; color:var(--highlight-deep); background:color-mix(in srgb, var(--highlight) 18%, transparent); }
+    .c-chip-badge   { border-color:transparent; color:var(--badge-fg); background:var(--badge-bg); }
+    .c-chip-danger  { border-color:transparent; color:var(--danger); background:rgba(208,52,44,.09); }
+    .c-chip-cat     { gap:7px; padding:0 13px; border:none; background:var(--primary); color:#fff; font-family:"Geist Mono",monospace; font-weight:500; letter-spacing:.16em; text-transform:uppercase; }
+
+    /* card */
+    .c-card { background:var(--paper); border:1px solid var(--line); padding:28px; border-radius:0; box-shadow:var(--shadow); }
+
+    /* progress bar */
+    .c-bar { height:6px; background:var(--bg-2); position:relative; border-radius:0; overflow:hidden; }
+    .c-bar-fill { position:absolute; inset:0; background:linear-gradient(90deg, var(--primary), var(--highlight)); transform-origin:left; }
+
+    /* dark section — fond dégradé latéral (identique à priceList dark) */
+    .c-dark {
+      background-color:var(--night);
+      background-image:
+        linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--primary) 32%, transparent) 50%, transparent 100%),
+        linear-gradient(90deg, rgba(0,0,0,.36) 0%, transparent 24%, transparent 76%, rgba(0,0,0,.36) 100%);
+      color: var(--paper);
+    }
+
+    /* ghost text */
+    .c-ghost { font-family:var(--f-display); font-weight:800; letter-spacing:-.02em; line-height:.96; white-space:nowrap; color:transparent; -webkit-text-stroke:1.2px var(--line-2); user-select:none; }
+    .c-ghost-gold { -webkit-text-stroke-color:var(--editorial); opacity:.85; }
+    .c-ghost-high { -webkit-text-stroke-color:var(--highlight-deep); }
+
+    /* ===== Textures de fond (filets discrets) ===== */
+    /* 1 · blueprint grid (orthogonal) */
+    .c-blueprint,
+    .c-tex-grid { background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px); background-size:48px 48px; }
+    /* 2 · dot grid */
+    .c-tex-dots { background-image: radial-gradient(var(--line-2) 1.3px, transparent 1.5px); background-size:32px 32px; }
+    /* 3 · losanges (blueprint diagonal, croisé deux sens) */
+    .c-tex-losange { background-image: repeating-linear-gradient(45deg, var(--line) 0 1px, transparent 1px 32px), repeating-linear-gradient(-45deg, var(--line) 0 1px, transparent 1px 32px); }
+
+    .tex-demo { height:150px; border:1px solid var(--line); position:relative; }
+    .tex-demo .tex-tag { position:absolute; left:0; bottom:0; background:var(--paper); border-top:1px solid var(--line); border-right:1px solid var(--line); padding:6px 12px; font-size:10.5px; font-weight:600; letter-spacing:.04em; color:var(--ink-2); font-family:"Geist Mono",monospace; }
+
+    /* rule */
+    .c-rule { height:1px; background:var(--line); border:0; width:100%; }
+
+    /* logo glyph + orbit dot */
+    .c-glyph { width:42px; height:42px; flex-shrink:0; background:var(--primary); display:flex; align-items:center; justify-content:center; position:relative; }
+    .c-orbit-dot { position:absolute; top:50%; left:50%; width:5px; height:5px; margin:-2.5px; border-radius:50%; background:var(--highlight); box-shadow:0 0 7px color-mix(in srgb, var(--highlight) 85%, transparent); animation:c-orbit 7s linear infinite; }
+    @keyframes c-orbit { from{ transform:rotate(0) translateX(26px) rotate(0);} to{ transform:rotate(360deg) translateX(26px) rotate(-360deg);} }
+    @media (prefers-reduced-motion: reduce){ .c-orbit-dot{ animation:none; transform:rotate(-34deg) translateX(26px);} }
+    .c-brand-name { font-family:var(--f-serif); font-weight:500; font-size:22px; line-height:1; letter-spacing:.30em; color:var(--ink); }
+
+    /* breadcrumb / fil d'ariane */
+    .crumb { display:flex; align-items:center; flex-wrap:wrap; gap:9px; font-family:"Geist Mono",monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; }
+    .crumb a { color:var(--ink-3); text-decoration:none; white-space:nowrap; transition:color var(--t-dur) var(--t-ease); }
+    .crumb a:hover { color:var(--primary); }
+    .crumb svg { color:var(--primary); flex:0 0 auto; }
+    .crumb .current { color:var(--ink-2); white-space:nowrap; }
+
+    /* swatch */
+    .sw { height:64px; border:1px solid rgba(12,20,40,.08); display:flex; align-items:flex-end; padding:8px; }
+    .sw-lbl { font-size:10.5px; font-weight:600; letter-spacing:.02em; }
+  </style>
+  <link rel="stylesheet" href="icons.css" />
+  <script src="icons.js"></script>
+</head>
+<body>
+  <!-- ============ TOP BAR / SWITCHER ============ -->
+  <header class="sticky top-0 z-50" style="background:color-mix(in oklab, var(--bg) 84%, transparent); backdrop-filter:saturate(160%) blur(16px); border-bottom:1px solid var(--line);">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 h-[68px] flex items-center justify-between gap-6">
+      <a class="inline-flex items-center gap-3.5 no-underline" href="#">
+        <span class="c-glyph">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="7" stroke="#fff" stroke-width="2"/></svg>
+          <span class="c-orbit-dot"></span>
+        </span>
+        <span class="c-brand-name">ORBITA</span>
+        <span class="c-mono hidden sm:inline" style="font-size:9.5px; font-weight:600; letter-spacing:.18em; color:var(--editorial); margin-left:10px; padding-left:12px; border-left:1px solid var(--editorial); text-transform:uppercase;">Design System</span>
+      </a>
+      <nav class="flex items-center gap-1.5" id="silo-switch">
+        <button data-silo="blue"   class="silo-btn">Bleu</button>
+        <button data-silo="green"  class="silo-btn">Vert</button>
+        <button data-silo="orange" class="silo-btn">Orange</button>
+        <button data-silo="violet" class="silo-btn">Violet</button>
+        <button data-silo="brique" class="silo-btn">Brique</button>
+        <button data-silo="magenta" class="silo-btn">Magenta</button>
+        <button data-silo="ambre" class="silo-btn">Ambre</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============ BREADCRUMB (non sticky) ============ -->
+  <nav class="border-b border-line bg-paper" aria-label="Fil d'ariane">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 py-3.5 crumb">
+      <a href="#">Accueil</a>
+      <o-icon name="chevron-right" size="12"></o-icon>
+      <a href="#">Design System</a>
+      <o-icon name="chevron-right" size="12"></o-icon>
+      <span class="current">Fondations</span>
+    </div>
+  </nav>
+
+  <main class="max-w-[1280px] mx-auto px-5 sm:px-8 py-16">
+
+    <!-- intro -->
+    <div class="mb-20">
+      <div class="c-head-eyebrow mb-4"><span class="c-eyebrow c-eyebrow-accent">Fondations · à valider</span></div>
+      <h1 class="c-display" style="font-size:clamp(42px,6vw,76px);">Le socle <span class="c-serif-i" style="color:var(--primary); font-weight:600;">Orbita.</span></h1>
+      <p class="mt-5 max-w-[620px]" style="font-size:18px; color:var(--ink-2);">Quatre silos, un même squelette. Choisis la police du gros titre ci-dessous et valide les quatre triades — ensuite je décline tous les blocs. Le sélecteur en haut à droite change de silo en direct.</p>
+    </div>
+
+    <!-- ============ 1. TYPOGRAPHIE ============ -->
+    <section class="mb-24">
+      <div class="flex items-baseline gap-4 mb-2">
+        <span class="c-mono" style="font-size:12px; color:var(--ink-3);">01</span>
+        <h2 class="c-display" style="font-size:30px;">Typographie</h2>
+      </div>
+      <p class="mb-8" style="color:var(--ink-2); max-width:660px;">Display <b>Schibsted Grotesk</b> + texte <b>Geist</b> + accent <b>Cormorant Garamond</b> (italique 600) — tout est verrouillé.</p>
+
+      <!-- display + body lockés -->
+      <div class="grid gap-5 mb-5" style="grid-template-columns:1fr;">
+        <div class="c-card" style="padding:32px;">
+          <div class="flex items-center justify-between mb-5">
+            <span class="c-chip c-chip-badge">DISPLAY · verrouillé</span>
+          </div>
+          <p class="c-display" style="font-size:clamp(30px,4.6vw,56px);">Chiffrez les travaux<br><span class="c-serif-i" style="color:var(--primary); font-weight:600; letter-spacing:0;">en 20 minutes.</span> Sans artisan.</p>
+        </div>
+        <div class="c-card" style="padding:32px;">
+          <div class="flex items-center justify-between mb-5">
+            <span class="c-chip c-chip-badge">TEXTE · verrouillé</span>
+          </div>
+          <p style="font-size:17px; line-height:1.6; color:var(--ink-2); max-width:640px;">Le devis arrive jamais. Le client signe ailleurs. Chiffrage Pro vous sort de cette dépendance — estimation détaillée, validée expert, livrable client en moins de 48 heures.</p>
+          <div class="flex flex-wrap gap-x-7 gap-y-1 mt-5" style="color:var(--ink);">
+            <span style="font-weight:300;">Light 300</span><span style="font-weight:400;">Regular 400</span><span style="font-weight:500;">Medium 500</span><span style="font-weight:600;">Semibold 600</span><span style="font-weight:700;">Bold 700</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- serif accent verrouillé -->
+      <p class="c-eyebrow mb-3">Accent serif · Cormorant Garamond italique 600</p>
+      <div class="c-card" style="padding:32px;">
+        <p class="c-display" style="font-size:clamp(28px,4vw,46px);">3 étapes. <span class="c-serif-i" style="color:var(--primary);">48 h max.</span> &nbsp;·&nbsp; Ce que ça vous <span class="c-serif-i" style="color:var(--primary);">rapporte.</span></p>
+        <div class="flex flex-wrap gap-x-9 gap-y-2 mt-7 items-baseline">
+          <span class="c-serif-i" style="font-weight:400; font-size:30px; color:var(--primary);">en 20 minutes. <span class="c-mono" style="font-size:12px; color:var(--ink-3); font-style:normal;">400</span></span>
+          <span class="c-serif-i" style="font-weight:500; font-size:30px; color:var(--primary);">en 20 minutes. <span class="c-mono" style="font-size:12px; color:var(--ink-3); font-style:normal;">500</span></span>
+          <span class="c-serif-i" style="font-weight:600; font-size:30px; color:var(--primary);">en 20 minutes. <span class="c-mono" style="font-size:12px; color:var(--ink-3); font-style:normal;">600 ✓</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 2. TRIADES ============ -->
+    <section class="mb-24">
+      <div class="flex items-baseline gap-4 mb-2">
+        <span class="c-mono" style="font-size:12px; color:var(--ink-3);">02</span>
+        <h2 class="c-display" style="font-size:30px;">Les 4 palettes</h2>
+      </div>
+      <p class="mb-8" style="color:var(--ink-2); max-width:680px;">Chaque silo = un <b>fond</b> légèrement teinté + une <b>primaire</b> (structure) + un <b>highlight</b> (énergie) + une <b>nuit</b>. L'or éditorial reste constant. Le silo actif est piloté par le sélecteur en haut.</p>
+
+      <!-- active triad, live -->
+      <div class="c-card mb-8" style="padding:32px;">
+        <div class="c-head-eyebrow mb-6"><span class="c-eyebrow c-eyebrow-accent" id="active-name">Silo bleu — actif</span></div>
+        <div class="grid gap-4" style="grid-template-columns:repeat(4,1fr);">
+          <div>
+            <div class="sw" style="background:var(--bg); border-color:var(--line);"><span class="sw-lbl" style="color:var(--ink-3);" id="hx-bg">#F4F6FB</span></div>
+            <p class="mt-2" style="font-size:12px; color:var(--ink-2);"><b>Fond</b> · page, teinté par silo</p>
+          </div>
+          <div>
+            <div class="sw" style="background:var(--primary);"><span class="sw-lbl" style="color:#fff;" id="hx-primary">#4F46E5</span></div>
+            <p class="mt-2" style="font-size:12px; color:var(--ink-2);"><b>Primaire</b> · boutons, chiffres, barres, mots-accent</p>
+          </div>
+          <div>
+            <div class="sw" style="background:var(--highlight);"><span class="sw-lbl" style="color:#062019;" id="hx-high">#10E0C8</span></div>
+            <p class="mt-2" style="font-size:12px; color:var(--ink-2);"><b>Highlight</b> · badges, statuts, glow nuit</p>
+          </div>
+          <div>
+            <div class="sw" style="background:var(--night);"><span class="sw-lbl" style="color:#fff;" id="hx-night">#1B1A4E</span></div>
+            <p class="mt-2" style="font-size:12px; color:var(--ink-2);"><b>Nuit</b> · fonds sombres</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- all 4 at a glance -->
+      <div class="grid gap-4" style="grid-template-columns:repeat(7,1fr);">
+        <div data-theme="blue"   class="c-card" style="padding:18px;"><p class="c-eyebrow mb-3">Bleu · indigo</p><div class="flex gap-1.5"><span class="sw" style="flex:1; height:44px; background:var(--bg); border-color:var(--line);"></span><span class="sw" style="flex:1; height:44px; background:var(--primary);"></span><span class="sw" style="flex:1; height:44px; background:var(--highlight);"></span><span class="sw" style="flex:1; height:44px; background:var(--night);"></span></div></div>
+        <div data-theme="green"  class="c-card" style="padding:18px;"><p class="c-eyebrow mb-3">Vert · teal</p><div class="flex gap-1.5"><span class="sw" style="flex:1; height:44px; background:var(--bg); border-color:var(--line);"></span><span class="sw" style="flex:1; height:44px; background:var(--primary);"></span><span class="sw" style="flex:1; height:44px; background:var(--highlight);"></span><span class="sw" style="flex:1; height:44px; background:var(--night);"></span></div></div>
+        <div data-theme="orange" class="c-card" style="padding:18px;"><p class="c-eyebrow mb-3">Orange · vif</p><div class="flex gap-1.5"><span class="sw" style="flex:1; height:44px; background:var(--bg); border-color:var(--line);"></span><span class="sw" style="flex:1; height:44px; background:var(--primary);"></span><span class="sw" style="flex:1; height:44px; background:var(--highlight);"></span><span class="sw" style="flex:1; height:44px; background:var(--night);"></span></div></div>
+        <div data-theme="violet" class="c-card" style="padding:18px;"><p class="c-eyebrow mb-3">Violet · améthyste</p><div class="flex gap-1.5"><span class="sw" style="flex:1; height:44px; background:var(--bg); border-color:var(--line);"></span><span class="sw" style="flex:1; height:44px; background:var(--primary);"></span><span class="sw" style="flex:1; height:44px; background:var(--highlight);"></span><span class="sw" style="flex:1; height:44px; background:var(--night);"></span></div></div>
+        <div data-theme="brique" class="c-card" style="padding:18px;"><p class="c-eyebrow mb-3">Brique · terre cuite</p><div class="flex gap-1.5"><span class="sw" style="flex:1; height:44px; background:var(--bg); border-color:var(--line);"></span><span class="sw" style="flex:1; height:44px; background:var(--primary);"></span><span class="sw" style="flex:1; height:44px; background:var(--highlight);"></span><span class="sw" style="flex:1; height:44px; background:var(--night);"></span></div></div>
+        <div data-theme="magenta" class="c-card" style="padding:18px;"><p class="c-eyebrow mb-3">Magenta · fuchsia</p><div class="flex gap-1.5"><span class="sw" style="flex:1; height:44px; background:var(--bg); border-color:var(--line);"></span><span class="sw" style="flex:1; height:44px; background:var(--primary);"></span><span class="sw" style="flex:1; height:44px; background:var(--highlight);"></span><span class="sw" style="flex:1; height:44px; background:var(--night);"></span></div></div>
+        <div data-theme="ambre" class="c-card" style="padding:18px;"><p class="c-eyebrow mb-3">Ambre · ocre</p><div class="flex gap-1.5"><span class="sw" style="flex:1; height:44px; background:var(--bg); border-color:var(--line);"></span><span class="sw" style="flex:1; height:44px; background:var(--primary);"></span><span class="sw" style="flex:1; height:44px; background:var(--highlight);"></span><span class="sw" style="flex:1; height:44px; background:var(--night);"></span></div></div>
+      </div>
+
+      <!-- neutrals -->
+      <div class="mt-8">
+        <p class="c-eyebrow mb-3">Neutres + or éditorial — constants</p>
+        <div class="flex gap-1.5">
+          <span class="sw" style="flex:1; background:var(--bg);"><span class="sw-lbl" style="color:var(--ink-3);">bg</span></span>
+          <span class="sw" style="flex:1; background:var(--bg-2);"><span class="sw-lbl" style="color:var(--ink-3);">bg-2</span></span>
+          <span class="sw" style="flex:1; background:var(--paper);"><span class="sw-lbl" style="color:var(--ink-3);">paper</span></span>
+          <span class="sw" style="flex:1; background:var(--line);"><span class="sw-lbl" style="color:var(--ink-3);">line</span></span>
+          <span class="sw" style="flex:1; background:var(--ink-3);"><span class="sw-lbl" style="color:#fff;">ink-3</span></span>
+          <span class="sw" style="flex:1; background:var(--ink-2);"><span class="sw-lbl" style="color:#fff;">ink-2</span></span>
+          <span class="sw" style="flex:1; background:var(--ink);"><span class="sw-lbl" style="color:#fff;">ink</span></span>
+          <span class="sw" style="flex:1; background:var(--danger);"><span class="sw-lbl" style="color:#fff;">danger</span></span>
+          <span class="sw" style="flex:1; background:var(--editorial);"><span class="sw-lbl" style="color:#241a02;">or</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 3. COMPOSANTS SIGNATURE ============ -->
+    <section class="mb-24">
+      <div class="flex items-baseline gap-4 mb-8">
+        <span class="c-mono" style="font-size:12px; color:var(--ink-3);">03</span>
+        <h2 class="c-display" style="font-size:30px;">Composants signature</h2>
+      </div>
+
+      <div class="grid gap-5" style="grid-template-columns:repeat(2,1fr);">
+        <!-- buttons -->
+        <div class="c-card">
+          <p class="c-eyebrow mb-5">Boutons · carrés, zéro radius</p>
+          <div class="flex flex-wrap gap-3 items-center">
+            <button class="c-btn-split"><span class="lbl">Faire mon chiffrage</span><span class="arw"><o-icon name="arrow-right" size="16"></o-icon></span></button>
+            <button class="c-btn c-btn-accent">Action accent</button>
+            <button class="c-btn c-btn-primary">Primaire</button>
+            <button class="c-btn c-btn-ghost">Secondaire</button>
+          </div>
+        </div>
+        <!-- chips -->
+        <div class="c-card">
+          <p class="c-eyebrow mb-5">Chips & statuts</p>
+          <div class="flex flex-wrap gap-2.5 items-center">
+            <span class="c-chip c-chip-cat">Chiffrage</span>
+            <span class="c-chip c-chip-accent">PRIMAIRE</span>
+            <span class="c-chip c-chip-high">+34 % CLOSING</span>
+            <span class="c-chip c-chip-danger">AVANT</span>
+            <span class="c-chip">NEUTRE</span>
+          </div>
+          <p class="c-eyebrow mb-3 mt-7">Barre de progression</p>
+          <div class="c-bar"><div class="c-bar-fill" style="transform:scaleX(.62);"></div></div>
+        </div>
+        <!-- eyebrow + serif -->
+        <div class="c-card">
+          <p class="c-eyebrow mb-5">En-tête de section</p>
+          <div class="c-head-eyebrow mb-4"><span class="c-eyebrow c-eyebrow-accent">Le déclic</span></div>
+          <p class="c-display" style="font-size:34px;">Sortez <span class="c-serif-i" style="color:var(--primary); font-weight:600;">de l'attente.</span></p>
+        </div>
+        <!-- ghost text -->
+        <div class="c-card" style="overflow:hidden;">
+          <p class="c-eyebrow mb-5">Ghost text contouré</p>
+          <div style="position:relative; height:96px; display:flex; align-items:center; justify-content:center; text-align:center;">
+            <span class="c-ghost c-ghost-gold" style="font-size:64px; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); opacity:.24;">AVANT / APRÈS</span>
+            <span class="c-display" style="position:relative; font-size:38px;">3 étapes. <span class="c-serif-i" style="color:var(--primary);">48 h max.</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- dark section -->
+      <div class="c-dark mt-5" style="padding:48px;">
+        <div class="c-head-eyebrow mb-4"><span class="c-eyebrow" style="color:var(--highlight);">Le calcul</span></div>
+        <p class="c-display" style="color:#fff; font-size:clamp(30px,4vw,48px);">Ce que ça vous <span class="c-serif-i" style="color:var(--editorial); font-weight:600;">rapporte.</span></p>
+        <div class="flex flex-wrap gap-10 mt-7">
+          <div><p class="c-display" style="color:var(--highlight); font-size:46px;">+34 %</p><p class="c-eyebrow" style="color:rgba(255,255,255,.6);">Deals closés</p></div>
+          <div><p class="c-display" style="color:var(--highlight); font-size:46px;">×2</p><p class="c-eyebrow" style="color:rgba(255,255,255,.6);">Recommandations</p></div>
+          <div><p class="c-display" style="color:#fff; font-size:46px;">21 600&nbsp;€</p><p class="c-eyebrow" style="color:rgba(255,255,255,.6);">Par mois</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 4. TEXTURES ============ -->
+    <section class="mb-24">
+      <div class="flex items-baseline gap-4 mb-2">
+        <span class="c-mono" style="font-size:12px; color:var(--ink-3);">04</span>
+        <h2 class="c-display" style="font-size:30px;">Textures de fond</h2>
+      </div>
+      <p class="mb-8" style="color:var(--ink-2); max-width:680px;">Famille de trames architecturales en filets discrets, dans l'esprit du quadrillage de <span class="c-mono" style="font-size:13px;">mainSource</span>. Neutres par défaut, déclinables sur fond nuit. À poser derrière les sections.</p>
+
+      <p class="c-eyebrow mb-3">Sur clair</p>
+      <div class="grid gap-4 mb-8" style="grid-template-columns:repeat(3,1fr);">
+        <div class="tex-demo c-tex-grid"><span class="tex-tag">grid · blueprint</span></div>
+        <div class="tex-demo c-tex-dots"><span class="tex-tag">points</span></div>
+        <div class="tex-demo c-tex-losange"><span class="tex-tag">losanges</span></div>
+      </div>
+    </section>
+
+    <p class="c-mono" style="font-size:11px; color:var(--ink-3); text-align:center;">Orbita Design System — page Fondations · Tailwind v4 · tokens sémantiques remappés par <code>data-theme</code></p>
+  </main>
+
+  <script>
+    const HEX = {
+      blue:   { name:"Silo bleu — actif",      bg:"#F4F6FB", primary:"#4F46E5", high:"#10E0C8", night:"#1B1A4E" },
+      green:  { name:"Silo vert — actif",      bg:"#F1F6F2", primary:"#40916C", high:"#90D150", night:"#0E2C2E" },
+      orange: { name:"Silo orange — actif",    bg:"#FBF5EF", primary:"#DC5A20", high:"#F5C403", night:"#2A1409" },
+      violet: { name:"Silo violet — actif",    bg:"#F7F3FB", primary:"#8B47BE", high:"#C77DFF", night:"#241038" },
+      brique: { name:"Silo brique — actif",    bg:"#FBF2F1", primary:"#C2362F", high:"#FF8A5B", night:"#2A1012" },
+      magenta:{ name:"Silo magenta — actif",   bg:"#FBF1F7", primary:"#C42E86", high:"#FF7AC4", night:"#2A0E22" },
+      ambre:  { name:"Silo ambre — actif",     bg:"#FBF6EC", primary:"#C99016", high:"#F5CE5B", night:"#241B06" },
+    };
+    const root = document.documentElement;
+    const btns = [...document.querySelectorAll('.silo-btn')];
+    function setSilo(s){
+      root.setAttribute('data-theme', s);
+      const h = HEX[s];
+      document.getElementById('active-name').textContent = h.name;
+      document.getElementById('hx-bg').textContent = h.bg;
+      document.getElementById('hx-primary').textContent = h.primary;
+      document.getElementById('hx-high').textContent = h.high;
+      document.getElementById('hx-night').textContent = h.night;
+      btns.forEach(b=>{
+        const on = b.dataset.silo === s;
+        b.style.background = on ? 'var(--primary)' : 'transparent';
+        b.style.color = on ? '#fff' : 'var(--ink-2)';
+        b.style.borderColor = on ? 'var(--primary)' : 'var(--line-2)';
+      });
+    }
+    btns.forEach(b=>{
+      b.style.cssText = 'padding:7px 15px; font-size:13px; font-weight:600; border:1px solid var(--line-2); background:transparent; color:var(--ink-2); cursor:pointer; border-radius:0; font-family:Geist,sans-serif;';
+      b.addEventListener('click', ()=> setSilo(b.dataset.silo));
+    });
+    setSilo('blue');
+  </script>
+</body>
+</html>

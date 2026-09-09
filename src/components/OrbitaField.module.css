@@ -1,0 +1,157 @@
+/*
+ * OrbitaField — champ texte et zone de texte iso maquette 17-forms (.field-*)
+ * par-dessus TextInput / TextArea d'Astryx : 58 px, label flottant dans le
+ * champ qui remonte au focus ou dès qu'il y a une valeur, icône de tête,
+ * icône d'état centrée, message sous le champ.
+ */
+.wrap { position: relative; }
+
+/* boîte : 58 px, le contrôle porte le padding (24 / 15 / 8) */
+.wrap :global(.astryx-text-input) {
+  min-height: 58px;
+  padding: 0;
+  align-items: stretch;
+  position: relative;
+}
+.wrap :global(.astryx-text-input) > input {
+  height: 56px;
+  padding: 24px 15px 8px;
+  font-size: 15px;
+  line-height: 1.4;
+}
+.wrap :global(.astryx-text-area) { min-height: 128px; padding: 0; position: relative; }
+.wrap :global(.astryx-text-area) > textarea {
+  min-height: 126px;
+  padding: 26px 15px 8px;
+  font-size: 15px;
+  line-height: 1.55;
+  resize: vertical;
+}
+
+/* icône de tête (startIcon Astryx) : à gauche, centrée ; le texte et le label décalent à 44 px */
+.wrap :global(.astryx-text-input) > :global(.astryx-icon):first-child {
+  position: absolute;
+  inset-inline-start: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: var(--color-text-disabled);
+  pointer-events: none;
+}
+.wrap.hasLead :global(.astryx-text-input) > input { padding-inline-start: 44px; }
+.wrap.hasLead .label { inset-inline-start: 44px; }
+
+/* icône d'état (erreur / succès) : à droite, centrée, 20 px */
+.wrap :global(.astryx-text-input) > :global(.astryx-icon)[data-color='error'],
+.wrap :global(.astryx-text-input) > :global(.astryx-icon)[data-color='success'],
+.wrap :global(.astryx-text-input) > :global(.astryx-icon)[data-color='warning'] {
+  position: absolute;
+  inset-inline-end: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+}
+.wrap :global(.astryx-text-input) > :global(.astryx-icon)[data-color='error'] svg,
+.wrap :global(.astryx-text-input) > :global(.astryx-icon)[data-color='success'] svg,
+.wrap :global(.astryx-text-input) > :global(.astryx-icon)[data-color='warning'] svg { width: 20px; height: 20px; }
+.wrap.hasStatus :global(.astryx-text-input) > input { padding-inline-end: 44px; }
+
+/* label flottant : dans le champ au repos, remonte (11,5 px, silo) au focus ou avec valeur */
+.label {
+  position: absolute;
+  inset-inline-start: 15px;
+  top: 18px;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--color-text-disabled);
+  pointer-events: none;
+  z-index: 2; /* au-dessus des segments Astryx (relative, z-index 1) */
+  transition: top 0.16s ease, font-size 0.16s ease, color 0.16s ease;
+}
+.wrap.hasValue .label,
+.wrap:focus-within .label {
+  top: 8px;
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+  color: light-dark(var(--color-accent), var(--color-highlight));
+}
+.wrap.error .label { color: var(--color-error); }
+.wrap.disabled .label { color: var(--color-text-disabled); }
+
+/* message sous le champ (aide, erreur, succès) : 12,5 px avec icône */
+.msg {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 7px;
+  font-size: 12.5px;
+  color: var(--color-text-disabled);
+}
+.msg svg { width: 14px; height: 14px; }
+.wrap.error .msg { color: var(--color-error); }
+.wrap.success .msg { color: var(--color-success); }
+
+/* ---- autres contrôles Astryx portés au label flottant (FloatingField) ---- */
+
+/* numérique : 58 px, cases de flèches sur toute la hauteur (styles.css) */
+.wrap :global(.astryx-number-input) {
+  min-height: 58px;
+  padding: 0 32px 0 0 !important;
+  align-items: stretch;
+}
+.wrap :global(.astryx-number-input) > input {
+  height: 56px;
+  padding: 24px 15px 8px;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+/* date et heure : icône de tête intégrée à gauche, texte et label à 44 px */
+.wrap :global(.astryx-date-input),
+.wrap :global(.astryx-time-input) {
+  min-height: 58px;
+  padding: 0 0 0 14px;
+  align-items: stretch;
+}
+.wrap :global(.astryx-date-input) > input,
+.wrap :global(.astryx-time-input) > input {
+  height: 56px;
+  padding: 24px 15px 8px 10px;
+  font-size: 15px;
+  line-height: 1.4;
+}
+.wrap :global(.astryx-date-input) > button,
+.wrap :global(.astryx-time-input) > div:first-child,
+.wrap :global(.astryx-date-input) > .astryx-icon { align-self: center; }
+
+/* date + heure : deux segments, même traitement, second label sur le segment heure */
+.wrap :global(.astryx-date-time-input) > div {
+  min-height: 58px;
+  padding-inline-start: 14px;
+  align-items: stretch;
+}
+.wrap :global(.astryx-date-time-input) > div > input {
+  height: 56px;
+  padding: 24px 15px 8px 10px;
+  font-size: 15px;
+  line-height: 1.4;
+}
+.wrap :global(.astryx-date-time-input) > div > button,
+.wrap :global(.astryx-date-time-input) > div > div:first-child { align-self: center; }
+.label2 {
+  composes: label;
+}
+/* spécificité > .wrap.hasLead .label (qui fixe 44 px) */
+.wrap .label2,
+.wrap.hasLead .label2 {
+  inset-inline-start: calc(50% + 4px + 44px);
+}
+.wrap.hasValue2 .label2,
+.wrap:has(:global(.astryx-date-time-input-time-segment):focus-within) .label2 {
+  top: 8px;
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+  color: light-dark(var(--color-accent), var(--color-highlight));
+}

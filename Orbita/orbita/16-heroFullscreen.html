@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="blue" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbita — hero plein écran</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="orbita.css" />
+  <link rel="stylesheet" href="icons.css" />
+  <script src="icons.js"></script>
+  <style type="text/tailwindcss">
+    @theme inline {
+      --font-sans: "Geist", system-ui, sans-serif;
+      --font-serif: "Cormorant Garamond", serif;
+      --font-mono: "Geist Mono", monospace;
+      --font-display: "Schibsted Grotesk", system-ui, sans-serif;
+      --color-bg: var(--bg); --color-bg-2: var(--bg-2); --color-paper: var(--paper);
+      --color-ink: var(--ink); --color-ink-2: var(--ink-2); --color-ink-3: var(--ink-3);
+      --color-line: var(--line); --color-line-2: var(--line-2);
+      --color-primary: var(--primary); --color-primary-deep: var(--primary-deep);
+      --color-editorial: var(--editorial); --color-highlight: var(--highlight); --color-night: var(--night);
+    }
+  </style>
+  <style>
+@media (prefers-reduced-motion:reduce){ .c-orbit-dot{ animation:none; transform:rotate(-34deg) translateX(25px);} }    /* ===== header chrome ===== */
+    /* AU REPOS (en haut, par-dessus le hero) : voile sombre translucide, texte blanc.
+       AU SCROLL : barre opaque (paper), texte sombre — état normal du DS. */
+    .hdr-main { background:rgba(10,14,26,.34); backdrop-filter:saturate(140%) blur(10px); transition:background .3s, box-shadow .3s, border-color .3s; }    .hdr-main { border-color:transparent !important; }    .hdr.is-scrolled .hdr-main { background:var(--paper); backdrop-filter:saturate(160%) blur(16px); box-shadow:0 8px 30px rgba(12,20,40,.09); border-color:var(--line) !important; }    .hdr-strip { height:38px; transition:height .3s ease, opacity .25s ease, background .3s; }    .hdr:not(.is-scrolled) .hdr-strip { background:rgba(10,14,26,.40); }    .hdr.is-scrolled .hdr-bar { height:64px; }    /* teinte claire des éléments du header quand il est transparent (sur le hero). */
+    .hdr:not(.is-scrolled) .nav-ink { color:#fff !important; }    .hdr:not(.is-scrolled) #nav button, .hdr:not(.is-scrolled) #nav a { color:rgba(255,255,255,.9) !important; }    .hdr:not(.is-scrolled) #nav button:hover, .hdr:not(.is-scrolled) #nav a:hover { color:#fff !important; }    .hdr:not(.is-scrolled) #searchOpen { color:#fff !important; }    .hdr:not(.is-scrolled) #searchOpen:hover { border-color:rgba(255,255,255,.4) !important; }    .hdr:not(.is-scrolled) .lang-btn { border-color:rgba(255,255,255,.4) !important; }    .hdr:not(.is-scrolled) .lang-btn svg { color:#fff !important; }    .hdr:not(.is-scrolled) .nav-div { background:rgba(255,255,255,.28) !important; }    .hdr:not(.is-scrolled) .btn-login { background:transparent !important; border:1px solid rgba(255,255,255,.55) !important; color:#fff !important; }    .hdr:not(.is-scrolled) .btn-login:hover { background:rgba(255,255,255,.12) !important; }    .hdr:not(.is-scrolled) .burger-line { background:#fff !important; }    /* ===== HERO ===== */
+    .hero { position:relative; min-height:100vh; width:100%; overflow:hidden; display:flex; align-items:center; justify-content:center; text-align:center; }    .hero-media { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; background:#10162A; }    /* voile sombre global (l'image/vidéo garde de la présence) */
+    .hero-scrim { position:absolute; inset:0; z-index:1; pointer-events:none;
+      background:linear-gradient(180deg, rgba(8,11,22,.40) 0%, rgba(8,11,22,.16) 30%, rgba(8,11,22,.18) 70%, rgba(8,11,22,.44) 100%); }    /* halo localisé derrière le texte (ellipse, teinté nuit-de-l'accent) */
+    .hero-halo { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:1; pointer-events:none;
+      width:min(1180px,94%); height:68%;
+      background:radial-gradient(ellipse 50% 50% at 50% 50%,
+        color-mix(in srgb, var(--night), transparent 34%) 0%,
+        color-mix(in srgb, var(--night), transparent 56%) 46%,
+        color-mix(in srgb, var(--night), transparent 84%) 74%,
+        transparent 100%); }    .hero-inner { position:relative; z-index:2; width:100%; }    /* eyebrow chip translucide */
+    .hero-eyebrow { display:inline-flex; align-items:center; gap:10px; border:1px solid rgba(255,255,255,.28); background:rgba(255,255,255,.06); backdrop-filter:blur(4px); padding:8px 15px; }    .hero-eyebrow .dot { width:6px; height:6px; border-radius:9999px; background:var(--highlight); box-shadow:0 0 8px var(--highlight); }    .hero-eyebrow .lbl { font-size:12px; font-weight:600; letter-spacing:.04em; color:rgba(255,255,255,.9); white-space:nowrap; }    /* titre éditorial (tag-agnostique) */
+    .hero-title { display:block; margin:22px auto 0; font-family:"Schibsted Grotesk",system-ui,sans-serif;
+      font-weight:800; font-style:normal; font-size:clamp(32px,3.4vw,52px); line-height:1.08; letter-spacing:-.02em; color:#fff; text-wrap:balance; }    .hero-title .accent { display:block; font-family:"Cormorant Garamond",Georgia,serif; font-style:italic; font-weight:600; letter-spacing:-.005em; color:var(--editorial); }    .hero-lead { max-width:640px; margin:22px auto 0; font-size:clamp(16px,1.2vw,18px); line-height:1.55; color:rgba(255,255,255,.88); }    /* chevron de défilement */
+    .hero-chevron { position:absolute; left:50%; bottom:30px; transform:translateX(-50%); z-index:3; color:rgba(255,255,255,.8);
+      display:inline-flex; flex-direction:column; align-items:center; gap:7px; text-decoration:none; font-family:"Geist Mono",monospace; font-size:10.5px; letter-spacing:.22em; text-transform:uppercase; }    .hero-chevron svg { animation:c-bounce 1.8s ease-in-out infinite; }    @keyframes c-bounce { 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(6px);} }    @media (prefers-reduced-motion:reduce){ .hero-chevron svg{ animation:none; } }    /* accent switcher flottant */
+    .silo-fab { position:fixed; left:22px; bottom:22px; z-index:50; display:flex; align-items:center; gap:8px; background:var(--night); padding:9px 12px; box-shadow:0 14px 36px rgba(0,0,0,.3); }
+  </style>
+</head>
+<body data-theme="blue" class="bg-bg text-ink font-sans text-[15px] leading-normal antialiased">
+
+  <!-- ============================ HEADER (réutilisé du composant 01) ============================ -->
+  <header class="hdr fixed inset-x-0 top-0 z-[60]" id="hdr">
+
+    <!-- top utility strip -->
+    <div class="hdr-strip hidden xl:block overflow-hidden text-white/[.82] text-[12.5px]">
+      <div class="max-w-[1280px] mx-auto px-5 sm:px-8 h-[38px] flex items-center justify-between whitespace-nowrap">
+        <div class="flex items-center gap-[18px]">
+          <a class="inline-flex items-center gap-[7px] no-underline text-white/[.82] hover:text-highlight transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]" href="#"><o-icon name="phone" size="14"></o-icon> 01 84 80 09 12</a>
+          <span class="w-px h-[13px] bg-white/20"></span>
+          <a class="inline-flex items-center gap-[7px] no-underline text-white/[.82] hover:text-highlight transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]" href="#"><o-icon name="mail" size="14"></o-icon> contact@orbita.fr</a>
+          <span class="w-px h-[13px] bg-white/20"></span>
+          <span class="inline-flex items-center gap-[7px] text-white/[.82]"><o-icon name="clock" size="14"></o-icon> Lun–Ven · 9h–18h</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="font-mono text-[10.5px] tracking-[.14em] text-white/55 mr-1">SUIVEZ-NOUS</span>
+          <a class="w-[30px] h-[30px] inline-flex items-center justify-center text-white/75 border border-white/[.18] hover:text-white hover:border-highlight transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]" href="#" aria-label="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.1c.5-1 1.8-2 3.7-2 4 0 4.7 2.6 4.7 6V21h-4v-5.3c0-1.3 0-2.9-1.8-2.9s-2 1.4-2 2.8V21H9z"/></svg></a>
+          <a class="w-[30px] h-[30px] inline-flex items-center justify-center text-white/75 border border-white/[.18] hover:text-white hover:border-highlight transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]" href="#" aria-label="X"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.3 8.3L23 22h-6.8l-5-6.6L5.4 22H2.3l7.8-8.9L1.7 2h7l4.5 6zM17 20h1.7L7 4H5.3z"/></svg></a>
+          <a class="w-[30px] h-[30px] inline-flex items-center justify-center text-white/75 border border-white/[.18] hover:text-white hover:border-highlight transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]" href="#" aria-label="YouTube"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M22.5 7s-.2-1.5-.9-2.1c-.8-.8-1.7-.9-2.1-.9C16.7 3.7 12 3.7 12 3.7h0s-4.7 0-7.5.3c-.4 0-1.3.1-2.1.9C1.7 5.5 1.5 7 1.5 7S1.3 8.8 1.3 10.5v1.6c0 1.8.2 3.5.2 3.5s.2 1.5.9 2.1c.8.8 1.9.8 2.4.9 1.7.2 7.2.3 7.2.3s4.7 0 7.5-.3c.4 0 1.3-.1 2.1-.9.7-.6.9-2.1.9-2.1s.2-1.8.2-3.5v-1.6C22.7 8.8 22.5 7 22.5 7zM9.8 14.3V8.7l6 2.8z"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- main bar -->
+    <div class="hdr-main relative border-b border-line">
+      <div class="max-w-[1280px] mx-auto px-5 sm:px-8 hdr-bar flex items-center gap-7">
+        <!-- logo -->
+        <a href="#" class="inline-flex items-center gap-[13px] no-underline shrink-0">
+          <span class="w-10 h-10 shrink-0 bg-primary flex items-center justify-center relative">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="7" stroke="#fff" stroke-width="2"/></svg>
+            <span class="c-orbit-dot absolute top-1/2 left-1/2 w-[5px] h-[5px] -m-[2.5px] rounded-full bg-highlight shadow-[0_0_7px_color-mix(in_srgb,var(--highlight)_85%,transparent)]"></span>
+          </span>
+          <span class="nav-ink font-serif font-medium text-[18px] leading-[1.2] tracking-[1px] text-ink">ORBITA<br>SYSTÈME</span>
+        </a>
+
+        <!-- nav (desktop) -->
+        <nav id="nav" class="hidden xl:flex xl:items-stretch gap-[2px] h-full">
+          <div class="nav-item group/ni relative flex items-center" data-menu="mega">
+            <button class="relative inline-flex items-center gap-[6px] h-full px-[14px] text-[14.5px] font-medium text-ink-2 hover:text-ink group-[.open]/ni:text-ink cursor-pointer bg-transparent border-0 whitespace-nowrap transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]">Solutions <o-icon name="chevron-down" size="13" class="opacity-60 transition-transform duration-[var(--t-dur)] ease-[var(--t-ease)] group-[.open]/ni:rotate-180"></o-icon></button>
+            <span class="absolute left-[14px] right-[14px] -bottom-px h-0.5 bg-primary origin-left scale-x-0 transition-transform duration-[var(--t-dur)] ease-[var(--t-ease)] group-hover/ni:scale-x-100 group-[.open]/ni:scale-x-100"></span>
+          </div>
+          <div class="nav-item group/ni relative flex items-center" data-menu="simple">
+            <button class="relative inline-flex items-center gap-[6px] h-full px-[14px] text-[14.5px] font-medium text-ink-2 hover:text-ink group-[.open]/ni:text-ink cursor-pointer bg-transparent border-0 whitespace-nowrap transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]">Ressources <o-icon name="chevron-down" size="13" class="opacity-60 transition-transform duration-[var(--t-dur)] ease-[var(--t-ease)] group-[.open]/ni:rotate-180"></o-icon></button>
+            <span class="absolute left-[14px] right-[14px] -bottom-px h-0.5 bg-primary origin-left scale-x-0 transition-transform duration-[var(--t-dur)] ease-[var(--t-ease)] group-hover/ni:scale-x-100 group-[.open]/ni:scale-x-100"></span>
+            <div class="submenu absolute top-full left-0 -translate-y-1.5 opacity-0 invisible pointer-events-none min-w-[340px] bg-paper border border-line border-t-0 shadow-[0_26px_60px_rgba(12,20,40,.16)] p-2" role="menu">
+              <a class="group/ml flex items-center gap-[14px] px-[14px] py-3 bg-bg transition-all duration-[var(--t-dur)] ease-[var(--t-ease)] hover:bg-primary no-underline" href="#">
+                <span class="w-11 h-11 shrink-0 flex items-center justify-center text-primary group-hover/ml:text-white transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]"><o-icon name="gauge" size="24"></o-icon></span>
+                <span><span class="block text-[14.5px] font-semibold text-ink group-hover/ml:text-white transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]">Guides &amp; livres blancs</span><span class="block text-[12.5px] text-ink-3 group-hover/ml:text-white/80 mt-0.5 leading-[1.45] transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]">Méthodes de chiffrage, prix de référence.</span></span>
+              </a>
+              <a class="group/ml flex items-center gap-[14px] px-[14px] py-3 mt-1.5 bg-bg transition-all duration-[var(--t-dur)] ease-[var(--t-ease)] hover:bg-primary no-underline" href="#">
+                <span class="w-11 h-11 shrink-0 flex items-center justify-center text-primary group-hover/ml:text-white transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]"><o-icon name="chart" size="24"></o-icon></span>
+                <span><span class="block text-[14.5px] font-semibold text-ink group-hover/ml:text-white transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]">Webinaires</span><span class="block text-[12.5px] text-ink-3 group-hover/ml:text-white/80 mt-0.5 leading-[1.45] transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]">Sessions live et replays à la demande.</span></span>
+              </a>
+              <a class="group/ml flex items-center gap-[14px] px-[14px] py-3 mt-1.5 bg-bg transition-all duration-[var(--t-dur)] ease-[var(--t-ease)] hover:bg-primary no-underline" href="#">
+                <span class="w-11 h-11 shrink-0 flex items-center justify-center text-primary group-hover/ml:text-white transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]"><o-icon name="doc" size="24"></o-icon></span>
+                <span><span class="block text-[14.5px] font-semibold text-ink group-hover/ml:text-white transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]">Blog</span><span class="block text-[12.5px] text-ink-3 group-hover/ml:text-white/80 mt-0.5 leading-[1.45] transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]">Conseils, tendances et retours terrain.</span></span>
+              </a>
+            </div>
+          </div>
+          <div class="nav-item group/ni relative flex items-center"><a class="relative inline-flex items-center h-full px-[14px] text-[14.5px] font-medium text-ink-2 hover:text-ink no-underline whitespace-nowrap transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]" href="#">Tarifs<span class="absolute left-[14px] right-[14px] -bottom-px h-0.5 bg-primary origin-left scale-x-0 transition-transform duration-[var(--t-dur)] ease-[var(--t-ease)] group-hover/ni:scale-x-100"></span></a></div>
+          <div class="nav-item group/ni relative flex items-center"><a class="relative inline-flex items-center h-full px-[14px] text-[14.5px] font-medium text-ink-2 hover:text-ink no-underline whitespace-nowrap transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]" href="#">À propos<span class="absolute left-[14px] right-[14px] -bottom-px h-0.5 bg-primary origin-left scale-x-0 transition-transform duration-[var(--t-dur)] ease-[var(--t-ease)] group-hover/ni:scale-x-100"></span></a></div>
+        </nav>
+
+        <!-- right cluster -->
+        <div class="flex items-center gap-[10px] ml-auto">
+          <button class="w-[38px] h-[38px] inline-flex items-center justify-center text-ink-2 bg-transparent border border-transparent hover:text-primary hover:border-line-2 cursor-pointer transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]" id="searchOpen" aria-label="Rechercher">
+            <o-icon name="search" size="19"></o-icon>
+          </button>
+
+          <div class="lang group/lang relative" id="lang">
+            <button class="lang-btn inline-flex items-center gap-[7px] h-[38px] px-[11px] bg-transparent border border-line-2 hover:border-primary group-[.open]/lang:border-primary cursor-pointer transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]" id="langBtn">
+              <img class="w-[18px] h-[13px] object-cover block border border-black/10 shrink-0" id="langFlag" src="https://flagcdn.com/fr.svg" alt="" />
+              <o-icon name="chevron-down" size="12" class="text-ink-2"></o-icon>
+            </button>
+            <div class="lang-menu absolute top-[calc(100%+8px)] right-0 -translate-y-1.5 opacity-0 invisible bg-paper border border-line shadow-[var(--shadow)] p-1.5" role="listbox">
+              <button class="lang-opt flex items-center justify-center min-w-[46px] px-3 py-2 bg-transparent border-0 cursor-pointer hover:bg-bg aria-selected:bg-bg transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]" data-flag="fr" aria-selected="true"><img class="w-[26px] h-[19px] object-cover block border border-black/10 shrink-0" src="https://flagcdn.com/fr.svg" alt="Français" /></button>
+              <button class="lang-opt flex items-center justify-center min-w-[46px] px-3 py-2 bg-transparent border-0 cursor-pointer hover:bg-bg aria-selected:bg-bg transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]" data-flag="gb" aria-selected="false"><img class="w-[26px] h-[19px] object-cover block border border-black/10 shrink-0" src="https://flagcdn.com/gb.svg" alt="English" /></button>
+              <button class="lang-opt flex items-center justify-center min-w-[46px] px-3 py-2 bg-transparent border-0 cursor-pointer hover:bg-bg aria-selected:bg-bg transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]" data-flag="de" aria-selected="false"><img class="w-[26px] h-[19px] object-cover block border border-black/10 shrink-0" src="https://flagcdn.com/de.svg" alt="Deutsch" /></button>
+              <button class="lang-opt flex items-center justify-center min-w-[46px] px-3 py-2 bg-transparent border-0 cursor-pointer hover:bg-bg aria-selected:bg-bg transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]" data-flag="it" aria-selected="false"><img class="w-[26px] h-[19px] object-cover block border border-black/10 shrink-0" src="https://flagcdn.com/it.svg" alt="Italiano" /></button>
+            </div>
+          </div>
+
+          <span class="nav-div w-px h-[26px] bg-line-2 mx-0.5"></span>
+
+          <a class="btn-login inline-flex items-center justify-center px-5 py-[11px] text-[14px] font-semibold tracking-[-.005em] no-underline cursor-pointer bg-ink text-white hover:bg-primary active:translate-y-px transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]" href="#">Connexion</a>
+          <span class="hidden xl:block"><a class="inline-flex items-center justify-center px-5 py-[11px] text-[14px] font-semibold tracking-[-.005em] no-underline cursor-pointer bg-primary text-white shadow-[0_10px_24px_var(--primary-soft)] hover:bg-primary-deep active:translate-y-px transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]" href="#">Demander une démo</a></span>
+          <button class="burger flex xl:hidden flex-col items-center justify-center w-10 h-10 gap-[6px] bg-transparent border border-transparent hover:border-line-2 cursor-pointer transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]" id="burger" aria-label="Menu"><span class="burger-line w-[22px] h-0.5 bg-ink rounded-sm"></span><span class="burger-line w-[22px] h-0.5 bg-ink rounded-sm"></span></button>
+        </div>
+      </div>
+
+      <!-- MEGA panel -->
+      <div class="mega absolute top-full inset-x-0 w-full -translate-y-1.5 opacity-0 invisible pointer-events-none bg-paper border-b border-line shadow-[0_30px_70px_rgba(12,20,40,.18)]" id="megaPanel" role="menu">
+        <div class="grid grid-cols-3 max-w-[1280px] mx-auto px-5 sm:px-8">
+          <div class="py-[30px] pr-8">
+            <div class="flex items-center gap-[10px] mb-[18px]"><span class="text-[11px] font-semibold tracking-[.16em] uppercase text-editorial">Par besoin</span><span class="flex-1 h-px bg-[color-mix(in_srgb,var(--editorial)_45%,transparent)]"></span></div>
+            <a class="group/ml flex items-center gap-[14px] px-[14px] py-3 bg-bg transition-all duration-[var(--t-dur)] ease-[var(--t-ease)] hover:bg-primary no-underline" href="#">
+              <span class="w-11 h-11 shrink-0 flex items-center justify-center text-primary group-hover/ml:text-white transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]"><o-icon name="shield" size="24"></o-icon></span>
+              <span class="flex-1"><span class="block text-[14.5px] font-semibold text-ink group-hover/ml:text-white transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]">Chiffrage instantané</span><span class="block text-[12.5px] text-ink-3 group-hover/ml:text-white/80 mt-0.5 leading-[1.45] transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]">Estimez vos travaux en 20 minutes, sans artisan.</span></span>
+            </a>
+            <a class="group/ml flex items-center gap-[14px] px-[14px] py-3 mt-1.5 bg-bg transition-all duration-[var(--t-dur)] ease-[var(--t-ease)] hover:bg-primary no-underline" href="#">
+              <span class="w-11 h-11 shrink-0 flex items-center justify-center text-primary group-hover/ml:text-white transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]"><o-icon name="calculator" size="24"></o-icon></span>
+              <span class="flex-1"><span class="block text-[14.5px] font-semibold text-ink group-hover/ml:text-white transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]">Suivi de chantier</span><span class="block text-[12.5px] text-ink-3 group-hover/ml:text-white/80 mt-0.5 leading-[1.45] transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]">Pilotez l'avancement et les coûts en temps réel.</span></span>
+            </a>
+            <a class="group/ml flex items-center gap-[14px] px-[14px] py-3 mt-1.5 bg-bg transition-all duration-[var(--t-dur)] ease-[var(--t-ease)] hover:bg-primary no-underline" href="#">
+              <span class="w-11 h-11 shrink-0 flex items-center justify-center text-primary group-hover/ml:text-white transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]"><o-icon name="ruler" size="24"></o-icon></span>
+              <span class="flex-1"><span class="block text-[14.5px] font-semibold text-ink group-hover/ml:text-white transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]">Devis client</span><span class="block text-[12.5px] text-ink-3 group-hover/ml:text-white/80 mt-0.5 leading-[1.45] transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]">Générez un livrable pro, validé par un expert.</span></span>
+            </a>
+          </div>
+          <div class="py-[30px] px-8 border-l border-line">
+            <div class="flex items-center gap-[10px] mb-[18px]"><span class="text-[11px] font-semibold tracking-[.16em] uppercase text-editorial">Par métier</span><span class="flex-1 h-px bg-[color-mix(in_srgb,var(--editorial)_45%,transparent)]"></span></div>
+            <a class="group/ml flex items-center gap-[14px] px-[14px] py-3 bg-bg transition-all duration-[var(--t-dur)] ease-[var(--t-ease)] hover:bg-primary no-underline" href="#">
+              <span class="w-11 h-11 shrink-0 flex items-center justify-center text-primary group-hover/ml:text-white transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]"><o-icon name="helmet" size="24"></o-icon></span>
+              <span class="flex-1"><span class="block text-[14.5px] font-semibold text-ink group-hover/ml:text-white transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]">Architectes</span><span class="block text-[12.5px] text-ink-3 group-hover/ml:text-white/80 mt-0.5 leading-[1.45] transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]">Du métré à l'estimatif détaillé en un flux.</span></span>
+            </a>
+            <a class="group/ml flex items-center gap-[14px] px-[14px] py-3 mt-1.5 bg-bg transition-all duration-[var(--t-dur)] ease-[var(--t-ease)] hover:bg-primary no-underline" href="#">
+              <span class="w-11 h-11 shrink-0 flex items-center justify-center text-primary group-hover/ml:text-white transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]"><o-icon name="hammer" size="24"></o-icon></span>
+              <span class="flex-1"><span class="block text-[14.5px] font-semibold text-ink group-hover/ml:text-white transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]">Maîtres d'œuvre</span><span class="block text-[12.5px] text-ink-3 group-hover/ml:text-white/80 mt-0.5 leading-[1.45] transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]">Centralisez tous vos chiffrages sur un poste.</span></span>
+            </a>
+            <a class="group/ml flex items-center gap-[14px] px-[14px] py-3 mt-1.5 bg-bg transition-all duration-[var(--t-dur)] ease-[var(--t-ease)] hover:bg-primary no-underline" href="#">
+              <span class="w-11 h-11 shrink-0 flex items-center justify-center text-primary group-hover/ml:text-white transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]"><o-icon name="user" size="24"></o-icon></span>
+              <span class="flex-1"><span class="block text-[14.5px] font-semibold text-ink group-hover/ml:text-white transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]">Promoteurs</span><span class="block text-[12.5px] text-ink-3 group-hover/ml:text-white/80 mt-0.5 leading-[1.45] transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]">Fiabilisez vos budgets dès l'esquisse.</span></span>
+            </a>
+          </div>
+          <div class="bg-night text-white flex flex-col">
+            <div class="h-[168px] relative overflow-hidden">
+              <img class="w-full h-full object-cover block" src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=900&auto=format&fit=crop" alt="" />
+              <span class="absolute top-[14px] left-[14px] bg-editorial text-[#1a1205] text-[10.5px] font-bold tracking-[.08em] uppercase px-[9px] py-[5px]">À la une</span>
+            </div>
+            <div class="px-[26px] pt-[22px] pb-[26px] flex flex-col flex-1">
+              <h4 class="font-display font-bold text-[19px] leading-[1.15] tracking-[-.01em] mb-2">Chiffrer juste, <span class="font-serif italic font-semibold text-highlight">gagner plus.</span></h4>
+              <p class="text-[13px] text-white/[.66] leading-[1.5] mb-[18px]">Comment 1 200 pros ont réduit leurs délais de devis de 40 % en six mois.</p>
+              <a class="group/edt mt-auto inline-flex items-center gap-[9px] text-highlight text-[13.5px] font-semibold no-underline" href="#">Lire l'étude <o-icon name="arrow-right" size="16" class="transition-transform group-hover/edt:translate-x-1"></o-icon></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ===================== MOBILE DRAWER ( < xl ) ===================== -->
+  <div class="mdrawer fixed right-0 bottom-0 top-[74px] z-[55] w-full bg-bg translate-x-full invisible overflow-y-auto" id="mdrawer" aria-hidden="true">
+    <div class="px-6 pt-[22px] pb-10 flex flex-col min-h-full">
+      <a class="inline-flex items-center justify-center w-full max-w-[440px] mx-auto p-4 text-[16px] font-semibold no-underline cursor-pointer bg-primary text-white shadow-[0_10px_24px_var(--primary-soft)] hover:bg-primary-deep transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)]" href="#">Demander une démo</a>
+      <nav class="mt-4">
+        <div class="macc group/acc border-b border-line">
+          <button class="macc-head w-full flex items-center justify-between py-[18px] px-0.5 font-display font-bold text-[21px] tracking-[-.01em] text-ink bg-transparent border-0 cursor-pointer" type="button">Solutions <o-icon name="chevron-down" size="16" class="macc-chevron text-ink-3 transition-transform duration-300"></o-icon></button>
+          <div class="macc-body overflow-hidden max-h-0">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 pb-3">
+              <div>
+                <p class="text-[11px] font-semibold tracking-[.14em] uppercase text-editorial mt-2.5 mb-0.5">Par besoin</p>
+                <a class="flex items-center gap-[13px] py-[11px] px-0.5 no-underline" href="#"><span class="w-10 h-10 shrink-0 flex items-center justify-center text-primary"><o-icon name="target" size="24"></o-icon></span><span><span class="block font-semibold text-[15px] text-ink">Chiffrage instantané</span><span class="block text-[12.5px] text-ink-3 mt-0.5">Estimez vos travaux en 20 minutes.</span></span></a>
+                <a class="flex items-center gap-[13px] py-[11px] px-0.5 no-underline" href="#"><span class="w-10 h-10 shrink-0 flex items-center justify-center text-primary"><o-icon name="key" size="24"></o-icon></span><span><span class="block font-semibold text-[15px] text-ink">Suivi de chantier</span><span class="block text-[12.5px] text-ink-3 mt-0.5">Pilotez l'avancement en temps réel.</span></span></a>
+                <a class="flex items-center gap-[13px] py-[11px] px-0.5 no-underline" href="#"><span class="w-10 h-10 shrink-0 flex items-center justify-center text-primary"><o-icon name="bolt" size="24"></o-icon></span><span><span class="block font-semibold text-[15px] text-ink">Devis client</span><span class="block text-[12.5px] text-ink-3 mt-0.5">Un livrable pro validé par un expert.</span></span></a>
+              </div>
+              <div>
+                <p class="text-[11px] font-semibold tracking-[.14em] uppercase text-editorial mt-2.5 mb-0.5">Par métier</p>
+                <a class="flex items-center gap-[13px] py-[11px] px-0.5 no-underline" href="#"><span class="w-10 h-10 shrink-0 flex items-center justify-center text-primary"><o-icon name="coins" size="24"></o-icon></span><span><span class="block font-semibold text-[15px] text-ink">Architectes</span><span class="block text-[12.5px] text-ink-3 mt-0.5">Du métré à l'estimatif détaillé.</span></span></a>
+                <a class="flex items-center gap-[13px] py-[11px] px-0.5 no-underline" href="#"><span class="w-10 h-10 shrink-0 flex items-center justify-center text-primary"><o-icon name="files" size="24"></o-icon></span><span><span class="block font-semibold text-[15px] text-ink">Maîtres d'œuvre</span><span class="block text-[12.5px] text-ink-3 mt-0.5">Centralisez vos chiffrages.</span></span></a>
+                <a class="flex items-center gap-[13px] py-[11px] px-0.5 no-underline" href="#"><span class="w-10 h-10 shrink-0 flex items-center justify-center text-primary"><o-icon name="gauge" size="24"></o-icon></span><span><span class="block font-semibold text-[15px] text-ink">Promoteurs</span><span class="block text-[12.5px] text-ink-3 mt-0.5">Fiabilisez vos budgets dès l'esquisse.</span></span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="macc group/acc border-b border-line">
+          <button class="macc-head w-full flex items-center justify-between py-[18px] px-0.5 font-display font-bold text-[21px] tracking-[-.01em] text-ink bg-transparent border-0 cursor-pointer" type="button">Ressources <o-icon name="chevron-down" size="16" class="macc-chevron text-ink-3 transition-transform duration-300"></o-icon></button>
+          <div class="macc-body overflow-hidden max-h-0">
+            <div class="pb-3">
+              <a class="flex items-center gap-[13px] py-[11px] px-0.5 no-underline" href="#"><span class="w-10 h-10 shrink-0 flex items-center justify-center text-primary"><o-icon name="chart" size="24"></o-icon></span><span><span class="block font-semibold text-[15px] text-ink">Guides &amp; livres blancs</span><span class="block text-[12.5px] text-ink-3 mt-0.5">Méthodes de chiffrage, prix de référence.</span></span></a>
+              <a class="flex items-center gap-[13px] py-[11px] px-0.5 no-underline" href="#"><span class="w-10 h-10 shrink-0 flex items-center justify-center text-primary"><o-icon name="doc" size="24"></o-icon></span><span><span class="block font-semibold text-[15px] text-ink">Webinaires</span><span class="block text-[12.5px] text-ink-3 mt-0.5">Sessions live et replays.</span></span></a>
+              <a class="flex items-center gap-[13px] py-[11px] px-0.5 no-underline" href="#"><span class="w-10 h-10 shrink-0 flex items-center justify-center text-primary"><o-icon name="shield" size="24"></o-icon></span><span><span class="block font-semibold text-[15px] text-ink">Blog</span><span class="block text-[12.5px] text-ink-3 mt-0.5">Conseils, tendances et retours terrain.</span></span></a>
+            </div>
+          </div>
+        </div>
+        <a class="block py-[18px] px-0.5 font-display font-bold text-[21px] tracking-[-.01em] text-ink no-underline border-b border-line" href="#">Tarifs</a>
+        <a class="block py-[18px] px-0.5 font-display font-bold text-[21px] tracking-[-.01em] text-ink no-underline border-b border-line" href="#">À propos</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- search overlay -->
+  <div class="search-ov fixed inset-0 z-[80] opacity-0 invisible flex items-start justify-center bg-[color-mix(in_oklab,var(--night)_60%,transparent)] backdrop-blur-[7px]" id="searchOv">
+    <div class="search-box w-[min(720px,calc(100vw-48px))] mt-[18vh] -translate-y-4 bg-paper border border-line shadow-[0_40px_90px_rgba(0,0,0,.3)]">
+      <div class="h-0.5 bg-gradient-to-r from-primary to-highlight"></div>
+      <div class="flex items-center gap-[14px] px-6 py-[22px]">
+        <o-icon name="search" size="22" style="color:var(--ink-3)"></o-icon>
+        <input id="searchInput" type="text" class="flex-1 border-0 outline-0 font-sans text-[21px] text-ink bg-transparent placeholder:text-ink-3" placeholder="Rechercher un guide, un prix, un article…" autocomplete="off" />
+        <button class="w-[38px] h-[38px] inline-flex items-center justify-center text-ink-2 hover:text-primary cursor-pointer" id="searchClose" aria-label="Fermer"><o-icon name="close" size="18"></o-icon></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- sentinelle de scroll (haut de page) — pilote l'état opaque du header -->
+  <div id="scrollSentinel" style="position:absolute; top:0; left:0; width:1px; height:24px; pointer-events:none;"></div>
+
+  <!-- ============================ HERO plein écran ============================ -->
+  <section class="hero" id="hero">
+    <!-- média de fond : vidéo en boucle muette + poster (image BTP) en repli.
+         Remplacer la <source> par votre vidéo ; le poster s'affiche si elle ne charge pas. -->
+    <video class="hero-media" autoplay loop muted playsinline
+           poster="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1920&q=80">
+      <source src="https://videos.pexels.com/video-files/1197802/1197802-hd_1920_1080_25fps.mp4" type="video/mp4" />
+    </video>
+
+    <div class="hero-scrim"></div>
+    <div class="hero-halo"></div>
+
+    <div class="hero-inner">
+      <div class="max-w-[1000px] mx-auto px-5 sm:px-8 flex flex-col items-center">
+
+        <!-- eyebrow chip -->
+        <div class="hero-eyebrow">
+          <span class="dot"></span>
+          <span class="lbl">L'IA au service du bâtiment &amp; de l'immobilier</span>
+        </div>
+
+        <!-- titre : H1 UNIQUE et FIXE de la page (ne change pas de balise).
+             La ligne du milieu est un <span> display:block (serif italique doré). -->
+        <h1 class="hero-title">
+          Toute la chaîne bâtiment,
+          <span class="accent">d'un seul outil.</span>
+          Du chiffrage à la maintenance.
+        </h1>
+
+        <p class="hero-lead">
+          Éditeur de logiciels pour les pros de l'immobilier et les gestionnaires de sites —
+          du chiffrage de travaux à la maintenance multitechnique.
+        </p>
+
+        <div class="flex flex-wrap items-stretch justify-center gap-4 mt-9">
+          <a class="c-btn-split c-btn-split--ondark" href="#">
+            <span class="lbl">Demander une démo</span>
+            <span class="arw"><o-icon name="arrow-right" size="16"></o-icon></span>
+          </a>
+          <a class="c-btn-ghost" href="#">
+            <o-icon name="play" size="15"></o-icon>
+            Voir la vidéo
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <a class="hero-chevron" href="#after" aria-label="Défiler">
+      <span>Défiler</span>
+      <o-icon name="chevron-down" size="22"></o-icon>
+    </a>
+  </section>
+
+  <!-- section factice (démo du scroll : le header devient opaque) -->
+  <section id="after" class="bg-bg">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 py-28 text-center">
+      <div class="c-eyebrow inline-flex items-center gap-3 mb-5">
+        <span class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial">Section suivante</span>
+      </div>
+      <h2 class="font-display font-extrabold tracking-[-0.025em] leading-[1.04] text-ink m-0 mb-5 text-[clamp(34px,4.4vw,56px)]">
+        Scrollez — le header passe <span class="font-serif italic font-semibold text-primary">en opaque.</span>
+      </h2>
+      <p class="text-[18px] leading-[1.6] text-ink-2 m-0 max-w-[620px] mx-auto">
+        Au repos, la barre est transparente par-dessus le hero. Dès les premiers pixels de scroll,
+        la barre utilitaire se replie et le header se condense en fond clair.
+      </p>
+      <div class="h-[900px]"></div>
+    </div>
+  </section>
+
+  <!-- accent switcher flottant -->
+  <div class="silo-fab" id="siloSwitch">
+    <span class="font-mono text-[10.5px] tracking-[.14em] uppercase text-white/45 mr-0.5">Accent</span>
+    <button class="silo-btn" data-silo="blue">Bleu</button>
+    <button class="silo-btn" data-silo="green">Vert</button>
+    <button class="silo-btn" data-silo="orange">Orange</button>
+    <button class="silo-btn" data-silo="violet">Violet</button>
+        <button class="silo-btn" data-silo="brique">Brique</button>
+        <button class="silo-btn" data-silo="magenta">Magenta</button>
+        <button class="silo-btn" data-silo="ambre">Ambre</button>
+  </div>
+
+  <script>
+    const hdr = document.getElementById('hdr');
+    /* état opaque : IntersectionObserver sur une sentinelle (robuste quel que
+       soit le conteneur de scroll) + fallback sur l'événement scroll. */
+    const sentinel = document.getElementById('scrollSentinel');
+    if (sentinel && 'IntersectionObserver' in window){
+      new IntersectionObserver(([e])=>{ hdr.classList.toggle('is-scrolled', !e.isIntersecting); }, { threshold:0 }).observe(sentinel);
+    }
+    let ticking = false;
+    window.addEventListener('scroll', ()=>{
+      if (!ticking){ requestAnimationFrame(()=>{ hdr.classList.toggle('is-scrolled', window.scrollY > 24); ticking = false; }); ticking = true; }
+    }, { passive:true });
+
+    /* hover menus */
+    const megaItem = document.querySelector('.nav-item[data-menu="mega"]');
+    const megaPanel = document.getElementById('megaPanel');
+    const simpleItem = document.querySelector('.nav-item[data-menu="simple"]');
+    let mt, st;
+    function closeSimple(){ if(simpleItem) simpleItem.classList.remove('open'); }
+    function closeMegaNow(){ megaItem.classList.remove('open'); megaPanel.classList.remove('open'); }
+    function openMega(){ clearTimeout(mt); closeSimple(); megaItem.classList.add('open'); megaPanel.classList.add('open'); }
+    function closeMega(){ mt = setTimeout(closeMegaNow, 120); }
+    function openSimple(){ clearTimeout(st); closeMegaNow(); simpleItem.classList.add('open'); }
+    megaItem.addEventListener('mouseenter', openMega);
+    megaItem.addEventListener('mouseleave', closeMega);
+    megaPanel.addEventListener('mouseenter', ()=> clearTimeout(mt));
+    megaPanel.addEventListener('mouseleave', closeMega);
+    simpleItem.addEventListener('mouseenter', openSimple);
+    simpleItem.addEventListener('mouseleave', ()=>{ st = setTimeout(closeSimple, 120); });
+    megaItem.querySelector('button').addEventListener('click', e=>{ e.preventDefault(); megaPanel.classList.contains('open') ? closeMegaNow() : openMega(); });
+    simpleItem.querySelector('button').addEventListener('click', e=>{ e.preventDefault(); simpleItem.classList.toggle('open'); });
+
+    /* lang */
+    const lang = document.getElementById('lang');
+    document.getElementById('langBtn').addEventListener('click', (e)=>{ e.stopPropagation(); lang.classList.toggle('open'); });
+    document.querySelectorAll('.lang-opt').forEach(opt=>{
+      opt.addEventListener('click', ()=>{
+        document.querySelectorAll('.lang-opt').forEach(o=> o.setAttribute('aria-selected','false'));
+        opt.setAttribute('aria-selected','true');
+        document.getElementById('langFlag').src = 'https://flagcdn.com/' + opt.dataset.flag + '.svg';
+        lang.classList.remove('open');
+      });
+    });
+    document.addEventListener('click', (e)=>{ if(!lang.contains(e.target)) lang.classList.remove('open'); });
+
+    /* search overlay */
+    const ov = document.getElementById('searchOv');
+    const input = document.getElementById('searchInput');
+    const openSearch = ()=>{ ov.classList.add('open'); setTimeout(()=> input.focus(), 60); };
+    const closeSearch = ()=> ov.classList.remove('open');
+    document.getElementById('searchOpen').addEventListener('click', openSearch);
+    document.getElementById('searchClose').addEventListener('click', closeSearch);
+    ov.addEventListener('click', (e)=>{ if(e.target===ov) closeSearch(); });
+    document.addEventListener('keydown', (e)=>{
+      if(e.key==='Escape') closeSearch();
+      if((e.metaKey||e.ctrlKey) && e.key==='k'){ e.preventDefault(); openSearch(); }
+    });
+
+    /* mobile drawer */
+    const burger = document.getElementById('burger');
+    const mdrawer = document.getElementById('mdrawer');
+    function setDrawerTop(){ const b = document.querySelector('.hdr-main').getBoundingClientRect().bottom; mdrawer.style.top = Math.round(b) + 'px'; }
+    function openDrawer(){ setDrawerTop(); mdrawer.classList.add('open'); burger.classList.add('open'); document.body.style.overflow='hidden'; }
+    function closeDrawer(){ mdrawer.classList.remove('open'); burger.classList.remove('open'); document.body.style.overflow=''; }
+    burger.addEventListener('click', ()=> mdrawer.classList.contains('open') ? closeDrawer() : openDrawer());
+    mdrawer.querySelectorAll('a').forEach(a=> a.addEventListener('click', closeDrawer));
+    document.querySelectorAll('.macc-head').forEach(h=> h.addEventListener('click', ()=> h.closest('.macc').classList.toggle('open')));
+    window.addEventListener('resize', ()=>{ if(window.innerWidth>=1280){ closeDrawer(); } else if(mdrawer.classList.contains('open')){ setDrawerTop(); } });
+
+    /* accent switcher */
+    const siloBtns = document.querySelectorAll('.silo-btn');
+    function setSilo(s){
+      document.documentElement.setAttribute('data-theme', s);
+      document.body.setAttribute('data-theme', s);
+      siloBtns.forEach(d=> d.classList.toggle('is-active', d.dataset.silo===s));
+    }
+    siloBtns.forEach(d=> d.addEventListener('click', ()=> setSilo(d.dataset.silo)));
+    setSilo('blue');
+  </script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="blue">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbita — FAQ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="orbita.css" />
+  <link rel="stylesheet" href="icons.css" />
+  <script src="icons.js"></script>
+  <style type="text/tailwindcss">
+    @theme inline {
+      --font-sans: "Geist", system-ui, sans-serif;
+      --font-serif: "Cormorant Garamond", serif;
+      --font-display: "Schibsted Grotesk", system-ui, sans-serif;
+      --font-mono: "Geist Mono", monospace;
+      --color-bg: var(--bg); --color-bg-2: var(--bg-2); --color-paper: var(--paper);
+      --color-ink: var(--ink); --color-ink-2: var(--ink-2); --color-ink-3: var(--ink-3);
+      --color-line: var(--line); --color-line-2: var(--line-2);
+      --color-primary: var(--primary); --color-primary-deep: var(--primary-deep);
+      --color-editorial: var(--editorial); --color-highlight: var(--highlight); --color-highlight-deep: var(--highlight-deep); --color-night: var(--night);
+    }
+  </style>
+  <style>
+body { margin:0; background:var(--bg); color:var(--ink); font-family:"Geist",system-ui,sans-serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }    /* titre : filet sous le titre */
+    .c-title-rule { width:64px; height:3px; background:var(--primary); margin:22px auto 0; }    /* ===================== FAQ accordéon ===================== */
+    .faq-grid { display:grid; grid-template-columns:1fr; gap:18px; align-items:start; max-width:600px; margin-inline:auto; }    @media (min-width:1024px){ .faq-grid { grid-template-columns:1fr 1fr; gap:18px 24px; max-width:none; margin-inline:0; } }    /* accordéon : centralisé dans orbita.css */
+  </style>
+</head>
+<body data-theme="blue">
+
+  <!-- reserved header space — dark + sélecteur d'accent -->
+  <div class="flex items-center h-[112px] bg-night">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 w-full flex items-center justify-end gap-6">
+      <div class="flex items-center gap-2" id="siloSwitch">
+        <span class="font-mono text-[11px] tracking-[.14em] uppercase mr-1 text-white/40">Accent</span>
+        <button class="silo-btn" data-silo="blue">Bleu</button>
+        <button class="silo-btn" data-silo="green">Vert</button>
+        <button class="silo-btn" data-silo="orange">Orange</button>
+        <button class="silo-btn" data-silo="violet">Violet</button>
+        <button class="silo-btn" data-silo="brique">Brique</button>
+        <button class="silo-btn" data-silo="magenta">Magenta</button>
+        <button class="silo-btn" data-silo="ambre">Ambre</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ FAQ · light ============================ -->
+  <section class="py-16 sm:py-24 bg-bg">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+      <div class="text-center mb-16">
+        <h2 class="font-display font-extrabold tracking-[-0.025em] leading-[1] text-ink m-0 text-[clamp(30px,3.6vw,46px)]">
+          Vos questions, <span class="c-serif-i text-primary">nos réponses.</span>
+        </h2>
+      </div>
+      <div class="faq-grid" id="faqLight" data-faq-group></div>
+    </div>
+  </section>
+
+  <!-- separator band (vide) -->
+  <div class="h-[100px] bg-paper"></div>
+
+  <!-- ============================ FAQ · dark ============================ -->
+  <section class="py-16 sm:py-24 c-darkbg faq-dark">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+      <div class="text-center mb-16">
+        <h2 class="font-display font-extrabold tracking-[-0.025em] leading-[1] text-white m-0 text-[clamp(30px,3.6vw,46px)]">
+          Vos questions, <span class="c-serif-i" style="color:var(--highlight);">nos réponses.</span>
+        </h2>
+      </div>
+      <div class="faq-grid" id="faqDark" data-faq-group></div>
+    </div>
+  </section>
+
+  <script>
+    /* ---------- données (lorem ipsum) ---------- */
+    const FAQ = [
+      { q:"Lorem ipsum dolor sit amet consectetur ?", a:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation." },
+      { q:"Quis nostrud exercitation ullamco laboris ?", a:"Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident." },
+      { q:"Ut enim ad minim veniam quis nostrud ?", a:"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore." },
+      { q:"Nemo enim ipsam voluptatem quia voluptas ?", a:"Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt." },
+      { q:"Quis autem vel eum iure reprehenderit ?", a:"At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores." },
+      { q:"Temporibus autem quibusdam et aut officiis ?", a:"Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus." },
+    ];
+
+    const arw = '<o-icon name="arrow-right" size="16"></o-icon>';
+    function buildGroup(el){
+      el.innerHTML = FAQ.map((f, i) => `
+        <div class="faq-item" data-faq>
+          <button class="faq-q" aria-expanded="false" aria-controls="${el.id}-a${i}">
+            <span class="faq-q-text">${f.q}</span>
+            <span class="faq-ico" aria-hidden="true"></span>
+          </button>
+          <div class="faq-a" id="${el.id}-a${i}" role="region">
+            <div class="faq-a-inner"><p>${f.a}</p></div>
+          </div>
+        </div>`).join('');
+      // accordéon strict : une seule ouverte dans le groupe
+      const items = [...el.querySelectorAll('[data-faq]')];
+      items.forEach(item => {
+        const btn = item.querySelector('.faq-q');
+        btn.addEventListener('click', () => {
+          const willOpen = !item.classList.contains('is-open');
+          items.forEach(o => { o.classList.remove('is-open'); o.querySelector('.faq-q').setAttribute('aria-expanded','false'); });
+          if (willOpen){ item.classList.add('is-open'); btn.setAttribute('aria-expanded','true'); }
+        });
+      });
+    }
+    buildGroup(document.getElementById('faqLight'));
+    buildGroup(document.getElementById('faqDark'));
+    // ouvrir la 1ère de chaque groupe par défaut (comme la capture)
+    document.querySelectorAll('[data-faq-group]').forEach(g => {
+      const first = g.querySelector('[data-faq]');
+      first.classList.add('is-open');
+      first.querySelector('.faq-q').setAttribute('aria-expanded','true');
+    });
+
+    /* ---------- accent switcher ---------- */
+    const root = document.documentElement, body = document.body;
+    const siloBtns = [...document.querySelectorAll('.silo-btn')];
+    function setSilo(s){
+      root.setAttribute('data-theme', s); body.setAttribute('data-theme', s);
+      siloBtns.forEach(b => b.classList.toggle('is-active', b.dataset.silo === s));
+    }
+    siloBtns.forEach(b => b.addEventListener('click', () => setSilo(b.dataset.silo)));
+    setSilo('blue');
+  </script>
+</body>
+</html>

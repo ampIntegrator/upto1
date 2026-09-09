@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="blue">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbita — topPageText</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="orbita.css" />
+  <link rel="stylesheet" href="icons.css" />
+  <script src="icons.js"></script>
+  <style type="text/tailwindcss">
+    @theme inline {
+      --font-sans: "Geist", system-ui, sans-serif;
+      --font-serif: "Cormorant Garamond", serif;
+      --font-display: "Schibsted Grotesk", system-ui, sans-serif;
+      --font-mono: "Geist Mono", monospace;
+      --color-bg: var(--bg); --color-bg-2: var(--bg-2); --color-paper: var(--paper);
+      --color-ink: var(--ink); --color-ink-2: var(--ink-2); --color-ink-3: var(--ink-3);
+      --color-line: var(--line); --color-line-2: var(--line-2);
+      --color-primary: var(--primary); --color-primary-deep: var(--primary-deep);
+      --color-editorial: var(--editorial); --color-highlight: var(--highlight); --color-night: var(--night);
+    }
+  </style>
+  <style>
+body { margin:0; background:var(--bg); color:var(--ink); font-family:"Geist",system-ui,sans-serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }    .reframe-note { font-family:"Geist Mono",monospace; }
+  </style>
+</head>
+<body data-theme="blue">
+
+  <!-- reserved header space — dark (night du silo) + sélecteur d'accent -->
+  <div class="flex items-center" style="height:var(--header-h); background:var(--night);">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 w-full flex items-center justify-between gap-6">
+      <span class="font-mono text-[11px] tracking-[.14em] uppercase" style="color:rgba(255,255,255,.5);">Espace réservé header · 112px</span>
+      <div class="flex items-center gap-2" id="siloSwitch">
+        <span class="font-mono text-[11px] tracking-[.14em] uppercase mr-1" style="color:rgba(255,255,255,.4);">Accent</span>
+        <button class="silo-btn" data-silo="blue">Bleu</button>
+        <button class="silo-btn" data-silo="green">Vert</button>
+        <button class="silo-btn" data-silo="orange">Orange</button>
+        <button class="silo-btn" data-silo="violet">Violet</button>
+        <button class="silo-btn" data-silo="brique">Brique</button>
+        <button class="silo-btn" data-silo="magenta">Magenta</button>
+        <button class="silo-btn" data-silo="ambre">Ambre</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ topPageText ============================ -->
+  <section class="xl:min-h-[calc(100vh-var(--header-h))] flex items-center bg-bg">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 w-full py-16 xl:py-0">
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-12 xl:gap-16 items-center">
+
+        <!-- LEFT · text -->
+        <div class="xl:col-span-7">
+          <!-- eyebrow chip -->
+          <div class="inline-flex items-center gap-2.5 border border-line-2 bg-paper px-3.5 py-2 mb-7">
+            <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+            <span class="text-[12px] font-semibold tracking-[.04em] text-ink-2">850+ courtiers actifs · Mis à jour aujourd'hui</span>
+          </div>
+
+          <!-- title -->
+          <h1 class="font-display font-extrabold tracking-[-0.025em] leading-[0.98] text-ink m-0" style="font-size:clamp(44px,5.4vw,74px);">
+            Chiffrez les travaux<br />
+            <span class="c-serif-i text-primary" style="letter-spacing:-.01em;">en 20 minutes.</span><br />
+            Sans artisan.
+          </h1>
+
+          <!-- paragraph -->
+          <p class="text-[18px] leading-[1.55] text-ink-2 mt-6 mb-8 max-w-[520px]">
+            Le devis arrive jamais. Le client signe ailleurs. Chiffrage Pro vous sort de cette dépendance — estimation détaillée, validée expert, livrable client en moins de 48 heures.
+          </p>
+
+          <!-- buttons -->
+          <div class="flex flex-wrap gap-3 mb-7">
+            <a class="c-btn-split" href="#"><span class="lbl">Faire mon 1er chiffrage gratuit</span><span class="arw"><o-icon name="arrow-right" size="16"></o-icon></span></a>
+            <a class="inline-flex items-center px-7 py-[15px] text-[15px] font-semibold text-ink border border-line-2 bg-transparent no-underline transition-colors duration-[var(--t-dur)] ease-[var(--t-ease)] hover:border-primary hover:text-primary" href="#">Voir un exemple de rapport</a>
+          </div>
+
+          <!-- reassurance line -->
+          <div class="flex flex-wrap gap-x-6 gap-y-2 text-[13px] text-ink-2">
+            <span class="inline-flex items-center gap-1.5"><span class="text-primary font-bold">✓</span> 1er chiffrage offert</span>
+            <span class="inline-flex items-center gap-1.5"><span class="text-primary font-bold">✓</span> Sans carte bancaire</span>
+            <span class="inline-flex items-center gap-1.5"><span class="text-primary font-bold">✓</span> Première estimation en 20 min</span>
+          </div>
+        </div>
+
+        <!-- RIGHT · image + 2 overlay badges -->
+        <div class="xl:col-span-5">
+          <div class="relative" style="isolation:isolate;">
+            <image-slot id="topPageImg" class="block w-full" style="height:clamp(400px,56vh,600px);" shape="rect" fit="cover"
+              src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1100&auto=format&fit=crop"
+              placeholder="Déposez votre visuel"></image-slot>
+
+            <!-- top-right badge — déborde du coin -->
+            <div class="absolute bg-night text-white p-2 shadow-[0_16px_34px_rgba(12,20,40,.30)]" style="top:-18px; right:-22px;">
+              <span class="font-display font-bold text-[14px] tracking-[.05em] uppercase">20 min chrono</span>
+            </div>
+
+            <!-- bottom-left badge — déborde du coin -->
+            <div class="absolute p-2 shadow-[0_16px_34px_rgba(12,20,40,.20)]" style="bottom:-18px; left:-22px; background:var(--primary);">
+              <span class="font-display font-bold text-[14px] tracking-[.05em] uppercase" style="color:#fff;">+34 % closing</span>
+            </div>
+          </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <script src="image-slot.js?v=1"></script>
+  <script>
+    const root = document.documentElement;
+    const body = document.body;
+    const siloBtns = [...document.querySelectorAll('.silo-btn')];
+    function setSilo(s){
+      root.setAttribute('data-theme', s);
+      body.setAttribute('data-theme', s);
+      siloBtns.forEach(b=> b.classList.toggle('is-active', b.dataset.silo===s));
+    }
+    siloBtns.forEach(b=> b.addEventListener('click', ()=> setSilo(b.dataset.silo)));
+    setSilo('blue');
+  </script>
+</body>
+</html>

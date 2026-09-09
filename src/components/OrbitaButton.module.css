@@ -1,0 +1,111 @@
+/*
+ * OrbitaButton — signature split-button (maquette orbita.css .c-btn-split).
+ * Le Button Astryx porte le fond, la taille et la variante (thème) ; ce module
+ * ajoute la cellule flèche pleine hauteur, le cadre intérieur et le rebond.
+ * Valeurs de mouvement : tokens Astryx (durée medium, courbe standard).
+ */
+.arrow {
+  /* réserve la cellule à droite : padding de taille (thème) + largeur cellule */
+  --orbita-arrow-w: 54px;
+  padding-inline-end: calc(var(--orbita-arrow-w) + var(--spacing-6)) !important;
+}
+.arrow[data-size='lg'] { --orbita-arrow-w: 60px; padding-inline-end: calc(var(--orbita-arrow-w) + var(--spacing-8)) !important; }
+
+/* cadre intérieur : s'étend jusqu'aux bords et disparaît au survol */
+.arrow::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border: 1px solid var(--orbita-frame, rgba(255, 255, 255, 0.34));
+  pointer-events: none;
+  transition:
+    inset var(--duration-medium) var(--ease-standard),
+    opacity var(--duration-medium) var(--ease-standard);
+}
+.arrow[data-variant='high']::before,
+.arrow[data-variant='ghost']::before { --orbita-frame: rgba(0, 0, 0, 0.2); }
+.arrow[data-variant='secondary']::before { --orbita-frame: rgba(0, 0, 0, 0.12); }
+
+/* le conteneur Astryx du contenu de fin sort du flux : il ne doit ni prendre
+   de largeur ni déclencher le gap, sinon le libellé n'est plus centré */
+.arrow :has(.cell) { display: contents; }
+
+/* cellule flèche : pleine hauteur, filet à gauche */
+.cell {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  width: var(--orbita-arrow-w);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-inline-start: 1px solid var(--orbita-sep, rgba(255, 255, 255, 0.38));
+  transition: border-color var(--duration-medium) var(--ease-standard);
+}
+.arrow[data-variant='high'] .cell,
+.arrow[data-variant='ghost'] .cell { --orbita-sep: rgba(0, 0, 0, 0.22); }
+.arrow[data-variant='secondary'] .cell { --orbita-sep: rgba(0, 0, 0, 0.12); }
+.cell svg { transition: transform var(--duration-medium) var(--ease-standard); }
+
+@media (hover: hover) {
+  .arrow:hover::before { inset: 0; opacity: 0; }
+  .arrow:hover .cell { border-color: transparent; }
+  .arrow:hover .cell svg { transform: scale(1.25); animation: orbitaArwPop 0.45s var(--ease-standard); }
+}
+@keyframes orbitaArwPop {
+  0% { transform: scale(1); }
+  45% { transform: scale(0.8); }
+  100% { transform: scale(1.25); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .arrow::before, .cell, .cell svg { transition: none; animation: none !important; }
+  .arrow:hover .cell svg { transform: none; }
+}
+
+/* mode bloc : pleine largeur, libellé à gauche, flèche collée au bord droit */
+.block { display: flex !important; width: 100%; justify-content: flex-start !important; }
+
+/* icône à gauche : les tracés Nucleo laissent 2,5 px de marge dans leur boîte ;
+   en lg la boîte n'est plus rognée par le conteneur, on compense pour garder
+   un padding optique égal des deux côtés et un écart = padding / 2 */
+.withIcon[data-size='lg'] {
+  padding-inline-start: calc(var(--spacing-8) - 2.5px) !important;
+  gap: calc(var(--spacing-4) - 2.5px) !important;
+}
+
+/* secondary : fond neutre Astryx, mais libellé et icône portent le silo.
+   Libellé : dégradé accent → encre, inversé au survol (glissement).
+   Icône  : dégradé inverse encre → accent, inversé au survol (stops SVG).
+   Appliqué au libellé (span) et aux tracés SVG, jamais au bouton entier. */
+.secondaryLabel {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-accent) 0%,
+    var(--color-text-primary) 50%,
+    var(--color-accent) 100%
+  );
+  background-size: 200% 100%;
+  background-position: 0% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  transition: background-position var(--duration-medium) var(--ease-standard);
+}
+.iconGrad { display: inline-flex; position: relative; }
+.iconGrad svg [stroke='currentColor'],
+.secondary .cell svg [stroke='currentColor'] { stroke: var(--orbita-grad); }
+.iconGrad svg [fill='currentColor'] { fill: var(--orbita-grad); }
+.stopA, .stopB { transition: stop-color var(--duration-medium) var(--ease-standard); }
+.stopA { stop-color: var(--color-text-primary); }
+.stopB { stop-color: var(--color-accent); }
+@media (hover: hover) {
+  .secondary:hover .secondaryLabel { background-position: 100% 0; }
+  .secondary:hover .stopA { stop-color: var(--color-accent); }
+  .secondary:hover .stopB { stop-color: var(--color-text-primary); }
+}
+.secondary[aria-disabled='true'] .secondaryLabel,
+.secondary:disabled .secondaryLabel { background-image: none; color: inherit; }
+.secondary[aria-disabled='true'] .iconGrad svg *,
+.secondary:disabled .iconGrad svg *,
+.secondary[aria-disabled='true'] .cell svg *,
+.secondary:disabled .cell svg * { stroke: currentColor; fill: none; }

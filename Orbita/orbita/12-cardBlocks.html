@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="blue">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbita — bloc cartes (4 apparences)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="orbita.css" />
+  <link rel="stylesheet" href="icons.css" />
+  <script src="icons.js"></script>
+  <style type="text/tailwindcss">
+    @theme inline {
+      --font-sans: "Geist", system-ui, sans-serif;
+      --font-serif: "Cormorant Garamond", serif;
+      --font-display: "Schibsted Grotesk", system-ui, sans-serif;
+      --font-mono: "Geist Mono", monospace;
+      --color-bg: var(--bg); --color-bg-2: var(--bg-2); --color-paper: var(--paper);
+      --color-ink: var(--ink); --color-ink-2: var(--ink-2); --color-ink-3: var(--ink-3);
+      --color-line: var(--line); --color-line-2: var(--line-2);
+      --color-primary: var(--primary); --color-primary-deep: var(--primary-deep); --color-primary-soft: var(--primary-soft);
+      --color-editorial: var(--editorial); --color-highlight: var(--highlight); --color-night: var(--night);
+    }
+  </style>
+  <style>
+body { margin:0; background:var(--bg); color:var(--ink); font-family:"Geist",system-ui,sans-serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }    /* média : image en haut */
+    .card-img { height:230px; background-size:cover; background-position:center center; background-repeat:no-repeat; }    @media (prefers-reduced-motion:reduce){ .card-sep i { animation:none; } }
+  </style>
+</head>
+<body data-theme="blue">
+
+  <!-- reserved header space — dark + accent switcher -->
+  <div class="flex items-center h-[112px] bg-night">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 w-full flex items-center justify-end gap-6">
+      <div class="flex items-center gap-2" id="siloSwitch">
+        <span class="font-mono text-[11px] tracking-[.14em] uppercase mr-1 text-white/40">Accent</span>
+        <button class="silo-btn" data-silo="blue">Bleu</button>
+        <button class="silo-btn" data-silo="green">Vert</button>
+        <button class="silo-btn" data-silo="orange">Orange</button>
+        <button class="silo-btn" data-silo="violet">Violet</button>
+        <button class="silo-btn" data-silo="brique">Brique</button>
+        <button class="silo-btn" data-silo="magenta">Magenta</button>
+        <button class="silo-btn" data-silo="ambre">Ambre</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================= BLOC A · IMAGE (3 colonnes) — sans texture ======================= -->
+  <section class="py-14 sm:py-20">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+      <div class="text-center mb-14 max-w-[800px] mx-auto">
+        <div class="c-head-eyebrow mb-5"><span class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial">Image en haut</span></div>
+        <h2 class="font-display font-extrabold tracking-[-0.025em] leading-[1.02] text-ink m-0 mb-5 text-[clamp(40px,5vw,64px)]">
+          Le chiffrage adapté <span class="c-serif-i text-primary">à votre métier.</span>
+        </h2>
+        <p class="text-[17px] leading-[1.6] text-ink-2 m-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="gridImage"></div>
+    </div>
+  </section>
+
+  <div class="h-[100px] bg-night"></div>
+
+  <!-- ======================= BLOC B · ICÔNE (4 colonnes) — texture grid ======================= -->
+  <section class="py-14 sm:py-20 tex-target tex-grid">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+      <div class="text-center mb-14 max-w-[800px] mx-auto">
+        <div class="c-head-eyebrow mb-5"><span class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial">Icône</span></div>
+        <h2 class="font-display font-extrabold tracking-[-0.025em] leading-[1.02] text-ink m-0 mb-5 text-[clamp(40px,5vw,64px)]">
+          Une plateforme, <span class="c-serif-i text-primary">tout le chantier.</span>
+        </h2>
+        <p class="text-[17px] leading-[1.6] text-ink-2 m-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6" id="gridIcon"></div>
+    </div>
+  </section>
+
+  <div class="h-[100px] bg-night"></div>
+
+  <!-- ======================= BLOC C · NOMBRE (4 colonnes) — texture points ======================= -->
+  <section class="py-14 sm:py-20 tex-target tex-dots">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+      <div class="text-center mb-14 max-w-[800px] mx-auto">
+        <div class="c-head-eyebrow mb-5"><span class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial">Gros chiffre</span></div>
+        <h2 class="font-display font-extrabold tracking-[-0.025em] leading-[1.02] text-ink m-0 mb-5 text-[clamp(40px,5vw,64px)]">
+          Le décret <span class="c-serif-i text-primary">en chiffres.</span>
+        </h2>
+        <p class="text-[17px] leading-[1.6] text-ink-2 m-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6" id="gridNumber"></div>
+    </div>
+  </section>
+
+  <div class="h-[100px] bg-night"></div>
+
+  <!-- ======================= BLOC D · TITRE SEUL (3 colonnes) — texture losanges ======================= -->
+  <section class="py-14 sm:py-20 tex-target tex-losange">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+      <div class="text-center mb-14 max-w-[800px] mx-auto">
+        <div class="c-head-eyebrow mb-5"><span class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial">Titre seul</span></div>
+        <h2 class="font-display font-extrabold tracking-[-0.025em] leading-[1.02] text-ink m-0 mb-5 text-[clamp(40px,5vw,64px)]">
+          L'essentiel, <span class="c-serif-i text-primary">sans détour.</span>
+        </h2>
+        <p class="text-[17px] leading-[1.6] text-ink-2 m-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="gridPlain"></div>
+    </div>
+  </section>
+
+  <script>
+    /* icônes SVG réutilisées */
+    const ICONS = { check:'gauge', chart:'chart', doc:'doc', shield:'shield' };
+    const arw = '<o-icon name="arrow-right" size="16"></o-icon>';
+    const LOREM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.";
+
+    /* châssis commun : média (HTML) + titre + texte + CTA en bas */
+    function card(media, title, text, cta, opts){
+      opts = opts || {};
+      const titleCls = opts.accentTitle ? 'text-primary' : 'text-ink';
+      const sep = '<div class="card-sep"><i></i></div>';
+      return `
+      <div class="card-i bg-paper flex flex-col">
+        <div class="flex flex-col flex-1 border border-line border-b-0">
+          ${media.fullbleed ? media.html : ''}
+          <div class="p-6 flex flex-col flex-1">
+            ${media.fullbleed ? '' : media.html}
+            <h3 class="text-[18px] font-bold ${titleCls} text-center mb-2.5 mt-0">${title}</h3>
+            ${sep}
+            <p class="text-[14px] leading-[1.6] text-ink-2 text-left flex-1 m-0 mb-5">${text}</p>
+          </div>
+        </div>
+        <a class="card-cta flex items-center justify-between px-6 py-4 border border-line no-underline text-[13.5px] font-semibold" href="#">
+          <span class="whitespace-nowrap">${cta}</span>${arw}
+        </a>
+      </div>`;
+    }
+    const noMedia   = { html:'', fullbleed:false };
+    const imgMedia  = url => ({ html:`<div class="card-img" style="background-image:url('${url}');"></div>`, fullbleed:true });
+    const iconMedia = name => ({ html:`<span class="inline-flex items-center justify-center w-16 h-16 mb-7 bg-primary-soft text-primary self-center"><o-icon name="${name}" size="28"></o-icon></span>`, fullbleed:false });
+    const numMedia  = n => ({ html:`<div class="card-num text-center mb-4">${n}</div>`, fullbleed:false });
+    /* ---- BLOC A · image ---- */
+    document.getElementById('gridImage').innerHTML = [
+      [imgMedia('https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1000&auto=format&fit=crop'), 'Rénovation', LOREM, 'Voir les détails', { accentTitle:true }],
+      [imgMedia('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1000&auto=format&fit=crop'), 'Gros œuvre', LOREM, 'Voir les détails', { accentTitle:true }],
+      [imgMedia('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop'), 'Second œuvre', LOREM, 'Voir les détails', { accentTitle:true }],
+    ].map(c => card(...c)).join('');
+
+    /* ---- BLOC B · icône ---- */
+    document.getElementById('gridIcon').innerHTML = [
+      [iconMedia(ICONS.check),  'Chiffrage instantané', LOREM, 'En savoir plus'],
+      [iconMedia(ICONS.chart),  'Suivi des coûts',      LOREM, 'En savoir plus'],
+      [iconMedia(ICONS.doc),    'Devis client pro',     LOREM, 'En savoir plus'],
+      [iconMedia(ICONS.shield), 'Validation expert',    LOREM, 'En savoir plus'],
+    ].map(c => card(...c)).join('');
+
+    /* ---- BLOC C · nombre ---- */
+    document.getElementById('gridNumber').innerHTML = [
+      [numMedia('1 000<span class="sign"> m²</span>'), 'Seuil d\'application',  LOREM, 'En savoir plus'],
+      [numMedia('<span class="sign">− </span>40<span class="sign"> %</span>'),    'Objectif 2030',         LOREM, 'En savoir plus'],
+      [numMedia('30/09'),    'Date limite annuelle',  LOREM, 'En savoir plus'],
+      [numMedia('2026'),     'Premier contrôle',      LOREM, 'En savoir plus'],
+    ].map(c => card(...c)).join('');
+
+    /* ---- BLOC D · titre seul (titre en primaire + séparateur) ---- */
+    document.getElementById('gridPlain').innerHTML = [
+      [noMedia, 'Sans artisan',     LOREM, 'En savoir plus', { accentTitle:true, sep:true }],
+      [noMedia, 'Sans avance',      LOREM, 'En savoir plus', { accentTitle:true, sep:true }],
+      [noMedia, 'Sans engagement',  LOREM, 'En savoir plus', { accentTitle:true, sep:true }],
+    ].map(c => card(...c)).join('');
+
+    /* ---------- switchers ---------- */
+    const root = document.documentElement, body = document.body;
+    const siloBtns = [...document.querySelectorAll('#siloSwitch .silo-btn')];
+    function setSilo(s){
+      root.setAttribute('data-theme', s); body.setAttribute('data-theme', s);
+      siloBtns.forEach(b => b.classList.toggle('is-active', b.dataset.silo === s));
+    }
+    siloBtns.forEach(b => b.addEventListener('click', () => setSilo(b.dataset.silo)));
+    setSilo('blue');
+  </script>
+</body>
+</html>

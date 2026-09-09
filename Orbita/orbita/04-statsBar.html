@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="blue">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbita — statsBar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="orbita.css" />
+  <style type="text/tailwindcss">
+    @theme inline {
+      --font-sans: "Geist", system-ui, sans-serif;
+      --font-display: "Schibsted Grotesk", system-ui, sans-serif;
+      --font-mono: "Geist Mono", monospace;
+      --color-bg: var(--bg); --color-paper: var(--paper);
+      --color-ink: var(--ink); --color-ink-2: var(--ink-2); --color-ink-3: var(--ink-3);
+      --color-line: var(--line); --color-line-2: var(--line-2);
+      --color-primary: var(--primary); --color-primary-deep: var(--primary-deep);
+      --color-highlight: var(--highlight); --color-night: var(--night);
+    }
+  </style>
+  <style>
+body { margin:0; background:var(--bg); color:var(--ink); font-family:"Geist",system-ui,sans-serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }    /* header switchers */
+    .silo-btn, .mode-btn { padding:7px 15px; font-size:13px; font-weight:600; border:1px solid rgba(255,255,255,.22); background:transparent; color:rgba(255,255,255,.72); cursor:pointer; border-radius:0; font-family:"Geist",sans-serif; transition:color var(--t-dur) var(--t-ease), border-color var(--t-dur) var(--t-ease), background var(--t-dur) var(--t-ease); }    .silo-btn:hover, .mode-btn:hover { color:#fff; border-color:rgba(255,255,255,.5); }    .silo-btn.is-active, .mode-btn.is-active { background:var(--primary); color:#fff; border-color:var(--primary); }    /* ===================== statsBar ===================== */
+    .statsbar { border-top:1px solid var(--line); border-bottom:1px solid var(--line); background-color:var(--paper); transition:background-color .25s, border-color .25s; }    .stat-label { color:var(--ink-3); }    .stat-rule { width:1px; height:42px; background:var(--line-2); }    .stat-value { font-family:"Schibsted Grotesk",sans-serif; font-weight:800; letter-spacing:-.02em; line-height:1; color:var(--primary); }    .stat-value .sign { color:var(--highlight-deep); font-size:0.75em; font-weight:600; }    .stat-sub { font-family:"Geist Mono",monospace; color:var(--ink-3); }    /* dark variant — dégradé latéral (clair au centre, sombre vers G/D) */
+    .statsbar.is-dark { background-color:var(--night) !important;
+      background-image:
+        linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--primary) 32%, transparent) 50%, transparent 100%),
+        linear-gradient(90deg, rgba(0,0,0,.36) 0%, transparent 24%, transparent 76%, rgba(0,0,0,.36) 100%);
+      border-top-color:rgba(255,255,255,.12); border-bottom-color:rgba(255,255,255,.12); }    .statsbar.is-dark .stat-label { color:rgba(255,255,255,.55); }    .statsbar.is-dark .stat-rule { background:rgba(255,255,255,.18); }    .statsbar.is-dark .stat-value { color:#fff; }    .statsbar.is-dark .stat-value .sign { color:var(--highlight); }    .statsbar.is-dark .stat-sub { color:rgba(255,255,255,.5); }
+  </style>
+</head>
+<body data-theme="blue">
+
+  <!-- header — dark, accent switcher (no texture) -->
+  <div class="flex items-center h-[112px] bg-night">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 w-full flex items-center justify-end gap-6">
+      <div class="flex items-center gap-2" id="siloSwitch">
+        <span class="font-mono text-[11px] tracking-[.14em] uppercase mr-1 text-white/40">Accent</span>
+        <button class="silo-btn" data-silo="blue">Bleu</button>
+        <button class="silo-btn" data-silo="green">Vert</button>
+        <button class="silo-btn" data-silo="orange">Orange</button>
+        <button class="silo-btn" data-silo="violet">Violet</button>
+        <button class="silo-btn" data-silo="brique">Brique</button>
+        <button class="silo-btn" data-silo="magenta">Magenta</button>
+        <button class="silo-btn" data-silo="ambre">Ambre</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ statsBar ============================ -->
+  <div class="statsbar my-10" id="bar">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+      <div class="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12 py-9">
+
+        <!-- label + rule -->
+        <div class="flex items-center gap-7 shrink-0">
+          <span class="stat-label text-[12.5px] font-semibold tracking-[.16em] uppercase whitespace-nowrap">Ils chiffrent avec nous</span>
+          <span class="stat-rule hidden lg:block"></span>
+        </div>
+
+        <!-- stats -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-8 flex-1 text-center lg:text-left">
+          <div>
+            <p class="stat-value text-[40px] m-0">850<span class="sign"> +</span></p>
+            <p class="stat-sub text-[11.5px] font-medium tracking-[.1em] uppercase mt-2 m-0">Courtiers actifs</p>
+          </div>
+          <div>
+            <p class="stat-value text-[40px] m-0">4,9<span class="sign"> / 5</span></p>
+            <p class="stat-sub text-[11.5px] font-medium tracking-[.1em] uppercase mt-2 m-0">Satisfaction</p>
+          </div>
+          <div>
+            <p class="stat-value text-[40px] m-0">50<span class="sign"> K+</span></p>
+            <p class="stat-sub text-[11.5px] font-medium tracking-[.1em] uppercase mt-2 m-0">Chantiers analysés</p>
+          </div>
+          <div>
+            <p class="stat-value text-[40px] m-0"><span class="sign">+ </span>34<span class="sign"> %</span></p>
+            <p class="stat-sub text-[11.5px] font-medium tracking-[.1em] uppercase mt-2 m-0">Closing rate</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- band 2 · 3 values -->
+  <div class="statsbar my-10">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+      <div class="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12 py-9">
+        <div class="flex items-center gap-7 shrink-0">
+          <span class="stat-label text-[12.5px] font-semibold tracking-[.16em] uppercase whitespace-nowrap">En quelques chiffres</span>
+          <span class="stat-rule hidden lg:block"></span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-8 flex-1 text-center lg:text-left sm:[&>div:last-child]:col-span-2 lg:[&>div:last-child]:col-span-1">
+          <div>
+            <p class="stat-value text-[40px] m-0">20<span class="sign"> min</span></p>
+            <p class="stat-sub text-[11.5px] font-medium tracking-[.1em] uppercase mt-2 m-0">Pour un chiffrage</p>
+          </div>
+          <div>
+            <p class="stat-value text-[40px] m-0">48<span class="sign"> h</span></p>
+            <p class="stat-sub text-[11.5px] font-medium tracking-[.1em] uppercase mt-2 m-0">Validation expert</p>
+          </div>
+          <div>
+            <p class="stat-value text-[40px] m-0"><span class="sign">± </span>8<span class="sign"> %</span></p>
+            <p class="stat-sub text-[11.5px] font-medium tracking-[.1em] uppercase mt-2 m-0">Précision estimée</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- band 3 · 2 values -->
+  <div class="statsbar my-10">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-center gap-8 lg:gap-14 py-9">
+        <div class="flex items-center gap-7 shrink-0">
+          <span class="stat-label text-[12.5px] font-semibold tracking-[.16em] uppercase whitespace-nowrap">L'impact business</span>
+          <span class="stat-rule hidden lg:block"></span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-14 gap-y-8 shrink-0 text-center lg:text-left">
+          <div>
+            <p class="stat-value text-[40px] m-0"><span class="sign">× </span>2<span class="sign"> ROI</span></p>
+            <p class="stat-sub text-[11.5px] font-medium tracking-[.1em] uppercase mt-2 m-0">Dès le 1er trimestre</p>
+          </div>
+          <div>
+            <p class="stat-value text-[40px] m-0">21 600<span class="sign"> €</span></p>
+            <p class="stat-sub text-[11.5px] font-medium tracking-[.1em] uppercase mt-2 m-0">Gagnés par mois</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ statsBar · DARK ============================ -->
+  <div class="statsbar is-dark my-10">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+      <div class="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12 py-9">
+
+        <!-- label + rule -->
+        <div class="flex items-center gap-7 shrink-0">
+          <span class="stat-label text-[12.5px] font-semibold tracking-[.16em] uppercase whitespace-nowrap">Ils chiffrent avec nous</span>
+          <span class="stat-rule hidden lg:block"></span>
+        </div>
+
+        <!-- stats -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-8 flex-1 text-center lg:text-left">
+          <div>
+            <p class="stat-value text-[40px] m-0">850<span class="sign"> +</span></p>
+            <p class="stat-sub text-[11.5px] font-medium tracking-[.1em] uppercase mt-2 m-0">Courtiers actifs</p>
+          </div>
+          <div>
+            <p class="stat-value text-[40px] m-0">4,9<span class="sign"> / 5</span></p>
+            <p class="stat-sub text-[11.5px] font-medium tracking-[.1em] uppercase mt-2 m-0">Satisfaction</p>
+          </div>
+          <div>
+            <p class="stat-value text-[40px] m-0">50<span class="sign"> K+</span></p>
+            <p class="stat-sub text-[11.5px] font-medium tracking-[.1em] uppercase mt-2 m-0">Chantiers analysés</p>
+          </div>
+          <div>
+            <p class="stat-value text-[40px] m-0"><span class="sign">+ </span>34<span class="sign"> %</span></p>
+            <p class="stat-sub text-[11.5px] font-medium tracking-[.1em] uppercase mt-2 m-0">Closing rate</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- band 2 · 3 values -->
+  <div class="statsbar is-dark my-10">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+      <div class="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12 py-9">
+        <div class="flex items-center gap-7 shrink-0">
+          <span class="stat-label text-[12.5px] font-semibold tracking-[.16em] uppercase whitespace-nowrap">En quelques chiffres</span>
+          <span class="stat-rule hidden lg:block"></span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-8 flex-1 text-center lg:text-left sm:[&>div:last-child]:col-span-2 lg:[&>div:last-child]:col-span-1">
+          <div>
+            <p class="stat-value text-[40px] m-0">20<span class="sign"> min</span></p>
+            <p class="stat-sub text-[11.5px] font-medium tracking-[.1em] uppercase mt-2 m-0">Pour un chiffrage</p>
+          </div>
+          <div>
+            <p class="stat-value text-[40px] m-0">48<span class="sign"> h</span></p>
+            <p class="stat-sub text-[11.5px] font-medium tracking-[.1em] uppercase mt-2 m-0">Validation expert</p>
+          </div>
+          <div>
+            <p class="stat-value text-[40px] m-0"><span class="sign">± </span>8<span class="sign"> %</span></p>
+            <p class="stat-sub text-[11.5px] font-medium tracking-[.1em] uppercase mt-2 m-0">Précision estimée</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- band 3 · 2 values -->
+  <div class="statsbar is-dark my-10">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-center gap-8 lg:gap-14 py-9">
+        <div class="flex items-center gap-7 shrink-0">
+          <span class="stat-label text-[12.5px] font-semibold tracking-[.16em] uppercase whitespace-nowrap">L'impact business</span>
+          <span class="stat-rule hidden lg:block"></span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-14 gap-y-8 shrink-0 text-center lg:text-left">
+          <div>
+            <p class="stat-value text-[40px] m-0"><span class="sign">× </span>2<span class="sign"> ROI</span></p>
+            <p class="stat-sub text-[11.5px] font-medium tracking-[.1em] uppercase mt-2 m-0">Dès le 1er trimestre</p>
+          </div>
+          <div>
+            <p class="stat-value text-[40px] m-0">21 600<span class="sign"> €</span></p>
+            <p class="stat-sub text-[11.5px] font-medium tracking-[.1em] uppercase mt-2 m-0">Gagnés par mois</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const root = document.documentElement, body = document.body;
+    const bar = document.getElementById('bar');
+
+    const siloBtns = [...document.querySelectorAll('.silo-btn')];
+    function setSilo(s){
+      root.setAttribute('data-theme', s); body.setAttribute('data-theme', s);
+      siloBtns.forEach(b=> b.classList.toggle('is-active', b.dataset.silo===s));
+    }
+    siloBtns.forEach(b=> b.addEventListener('click', ()=> setSilo(b.dataset.silo)));
+
+    setSilo('blue');
+  </script>
+</body>
+</html>

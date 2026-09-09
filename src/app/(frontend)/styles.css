@@ -1,164 +1,228 @@
-:root {
-  --font-mono: 'Roboto Mono', monospace;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  font-size: 18px;
-  line-height: 32px;
-
-  background: rgb(0, 0, 0);
-  -webkit-font-smoothing: antialiased;
-}
+/*
+ * Styles globaux du front (hors admin Payload, qui a son propre layout).
+ * Astryx : reset + styles de base des composants. Le thème Orbita (tokens
+ * compilés) est importé par src/theme/OrbitaThemeProvider.tsx.
+ */
+@import '@astryxdesign/core/reset.css';
+@import '@astryxdesign/core/astryx.css';
 
 html,
-body,
-#app {
-  height: 100%;
-}
-
 body {
-  font-family: system-ui;
-  font-size: 18px;
-  line-height: 32px;
-
   margin: 0;
-  color: rgb(1000, 1000, 1000);
-
-  @media (max-width: 1024px) {
-    font-size: 15px;
-    line-height: 24px;
-  }
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
+/* Le fournisseur de thème est la racine visuelle : il porte le fond, la
+   couleur de texte et la police du silo actif. */
+body > [data-astryx-theme] {
+  min-height: 100dvh;
+  background: var(--color-background-body);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-body);
 }
 
-h1 {
-  margin: 40px 0;
-  font-size: 64px;
-  line-height: 70px;
-  font-weight: bold;
-
-  @media (max-width: 1024px) {
-    margin: 24px 0;
-    font-size: 42px;
-    line-height: 42px;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 38px;
-    line-height: 38px;
-  }
-
-  @media (max-width: 400px) {
-    font-size: 32px;
-    line-height: 32px;
-  }
+/* Icônes Nucleo : épaisseur de trait globale, sans modifier les SVG.
+   Ne touche que les groupes exportés à 1 (les aplats et les traits à 0 restent). */
+[data-icon='nucleo'] [stroke-width='1'] {
+  stroke-width: var(--icon-stroke-width, 1);
 }
 
-p {
-  margin: 24px 0;
-
-  @media (max-width: 1024px) {
-    margin: calc(var(--base) * 0.75) 0;
-  }
+/* Contrôles d'option Orbita : libellé en couleur silo quand l'option est cochée,
+   piste de progression du curseur alignée sur la piste (6 px). */
+[data-astryx-theme^='orbita'] .astryx-checkbox-input:has(input:checked) .astryx-checkbox-label,
+[data-astryx-theme^='orbita'] .astryx-radio-list-item:has(input:checked) {
+  color: light-dark(var(--color-text-accent), var(--color-highlight));
+}
+[data-astryx-theme^='orbita'] .astryx-checkbox-label,
+[data-astryx-theme^='orbita'] .astryx-radio-list-item,
+[data-astryx-theme^='orbita'] .astryx-switch-label {
+  font-size: 14.5px;
+}
+[data-astryx-theme^='orbita'] .astryx-slider-track + div {
+  height: 6px;
+  border-radius: 3px;
 }
 
-a {
-  color: currentColor;
-
-  &:focus {
-    opacity: 0.8;
-    outline: none;
-  }
-
-  &:active {
-    opacity: 0.7;
-    outline: none;
-  }
+/* Sélecteurs de date : le panneau court bord à bord du champ qui l'ouvre
+   (largeur de l'ancre), 6 px dessous ; la grille du calendrier reste bornée
+   et centrée dedans. */
+[data-astryx-theme^='orbita'] :is(.astryx-date-input, .astryx-date-range-input, .astryx-date-time-input) > div[style*='position-anchor'] {
+  width: anchor-size(width);
+  margin-block-start: var(--spacing-1-5);
 }
-
-svg {
-  vertical-align: middle;
-}
-
-.home {
+[data-astryx-theme^='orbita'] :is(.astryx-date-input, .astryx-date-range-input, .astryx-date-time-input) > div[style*='position-anchor'] > .astryx-popover-surface {
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  height: 100vh;
-  padding: 45px;
-  max-width: 1024px;
-  margin: 0 auto;
-  overflow: hidden;
-
-  @media (max-width: 400px) {
-    padding: 24px;
-  }
-
-  .content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex-grow: 1;
-
-    h1 {
-      text-align: center;
-    }
-  }
-
-  .links {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    a {
-      text-decoration: none;
-      padding: 0.25rem 0.5rem;
-      border-radius: 4px;
-    }
-
-    .admin {
-      color: rgb(0, 0, 0);
-      background: rgb(1000, 1000, 1000);
-      border: 1px solid rgb(0, 0, 0);
-    }
-
-    .docs {
-      color: rgb(1000, 1000, 1000);
-      background: rgb(0, 0, 0);
-      border: 1px solid rgb(1000, 1000, 1000);
-    }
-  }
-
-  .footer {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    @media (max-width: 1024px) {
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    p {
-      margin: 0;
-    }
-
-    .codeLink {
-      text-decoration: none;
-      padding: 0 0.5rem;
-      background: rgb(60, 60, 60);
-      border-radius: 4px;
-    }
-  }
+  justify-content: center;
 }
+[data-astryx-theme^='orbita'] :is(.astryx-date-input, .astryx-date-range-input, .astryx-date-time-input) .astryx-popover-surface > .astryx-calendar {
+  max-width: 360px;
+  margin-inline: auto;
+}
+
+/* Listes à cases (CheckboxList) : ligne cochée en silo à 5 % seulement, séparation
+   des lignes en blanc (nuit : fond nuit), sans transparence. */
+[data-astryx-theme^='orbita'] .astryx-checkbox-list .astryx-list-item {
+  border-bottom-color: light-dark(#FFFFFF, var(--color-night));
+}
+[data-astryx-theme^='orbita'] .astryx-checkbox-list .astryx-list-item:has(input:checked) {
+  background-color: color-mix(in srgb, var(--color-accent) 5%, transparent);
+}
+
+/* Bouton d'effacement des champs : croix nue, sans le cadre du bouton fantôme
+   (la règle du thème est battue en spécificité par .astryx-button.ghost). */
+[data-astryx-theme^='orbita'] .astryx-button.astryx-input-clear-button,
+[data-astryx-theme^='orbita'] .astryx-button.astryx-input-clear-button:hover {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  min-width: 0;
+  width: 24px;
+  height: 24px;
+}
+[data-astryx-theme^='orbita'] .astryx-button.astryx-input-clear-button { color: var(--color-icon-secondary); }
+[data-astryx-theme^='orbita'] .astryx-button.astryx-input-clear-button:hover { color: var(--color-text-accent); }
+
+/* Champs de date et d'heure : icônes calendrier et horloge en couleur du silo. */
+[data-astryx-theme^='orbita'] :is(
+  .astryx-date-input-toggle-icon,
+  .astryx-date-range-input-toggle-icon,
+  .astryx-date-time-input-toggle-icon,
+  .astryx-date-time-input-clock-icon,
+  .astryx-time-input > div > .astryx-icon
+) {
+  color: var(--color-text-accent);
+}
+
+/* Date + heure : le calendrier court sur la largeur des deux segments réunis,
+   pas seulement sur le segment date qui l'ancre. Les deux segments sont égaux
+   et séparés de 8 px : largeur = 2 × segment + 8. */
+[data-astryx-theme^='orbita'] .astryx-field:has(> .astryx-date-time-input) > div[style*='position-anchor'] {
+  width: calc(anchor-size(width) * 2 + var(--spacing-2));
+  margin-block-start: var(--spacing-1-5);
+}
+[data-astryx-theme^='orbita'] .astryx-field:has(> .astryx-date-time-input) > div[style*='position-anchor'] > .astryx-popover-surface {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+[data-astryx-theme^='orbita'] .astryx-field:has(> .astryx-date-time-input) .astryx-popover-surface > .astryx-calendar {
+  max-width: 360px;
+  margin-inline: auto;
+}
+
+/* Champ numérique : deux cases carrées empilées, chacune d'une demi-hauteur
+   du champ (48 px → 24 × 24), flèches Nucleo un peu plus grandes. */
+[data-astryx-theme^='orbita'] .astryx-number-input {
+  position: relative !important; /* bloc conteneur des cases (StyleX force static) */
+  padding-inline-end: 32px !important;
+}
+[data-astryx-theme^='orbita'] .astryx-number-input > div:last-child {
+  position: absolute !important;
+  inset-block: 0 !important;
+  inset-inline-end: 0 !important;
+  height: auto !important;
+  width: 24px !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  border-inline-start: var(--border-width) solid var(--color-border);
+}
+[data-astryx-theme^='orbita'] .astryx-number-input > div:last-child > button {
+  /* !important : les styles StyleX d'Astryx ont une spécificité artificielle très haute */
+  width: 24px !important;
+  height: 50% !important;
+  min-height: 0 !important;
+  flex: 1 1 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  color: var(--color-text-accent) !important;
+}
+[data-astryx-theme^='orbita'] .astryx-number-input > div:last-child > button + button {
+  border-top: var(--border-width) solid var(--color-border);
+}
+[data-astryx-theme^='orbita'] .astryx-number-input > div:last-child > button .astryx-icon,
+[data-astryx-theme^='orbita'] .astryx-number-input > div:last-child > button svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Interrupteur Orbita : piste 46 × 26 (StyleX force 40 de large, d'où le curseur
+   qui sortait du cadre une fois coché). */
+[data-astryx-theme^='orbita'] .astryx-switch {
+  width: 46px !important;
+  min-width: 46px !important;
+  flex: 0 0 46px !important;
+  height: 26px !important;
+}
+[data-astryx-theme^='orbita'] .astryx-switch-field :has(> .astryx-switch) {
+  width: 46px !important;
+  min-width: 46px !important;
+}
+
+/* PowerSearch : codes des champs Orbita — 58 px, label flottant (CSS seul :
+   focus, filtre présent ou saisie), jetons de filtre en badges accent. */
+[data-astryx-theme^='orbita'] .astryx-power-search .astryx-field { position: relative; }
+[data-astryx-theme^='orbita'] .astryx-power-search .astryx-field > .astryx-field-label {
+  position: absolute !important;
+  inset-inline-start: 15px !important;
+  top: 18px !important;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  clip: auto !important;
+  clip-path: none !important;
+  font-size: 15px !important;
+  line-height: 1.4 !important;
+  color: var(--color-text-disabled) !important;
+  pointer-events: none;
+  z-index: 1;
+  transition: top 0.16s ease, font-size 0.16s ease, color 0.16s ease;
+}
+[data-astryx-theme^='orbita'] .astryx-power-search .astryx-field:focus-within > .astryx-field-label,
+[data-astryx-theme^='orbita'] .astryx-power-search .astryx-field:has(.astryx-token) > .astryx-field-label,
+[data-astryx-theme^='orbita'] .astryx-power-search .astryx-field:has(input[placeholder]:not(:placeholder-shown)) > .astryx-field-label {
+  top: 8px !important;
+  font-size: 11.5px !important;
+  letter-spacing: 0.02em;
+  color: light-dark(var(--color-accent), var(--color-highlight)) !important;
+}
+[data-astryx-theme^='orbita'] .astryx-power-search .astryx-tokenizer {
+  min-height: 58px;
+  padding: 24px 15px 6px !important;
+  align-items: flex-end;
+  gap: 6px;
+}
+[data-astryx-theme^='orbita'] .astryx-power-search .astryx-tokenizer > input {
+  font-size: 15px;
+  min-height: 24px;
+}
+[data-astryx-theme^='orbita'] .astryx-power-search .astryx-token {
+  background: light-dark(var(--color-accent-muted), rgba(255, 255, 255, 0.1)) !important;
+  color: light-dark(var(--color-text-accent), var(--color-highlight)) !important;
+  border-radius: 0 !important;
+  font-size: 12.5px !important;
+  font-weight: var(--font-weight-semibold) !important;
+}
+
+/* Message d'état accolé (erreur / succès / avertissement) : aligné sur le halo
+   de 3 px du champ, pour que le bloc coloré et le contour aient la même largeur. */
+[data-astryx-theme^='orbita'] .astryx-field-status[data-variant='attached'] {
+  margin-inline: -3px;
+  width: calc(100% + 6px);
+  /* le bloc commence sous le halo au lieu de se glisser sous le champ :
+     sinon halo et fond translucides se superposent et foncent la jonction */
+  margin-top: 3px !important;
+  padding-top: 8px !important;
+}
+[data-astryx-theme^='orbita'] .astryx-field-status[data-variant='attached'][data-type='error'] { background-color: var(--color-error-muted) !important; }
+[data-astryx-theme^='orbita'] .astryx-field-status[data-variant='attached'][data-type='success'] { background-color: var(--color-success-muted) !important; }
+[data-astryx-theme^='orbita'] .astryx-field-status[data-variant='attached'][data-type='warning'] { background-color: var(--color-warning-muted) !important; }

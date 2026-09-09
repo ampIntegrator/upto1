@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="blue">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbita — formulaires & contrôles</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="orbita.css" />
+  <link rel="stylesheet" href="icons.css" />
+  <script src="icons.js"></script>
+  <style type="text/tailwindcss">
+    @theme inline {
+      --font-sans: "Geist", system-ui, sans-serif;
+      --font-serif: "Cormorant Garamond", serif;
+      --font-display: "Schibsted Grotesk", system-ui, sans-serif;
+      --font-mono: "Geist Mono", monospace;
+      --color-bg: var(--bg); --color-bg-2: var(--bg-2); --color-paper: var(--paper);
+      --color-ink: var(--ink); --color-ink-2: var(--ink-2); --color-ink-3: var(--ink-3);
+      --color-line: var(--line); --color-line-2: var(--line-2);
+      --color-primary: var(--primary); --color-primary-deep: var(--primary-deep); --color-primary-soft: var(--primary-soft);
+      --color-editorial: var(--editorial); --color-highlight: var(--highlight); --color-night: var(--night);
+      --color-danger: var(--danger); --color-ok: var(--ok);
+    }
+  </style>
+  <style>
+body { margin:0; background:var(--bg); color:var(--ink); font-family:"Geist",system-ui,sans-serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+  </style>
+</head>
+<body data-theme="blue">
+
+  <!-- reserved header space — dark + accent switcher -->
+  <div class="flex items-center h-[112px] bg-night">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 w-full flex items-center justify-end gap-6">
+      <div class="flex items-center gap-2" id="siloSwitch">
+        <span class="font-mono text-[11px] tracking-[.14em] uppercase mr-1 text-white/40">Accent</span>
+        <button class="silo-btn" data-silo="blue">Bleu</button>
+        <button class="silo-btn" data-silo="green">Vert</button>
+        <button class="silo-btn" data-silo="orange">Orange</button>
+        <button class="silo-btn" data-silo="violet">Violet</button>
+        <button class="silo-btn" data-silo="brique">Brique</button>
+        <button class="silo-btn" data-silo="magenta">Magenta</button>
+        <button class="silo-btn" data-silo="ambre">Ambre</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ GALERIE (light) ============================ -->
+  <section class="py-14 sm:py-20">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+      <div class="text-center mb-16 max-w-[800px] mx-auto">
+        <div class="c-head-eyebrow mb-5 justify-center"><span class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial">Saisie</span></div>
+        <h2 class="font-display font-extrabold tracking-[-0.025em] leading-[1.02] text-ink m-0 mb-5 text-[clamp(40px,5vw,64px)]">
+          Formulaires <span class="c-serif-i text-primary">& contrôles.</span>
+        </h2>
+        <p class="text-[17px] leading-[1.6] text-ink-2 m-0">Label flottant, angles vifs, fond blanc. Select custom, radios à disque, cases à coche CSS, toggles — chaque état couvert.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8 items-start">
+        <div class="bg-paper border border-line p-5 sm:p-9">
+        <div class="flex flex-col gap-7">
+          <div><p class="ctrl-tag mb-3">Champ · repos</p>
+            <div class="field"><input class="field-input" id="f1" type="text" placeholder=" " /><label class="field-label" for="f1">Nom complet</label></div></div>
+          <div><p class="ctrl-tag mb-3">Champ · focus</p>
+            <div class="field show-focus"><input class="field-input" id="f2" type="email" placeholder=" " value="contact@" /><label class="field-label" for="f2">Adresse e-mail</label></div></div>
+          <div><p class="ctrl-tag mb-3">Champ · rempli + aide</p>
+            <div class="field"><input class="field-input" id="f3" type="text" placeholder=" " value="Orbita Systèmes" /><label class="field-label" for="f3">Société</label>
+              <div class="field-msg"><o-icon name="info" size="14"></o-icon> Tel qu'il apparaîtra sur vos devis.</div></div></div>
+          <div><p class="ctrl-tag mb-3">Champ · préfixe</p>
+            <div class="field has-lead"><span class="field-lead"><o-icon name="phone" size="17"></o-icon></span><input class="field-input" id="f4" type="tel" placeholder=" " /><label class="field-label" for="f4">Téléphone</label></div></div>
+          <div><p class="ctrl-tag mb-3">Champ · erreur</p>
+            <div class="field is-error"><input class="field-input" id="f5" type="email" placeholder=" " value="contact@orbita" /><label class="field-label" for="f5">Adresse e-mail</label>
+              <div class="field-msg"><o-icon name="alert" size="14"></o-icon> Adresse e-mail invalide.</div></div></div>
+          <div><p class="ctrl-tag mb-3">Champ · succès</p>
+            <div class="field is-success has-trail"><input class="field-input" id="f6" type="text" placeholder=" " value="vérifié" /><label class="field-label" for="f6">N° SIRET</label>
+              <span class="field-trail"><o-icon name="check" size="18"></o-icon></span>
+              <div class="field-msg"><o-icon name="check" size="14"></o-icon> Entreprise validée.</div></div></div>
+          <div><p class="ctrl-tag mb-3">Recherche</p>
+            <div class="field has-lead"><span class="field-lead"><o-icon name="search" size="17"></o-icon></span><input class="field-input" id="f7" type="search" placeholder=" " /><label class="field-label" for="f7">Rechercher un guide, un prix…</label></div></div>
+          <div><p class="ctrl-tag mb-3">Champ · désactivé</p>
+            <div class="field"><input class="field-input" id="f8" type="text" placeholder=" " value="Champ verrouillé" disabled /><label class="field-label is-float" for="f8">Identifiant</label></div></div>
+          <div><p class="ctrl-tag mb-3">Textarea</p>
+            <div class="field"><textarea class="field-input" id="f9" placeholder=" "></textarea><label class="field-label" for="f9">Décrivez votre besoin</label></div></div>
+          <div data-range-block><p class="ctrl-tag mb-4">Range / slider</p>
+            <div class="flex items-center justify-between mb-2.5">
+              <span class="text-[13px] font-medium text-ink-2">Budget travaux estimé</span>
+              <span class="font-sans text-[13px] font-semibold text-ink"><span data-rangeval>250</span> k€</span>
+            </div>
+            <input class="c-range" type="range" min="50" max="500" step="10" value="250" /></div>
+        </div>
+        </div>
+        <div class="bg-paper border border-line p-5 sm:p-9">
+        <div class="flex flex-col gap-7">
+          <div><p class="ctrl-tag mb-3">Select · 1 choix · 4 options</p>
+            <div class="selectx" data-set="m4" data-name="metier1" data-label="Votre métier"></div></div>
+          <div><p class="ctrl-tag mb-3">Select · 1 choix · 8 options (recherche)</p>
+            <div class="selectx" data-set="m8" data-name="metier2" data-label="Votre métier"></div></div>
+          <div><p class="ctrl-tag mb-3">Select · multiple · 4 options</p>
+            <div class="selectx" data-set="m4" data-multiple data-name="metiers1" data-label="Vos métiers"></div></div>
+          <div><p class="ctrl-tag mb-3">Select · multiple · 8 options (recherche)</p>
+            <div class="selectx" data-set="m8" data-multiple data-name="metiers2" data-label="Vos métiers"></div></div>
+          <div><p class="ctrl-tag mb-4">Radio · disque</p>
+            <div class="flex flex-col gap-3.5">
+              <span class="opt radio"><input class="opt-input" type="radio" name="taille" id="r1" checked /><label class="opt-label" for="r1">1 à 10 sites</label></span>
+              <span class="opt radio"><input class="opt-input" type="radio" name="taille" id="r2" /><label class="opt-label" for="r2">11 à 50 sites</label></span>
+              <span class="opt radio"><input class="opt-input" type="radio" name="taille" id="r3" /><label class="opt-label" for="r3">Plus de 50 sites</label></span>
+              <span class="opt radio"><input class="opt-input" type="radio" name="taille" id="r4" disabled /><label class="opt-label" for="r4">Je ne sais pas (désactivé)</label></span>
+            </div></div>
+          <div><p class="ctrl-tag mb-4">Checkbox · carré</p>
+            <div class="flex flex-col gap-3.5">
+              <span class="opt check"><input class="opt-input" type="checkbox" id="c1" checked /><label class="opt-label" for="c1">Chiffrage de travaux</label></span>
+              <span class="opt check"><input class="opt-input" type="checkbox" id="c2" checked /><label class="opt-label" for="c2">Suivi de chantier</label></span>
+              <span class="opt check"><input class="opt-input" type="checkbox" id="c3" /><label class="opt-label" for="c3">Maintenance multitechnique</label></span>
+              <span class="opt check"><input class="opt-input" type="checkbox" id="c4" disabled /><label class="opt-label" for="c4">Module API (désactivé)</label></span>
+            </div></div>
+          <div><p class="ctrl-tag mb-4">Toggle / switch</p>
+            <div class="flex flex-col gap-4">
+              <label class="switch"><input class="switch-input" type="checkbox" checked /><span class="switch-track"></span><span class="switch-lbl">Recevoir la newsletter</span></label>
+              <label class="switch"><input class="switch-input" type="checkbox" /><span class="switch-track"></span><span class="switch-lbl">Activer les rappels SMS</span></label>
+            </div></div>
+          <div><p class="ctrl-tag mb-4">Upload de fichier</p>
+            <div class="upload"><input class="upload-input" type="file" id="up1" />
+              <label class="upload-zone" for="up1"><span class="upload-ic"><o-icon name="upload" size="20"></o-icon></span>
+                <span><span class="block text-[14.5px] font-semibold text-ink up-name">Déposez votre cahier des charges</span><span class="block text-[12.5px] text-ink-3 mt-0.5">PDF, DOCX — 10 Mo max.</span></span></label></div></div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ FORMULAIRE DE DÉMO (light) ============================ -->
+  <section class="py-14 sm:py-20" style="background:var(--bg-2);">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+      <div class="form-split">
+        <div class="form-split-grid">
+          <div class="form-split-side l"><img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1600&auto=format&fit=crop" alt="" /></div>
+          <div class="bg-paper p-6 sm:p-9 md:p-12 form-split-card">
+        <p class="mb-3 text-center" style="font-family:'Geist Mono',monospace; font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--editorial);">Formulaire assemblé</p>
+        <h3 class="font-display font-extrabold text-primary text-[28px] leading-[1.1] tracking-[-.02em] m-0 mb-2 text-center">Demander une démo</h3>
+        <p class="text-[15px] text-ink-2 leading-[1.55] m-0 mb-8 text-center">Réponse sous 24 h ouvrées. Sans engagement.</p>
+        <form class="flex flex-col gap-5" onsubmit="return false;">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="field"><input class="field-input" id="d1" type="text" placeholder=" " /><label class="field-label" for="d1">Prénom</label></div>
+            <div class="field"><input class="field-input" id="d2" type="text" placeholder=" " /><label class="field-label" for="d2">Nom</label></div>
+          </div>
+          <div class="field"><input class="field-input" id="d3" type="email" placeholder=" " /><label class="field-label" for="d3">E-mail professionnel</label></div>
+          <div class="selectx" data-set="m4" data-name="secteur2" data-label="Votre métier"></div>
+          <div class="field"><textarea class="field-input" id="d4" placeholder=" "></textarea><label class="field-label" for="d4">Votre projet (facultatif)</label></div>
+          <span class="opt check"><input class="opt-input" type="checkbox" id="d5" /><label class="opt-label" for="d5">J'accepte d'être recontacté par l'équipe Orbita.</label></span>
+          <button class="c-btn-split mt-2 self-start" type="submit"><span class="lbl">Envoyer ma demande</span><span class="arw"><o-icon name="arrow-right" size="16"></o-icon></span></button>
+        </form>
+      </div>
+          <div class="form-split-side r"><img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1600&auto=format&fit=crop" alt="" /></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- bande de séparation -->
+  <div class="h-[120px] bg-night"></div>
+
+  <!-- ============================ VERSION DARK ============================ -->
+  <section class="py-14 sm:py-20 on-dark c-darkbg">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+      <div class="text-center mb-14 max-w-[760px] mx-auto">
+        <div class="c-head-eyebrow mb-5 justify-center"><span class="text-[11.5px] font-semibold tracking-[.16em] uppercase" style="color:var(--highlight);">Sur fond nuit</span></div>
+        <h2 class="font-display font-extrabold tracking-[-0.025em] leading-[1.05] m-0 text-[clamp(34px,4vw,52px)]" style="color:#fff;">
+          Les mêmes contrôles, <span class="c-serif-i" style="color:var(--highlight);">en sombre.</span>
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8 items-start">
+        <div class="border border-white/10 p-5 sm:p-9" style="background:#171a3d;">
+        <div class="flex flex-col gap-7">
+          <div><p class="ctrl-tag mb-3">Champ · repos</p>
+            <div class="field"><input class="field-input" id="d_f1" type="text" placeholder=" " /><label class="field-label" for="d_f1">Nom complet</label></div></div>
+          <div><p class="ctrl-tag mb-3">Champ · focus</p>
+            <div class="field show-focus"><input class="field-input" id="d_f2" type="email" placeholder=" " value="contact@" /><label class="field-label" for="d_f2">Adresse e-mail</label></div></div>
+          <div><p class="ctrl-tag mb-3">Champ · rempli + aide</p>
+            <div class="field"><input class="field-input" id="d_f3" type="text" placeholder=" " value="Orbita Systèmes" /><label class="field-label" for="d_f3">Société</label>
+              <div class="field-msg"><o-icon name="info" size="14"></o-icon> Tel qu'il apparaîtra sur vos devis.</div></div></div>
+          <div><p class="ctrl-tag mb-3">Champ · préfixe</p>
+            <div class="field has-lead"><span class="field-lead"><o-icon name="phone" size="17"></o-icon></span><input class="field-input" id="d_f4" type="tel" placeholder=" " /><label class="field-label" for="d_f4">Téléphone</label></div></div>
+          <div><p class="ctrl-tag mb-3">Champ · erreur</p>
+            <div class="field is-error"><input class="field-input" id="d_f5" type="email" placeholder=" " value="contact@orbita" /><label class="field-label" for="d_f5">Adresse e-mail</label>
+              <div class="field-msg"><o-icon name="alert" size="14"></o-icon> Adresse e-mail invalide.</div></div></div>
+          <div><p class="ctrl-tag mb-3">Champ · succès</p>
+            <div class="field is-success has-trail"><input class="field-input" id="d_f6" type="text" placeholder=" " value="vérifié" /><label class="field-label" for="d_f6">N° SIRET</label>
+              <span class="field-trail"><o-icon name="check" size="18"></o-icon></span>
+              <div class="field-msg"><o-icon name="check" size="14"></o-icon> Entreprise validée.</div></div></div>
+          <div><p class="ctrl-tag mb-3">Recherche</p>
+            <div class="field has-lead"><span class="field-lead"><o-icon name="search" size="17"></o-icon></span><input class="field-input" id="d_f7" type="search" placeholder=" " /><label class="field-label" for="d_f7">Rechercher un guide, un prix…</label></div></div>
+          <div><p class="ctrl-tag mb-3">Champ · désactivé</p>
+            <div class="field"><input class="field-input" id="d_f8" type="text" placeholder=" " value="Champ verrouillé" disabled /><label class="field-label is-float" for="d_f8">Identifiant</label></div></div>
+          <div><p class="ctrl-tag mb-3">Textarea</p>
+            <div class="field"><textarea class="field-input" id="d_f9" placeholder=" "></textarea><label class="field-label" for="d_f9">Décrivez votre besoin</label></div></div>
+          <div data-range-block><p class="ctrl-tag mb-4">Range / slider</p>
+            <div class="flex items-center justify-between mb-2.5">
+              <span class="text-[13px] font-medium text-white/70">Budget travaux estimé</span>
+              <span class="font-sans text-[13px] font-semibold text-white"><span data-rangeval>250</span> k€</span>
+            </div>
+            <input class="c-range" type="range" min="50" max="500" step="10" value="250" /></div>
+        </div>
+        </div>
+        <div class="border border-white/10 p-5 sm:p-9" style="background:#171a3d;">
+        <div class="flex flex-col gap-7">
+          <div><p class="ctrl-tag mb-3">Select · 1 choix · 4 options</p>
+            <div class="selectx" data-set="m4" data-name="d_metier1" data-label="Votre métier"></div></div>
+          <div><p class="ctrl-tag mb-3">Select · 1 choix · 8 options (recherche)</p>
+            <div class="selectx" data-set="m8" data-name="d_metier2" data-label="Votre métier"></div></div>
+          <div><p class="ctrl-tag mb-3">Select · multiple · 4 options</p>
+            <div class="selectx" data-set="m4" data-multiple data-name="d_metiers1" data-label="Vos métiers"></div></div>
+          <div><p class="ctrl-tag mb-3">Select · multiple · 8 options (recherche)</p>
+            <div class="selectx" data-set="m8" data-multiple data-name="d_metiers2" data-label="Vos métiers"></div></div>
+          <div><p class="ctrl-tag mb-4">Radio · disque</p>
+            <div class="flex flex-col gap-3.5">
+              <span class="opt radio"><input class="opt-input" type="radio" name="d_taille" id="d_r1" checked /><label class="opt-label" for="d_r1">1 à 10 sites</label></span>
+              <span class="opt radio"><input class="opt-input" type="radio" name="d_taille" id="d_r2" /><label class="opt-label" for="d_r2">11 à 50 sites</label></span>
+              <span class="opt radio"><input class="opt-input" type="radio" name="d_taille" id="d_r3" /><label class="opt-label" for="d_r3">Plus de 50 sites</label></span>
+              <span class="opt radio"><input class="opt-input" type="radio" name="d_taille" id="d_r4" disabled /><label class="opt-label" for="d_r4">Je ne sais pas (désactivé)</label></span>
+            </div></div>
+          <div><p class="ctrl-tag mb-4">Checkbox · carré</p>
+            <div class="flex flex-col gap-3.5">
+              <span class="opt check"><input class="opt-input" type="checkbox" id="d_c1" checked /><label class="opt-label" for="d_c1">Chiffrage de travaux</label></span>
+              <span class="opt check"><input class="opt-input" type="checkbox" id="d_c2" checked /><label class="opt-label" for="d_c2">Suivi de chantier</label></span>
+              <span class="opt check"><input class="opt-input" type="checkbox" id="d_c3" /><label class="opt-label" for="d_c3">Maintenance multitechnique</label></span>
+              <span class="opt check"><input class="opt-input" type="checkbox" id="d_c4" disabled /><label class="opt-label" for="d_c4">Module API (désactivé)</label></span>
+            </div></div>
+          <div><p class="ctrl-tag mb-4">Toggle / switch</p>
+            <div class="flex flex-col gap-4">
+              <label class="switch"><input class="switch-input" type="checkbox" checked /><span class="switch-track"></span><span class="switch-lbl">Recevoir la newsletter</span></label>
+              <label class="switch"><input class="switch-input" type="checkbox" /><span class="switch-track"></span><span class="switch-lbl">Activer les rappels SMS</span></label>
+            </div></div>
+          <div><p class="ctrl-tag mb-4">Upload de fichier</p>
+            <div class="upload"><input class="upload-input" type="file" id="d_up1" />
+              <label class="upload-zone" for="d_up1"><span class="upload-ic"><o-icon name="upload" size="20"></o-icon></span>
+                <span><span class="block text-[14.5px] font-semibold text-white up-name">Déposez votre cahier des charges</span><span class="block text-[12.5px] text-white/55 mt-0.5">PDF, DOCX — 10 Mo max.</span></span></label></div></div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ FORMULAIRE DE DÉMO (dark) ============================ -->
+  <section class="pb-24 on-dark c-darkbg" style="padding-top:5rem;">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+      <div class="form-split">
+        <div class="form-split-grid">
+          <div class="form-split-side l"><img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1600&auto=format&fit=crop" alt="" /></div>
+        <div class="p-6 sm:p-9 md:p-12 form-split-card" style="background:#171a3d;">
+          <p class="mb-3 text-center" style="font-family:'Geist Mono',monospace; font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--editorial);">Formulaire assemblé</p>
+          <h3 class="font-display font-extrabold text-[28px] leading-[1.1] tracking-[-.02em] m-0 mb-2 text-center" style="color:var(--highlight);">Demander une démo</h3>
+          <p class="text-[15px] leading-[1.55] m-0 mb-8 text-center" style="color:rgba(255,255,255,.7);">Réponse sous 24 h ouvrées. Sans engagement.</p>
+          <form class="flex flex-col gap-5" onsubmit="return false;">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div class="field"><input class="field-input" id="kd1" type="text" placeholder=" " /><label class="field-label" for="kd1">Prénom</label></div>
+              <div class="field"><input class="field-input" id="kd2" type="text" placeholder=" " /><label class="field-label" for="kd2">Nom</label></div>
+            </div>
+            <div class="field"><input class="field-input" id="kd3" type="email" placeholder=" " /><label class="field-label" for="kd3">E-mail professionnel</label></div>
+            <div class="selectx" data-set="m4" data-name="secteur4" data-label="Votre métier"></div>
+            <div class="field"><textarea class="field-input" id="kd4" placeholder=" "></textarea><label class="field-label" for="kd4">Votre projet (facultatif)</label></div>
+            <span class="opt check"><input class="opt-input" type="checkbox" id="kd5" /><label class="opt-label" for="kd5">J'accepte d'être recontacté par l'équipe Orbita.</label></span>
+            <button class="c-btn-split mt-2 self-start" type="submit"><span class="lbl">Envoyer ma demande</span><span class="arw"><o-icon name="arrow-right" size="16"></o-icon></span></button>
+          </form>
+        </div>
+          <div class="form-split-side r"><img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1600&auto=format&fit=crop" alt="" /></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    /* accent switcher */
+    const root = document.documentElement, body = document.body;
+    const siloBtns = [...document.querySelectorAll('.silo-btn')];
+    function setSilo(s){
+      root.setAttribute('data-theme', s); body.setAttribute('data-theme', s);
+      siloBtns.forEach(b=> b.classList.toggle('is-active', b.dataset.silo===s));
+    }
+    siloBtns.forEach(b=> b.addEventListener('click', ()=> setSilo(b.dataset.silo)));
+    setSilo('blue');
+
+    /* select custom — builder data-driven : single / multiple / recherche (>5 options) */
+    const SELECT_SETS = {
+      m4: [['archi','Architecte'],['moe',"Maître d'œuvre"],['promo','Promoteur'],['gest','Gestionnaire de sites']],
+      m8: [['archi','Architecte'],['moe',"Maître d'œuvre"],['promo','Promoteur'],['gest','Gestionnaire de sites'],['be',"Bureau d'études"],['eg','Entreprise générale'],['bailleur','Bailleur social'],['coll','Collectivité']]
+    };
+    const TICK = '<span class="tick"><o-icon name="check" size="15"></o-icon></span>';
+    const CHEV = '<o-icon name="chevron-down" size="14" class="selectx-chev"></o-icon>';
+    const SRCH = '<o-icon name="search" size="15"></o-icon>';
+
+    function buildSelect(el){
+      const set = SELECT_SETS[el.dataset.set] || [];
+      const multiple = el.hasAttribute('data-multiple');
+      const search = el.hasAttribute('data-search') || set.length > 5;
+      const label = el.dataset.label || '';
+      const name = el.dataset.name || '';
+      const ph = el.dataset.placeholder || (multiple ? 'Sélectionner…' : 'Choisir…');
+      el.innerHTML =
+        '<button type="button" class="selectx-btn" aria-haspopup="listbox" aria-expanded="false">' +
+          '<span class="selectx-field"><span class="selectx-val placeholder">' + ph + '</span></span>' + CHEV +
+        '</button>' +
+        '<label class="selectx-label">' + label + '</label>' +
+        '<div class="selectx-panel">' +
+          (search ? '<div class="selectx-search">' + SRCH + '<input type="text" placeholder="Rechercher…" /></div>' : '') +
+          '<ul class="selectx-list" role="listbox"' + (multiple ? ' aria-multiselectable="true"' : '') + '></ul>' +
+          '<div class="selectx-empty" hidden>Aucun résultat</div>' +
+        '</div>' +
+        '<select class="selectx-native" name="' + name + '"' + (multiple ? ' multiple' : '') + ' aria-hidden="true" tabindex="-1"></select>';
+      const list = el.querySelector('.selectx-list');
+      const native = el.querySelector('.selectx-native');
+      set.forEach(([v,t])=>{
+        const li = document.createElement('li');
+        li.className = 'selectx-opt'; li.setAttribute('role','option'); li.setAttribute('aria-selected','false'); li.dataset.value = v;
+        li.innerHTML = '<span class="selectx-opt-t">' + t + '</span>' + TICK;
+        list.appendChild(li);
+        const o = document.createElement('option'); o.value = v; o.textContent = t; native.appendChild(o);
+      });
+      initSelect(el, multiple);
+    }
+
+    function initSelect(sel, multiple){
+      const btn = sel.querySelector('.selectx-btn');
+      const field = sel.querySelector('.selectx-field');
+      const valSpan = sel.querySelector('.selectx-val');
+      const native = sel.querySelector('.selectx-native');
+      const opts = [...sel.querySelectorAll('.selectx-opt')];
+      const searchInput = sel.querySelector('.selectx-search input');
+      const empty = sel.querySelector('.selectx-empty');
+      const selected = new Set();
+      let open = false;
+
+      function setOpen(o){
+        open = o; sel.classList.toggle('open', o); btn.setAttribute('aria-expanded', o);
+        if(o && searchInput){ searchInput.value=''; filter(''); setTimeout(()=> searchInput.focus(), 30); }
+      }
+      function syncNative(){ [...native.options].forEach(o=> o.selected = selected.has(o.value)); native.dispatchEvent(new Event('change', {bubbles:true})); }
+      function labelOf(v){ return opts.find(o=> o.dataset.value===v).querySelector('.selectx-opt-t').textContent; }
+      function render(){
+        opts.forEach(o=> o.setAttribute('aria-selected', String(selected.has(o.dataset.value))));
+        if(multiple){
+          field.querySelectorAll('.selectx-badge').forEach(b=> b.remove());
+          valSpan.style.display = selected.size ? 'none' : '';
+          [...selected].forEach(v=>{
+            const b = document.createElement('span'); b.className = 'selectx-badge';
+            b.innerHTML = labelOf(v) + '<button type="button" class="selectx-x" data-v="' + v + '" aria-label="Retirer">×</button>';
+            field.insertBefore(b, valSpan);
+          });
+          sel.classList.toggle('has-value', selected.size>0);
+        } else {
+          const v = [...selected][0];
+          if(v){ valSpan.textContent = labelOf(v); valSpan.classList.remove('placeholder'); sel.classList.add('has-value'); }
+          else { valSpan.classList.add('placeholder'); sel.classList.remove('has-value'); }
+        }
+        syncNative();
+      }
+      function choose(o){
+        const v = o.dataset.value;
+        if(multiple){ selected.has(v) ? selected.delete(v) : selected.add(v); render(); }
+        else { selected.clear(); selected.add(v); render(); setOpen(false); btn.focus(); }
+      }
+      function filter(q){
+        q = q.toLowerCase().trim(); let any = false;
+        opts.forEach(o=>{ const m = o.textContent.toLowerCase().includes(q); o.style.display = m ? '' : 'none'; if(m) any = true; });
+        if(empty) empty.hidden = any;
+      }
+      btn.addEventListener('click', e=>{ if(e.target.closest('.selectx-x')) return; e.stopPropagation(); setOpen(!open); });
+      field.addEventListener('click', e=>{ const x = e.target.closest('.selectx-x'); if(x){ e.stopPropagation(); selected.delete(x.dataset.v); render(); } });
+      opts.forEach(o=> o.addEventListener('click', ()=> choose(o)));
+      if(searchInput){ searchInput.addEventListener('input', ()=> filter(searchInput.value)); searchInput.addEventListener('click', e=> e.stopPropagation()); searchInput.addEventListener('keydown', e=>{ if(e.key==='Escape'){ setOpen(false); btn.focus(); } }); }
+      btn.addEventListener('keydown', e=>{ if((e.key==='Enter'||e.key===' '||e.key==='ArrowDown') && !open){ e.preventDefault(); setOpen(true); } else if(e.key==='Escape'){ setOpen(false); } });
+      document.addEventListener('click', e=>{ if(!sel.contains(e.target)) setOpen(false); });
+    }
+
+    document.querySelectorAll('.selectx[data-set]').forEach(buildSelect);
+
+    /* upload — affiche le nom du fichier */
+    document.querySelectorAll('.upload-input').forEach(inp=>{
+      inp.addEventListener('change', ()=>{
+        const name = inp.files && inp.files[0] ? inp.files[0].name : null;
+        const lbl = inp.parentElement.querySelector('.up-name');
+        if(lbl && name) lbl.textContent = name;
+      });
+    });
+  </script>
+  <script>
+    document.querySelectorAll('.c-range').forEach(function(el){
+      var block = el.closest('[data-range-block]');
+      var out = block && block.querySelector('[data-rangeval]');
+      function paint(){ var min=+el.min, max=+el.max, v=+el.value; el.style.setProperty('--val', ((v-min)/(max-min)*100)+'%'); if(out) out.textContent=v; }
+      paint(); el.addEventListener('input', paint);
+    });
+  </script>
+</body>
+</html>

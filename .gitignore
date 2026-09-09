@@ -54,3 +54,8 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/captures/
+
+# Maquette Orbita : on ne versionne que la référence design (orbita/), pas les captures ni les exports de travail
+/Orbita/*
+!/Orbita/orbita/

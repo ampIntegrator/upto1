@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="blue">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbita — price list · dark</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="orbita.css" />
+  <link rel="stylesheet" href="icons.css" />
+  <script src="icons.js"></script>
+  <style type="text/tailwindcss">
+    @theme inline {
+      --font-sans: "Geist", system-ui, sans-serif;
+      --font-serif: "Cormorant Garamond", serif;
+      --font-display: "Schibsted Grotesk", system-ui, sans-serif;
+      --font-mono: "Geist Mono", monospace;
+      --color-bg: var(--bg); --color-bg-2: var(--bg-2); --color-paper: var(--paper);
+      --color-ink: var(--ink); --color-ink-2: var(--ink-2); --color-ink-3: var(--ink-3);
+      --color-line: var(--line); --color-line-2: var(--line-2);
+      --color-primary: var(--primary); --color-primary-deep: var(--primary-deep); --color-primary-soft: var(--primary-soft);
+      --color-editorial: var(--editorial); --color-highlight: var(--highlight); --color-highlight-deep: var(--highlight-deep); --color-night: var(--night);
+    }
+  </style>
+  <style>
+body { margin:0; background:var(--bg); color:var(--ink); font-family:"Geist",system-ui,sans-serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }    /* ghost text contouré — ici en or éditorial (ghostTone gold) */
+    .c-ghost { font-family:"Schibsted Grotesk",system-ui,sans-serif; font-weight:800; letter-spacing:-.02em; line-height:.96; white-space:nowrap; color:transparent; -webkit-text-stroke:1.2px var(--editorial); opacity:.34; user-select:none; pointer-events:none; }    /* blueprint grid bg (signature section prix) — base sur --bg comme les autres sections */
+    .c-blueprint {
+      background-color:var(--bg);
+      background-image:linear-gradient(var(--primary-soft) 1px, transparent 1px), linear-gradient(90deg, var(--primary-soft) 1px, transparent 1px);
+      background-size:54px 54px;
+    }    @media (max-width:1023px){
+      .price-card { grid-template-columns:1fr; }
+      .price-detail { order:2; }
+      .price-side   { order:1; }
+    }    /* cartes sombres : surcharge locale des tokens (cascade dans le CSS ET les utilitaires Tailwind) */
+    .dark-cards {
+      --paper:#171a3d;
+      --bg-2:#1e2150;
+      --ink:#FFFFFF;
+      --ink-2:rgba(255,255,255,.72);
+      --ink-3:rgba(255,255,255,.50);
+      --line:rgba(255,255,255,.12);
+      --line-2:rgba(255,255,255,.18);
+      color:var(--ink);
+    }
+  </style>
+</head>
+<body data-theme="blue">
+
+  <!-- reserved header space — dark (night du silo) + sélecteur d'accent -->
+  <div class="flex items-center" style="height:var(--header-h); background:var(--night);">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 w-full flex items-center justify-between gap-6">
+      <span class="font-mono text-[11px] tracking-[.14em] uppercase" style="color:rgba(255,255,255,.5);">Espace réservé header · 112px</span>
+      <div class="flex items-center gap-2" id="siloSwitch">
+        <span class="font-mono text-[11px] tracking-[.14em] uppercase mr-1" style="color:rgba(255,255,255,.4);">Accent</span>
+        <button class="silo-btn" data-silo="blue">Bleu</button>
+        <button class="silo-btn" data-silo="green">Vert</button>
+        <button class="silo-btn" data-silo="orange">Orange</button>
+        <button class="silo-btn" data-silo="violet">Violet</button>
+        <button class="silo-btn" data-silo="brique">Brique</button>
+        <button class="silo-btn" data-silo="magenta">Magenta</button>
+        <button class="silo-btn" data-silo="ambre">Ambre</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ price list · 1 prix ============================ -->
+  <section class="py-16 sm:py-24 c-darkbg" id="prix">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+
+      <!-- heading -->
+      <div class="text-center mb-10">
+        <div class="mb-7"><span class="c-head-eyebrow"><span class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial">L'offre</span></span></div>
+        <h2 class="font-display font-extrabold tracking-[-0.025em] leading-[1] text-white m-0 text-[clamp(40px,6vw,72px)]">
+          Un prix. <span class="c-serif-i" style="font-weight:600;color:var(--highlight);">Tout dedans.</span>
+        </h2>
+      </div>
+
+      <!-- zone de texte centré (intro) -->
+      <p class="text-center text-[18px] leading-[1.6] max-w-[620px] mx-auto mb-14" style="color:rgba(255,255,255,.66);">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pas de palier, pas d'option cachée — tout ce qu'il vous faut pour chiffrer, certifier et livrer est compris dans un seul forfait.
+      </p>
+
+      <!-- card -->
+      <div class="dark-cards bg-paper border border-line max-w-[600px] lg:max-w-[900px] mx-auto overflow-hidden">
+        <div class="price-card">
+
+          <!-- value stack -->
+          <div class="price-detail">
+            <div class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial mb-5">Ce que vous obtenez</div>
+            <div id="features"></div>
+            <div class="flex justify-between items-center pt-[18px] font-semibold text-[15px]">
+              <span>Valeur totale</span>
+              <span class="text-ink-3 line-through">529 € / mois</span>
+            </div>
+          </div>
+
+          <!-- price -->
+          <div class="price-side">
+            <div class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-ink-3 mb-3">Votre prix</div>
+            <div class="flex items-baseline gap-1.5">
+              <span class="font-display font-extrabold text-primary leading-[1] tracking-[-0.04em]" style="font-size:84px;">79</span>
+              <span class="font-display font-semibold text-primary" style="font-size:32px;">€</span>
+            </div>
+            <div class="text-[13px] text-ink-3 mb-7">par mois · soit 2,60 € / jour</div>
+
+            <a class="c-btn-split is-block mb-3.5" href="#">
+              <span class="lbl">Commencer gratuitement</span>
+              <span class="arw"><o-icon name="arrow-right" size="16"></o-icon></span>
+            </a>
+            <div class="text-[12px] text-ink-3 text-center mb-6">1er chiffrage offert · Sans CB · Sans engagement</div>
+
+            <div class="p-4 border" style="border-color:var(--highlight-deep); background:color-mix(in srgb, var(--highlight) 12%, transparent);">
+              <div class="font-bold text-[13px] mb-1.5" style="color:var(--highlight-deep);">Garantie 30 jours</div>
+              <div class="text-[12.5px] leading-[1.5] text-ink-2">Pas de mandat supplémentaire en 30 jours ? Remboursé. Sans questions.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- light separator 100px (vide) -->
+  <div class="h-[100px] bg-paper"></div>
+
+  <!-- ============================ price list · 3 cartes ============================ -->
+  <section class="py-16 sm:py-24 c-darkbg" id="prix3">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+
+      <!-- heading -->
+      <div class="text-center mb-10">
+        <div class="mb-7"><span class="c-head-eyebrow"><span class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial">Plusieurs volumes</span></span></div>
+        <h2 class="font-display font-extrabold tracking-[-0.025em] leading-[1] text-white m-0 text-[clamp(40px,6vw,72px)]">
+          Trois volumes. <span class="c-serif-i" style="font-weight:600;color:var(--highlight);">Une seule promesse.</span>
+        </h2>
+      </div>
+
+      <!-- zone de texte centré (intro) -->
+      <p class="text-center text-[18px] leading-[1.6] max-w-[620px] mx-auto mb-14" style="color:rgba(255,255,255,.66);">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Chaque palier reprend tout le précédent et y ajoute ce qu'il faut pour passer à l'échelle.
+      </p>
+
+      <div class="dark-cards grid gap-6 lg:grid-cols-3 mx-auto max-w-[600px] lg:max-w-[1120px]" id="tiers"></div>
+    </div>
+  </section>
+
+  <script>
+    /* ---------- features ---------- */
+    const FEATURES = [
+      ['Chiffrage travaux en 20 min', '97 €'],
+      ['Rapport certifié expert BTP', '147 €'],
+      ['Note de calcul détaillée', '47 €'],
+      ['Préconisation IPN / HEB', '97 €'],
+      ['Plans et rapports complets', '67 €'],
+      ['PDF à votre nom', '27 €'],
+      ['Historique illimité', '47 €'],
+    ];
+    document.getElementById('features').innerHTML = FEATURES.map(([f, v]) => `
+      <div class="flex justify-between items-center py-3 border-b border-line text-[14px]">
+        <span class="inline-flex items-center gap-2.5"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0"><o-icon name="check" size="12" style="color:#fff"></o-icon></span>${f}</span>
+        <span class="text-ink-3 line-through font-mono text-[12px]">${v}</span>
+      </div>`).join('');
+
+    /* ---------- accent switcher ---------- */
+    const root = document.documentElement, body = document.body;
+    const siloBtns = [...document.querySelectorAll('.silo-btn')];
+    function setSilo(s){
+      root.setAttribute('data-theme', s); body.setAttribute('data-theme', s);
+      siloBtns.forEach(b => b.classList.toggle('is-active', b.dataset.silo === s));
+    }
+    siloBtns.forEach(b => b.addEventListener('click', () => setSilo(b.dataset.silo)));
+    setSilo('blue');
+
+    /* ---------- version 3 cartes ---------- */
+    const PLANS = [
+      { name:'Solo', tagline:'Pour démarrer en solo', price:'49', cta:'Commencer', featured:false, inherits:null,
+        features:['Chiffrage travaux en 20 min', 'Rapport certifié expert BTP', 'Note de calcul détaillée', 'PDF à votre nom'] },
+      { name:'Pro', tagline:'Le choix des courtiers actifs', price:'79', cta:'Commencer gratuitement', featured:true, inherits:'Solo',
+        features:['Préconisation IPN / HEB', 'Plans et rapports complets', 'Historique illimité', 'Support prioritaire'] },
+      { name:'Agence', tagline:'Pour les équipes', price:'149', cta:'Parler à un expert', featured:false, inherits:'Pro',
+        features:['Comptes multi-utilisateurs', 'Marque blanche complète', 'API & intégrations', 'Account manager dédié'] },
+    ];
+    const arw = '<o-icon name="arrow-right" size="16"></o-icon>';
+    document.getElementById('tiers').innerHTML = PLANS.map(p => {
+      const rows = p.features.map(f => `
+        <li class="flex items-center gap-2.5 py-2.5 border-b border-line text-[14px] text-ink-2 last:border-0">
+          <span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0"><o-icon name="check" size="12" style="color:#fff"></o-icon></span>${f}
+        </li>`).join('');
+      const inherit = p.inherits
+        ? `<div class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial mb-3">Tout <span class="text-editorial">${p.inherits}</span>, plus</div>`
+        : `<div class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial mb-3">Ce que vous obtenez</div>`;
+      const btn = p.featured
+        ? `<a class="c-btn-split is-block" href="#"><span class="lbl">${p.cta}</span><span class="arw">${arw}</span></a>`
+        : `<a class="c-btn-solid" href="#">${p.cta}</a>`;
+      const badge = p.featured ? `<span class="tier-badge absolute -top-3 left-1/2 -translate-x-1/2">Populaire</span>` : '';
+      return `
+      <div class="tier-card relative ${p.featured ? 'tier-featured' : ''}">
+        ${badge}
+        <div class="tier-head">
+          <div class="font-display font-bold text-[22px] tracking-[-0.01em] text-ink">${p.name}</div>
+          <div class="text-[13px] text-ink-3 mt-1 mb-4">${p.tagline}</div>
+          <div class="flex items-baseline gap-1.5">
+            <span class="font-display font-extrabold text-primary leading-[1] tracking-[-0.04em]" style="font-size:56px;">${p.price}</span>
+            <span class="font-display font-semibold text-primary" style="font-size:24px;">€</span>
+            <span class="text-[13px] text-ink-3 ml-1">/ mois</span>
+          </div>
+        </div>
+        <div class="tier-body">
+          ${inherit}
+          <ul class="list-none p-0 m-0">${rows}</ul>
+        </div>
+        <div class="tier-foot">
+          ${btn}
+          <div class="text-[12px] text-ink-3 text-center mt-3">Sans CB · Sans engagement</div>
+          <div class="p-3.5 border mt-4" style="border-color:var(--highlight-deep); background:color-mix(in srgb, var(--highlight) 12%, transparent);">
+            <div class="font-bold text-[12.5px] mb-1" style="color:var(--highlight-deep);">Garantie 30 jours</div>
+            <div class="text-[12px] leading-[1.5] text-ink-2">Pas de mandat supplémentaire en 30 jours ? Remboursé. Sans questions.</div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  </script>
+</body>
+</html>

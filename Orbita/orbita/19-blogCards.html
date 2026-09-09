@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="blue">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbita — bloc articles</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="orbita.css" />
+  <link rel="stylesheet" href="icons.css" />
+  <style type="text/tailwindcss">
+    @theme inline {
+      --font-sans: "Geist", system-ui, sans-serif;
+      --font-serif: "Cormorant Garamond", serif;
+      --font-display: "Schibsted Grotesk", system-ui, sans-serif;
+      --font-mono: "Geist Mono", monospace;
+      --color-bg: var(--bg); --color-bg-2: var(--bg-2); --color-paper: var(--paper);
+      --color-ink: var(--ink); --color-ink-2: var(--ink-2); --color-ink-3: var(--ink-3);
+      --color-line: var(--line); --color-line-2: var(--line-2);
+      --color-primary: var(--primary); --color-primary-deep: var(--primary-deep); --color-primary-soft: var(--primary-soft);
+      --color-editorial: var(--editorial); --color-highlight: var(--highlight); --color-highlight-deep: var(--highlight-deep); --color-night: var(--night);
+    }
+  </style>
+  <style>
+    body { margin:0; background:var(--bg); color:var(--ink); font-family:"Geist",system-ui,sans-serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+    /* Cartes article : tout est centralisé dans orbita.css (.post-card / .posts-dark) */
+  </style>
+</head>
+<body data-theme="blue">
+
+  <!-- reserved header space — dark + sélecteur d'accent -->
+  <div class="flex items-center h-[112px] bg-night">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 w-full flex items-center justify-end gap-6">
+      <div class="flex items-center gap-2" id="siloSwitch">
+        <span class="font-mono text-[11px] tracking-[.14em] uppercase mr-1 text-white/40">Accent</span>
+        <button class="silo-btn" data-silo="blue">Bleu</button>
+        <button class="silo-btn" data-silo="green">Vert</button>
+        <button class="silo-btn" data-silo="orange">Orange</button>
+        <button class="silo-btn" data-silo="violet">Violet</button>
+        <button class="silo-btn" data-silo="brique">Brique</button>
+        <button class="silo-btn" data-silo="magenta">Magenta</button>
+        <button class="silo-btn" data-silo="ambre">Ambre</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ LIGHT · 4 posts ============================ -->
+  <section class="py-16 sm:py-24">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+      <div class="text-center mb-12 sm:mb-16 max-w-[760px] mx-auto">
+        <div class="c-head-eyebrow mb-5"><span class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial">Le blog Orbita</span></div>
+        <h2 class="font-display font-extrabold tracking-[-0.025em] leading-[1.04] text-ink m-0 text-[clamp(34px,4.4vw,56px)]">
+          Pour continuer <span class="c-serif-i text-primary">sur le sujet.</span>
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6" id="gridLight"></div>
+      <div class="flex justify-center mt-12 sm:mt-14">
+        <a class="c-btn-split" href="#">
+          <span class="lbl">Voir le blog</span>
+          <span class="arw"><o-icon name="arrow-right" size="16"></o-icon></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- separator band -->
+  <div class="h-[90px] bg-paper"></div>
+
+  <!-- ============================ DARK · 3 posts ============================ -->
+  <section class="py-16 sm:py-24 c-darkbg posts-dark">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+      <div class="text-center mb-12 sm:mb-16 max-w-[760px] mx-auto">
+        <div class="c-head-eyebrow mb-5"><span class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial">Le blog Orbita</span></div>
+        <h2 class="font-display font-extrabold tracking-[-0.025em] leading-[1.04] text-white m-0 text-[clamp(34px,4.4vw,56px)]">
+          Pour continuer <span class="c-serif-i" style="color:var(--highlight);">sur le sujet.</span>
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="gridDark"></div>
+      <div class="flex justify-center mt-12 sm:mt-14">
+        <a class="c-btn-split c-btn-split--ondark" href="#">
+          <span class="lbl">Voir le blog</span>
+          <span class="arw"><o-icon name="arrow-right" size="16"></o-icon></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <script src="icons.js"></script>
+  <script>
+    const arw = '<o-icon name="arrow-right" size="16"></o-icon>';
+
+    function postCard(p){
+      return `
+      <article class="post-card card-i">
+        <div class="post-img"><img src="${p.img}" alt="" loading="lazy" /></div>
+        <div class="post-body">
+          <div class="post-meta-row">
+            <span class="c-chip c-chip-high">${p.cat}</span>
+            <time class="post-date">${p.date}</time>
+          </div>
+          <h3 class="post-title"><a href="#">${p.title}</a></h3>
+        </div>
+        <span class="card-cta flex items-center justify-between px-6 py-4 border border-line no-underline text-[13.5px] font-semibold">
+          <span class="whitespace-nowrap">Voir plus</span>${arw}
+        </span>
+      </article>`;
+    }
+
+    const LIGHT = [
+      { img:'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop', cat:'Facility Management', date:'02/06/2026', title:"Pilotage énergétique des sites tertiaires : retour d'expérience" },
+      { img:'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1000&auto=format&fit=crop', cat:'Maintenance',         date:'28/05/2026', title:"Gestion des contrats et des interventions : les bonnes pratiques" },
+      { img:'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop', cat:'Optimisation',        date:'21/05/2026', title:"Réduire les coûts d'exploitation grâce au Facility Management" },
+      { img:'https://images.unsplash.com/photo-1518005020951-eccb494ad742?q=80&w=1000&auto=format&fit=crop', cat:'Réglementation',      date:'14/05/2026', title:"Décret tertiaire : ce qui change pour vos bâtiments en 2026" },
+    ];
+
+    const DARK = [
+      { img:'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=1000&auto=format&fit=crop', cat:'Énergie',   date:'02/06/2026',  title:"Sobriété énergétique : 5 leviers actionnables dès maintenant" },
+      { img:'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop', cat:'Data',      date:'27/05/2026',  title:"Exploiter la donnée bâtiment pour anticiper la maintenance" },
+      { img:'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1000&auto=format&fit=crop', cat:'Stratégie', date:'19/05/2026',  title:"Externaliser ou internaliser son Facility Management ?" },
+    ];
+
+    document.getElementById('gridLight').innerHTML = LIGHT.map(postCard).join('');
+    document.getElementById('gridDark').innerHTML  = DARK.map(postCard).join('');
+
+    /* accent switcher */
+    const root = document.documentElement, body = document.body;
+    const siloBtns = [...document.querySelectorAll('#siloSwitch .silo-btn')];
+    function setSilo(s){
+      root.setAttribute('data-theme', s); body.setAttribute('data-theme', s);
+      siloBtns.forEach(b => b.classList.toggle('is-active', b.dataset.silo === s));
+    }
+    siloBtns.forEach(b => b.addEventListener('click', () => setSilo(b.dataset.silo)));
+    setSilo('blue');
+  </script>
+</body>
+</html>

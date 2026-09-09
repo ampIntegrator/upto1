@@ -1,0 +1,211 @@
+/*
+ * OrbitaSelect — habillage iso maquette 17-forms (.selectx-*) par-dessus
+ * Selector / MultiSelector d'Astryx. Le thème donne bordure, focus, panneau et
+ * options ; ce module ajoute ce qu'Astryx ne prévoit pas : label flottant dans
+ * le champ, hauteur 58 px, chevron qui pivote, recherche épurée, badges accent.
+ * L'état « ouvert » est lu en CSS via aria-expanded du déclencheur (:has).
+ */
+.wrap {
+  position: relative;
+}
+
+/* déclencheur : 58 px (grandit avec les badges), texte calé en bas sous le label */
+.wrap :global(.astryx-selector),
+.wrap :global(.astryx-multi-selector) {
+  min-height: 58px;
+  height: auto;
+  padding: 0 42px 0 0; /* le bouton porte le padding interne (21 / 15 / 6) */
+  align-items: stretch;
+}
+.wrap :global(.astryx-selector) > button,
+.wrap :global(.astryx-multi-selector) > button {
+  min-height: 56px;
+  height: auto;
+  padding: 21px 0 6px 15px;
+  align-items: flex-end;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+/* placeholder invisible : c'est le label qui joue ce rôle (maquette .selectx-val.placeholder) */
+.wrap:not(.hasValue) :global(.astryx-selector) > button > span,
+.wrap:not(.hasValue) :global(.astryx-multi-selector) > button > span {
+  color: transparent;
+}
+
+/* chevron : à droite, pivote à l'ouverture */
+.wrap :global(.astryx-selector-indicator-icon),
+.wrap :global(.astryx-multi-selector-indicator-icon) {
+  position: absolute;
+  inset-inline-end: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: transform var(--duration-medium) var(--ease-standard);
+  pointer-events: none;
+}
+.wrap:has(button[aria-expanded='true']) :global(.astryx-selector-indicator-icon),
+.wrap:has(button[aria-expanded='true']) :global(.astryx-multi-selector-indicator-icon) {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+/* label flottant : au repos dans le champ, remonte (11,5 px, accent) si valeur ou ouvert */
+.label {
+  position: absolute;
+  inset-inline-start: 15px;
+  top: 18px;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--color-text-disabled);
+  pointer-events: none;
+  transition:
+    top 0.16s ease,
+    font-size 0.16s ease,
+    color 0.16s ease;
+  z-index: 1;
+}
+.wrap.hasValue .label,
+.wrap:has(button[aria-expanded='true']) .label {
+  top: 8px;
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+  color: light-dark(var(--color-accent), var(--color-highlight));
+}
+.wrap.disabled .label { color: var(--color-text-disabled); }
+
+/* panneau : décalé de 6 px du champ (dessous, ou dessus si la place manque).
+   La hauteur se borne sur la liste, pas sur le panneau : Astryx dimensionne la
+   liste lui-même et un max-height sur le panneau la laisserait déborder. */
+.wrap :global(.astryx-selector-popup),
+.wrap :global(.astryx-multi-selector-popup) {
+  margin-top: 2px; /* + 4 px d'offset Astryx = 6 px (maquette) */
+}
+.wrap :global(.astryx-selector-popup) [role='listbox'],
+.wrap :global(.astryx-multi-selector-popup) [role='listbox'] {
+  max-height: 232px; /* 280 px de panneau − barre de recherche */
+}
+
+/* recherche : loupe + saisie nue, filet dessous ; ni croix ni divider Astryx */
+.wrap :global(.astryx-selector-search),
+.wrap :global(.astryx-multi-selector-search) {
+  padding: 10px 12px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--color-background-surface);
+}
+.wrap :global(.astryx-selector-search) > div,
+.wrap :global(.astryx-multi-selector-search) > div {
+  min-height: 0;
+  height: auto;
+  gap: 9px;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+.wrap :global(.astryx-selector-search) button,
+.wrap :global(.astryx-multi-selector-search) button {
+  display: none;
+}
+.wrap :global(.astryx-selector-search) input,
+.wrap :global(.astryx-multi-selector-search) input {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+  font-size: 14px;
+}
+.wrap :global(.astryx-selector-search) + :global(.astryx-divider),
+.wrap :global(.astryx-multi-selector-search) + :global(.astryx-divider) {
+  display: none;
+}
+
+/* options : 11 px 13 px, 14,5 px (maquette .selectx-opt) — on neutralise la
+   hauteur propre de l'item Astryx */
+.wrap :global(.astryx-selector-option-row),
+.wrap :global(.astryx-multi-selector-option) {
+  padding: 0 13px;
+  min-height: 0;
+  font-size: 14.5px;
+}
+.wrap :global(.astryx-selector-option-row) :global(.astryx-item),
+.wrap :global(.astryx-multi-selector-option) :global(.astryx-item) {
+  min-height: 0;
+  padding: 11px 0;
+  font-size: 14.5px;
+}
+.wrap :global(.astryx-multi-selector-option) > * {
+  padding-block: 9px;
+  min-height: 0;
+}
+
+/* multiple : le résumé Astryx est masqué, nos badges (avec croix) sont posés
+   par-dessus le déclencheur, dans la zone sous le label */
+.wrap.multi :global(.astryx-multi-selector) > button > span { visibility: hidden; }
+.badges {
+  position: absolute;
+  inset-inline: 15px 42px;
+  top: 26px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  z-index: 1;
+  pointer-events: none; /* le clic passe au déclencheur, sauf sur la croix */
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 5px 3px 9px;
+  background: light-dark(var(--color-accent-muted), rgba(255, 255, 255, 0.1));
+  color: light-dark(var(--color-text-accent), var(--color-highlight));
+  font-size: 12.5px;
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.5;
+  white-space: nowrap;
+}
+.badgeX {
+  pointer-events: auto;
+  appearance: none;
+  border: 0;
+  background: none;
+  width: 15px;
+  height: 15px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  cursor: pointer;
+  transition: color var(--duration-medium) var(--ease-standard);
+}
+.badgeX svg { width: 12px; height: 12px; }
+@media (hover: hover) {
+  .badgeX:hover { color: light-dark(var(--color-accent-deep), #ffffff); }
+}
+
+/* icône d'état (erreur / succès / avertissement) : Astryx la met à la place du
+   chevron, en haut ; on la centre à droite comme le chevron, un peu plus grande */
+.wrap :global(.astryx-selector) > :global(.astryx-icon)[data-color='error'],
+.wrap :global(.astryx-selector) > :global(.astryx-icon)[data-color='success'],
+.wrap :global(.astryx-selector) > :global(.astryx-icon)[data-color='warning'],
+.wrap :global(.astryx-multi-selector) > :global(.astryx-icon)[data-color='error'],
+.wrap :global(.astryx-multi-selector) > :global(.astryx-icon)[data-color='success'],
+.wrap :global(.astryx-multi-selector) > :global(.astryx-icon)[data-color='warning'] {
+  position: absolute;
+  inset-inline-end: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
+.wrap :global(.astryx-selector) > :global(.astryx-icon)[data-color='error'] svg,
+.wrap :global(.astryx-selector) > :global(.astryx-icon)[data-color='success'] svg,
+.wrap :global(.astryx-selector) > :global(.astryx-icon)[data-color='warning'] svg,
+.wrap :global(.astryx-multi-selector) > :global(.astryx-icon)[data-color='error'] svg,
+.wrap :global(.astryx-multi-selector) > :global(.astryx-icon)[data-color='success'] svg,
+.wrap :global(.astryx-multi-selector) > :global(.astryx-icon)[data-color='warning'] svg {
+  width: 20px;
+  height: 20px;
+}

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="blue">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbita — compareCards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="orbita.css" />
+  <link rel="stylesheet" href="icons.css" />
+  <script src="icons.js"></script>
+  <style type="text/tailwindcss">
+    @theme inline {
+      --font-sans: "Geist", system-ui, sans-serif;
+      --font-serif: "Cormorant Garamond", serif;
+      --font-display: "Schibsted Grotesk", system-ui, sans-serif;
+      --font-mono: "Geist Mono", monospace;
+      --color-bg: var(--bg); --color-bg-2: var(--bg-2); --color-paper: var(--paper);
+      --color-ink: var(--ink); --color-ink-2: var(--ink-2); --color-ink-3: var(--ink-3);
+      --color-line: var(--line); --color-line-2: var(--line-2);
+      --color-primary: var(--primary); --color-primary-deep: var(--primary-deep); --color-primary-soft: var(--primary-soft);
+      --color-editorial: var(--editorial); --color-highlight: var(--highlight); --color-night: var(--night);
+    }
+  </style>
+  <style>
+body { margin:0; background:var(--bg); color:var(--ink); font-family:"Geist",system-ui,sans-serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }    .c-chip-accent { border-color:transparent; color:var(--primary); background:var(--primary-soft); }    .c-chip-danger { border-color:transparent; color:var(--danger); background:rgba(208,52,44,.10); }    /* textures (cf. Fondations) — background-image only, se superpose à background-color */
+    .tex-target { background-color: var(--bg); }
+  </style>
+</head>
+<body data-theme="blue">
+
+  <!-- reserved header space — dark (night du silo) + sélecteurs -->
+  <div class="flex items-center h-[112px] bg-night">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 w-full flex items-center justify-between gap-6">
+      <!-- texture switcher (remplace le label) -->
+      <div class="flex items-center gap-2" id="texSwitch">
+        <span class="font-mono text-[11px] tracking-[.14em] uppercase mr-1 text-white/40">Texture</span>
+        <button class="silo-btn" data-tex="none">Aucune</button>
+        <button class="silo-btn" data-tex="tex-grid">Grid</button>
+        <button class="silo-btn" data-tex="tex-dots">Points</button>
+        <button class="silo-btn" data-tex="tex-losange">Losanges</button>
+      </div>
+      <!-- accent switcher -->
+      <div class="flex items-center gap-2" id="siloSwitch">
+        <span class="font-mono text-[11px] tracking-[.14em] uppercase mr-1 text-white/40">Accent</span>
+        <button class="silo-btn" data-silo="blue">Bleu</button>
+        <button class="silo-btn" data-silo="green">Vert</button>
+        <button class="silo-btn" data-silo="orange">Orange</button>
+        <button class="silo-btn" data-silo="violet">Violet</button>
+        <button class="silo-btn" data-silo="brique">Brique</button>
+        <button class="silo-btn" data-silo="magenta">Magenta</button>
+        <button class="silo-btn" data-silo="ambre">Ambre</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ cardIcon ============================ -->
+  <section class="py-14 sm:py-20 relative tex-target" id="sec">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 relative">
+
+      <!-- ROW 1 · heading (full width, centered) -->
+      <div class="text-center mb-14 max-w-[800px] mx-auto">
+        <div class="c-head-eyebrow mb-5"><span class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial">Le déclic</span></div>
+        <h2 class="font-display font-extrabold tracking-[-0.025em] leading-[1.02] text-ink m-0 mb-5 text-[clamp(40px,5vw,64px)]">
+          Sortez <span class="c-serif-i text-primary">de l'attente.</span>
+        </h2>
+        <p class="text-[17px] leading-[1.6] text-ink-2 m-0">Le même chantier, deux trajectoires. D'un côté l'attente du devis artisan ; de l'autre, un chiffrage chiffré, validé, livré — pendant que le client est encore en face de vous.</p>
+      </div>
+
+      <!-- ROW 2 · cards grid (espacées, grid-cols-4) -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- card · AVANT -->
+        <div class="bg-paper border border-line p-9">
+          <div class="flex items-center justify-between mb-7">
+            <span class="c-chip c-chip-danger">AVANT</span>
+            <span class="font-mono text-[12px] font-semibold tracking-[.1em] uppercase text-ink-3">3 semaines d'attente</span>
+          </div>
+          <p class="text-[19px] leading-[1.5] text-ink mb-7">« Je ne sais pas, j'attends le devis de l'artisan… »</p>
+          <ul class="flex flex-col m-0 p-0 list-none">
+            <li class="flex items-center gap-3.5 text-[15px] text-ink-2 py-3.5 border-t border-line"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full shrink-0" style="background:var(--danger);"><o-icon name="close" size="12" style="color:#fff"></o-icon></span> Vous appelez · l'artisan dit "Je vous rappelle"</li>
+            <li class="flex items-center gap-3.5 text-[15px] text-ink-2 py-3.5 border-t border-line"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full shrink-0" style="background:var(--danger);"><o-icon name="close" size="12" style="color:#fff"></o-icon></span> Vous relancez · 4 fois</li>
+            <li class="flex items-center gap-3.5 text-[15px] text-ink-2 py-3.5 border-t border-line"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full shrink-0" style="background:var(--danger);"><o-icon name="close" size="12" style="color:#fff"></o-icon></span> Le client signe ailleurs</li>
+            <li class="flex items-center gap-3.5 text-[15px] text-ink-2 py-3.5 border-t border-line"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full shrink-0" style="background:var(--danger);"><o-icon name="close" size="12" style="color:#fff"></o-icon></span> Le mandat est perdu</li>
+          </ul>
+        </div>
+
+        <!-- card · APRÈS (mise en avant) -->
+        <div class="bg-paper p-9" style="border:2px solid var(--primary); box-shadow:0 20px 50px var(--primary-soft);">
+          <div class="flex items-center justify-between mb-7">
+            <span class="c-chip c-chip-high">APRÈS</span>
+            <span class="font-mono text-[12px] font-semibold tracking-[.1em] uppercase text-editorial">20 min chrono</span>
+          </div>
+          <p class="text-[19px] leading-[1.5] text-ink mb-7">« Voici le détail : 67 400 € ± 8 %. Et le PDF. »</p>
+          <ul class="flex flex-col m-0 p-0 list-none">
+            <li class="flex items-center gap-3.5 text-[15px] text-ink-2 py-3.5 border-t border-line"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0"><o-icon name="check" size="12" style="color:#fff"></o-icon></span> Vous chiffrez en visite — devant le client</li>
+            <li class="flex items-center gap-3.5 text-[15px] text-ink-2 py-3.5 border-t border-line"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0"><o-icon name="check" size="12" style="color:#fff"></o-icon></span> Détail par poste, validé expert BTP</li>
+            <li class="flex items-center gap-3.5 text-[15px] text-ink-2 py-3.5 border-t border-line"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0"><o-icon name="check" size="12" style="color:#fff"></o-icon></span> Rapport PDF à votre nom — sous 48 h</li>
+            <li class="flex items-center gap-3.5 text-[15px] text-ink-2 py-3.5 border-t border-line"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0"><o-icon name="check" size="12" style="color:#fff"></o-icon></span> Le mandat est signé</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- ROW 3 · note + CTA (full width → flex) -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-8 mt-12">
+        <p class="text-[14px] leading-[1.6] text-ink-2 max-w-[760px] m-0">
+          <span class="text-primary font-bold align-top mr-1">*</span>
+          <strong class="text-ink font-semibold">Scénario réel.</strong>
+          <span class="text-ink-2"> Aucun module n'est facturé en supplément — chiffrage, suivi, devis et validation sont compris dans l'abonnement Chiffrage Pro à 79 € / mois, sans engagement.</span>
+        </p>
+        <a class="c-btn-split shrink-0" href="#"><span class="lbl">Basculer dans l'après</span><span class="arw"><o-icon name="arrow-right" size="16"></o-icon></span></a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- dark separator 100px -->
+  <div class="h-[100px] bg-night"></div>
+
+  <!-- ============================ compareCards · 3 colonnes ============================ -->
+  <section class="py-14 sm:py-20 relative tex-target" id="sec2">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 relative">
+
+      <!-- ROW 1 · heading -->
+      <div class="text-center mb-14 max-w-[800px] mx-auto">
+        <div class="c-head-eyebrow mb-5"><span class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial">Pour qui</span></div>
+        <h2 class="font-display font-extrabold tracking-[-0.025em] leading-[1.02] text-ink m-0 mb-5 text-[clamp(40px,5vw,64px)]">
+          Un outil, <span class="c-serif-i text-primary">trois métiers.</span>
+        </h2>
+        <p class="text-[17px] leading-[1.6] text-ink-2 m-0">Chaque profil tire Chiffrage Pro vers son usage — du courtier qui sécurise un mandat à l'architecte qui fiabilise un budget dès l'esquisse.</p>
+      </div>
+
+      <!-- ROW 2 · 3 cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-paper border border-line p-9">
+          <div class="flex items-center justify-between mb-7">
+            <span class="c-chip c-chip-accent">COURTIERS</span>
+            <span class="font-mono text-[12px] font-semibold tracking-[.1em] uppercase text-ink-3">Closing +34 %</span>
+          </div>
+          <p class="text-[19px] leading-[1.5] text-ink mb-7">« Je chiffre devant le client, je signe le mandat. »</p>
+          <ul class="flex flex-col m-0 p-0 list-none">
+            <li class="flex items-center gap-3.5 text-[15px] text-ink-2 py-3.5 border-t border-line"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0"><o-icon name="check" size="12" style="color:#fff"></o-icon></span> Estimation en rendez-vous</li>
+            <li class="flex items-center gap-3.5 text-[15px] text-ink-2 py-3.5 border-t border-line"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0"><o-icon name="check" size="12" style="color:#fff"></o-icon></span> Argumentaire chiffré, poste par poste</li>
+            <li class="flex items-center gap-3.5 text-[15px] text-ink-2 py-3.5 border-t border-line"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0"><o-icon name="check" size="12" style="color:#fff"></o-icon></span> Mandat sécurisé avant le concurrent</li>
+          </ul>
+        </div>
+
+        <div class="bg-paper p-9" style="border:2px solid var(--primary); box-shadow:0 20px 50px var(--primary-soft);">
+          <div class="flex items-center justify-between mb-7">
+            <span class="c-chip c-chip-accent">ARCHITECTES</span>
+            <span class="font-mono text-[12px] font-semibold tracking-[.1em] uppercase text-editorial">Du métré au prix</span>
+          </div>
+          <p class="text-[19px] leading-[1.5] text-ink mb-7">« Mon estimatif est prêt avant la prochaine réunion. »</p>
+          <ul class="flex flex-col m-0 p-0 list-none">
+            <li class="flex items-center gap-3.5 text-[15px] text-ink-2 py-3.5 border-t border-line"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0"><o-icon name="check" size="12" style="color:#fff"></o-icon></span> Métré importé, prix calculés</li>
+            <li class="flex items-center gap-3.5 text-[15px] text-ink-2 py-3.5 border-t border-line"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0"><o-icon name="check" size="12" style="color:#fff"></o-icon></span> Détail compatible CCTP</li>
+            <li class="flex items-center gap-3.5 text-[15px] text-ink-2 py-3.5 border-t border-line"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0"><o-icon name="check" size="12" style="color:#fff"></o-icon></span> Note de calcul exportable</li>
+          </ul>
+        </div>
+
+        <div class="bg-paper border border-line p-9">
+          <div class="flex items-center justify-between mb-7">
+            <span class="c-chip c-chip-accent">PROMOTEURS</span>
+            <span class="font-mono text-[12px] font-semibold tracking-[.1em] uppercase text-ink-3">Budget fiable</span>
+          </div>
+          <p class="text-[19px] leading-[1.5] text-ink mb-7">« Je fiabilise mon budget dès l’esquisse. »</p>
+          <ul class="flex flex-col m-0 p-0 list-none">
+            <li class="flex items-center gap-3.5 text-[15px] text-ink-2 py-3.5 border-t border-line"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0"><o-icon name="check" size="12" style="color:#fff"></o-icon></span> Chiffrage dès l’avant-projet</li>
+            <li class="flex items-center gap-3.5 text-[15px] text-ink-2 py-3.5 border-t border-line"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0"><o-icon name="check" size="12" style="color:#fff"></o-icon></span> Fourchettes ± 8 % documentées</li>
+            <li class="flex items-center gap-3.5 text-[15px] text-ink-2 py-3.5 border-t border-line"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0"><o-icon name="check" size="12" style="color:#fff"></o-icon></span> Suivi des coûts en temps réel</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ROW 3 · note + CTA -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-8 mt-12">
+        <p class="text-[14px] leading-[1.6] text-ink-2 max-w-[760px] m-0">
+          <span class="text-primary font-bold align-top mr-1">*</span>
+          <strong class="text-ink font-semibold">Un compte, tous les métiers.</strong>
+          <span class="text-ink-2"> L'interface s'adapte à votre profil à l'inscription. Vous pouvez basculer de vue à tout moment depuis votre tableau de bord, sans frais supplémentaire.</span>
+        </p>
+        <a class="c-btn-split shrink-0" href="#"><span class="lbl">Trouver mon profil</span><span class="arw"><o-icon name="arrow-right" size="16"></o-icon></span></a>
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    const root = document.documentElement;
+    const body = document.body;
+    const siloBtns = [...document.querySelectorAll('.silo-btn')];
+    function setSilo(s){
+      root.setAttribute('data-theme', s);
+      body.setAttribute('data-theme', s);
+      siloBtns.forEach(b=> b.classList.toggle('is-active', b.dataset.silo===s));
+    }
+    siloBtns.forEach(b=> b.addEventListener('click', ()=> setSilo(b.dataset.silo)));
+    setSilo('blue');
+
+    /* texture switcher — couleur + texture sur le même élément */
+    const texTargets = [...document.querySelectorAll('.tex-target')];
+    const texBtns = [...document.querySelectorAll('#texSwitch .silo-btn')];
+    function setTex(t){
+      texTargets.forEach(sec=>{ sec.classList.remove('tex-grid','tex-dots','tex-losange'); if(t!=='none') sec.classList.add(t); });
+      texBtns.forEach(b=> b.classList.toggle('is-active', b.dataset.tex===t));
+    }
+    texBtns.forEach(b=> b.addEventListener('click', ()=> setTex(b.dataset.tex)));
+    setTex('none');
+  </script>
+</body>
+</html>

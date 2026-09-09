@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="blue">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbita — Calculateur · dark</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="orbita.css" />
+  <link rel="stylesheet" href="icons.css" />
+  <script src="icons.js"></script>
+  <style type="text/tailwindcss">
+    @theme inline {
+      --font-sans: "Geist", system-ui, sans-serif;
+      --font-serif: "Cormorant Garamond", serif;
+      --font-display: "Schibsted Grotesk", system-ui, sans-serif;
+      --font-mono: "Geist Mono", monospace;
+      --color-paper: var(--paper);
+      --color-line: var(--line); --color-line-2: var(--line-2);
+      --color-primary: var(--primary); --color-primary-deep: var(--primary-deep); --color-primary-soft: var(--primary-soft);
+      --color-editorial: var(--editorial); --color-highlight: var(--highlight); --color-night: var(--night); --color-night-card: var(--night-card);
+    }
+  </style>
+  <style>
+    body { margin:0; background:var(--night); color:#fff; font-family:"Geist",system-ui,sans-serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+  </style>
+</head>
+<body data-theme="blue">
+
+  <!-- reserved header space — dark + sélecteur d'accent (démo, hors prod) -->
+  <div class="flex items-center h-[112px] bg-black/25">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 w-full flex items-center justify-end gap-6">
+      <div class="flex items-center gap-2" id="siloSwitch">
+        <span class="font-mono text-[11px] tracking-[.14em] uppercase mr-1 text-white/40">Accent</span>
+        <button class="silo-btn" data-silo="blue">Bleu</button>
+        <button class="silo-btn" data-silo="green">Vert</button>
+        <button class="silo-btn" data-silo="orange">Orange</button>
+        <button class="silo-btn" data-silo="violet">Violet</button>
+        <button class="silo-btn" data-silo="brique">Brique</button>
+        <button class="silo-btn" data-silo="magenta">Magenta</button>
+        <button class="silo-btn" data-silo="ambre">Ambre</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ CALCULATEUR · dark ============================ -->
+  <section class="c-darkhalo on-dark py-[72px]">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+
+      <!-- ===== en-tête : titre + 3 chiffres clés ===== -->
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-12 lg:gap-20 items-center">
+        <div>
+          <span class="c-eyebrow-dot text-editorial mb-4">Le calcul</span>
+          <h2 class="c-num font-semibold tracking-[-.025em] text-white text-[clamp(40px,4.8vw,64px)] m-0 mb-6">
+            Ce que ça vous <span class="c-serif-i block text-editorial font-normal">rapporte.</span>
+          </h2>
+          <p class="text-[16px] leading-[1.6] text-white/70 m-0">
+            Moyenne observée sur 200 courtiers actifs, douze mois.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-3 border-y border-white/20">
+          <div class="px-5 py-7 border-r border-white/20">
+            <div class="c-num text-highlight text-[clamp(26px,3vw,40px)] mb-3 whitespace-nowrap">+ 34 %</div>
+            <div class="font-mono text-[11px] tracking-[.16em] uppercase text-white/60">Deals closés</div>
+          </div>
+          <div class="px-5 py-7 border-r border-white/20">
+            <div class="c-num text-highlight text-[clamp(26px,3vw,40px)] mb-3 whitespace-nowrap">+ 3</div>
+            <div class="font-mono text-[11px] tracking-[.16em] uppercase text-white/60">Mandats<br>par mois</div>
+          </div>
+          <div class="px-5 py-7">
+            <div class="c-num text-highlight text-[clamp(26px,3vw,40px)] mb-3 whitespace-nowrap">× 2</div>
+            <div class="font-mono text-[11px] tracking-[.16em] uppercase text-white/60">Recommandations</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== simulateur interactif ===== -->
+      <div class="mt-12 border border-white/10 overflow-hidden bg-night-card">
+
+        <!-- barre de titre -->
+        <div class="flex flex-wrap items-center justify-between gap-3 px-6 sm:px-8 py-4 border-b border-white/[.15]">
+          <div class="flex items-baseline gap-3.5">
+            <span class="font-mono text-[11px] font-medium tracking-[.16em] uppercase text-editorial">Simulateur</span>
+            <span class="c-serif-i text-[22px] text-white">Combien Chiffrage Pro vous rapporte ?</span>
+          </div>
+          <div class="font-mono text-[11px] tracking-[.16em] uppercase text-white/50">Ajustez · résultat en direct</div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr]">
+
+          <!-- GAUCHE — sliders -->
+          <div class="p-6 sm:p-7 lg:border-r border-white/[.15]">
+
+            <!-- slider 1 -->
+            <div class="mb-7">
+              <div class="flex items-baseline justify-between gap-4 mb-2.5">
+                <label for="rgMandats" class="text-[13px] font-medium text-white/80">Mandats signés / mois aujourd'hui</label>
+                <span class="c-num font-semibold tracking-[-.01em] text-white text-[20px]"><span id="vMandats">8</span><span class="text-highlight text-[16px] ml-0.5">mandats</span></span>
+              </div>
+              <input class="c-range" id="rgMandats" type="range" min="1" max="30" step="1" value="8" />
+            </div>
+
+            <!-- slider 2 -->
+            <div class="mb-7">
+              <div class="flex items-baseline justify-between gap-4 mb-2.5">
+                <label for="rgCommission" class="text-[13px] font-medium text-white/80">Commission moyenne par mandat</label>
+                <span class="c-num font-semibold tracking-[-.01em] text-white text-[20px]"><span id="vCommission">8 000</span><span class="text-highlight text-[16px] ml-0.5">€</span></span>
+              </div>
+              <input class="c-range" id="rgCommission" type="range" min="2000" max="25000" step="500" value="8000" />
+            </div>
+
+            <!-- slider 3 -->
+            <div class="mb-2">
+              <div class="flex items-baseline justify-between gap-4 mb-2.5">
+                <label for="rgBoost" class="text-[13px] font-medium text-white/80">Boost de closing avec Chiffrage Pro</label>
+                <span class="c-num font-semibold tracking-[-.01em] text-white text-[20px]"><span id="vBoost">34</span><span class="text-highlight text-[16px] ml-0.5">%</span></span>
+              </div>
+              <input class="c-range" id="rgBoost" type="range" min="10" max="60" step="1" value="34" />
+              <div class="c-serif-i text-[13px] text-white/50 mt-1.5">Moyenne observée : +34 %</div>
+            </div>
+          </div>
+
+          <!-- DROITE — résultat live + CTA -->
+          <div class="p-6 sm:p-7 flex flex-col justify-between" style="background:color-mix(in srgb, var(--highlight) 5%, transparent);">
+            <div>
+              <div class="c-eyebrow-dot text-editorial mb-3.5">Vous laissez sur la table chaque mois</div>
+
+              <div class="flex items-baseline gap-1.5 mb-1.5">
+                <span class="c-num font-extrabold leading-[.95] tracking-[-.04em] text-highlight text-[clamp(48px,5.4vw,68px)] whitespace-nowrap">+ <span id="vMonthly">21 600</span></span>
+                <span class="c-num font-medium text-highlight text-[clamp(26px,2.6vw,36px)]">€</span>
+              </div>
+              <div class="text-[14px] text-white/70">
+                soit <strong class="text-white" id="vAnnual">259 200 €</strong> par an · <span id="vExtra">2.7</span> mandats supplémentaires / mois
+              </div>
+
+              <div class="mt-6 py-4 grid grid-cols-2 gap-4 border-y border-white/[.15]">
+                <div>
+                  <div class="font-mono text-[11px] tracking-[.16em] uppercase text-white/55 mb-1.5">Coût Chiffrage Pro</div>
+                  <div class="c-num font-medium text-white text-[18px]">79 € / mois</div>
+                </div>
+                <div>
+                  <div class="font-mono text-[11px] tracking-[.16em] uppercase text-white/55 mb-1.5">Retour sur invest.</div>
+                  <div class="c-num font-semibold text-highlight text-[18px]">× <span id="vRoi">273</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-7">
+              <a class="c-btn-split c-btn-split--high is-block font-bold" href="#prix">
+                <span class="lbl flex-1 justify-center">Réservez votre démo gratuite</span>
+                <span class="arw"><o-icon name="arrow-right" size="16"></o-icon></span>
+              </a>
+              <div class="text-[12px] text-white/55 mt-2.5 text-center">1er chiffrage offert · Sans CB · Démo personnalisée</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    const root = document.documentElement, body = document.body;
+
+    /* ----- accent switcher (démo) ----- */
+    const siloBtns = [...document.querySelectorAll('.silo-btn')];
+    function setSilo(s){
+      root.setAttribute('data-theme', s); body.setAttribute('data-theme', s);
+      siloBtns.forEach(b => b.classList.toggle('is-active', b.dataset.silo === s));
+    }
+    siloBtns.forEach(b => b.addEventListener('click', () => setSilo(b.dataset.silo)));
+    setSilo('blue');
+
+    /* ----- simulateur ROI (même logique que la source) ----- */
+    const fmt = (n) => n.toLocaleString('fr-FR');
+    const rg = {
+      mandats:    document.getElementById('rgMandats'),
+      commission: document.getElementById('rgCommission'),
+      boost:      document.getElementById('rgBoost'),
+    };
+    // remplissage visuel de la piste (--val en %)
+    function paint(el){
+      const min = +el.min, max = +el.max, v = +el.value;
+      el.style.setProperty('--val', ((v - min) / (max - min) * 100) + '%');
+    }
+    function compute(){
+      const mandats = +rg.mandats.value;
+      const commission = +rg.commission.value;
+      const boost = +rg.boost.value;
+
+      const extraDeals  = Math.round((mandats * boost / 100) * 10) / 10;
+      const monthlyExtra = Math.round(extraDeals * commission);
+      const annualExtra  = monthlyExtra * 12;
+      const roi = monthlyExtra > 0 ? Math.round(monthlyExtra / 79) : 0;
+      const plural = extraDeals > 1 ? 's' : '';
+
+      document.getElementById('vMandats').textContent    = mandats;
+      document.getElementById('vCommission').textContent = fmt(commission);
+      document.getElementById('vBoost').textContent      = boost;
+
+      document.getElementById('vMonthly').textContent = fmt(monthlyExtra);
+      document.getElementById('vAnnual').textContent  = fmt(annualExtra) + ' €';
+      document.getElementById('vExtra').textContent   = extraDeals;
+      document.getElementById('vRoi').textContent     = fmt(roi);
+
+      // accord pluriel sur la ligne "mandats supplémentaires"
+      const line = document.getElementById('vExtra').parentNode;
+      line.lastChild.textContent = ' mandat' + plural + ' supplémentaire' + plural + ' / mois';
+    }
+    Object.values(rg).forEach(el => {
+      paint(el);
+      el.addEventListener('input', () => { paint(el); compute(); });
+    });
+    compute();
+  </script>
+</body>
+</html>

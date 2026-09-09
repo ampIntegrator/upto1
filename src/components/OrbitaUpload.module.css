@@ -1,0 +1,46 @@
+/*
+ * OrbitaUpload — zone de dépôt iso maquette 17-forms (.upload-zone) par-dessus
+ * FileInput d'Astryx en mode dropzone : une ligne, carré icône accent à gauche,
+ * titre (placeholder Astryx, remplacé par le nom du fichier) et sous-titre.
+ */
+.wrap { position: relative; }
+
+.wrap :global(.astryx-file-input[data-mode='dropzone']) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 14px;
+  min-height: 76px;
+  padding: 18px 20px;
+  text-align: start;
+}
+/* carré icône 40 px */
+.wrap :global(.astryx-file-input[data-mode='dropzone']) > :global(.astryx-icon) {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: light-dark(var(--color-accent-muted), var(--color-highlight));
+  color: light-dark(var(--color-accent), var(--color-night));
+}
+.wrap :global(.astryx-file-input[data-mode='dropzone']) > :global(.astryx-icon) svg { width: 20px; height: 20px; }
+/* titre : 14,5 px semi-gras, calé en haut pour laisser le sous-titre dessous */
+.wrap :global(.astryx-file-input[data-mode='dropzone']) > span:last-child {
+  font-size: 14.5px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  align-self: flex-start;
+  margin-top: 1px;
+}
+/* sous-titre : superposé sous le titre, dans la zone */
+.sub {
+  position: absolute;
+  left: 74px;
+  top: 40px;
+  font-size: 12.5px;
+  color: var(--color-text-disabled);
+  pointer-events: none;
+}

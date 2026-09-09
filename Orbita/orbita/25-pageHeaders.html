@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="blue">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbita — hauts de page (sombre + clair)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="orbita.css" />
+  <link rel="stylesheet" href="icons.css" />
+  <script src="icons.js"></script>
+  <style type="text/tailwindcss">
+    @theme inline {
+      --font-sans: "Geist", system-ui, sans-serif;
+      --font-serif: "Cormorant Garamond", serif;
+      --font-display: "Schibsted Grotesk", system-ui, sans-serif;
+      --font-mono: "Geist Mono", monospace;
+      --color-bg: var(--bg); --color-bg-2: var(--bg-2); --color-paper: var(--paper);
+      --color-ink: var(--ink); --color-ink-2: var(--ink-2); --color-ink-3: var(--ink-3);
+      --color-line: var(--line); --color-line-2: var(--line-2);
+      --color-primary: var(--primary); --color-primary-deep: var(--primary-deep); --color-primary-soft: var(--primary-soft);
+      --color-editorial: var(--editorial); --color-highlight: var(--highlight); --color-highlight-deep: var(--highlight-deep); --color-night: var(--night);
+    }
+  </style>
+  <style>
+    body { margin:0; background:var(--bg); color:var(--ink); font-family:"Geist",system-ui,sans-serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+
+    /* ===== haut de page (composant 25) — hauteur fixe 500px, contenu centré, liseré gradient en bas ===== */
+    .pagehead { position:relative; height:500px; display:flex; align-items:center; justify-content:center; overflow:hidden; text-align:center; }
+    /* liseré d'accent en bas (même signature que .modal-foot::before / .ftr-rule) */
+    .pagehead::after { content:''; position:absolute; left:0; right:0; bottom:0; height:6px; z-index:3;
+      background:linear-gradient(90deg, var(--highlight) 0%, var(--primary) 50%, var(--highlight) 100%); }
+
+    /* variante sombre : image de fond + voile nuit (symétrique).
+       Pensée pour un header en top:0 par-dessus → image agrandie de la hauteur
+       du header (92px) et contenu décalé vers le bas pour rester centré sous la nav. */
+    .pagehead.pagehead-dark { background:var(--night); height:calc(500px + 92px); padding-top:92px; }
+    .pagehead-dark > img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .pagehead-dark::before { content:''; position:absolute; inset:0; z-index:1;
+      background:linear-gradient(180deg, rgba(8,10,26,.62) 0%, rgba(8,10,26,.46) 45%, rgba(8,10,26,.80) 100%),
+                 radial-gradient(120% 120% at 50% -12%, color-mix(in srgb, var(--primary) 30%, transparent), transparent 60%); }
+
+    /* variante claire : texture radiale discrète, centrée */
+    .pagehead-light { background:var(--bg);
+      background-image:radial-gradient(90% 120% at 50% 0%, color-mix(in srgb, var(--highlight) 11%, transparent), transparent 56%); }
+
+    /* variante sombre unie : nuit + halos d'accent (sans image) */
+    .pagehead-night { background-color:var(--night);
+      background-image:radial-gradient(80% 130% at 50% -16%, color-mix(in srgb, var(--primary) 30%, transparent), transparent 58%),
+                       radial-gradient(70% 120% at 100% 120%, color-mix(in srgb, var(--editorial) 16%, transparent), transparent 55%); }
+
+    /* bouton secondaire clair (contour) — repris du comp 02 */
+    .btn-line { display:inline-flex; align-items:center; gap:9px; padding:15px 26px; font-size:15px; font-weight:600;
+      color:var(--ink); border:1px solid var(--line-2); background:transparent; text-decoration:none;
+      transition:border-color var(--t-dur) var(--t-ease), color var(--t-dur) var(--t-ease), background var(--t-dur) var(--t-ease); }
+    .btn-line:hover { border-color:var(--primary); color:var(--primary); background:var(--primary-soft); }
+  </style>
+</head>
+<body data-theme="blue">
+
+  <!-- reserved header space — dark + sélecteur d'accent -->
+  <div class="flex items-center h-[92px] bg-night">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 w-full flex items-center justify-between gap-6">
+      <span class="font-mono text-[11px] tracking-[.16em] uppercase text-white/35">Hauts de page · 500px · titre + 2 boutons</span>
+      <div class="flex items-center gap-2" id="siloSwitch">
+        <span class="font-mono text-[11px] tracking-[.14em] uppercase mr-1 text-white/40 hidden sm:inline">Accent</span>
+        <button class="silo-btn" data-silo="blue">Bleu</button>
+        <button class="silo-btn" data-silo="green">Vert</button>
+        <button class="silo-btn" data-silo="orange">Orange</button>
+        <button class="silo-btn" data-silo="violet">Violet</button>
+        <button class="silo-btn" data-silo="brique">Brique</button>
+        <button class="silo-btn" data-silo="magenta">Magenta</button>
+        <button class="silo-btn" data-silo="ambre">Ambre</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ A — HAUT DE PAGE SOMBRE (image de fond) ============================ -->
+  <header class="pagehead pagehead-dark">
+    <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1920&q=80&auto=format&fit=crop" alt="Chantier" />
+    <div class="relative z-[2] w-full on-dark">
+      <div class="max-w-[1280px] mx-auto px-5 sm:px-8 flex flex-col items-center">
+        <div class="c-head-eyebrow mb-5"><span class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial">Plateforme</span></div>
+
+        <h1 class="font-display font-extrabold tracking-[-0.025em] leading-[1.04] text-white m-0 max-w-[800px] text-[clamp(32px,4.4vw,54px)]">
+          Le chiffrage,<br /><span class="c-serif-i text-highlight">de A à Z.</span>
+        </h1>
+        <p class="mt-5 max-w-[580px] text-[17px] leading-[1.55] text-white/75">
+          Du métré au devis signé, une seule plateforme pour estimer juste et répondre plus vite que la concurrence.
+        </p>
+
+        <div class="flex flex-wrap items-stretch justify-center gap-4 mt-9">
+          <a class="c-btn-split c-btn-split--ondark" href="#">
+            <span class="lbl">Demander une démo</span>
+            <span class="arw"><o-icon name="arrow-right" size="16"></o-icon></span>
+          </a>
+          <a class="c-btn-ghost" href="#">
+            <o-icon name="play" size="15"></o-icon>
+            Voir la vidéo
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- breadcrumb (sous le liseré, hors du bloc) — composant DS canonique -->
+  <nav class="border-b border-line bg-paper" aria-label="Fil d'ariane">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 py-3.5 crumb">
+      <a href="#">Accueil</a>
+      <o-icon name="chevron-right" size="12"></o-icon>
+      <span class="current">Nos solutions</span>
+    </div>
+  </nav>
+
+  <!-- séparateur -->
+  <div class="h-[64px] bg-paper"></div>
+
+  <!-- ============================ B — HAUT DE PAGE CLAIR ============================ -->
+  <header class="pagehead pagehead-light">
+    <div class="relative z-[2] w-full">
+      <div class="max-w-[1280px] mx-auto px-5 sm:px-8 flex flex-col items-center">
+        <div class="c-head-eyebrow mb-5"><span class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial">Tarification</span></div>
+
+        <h1 class="font-display font-extrabold tracking-[-0.025em] leading-[1.04] text-ink m-0 max-w-[800px] text-[clamp(32px,4.4vw,54px)]">
+          Un prix clair,<br /><span class="c-serif-i text-primary">sans surprise.</span>
+        </h1>
+        <p class="mt-5 max-w-[580px] text-[17px] leading-[1.55] text-ink-2">
+          Choisissez l'offre adaptée à votre volume de chantiers. Sans engagement, sans frais cachés, résiliable en un clic.
+        </p>
+
+        <div class="flex flex-wrap items-stretch justify-center gap-4 mt-9">
+          <a class="c-btn-split" href="#">
+            <span class="lbl">Voir les tarifs</span>
+            <span class="arw"><o-icon name="arrow-right" size="16"></o-icon></span>
+          </a>
+          <a class="btn-line" href="#">
+            <o-icon name="phone" size="15"></o-icon>
+            Parler à un conseiller
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- breadcrumb (sous le liseré, hors du bloc) — composant DS canonique -->
+  <nav class="border-b border-line bg-paper" aria-label="Fil d'ariane">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 py-3.5 crumb">
+      <a href="#">Accueil</a>
+      <o-icon name="chevron-right" size="12"></o-icon>
+      <span class="current">Tarifs &amp; offres</span>
+    </div>
+  </nav>
+
+  <!-- séparateur -->
+  <div class="h-[64px] bg-paper"></div>
+
+  <!-- ============================ C — HAUT DE PAGE SOMBRE UNI (sans image) ============================ -->
+  <header class="pagehead pagehead-night">
+    <div class="relative z-[2] w-full on-dark">
+      <div class="max-w-[1280px] mx-auto px-5 sm:px-8 flex flex-col items-center">
+        <div class="c-head-eyebrow mb-5"><span class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial">Support</span></div>
+
+        <h1 class="font-display font-extrabold tracking-[-0.025em] leading-[1.04] text-white m-0 max-w-[800px] text-[clamp(32px,4.4vw,54px)]">
+          Une question&#8239;?<br /><span class="c-serif-i text-highlight">On vous répond.</span>
+        </h1>
+        <p class="mt-5 max-w-[580px] text-[17px] leading-[1.55] text-white/75">
+          Centre d'aide, documentation et équipe support&#8239;: trouvez la réponse en quelques minutes, ou parlez à un humain.
+        </p>
+
+        <div class="flex flex-wrap items-stretch justify-center gap-4 mt-9">
+          <a class="c-btn-split c-btn-split--ondark" href="#">
+            <span class="lbl">Centre d'aide</span>
+            <span class="arw"><o-icon name="arrow-right" size="16"></o-icon></span>
+          </a>
+          <a class="c-btn-ghost" href="#">
+            <o-icon name="mail" size="15"></o-icon>
+            Nous écrire
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- breadcrumb (sous le liseré, hors du bloc) — composant DS canonique -->
+  <nav class="border-b border-line bg-paper" aria-label="Fil d'ariane">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 py-3.5 crumb">
+      <a href="#">Accueil</a>
+      <o-icon name="chevron-right" size="12"></o-icon>
+      <span class="current">Support</span>
+    </div>
+  </nav>
+
+  <!-- séparateur de fin -->
+  <div class="h-[60px] bg-paper"></div>
+
+  <script>
+    /* sélecteur d'accent (démo) */
+    const root = document.documentElement, body = document.body;
+    const siloBtns = [...document.querySelectorAll('#siloSwitch .silo-btn')];
+    function setSilo(s){
+      root.setAttribute('data-theme', s); body.setAttribute('data-theme', s);
+      siloBtns.forEach(b => b.classList.toggle('is-active', b.dataset.silo === s));
+    }
+    siloBtns.forEach(b => b.addEventListener('click', () => setSilo(b.dataset.silo)));
+    setSilo('blue');
+  </script>
+</body>
+</html>

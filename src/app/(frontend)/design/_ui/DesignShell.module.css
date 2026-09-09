@@ -1,0 +1,12 @@
+/* Titres de section de la barre latérale (Fondations / Composants) :
+   24 px, semi-gras, capitales, couleur du silo. */
+.shell :global(.astryx-side-nav-section) > div:first-child,
+.shell :global(.astryx-side-nav-section) > div:first-child * {
+  font-family: var(--font-family-heading) !important;
+  font-size: 24px !important;
+  font-weight: var(--font-weight-semibold) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.02em !important;
+  color: var(--color-text-accent) !important;
+  line-height: 1.2 !important;
+}

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="blue">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbita — process (3 étapes)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="orbita.css" />
+  <link rel="stylesheet" href="icons.css" />
+  <script src="icons.js"></script>
+  <style type="text/tailwindcss">
+    @theme inline {
+      --font-sans: "Geist", system-ui, sans-serif;
+      --font-serif: "Cormorant Garamond", serif;
+      --font-display: "Schibsted Grotesk", system-ui, sans-serif;
+      --font-mono: "Geist Mono", monospace;
+      --color-bg: var(--bg); --color-bg-2: var(--bg-2); --color-paper: var(--paper);
+      --color-ink: var(--ink); --color-ink-2: var(--ink-2); --color-ink-3: var(--ink-3);
+      --color-line: var(--line); --color-line-2: var(--line-2);
+      --color-primary: var(--primary); --color-primary-deep: var(--primary-deep); --color-primary-soft: var(--primary-soft);
+      --color-editorial: var(--editorial); --color-highlight: var(--highlight); --color-night: var(--night);
+    }
+  </style>
+  <style>
+body { margin:0; background:var(--bg); color:var(--ink); font-family:"Geist",system-ui,sans-serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+    /* séparateur entre étapes : gradient des modals — horizontal en mobile, vertical en desktop */
+    .step { position:relative; }
+    .step:not(:last-child)::after { content:''; position:absolute; left:0; right:0; bottom:0; height:3px;
+      background:linear-gradient(90deg, var(--highlight) 0%, var(--primary) 50%, var(--highlight) 100%); }
+    @media (min-width:768px){
+      .step:not(:last-child)::after { left:auto; top:0; right:0; bottom:auto; width:3px; height:100%;
+        background:linear-gradient(180deg, var(--highlight) 0%, var(--primary) 50%, var(--highlight) 100%); }
+    }
+  </style>
+</head>
+<body data-theme="blue">
+
+  <!-- reserved header space — dark (night du silo) + sélecteurs -->
+  <div class="flex items-center h-[112px] bg-night">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 w-full flex items-center justify-between gap-6">
+      <!-- texture switcher (remplace le label) -->
+      <div class="flex items-center gap-2" id="texSwitch">
+        <span class="font-mono text-[11px] tracking-[.14em] uppercase mr-1 text-white/40">Texture</span>
+        <button class="silo-btn" data-tex="none">Aucune</button>
+        <button class="silo-btn" data-tex="tex-grid">Grid</button>
+        <button class="silo-btn" data-tex="tex-dots">Points</button>
+        <button class="silo-btn" data-tex="tex-losange">Losanges</button>
+      </div>
+      <!-- accent switcher -->
+      <div class="flex items-center gap-2" id="siloSwitch">
+        <span class="font-mono text-[11px] tracking-[.14em] uppercase mr-1 text-white/40">Accent</span>
+        <button class="silo-btn" data-silo="blue">Bleu</button>
+        <button class="silo-btn" data-silo="green">Vert</button>
+        <button class="silo-btn" data-silo="orange">Orange</button>
+        <button class="silo-btn" data-silo="violet">Violet</button>
+        <button class="silo-btn" data-silo="brique">Brique</button>
+        <button class="silo-btn" data-silo="magenta">Magenta</button>
+        <button class="silo-btn" data-silo="ambre">Ambre</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ process (3 étapes) ============================ -->
+  <section class="py-14 sm:py-20 relative" id="sec">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 relative">
+
+      <!-- ROW 1 · heading (full width, centered) -->
+      <div class="text-center mb-14">
+        <div class="c-head-eyebrow mb-5"><span class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial">Comment ça marche</span></div>
+        <h2 class="font-display font-extrabold tracking-[-0.025em] leading-[1] text-ink m-0 text-[clamp(40px,5vw,64px)]">
+          3 étapes. <span class="c-serif-i text-primary">48 h max.</span>
+        </h2>
+      </div>
+
+      <!-- ROW 2 · steps panel (full width → inner grid-cols-3) -->
+      <div class="bg-paper border border-line shadow-[0_2px_6px_rgba(12,20,40,.05),0_20px_50px_rgba(12,20,40,.07)]">
+        <div class="grid grid-cols-1 md:grid-cols-3">
+
+          <!-- step 01 -->
+          <div class="step p-10">
+            <div class="flex items-center justify-between mb-7">
+              <span class="c-serif text-primary font-medium leading-none" style="font-size:54px;">01</span>
+              <span class="c-chip c-chip-high">
+                <o-icon name="clock" size="13"></o-icon> 5 min
+              </span>
+            </div>
+            <h3 class="text-[21px] font-bold text-ink mb-3">Vous décrivez</h3>
+            <p class="text-[15px] leading-[1.6] text-ink-2 mb-7">Un questionnaire guidé en 18 questions. Surface, typologie, état du bâti, travaux souhaités, contraintes. L'interface adapte les questions à votre cas.</p>
+            <div class="h-px bg-line mb-6"></div>
+            <ul class="flex flex-col gap-3.5 m-0 p-0 list-none">
+              <li class="flex items-start gap-3 text-[14px] text-ink-2"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0 mt-0.5"><o-icon name="check" size="12" style="color:#fff"></o-icon></span> Aucune compétence BTP requise</li>
+              <li class="flex items-start gap-3 text-[14px] text-ink-2"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0 mt-0.5"><o-icon name="check" size="12" style="color:#fff"></o-icon></span> Sauvegarde automatique entre étapes</li>
+              <li class="flex items-start gap-3 text-[14px] text-ink-2"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0 mt-0.5"><o-icon name="check" size="12" style="color:#fff"></o-icon></span> Téléversement de photos &amp; plans existants</li>
+            </ul>
+          </div>
+
+          <!-- step 02 -->
+          <div class="step p-10">
+            <div class="flex items-center justify-between mb-7">
+              <span class="c-serif text-primary font-medium leading-none" style="font-size:54px;">02</span>
+              <span class="c-chip c-chip-high">
+                <o-icon name="clock" size="13"></o-icon> 15 min
+              </span>
+            </div>
+            <h3 class="text-[21px] font-bold text-ink mb-3">Vous recevez<span class="text-primary">*</span></h3>
+            <p class="text-[15px] leading-[1.6] text-ink-2 mb-7">Notre algorithme compare votre projet à 50 000 chantiers similaires. Détail poste par poste, fourchette de prix, hypothèses techniques, alertes structure.</p>
+            <div class="h-px bg-line mb-6"></div>
+            <ul class="flex flex-col gap-3.5 m-0 p-0 list-none">
+              <li class="flex items-start gap-3 text-[14px] text-ink-2"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0 mt-0.5"><o-icon name="check" size="12" style="color:#fff"></o-icon></span> Estimation poste par poste · ± 8 %</li>
+              <li class="flex items-start gap-3 text-[14px] text-ink-2"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0 mt-0.5"><o-icon name="check" size="12" style="color:#fff"></o-icon></span> Préconisation IPN / HEB si mur porteur</li>
+              <li class="flex items-start gap-3 text-[14px] text-ink-2"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0 mt-0.5"><o-icon name="check" size="12" style="color:#fff"></o-icon></span> Note de calcul exportable</li>
+            </ul>
+          </div>
+
+          <!-- step 03 -->
+          <div class="step p-10">
+            <div class="flex items-center justify-between mb-7">
+              <span class="c-serif text-primary font-medium leading-none" style="font-size:54px;">03</span>
+              <span class="c-chip c-chip-high">
+                <o-icon name="clock" size="13"></o-icon> 48 h
+              </span>
+            </div>
+            <h3 class="text-[21px] font-bold text-ink mb-3">Un expert valide</h3>
+            <p class="text-[15px] leading-[1.6] text-ink-2 mb-7">Un ingénieur BTP — 15 ans d'expérience minimum — relit, ajuste, signe. Vous recevez un PDF à votre nom, prêt à être remis au client.</p>
+            <div class="h-px bg-line mb-6"></div>
+            <ul class="flex flex-col gap-3.5 m-0 p-0 list-none">
+              <li class="flex items-start gap-3 text-[14px] text-ink-2"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0 mt-0.5"><o-icon name="check" size="12" style="color:#fff"></o-icon></span> Validation par expert agréé</li>
+              <li class="flex items-start gap-3 text-[14px] text-ink-2"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0 mt-0.5"><o-icon name="check" size="12" style="color:#fff"></o-icon></span> PDF à votre charte graphique</li>
+              <li class="flex items-start gap-3 text-[14px] text-ink-2"><span class="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-primary shrink-0 mt-0.5"><o-icon name="check" size="12" style="color:#fff"></o-icon></span> Recours hotline pendant 30 jours</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ROW 3 · note + CTA (full width → flex) -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-8 mt-12">
+        <p class="text-[14px] leading-[1.6] text-ink-2 max-w-[760px] m-0">
+          <span class="text-primary font-bold align-top mr-1">*</span>
+          <strong class="text-ink font-semibold">Première estimation offerte.</strong>
+          <span class="text-ink-2"> La première estimation est gratuite et sans engagement — y compris le rapport PDF validé par expert. Aucune carte bancaire n'est requise à l'inscription. Vous décidez ensuite si vous souhaitez activer l'abonnement Chiffrage Pro à 79 € / mois pour des estimations illimitées.</span>
+        </p>
+        <a class="c-btn-split shrink-0" href="#"><span class="lbl">Démarrer gratuitement</span><span class="arw"><o-icon name="arrow-right" size="16"></o-icon></span></a>
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    const root = document.documentElement;
+    const body = document.body;
+    const siloBtns = [...document.querySelectorAll('.silo-btn')];
+    function setSilo(s){
+      root.setAttribute('data-theme', s);
+      body.setAttribute('data-theme', s);
+      siloBtns.forEach(b=> b.classList.toggle('is-active', b.dataset.silo===s));
+    }
+    siloBtns.forEach(b=> b.addEventListener('click', ()=> setSilo(b.dataset.silo)));
+    setSilo('blue');
+
+    /* texture switcher — couleur + texture sur le même élément */
+    const sec = document.getElementById('sec');
+    const texBtns = [...document.querySelectorAll('#texSwitch .silo-btn')];
+    function setTex(t){
+      sec.classList.remove('tex-grid','tex-dots','tex-losange');
+      if(t!=='none') sec.classList.add(t);
+      texBtns.forEach(b=> b.classList.toggle('is-active', b.dataset.tex===t));
+    }
+    texBtns.forEach(b=> b.addEventListener('click', ()=> setTex(b.dataset.tex)));
+    setTex('none');
+  </script>
+</body>
+</html>

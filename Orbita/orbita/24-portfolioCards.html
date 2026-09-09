@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="blue">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbita — bloc cartes portfolio (carousel)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="orbita.css" />
+  <link rel="stylesheet" href="icons.css" />
+  <script src="icons.js"></script>
+  <style type="text/tailwindcss">
+    @theme inline {
+      --font-sans: "Geist", system-ui, sans-serif;
+      --font-serif: "Cormorant Garamond", serif;
+      --font-display: "Schibsted Grotesk", system-ui, sans-serif;
+      --font-mono: "Geist Mono", monospace;
+      --color-bg: var(--bg); --color-bg-2: var(--bg-2); --color-paper: var(--paper);
+      --color-ink: var(--ink); --color-ink-2: var(--ink-2); --color-ink-3: var(--ink-3);
+      --color-line: var(--line); --color-line-2: var(--line-2);
+      --color-primary: var(--primary); --color-primary-deep: var(--primary-deep); --color-primary-soft: var(--primary-soft);
+      --color-editorial: var(--editorial); --color-highlight: var(--highlight); --color-highlight-deep: var(--highlight-deep); --color-night: var(--night);
+    }
+  </style>
+  <style>
+    body { margin:0; background:var(--bg); color:var(--ink); font-family:"Geist",system-ui,sans-serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+    /* Carousel + cartes : .track/.slide/.seg/.nav-arw + .post-card centralisés dans orbita.css.
+       Spécifique portfolio : résultat clé + ligne client (déclinés clair/sombre). */
+    .work-result { font-family:"Geist Mono",monospace; font-size:12px; font-weight:600; letter-spacing:.02em; color:var(--primary); white-space:nowrap; }
+    .posts-dark .work-result { color:var(--highlight); }
+    .work-client { display:flex; align-items:center; gap:7px; margin-top:11px; font-size:13px; color:var(--ink-3); }
+    .work-client svg { flex:0 0 auto; color:var(--ink-3); }
+    .posts-dark .work-client, .posts-dark .work-client svg { color:rgba(255,255,255,.55); }
+  </style>
+</head>
+<body data-theme="blue">
+
+  <!-- reserved header space — dark + sélecteur d'accent -->
+  <div class="flex items-center h-[112px] bg-night">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 w-full flex items-center justify-end gap-6">
+      <div class="flex items-center gap-2" id="siloSwitch">
+        <span class="font-mono text-[11px] tracking-[.14em] uppercase mr-1 text-white/40">Accent</span>
+        <button class="silo-btn" data-silo="blue">Bleu</button>
+        <button class="silo-btn" data-silo="green">Vert</button>
+        <button class="silo-btn" data-silo="orange">Orange</button>
+        <button class="silo-btn" data-silo="violet">Violet</button>
+        <button class="silo-btn" data-silo="brique">Brique</button>
+        <button class="silo-btn" data-silo="magenta">Magenta</button>
+        <button class="silo-btn" data-silo="ambre">Ambre</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ LIGHT · carousel réalisations ============================ -->
+  <section class="py-16 sm:py-24" data-carousel>
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+      <div class="text-center mb-12 sm:mb-16 max-w-[760px] mx-auto">
+        <div class="c-head-eyebrow mb-5"><span class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial">Nos réalisations</span></div>
+        <h2 class="font-display font-extrabold tracking-[-0.025em] leading-[1.04] text-ink m-0 text-[clamp(34px,4.4vw,56px)]">
+          Des chantiers <span class="c-serif-i text-primary">chiffrés juste.</span>
+        </h2>
+      </div>
+
+      <div class="track" data-track></div>
+
+      <div class="hidden sm:flex items-center justify-between gap-6 mt-7">
+        <div class="flex items-center gap-2.5" data-segs role="tablist" aria-label="Pages de réalisations"></div>
+        <div class="flex items-center gap-2.5">
+          <button class="nav-arw" data-prev aria-label="Réalisations précédentes"><o-icon name="arrow-left" size="18"></o-icon></button>
+          <button class="nav-arw" data-next aria-label="Réalisations suivantes"><o-icon name="arrow-right" size="18"></o-icon></button>
+        </div>
+      </div>
+
+      <div class="flex justify-center mt-7 sm:mt-8">
+        <a class="c-btn-split" href="#">
+          <span class="lbl">Voir toutes les réalisations</span>
+          <span class="arw"><o-icon name="arrow-right" size="16"></o-icon></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- separator band -->
+  <div class="h-[90px] bg-paper"></div>
+
+  <!-- ============================ DARK · carousel réalisations ============================ -->
+  <section class="py-16 sm:py-24 c-darkbg posts-dark" data-carousel>
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+      <div class="text-center mb-12 sm:mb-16 max-w-[760px] mx-auto">
+        <div class="c-head-eyebrow mb-5"><span class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial">Nos réalisations</span></div>
+        <h2 class="font-display font-extrabold tracking-[-0.025em] leading-[1.04] text-white m-0 text-[clamp(34px,4.4vw,56px)]">
+          Des chantiers <span class="c-serif-i" style="color:var(--highlight);">chiffrés juste.</span>
+        </h2>
+      </div>
+
+      <div class="track" data-track></div>
+
+      <div class="hidden sm:flex items-center justify-between gap-6 mt-7">
+        <div class="flex items-center gap-2.5" data-segs role="tablist" aria-label="Pages de réalisations"></div>
+        <div class="flex items-center gap-2.5">
+          <button class="nav-arw" data-prev aria-label="Réalisations précédentes"><o-icon name="arrow-left" size="18"></o-icon></button>
+          <button class="nav-arw" data-next aria-label="Réalisations suivantes"><o-icon name="arrow-right" size="18"></o-icon></button>
+        </div>
+      </div>
+
+      <div class="flex justify-center mt-7 sm:mt-8">
+        <a class="c-btn-split c-btn-split--ondark" href="#">
+          <span class="lbl">Voir toutes les réalisations</span>
+          <span class="arw"><o-icon name="arrow-right" size="16"></o-icon></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const arw = '<o-icon name="arrow-right" size="16"></o-icon>';
+    const pin = '<o-icon name="pin" size="13"></o-icon>';
+
+    /* ---------- données : 6 réalisations ---------- */
+    const WORK = [
+      { img:'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1000&auto=format&fit=crop', cat:'Rénovation',  title:"Vasseur Construction : le chiffrage divisé par trois", client:'Vasseur Construction', loc:'Nantes (44)',  result:'−68 % délai' },
+      { img:'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1000&auto=format&fit=crop', cat:'Gros œuvre',  title:"Bâti Méridien fiabilise ses métrés directement sur plans", client:'Bâti Méridien', loc:'Lyon (69)', result:'×2,4 devis' },
+      { img:'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1000&auto=format&fit=crop', cat:'Couverture',  title:"Toitures Caron sécurise ses marges sur chaque chantier", client:'Toitures Caron', loc:'Rennes (35)', result:'+18 pts marge' },
+      { img:'https://images.unsplash.com/photo-1590725140246-20acdee442be?q=80&w=1000&auto=format&fit=crop', cat:'Aménagement', title:"Atelier Lhomme répond aux appels d'offres en 24 heures", client:'Atelier Lhomme', loc:'Lille (59)', result:'24 h délai' },
+      { img:'https://images.unsplash.com/photo-1523217582562-09d0def993a6?q=80&w=1000&auto=format&fit=crop', cat:'Charpente',   title:"Bois & Cie standardise ses devis les plus complexes", client:'Bois & Cie', loc:'Annecy (74)', result:'+31 % closing' },
+      { img:'https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=1000&auto=format&fit=crop', cat:'CVC',         title:"Réseau Calé pilote quarante chantiers en parallèle", client:'Réseau Calé', loc:'Bordeaux (33)', result:'40 chantiers/mois' },
+    ];
+
+    function workCard(p){
+      return `
+      <article class="slide post-card card-i">
+        <div class="post-img"><img src="${p.img}" alt="" loading="lazy" /></div>
+        <div class="post-body">
+          <div class="post-meta-row">
+            <span class="c-chip c-chip-high">${p.cat}</span>
+            <span class="work-result">${p.result}</span>
+          </div>
+          <h3 class="post-title"><a href="#">${p.title}</a></h3>
+          <div class="work-client">${pin}<span>${p.client} · ${p.loc}</span></div>
+        </div>
+        <span class="card-cta flex items-center justify-between px-6 py-4 border border-line no-underline text-[13.5px] font-semibold">
+          <span class="whitespace-nowrap">Voir l'étude</span>${arw}
+        </span>
+      </article>`;
+    }
+
+    /* ---------- carousel (logique du composant 07, généralisée) ---------- */
+    function initCarousel(root){
+      const track = root.querySelector('[data-track]');
+      const segsWrap = root.querySelector('[data-segs]');
+      const prevBtn = root.querySelector('[data-prev]');
+      const nextBtn = root.querySelector('[data-next]');
+      track.innerHTML = WORK.map(workCard).join('');
+      const slides = () => [...track.querySelectorAll('.slide')];
+
+      const cpv = () => window.matchMedia('(min-width:1280px)').matches ? 3
+                      : window.matchMedia('(min-width:640px)').matches ? 2 : 1;
+      const pageCount = () => Math.ceil(WORK.length / cpv());
+
+      function pageTargets(){
+        const c = cpv(), s = slides(), x0 = s[0].offsetLeft, out = [];
+        for (let p = 0; p < pageCount(); p++){
+          const i = Math.min(p * c, s.length - 1);
+          out.push(s[i].offsetLeft - x0);
+        }
+        return out;
+      }
+      function activePage(){
+        const t = pageTargets(); let best = 0, bd = Infinity;
+        t.forEach((v, p) => { const d = Math.abs(v - track.scrollLeft); if (d < bd){ bd = d; best = p; } });
+        return best;
+      }
+      function go(p){
+        const t = pageTargets();
+        track.scrollTo({ left: t[Math.max(0, Math.min(p, t.length - 1))] });
+      }
+      function buildSegs(){
+        const n = pageCount();
+        segsWrap.innerHTML = '';
+        for (let p = 0; p < n; p++){
+          const b = document.createElement('button');
+          b.className = 'seg'; b.setAttribute('role','tab'); b.setAttribute('aria-label', 'Page ' + (p+1));
+          b.addEventListener('click', () => go(p));
+          segsWrap.appendChild(b);
+        }
+        sync();
+      }
+      function sync(){
+        const p = activePage(), n = pageCount();
+        [...segsWrap.children].forEach((b, i) => {
+          const on = i === p;
+          b.classList.toggle('is-active', on);
+          b.setAttribute('aria-selected', on);
+        });
+        prevBtn.disabled = p <= 0;
+        nextBtn.disabled = p >= n - 1;
+      }
+
+      prevBtn.addEventListener('click', () => go(activePage() - 1));
+      nextBtn.addEventListener('click', () => go(activePage() + 1));
+      let raf;
+      track.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(sync); }, { passive:true });
+      let rt;
+      window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(buildSegs, 120); });
+      track.tabIndex = 0;
+      track.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight'){ e.preventDefault(); go(activePage() + 1); }
+        if (e.key === 'ArrowLeft'){ e.preventDefault(); go(activePage() - 1); }
+      });
+      buildSegs();
+    }
+    document.querySelectorAll('[data-carousel]').forEach(initCarousel);
+
+    /* ---------- sélecteur d'accent ---------- */
+    const root = document.documentElement, body = document.body;
+    const siloBtns = [...document.querySelectorAll('#siloSwitch .silo-btn')];
+    function setSilo(s){
+      root.setAttribute('data-theme', s); body.setAttribute('data-theme', s);
+      siloBtns.forEach(b => b.classList.toggle('is-active', b.dataset.silo === s));
+    }
+    siloBtns.forEach(b => b.addEventListener('click', () => setSilo(b.dataset.silo)));
+    setSilo('blue');
+  </script>
+</body>
+</html>

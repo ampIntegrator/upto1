@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="blue">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbita — modale</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="orbita.css" />
+  <link rel="stylesheet" href="icons.css" />
+  <script src="icons.js"></script>
+  <style type="text/tailwindcss">
+    @theme inline {
+      --font-sans: "Geist", system-ui, sans-serif;
+      --font-serif: "Cormorant Garamond", serif;
+      --font-display: "Schibsted Grotesk", system-ui, sans-serif;
+      --font-mono: "Geist Mono", monospace;
+      --color-bg: var(--bg); --color-bg-2: var(--bg-2); --color-paper: var(--paper);
+      --color-ink: var(--ink); --color-ink-2: var(--ink-2); --color-ink-3: var(--ink-3);
+      --color-line: var(--line); --color-line-2: var(--line-2);
+      --color-primary: var(--primary); --color-primary-deep: var(--primary-deep); --color-primary-soft: var(--primary-soft);
+      --color-editorial: var(--editorial); --color-highlight: var(--highlight); --color-highlight-deep: var(--highlight-deep); --color-night: var(--night);
+    }
+  </style>
+  <style>
+    body { margin:0; background:var(--bg); color:var(--ink); font-family:"Geist",system-ui,sans-serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+    /* Modale : tout est centralisé dans orbita.css (.modal-overlay / .modal-*) */
+    .demo-btn { display:inline-flex; flex-direction:column; align-items:flex-start; gap:10px; padding:26px 28px; background:var(--paper); border:1px solid var(--line); text-align:left; cursor:pointer; transition:border-color var(--t-dur) var(--t-ease), box-shadow var(--t-dur) var(--t-ease), transform var(--t-dur) var(--t-ease); }
+    .demo-btn:hover { border-color:var(--primary); box-shadow:0 18px 40px -24px var(--primary); transform:translateY(-3px); }
+    .demo-btn .size-tag { font-family:"Geist Mono",monospace; font-size:11px; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--editorial); }
+    .demo-btn .size-name { font-family:var(--f-display); font-weight:700; font-size:22px; letter-spacing:-.02em; color:var(--ink); }
+    .demo-btn .size-desc { font-size:13.5px; line-height:1.55; color:var(--ink-3); }
+    .demo-btn .size-open { display:inline-flex; align-items:center; gap:7px; margin-top:4px; font-size:13px; font-weight:600; color:var(--primary); }
+    .demo-btn:hover .size-open svg { transform:translateX(3px); }
+    .demo-btn .size-open svg { transition:transform var(--t-dur) var(--t-ease); }
+  </style>
+</head>
+<body data-theme="blue">
+
+  <!-- reserved header space — dark + sélecteur d'accent -->
+  <div class="flex items-center h-[112px] bg-night">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 w-full flex items-center justify-end gap-6">
+      <div class="flex items-center gap-2" id="siloSwitch">
+        <span class="font-mono text-[11px] tracking-[.14em] uppercase mr-1 text-white/40">Accent</span>
+        <button class="silo-btn" data-silo="blue">Bleu</button>
+        <button class="silo-btn" data-silo="green">Vert</button>
+        <button class="silo-btn" data-silo="orange">Orange</button>
+        <button class="silo-btn" data-silo="violet">Violet</button>
+        <button class="silo-btn" data-silo="brique">Brique</button>
+        <button class="silo-btn" data-silo="magenta">Magenta</button>
+        <button class="silo-btn" data-silo="ambre">Ambre</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ DÉMO ============================ -->
+  <main class="max-w-[1280px] mx-auto px-5 sm:px-8 py-16 sm:py-24">
+    <div class="max-w-[680px] mb-12 sm:mb-16">
+      <div class="c-head-eyebrow mb-5"><span class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial">Composant · superposition</span></div>
+      <h1 class="font-display font-extrabold tracking-[-0.025em] leading-[1.04] text-ink m-0 text-[clamp(34px,4.6vw,56px)]">
+        La fenêtre <span class="c-serif-i text-primary">modale.</span>
+      </h1>
+      <p class="mt-5 text-[18px] leading-[1.6] text-ink-2">
+        Trois tailles, un même squelette : en-tête fixe, corps défilant, pied d'actions. L'overlay se teinte
+        selon l'accent actif. Ouvrez-en une pour la voir centrée.
+      </p>
+    </div>
+
+    <div class="max-w-[920px]">
+      <p class="font-mono text-[11px] tracking-[.14em] uppercase text-ink-3 mb-4">Version claire</p>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <button class="demo-btn" data-open="modal-sm">
+          <span class="size-tag">SM · 420 px</span>
+          <span class="size-name">Confirmation</span>
+          <span class="size-desc">Une question, deux choix. Pour valider une action rapide.</span>
+          <span class="size-open">Ouvrir <o-icon name="arrow-right" size="15"></o-icon></span>
+        </button>
+        <button class="demo-btn" data-open="modal-md">
+          <span class="size-tag">MD · 620 px</span>
+          <span class="size-name">Formulaire</span>
+          <span class="size-desc">Largeur standard pour un contenu structuré ou un court formulaire.</span>
+          <span class="size-open">Ouvrir <o-icon name="arrow-right" size="15"></o-icon></span>
+        </button>
+        <button class="demo-btn" data-open="modal-lg">
+          <span class="size-tag">LG · 840 px · scroll</span>
+          <span class="size-name">Document</span>
+          <span class="size-desc">Contenu long : le corps défile, l'en-tête et le pied restent fixes.</span>
+          <span class="size-open">Ouvrir <o-icon name="arrow-right" size="15"></o-icon></span>
+        </button>
+      </div>
+
+      <p class="font-mono text-[11px] tracking-[.14em] uppercase text-ink-3 mb-4 mt-12">Version sombre</p>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <button class="demo-btn" data-open="modal-sm-d">
+          <span class="size-tag">SM · 420 px · dark</span>
+          <span class="size-name">Confirmation</span>
+          <span class="size-desc">Une question, deux choix. Pour valider une action rapide.</span>
+          <span class="size-open">Ouvrir <o-icon name="arrow-right" size="15"></o-icon></span>
+        </button>
+        <button class="demo-btn" data-open="modal-md-d">
+          <span class="size-tag">MD · 620 px · dark</span>
+          <span class="size-name">Formulaire</span>
+          <span class="size-desc">Largeur standard pour un contenu structuré ou un court formulaire.</span>
+          <span class="size-open">Ouvrir <o-icon name="arrow-right" size="15"></o-icon></span>
+        </button>
+        <button class="demo-btn" data-open="modal-lg-d">
+          <span class="size-tag">LG · 840 px · dark</span>
+          <span class="size-name">Document</span>
+          <span class="size-desc">Contenu long : le corps défile, l'en-tête et le pied restent fixes.</span>
+          <span class="size-open">Ouvrir <o-icon name="arrow-right" size="15"></o-icon></span>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ============================ MODALE SM ============================ -->
+  <div class="modal-overlay" id="modal-sm" role="dialog" aria-modal="true" aria-labelledby="t-sm">
+    <div class="modal modal-sm">
+      <header class="modal-head">
+        <div>
+          <p class="modal-eyebrow">Confirmation</p>
+          <h2 class="modal-title" id="t-sm">Supprimer ce chiffrage ?</h2>
+        </div>
+        <button class="modal-close" data-close aria-label="Fermer">
+          <o-icon name="close" size="17"></o-icon>
+        </button>
+      </header>
+      <div class="modal-body">
+        <p>Cette action est définitive. Le devis associé et son historique de relances seront retirés de votre espace.</p>
+      </div>
+      <footer class="modal-foot">
+        <button class="modal-btn modal-btn--sm modal-btn--ghost" data-close>Annuler</button>
+        <button class="modal-btn modal-btn--sm modal-btn--primary" data-close>Supprimer</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ============================ MODALE MD ============================ -->
+  <div class="modal-overlay" id="modal-md" role="dialog" aria-modal="true" aria-labelledby="t-md">
+    <div class="modal modal-md">
+      <header class="modal-head">
+        <div>
+          <p class="modal-eyebrow">Nouveau chiffrage</p>
+          <h2 class="modal-title" id="t-md">Démarrer une estimation</h2>
+        </div>
+        <button class="modal-close" data-close aria-label="Fermer">
+          <o-icon name="close" size="17"></o-icon>
+        </button>
+      </header>
+      <div class="modal-body">
+        <p>Renseignez les bases du projet — vous pourrez affiner chaque poste ensuite.</p>
+        <div class="grid gap-4 mt-2">
+          <label class="block">
+            <span class="block font-mono text-[11px] tracking-[.1em] uppercase text-ink-3 mb-2">Intitulé du projet</span>
+            <input type="text" value="Réhabilitation — 14 rue des Lilas" class="w-full px-4 py-3 border border-line-2 bg-bg text-[15px] text-ink outline-none focus:border-primary transition-colors" />
+          </label>
+          <div class="grid grid-cols-2 gap-4">
+            <label class="block">
+              <span class="block font-mono text-[11px] tracking-[.1em] uppercase text-ink-3 mb-2">Type de bien</span>
+              <input type="text" value="Logement collectif" class="w-full px-4 py-3 border border-line-2 bg-bg text-[15px] text-ink outline-none focus:border-primary transition-colors" />
+            </label>
+            <label class="block">
+              <span class="block font-mono text-[11px] tracking-[.1em] uppercase text-ink-3 mb-2">Surface (m²)</span>
+              <input type="text" value="320" class="w-full px-4 py-3 border border-line-2 bg-bg text-[15px] text-ink outline-none focus:border-primary transition-colors" />
+            </label>
+          </div>
+        </div>
+      </div>
+      <footer class="modal-foot">
+        <button class="modal-btn modal-btn--sm modal-btn--ghost" data-close>Annuler</button>
+        <button class="modal-btn modal-btn--sm modal-btn--primary" data-close>Créer le chiffrage</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ============================ MODALE LG (scroll) ============================ -->
+  <div class="modal-overlay" id="modal-lg" role="dialog" aria-modal="true" aria-labelledby="t-lg">
+    <div class="modal modal-lg">
+      <header class="modal-head">
+        <div>
+          <p class="modal-eyebrow">Conditions · v2.4</p>
+          <h2 class="modal-title" id="t-lg">Conditions générales d'utilisation</h2>
+        </div>
+        <button class="modal-close" data-close aria-label="Fermer">
+          <o-icon name="close" size="17"></o-icon>
+        </button>
+      </header>
+      <div class="modal-body">
+        <p>Dernière mise à jour le 2 juin 2026. En utilisant Orbita, vous acceptez les conditions ci-dessous. Le corps de cette modale défile : l'en-tête et le pied restent visibles en permanence.</p>
+        <h3>1. Objet du service</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <h3>2. Accès et disponibilité</h3>
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+        <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+        <h3>3. Données et confidentialité</h3>
+        <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+        <p>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.</p>
+        <h3>4. Responsabilités</h3>
+        <p>Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur.</p>
+        <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
+        <h3>5. Résiliation</h3>
+        <p>Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus.</p>
+        <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae.</p>
+      </div>
+      <footer class="modal-foot">
+        <button class="modal-btn modal-btn--sm modal-btn--ghost" data-close>Refuser</button>
+        <button class="modal-btn modal-btn--sm modal-btn--primary" data-close>J'accepte</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ============================ MODALE SM · DARK ============================ -->
+  <div class="modal-overlay" id="modal-sm-d" role="dialog" aria-modal="true" aria-labelledby="t-sm-d">
+    <div class="modal modal-sm modal-dark">
+      <header class="modal-head">
+        <div>
+          <p class="modal-eyebrow">Confirmation</p>
+          <h2 class="modal-title" id="t-sm-d">Supprimer ce chiffrage ?</h2>
+        </div>
+        <button class="modal-close" data-close aria-label="Fermer">
+          <o-icon name="close" size="17"></o-icon>
+        </button>
+      </header>
+      <div class="modal-body">
+        <p>Cette action est définitive. Le devis associé et son historique de relances seront retirés de votre espace.</p>
+      </div>
+      <footer class="modal-foot">
+        <button class="modal-btn modal-btn--sm modal-btn--ghost" data-close>Annuler</button>
+        <button class="modal-btn modal-btn--sm modal-btn--primary" data-close>Supprimer</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ============================ MODALE MD · DARK ============================ -->
+  <div class="modal-overlay" id="modal-md-d" role="dialog" aria-modal="true" aria-labelledby="t-md-d">
+    <div class="modal modal-md modal-dark">
+      <header class="modal-head">
+        <div>
+          <p class="modal-eyebrow">Nouveau chiffrage</p>
+          <h2 class="modal-title" id="t-md-d">Démarrer une estimation</h2>
+        </div>
+        <button class="modal-close" data-close aria-label="Fermer">
+          <o-icon name="close" size="17"></o-icon>
+        </button>
+      </header>
+      <div class="modal-body">
+        <p>Renseignez les bases du projet — vous pourrez affiner chaque poste ensuite.</p>
+        <div class="grid gap-4 mt-2">
+          <label class="block">
+            <span class="m-label block font-mono text-[11px] tracking-[.1em] uppercase mb-2">Intitulé du projet</span>
+            <input type="text" value="Réhabilitation — 14 rue des Lilas" class="m-field w-full px-4 py-3 border text-[15px] outline-none transition-colors" />
+          </label>
+          <div class="grid grid-cols-2 gap-4">
+            <label class="block">
+              <span class="m-label block font-mono text-[11px] tracking-[.1em] uppercase mb-2">Type de bien</span>
+              <input type="text" value="Logement collectif" class="m-field w-full px-4 py-3 border text-[15px] outline-none transition-colors" />
+            </label>
+            <label class="block">
+              <span class="m-label block font-mono text-[11px] tracking-[.1em] uppercase mb-2">Surface (m²)</span>
+              <input type="text" value="320" class="m-field w-full px-4 py-3 border text-[15px] outline-none transition-colors" />
+            </label>
+          </div>
+        </div>
+      </div>
+      <footer class="modal-foot">
+        <button class="modal-btn modal-btn--sm modal-btn--ghost" data-close>Annuler</button>
+        <button class="modal-btn modal-btn--sm modal-btn--primary" data-close>Créer le chiffrage</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ============================ MODALE LG · DARK (scroll) ============================ -->
+  <div class="modal-overlay" id="modal-lg-d" role="dialog" aria-modal="true" aria-labelledby="t-lg-d">
+    <div class="modal modal-lg modal-dark">
+      <header class="modal-head">
+        <div>
+          <p class="modal-eyebrow">Conditions · v2.4</p>
+          <h2 class="modal-title" id="t-lg-d">Conditions générales d'utilisation</h2>
+        </div>
+        <button class="modal-close" data-close aria-label="Fermer">
+          <o-icon name="close" size="17"></o-icon>
+        </button>
+      </header>
+      <div class="modal-body">
+        <p>Dernière mise à jour le 2 juin 2026. En utilisant Orbita, vous acceptez les conditions ci-dessous. Le corps de cette modale défile : l'en-tête et le pied restent visibles en permanence.</p>
+        <h3>1. Objet du service</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <h3>2. Accès et disponibilité</h3>
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+        <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+        <h3>3. Données et confidentialité</h3>
+        <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+        <p>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.</p>
+        <h3>4. Responsabilités</h3>
+        <p>Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur.</p>
+        <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
+        <h3>5. Résiliation</h3>
+        <p>Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus.</p>
+        <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae.</p>
+      </div>
+      <footer class="modal-foot">
+        <button class="modal-btn modal-btn--sm modal-btn--ghost" data-close>Refuser</button>
+        <button class="modal-btn modal-btn--sm modal-btn--primary" data-close>J'accepte</button>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    /* ===== modale : ouverture / fermeture ===== */
+    (function () {
+      let lastFocus = null;
+      const openModal = (id) => {
+        const ov = document.getElementById(id);
+        if (!ov) return;
+        lastFocus = document.activeElement;
+        ov.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+        const f = ov.querySelector('.modal-close');
+        if (f) f.focus();
+      };
+      const closeModal = (ov) => {
+        ov.classList.remove('is-open');
+        document.body.style.overflow = '';
+        if (lastFocus) lastFocus.focus();
+      };
+
+      document.querySelectorAll('[data-open]').forEach(b =>
+        b.addEventListener('click', () => openModal(b.dataset.open)));
+
+      document.querySelectorAll('.modal-overlay').forEach(ov => {
+        // clic sur le fond (hors .modal) ferme
+        ov.addEventListener('mousedown', (e) => { if (e.target === ov) closeModal(ov); });
+        ov.querySelectorAll('[data-close]').forEach(b =>
+          b.addEventListener('click', () => closeModal(ov)));
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          const open = document.querySelector('.modal-overlay.is-open');
+          if (open) closeModal(open);
+        }
+      });
+    })();
+
+    /* ===== sélecteur d'accent ===== */
+    (function () {
+      const root = document.documentElement, body = document.body;
+      const btns = [...document.querySelectorAll('.silo-btn')];
+      function setSilo(s){
+        root.setAttribute('data-theme', s); body.setAttribute('data-theme', s);
+        btns.forEach(b => b.classList.toggle('is-active', b.dataset.silo === s));
+      }
+      btns.forEach(b => b.addEventListener('click', () => setSilo(b.dataset.silo)));
+      setSilo('blue');
+    })();
+  </script>
+</body>
+</html>

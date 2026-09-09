@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="blue">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbita — bloc image pleine largeur</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="orbita.css" />
+  <link rel="stylesheet" href="icons.css" />
+  <script src="icons.js"></script>
+  <style type="text/tailwindcss">
+    @theme inline {
+      --font-sans: "Geist", system-ui, sans-serif;
+      --font-serif: "Cormorant Garamond", serif;
+      --font-display: "Schibsted Grotesk", system-ui, sans-serif;
+      --font-mono: "Geist Mono", monospace;
+      --color-primary: var(--primary); --color-primary-deep: var(--primary-deep); --color-primary-soft: var(--primary-soft);
+      --color-editorial: var(--editorial); --color-highlight: var(--highlight); --color-night: var(--night);
+    }
+  </style>
+  <style>
+body { margin:0; background:var(--night); color:#fff; font-family:"Geist",system-ui,sans-serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }    /* ===== section image pleine largeur ===== */
+    .fwti { position:relative; width:100%; min-height:600px; overflow:hidden; display:flex; align-items:center; justify-content:center; text-align:center; }    /* couche image — parallax CSS pur (background-attachment:fixed) */
+    .fwti-bg { position:absolute; inset:0; width:100%; z-index:0;
+      background-position:center; background-size:cover; background-repeat:no-repeat;
+      background-attachment:fixed; background-color:#1B2238; }    /* scrim global : très léger (l'image garde sa clarté) */
+    .fwti-scrim { position:absolute; inset:0; z-index:1; pointer-events:none;
+      background:
+        linear-gradient(0deg, rgba(8,11,22,.14) 0%, transparent 34%, transparent 70%, rgba(8,11,22,.10) 100%);
+    }    /* halo sombre localisé derrière le texte (ellipse floutée, sans contour) */
+    /* halo localisé derrière le texte — ellipse, teinté nuit-de-l'accent (pas du noir pur) */
+    .fwti-halo { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:1; pointer-events:none;
+      width:min(1080px,95%); height:86%;
+      background:radial-gradient(ellipse 50% 50% at 50% 50%,
+        color-mix(in srgb, var(--night), transparent 30%) 0%,
+        color-mix(in srgb, var(--night), transparent 52%) 46%,
+        color-mix(in srgb, var(--night), transparent 82%) 74%,
+        transparent 100%); }    /* liseré accent en pied : gradient latéral, primaire aux bords → highlight au centre */
+    .fwti-edge { position:absolute; left:0; right:0; bottom:0; height:4px; z-index:2;
+      background:linear-gradient(90deg, var(--primary) 0%, var(--highlight) 50%, var(--primary) 100%); }    .fwti-inner { position:relative; z-index:2; width:100%; }    /* ===== titre éditorial (tag-agnostique, centré, court) ===== */
+    .fwti-title { display:block; margin:0 auto 18px; font-family:"Schibsted Grotesk",system-ui,sans-serif;
+      font-weight:700; font-style:normal; font-size:clamp(27px,3vw,40px); line-height:1.18; letter-spacing:-.02em; color:#fff; text-wrap:balance; max-width:860px; }    .fwti-title .accent { font-family:"Cormorant Garamond",Georgia,serif; font-style:italic; font-weight:600; letter-spacing:0; color:var(--editorial); }    .fwti-lead { max-width:600px; margin:0 auto 30px; font-size:18px; line-height:1.55; color:rgba(255,255,255,.92); }    @media (max-width:680px){
+      .fwti { min-height:520px; }
+    }
+  </style>
+</head>
+<body data-theme="blue">
+
+  <!-- reserved header space — dark + sélecteur d'accent -->
+  <div class="flex items-center h-[112px]" style="background:rgba(0,0,0,.35);">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 w-full flex items-center justify-end gap-6">
+      <div class="flex items-center gap-2" id="siloSwitch">
+        <span class="font-mono text-[11px] tracking-[.14em] uppercase mr-1 text-white/40">Accent</span>
+        <button class="silo-btn" data-silo="blue">Bleu</button>
+        <button class="silo-btn" data-silo="green">Vert</button>
+        <button class="silo-btn" data-silo="orange">Orange</button>
+        <button class="silo-btn" data-silo="violet">Violet</button>
+        <button class="silo-btn" data-silo="brique">Brique</button>
+        <button class="silo-btn" data-silo="magenta">Magenta</button>
+        <button class="silo-btn" data-silo="ambre">Ambre</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- bande claire (haut) — pour voir le parallax au scroll -->
+  <div style="height:300px; background:#EEF1F8;"></div>
+
+  <!-- ============================ bloc image pleine largeur ============================ -->
+  <section class="fwti">
+
+    <!-- couche image (parallax) — background-image plein cadre ;
+         dans Next.js, remplacer par <Image fill> ou la photo du back-office. -->
+    <div class="fwti-bg" style="background-image:url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1920&q=80');"></div>
+
+    <!-- voile de lisibilité -->
+    <div class="fwti-scrim"></div>
+    <div class="fwti-halo"></div>
+
+    <!-- contenu -->
+    <div class="fwti-inner">
+      <div class="max-w-[900px] mx-auto px-5 sm:px-8">
+
+        <!-- titre : UNE balise tag-agnostique ; la portion accent
+             est un <span> serif italique doré (inline). -->
+        <h2 class="fwti-title">
+          Gérez tout votre chantier en un seul outil. <span class="accent">Mise en place en moins de 24 heures.</span>
+        </h2>
+
+        <p class="fwti-lead">
+          Sans engagement. Notre équipe vous rappelle dans la journée.
+        </p>
+
+        <a class="c-btn-split c-btn-split--ondark" href="#">
+          <span class="lbl">Demander un rappel</span>
+          <span class="arw"><o-icon name="arrow-right" size="16"></o-icon></span>
+        </a>
+
+      </div>
+    </div>
+
+    <span class="fwti-edge"></span>
+  </section>
+
+  <!-- bande claire (bas) — pour voir le parallax au scroll -->
+  <div style="height:300px; background:#EEF1F8;"></div>
+
+  <script>
+    /* ---- accent switcher ---- */
+    const root = document.documentElement, body = document.body;
+    const siloBtns = [...document.querySelectorAll('.silo-btn')];
+    function setSilo(s){
+      root.setAttribute('data-theme', s); body.setAttribute('data-theme', s);
+      siloBtns.forEach(b => b.classList.toggle('is-active', b.dataset.silo === s));
+    }
+    siloBtns.forEach(b => b.addEventListener('click', () => setSilo(b.dataset.silo)));
+    setSilo('blue');
+  </script>
+</body>
+</html>

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="blue">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbita — modèle de post de blog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="orbita.css" />
+  <link rel="stylesheet" href="icons.css" />
+  <script src="icons.js"></script>
+  <style type="text/tailwindcss">
+    @theme inline {
+      --font-sans: "Geist", system-ui, sans-serif;
+      --font-serif: "Cormorant Garamond", serif;
+      --font-display: "Schibsted Grotesk", system-ui, sans-serif;
+      --font-mono: "Geist Mono", monospace;
+      --color-bg: var(--bg); --color-bg-2: var(--bg-2); --color-paper: var(--paper);
+      --color-ink: var(--ink); --color-ink-2: var(--ink-2); --color-ink-3: var(--ink-3);
+      --color-line: var(--line); --color-line-2: var(--line-2);
+      --color-primary: var(--primary); --color-primary-deep: var(--primary-deep); --color-primary-soft: var(--primary-soft);
+      --color-editorial: var(--editorial); --color-highlight: var(--highlight); --color-highlight-deep: var(--highlight-deep); --color-night: var(--night);
+    }
+  </style>
+  <style>
+    body { margin:0; background:var(--bg); color:var(--ink); font-family:"Geist",system-ui,sans-serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+
+    /* ===================== layout 2 colonnes ===================== */
+    .post-layout { display:grid; grid-template-columns:1fr; gap:48px; }
+    @media (min-width:1024px){ .post-layout { grid-template-columns:248px minmax(0,1fr); gap:72px; } }
+    .post-main { max-width:760px; }
+
+    /* ----- sommaire (TOC) ----- */
+    .toc { position:sticky; top:96px; }
+    .toc-eyebrow { display:inline-flex; align-items:center; gap:12px; margin-bottom:18px; }
+    .toc-eyebrow::after { content:''; flex:1; height:1px; background:var(--editorial); opacity:.5; }
+    .toc-eyebrow span { font-family:"Geist Mono",monospace; font-size:11px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; color:var(--editorial); white-space:nowrap; }
+    .toc-list { list-style:none; margin:0; padding:0; border-left:1px solid var(--line-2); }
+    .toc-link { display:block; padding:9px 0 9px 18px; margin-left:-1px; border-left:2px solid transparent;
+      font-size:13.5px; line-height:1.4; color:var(--ink-3); text-decoration:none;
+      transition:color var(--t-dur) var(--t-ease), border-color var(--t-dur) var(--t-ease); }
+    .toc-link:hover { color:var(--ink); }
+    .toc-link.lvl-3 { padding-left:34px; font-size:13px; }
+    .toc-link.is-active { color:var(--primary); border-left-color:var(--primary); font-weight:600; }
+
+    /* ===================== FAQ — conteneur (accordéon : orbita.css) ===================== */
+    .faq-grid { display:grid; grid-template-columns:1fr; gap:18px; align-items:start; max-width:760px; margin-inline:auto; }
+    @media (min-width:1024px){ .faq-grid { grid-template-columns:1fr 1fr; gap:18px 24px; max-width:none; } }
+
+  </style>
+</head>
+<body data-theme="blue">
+
+  <!-- ============ HEADER STICKY (condensé au scroll) ============ -->
+  <header class="post-hdr fixed inset-x-0 top-0 z-[60] bg-night" id="postHdr">
+    <div class="post-hdr-bar max-w-[1280px] mx-auto px-5 sm:px-8 flex items-center gap-6">
+      <!-- logo -->
+      <a href="#" class="inline-flex items-center gap-[13px] no-underline shrink-0">
+        <span class="w-10 h-10 shrink-0 bg-primary flex items-center justify-center relative">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="7" stroke="#fff" stroke-width="2"/></svg>
+          <span class="c-orbit-dot absolute top-1/2 left-1/2 w-[5px] h-[5px] -m-[2.5px] rounded-full bg-highlight"></span>
+        </span>
+        <span class="font-serif font-medium text-[18px] leading-[1.15] tracking-[1px] text-white">ORBITA<br>SYSTÈME</span>
+      </a>
+      <!-- sélecteur d'accent (aide de démo) -->
+      <div class="flex items-center gap-2 ml-auto" id="siloSwitch">
+        <span class="font-mono text-[11px] tracking-[.14em] uppercase mr-1 text-white/40 hidden sm:inline">Accent</span>
+        <button class="silo-btn" data-silo="blue">Bleu</button>
+        <button class="silo-btn" data-silo="green">Vert</button>
+        <button class="silo-btn" data-silo="orange">Orange</button>
+        <button class="silo-btn" data-silo="violet">Violet</button>
+        <button class="silo-btn" data-silo="brique">Brique</button>
+        <button class="silo-btn" data-silo="magenta">Magenta</button>
+        <button class="silo-btn" data-silo="ambre">Ambre</button>
+      </div>
+    </div>
+    <!-- progression de lecture : collée au bas du header -->
+    <div class="read-bar" id="readBar"></div>
+  </header>
+  <!-- réserve la hauteur du header fixe -->
+  <div class="post-hdr-spacer"></div>
+
+  <!-- ============ BREADCRUMB (non sticky) ============ -->
+  <nav class="border-b border-line bg-paper" aria-label="Fil d'ariane">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8 py-3.5 crumb">
+      <a href="#">Accueil</a>
+      <o-icon name="chevron-right" size="12"></o-icon>
+      <a href="#">Blog</a>
+      <o-icon name="chevron-right" size="12"></o-icon>
+      <span class="current">Cycle commercial</span>
+    </div>
+  </nav>
+
+  <!-- ============================ ENTÊTE DE L'ARTICLE ============================ -->
+  <header class="pt-9 sm:pt-12">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+
+      <!-- fil d'ariane léger + catégorie -->
+      <div class="flex items-center gap-2.5 mb-7">
+        <span class="c-chip c-chip-cat">Chiffrage</span>
+        <span class="c-chip">Cycle commercial</span>
+      </div>
+
+      <!-- titre : balise back-office libre ; portion accent = serif italique primaire -->
+      <h1 class="font-display font-extrabold tracking-[-0.025em] leading-[1.04] text-ink m-0 max-w-[920px] text-[clamp(34px,5vw,62px)]">
+        Du devis à la facturation : <span class="c-serif-i text-primary">industrialiser</span> le cycle commercial
+      </h1>
+
+      <!-- chapô -->
+      <p class="mt-6 max-w-[680px] text-[19px] leading-[1.6] text-ink-2">
+        Entre l'estimation envoyée et le paiement encaissé, le temps file et la marge fuit. Voici comment fiabiliser
+        chaque étape — sans alourdir vos équipes.
+      </p>
+
+      <!-- métas -->
+      <div class="post-meta mt-8">
+        <div class="post-author">
+          <img class="post-av" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=96&h=96&q=80&auto=format&fit=crop" alt="" />
+          <div class="leading-tight">
+            <p class="m-0 text-[14.5px] font-semibold text-ink">Marie Lefebvre</p>
+            <p class="m-0 text-[12.5px] text-ink-3">Responsable produit · Orbita</p>
+          </div>
+        </div>
+        <span class="meta-div"></span>
+        <div class="leading-tight">
+          <p class="m-0 font-mono text-[10.5px] tracking-[.12em] uppercase text-ink-3">Publié le</p>
+          <p class="m-0 text-[14.5px] text-ink-2 mt-0.5">2 juin 2026</p>
+        </div>
+      </div>
+
+      <!-- image à la une -->
+      <figure class="m-0 mt-8">
+        <div class="post-hero">
+          <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1280&q=80&auto=format&fit=crop" alt="Tableau de bord et indicateurs commerciaux" />
+        </div>
+        <figcaption class="post-cap">img · à la une — 16:7, ~1280px</figcaption>
+      </figure>
+
+    </div>
+  </header>
+
+  <!-- ============================ CORPS : SOMMAIRE + ARTICLE ============================ -->
+  <div class="max-w-[1280px] mx-auto px-5 sm:px-8 pt-14 sm:pt-16 pb-20 sm:pb-28">
+    <div class="post-layout">
+
+      <!-- SOMMAIRE (sticky, scroll-spy) -->
+      <aside>
+        <nav class="toc" id="toc" aria-label="Sommaire">
+          <div class="toc-eyebrow"><span>Sommaire</span></div>
+          <ul class="toc-list" id="tocList"></ul>
+        </nav>
+      </aside>
+
+      <!-- ARTICLE -->
+      <article class="post-main prose" id="article">
+
+        <h2>Le cycle commercial, ce maillon qui fuit</h2>
+        <p class="lead">
+          Le devis part vite. La suite, beaucoup moins. Entre la relance oubliée, la validation qui traîne et la
+          facture émise trois semaines trop tard, c'est tout le cycle qui se grippe — et la trésorerie avec.
+        </p>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
+          dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+          ex ea commodo consequat. <strong>Industrialiser</strong>, ici, ne veut pas dire déshumaniser : il s'agit
+          de rendre <em>répétable</em> ce qui était jusque-là improvisé.
+        </p>
+
+        <h2>Cartographier le parcours, du devis à la facture</h2>
+        <p>
+          Avant d'automatiser quoi que ce soit, il faut voir. Poser à plat les étapes réelles — pas celles du
+          processus rêvé — révèle presque toujours deux ou trois ruptures invisibles au quotidien.
+        </p>
+
+        <h3>Là où le temps se perd</h3>
+        <p>
+          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+          laborum.
+        </p>
+
+        <blockquote>
+          <p>« On ne pilote bien que ce qu'on rend visible. Tant que le cycle reste dans les têtes, il reste hors de contrôle. »</p>
+          <cite>Principe directeur — atelier Orbita</cite>
+        </blockquote>
+
+        <h2>Trois leviers d'industrialisation</h2>
+        <p>
+          Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. Voici
+          l'ordre dans lequel nous les déployons, du plus rentable au plus structurant :
+        </p>
+        <ol>
+          <li><strong>Standardiser le devis</strong> — un modèle unique, des postes pré-chiffrés, zéro page blanche.</li>
+          <li><strong>Automatiser la relance</strong> — séquences déclenchées sur l'inactivité, pas sur la mémoire.</li>
+          <li><strong>Relier devis et facture</strong> — la donnée saisie une fois circule jusqu'au paiement.</li>
+          <li><strong>Mesurer en continu</strong> — un tableau de bord partagé, mis à jour sans ressaisie.</li>
+        </ol>
+
+        <!-- tableau éditorial -->
+        <div class="prose-table">
+          <table>
+            <caption>tab · impact moyen constaté sur 40 PME du bâtiment (2025)</caption>
+            <thead>
+              <tr><th>Levier</th><th>Effort de mise en place</th><th>Gain de temps</th><th>Délai de retour</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Devis standardisé</td><td>Faible</td><td><span class="pt-num">−35&nbsp;%</span></td><td><span class="pt-num">2 sem.</span></td></tr>
+              <tr><td>Relance automatisée</td><td>Faible</td><td><span class="pt-num">−48&nbsp;%</span></td><td><span class="pt-num">1 sem.</span></td></tr>
+              <tr><td>Devis → facture reliés</td><td>Moyen</td><td><span class="pt-num">−21&nbsp;%</span></td><td><span class="pt-num">6 sem.</span></td></tr>
+              <tr><td>Tableau de bord partagé</td><td>Élevé</td><td><span class="pt-num">−12&nbsp;%</span></td><td><span class="pt-num">3 mois</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- encart à retenir -->
+        <div class="callout">
+          <div class="callout-head"><span>À retenir</span></div>
+          <ul>
+            <li>Le gain le plus rapide vient de la <strong>relance automatisée</strong>, pas de l'outil le plus complexe.</li>
+            <li>Une donnée saisie deux fois est une donnée qui finira par diverger.</li>
+            <li>Mesurez le <strong>délai devis → facture</strong> avant tout autre indicateur.</li>
+          </ul>
+        </div>
+
+        <!-- bloc CTA inline -->
+        <div class="prose-cta">
+          <span class="prose-cta-ico"><o-icon name="arrow-right" size="22"></o-icon></span>
+          <span class="prose-cta-txt">Lien vers une page ou autre</span>
+          <a class="prose-cta-btn" href="#">En savoir plus</a>
+        </div>
+
+        <figure>
+          <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1024&q=80&auto=format&fit=crop" alt="Visualisation d'un tableau de bord analytique" />
+          <figcaption>img · inline — schéma de flux ou capture produit</figcaption>
+        </figure>
+
+        <h2>Mesurer ce qui compte vraiment</h2>
+        <p>
+          Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit. Les
+          indicateurs à suivre en priorité :
+        </p>
+        <ul>
+          <li>Taux de transformation des devis émis</li>
+          <li>Délai moyen entre devis accepté et facture émise</li>
+          <li>Délai de paiement réel vs. conditions affichées</li>
+          <li>Part des relances déclenchées automatiquement</li>
+        </ul>
+
+        <h2>Déployer, étape par étape</h2>
+        <p>
+          At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti
+          atque corrupti quos dolores et quas molestias. Inutile de tout changer le même mois : chaque levier se
+          pose seul, puis se connecte aux autres.
+        </p>
+        <p>
+          Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et
+          voluptates repudiandae sint et molestiae non recusandae.
+        </p>
+
+      </article>
+    </div>
+  </div>
+
+  <!-- ============================ FAQ · section nuit pleine largeur ============================ -->
+  <section class="py-12 sm:py-16 c-darkbg faq-dark">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+      <div class="faq-grid" id="faqDark" data-faq-group></div>
+    </div>
+  </section>
+
+  <!-- ============================ ARTICLES LIÉS (maillage interne) ============================ -->
+  <section class="py-12 sm:py-16">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-8">
+      <div class="text-center mb-8 sm:mb-10 max-w-[760px] mx-auto">
+        <div class="c-head-eyebrow mb-5"><span class="text-[11.5px] font-semibold tracking-[.16em] uppercase text-editorial">Le blog Orbita</span></div>
+        <h2 class="font-display font-extrabold tracking-[-0.025em] leading-[1.04] text-ink m-0 text-[clamp(26px,3vw,40px)]">
+          Pour continuer <span class="c-serif-i text-primary">sur le sujet.</span>
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6" id="gridRelated"></div>
+    </div>
+  </section>
+
+  <script>
+    /* ===== TOC générée depuis les titres de l'article + scroll-spy ===== */
+    (function () {
+      const article = document.getElementById('article');
+      const list = document.getElementById('tocList');
+      const heads = [...article.querySelectorAll('h2, h3')];
+      const slug = (t, i) => (t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+        .replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || 'sec') + '-' + i;
+
+      const links = [];
+      heads.forEach((h, i) => {
+        if (!h.id) h.id = slug(h.textContent, i);
+        const a = document.createElement('a');
+        a.className = 'toc-link' + (h.tagName === 'H3' ? ' lvl-3' : '');
+        a.href = '#' + h.id;
+        a.textContent = h.textContent;
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          const y = h.getBoundingClientRect().top + window.scrollY - 92;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+          history.replaceState(null, '', '#' + h.id);
+        });
+        const li = document.createElement('li');
+        li.appendChild(a);
+        list.appendChild(li);
+        links.push(a);
+      });
+
+      // scroll-spy : surligne le titre dont la position est la plus proche du haut
+      function spy() {
+        const offset = 120;
+        let activeIdx = 0;
+        for (let i = 0; i < heads.length; i++) {
+          if (heads[i].getBoundingClientRect().top - offset <= 0) activeIdx = i;
+        }
+        links.forEach((a, i) => a.classList.toggle('is-active', i === activeIdx));
+      }
+
+      /* ===== barre de progression ===== */
+      const bar = document.getElementById('readBar');
+      function progress() {
+        const doc = document.documentElement;
+        const max = doc.scrollHeight - doc.clientHeight;
+        bar.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + '%';
+      }
+
+      const postHdr = document.getElementById('postHdr');
+      function condense() { postHdr.classList.toggle('is-scrolled', window.scrollY > 24); }
+
+      let ticking = false;
+      function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => { spy(); progress(); condense(); ticking = false; });
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
+      spy(); progress(); condense();
+    })();
+
+    /* ===== FAQ accordéon (réutilisé du composant 11) ===== */
+    (function () {
+      const FAQ = [
+        { q:"Combien de temps pour déployer le premier levier ?", a:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, quis nostrud exercitation." },
+        { q:"Faut-il changer d'outil de facturation ?", a:"Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident." },
+        { q:"Mes équipes vont-elles devoir tout ressaisir ?", a:"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore." },
+        { q:"Comment mesurer le retour sur investissement ?", a:"Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt." },
+      ];
+      const el = document.getElementById('faqDark');
+      el.innerHTML = FAQ.map((f, i) => `
+        <div class="faq-item" data-faq>
+          <button class="faq-q" aria-expanded="false" aria-controls="${el.id}-a${i}">
+            <span class="faq-q-text">${f.q}</span>
+            <span class="faq-ico" aria-hidden="true"></span>
+          </button>
+          <div class="faq-a" id="${el.id}-a${i}" role="region">
+            <div class="faq-a-inner"><p>${f.a}</p></div>
+          </div>
+        </div>`).join('');
+      const items = [...el.querySelectorAll('[data-faq]')];
+      items.forEach(item => {
+        const btn = item.querySelector('.faq-q');
+        btn.addEventListener('click', () => {
+          const willOpen = !item.classList.contains('is-open');
+          items.forEach(o => { o.classList.remove('is-open'); o.querySelector('.faq-q').setAttribute('aria-expanded','false'); });
+          if (willOpen) { item.classList.add('is-open'); btn.setAttribute('aria-expanded','true'); }
+        });
+      });
+      const first = el.querySelector('[data-faq]');
+      first.classList.add('is-open');
+      first.querySelector('.faq-q').setAttribute('aria-expanded','true');
+    })();
+
+    /* ===== sélecteur d'accent ===== */
+    (function () {
+      const root = document.documentElement, body = document.body;
+      const siloBtns = [...document.querySelectorAll('.silo-btn')];
+      function setSilo(s){
+        root.setAttribute('data-theme', s); body.setAttribute('data-theme', s);
+        siloBtns.forEach(b => b.classList.toggle('is-active', b.dataset.silo === s));
+      }
+      siloBtns.forEach(b => b.addEventListener('click', () => setSilo(b.dataset.silo)));
+      setSilo('blue');
+    })();
+
+    /* ===== articles liés (maillage interne) ===== */
+    (function () {
+      const arw = '<o-icon name="arrow-right" size="16"></o-icon>';
+      const postCard = (p) => `
+      <article class="post-card card-i">
+        <div class="post-img"><img src="${p.img}" alt="" loading="lazy" /></div>
+        <div class="post-body">
+          <div class="post-meta-row">
+            <span class="c-chip c-chip-high">${p.cat}</span>
+            <time class="post-date">${p.date}</time>
+          </div>
+          <h3 class="post-title"><a href="#">${p.title}</a></h3>
+        </div>
+        <span class="card-cta flex items-center justify-between px-6 py-4 border border-line no-underline text-[13.5px] font-semibold">
+          <span class="whitespace-nowrap">Voir plus</span>${arw}
+        </span>
+      </article>`;
+      const RELATED = [
+        { img:'https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?q=80&w=1000&auto=format&fit=crop', cat:'Facturation',  date:'30/05/2026', title:"Relancer sans froisser : l'art du recouvrement client" },
+        { img:'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop', cat:'Productivité', date:'22/05/2026', title:"5 automatisations qui font gagner une journée par semaine" },
+        { img:'https://images.unsplash.com/photo-1565514020179-026b92b84bb6?q=80&w=1000&auto=format&fit=crop', cat:'Trésorerie',   date:'15/05/2026', title:"Réduire le délai de paiement moyen de 15 jours" },
+        { img:'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?q=80&w=1000&auto=format&fit=crop', cat:'Devis',        date:'07/05/2026', title:"Le devis qui se signe : structure et bonnes pratiques" },
+      ];
+      document.getElementById('gridRelated').innerHTML = RELATED.map(postCard).join('');
+    })();
+  </script>
+</body>
+</html>

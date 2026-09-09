@@ -1,0 +1,105 @@
+/*
+ * OrbitaTimePicker — panneau de choix d'heure et de minutes au clic, dans
+ * l'esprit du calendrier Astryx : sous le champ, à sa largeur, deux colonnes
+ * défilantes, valeur choisie en cercle couleur silo.
+ */
+.wrap { position: relative; }
+
+.panel {
+  /* comme les panneaux Astryx : fixe, ancré au champ (anchor-name posé en
+     style inline), largeur du champ, dessous ou dessus si la place manque */
+  position: fixed;
+  position-area: block-end span-inline-end;
+  position-try-fallbacks: flip-block;
+  width: anchor-size(width);
+  margin-block-start: var(--spacing-1-5);
+  z-index: 1000;
+  background: var(--color-background-popover);
+  border: var(--border-width) solid var(--color-border);
+  box-shadow: 0 26px 60px light-dark(rgba(12, 20, 40, 0.16), rgba(0, 0, 0, 0.5));
+  padding: var(--spacing-3) var(--spacing-3) var(--spacing-2);
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* heures sur 4 colonnes, minutes sur 2 */
+  gap: var(--spacing-3);
+}
+/* séparation discrète entre les deux colonnes, comme le filet du pied */
+.columns > div + div {
+  border-inline-start: var(--border-width) solid var(--color-border);
+  padding-inline-start: var(--spacing-3);
+  max-width: 360px;
+  margin-inline: auto;
+}
+.colHead {
+  display: block;
+  text-align: center;
+  font-size: 11.5px;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  padding-block: var(--spacing-1) var(--spacing-2);
+}
+.list {
+  max-height: 272px; /* 6 rangées d'heures sans défilement */
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-1);
+  padding: 2px;
+  scrollbar-width: thin;
+}
+.list[data-cols='2'] { grid-template-columns: repeat(2, 1fr); }
+
+.cell {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  height: 40px;
+  width: 40px;
+  margin-inline: auto;
+  border-radius: 9999px;
+  font: inherit;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color var(--duration-medium) var(--ease-standard), color var(--duration-medium) var(--ease-standard);
+}
+@media (hover: hover) {
+  .cell:hover { background: var(--color-accent-muted); }
+}
+.cell:focus-visible { outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color); outline-offset: 2px; }
+.cell[aria-selected='true'] {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+.cell.now { box-shadow: inset 0 0 0 1px var(--color-border-emphasized); }
+
+.foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-3);
+  margin-top: var(--spacing-3);
+  padding-top: var(--spacing-2);
+  border-top: var(--border-width) solid var(--color-border);
+}
+.footLink {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: var(--spacing-1) 0;
+  font: inherit;
+  font-size: 13px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-accent);
+  cursor: pointer;
+}
+.value {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-secondary);
+}
