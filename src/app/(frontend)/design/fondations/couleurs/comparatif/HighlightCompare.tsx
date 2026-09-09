@@ -11,15 +11,16 @@ import {OrbitaButton} from '@/components/OrbitaButton';
 import {OrbitaCard} from '@/components/OrbitaCard';
 import {ORBITA_THEMES, SILO_LABELS, SILO_NAMES, SILOS, type SiloName} from '@/theme';
 
-/** Proposition : highlight / highlight-deep par silo (inchangé = valeurs actuelles). */
+/** Proposition : highlight / highlight-deep par silo, en complémentaire franche
+ *  (référence : bleu indigo → turquoise, écart de teinte ~70°). */
 const PROPOSAL: Record<SiloName, {highlight: string; highlightDeep: string}> = {
-  blue:    {highlight: SILOS.blue.highlight,   highlightDeep: SILOS.blue.highlightDeep},
-  green:   {highlight: SILOS.green.highlight,  highlightDeep: SILOS.green.highlightDeep},
-  orange:  {highlight: SILOS.orange.highlight, highlightDeep: SILOS.orange.highlightDeep},
-  violet:  {highlight: '#FF7AC4', highlightDeep: '#D6409B'},
-  brique:  {highlight: '#FF8A5B', highlightDeep: '#D9741F'},
-  magenta: {highlight: '#FF9A6B', highlightDeep: '#E2673A'},
-  ambre:   {highlight: '#6FB79A', highlightDeep: '#3E8F6E'},
+  blue:    {highlight: SILOS.blue.highlight, highlightDeep: SILOS.blue.highlightDeep},
+  green:   {highlight: '#F5B841', highlightDeep: '#B8800A'}, // vert → or
+  orange:  {highlight: '#38BDF8', highlightDeep: '#0F7FC0'}, // orange → bleu ciel
+  violet:  {highlight: '#A3E635', highlightDeep: '#5C9A0A'}, // violet → lime
+  brique:  {highlight: '#2ED3C3', highlightDeep: '#0E9C8F'}, // brique → turquoise
+  magenta: {highlight: '#4ADE9B', highlightDeep: '#158F5E'}, // magenta → menthe
+  ambre:   {highlight: '#4DA3F0', highlightDeep: '#1F6FCC'}, // ambre → bleu
 };
 
 const LOREM = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.';
