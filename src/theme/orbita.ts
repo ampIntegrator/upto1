@@ -450,7 +450,8 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         },
       },
       'top-nav-heading': {
-        base: {fontFamily: 'var(--font-family-serif)', fontSize: '18px', fontWeight: '500', letterSpacing: '1px', lineHeight: '1.2', textTransform: 'uppercase'},
+        // padding 0 : le logo s'aligne sur le bord du container, comme le fil d'Ariane et les blocs
+        base: {padding: '0', fontFamily: 'var(--font-family-serif)', fontSize: '18px', fontWeight: '500', letterSpacing: '1px', lineHeight: '1.2', textTransform: 'uppercase'},
       },
       // entrées de navigation : 14,5 px medium encre secondaire, encre au survol, pas de pastille
       ...Object.fromEntries(

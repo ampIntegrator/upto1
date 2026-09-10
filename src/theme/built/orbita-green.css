@@ -1021,6 +1021,7 @@
   }
 
   .astryx-top-nav-heading {
+    padding: 0;
     font-family: var(--font-family-serif);
     font-size: 18px;
     font-weight: 500;

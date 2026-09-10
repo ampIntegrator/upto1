@@ -811,6 +811,7 @@ export const orbitaBlueTheme = {
     },
     "top-nav-heading": {
       "base": {
+        "padding": "0",
         "fontFamily": "var(--font-family-serif)",
         "fontSize": "18px",
         "fontWeight": "500",
