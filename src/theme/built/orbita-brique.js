@@ -919,7 +919,7 @@ export const orbitaBriqueTheme = {
     },
     "breadcrumb-item": {
       "base": {
-        "fontSize": "14px",
+        "fontSize": "12px",
         "letterSpacing": "0.08em",
         "textTransform": "uppercase",
         "color": "var(--color-text-disabled)",

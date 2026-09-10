@@ -497,7 +497,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
       'breadcrumbs': {base: {gap: '9px'}},
       'breadcrumb-item': {
         base: {
-          fontSize: '14px',
+          fontSize: '12px', // exception à la règle des 14 px (décidée le 10 sept.)
           letterSpacing: '0.08em',
           textTransform: 'uppercase',
           color: 'var(--color-text-disabled)',
