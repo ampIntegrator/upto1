@@ -11,7 +11,7 @@ export const metadata = {title: 'Breadcrumbs — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="Breadcrumbs" id="breadcrumbs" doc={"breadcrumbs"} category="Navigation">
+      <ShowcaseBlock name="Breadcrumbs" id="breadcrumbs" doc={"breadcrumbs"} dressed category="Navigation">
         <BreadcrumbsShowcase />
       </ShowcaseBlock>
       <ComponentNav category="navigation" current="breadcrumbs" />

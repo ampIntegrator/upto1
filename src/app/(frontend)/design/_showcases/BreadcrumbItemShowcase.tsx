@@ -1,75 +1,21 @@
-// Copyright (c) Meta Platforms, Inc. and affiliates.
-
+/* Showcase habillé Orbita — thème : orbita.ts section NAVIGATION */
 'use client';
 
-import type {ComponentProps} from 'react';
-import {Breadcrumbs, BreadcrumbItem} from '@astryxdesign/core/Breadcrumbs';
-import {VStack} from '@astryxdesign/core/Layout';
+import {BreadcrumbItem, Breadcrumbs} from '@astryxdesign/core/Breadcrumbs';
+import {VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
+import React from 'react';
 
-function HomeIcon(props: ComponentProps<'svg'>) {
-  return (
-    <svg
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={2}
-      stroke="currentColor"
-      {...props}>
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"
-      />
-    </svg>
-  );
-}
+import {ChevronRightIcon} from '@/theme/icons/nucleo';
 
 export default function BreadcrumbItemShowcase() {
   return (
-    <VStack gap={4}>
-      <VStack gap={1}>
-        <Text type="supporting" color="secondary">
-          With start icon
-        </Text>
-        <Breadcrumbs>
-          <BreadcrumbItem href="/" startIcon={<HomeIcon />}>
-            Home
-          </BreadcrumbItem>
-          <BreadcrumbItem href="/docs">Docs</BreadcrumbItem>
-          <BreadcrumbItem isCurrent>Components</BreadcrumbItem>
-        </Breadcrumbs>
-      </VStack>
-      <VStack gap={1}>
-        <Text type="supporting" color="secondary">
-          As current page (non-link)
-        </Text>
-        <Breadcrumbs>
-          <BreadcrumbItem href="/">Home</BreadcrumbItem>
-          <BreadcrumbItem href="/settings">Settings</BreadcrumbItem>
-          <BreadcrumbItem isCurrent>Profile</BreadcrumbItem>
-        </Breadcrumbs>
-      </VStack>
-      <VStack gap={1}>
-        <Text type="supporting" color="secondary">
-          Supporting variant
-        </Text>
-        <Breadcrumbs variant="supporting">
-          <BreadcrumbItem href="/">Home</BreadcrumbItem>
-          <BreadcrumbItem href="/admin">Admin</BreadcrumbItem>
-          <BreadcrumbItem href="/admin/users">Users</BreadcrumbItem>
-          <BreadcrumbItem isCurrent>Permissions</BreadcrumbItem>
-        </Breadcrumbs>
-      </VStack>
-      <VStack gap={1}>
-        <Text type="supporting" color="secondary">
-          With onClick handler (no href)
-        </Text>
-        <Breadcrumbs>
-          <BreadcrumbItem onClick={() => {}}>Dashboard</BreadcrumbItem>
-          <BreadcrumbItem onClick={() => {}}>Projects</BreadcrumbItem>
-          <BreadcrumbItem isCurrent>Project Alpha</BreadcrumbItem>
-        </Breadcrumbs>
-      </VStack>
+    <VStack gap={6}>
+      <Text type="body" color="secondary">Un maillon du fil : lien vers un ancêtre, ou texte de la page courante avec isCurrent.</Text>
+      <Breadcrumbs label="Fil d'Ariane" separator={<ChevronRightIcon width={12} height={12} />}>
+        <BreadcrumbItem href="#">Accueil</BreadcrumbItem>
+        <BreadcrumbItem isCurrent>Tarifs & offres</BreadcrumbItem>
+      </Breadcrumbs>
     </VStack>
   );
 }

@@ -21,6 +21,7 @@ declare module '@astryxdesign/core/Heading' {
 declare module '@astryxdesign/core/Button' {
   interface ButtonVariantMap {
     'high': true;
+    'ink': true;
   }
 }
 

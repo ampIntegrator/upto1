@@ -1,0 +1,171 @@
+/*
+ * SiteHeader — chrome de l'en-tête (maquette 01-header) : bandeau, barre,
+ * repli au défilement, tonalité sombre sur hero, navigation mobile.
+ * Les éléments Astryx (TopNav, items, méga-menu, boutons) sont stylés par le thème.
+ */
+.header {
+  --site-header-strip: 38px;
+  --site-header-bar: 74px;
+  position: relative;
+  z-index: 60;
+  width: 100%;
+}
+.header[data-fixed] { position: fixed; inset-inline: 0; top: 0; }
+
+/* ---- bandeau utilitaire ---- */
+.strip {
+  height: var(--site-header-strip);
+  overflow: hidden;
+  background: var(--color-night);
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 14px;
+  transition: height 0.3s var(--ease-standard), opacity var(--duration-medium) var(--ease-standard);
+}
+.header[data-scrolled] .strip { height: 0; opacity: 0; }
+.stripRow { height: var(--site-header-strip); white-space: nowrap; }
+.stripLink,
+.stripText {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: inherit;
+  text-decoration: none;
+}
+.stripLink:hover { color: var(--color-highlight); }
+.stripSep { width: 1px; height: 14px; background: rgba(255, 255, 255, 0.2); }
+.stripFollow { color: rgba(255, 255, 255, 0.5); margin-right: 4px; }
+.social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: rgba(255, 255, 255, 0.7);
+  border: var(--border-width) solid rgba(255, 255, 255, 0.16);
+}
+.social:hover { color: #fff; border-color: var(--color-highlight); }
+
+/* ---- barre principale : papier translucide flouté, opaque + ombre au défilement ---- */
+.main {
+  position: relative;
+  border-bottom: var(--border-width) solid var(--color-border);
+  background: color-mix(in oklab, var(--color-background-surface) 78%, transparent);
+  backdrop-filter: saturate(160%) blur(16px);
+  transition: background-color 0.3s var(--ease-standard), box-shadow 0.3s var(--ease-standard), border-color 0.3s var(--ease-standard);
+}
+.header[data-scrolled] .main {
+  background: color-mix(in oklab, var(--color-background-surface) 96%, transparent);
+  box-shadow: 0 8px 30px rgba(12, 20, 40, 0.09);
+}
+.header[data-scrolled] :global(.astryx-top-nav) { height: 60px; }
+
+/* ---- logo (placeholder Vidomia : carré silo, cercle blanc) ---- */
+.logoMark {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--color-accent);
+}
+.logoMark::before { content: ''; width: 14px; height: 14px; border: 2px solid #fff; border-radius: 50%; }
+.logoMark::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin: -3px;
+  border-radius: 50%;
+  background: var(--color-highlight);
+  box-shadow: 0 0 7px color-mix(in srgb, var(--color-highlight) 85%, transparent);
+  transform: rotate(-34deg) translateX(25px);
+}
+
+/* ---- entrées de navigation : soulignement silo qui se déploie au survol ---- */
+.desktopNav { height: var(--site-header-bar); gap: 2px; }
+.header[data-scrolled] .desktopNav { height: 60px; }
+.desktopNav :global(.astryx-top-nav-item),
+.desktopNav :global(.astryx-top-nav-menu),
+.desktopNav :global(.astryx-top-nav-mega-menu) { position: relative; }
+.desktopNav :global(.astryx-top-nav-item)::after,
+.desktopNav :global(.astryx-top-nav-menu)::after,
+.desktopNav :global(.astryx-top-nav-mega-menu)::after {
+  content: '';
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 0;
+  height: 2px;
+  background: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--duration-medium) var(--ease-standard);
+}
+.desktopNav :global(.astryx-top-nav-item:hover)::after,
+.desktopNav :global(.astryx-top-nav-item.selected)::after,
+.desktopNav :global(.astryx-top-nav-menu:hover)::after,
+.desktopNav :global(.astryx-top-nav-menu[aria-expanded='true'])::after,
+.desktopNav :global(.astryx-top-nav-mega-menu:hover)::after,
+.desktopNav :global(.astryx-top-nav-mega-menu[aria-expanded='true'])::after { transform: scaleX(1); }
+
+/* méga-menu : groupes côte à côte, eyebrow + filet */
+.megaGroups { min-width: 0; }
+.megaGroup { min-width: 260px; }
+.megaTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.megaTitle::after { content: ''; flex: 1; height: 1px; background: color-mix(in srgb, var(--color-editorial) 35%, transparent); }
+
+/* ---- actions à droite ---- */
+.actions { margin-inline-start: auto; flex-shrink: 0; }
+.burger { display: none; }
+
+/* ---- tonalité sombre (sur hero) : jusqu'au premier défilement ---- */
+.header[data-tone='dark']:not([data-scrolled]) .main {
+  background: rgba(10, 14, 26, 0.34);
+  border-color: transparent;
+  backdrop-filter: saturate(140%) blur(10px);
+}
+.header[data-tone='dark']:not([data-scrolled]) .strip { background: transparent; }
+.header[data-tone='dark']:not([data-scrolled]) :global(.astryx-top-nav-heading),
+.header[data-tone='dark']:not([data-scrolled]) :global(.astryx-top-nav-item),
+.header[data-tone='dark']:not([data-scrolled]) :global(.astryx-top-nav-menu),
+.header[data-tone='dark']:not([data-scrolled]) :global(.astryx-top-nav-mega-menu),
+.header[data-tone='dark']:not([data-scrolled]) .actions :global(.astryx-icon-button),
+.header[data-tone='dark']:not([data-scrolled]) .actions :global(.astryx-button.ghost) {
+  color: #fff !important;
+}
+.header[data-tone='dark']:not([data-scrolled]) .actions :global(.astryx-icon-button),
+.header[data-tone='dark']:not([data-scrolled]) .actions :global(.astryx-button.ghost) {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+.header[data-tone='dark']:not([data-scrolled]) .actions :global(.astryx-icon-button:hover),
+.header[data-tone='dark']:not([data-scrolled]) .actions :global(.astryx-button.ghost:hover) {
+  background: #fff !important;
+  color: var(--color-accent) !important;
+}
+.header[data-tone='dark']:not([data-scrolled]) .login {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: var(--border-width) solid rgba(255, 255, 255, 0.5) !important;
+  color: #fff !important;
+}
+.header[data-tone='dark']:not([data-scrolled]) .login:hover { background: #fff !important; color: var(--color-accent) !important; }
+
+/* ---- mobile : navigation et actions réduites, burger ---- */
+@media (max-width: 1279px) {
+  .strip { display: none; }
+  .desktopNav { display: none; }
+  .actionsSep,
+  .cta { display: none; }
+  .burger { display: inline-flex; }
+}
+@media (max-width: 639px) {
+  .login { display: none; }
+}

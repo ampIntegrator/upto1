@@ -12,7 +12,9 @@ import {OrbitaButton} from '@/components/OrbitaButton';
 import {OrbitaCard} from '@/components/OrbitaCard';
 import {OrbitaCollapsible, OrbitaCollapsibleGroup} from '@/components/OrbitaCollapsible';
 import {Section} from '@/components/Section';
+import {SiteHeader} from '@/components/SiteHeader';
 import {FAQ} from '../design/_showcases/faq.shared';
+import {SITE_HEADER} from '../design/_ui/siteNav';
 import {STATS_BARS, StatsBar} from '../design/_ui/StatsBar';
 import {TabsWithPanel} from '../design/_ui/TabRows';
 
@@ -27,6 +29,9 @@ function Eyebrow({children}: {children: string}) {
 export function PageDemo() {
   return (
     <VStack className="page-demo">
+      {/* 0 · en-tête fixé, tonalité sombre car posé sur un hero image */}
+      <SiteHeader {...SITE_HEADER} tone="dark" />
+
       {/* 1 · image pleine largeur, colonne de 8 centrée (maquette 13 : contenu à 900 px) */}
       <Section background="image" image={{src: IMG, alt: ''}} overlay={0.3} spacing="lg" minHeight={600}>
         <Container>

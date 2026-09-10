@@ -386,3 +386,28 @@ body > [data-astryx-theme] {
   transition-duration: var(--duration-medium);
   transition-timing-function: var(--ease-standard);
 }
+
+/* Navigation (01-header) : compléments au thème orbita.ts section NAVIGATION.
+   Carte mise en avant du méga-menu : textes blancs sur fond nuit, lien highlight,
+   colonne sans fond, pleine hauteur. Fil d'Ariane : chevrons en couleur silo,
+   page courante en encre secondaire. */
+[data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-featured-card { height: 100%; }
+[data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-featured-card .astryx-text,
+[data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-featured-card .astryx-heading,
+[data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-featured-card span,
+[data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-featured-card p {
+  color: #fff !important;
+}
+[data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-featured-card a,
+[data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-featured-card .astryx-link {
+  color: var(--color-highlight) !important;
+}
+[data-astryx-theme^='orbita'] :has(> .astryx-top-nav-mega-menu-featured-card) {
+  background: transparent !important;
+  padding: 0 !important;
+}
+[data-astryx-theme^='orbita'] .astryx-breadcrumb-item > span[aria-hidden] { color: var(--color-accent); }
+[data-astryx-theme^='orbita'] .astryx-breadcrumb-item > [aria-current='page'] {
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}

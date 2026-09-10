@@ -11,7 +11,7 @@ export const metadata = {title: 'Top Nav Menu — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="TopNavMenu" id="top-nav-menu" doc={"top-nav"} parent="TopNav" category="Navigation">
+      <ShowcaseBlock name="TopNavMenu" id="top-nav-menu" doc={"top-nav"} parent="TopNav" dressed category="Navigation">
         <TopNavMenuShowcase />
       </ShowcaseBlock>
       <ComponentNav category="navigation" current="top-nav-menu" />

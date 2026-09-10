@@ -329,6 +329,12 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           boxShadow: '0 10px 26px var(--color-highlight-muted)',
           ':hover': {backgroundColor: 'var(--color-highlight-deep)'},
         },
+        // ink : encre pleine, texte blanc, survol silo (bouton « Connexion » de l'en-tête)
+        'variant:ink': {
+          backgroundColor: 'light-dark(var(--color-text-primary), #FFFFFF)',
+          color: 'light-dark(#FFFFFF, var(--color-night))',
+          ':hover': {backgroundColor: 'var(--color-accent)', color: '#FFFFFF'},
+        },
       },
 
       // liens : même transition que les boutons
@@ -425,6 +431,78 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           {base: {borderBottom: 'var(--border-width) solid var(--color-border)'}},
         ]),
       ),
+
+      /* ─────────────────────────────────────────────────────────────────
+         NAVIGATION (maquette 01-header) — TopNav et sa famille, MobileNav,
+         Breadcrumbs (25-pageHeaders). Le fond, la hauteur, le repli au
+         défilement et la tonalité sur hero sont portés par SiteHeader
+         (src/components/SiteHeader) ; ici, le style des éléments Astryx.
+         ───────────────────────────────────────────────────────────────── */
+      'top-nav': {
+        base: {
+          height: '74px',
+          padding: '0',
+          backgroundColor: 'transparent',
+          borderBottom: '0',
+          boxShadow: 'none',
+          fontFamily: 'var(--font-family-body)',
+          transition: 'height var(--duration-medium) var(--ease-standard)',
+        },
+      },
+      'top-nav-heading': {
+        base: {fontFamily: 'var(--font-family-serif)', fontSize: '18px', fontWeight: '500', letterSpacing: '1px', lineHeight: '1.2', textTransform: 'uppercase'},
+      },
+      // entrées de navigation : 14,5 px medium encre secondaire, encre au survol, pas de pastille
+      ...Object.fromEntries(
+        ['top-nav-item', 'top-nav-menu', 'top-nav-mega-menu'].map((k) => [
+          k,
+          {
+            base: {
+              height: '100%',
+              padding: '0 14px',
+              borderRadius: '0',
+              backgroundColor: 'transparent',
+              fontSize: '14.5px',
+              fontWeight: 'var(--font-weight-medium)',
+              whiteSpace: 'nowrap',
+              color: 'var(--color-text-secondary)',
+              transition: 'color var(--duration-medium) var(--ease-standard)',
+              ':hover': {backgroundColor: 'transparent', color: 'var(--color-text-primary)'},
+            },
+            selected: {backgroundColor: 'transparent', color: 'var(--color-text-primary)'},
+          },
+        ]),
+      ),
+      // item de méga-menu / sous-menu : bloc sur fond de page, survol silo texte blanc
+      'top-nav-mega-menu-item': {
+        base: {
+          borderRadius: '0',
+          padding: '12px 14px',
+          gap: '14px',
+          backgroundColor: 'var(--color-background-body)',
+          color: 'var(--color-text-primary)',
+          transition: 'background-color var(--duration-medium) var(--ease-standard), color var(--duration-medium) var(--ease-standard)',
+          ':hover': {backgroundColor: 'var(--color-accent)', color: '#FFFFFF'},
+        },
+      },
+      // carte mise en avant : fond nuit, angles vifs
+      'top-nav-mega-menu-featured-card': {
+        base: {borderRadius: '0', backgroundColor: 'var(--color-night)', color: '#FFFFFF'},
+      },
+      'mobile-nav': {
+        base: {backgroundColor: 'var(--color-background-body)', borderRadius: '0'},
+      },
+      // fil d'Ariane (maquette 25 .crumb) : capitales espacées 14 px, gris, silo au survol
+      'breadcrumbs': {base: {gap: '9px'}},
+      'breadcrumb-item': {
+        base: {
+          fontSize: '14px',
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase',
+          color: 'var(--color-text-disabled)',
+          ':hover': {color: 'var(--color-accent)'},
+        },
+      },
 
       /* ─────────────────────────────────────────────────────────────────
          ONGLETS (maquette 06-tabs) — Tab, TabList, TabMenu

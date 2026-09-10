@@ -786,11 +786,20 @@ export const CATALOG: CatalogCategory[] = [
     "href": "/design/composants#navigation",
     "items": [
       {
+        "name": "SiteHeader",
+        "label": "Site Header",
+        "slug": "site-header",
+        "href": "/design/composants/site-header",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
         "name": "Breadcrumbs",
         "label": "Breadcrumbs",
         "slug": "breadcrumbs",
         "href": "/design/composants/breadcrumbs",
-        "dressed": false,
+        "dressed": true,
         "parent": null,
         "doc": "breadcrumbs"
       },
@@ -799,7 +808,7 @@ export const CATALOG: CatalogCategory[] = [
         "label": "Breadcrumb Item",
         "slug": "breadcrumb-item",
         "href": "/design/composants/breadcrumb-item",
-        "dressed": false,
+        "dressed": true,
         "parent": "Breadcrumbs",
         "doc": "breadcrumbs"
       },
@@ -808,7 +817,7 @@ export const CATALOG: CatalogCategory[] = [
         "label": "Mobile Nav",
         "slug": "mobile-nav",
         "href": "/design/composants/mobile-nav",
-        "dressed": false,
+        "dressed": true,
         "parent": null,
         "doc": "mobile-nav"
       },
@@ -943,7 +952,7 @@ export const CATALOG: CatalogCategory[] = [
         "label": "Top Nav",
         "slug": "top-nav",
         "href": "/design/composants/top-nav",
-        "dressed": false,
+        "dressed": true,
         "parent": null,
         "doc": "top-nav"
       },
@@ -952,7 +961,7 @@ export const CATALOG: CatalogCategory[] = [
         "label": "Top Nav Heading",
         "slug": "top-nav-heading",
         "href": "/design/composants/top-nav-heading",
-        "dressed": false,
+        "dressed": true,
         "parent": "TopNav",
         "doc": "top-nav"
       },
@@ -961,7 +970,7 @@ export const CATALOG: CatalogCategory[] = [
         "label": "Top Nav Item",
         "slug": "top-nav-item",
         "href": "/design/composants/top-nav-item",
-        "dressed": false,
+        "dressed": true,
         "parent": "TopNav",
         "doc": "top-nav"
       },
@@ -970,7 +979,7 @@ export const CATALOG: CatalogCategory[] = [
         "label": "Top Nav Mega Menu",
         "slug": "top-nav-mega-menu",
         "href": "/design/composants/top-nav-mega-menu",
-        "dressed": false,
+        "dressed": true,
         "parent": "TopNav",
         "doc": "top-nav"
       },
@@ -979,7 +988,7 @@ export const CATALOG: CatalogCategory[] = [
         "label": "Top Nav Mega Menu Featured Card",
         "slug": "top-nav-mega-menu-featured-card",
         "href": "/design/composants/top-nav-mega-menu-featured-card",
-        "dressed": false,
+        "dressed": true,
         "parent": "TopNavMegaMenu",
         "doc": "top-nav-mega-menu"
       },
@@ -988,7 +997,7 @@ export const CATALOG: CatalogCategory[] = [
         "label": "Top Nav Mega Menu Item",
         "slug": "top-nav-mega-menu-item",
         "href": "/design/composants/top-nav-mega-menu-item",
-        "dressed": false,
+        "dressed": true,
         "parent": "TopNavMegaMenu",
         "doc": "top-nav-mega-menu"
       },
@@ -997,7 +1006,7 @@ export const CATALOG: CatalogCategory[] = [
         "label": "Top Nav Menu",
         "slug": "top-nav-menu",
         "href": "/design/composants/top-nav-menu",
-        "dressed": false,
+        "dressed": true,
         "parent": "TopNav",
         "doc": "top-nav"
       }
