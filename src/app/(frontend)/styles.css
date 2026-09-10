@@ -330,8 +330,7 @@ body > [data-astryx-theme] {
 }
 [data-astryx-theme^='orbita'] .orbita-tab-panel {
   padding: 44px 56px;
-  /* fond très clair à partir du highlight du silo, opaque (mélangé au papier) */
-  background: light-dark(color-mix(in srgb, var(--color-highlight) 12%, var(--color-background-surface)), var(--color-night));
+  background: light-dark(var(--color-background-muted), var(--color-night));
 }
 @media (max-width: 639px) {
   [data-astryx-theme^='orbita'] .orbita-tab-panel { padding: 28px 24px; }
