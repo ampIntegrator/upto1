@@ -12,9 +12,10 @@
  *   image / video : le média (couvre toute la section)
  *   overlay    : calque noir posé sur l'image ou la vidéo, sous le contenu ;
  *                opacité de 0 à 1, réglable en admin (0 = aucun)
- *   scrim / halo / edge : voile de lisibilité, halo nuit derrière le contenu,
- *                liseré dégradé en pied (maquette 13 ; actifs par défaut sur
- *                image et vidéo, edge disponible partout)
+ *   edge       : liseré dégradé en pied (actif par défaut sur image et vidéo,
+ *                disponible partout)
+ *   Le voile et le halo de la maquette 13 ont été retirés : l'overlay est le seul
+ *   réglage d'assombrissement.
  *   spacing    : padding vertical 'sm' | 'md' | 'lg' | 'none'
  *
  * night, image et video basculent leur contenu en mode nuit (Theme dark) :
@@ -37,10 +38,6 @@ export type SectionProps = {
   video?: {src: string; poster?: string};
   /** calque noir sur le média, sous le contenu : opacité 0 à 1 (image, vidéo) */
   overlay?: number;
-  /** voile léger haut/bas (image, vidéo) */
-  scrim?: boolean;
-  /** halo nuit derrière le contenu (image, vidéo) */
-  halo?: boolean;
   /** liseré dégradé silo → highlight → silo en pied */
   edge?: boolean;
   spacing?: SectionSpacing;
@@ -53,11 +50,9 @@ export type SectionProps = {
 const DARK: SectionBackground[] = ['night', 'image', 'video'];
 const MEDIA: SectionBackground[] = ['image', 'video'];
 
-export function Section({background = 'light', image, video, overlay = 0, scrim, halo, edge, spacing = 'md', minHeight, id, children}: SectionProps) {
+export function Section({background = 'light', image, video, overlay = 0, edge, spacing = 'md', minHeight, id, children}: SectionProps) {
   const {theme} = useOrbitaTheme();
   const isMedia = MEDIA.includes(background);
-  const showScrim = scrim ?? isMedia;
-  const showHalo = halo ?? isMedia;
   const showEdge = edge ?? isMedia;
 
   const content = (
@@ -67,8 +62,6 @@ export function Section({background = 'light', image, video, overlay = 0, scrim,
       className={styles.section}
       data-background={background}
       data-spacing={spacing}
-      data-scrim={showScrim || undefined}
-      data-halo={showHalo || undefined}
       data-edge={showEdge || undefined}
       style={minHeight != null ? {minHeight} : undefined}
     >
@@ -80,7 +73,6 @@ export function Section({background = 'light', image, video, overlay = 0, scrim,
         <video className={styles.media} src={video.src} poster={video.poster} autoPlay muted loop playsInline aria-hidden="true" />
       ) : null}
       {isMedia && overlay > 0 ? <i className={styles.overlay} style={{opacity: Math.min(1, overlay)}} aria-hidden="true" /> : null}
-      {showHalo ? <i className={styles.halo} aria-hidden="true" /> : null}
       <VStack className={styles.content}>{children}</VStack>
     </VStack>
   );

@@ -62,40 +62,13 @@
   object-fit: cover;
   object-position: center;
 }
-/* calque noir administrable (opacité en style inline), sur le média, sous le voile */
+/* calque noir administrable (opacité en style inline), sur le média, sous le contenu */
 .overlay {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
   background: rgb(0, 0, 0);
-}
-/* voile : très léger, l'image garde sa clarté */
-.section[data-scrim]::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background: linear-gradient(0deg, rgba(8, 11, 22, 0.14) 0%, transparent 34%, transparent 70%, rgba(8, 11, 22, 0.10) 100%);
-}
-/* halo : ellipse teintée nuit derrière le contenu */
-.halo {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 1;
-  width: min(1080px, 95%);
-  height: 86%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse 50% 50% at 50% 50%,
-    color-mix(in srgb, var(--color-night), transparent 30%) 0%,
-    color-mix(in srgb, var(--color-night), transparent 52%) 46%,
-    color-mix(in srgb, var(--color-night), transparent 82%) 74%,
-    transparent 100%
-  );
 }
 /* liseré en pied : silo aux bords, highlight au centre */
 .section[data-edge]::after {
