@@ -140,6 +140,7 @@ export const orbitaMagentaTheme = {
     "--color-editorial": "light-dark(#C7972E, #C7972E)",
     "--color-editorial-deep": "light-dark(#A37B1F, #C7972E)",
     "--color-night": "light-dark(#2A0E22, #2A0E22)",
+    "--color-background-light": "light-dark(#FAEFF6, rgba(255,255,255,.03))",
     "--color-accent-deep": "light-dark(#9E2068, #C42E86)"
   },
   components: {

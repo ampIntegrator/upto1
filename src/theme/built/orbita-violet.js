@@ -140,6 +140,7 @@ export const orbitaVioletTheme = {
     "--color-editorial": "light-dark(#C7972E, #C7972E)",
     "--color-editorial-deep": "light-dark(#A37B1F, #C7972E)",
     "--color-night": "light-dark(#241038, #241038)",
+    "--color-background-light": "light-dark(#F7F3FB, rgba(255,255,255,.03))",
     "--color-accent-deep": "light-dark(#6E2FA0, #8B47BE)"
   },
   components: {

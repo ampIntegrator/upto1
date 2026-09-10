@@ -70,7 +70,7 @@ function mixHex(a: string, b: string, pctA: number): string {
  * de `tokens` les refuse, d'où le cast explicite ici et nulle part ailleurs.
  */
 function orbitaOnlyTokens(silo: OrbitaSilo) {
-  const {primary, primaryDeep, highlight, highlightDeep, night} = silo;
+  const {bg2, primary, primaryDeep, highlight, highlightDeep, night} = silo;
   return {
     '--font-family-serif': FONT_SERIF,
     // épaisseur de trait des icônes Nucleo (grille 18), appliquée en CSS sans

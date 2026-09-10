@@ -140,6 +140,7 @@ export const orbitaOrangeTheme = {
     "--color-editorial": "light-dark(#C7972E, #C7972E)",
     "--color-editorial-deep": "light-dark(#A37B1F, #C7972E)",
     "--color-night": "light-dark(#2A1409, #2A1409)",
+    "--color-background-light": "light-dark(#FAF5EF, rgba(255,255,255,.03))",
     "--color-accent-deep": "light-dark(#B5470F, #DC5A20)"
   },
   components: {
