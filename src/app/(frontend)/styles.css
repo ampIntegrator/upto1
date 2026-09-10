@@ -318,7 +318,9 @@ body > [data-astryx-theme] {
 [data-astryx-theme^='orbita'] .orbita-tab-stack {
   position: relative;
   padding: 0;
-  background: transparent; /* le panneau (background-light, translucide) porte seul la teinte */
+  /* base opaque (papier / carte nuit) : la teinte translucide du panneau se pose dessus,
+     pas sur la texture de la section */
+  background: light-dark(var(--color-background-surface), var(--color-background-card));
   border-inline: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.15));
 }
 [data-astryx-theme^='orbita'] .orbita-tab-stack::after {
@@ -330,7 +332,7 @@ body > [data-astryx-theme] {
 }
 [data-astryx-theme^='orbita'] .orbita-tab-panel {
   padding: 44px 20px;
-  background: light-dark(var(--color-background-light), var(--color-night));
+  background: var(--color-background-light); /* silo 5 % en clair, blanc 3 % en nuit */
 }
 /* contenu d'un onglet : 900 px maximum, centré */
 [data-astryx-theme^='orbita'] .orbita-tab-panel > * {
