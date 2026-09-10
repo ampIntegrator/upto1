@@ -335,3 +335,23 @@ body > [data-astryx-theme] {
 @media (max-width: 639px) {
   [data-astryx-theme^='orbita'] .orbita-tab-panel { padding: 28px 24px; }
 }
+
+/* Grille de page : 12 colonnes dans le Container
+   (<Grid columns={12} className="page-grid"> + GridSpan). Sous 768 px, toutes
+   les colonnes passent en pleine largeur, dans l'ordre. */
+@media (max-width: 767px) {
+  [data-astryx-theme^='orbita'] .astryx-grid.page-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  [data-astryx-theme^='orbita'] .astryx-grid.page-grid > * {
+    grid-column: 1 / -1 !important;
+  }
+}
+
+/* Texte serif accentué (Text type="serif") : couleur silo en clair, highlight en
+   nuit. !important : la couleur « primary » par défaut du Text (StyleX) passe
+   sinon devant celle du type. Pour une autre couleur (or éditorial du hero 13) :
+   style={{'--serif-color': 'var(--color-editorial)'}}. */
+[data-astryx-theme^='orbita'] .astryx-text.serif {
+  color: var(--serif-color, light-dark(var(--color-accent), var(--color-highlight))) !important;
+}

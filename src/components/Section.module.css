@@ -1,0 +1,100 @@
+/*
+ * Section — bloc pleine largeur : arrière-plan + padding vertical.
+ * Le contenu (Container, Grid) passe au-dessus des couches média / voile / halo.
+ */
+.section {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  width: 100%;
+  background-color: var(--color-background-body);
+}
+.content { position: relative; z-index: 2; width: 100%; }
+
+/* ---- padding vertical ---- */
+.section[data-spacing='none'] { padding-block: 0; }
+.section[data-spacing='sm'] { padding-block: 56px; }
+.section[data-spacing='md'] { padding-block: 96px; }
+.section[data-spacing='lg'] { padding-block: 128px; }
+@media (max-width: 639px) {
+  .section[data-spacing='sm'] { padding-block: 40px; }
+  .section[data-spacing='md'] { padding-block: 56px; }
+  .section[data-spacing='lg'] { padding-block: 72px; }
+}
+
+/* ---- textures (00-fondations §4 : filets discrets, clair seulement) ---- */
+.section[data-background='grid'] {
+  background-image:
+    linear-gradient(var(--color-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.section[data-background='dots'] {
+  background-image: radial-gradient(var(--color-border-emphasized) 1.3px, transparent 1.5px);
+  background-size: 32px 32px;
+}
+.section[data-background='losange'] {
+  background-image:
+    repeating-linear-gradient(45deg, var(--color-border) 0 1px, transparent 1px 32px),
+    repeating-linear-gradient(-45deg, var(--color-border) 0 1px, transparent 1px 32px);
+}
+
+/* ---- nuit (orbita.css .c-darkbg : nuit + lueur silo centrale + bords assombris) ---- */
+.section[data-background='night'] {
+  background-color: var(--color-night);
+  background-image:
+    linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--color-accent) 32%, transparent) 50%, transparent 100%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.36) 0%, transparent 24%, transparent 76%, rgba(0, 0, 0, 0.36) 100%);
+}
+
+/* ---- image / vidéo (maquette 13) ---- */
+.section[data-background='image'],
+.section[data-background='video'] {
+  justify-content: center;
+  background-color: var(--color-night);
+}
+.media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+/* voile : très léger, l'image garde sa clarté */
+.section[data-scrim]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(0deg, rgba(8, 11, 22, 0.14) 0%, transparent 34%, transparent 70%, rgba(8, 11, 22, 0.10) 100%);
+}
+/* halo : ellipse teintée nuit derrière le contenu */
+.halo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: min(1080px, 95%);
+  height: 86%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 50% 50% at 50% 50%,
+    color-mix(in srgb, var(--color-night), transparent 30%) 0%,
+    color-mix(in srgb, var(--color-night), transparent 52%) 46%,
+    color-mix(in srgb, var(--color-night), transparent 82%) 74%,
+    transparent 100%
+  );
+}
+/* liseré en pied : silo aux bords, highlight au centre */
+.section[data-edge]::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 3;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-highlight) 50%, var(--color-accent) 100%);
+}

@@ -11,6 +11,7 @@ export const FOUNDATIONS: NavEntry[] = [
   {slug: 'formes', label: 'Formes & ombres', href: '/design/fondations/formes'},
   {slug: 'mouvement', label: 'Mouvement', href: '/design/fondations/mouvement'},
   {slug: 'icones', label: 'Icônes', href: '/design/fondations/icones'},
+  {slug: 'mise-en-page', label: 'Mise en page', href: '/design/fondations/mise-en-page'},
 ];
 
 export const CATEGORIES: NavEntry[] = CATALOG.map((c) => ({slug: c.slug, label: c.label, href: c.href}));

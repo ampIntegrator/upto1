@@ -742,6 +742,15 @@ export const CATALOG: CatalogCategory[] = [
         "doc": "resizable"
       },
       {
+        "name": "Section",
+        "label": "Section",
+        "slug": "section",
+        "href": "/design/composants/section",
+        "dressed": true,
+        "parent": null,
+        "doc": "section"
+      },
+      {
         "name": "StackItem",
         "label": "Stack Item",
         "slug": "stack-item",
