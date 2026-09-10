@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/OrbitaField (multiline) */
+/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/Field (multiline) */
 'use client';
 
 import {Card} from '@astryxdesign/core/Card';
@@ -7,7 +7,7 @@ import {VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
 import React, {useState} from 'react';
 
-import {OrbitaField} from '@/components/OrbitaField';
+import {Field} from '@/components/Field';
 
 export default function TextAreaShowcase() {
   const [besoin, setBesoin] = useState('');
@@ -17,8 +17,8 @@ export default function TextAreaShowcase() {
       <Text type="body" color="secondary">Même champ en zone de texte : 128 px minimum, redimensionnable en hauteur, label flottant.</Text>
       <Card padding={6}>
         <Grid columns={{minWidth: 280, max: 2}} gap={6}>
-          <OrbitaField multiline label="Décrivez votre besoin" value={besoin} onChange={setBesoin} />
-          <OrbitaField multiline label="Votre projet (facultatif)" value={projet} onChange={setProjet} help="Quelques lignes suffisent." />
+          <Field multiline label="Décrivez votre besoin" value={besoin} onChange={setBesoin} />
+          <Field multiline label="Votre projet (facultatif)" value={projet} onChange={setProjet} help="Quelques lignes suffisent." />
         </Grid>
       </Card>
     </VStack>

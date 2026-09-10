@@ -259,7 +259,7 @@ export const orbitaBriqueTheme = {
       "type:eyebrow-lines": {
         "display": "inline-flex",
         "alignItems": "center",
-        "gap": "14px",
+        "gap": "16px",
         "fontSize": "15px",
         "fontWeight": "var(--font-weight-semibold)",
         "letterSpacing": "0.16em",
@@ -1056,8 +1056,8 @@ export const orbitaBriqueTheme = {
     "top-nav-item": {
       "base": {
         "height": "100%",
-        "padding": "0 14px",
-        "gap": "6px",
+        "padding": "0 16px",
+        "gap": "8px",
         "borderRadius": "0",
         "backgroundColor": "transparent",
         "fontSize": "14.5px",
@@ -1078,8 +1078,8 @@ export const orbitaBriqueTheme = {
     "top-nav-menu": {
       "base": {
         "height": "100%",
-        "padding": "0 14px",
-        "gap": "6px",
+        "padding": "0 16px",
+        "gap": "8px",
         "borderRadius": "0",
         "backgroundColor": "transparent",
         "fontSize": "14.5px",
@@ -1100,8 +1100,8 @@ export const orbitaBriqueTheme = {
     "top-nav-mega-menu": {
       "base": {
         "height": "100%",
-        "padding": "0 14px",
-        "gap": "6px",
+        "padding": "0 16px",
+        "gap": "8px",
         "borderRadius": "0",
         "backgroundColor": "transparent",
         "fontSize": "14.5px",
@@ -1122,8 +1122,8 @@ export const orbitaBriqueTheme = {
     "top-nav-mega-menu-item": {
       "base": {
         "borderRadius": "0",
-        "padding": "12px 14px",
-        "gap": "14px",
+        "padding": "12px 16px",
+        "gap": "16px",
         "backgroundColor": "var(--color-background-body)",
         "color": "var(--color-text-primary)",
         "transition": "background-color var(--duration-medium) var(--ease-standard), color var(--duration-medium) var(--ease-standard)",
@@ -1182,7 +1182,7 @@ export const orbitaBriqueTheme = {
     "tab": {
       "base": {
         "height": "auto",
-        "padding": "18px 22px",
+        "padding": "20px 24px",
         "gap": "12px",
         "fontSize": "15px",
         "fontWeight": "var(--font-weight-semibold)",
@@ -1204,7 +1204,7 @@ export const orbitaBriqueTheme = {
     "tab-menu": {
       "base": {
         "height": "auto",
-        "padding": "18px 22px",
+        "padding": "20px 24px",
         "gap": "12px",
         "fontSize": "15px",
         "fontWeight": "var(--font-weight-semibold)",
@@ -1346,7 +1346,7 @@ export const orbitaBriqueTheme = {
         "borderColor": "var(--color-border-emphasized)",
         "backgroundColor": "light-dark(var(--color-background-surface), rgba(255,255,255,.05))",
         "borderRadius": "0",
-        "padding": "18px 20px",
+        "padding": "20px 20px",
         "transition": "border-color var(--duration-medium) var(--ease-standard), background-color var(--duration-medium) var(--ease-standard)",
         ":hover": {
           "borderColor": "var(--color-accent)",
@@ -1366,7 +1366,7 @@ export const orbitaBriqueTheme = {
       },
       "variant:chip": {
         "height": "28px",
-        "padding": "0 11px",
+        "padding": "0 12px",
         "lineHeight": "1",
         "borderWidth": "var(--border-width)",
         "borderStyle": "solid",
@@ -1379,7 +1379,7 @@ export const orbitaBriqueTheme = {
       },
       "variant:chip-high": {
         "height": "28px",
-        "padding": "0 11px",
+        "padding": "0 12px",
         "lineHeight": "1",
         "borderWidth": "0",
         "backgroundColor": "color-mix(in srgb, var(--color-highlight) 18%, transparent)",
@@ -1390,7 +1390,7 @@ export const orbitaBriqueTheme = {
       },
       "variant:chip-accent": {
         "height": "28px",
-        "padding": "0 11px",
+        "padding": "0 12px",
         "lineHeight": "1",
         "borderWidth": "0",
         "backgroundColor": "light-dark(var(--color-accent-muted), rgba(255,255,255,.1))",
@@ -1401,7 +1401,7 @@ export const orbitaBriqueTheme = {
       },
       "variant:chip-cat": {
         "height": "28px",
-        "padding": "0 13px",
+        "padding": "0 12px",
         "lineHeight": "1",
         "borderWidth": "0",
         "backgroundColor": "var(--color-accent)",
@@ -1413,7 +1413,7 @@ export const orbitaBriqueTheme = {
       },
       "variant:chip-danger": {
         "height": "28px",
-        "padding": "0 11px",
+        "padding": "0 12px",
         "lineHeight": "1",
         "borderWidth": "0",
         "backgroundColor": "var(--color-error-muted)",

@@ -1,5 +1,5 @@
 /*
- * OrbitaSelect — habillage iso maquette 17-forms (.selectx-*) par-dessus
+ * Select — habillage iso maquette 17-forms (.selectx-*) par-dessus
  * Selector / MultiSelector d'Astryx. Le thème donne bordure, focus, panneau et
  * options ; ce module ajoute ce qu'Astryx ne prévoit pas : label flottant dans
  * le champ, hauteur 58 px, chevron qui pivote, recherche épurée, badges accent.
@@ -14,14 +14,14 @@
 .wrap :global(.astryx-multi-selector) {
   min-height: 58px;
   height: auto;
-  padding: 0 42px 0 0; /* le bouton porte le padding interne (21 / 15 / 6) */
+  padding: 0 40px 0 0; /* le bouton porte le padding interne (21 / 15 / 6) */
   align-items: stretch;
 }
 .wrap :global(.astryx-selector) > button,
 .wrap :global(.astryx-multi-selector) > button {
   min-height: 56px;
   height: auto;
-  padding: 21px 0 6px 15px;
+  padding: 20px 0 8px 16px;
   align-items: flex-end;
   font-size: 15px;
   line-height: 1.4;
@@ -87,7 +87,7 @@
 /* recherche : loupe + saisie nue, filet dessous ; ni croix ni divider Astryx */
 .wrap :global(.astryx-selector-search),
 .wrap :global(.astryx-multi-selector-search) {
-  padding: 10px 12px;
+  padding: 12px 12px;
   position: sticky;
   top: 0;
   z-index: 1;
@@ -97,7 +97,7 @@
 .wrap :global(.astryx-multi-selector-search) > div {
   min-height: 0;
   height: auto;
-  gap: 9px;
+  gap: 8px;
   border: none;
   background: transparent;
   box-shadow: none;
@@ -124,18 +124,18 @@
    hauteur propre de l'item Astryx */
 .wrap :global(.astryx-selector-option-row),
 .wrap :global(.astryx-multi-selector-option) {
-  padding: 0 13px;
+  padding: 0 12px;
   min-height: 0;
   font-size: 14.5px;
 }
 .wrap :global(.astryx-selector-option-row) :global(.astryx-item),
 .wrap :global(.astryx-multi-selector-option) :global(.astryx-item) {
   min-height: 0;
-  padding: 11px 0;
+  padding: 12px 0;
   font-size: 14.5px;
 }
 .wrap :global(.astryx-multi-selector-option) > * {
-  padding-block: 9px;
+  padding-block: 8px;
   min-height: 0;
 }
 
@@ -148,15 +148,15 @@
   top: 26px;
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
   z-index: 1;
   pointer-events: none; /* le clic passe au déclencheur, sauf sur la croix */
 }
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 3px 5px 3px 9px;
+  gap: 8px;
+  padding: 4px 4px 4px 8px;
   background: light-dark(var(--color-accent-muted), rgba(255, 255, 255, 0.1));
   color: light-dark(var(--color-text-accent), var(--color-highlight));
   font-size: 14px;

@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * OrbitaTimePicker — choix de l'heure au clic, comme le calendrier.
+ * TimePicker — choix de l'heure au clic, comme le calendrier.
  *
  * Deux usages :
- *   <OrbitaTimePicker …>          heure seule, sur TimeInput Astryx
- *   <OrbitaDateTimePicker …>      date + heure, sur DateTimeInput Astryx
+ *   <TimePicker …>          heure seule, sur TimeInput Astryx
+ *   <DateTimePicker …>      date + heure, sur DateTimeInput Astryx
  *
  * Le champ Astryx reste dessous (saisie clavier, validation, accessibilité) ;
  * le panneau s'ouvre au clic ou au focus dans le segment heure, sous le champ,
@@ -18,7 +18,7 @@ import {TimeInput, type ISOTimeString} from '@astryxdesign/core/TimeInput';
 import React, {useCallback, useEffect, useId, useMemo, useRef, useState} from 'react';
 
 import {FloatingField} from './FloatingField';
-import styles from './OrbitaTimePicker.module.css';
+import styles from './TimePicker.module.css';
 
 const pad = (n: number) => String(n).padStart(2, '0');
 const HOURS = Array.from({length: 24}, (_, h) => h);
@@ -69,18 +69,30 @@ function TimePanel({
     else onPick(h, m === 60 ? 0 : m, true);
   };
 
+  // navigation clavier dans une colonne : flèches, Début / Fin ; une seule option tabulable
+  const onListKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const opts = [...e.currentTarget.querySelectorAll<HTMLButtonElement>('[role="option"]')];
+    const i = opts.indexOf(document.activeElement as HTMLButtonElement);
+    const go = (j: number) => { e.preventDefault(); opts[Math.max(0, Math.min(opts.length - 1, j))]?.focus(); };
+    if (e.key === 'ArrowDown') go(i + 1);
+    else if (e.key === 'ArrowUp') go(i - 1);
+    else if (e.key === 'Home') go(0);
+    else if (e.key === 'End') go(opts.length - 1);
+  };
+
   return (
     <div
       className={styles.panel}
       id={id}
       role="dialog"
+      aria-modal="false"
       aria-label="Choisir une heure"
       style={{positionAnchor: anchor} as React.CSSProperties}
       onMouseDown={(e) => e.preventDefault()}>
       <div className={styles.columns}>
         <div>
           <span className={styles.colHead}>Heures</span>
-          <div className={styles.list} ref={hoursRef} role="listbox" aria-label="Heures">
+          <div className={styles.list} ref={hoursRef} role="listbox" aria-label="Heures" onKeyDown={onListKey}>
             {HOURS.map((h) => (
               <button
                 key={h}
@@ -88,6 +100,7 @@ function TimePanel({
                 role="option"
                 data-h={h}
                 aria-selected={h === hour}
+                tabIndex={h === (hour ?? now.getHours()) ? 0 : -1}
                 className={[styles.cell, h === now.getHours() ? styles.now : null].filter(Boolean).join(' ')}
                 onClick={() => onPick(h, minute, false)}>
                 {pad(h)}
@@ -97,7 +110,7 @@ function TimePanel({
         </div>
         <div>
           <span className={styles.colHead}>Minutes</span>
-          <div className={styles.list} ref={minutesRef} role="listbox" aria-label="Minutes" data-cols="2">
+          <div className={styles.list} ref={minutesRef} role="listbox" aria-label="Minutes" data-cols="2" onKeyDown={onListKey}>
             {minutes.map((m) => (
               <button
                 key={m}
@@ -105,6 +118,7 @@ function TimePanel({
                 role="option"
                 data-m={m}
                 aria-selected={m === minute}
+                tabIndex={m === (minute ?? 0) ? 0 : -1}
                 className={styles.cell}
                 onClick={() => onPick(hour ?? now.getHours(), m, true)}>
                 {pad(m)}
@@ -154,7 +168,7 @@ function usePanel(wrapRef: React.RefObject<HTMLDivElement | null>, isTarget: (el
 /** AAAA-MM-JJ en heure locale (toISOString() donnerait la date UTC, fausse entre minuit et 2 h). */
 const localISODate = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
-export type OrbitaTimePickerProps = {
+export type TimePickerProps = {
   label: string;
   value: ISOTimeString | undefined;
   onChange: (value: ISOTimeString | undefined) => void;
@@ -168,7 +182,7 @@ export type OrbitaTimePickerProps = {
   style?: React.CSSProperties;
 };
 
-export function OrbitaTimePicker({label, value, onChange, placeholder = ' ', minuteStep = 5, hasClear = true, isDisabled, isRequired, description, style}: OrbitaTimePickerProps) {
+export function TimePicker({label, value, onChange, placeholder = ' ', minuteStep = 5, hasClear = true, isDisabled, isRequired, description, style}: TimePickerProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const panelId = useId();
   const isTarget = useCallback((el: Element) => !!el.closest('.astryx-time-input') && !el.closest('.astryx-input-clear-button'), []);
@@ -201,7 +215,7 @@ export function OrbitaTimePicker({label, value, onChange, placeholder = ' ', min
 
 /* --------------------------------------------------------------- date + heure */
 
-export type OrbitaDateTimePickerProps = {
+export type DateTimePickerProps = {
   label: string;
   value: ISODateTimeString | undefined;
   onChange: (value: ISODateTimeString | undefined) => void;
@@ -215,7 +229,7 @@ export type OrbitaDateTimePickerProps = {
   style?: React.CSSProperties;
 };
 
-export function OrbitaDateTimePicker({label, value, onChange, placeholder = 'Date', timePlaceholder = 'Heure', minuteStep = 5, hasClear = true, isDisabled, isRequired, description, style}: OrbitaDateTimePickerProps) {
+export function DateTimePicker({label, value, onChange, placeholder = 'Date', timePlaceholder = 'Heure', minuteStep = 5, hasClear = true, isDisabled, isRequired, description, style}: DateTimePickerProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const panelId = useId();
   // Seul le segment heure ouvre notre panneau ; le segment date garde le calendrier Astryx.

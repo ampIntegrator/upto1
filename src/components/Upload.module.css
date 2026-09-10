@@ -1,5 +1,5 @@
 /*
- * OrbitaUpload — zone de dépôt iso maquette 17-forms (.upload-zone) par-dessus
+ * Upload — zone de dépôt iso maquette 17-forms (.upload-zone) par-dessus
  * FileInput d'Astryx en mode dropzone : une ligne, carré icône accent à gauche,
  * titre (placeholder Astryx, remplacé par le nom du fichier) et sous-titre.
  */
@@ -10,9 +10,9 @@
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  gap: 14px;
+  gap: 16px;
   min-height: 76px;
-  padding: 18px 20px;
+  padding: 20px 20px;
   text-align: start;
 }
 /* carré icône 40 px */
@@ -33,7 +33,7 @@
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
   align-self: flex-start;
-  margin-top: 1px;
+  margin-top: 2px;
 }
 /* sous-titre : superposé sous le titre, dans la zone */
 .sub {

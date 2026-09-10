@@ -1,5 +1,5 @@
 /*
- * OrbitaField — champ texte et zone de texte iso maquette 17-forms (.field-*)
+ * Field — champ texte et zone de texte iso maquette 17-forms (.field-*)
  * par-dessus TextInput / TextArea d'Astryx : 58 px, label flottant dans le
  * champ qui remonte au focus ou dès qu'il y a une valeur, icône de tête,
  * icône d'état centrée, message sous le champ.
@@ -15,14 +15,14 @@
 }
 .wrap :global(.astryx-text-input) > input {
   height: 56px;
-  padding: 24px 15px 8px;
+  padding: 24px 16px 8px;
   font-size: 15px;
   line-height: 1.4;
 }
 .wrap :global(.astryx-text-area) { min-height: 128px; padding: 0; position: relative; }
 .wrap :global(.astryx-text-area) > textarea {
   min-height: 126px;
-  padding: 26px 15px 8px;
+  padding: 24px 16px 8px;
   font-size: 15px;
   line-height: 1.55;
   resize: vertical;
@@ -39,7 +39,7 @@
   color: var(--color-text-disabled);
   pointer-events: none;
 }
-.wrap.hasLead :global(.astryx-text-input) > input { padding-inline-start: 44px; }
+.wrap.hasLead :global(.astryx-text-input) > input { padding-inline-start: 48px; }
 .wrap.hasLead .label { inset-inline-start: 44px; }
 
 /* icône d'état (erreur / succès) : à droite, centrée, 20 px */
@@ -56,7 +56,7 @@
 .wrap :global(.astryx-text-input) > :global(.astryx-icon)[data-color='error'] svg,
 .wrap :global(.astryx-text-input) > :global(.astryx-icon)[data-color='success'] svg,
 .wrap :global(.astryx-text-input) > :global(.astryx-icon)[data-color='warning'] svg { width: 20px; height: 20px; }
-.wrap.hasStatus :global(.astryx-text-input) > input { padding-inline-end: 44px; }
+.wrap.hasStatus :global(.astryx-text-input) > input { padding-inline-end: 48px; }
 
 /* label flottant : dans le champ au repos, remonte (11,5 px, silo) au focus ou avec valeur */
 .label {
@@ -80,18 +80,6 @@
 .wrap.error .label { color: var(--color-error); }
 .wrap.disabled .label { color: var(--color-text-disabled); }
 
-/* message sous le champ (aide, erreur, succès) : 12,5 px avec icône */
-.msg {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 7px;
-  font-size: 14px;
-  color: var(--color-text-disabled);
-}
-.msg svg { width: 14px; height: 14px; }
-.wrap.error .msg { color: var(--color-error); }
-.wrap.success .msg { color: var(--color-success); }
 
 /* ---- autres contrôles Astryx portés au label flottant (FloatingField) ---- */
 
@@ -103,7 +91,7 @@
 }
 .wrap :global(.astryx-number-input) > input {
   height: 56px;
-  padding: 24px 15px 8px;
+  padding: 24px 16px 8px;
   font-size: 15px;
   line-height: 1.4;
 }
@@ -112,13 +100,13 @@
 .wrap :global(.astryx-date-input),
 .wrap :global(.astryx-time-input) {
   min-height: 58px;
-  padding: 0 0 0 14px;
+  padding: 0 0 0 16px;
   align-items: stretch;
 }
 .wrap :global(.astryx-date-input) > input,
 .wrap :global(.astryx-time-input) > input {
   height: 56px;
-  padding: 24px 15px 8px 10px;
+  padding: 24px 16px 8px 12px;
   font-size: 15px;
   line-height: 1.4;
 }
@@ -129,12 +117,12 @@
 /* date + heure : deux segments, même traitement, second label sur le segment heure */
 .wrap :global(.astryx-date-time-input) > div {
   min-height: 58px;
-  padding-inline-start: 14px;
+  padding-inline-start: 16px;
   align-items: stretch;
 }
 .wrap :global(.astryx-date-time-input) > div > input {
   height: 56px;
-  padding: 24px 15px 8px 10px;
+  padding: 24px 16px 8px 12px;
   font-size: 15px;
   line-height: 1.4;
 }
@@ -154,4 +142,30 @@
   font-size: 14px;
   letter-spacing: 0.02em;
   color: light-dark(var(--color-accent), var(--color-highlight));
+}
+
+/* Aide (description Astryx) : rendue par Astryx dans le bloc du label, masqué avec lui
+   (isLabelHidden). On dissout ce bloc, on cache le seul label, et l'aide passe sous le
+   champ (order) : le lien aria-describedby vers l'input reste intact. */
+.wrap :global(.astryx-field) { display: flex; flex-direction: column; }
+.wrap :global(.astryx-field) > :global(div:first-child):has(> :global(.astryx-field-label)) { display: contents; }
+.wrap :global(.astryx-field-label) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.wrap :global(.astryx-field-label + span) {
+  /* Astryx la masque en absolu + clip : on la remet dans le flux */
+  position: static;
+  width: auto;
+  height: auto;
+  clip: auto;
+  order: 3;
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--color-text-secondary);
 }

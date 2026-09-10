@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/OrbitaCollapsible (OrbitaCollapsibleGroup) */
+/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/Collapsible (CollapsibleGroup) */
 'use client';
 
 import {Heading} from '@astryxdesign/core/Heading';
@@ -7,19 +7,19 @@ import {Text} from '@astryxdesign/core/Text';
 import {Theme} from '@astryxdesign/core/theme';
 import React from 'react';
 
-import {OrbitaCollapsible, OrbitaCollapsibleGroup} from '@/components/OrbitaCollapsible';
+import {Collapsible, CollapsibleGroup} from '@/components/Collapsible';
 import {useOrbitaTheme} from '@/theme/OrbitaThemeProvider';
 import {FAQ} from './faq.shared';
 
 function Faq({columns, type = 'single', prefix}: {columns: 1 | 2; type?: 'single' | 'multiple'; prefix: string}) {
   return (
-    <OrbitaCollapsibleGroup type={type} columns={columns} defaultValue={type === 'multiple' ? [`${prefix}-0`] : `${prefix}-0`}>
+    <CollapsibleGroup type={type} columns={columns} defaultValue={type === 'multiple' ? [`${prefix}-0`] : `${prefix}-0`}>
       {FAQ.map((f, i) => (
-        <OrbitaCollapsible key={f.q} value={`${prefix}-${i}`} question={f.q}>
+        <Collapsible key={f.q} value={`${prefix}-${i}`} question={f.q}>
           <Text type="body">{f.a}</Text>
-        </OrbitaCollapsible>
+        </Collapsible>
       ))}
-    </OrbitaCollapsibleGroup>
+    </CollapsibleGroup>
   );
 }
 

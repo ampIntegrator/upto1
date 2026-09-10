@@ -10,10 +10,10 @@ import {Text} from '@astryxdesign/core/Text';
 import React from 'react';
 
 import {Container} from '@/components/Container';
-import {OrbitaButton} from '@/components/OrbitaButton';
+import {Button} from '@/components/Button';
 import {ChevronRightIcon, HomeIcon} from '@/theme/icons/nucleo';
-import {OrbitaCard} from '@/components/OrbitaCard';
-import {OrbitaCollapsible, OrbitaCollapsibleGroup} from '@/components/OrbitaCollapsible';
+import {Card} from '@/components/Card';
+import {Collapsible, CollapsibleGroup} from '@/components/Collapsible';
 import {Section} from '@/components/Section';
 import {SiteHeader} from '@/components/SiteHeader';
 import {FAQ} from '../design/_showcases/faq.shared';
@@ -46,7 +46,7 @@ export function PageDemo({hero = 'media'}: {hero?: 'media' | 'light'}) {
                     Gérez tout votre chantier en un seul outil. <Text type="serif" style={{'--serif-color': 'var(--color-editorial)'} as React.CSSProperties}>Mise en place en moins de 24 heures.</Text>
                   </Heading>
                   <Text type="large" color="secondary">Sans engagement. Notre équipe vous rappelle dans la journée.</Text>
-                  <OrbitaButton variant="primary" size="lg" arrow label="Demander un rappel" />
+                  <Button variant="primary" size="lg" arrow label="Demander un rappel" />
                 </VStack>
               </GridSpan>
             </Grid>
@@ -64,8 +64,8 @@ export function PageDemo({hero = 'media'}: {hero?: 'media' | 'light'}) {
                   </Heading>
                   <Text type="large" color="secondary">Choisissez l'offre adaptée à votre volume de chantiers. Sans engagement, sans frais cachés, résiliable en un clic.</Text>
                   <HStack gap={3} justify="center" wrap="wrap">
-                    <OrbitaButton variant="primary" size="lg" arrow label="Voir les tarifs" />
-                    <OrbitaButton variant="ghost" size="lg" label="Parler à un conseiller" />
+                    <Button variant="primary" size="lg" arrow label="Voir les tarifs" />
+                    <Button variant="ghost" size="lg" label="Parler à un conseiller" />
                   </HStack>
                 </VStack>
               </GridSpan>
@@ -107,7 +107,7 @@ export function PageDemo({hero = 'media'}: {hero?: 'media' | 'light'}) {
           <Grid columns={12} gap={6} className="page-grid" align="stretch">
             {([['clipboard-check', 'Chiffrage instantané'], ['gauge', 'Suivi des coûts'], ['table', 'Devis structurés'], ['shield', 'Données sécurisées']] as const).map(([k, t]) => (
               <GridSpan key={k} columns={3}>
-                <OrbitaCard media={{type: 'icon', iconKey: k}} title={t} text={LOREM} cta={{label: 'Découvrir', href: '#'}} />
+                <Card media={{type: 'icon', iconKey: k}} title={t} text={LOREM} cta={{label: 'Découvrir', href: '#'}} />
               </GridSpan>
             ))}
           </Grid>
@@ -126,19 +126,19 @@ export function PageDemo({hero = 'media'}: {hero?: 'media' | 'light'}) {
                 </Heading>
                 <Text type="large" color="secondary">{LOREM}</Text>
                 <HStack gap={3}>
-                  <OrbitaButton variant="primary" size="lg" label="Nous contacter" />
-                  <OrbitaButton variant="ghost" size="lg" label="Voir la doc" />
+                  <Button variant="primary" size="lg" label="Nous contacter" />
+                  <Button variant="ghost" size="lg" label="Voir la doc" />
                 </HStack>
               </VStack>
             </GridSpan>
             <GridSpan columns={7}>
-              <OrbitaCollapsibleGroup columns={1} defaultValue="page-0">
+              <CollapsibleGroup columns={1} defaultValue="page-0">
                 {FAQ.slice(0, 4).map((f, i) => (
-                  <OrbitaCollapsible key={i} value={`page-${i}`} question={f.q}>
+                  <Collapsible key={i} value={`page-${i}`} question={f.q}>
                     <Text type="body">{f.a}</Text>
-                  </OrbitaCollapsible>
+                  </Collapsible>
                 ))}
-              </OrbitaCollapsibleGroup>
+              </CollapsibleGroup>
             </GridSpan>
           </Grid>
         </Container>
@@ -162,7 +162,7 @@ export function PageDemo({hero = 'media'}: {hero?: 'media' | 'light'}) {
               <TabsWithPanel id="page-tabs" />
             </GridSpan>
             <GridSpan columns={3}>
-              <OrbitaCard media={{type: 'icon', iconKey: 'gauge'}} title="Un seul tableau de bord" text="Chiffrage, suivi, devis et validation au même endroit, pour tous les sites." cta={{label: 'Découvrir', href: '#'}} />
+              <Card media={{type: 'icon', iconKey: 'gauge'}} title="Un seul tableau de bord" text="Chiffrage, suivi, devis et validation au même endroit, pour tous les sites." cta={{label: 'Découvrir', href: '#'}} />
             </GridSpan>
           </Grid>
         </Container>
@@ -179,8 +179,8 @@ export function PageDemo({hero = 'media'}: {hero?: 'media' | 'light'}) {
                   Votre premier chiffrage <Text type="serif" style={{'--serif-color': 'var(--color-editorial)'} as React.CSSProperties}>en 20 minutes.</Text>
                 </Heading>
                 <HStack gap={3} justify="center" wrap="wrap">
-                  <OrbitaButton variant="primary" size="lg" arrow label="Faire mon chiffrage" />
-                  <OrbitaButton variant="ghost" size="lg" label="Demander une démo" />
+                  <Button variant="primary" size="lg" arrow label="Faire mon chiffrage" />
+                  <Button variant="ghost" size="lg" label="Demander une démo" />
                 </HStack>
               </VStack>
             </GridSpan>
@@ -194,7 +194,7 @@ export function PageDemo({hero = 'media'}: {hero?: 'media' | 'light'}) {
           <Grid columns={12} gap={6} className="page-grid">
               {[['1 000', 'm²', "Seuil d'application"], ['40', '%', 'Objectif 2030'], ['850', '', 'Courtiers équipés']].map(([v, s, t]) => (
                 <GridSpan key={t} columns={4}>
-                  <OrbitaCard media={{type: 'number', value: v, suffix: s || undefined}} title={t} text={LOREM} />
+                  <Card media={{type: 'number', value: v, suffix: s || undefined}} title={t} text={LOREM} />
                 </GridSpan>
               ))}
           </Grid>

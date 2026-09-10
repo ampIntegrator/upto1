@@ -1,12 +1,14 @@
 'use client';
 
 /**
- * OrbitaField — champ texte / zone de texte du site, iso maquette 17-forms.
+ * Field — champ texte / zone de texte du site, iso maquette 17-forms.
  *
  * Sur TextInput et TextArea d'Astryx : label flottant dans le champ (remonte au
  * focus ou dès qu'il y a une valeur), icône de tête par clé Nucleo, états
- * erreur / succès avec icône centrée et message sous le champ, aide en
- * dessous, désactivé. Le placeholder n'existe pas : c'est le label.
+ * erreur / succès avec icône centrée et message accolé sous le champ, aide en
+ * dessous, désactivé. Aide et message sont rendus par Astryx (description /
+ * status.message), donc reliés au champ pour les lecteurs d'écran.
+ * Le placeholder n'existe pas : c'est le label.
  */
 import {Icon} from '@astryxdesign/core/Icon';
 import {TextArea} from '@astryxdesign/core/TextArea';
@@ -14,9 +16,9 @@ import {TextInput} from '@astryxdesign/core/TextInput';
 import React from 'react';
 
 import {NUCLEO_ICONS, type NucleoIconKey} from '@/theme/icons/nucleo';
-import styles from './OrbitaField.module.css';
+import styles from './Field.module.css';
 
-export type OrbitaFieldProps = {
+export type FieldProps = {
   label: string;
   value: string;
   onChange: (value: string) => void;
@@ -35,9 +37,7 @@ export type OrbitaFieldProps = {
   style?: React.CSSProperties;
 };
 
-const MSG_ICON = {help: 'info', error: 'warning', success: 'check'} as const;
-
-export function OrbitaField({label, value, onChange, multiline = false, type = 'text', iconKey, help, status, isDisabled, isRequired, style}: OrbitaFieldProps) {
+export function Field({label, value, onChange, multiline = false, type = 'text', iconKey, help, status, isDisabled, isRequired, style}: FieldProps) {
   const hasValue = value.length > 0;
   const wrapClass = [
     styles.wrap,
@@ -51,18 +51,15 @@ export function OrbitaField({label, value, onChange, multiline = false, type = '
     .filter(Boolean)
     .join(' ');
 
-  const message = status?.message ?? help;
-  const msgKind = status?.type ?? 'help';
-  const MsgGlyph = NUCLEO_ICONS[MSG_ICON[msgKind]];
-
   const shared = {
     label,
     isLabelHidden: true,
     value,
     isDisabled,
     isRequired,
-    // bordure + icône d'état Astryx ; le message est le nôtre, sous le champ
-    status: status ? {type: status.type} : undefined,
+    description: help,
+    // bordure, icône d'état et message accolé (variant attached, stylé par le thème)
+    status: status ? {type: status.type, message: status.message, variant: 'attached' as const} : undefined,
     width: '100%',
   };
 
@@ -82,12 +79,6 @@ export function OrbitaField({label, value, onChange, multiline = false, type = '
           startIcon={iconKey ? <Icon icon={NUCLEO_ICONS[iconKey]} /> : undefined}
         />
       )}
-      {message ? (
-        <div className={styles.msg}>
-          <Icon icon={MsgGlyph} size="xsm" />
-          <span>{message}</span>
-        </div>
-      ) : null}
     </div>
   );
 }

@@ -7,8 +7,8 @@ import {Text} from '@astryxdesign/core/Text';
 import {Theme} from '@astryxdesign/core/theme';
 import React from 'react';
 
-import {OrbitaButton} from '@/components/OrbitaButton';
-import {OrbitaCard} from '@/components/OrbitaCard';
+import {Button} from '@/components/Button';
+import {Card} from '@/components/Card';
 import {ORBITA_THEMES, SILO_LABELS, SILO_NAMES, SILOS, type SiloName} from '@/theme';
 
 /** Valeurs de la maquette Orbita (orbita.css), avant l'harmonisation du 9 sept. 2026. */
@@ -41,10 +41,10 @@ function Cell({silo, mode, label, h, hd, after}: {silo: SiloName; mode: 'light' 
           <Text type="tag">{label}</Text>
           <Text type="supporting" style={{fontVariantNumeric: 'tabular-nums'}}>{h} · {hd}</Text>
         </HStack>
-        <OrbitaCard media={{type: 'number', value: '40', prefix: '−', suffix: '%'}} title="Objectif 2030" text={LOREM} />
+        <Card media={{type: 'number', value: '40', prefix: '−', suffix: '%'}} title="Objectif 2030" text={LOREM} />
         <HStack gap={2}>
-          <OrbitaButton variant="high" label="Bouton high" />
-          <OrbitaButton variant="ghost" label="Ghost" />
+          <Button variant="high" label="Bouton high" />
+          <Button variant="ghost" label="Ghost" />
         </HStack>
       </VStack>
     </Theme>

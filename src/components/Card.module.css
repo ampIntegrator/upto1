@@ -1,5 +1,5 @@
 /*
- * OrbitaCard — châssis unique des cartes (maquettes 12 cardBlocks, 14 mosaic,
+ * Card — châssis unique des cartes (maquettes 12 cardBlocks, 14 mosaic,
  * 19 blogCards, 24 portfolioCards) : média, métadonnées, titre + ornement,
  * texte, barre d'action. Le survol de la carte remplit la barre d'action.
  */
@@ -27,7 +27,7 @@
   padding: var(--spacing-6);
 }
 .card[data-preset='article'] .inner,
-.card[data-preset='realisation'] .inner { padding: 15px 18px 13px; }
+.card[data-preset='realisation'] .inner { padding: 16px 20px 12px; }
 
 /* médias */
 .img {
@@ -43,7 +43,7 @@
   background: light-dark(var(--color-background-muted), rgba(255, 255, 255, 0.06));
 }
 .postImg img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.iconMedia { display: flex; justify-content: center; margin-bottom: 28px; }
+.iconMedia { display: flex; justify-content: center; margin-bottom: 32px; }
 .numberMedia { display: flex; justify-content: center; margin-bottom: 16px; }
 
 /* métadonnées (article / réalisation) */
@@ -57,7 +57,7 @@
 
 /* titre + ornement */
 .title { margin: 0; }
-.card[data-preset='bloc'] .title { text-align: center; margin-bottom: 10px; }
+.card[data-preset='bloc'] .title { text-align: center; margin-bottom: 12px; }
 .card[data-preset='article'] .title,
 .card[data-preset='realisation'] .title {
   display: -webkit-box;
@@ -84,7 +84,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 9px;
+  gap: 8px;
   margin: 0 auto 16px;
 }
 .ornament::before,
@@ -117,8 +117,8 @@
 .client {
   display: flex;
   align-items: center;
-  gap: 7px;
-  margin-top: 11px;
+  gap: 8px;
+  margin-top: 12px;
   font-size: 14px;
   color: var(--color-text-disabled);
 }

@@ -189,9 +189,9 @@ body {
 }
 [data-astryx-theme^='orbita'] .astryx-power-search .astryx-tokenizer {
   min-height: 58px;
-  padding: 24px 15px 6px !important;
+  padding: 24px 16px 8px !important;
   align-items: flex-end;
-  gap: 6px;
+  gap: 8px;
 }
 [data-astryx-theme^='orbita'] .astryx-power-search .astryx-tokenizer > input {
   font-size: 15px;
@@ -309,7 +309,7 @@ body {
   background: linear-gradient(90deg, var(--color-highlight) 0%, var(--color-accent) 50%, var(--color-highlight) 100%);
 }
 [data-astryx-theme^='orbita'] .orbita-tab-panel {
-  padding: 44px 20px;
+  padding: 48px 20px;
   background: var(--color-highlight-light); /* highlight du silo à 5 %, retenu le 10 sept. */
 }
 /* contenu d'un onglet : 900 px maximum, centré */
@@ -319,7 +319,7 @@ body {
   margin-inline: auto;
 }
 @media (max-width: 639px) {
-  [data-astryx-theme^='orbita'] .orbita-tab-panel { padding: 28px 24px; }
+  [data-astryx-theme^='orbita'] .orbita-tab-panel { padding: 32px 24px; }
 }
 
 /* Grille de page : 12 colonnes dans le Container

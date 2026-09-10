@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * OrbitaCollapsible — l'item d'accordéon de la maquette 11-faq : boîte bordée,
+ * Collapsible — l'item d'accordéon de la maquette 11-faq : boîte bordée,
  * question en Geist 600, icône plus/moins dessinée en CSS. Ouvert, la boîte se
  * remplit en couleur silo (texte et icône blancs). Nuit : fond translucide,
  * plus en highlight, ouvert = même remplissage silo.
@@ -10,21 +10,21 @@
  * état contrôlé ou non). Le chevron Astryx est masqué, la réponse s'anime en
  * hauteur (grille 0fr → 1fr) comme dans la maquette.
  *
- * OrbitaCollapsibleGroup — plusieurs items reliés : `type="single"` (accordéon
+ * CollapsibleGroup — plusieurs items reliés : `type="single"` (accordéon
  * strict, une seule ouverte) ou `"multiple"` (libres), empilés ou sur deux
  * colonnes. Deux groupes sur une même page sont indépendants.
  */
-import {Collapsible, CollapsibleGroup} from '@astryxdesign/core/Collapsible';
+import {Collapsible as AstryxCollapsible, CollapsibleGroup as AstryxCollapsibleGroup} from '@astryxdesign/core/Collapsible';
 import {Grid} from '@astryxdesign/core/Grid';
 import {VStack} from '@astryxdesign/core/Stack';
 import React from 'react';
 
-import styles from './OrbitaCollapsible.module.css';
+import styles from './Collapsible.module.css';
 
-export type OrbitaCollapsibleProps = {
+export type CollapsibleProps = {
   /** la question (contenu du déclencheur) */
   question: React.ReactNode;
-  /** identifiant dans le groupe (obligatoire dans un OrbitaCollapsibleGroup) */
+  /** identifiant dans le groupe (obligatoire dans un CollapsibleGroup) */
   value?: string;
   /** la réponse */
   children: React.ReactNode;
@@ -34,10 +34,10 @@ export type OrbitaCollapsibleProps = {
   isDisabled?: boolean;
 };
 
-export function OrbitaCollapsible({question, value, children, defaultIsOpen = false, isOpen, onOpenChange, isDisabled}: OrbitaCollapsibleProps) {
+export function Collapsible({question, value, children, defaultIsOpen = false, isOpen, onOpenChange, isDisabled}: CollapsibleProps) {
   return (
     <VStack className={styles.item}>
-      <Collapsible
+      <AstryxCollapsible
         trigger={<span className={styles.question}>{question}<i className={styles.icon} aria-hidden="true" /></span>}
         value={value}
         defaultIsOpen={defaultIsOpen}
@@ -46,12 +46,12 @@ export function OrbitaCollapsible({question, value, children, defaultIsOpen = fa
         isDisabled={isDisabled}
       >
         <VStack className={styles.answer}>{children}</VStack>
-      </Collapsible>
+      </AstryxCollapsible>
     </VStack>
   );
 }
 
-export type OrbitaCollapsibleGroupProps = {
+export type CollapsibleGroupProps = {
   /** accordéon strict (une seule ouverte) ou libre */
   type?: 'single' | 'multiple';
   /** item(s) ouvert(s) au départ : `value` d'un item, ou tableau en mode multiple */
@@ -63,9 +63,9 @@ export type OrbitaCollapsibleGroupProps = {
   children: React.ReactNode;
 };
 
-export function OrbitaCollapsibleGroup({type = 'single', defaultValue, value, onChange, columns = 1, children}: OrbitaCollapsibleGroupProps) {
+export function CollapsibleGroup({type = 'single', defaultValue, value, onChange, columns = 1, children}: CollapsibleGroupProps) {
   return (
-    <CollapsibleGroup type={type} defaultValue={defaultValue} value={value} onChange={onChange}>
+    <AstryxCollapsibleGroup type={type} defaultValue={defaultValue} value={value} onChange={onChange}>
       {columns === 2 ? (
         <Grid columns={{minWidth: 420, max: 2}} rowGap={4} columnGap={6} align="start">
           {children}
@@ -73,6 +73,6 @@ export function OrbitaCollapsibleGroup({type = 'single', defaultValue, value, on
       ) : (
         <VStack gap={4}>{children}</VStack>
       )}
-    </CollapsibleGroup>
+    </AstryxCollapsibleGroup>
   );
 }

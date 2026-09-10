@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/OrbitaField */
+/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/Field */
 'use client';
 
 import {Card} from '@astryxdesign/core/Card';
@@ -9,7 +9,7 @@ import {Text} from '@astryxdesign/core/Text';
 import {Theme} from '@astryxdesign/core/theme';
 import React, {useState} from 'react';
 
-import {OrbitaField} from '@/components/OrbitaField';
+import {Field} from '@/components/Field';
 import {useOrbitaTheme} from '@/theme/OrbitaThemeProvider';
 
 function Gallery() {
@@ -20,14 +20,14 @@ function Gallery() {
   const [search, setSearch] = useState('');
   return (
     <Grid columns={{minWidth: 280, max: 2}} gap={6}>
-      <OrbitaField label="Nom complet" value={nom} onChange={setNom} />
-      <OrbitaField label="Adresse e-mail" type="email" value={mail} onChange={setMail} />
-      <OrbitaField label="Société" value={societe} onChange={setSociete} help="Tel qu'il apparaîtra sur vos devis." />
-      <OrbitaField label="Téléphone" value={tel} onChange={setTel} iconKey="phone" />
-      <OrbitaField label="Adresse e-mail" type="email" value="contact@orbita" onChange={() => {}} status={{type: 'error', message: 'Adresse e-mail invalide.'}} />
-      <OrbitaField label="N° SIRET" value="vérifié" onChange={() => {}} status={{type: 'success', message: 'Entreprise validée.'}} />
-      <OrbitaField label="Rechercher un chantier" value={search} onChange={setSearch} iconKey="search" />
-      <OrbitaField label="Identifiant" value="Champ verrouillé" onChange={() => {}} isDisabled />
+      <Field label="Nom complet" value={nom} onChange={setNom} />
+      <Field label="Adresse e-mail" type="email" value={mail} onChange={setMail} />
+      <Field label="Société" value={societe} onChange={setSociete} help="Tel qu'il apparaîtra sur vos devis." />
+      <Field label="Téléphone" value={tel} onChange={setTel} iconKey="phone" />
+      <Field label="Adresse e-mail" type="email" value="contact@orbita" onChange={() => {}} status={{type: 'error', message: 'Adresse e-mail invalide.'}} />
+      <Field label="N° SIRET" value="vérifié" onChange={() => {}} status={{type: 'success', message: 'Entreprise validée.'}} />
+      <Field label="Rechercher un chantier" value={search} onChange={setSearch} iconKey="search" />
+      <Field label="Identifiant" value="Champ verrouillé" onChange={() => {}} isDisabled />
     </Grid>
   );
 }

@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * OrbitaSelect — sélecteur du site, iso maquette Orbita (17-forms, .selectx).
+ * Select — sélecteur du site, iso maquette Orbita (17-forms, .selectx).
  *
  *   mode="single"    → Selector       (un choix)
  *   mode="multiple"  → MultiSelector  (plusieurs choix, cases dans le panneau, badges dans le champ)
@@ -15,14 +15,14 @@
  * avec les badges.
  *
  * Les options ont la forme {value, label, disabled?} que Payload stockera.
- * L'apparence vient du thème Orbita + OrbitaSelect.module.css.
+ * L'apparence vient du thème Orbita + Select.module.css.
  */
 import {MultiSelector} from '@astryxdesign/core/MultiSelector';
 import {Selector} from '@astryxdesign/core/Selector';
 import React, {useEffect, useRef, useState} from 'react';
 
 import {CloseIcon} from '@/theme/icons/nucleo';
-import styles from './OrbitaSelect.module.css';
+import styles from './Select.module.css';
 
 export type OrbitaOption = {value: string; label: string; disabled?: boolean};
 
@@ -43,11 +43,11 @@ type Common = {
   style?: React.CSSProperties;
 };
 
-export type OrbitaSelectProps =
+export type SelectProps =
   | (Common & {mode?: 'single'; value: string | null; onChange: (value: string) => void})
   | (Common & {mode: 'multiple'; value: string[]; onChange: (value: string[]) => void});
 
-export function OrbitaSelect(props: OrbitaSelectProps) {
+export function Select(props: SelectProps) {
   const {label, options, description, status, isRequired, isDisabled, searchFrom = 5, emptyText = 'Aucun résultat', style} = props;
   const mode = props.mode ?? 'single';
   const hasSearch = options.length > searchFrom;
@@ -59,6 +59,7 @@ export function OrbitaSelect(props: OrbitaSelectProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const badgesRef = useRef<HTMLDivElement>(null);
   const [minHeight, setMinHeight] = useState<number | undefined>(undefined);
+  const selectedCount = (props.value as string[] | string | null)?.length ?? 0;
   useEffect(() => {
     if (mode !== 'multiple') return;
     const layer = badgesRef.current;
@@ -72,7 +73,7 @@ export function OrbitaSelect(props: OrbitaSelectProps) {
     const ro = new ResizeObserver(apply);
     ro.observe(layer);
     return () => ro.disconnect();
-  }, [mode, hasValue, (props.value as string[] | string | null)?.length]);
+  }, [mode, hasValue, selectedCount]);
   useEffect(() => {
     const trigger = wrapRef.current?.querySelector<HTMLElement>('.astryx-multi-selector');
     if (trigger) trigger.style.minHeight = minHeight ? `${minHeight}px` : '';

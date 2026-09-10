@@ -22,7 +22,7 @@ import {InternationalizationProvider} from '@astryxdesign/core/i18n';
 import {LinkProvider} from '@astryxdesign/core/Link';
 import {type DefinedTheme, Theme} from '@astryxdesign/core/theme';
 import NextLink from 'next/link';
-import React, {createContext, useCallback, useContext, useEffect, useMemo, useState} from 'react';
+import React, {createContext, useCallback, useContext, useMemo, useState, useSyncExternalStore} from 'react';
 
 import {ASTRYX_NUCLEO_ICONS} from './icons/astryx-icons';
 import {type ColorMode, DEFAULT_SILO, ORBITA_THEMES, SILO_NAMES, type SiloName} from './index';
@@ -50,6 +50,17 @@ const OrbitaThemeContext = createContext<OrbitaThemeContextValue | null>(null);
 
 const STORAGE_KEY = 'orbita:theme';
 
+/** Abonnement aux changements de localStorage (autres onglets + nos propres écritures). */
+const listeners = new Set<() => void>();
+function subscribeStorage(cb: () => void) {
+  listeners.add(cb);
+  window.addEventListener('storage', cb);
+  return () => {
+    listeners.delete(cb);
+    window.removeEventListener('storage', cb);
+  };
+}
+
 function readStored(): {silo?: SiloName; mode?: ColorMode} {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
@@ -73,18 +84,16 @@ export function OrbitaThemeProvider({
   initialSilo?: SiloName;
   initialMode?: ColorMode;
 }) {
-  const [silo, setSiloState] = useState<SiloName>(initialSilo);
+  // Silo mémorisé : store minimal sur localStorage, lu après hydratation (SSR : initialSilo).
+  const storedSilo = useSyncExternalStore(subscribeStorage, () => readStored().silo ?? null, () => null);
+  const [override, setSiloState] = useState<SiloName | null>(null);
+  const silo: SiloName = override ?? storedSilo ?? initialSilo;
   const [mode, setModeState] = useState<ColorMode>(initialMode);
-
-  // Restauration du silo mémorisé (après hydratation, pour rester SSR-safe).
-  useEffect(() => {
-    const stored = readStored();
-    if (stored.silo) setSiloState(stored.silo);
-  }, []);
 
   const persist = useCallback((next: {silo: SiloName; mode: ColorMode}) => {
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      listeners.forEach((cb) => cb());
     } catch {
       /* stockage indisponible : on ignore */
     }

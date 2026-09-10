@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/OrbitaUpload */
+/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/Upload */
 'use client';
 
 import {Card} from '@astryxdesign/core/Card';
@@ -7,7 +7,7 @@ import {Text} from '@astryxdesign/core/Text';
 import {Theme} from '@astryxdesign/core/theme';
 import React, {useState} from 'react';
 
-import {OrbitaUpload} from '@/components/OrbitaUpload';
+import {Upload} from '@/components/Upload';
 import {useOrbitaTheme} from '@/theme/OrbitaThemeProvider';
 
 export default function FileInputShowcase() {
@@ -19,13 +19,13 @@ export default function FileInputShowcase() {
       <Text type="body" color="secondary">Zone de dépôt : cadre pointillé qui passe en accent au survol, carré icône, titre et sous-titre. Le nom du fichier remplace le titre une fois déposé.</Text>
       <Card padding={6}>
         <VStack maxWidth={520}>
-          <OrbitaUpload label="Déposez votre cahier des charges" hint="PDF, DOCX — 10 Mo max." accept=".pdf,.doc,.docx" value={file} onChange={setFile} />
+          <Upload label="Déposez votre cahier des charges" hint="PDF, DOCX — 10 Mo max." accept=".pdf,.doc,.docx" value={file} onChange={setFile} />
         </VStack>
       </Card>
       <Theme theme={theme} mode="dark">
         <Card padding={6}>
           <VStack maxWidth={520}>
-            <OrbitaUpload label="Déposez votre cahier des charges" hint="PDF, DOCX — 10 Mo max." accept=".pdf,.doc,.docx" value={fileN} onChange={setFileN} />
+            <Upload label="Déposez votre cahier des charges" hint="PDF, DOCX — 10 Mo max." accept=".pdf,.doc,.docx" value={fileN} onChange={setFileN} />
           </VStack>
         </Card>
       </Theme>

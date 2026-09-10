@@ -4,12 +4,12 @@
  * FloatingField — enveloppe « label flottant » Orbita pour un contrôle Astryx
  * dont le label natif est masqué (isLabelHidden). Le label visible est posé
  * dans le champ et remonte en petit, couleur silo, au focus ou dès qu'il y a
- * une valeur. Partagé par OrbitaField, OrbitaNumberField, OrbitaDateField,
- * OrbitaTimePicker et OrbitaDateTimePicker.
+ * une valeur. Partagé par Field, NumberField, DateField,
+ * TimePicker et DateTimePicker.
  */
 import React from 'react';
 
-import styles from './OrbitaField.module.css';
+import styles from './Field.module.css';
 
 export type FloatingFieldProps = {
   label: string;

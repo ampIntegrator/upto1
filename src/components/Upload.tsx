@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * OrbitaUpload — zone de dépôt de fichier du site (maquette 17-forms .upload).
+ * Upload — zone de dépôt de fichier du site (maquette 17-forms .upload).
  * FileInput Astryx en mode dropzone, habillé : cadre pointillé, carré icône
  * accent, titre et sous-titre sur une ligne. Le titre laisse place au nom du
  * fichier une fois déposé.
@@ -9,9 +9,9 @@
 import {FileInput} from '@astryxdesign/core/FileInput';
 import React from 'react';
 
-import styles from './OrbitaUpload.module.css';
+import styles from './Upload.module.css';
 
-export type OrbitaUploadProps = {
+export type UploadProps = {
   /** Libellé accessible et titre de la zone (« Déposez votre cahier des charges »). */
   label: string;
   /** Sous-titre (« PDF, DOCX — 10 Mo max. »). */
@@ -25,7 +25,7 @@ export type OrbitaUploadProps = {
   style?: React.CSSProperties;
 };
 
-export function OrbitaUpload({label, hint, value, onChange, accept, isDisabled, isRequired, status, style}: OrbitaUploadProps) {
+export function Upload({label, hint, value, onChange, accept, isDisabled, isRequired, status, style}: UploadProps) {
   return (
     <div className={styles.wrap} style={style}>
       <FileInput

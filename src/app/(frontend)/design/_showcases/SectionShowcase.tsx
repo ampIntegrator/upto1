@@ -8,7 +8,7 @@ import {Text} from '@astryxdesign/core/Text';
 import React from 'react';
 
 import {Container} from '@/components/Container';
-import {OrbitaButton} from '@/components/OrbitaButton';
+import {Button} from '@/components/Button';
 import {Section, type SectionBackground} from '@/components/Section';
 
 const IMG = 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1600&q=70';
@@ -45,7 +45,7 @@ export default function SectionShowcase() {
                       Titre de section <Text type="serif">accentué.</Text>
                     </Heading>
                     <Text type="large" color="secondary">Colonne de six sur douze, centrée. Titre, texte et bouton du catalogue.</Text>
-                    <OrbitaButton variant="primary" arrow label="Découvrir" />
+                    <Button variant="primary" arrow label="Découvrir" />
                   </VStack>
                 </GridSpan>
               </Grid>

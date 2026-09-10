@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/OrbitaCard (avec cta) */
+/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/Card (avec cta) */
 'use client';
 
 import {VStack} from '@astryxdesign/core/Stack';

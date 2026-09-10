@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * OrbitaCard — la carte du site, un seul châssis et trois préréglages
+ * Card — la carte du site, un seul châssis et trois préréglages
  * (maquettes 12 cardBlocks / 14 mosaic, 19 blogCards, 24 portfolioCards).
  *
  *   preset="bloc"        média (image, icône, nombre ou rien) + titre centré
@@ -20,21 +20,21 @@ import {Text} from '@astryxdesign/core/Text';
 import NextLink from 'next/link';
 import React from 'react';
 
-import {ArrowRightIcon, NUCLEO_ICONS, PinIcon, type NucleoIconKey} from '@/theme/icons/nucleo';
+import {ArrowRightIcon, PinIcon, type NucleoIconKey} from '@/theme/icons/nucleo';
 import {IconSquare} from './IconSquare';
-import {OrbitaChip, type OrbitaChipTone} from './OrbitaChip';
+import {Chip, type ChipTone} from './Chip';
 import {Stat} from './Stat';
-import styles from './OrbitaCard.module.css';
+import styles from './Card.module.css';
 
-export type OrbitaCardMedia =
+export type CardMedia =
   | {type: 'image'; src: string; alt?: string}
   | {type: 'icon'; iconKey: NucleoIconKey}
   | {type: 'number'; value: string; prefix?: string; suffix?: string}
   | {type: 'none'};
 
-export type OrbitaCardProps = {
+export type CardProps = {
   preset?: 'bloc' | 'article' | 'realisation';
-  media?: OrbitaCardMedia;
+  media?: CardMedia;
   title: string;
   /** niveau HTML du titre (SEO) ; l'apparence ne change pas */
   level?: 3 | 4;
@@ -42,7 +42,7 @@ export type OrbitaCardProps = {
   accentTitle?: boolean;
   text?: string;
   /** article / réalisation : chip de catégorie */
-  chip?: {label: string; tone?: OrbitaChipTone};
+  chip?: {label: string; tone?: ChipTone};
   /** article : date affichée */
   date?: string;
   /** réalisation : résultat chiffré (« +34 % closing ») */
@@ -54,7 +54,7 @@ export type OrbitaCardProps = {
   style?: React.CSSProperties;
 };
 
-export function OrbitaCard({preset = 'bloc', media = {type: 'none'}, title, level = 3, accentTitle, text, chip, date, result, client, cta, style}: OrbitaCardProps) {
+export function Card({preset = 'bloc', media = {type: 'none'}, title, level = 3, accentTitle, text, chip, date, result, client, cta, style}: CardProps) {
   const editorial = preset !== 'bloc';
 
   const mediaNode = (() => {
@@ -97,7 +97,7 @@ export function OrbitaCard({preset = 'bloc', media = {type: 'none'}, title, leve
           {media.type !== 'image' ? mediaNode : null}
           {editorial && (chip || date || result) ? (
             <div className={styles.meta}>
-              {chip ? <OrbitaChip label={chip.label} tone={chip.tone ?? 'high'} /> : <span />}
+              {chip ? <Chip label={chip.label} tone={chip.tone ?? 'high'} /> : <span />}
               {preset === 'article' && date ? <Text type="date">{date}</Text> : null}
               {preset === 'realisation' && result ? <Text type="result">{result}</Text> : null}
             </div>

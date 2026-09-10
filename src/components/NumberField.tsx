@@ -1,12 +1,12 @@
 'use client';
 
-/** OrbitaNumberField — NumberInput Astryx avec label flottant Orbita et flèches Nucleo. */
+/** NumberField — NumberInput Astryx avec label flottant Orbita et flèches Nucleo. */
 import {NumberInput} from '@astryxdesign/core/NumberInput';
 import React from 'react';
 
 import {FloatingField} from './FloatingField';
 
-export type OrbitaNumberFieldProps = {
+export type NumberFieldProps = {
   label: string;
   value: number | null;
   onChange: (value: number | null) => void;
@@ -21,7 +21,7 @@ export type OrbitaNumberFieldProps = {
   style?: React.CSSProperties;
 };
 
-export function OrbitaNumberField({label, value, onChange, min, max, step, formatValue, hasSteppers = true, isDisabled, isRequired, status, style}: OrbitaNumberFieldProps) {
+export function NumberField({label, value, onChange, min, max, step, formatValue, hasSteppers = true, isDisabled, isRequired, status, style}: NumberFieldProps) {
   return (
     <FloatingField label={label} hasValue={value != null} isRequired={isRequired} isDisabled={isDisabled} status={status?.type} style={style}>
       <NumberInput

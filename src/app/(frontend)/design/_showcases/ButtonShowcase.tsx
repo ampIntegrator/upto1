@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/OrbitaButton */
+/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/Button */
 'use client';
 
 import {Card} from '@astryxdesign/core/Card';
@@ -8,7 +8,7 @@ import {Text} from '@astryxdesign/core/Text';
 import {Theme} from '@astryxdesign/core/theme';
 import React from 'react';
 
-import {OrbitaButton} from '@/components/OrbitaButton';
+import {Button} from '@/components/Button';
 import {useOrbitaTheme} from '@/theme/OrbitaThemeProvider';
 
 const VARIANTS = ['primary', 'high', 'ghost', 'secondary', 'destructive'] as const;
@@ -21,7 +21,7 @@ function Matrix({arrow}: {arrow: boolean}) {
         <HStack key={v} gap={4} vAlign="center" wrap="wrap">
           <Text type="tag" color="secondary" style={{width: 96}}>{v}</Text>
           {SIZES.map((s) => (
-            <OrbitaButton key={s} label="Faire mon chiffrage" variant={v} size={s} arrow={arrow} />
+            <Button key={s} label="Faire mon chiffrage" variant={v} size={s} arrow={arrow} />
           ))}
         </HStack>
       ))}
@@ -43,7 +43,7 @@ export default function ButtonShowcase() {
   const {theme} = useOrbitaTheme();
   return (
     <VStack gap={8}>
-      <Text type="body" color="secondary">Le bouton : angles vifs, Geist semi-gras, halo accent sur le primaire, fantôme bordé, variante high. OrbitaButton ajoute le split-button : cellule flèche pleine hauteur, cadre intérieur qui s'ouvre au survol, flèche qui rebondit.</Text>
+      <Text type="body" color="secondary">Le bouton : angles vifs, Geist semi-gras, halo accent sur le primaire, fantôme bordé, variante high. Button ajoute le split-button : cellule flèche pleine hauteur, cadre intérieur qui s'ouvre au survol, flèche qui rebondit.</Text>
 
       <Section title="Bouton simple" note="Sans flèche : boutons de formulaires, de modales, de pieds de carte.">
         <Card padding={6}><Matrix arrow={false} /></Card>
@@ -55,18 +55,18 @@ export default function ButtonShowcase() {
             {SIZES.map((s) => (
               <HStack key={s} gap={4} wrap="wrap" vAlign="center">
                 <Text type="tag" color="secondary" style={{width: 96}}>{s}</Text>
-                <OrbitaButton label="Rechercher" variant="primary" size={s} iconKey="search" />
-                <OrbitaButton label="Télécharger" variant="ghost" size={s} iconKey="upload" />
-                <OrbitaButton label="Appeler" variant="secondary" size={s} iconKey="phone" />
+                <Button label="Rechercher" variant="primary" size={s} iconKey="search" />
+                <Button label="Télécharger" variant="ghost" size={s} iconKey="upload" />
+                <Button label="Appeler" variant="secondary" size={s} iconKey="phone" />
               </HStack>
             ))}
             <HStack gap={4} wrap="wrap" vAlign="center">
               <Text type="tag" color="secondary" style={{width: 96}}>états</Text>
-              <OrbitaButton label="Envoi…" variant="primary" isLoading />
-              <OrbitaButton label="Indisponible" variant="primary" isDisabled />
-              <OrbitaButton label="Indisponible" variant="ghost" isDisabled />
-              <OrbitaButton label="Voir la méthode" variant="primary" href="/design" />
-              <OrbitaButton label="Voir la méthode" variant="ghost" href="/design" iconKey="external-link" />
+              <Button label="Envoi…" variant="primary" isLoading />
+              <Button label="Indisponible" variant="primary" isDisabled />
+              <Button label="Indisponible" variant="ghost" isDisabled />
+              <Button label="Voir la méthode" variant="primary" href="/design" />
+              <Button label="Voir la méthode" variant="ghost" href="/design" iconKey="external-link" />
             </HStack>
           </VStack>
         </Card>
@@ -79,10 +79,10 @@ export default function ButtonShowcase() {
       <Section title="Split-button · états et compléments" note="Mêmes états avec la cellule flèche ; l'icône à gauche se combine avec la flèche.">
         <Card padding={6}>
           <HStack gap={4} wrap="wrap" vAlign="center">
-            <OrbitaButton label="Rechercher" variant="primary" arrow iconKey="search" />
-            <OrbitaButton label="Envoi…" variant="primary" arrow isLoading />
-            <OrbitaButton label="Indisponible" variant="primary" arrow isDisabled />
-            <OrbitaButton label="Voir la méthode" variant="ghost" arrow href="/design" />
+            <Button label="Rechercher" variant="primary" arrow iconKey="search" />
+            <Button label="Envoi…" variant="primary" arrow isLoading />
+            <Button label="Indisponible" variant="primary" arrow isDisabled />
+            <Button label="Voir la méthode" variant="ghost" arrow href="/design" />
           </HStack>
         </Card>
       </Section>
@@ -91,10 +91,10 @@ export default function ButtonShowcase() {
         <Theme theme={theme} mode="dark">
           <Card padding={6}>
             <HStack gap={4} wrap="wrap" vAlign="center">
-              <OrbitaButton label="Faire mon chiffrage" variant="primary" arrow />
-              <OrbitaButton label="Voir les tarifs" variant="high" arrow />
-              <OrbitaButton label="Demander une démo" variant="ghost" arrow />
-              <OrbitaButton label="En savoir plus" variant="ghost" iconKey="info" />
+              <Button label="Faire mon chiffrage" variant="primary" arrow />
+              <Button label="Voir les tarifs" variant="high" arrow />
+              <Button label="Demander une démo" variant="ghost" arrow />
+              <Button label="En savoir plus" variant="ghost" iconKey="info" />
             </HStack>
           </Card>
         </Theme>
@@ -103,9 +103,9 @@ export default function ButtonShowcase() {
       <Section title="Mode bloc" note="Pleine largeur, libellé à gauche, flèche au bord droit. Cartes de prix, formulaires, drawer mobile.">
         <Card padding={6}>
           <VStack gap={3} maxWidth={420}>
-            <OrbitaButton label="Choisir Pro" variant="primary" arrow block />
-            <OrbitaButton label="Choisir Solo" variant="ghost" arrow block />
-            <OrbitaButton label="Choisir Agence" variant="primary" block />
+            <Button label="Choisir Pro" variant="primary" arrow block />
+            <Button label="Choisir Solo" variant="ghost" arrow block />
+            <Button label="Choisir Agence" variant="primary" block />
           </VStack>
         </Card>
       </Section>

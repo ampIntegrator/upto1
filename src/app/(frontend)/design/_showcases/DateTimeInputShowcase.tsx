@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/OrbitaTimePicker (OrbitaDateTimePicker) */
+/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/TimePicker (DateTimePicker) */
 'use client';
 
 import type {ISODateTimeString} from '@astryxdesign/core/DateTimeInput';
@@ -7,7 +7,7 @@ import {VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
 import React, {useState} from 'react';
 
-import {OrbitaDateTimePicker} from '@/components/OrbitaTimePicker';
+import {DateTimePicker} from '@/components/TimePicker';
 
 export default function DateTimeInputShowcase() {
   const [value, setValue] = useState<ISODateTimeString | undefined>(undefined);
@@ -15,7 +15,7 @@ export default function DateTimeInputShowcase() {
     <VStack gap={4}>
       <Text type="body" color="secondary">Date et heure en un champ à deux segments, « Date » et « Heure ». Le segment date ouvre le calendrier Astryx, étendu sur toute la largeur ; le segment heure ouvre le panneau heures et minutes. Sans date choisie, l'heure se pose sur aujourd'hui.</Text>
       <Grid columns={{minWidth: 280, max: 2}} gap={6} maxWidth={824}>
-        <OrbitaDateTimePicker label="Rendez-vous" value={value} onChange={setValue} />
+        <DateTimePicker label="Rendez-vous" value={value} onChange={setValue} />
       </Grid>
     </VStack>
   );

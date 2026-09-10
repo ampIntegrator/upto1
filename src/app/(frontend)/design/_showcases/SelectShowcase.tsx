@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — remplace Selector et MultiSelector. Composant : src/components/OrbitaSelect */
+/* Showcase habillé Orbita — remplace Selector et MultiSelector. Composant : src/components/Select */
 'use client';
 
 import {Card} from '@astryxdesign/core/Card';
@@ -9,7 +9,7 @@ import {Text} from '@astryxdesign/core/Text';
 import {Theme} from '@astryxdesign/core/theme';
 import React, {useState} from 'react';
 
-import {OrbitaSelect, type OrbitaOption} from '@/components/OrbitaSelect';
+import {Select, type OrbitaOption} from '@/components/Select';
 import {useOrbitaTheme} from '@/theme/OrbitaThemeProvider';
 
 /* Jeux de la maquette 17-forms : m4 (4 options, sans recherche) et m8 (8 options, recherche). */
@@ -44,10 +44,10 @@ function Quartet({prefix}: {prefix: string}) {
   const [m2, setM2] = useState<string[]>([]);
   return (
     <Grid columns={{minWidth: 280, max: 2}} gap={6}>
-      <OrbitaSelect label="Votre métier" options={M4} value={s1} onChange={setS1} />
-      <OrbitaSelect label="Votre métier" options={M8} value={s2} onChange={setS2} />
-      <OrbitaSelect mode="multiple" label="Vos métiers" options={M4} value={m1} onChange={setM1} />
-      <OrbitaSelect mode="multiple" label="Vos métiers" options={M8} value={m2} onChange={setM2} />
+      <Select label="Votre métier" options={M4} value={s1} onChange={setS1} />
+      <Select label="Votre métier" options={M8} value={s2} onChange={setS2} />
+      <Select mode="multiple" label="Vos métiers" options={M4} value={m1} onChange={setM1} />
+      <Select mode="multiple" label="Vos métiers" options={M8} value={m2} onChange={setM2} />
       <Text type="supporting" style={{gridColumn: '1 / -1'}}>
         {prefix} 1 choix · 4 options — 1 choix · 8 options, recherche — multiple · 4 options — multiple · 8 options, recherche
       </Text>
@@ -73,8 +73,8 @@ export default function SelectShowcase() {
       <Section title="Avec valeur" note="Label remonté, valeur ou badges dans le champ.">
         <Card padding={6}>
           <Grid columns={{minWidth: 280, max: 2}} gap={6}>
-            <OrbitaSelect label="Votre métier" options={M8} value={pre} onChange={setPre} />
-            <OrbitaSelect mode="multiple" label="Vos métiers" options={M8} value={preM} onChange={setPreM} />
+            <Select label="Votre métier" options={M8} value={pre} onChange={setPre} />
+            <Select mode="multiple" label="Vos métiers" options={M8} value={preM} onChange={setPreM} />
           </Grid>
         </Card>
       </Section>
@@ -82,10 +82,10 @@ export default function SelectShowcase() {
       <Section title="États" note="Obligatoire, erreur, succès, désactivé.">
         <Card padding={6}>
           <Grid columns={{minWidth: 240, max: 2}} gap={6}>
-            <OrbitaSelect label="Votre métier" options={M4} value={null} onChange={() => {}} isRequired />
-            <OrbitaSelect label="Votre métier" options={M4} value={null} onChange={() => {}} status={{type: 'error', message: 'Choisissez un métier.'}} />
-            <OrbitaSelect label="Votre métier" options={M4} value="archi" onChange={() => {}} status={{type: 'success', message: 'Profil reconnu.'}} />
-            <OrbitaSelect label="Votre métier" options={M4} value="moe" onChange={() => {}} isDisabled />
+            <Select label="Votre métier" options={M4} value={null} onChange={() => {}} isRequired />
+            <Select label="Votre métier" options={M4} value={null} onChange={() => {}} status={{type: 'error', message: 'Choisissez un métier.'}} />
+            <Select label="Votre métier" options={M4} value="archi" onChange={() => {}} status={{type: 'success', message: 'Profil reconnu.'}} />
+            <Select label="Votre métier" options={M4} value="moe" onChange={() => {}} isDisabled />
           </Grid>
         </Card>
       </Section>

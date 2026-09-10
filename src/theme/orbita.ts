@@ -92,7 +92,7 @@ function orbitaOnlyTokens(silo: OrbitaSilo) {
 }
 
 export function defineOrbitaSilo(silo: OrbitaSilo) {
-  const {bg, bg2, primary, primaryDeep, highlight, highlightDeep, night} = silo;
+  const {bg, bg2, primary, night} = silo;
 
   // Accent éclairci pour rester lisible sur le fond nuit.
   const primaryOnNight = mixHex(primary, '#FFFFFF', 68);
@@ -237,7 +237,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         'type:eyebrow-lines': {
           display: 'inline-flex',
           alignItems: 'center',
-          gap: '14px',
+          gap: '16px',
           fontSize: '15px',
           fontWeight: 'var(--font-weight-semibold)',
           letterSpacing: '0.16em',
@@ -298,8 +298,8 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
          - ghost    : « fantôme » bordé ; sur nuit, bordure et voile blancs
          - high     : fond highlight, texte nuit (variante ajoutée, typée au build)
          - secondary/destructive : Astryx, angles vifs
-         Padding horizontal fixé par taille : OrbitaButton s'en sert pour
-         réserver la cellule flèche (voir src/components/OrbitaButton). */
+         Padding horizontal fixé par taille : Button s'en sert pour
+         réserver la cellule flèche (voir src/components/Button). */
       button: {
         base: {
           fontWeight: 'var(--font-weight-semibold)',
@@ -483,8 +483,8 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           {
             base: {
               height: '100%',
-              padding: '0 14px',
-              gap: '6px',
+              padding: '0 16px',
+              gap: '8px',
               borderRadius: '0',
               backgroundColor: 'transparent',
               fontSize: '14.5px',
@@ -502,8 +502,8 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
       'top-nav-mega-menu-item': {
         base: {
           borderRadius: '0',
-          padding: '12px 14px',
-          gap: '14px',
+          padding: '12px 16px',
+          gap: '16px',
           backgroundColor: 'var(--color-background-body)',
           color: 'var(--color-text-primary)',
           transition: 'background-color var(--duration-medium) var(--ease-standard), color var(--duration-medium) var(--ease-standard)',
@@ -558,7 +558,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           {
             base: {
               height: 'auto',
-              padding: '18px 22px',
+              padding: '20px 24px',
               gap: '12px', // icône ↔ libellé ↔ compteur : une demi-icône
               fontSize: '15px',
               fontWeight: 'var(--font-weight-semibold)',
@@ -669,7 +669,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         'mode:dropzone': {
           borderWidth: '1.5px', borderStyle: 'dashed', borderColor: 'var(--color-border-emphasized)',
           backgroundColor: 'light-dark(var(--color-background-surface), rgba(255,255,255,.05))',
-          borderRadius: '0', padding: '18px 20px',
+          borderRadius: '0', padding: '20px 20px',
           transition: 'border-color var(--duration-medium) var(--ease-standard), background-color var(--duration-medium) var(--ease-standard)',
           ':hover': {borderColor: 'var(--color-accent)', backgroundColor: 'var(--color-accent-muted)'},
         },
@@ -684,30 +684,30 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
       badge: {
         base: {borderRadius: '0'},
         'variant:chip': {
-          height: '28px', padding: '0 11px', lineHeight: '1',
+          height: '28px', padding: '0 12px', lineHeight: '1',
           borderWidth: 'var(--border-width)', borderStyle: 'solid', borderColor: 'var(--color-border-emphasized)',
           backgroundColor: 'var(--color-background-surface)', color: 'var(--color-text-secondary)',
           fontSize: '14px', fontWeight: 'var(--font-weight-semibold)', letterSpacing: '0.03em',
         },
         'variant:chip-high': {
-          height: '28px', padding: '0 11px', lineHeight: '1', borderWidth: '0',
+          height: '28px', padding: '0 12px', lineHeight: '1', borderWidth: '0',
           backgroundColor: 'color-mix(in srgb, var(--color-highlight) 18%, transparent)',
           color: 'light-dark(var(--color-highlight-deep), var(--color-highlight))',
           fontSize: '14px', fontWeight: 'var(--font-weight-semibold)', letterSpacing: '0.03em',
         },
         'variant:chip-accent': {
-          height: '28px', padding: '0 11px', lineHeight: '1', borderWidth: '0',
+          height: '28px', padding: '0 12px', lineHeight: '1', borderWidth: '0',
           backgroundColor: 'light-dark(var(--color-accent-muted), rgba(255,255,255,.1))',
           color: 'light-dark(var(--color-text-accent), var(--color-highlight))',
           fontSize: '14px', fontWeight: 'var(--font-weight-semibold)', letterSpacing: '0.03em',
         },
         'variant:chip-cat': {
-          height: '28px', padding: '0 13px', lineHeight: '1', borderWidth: '0',
+          height: '28px', padding: '0 12px', lineHeight: '1', borderWidth: '0',
           backgroundColor: 'var(--color-accent)', color: 'var(--color-on-accent)',
           fontSize: '14px', fontWeight: 'var(--font-weight-medium)', letterSpacing: '0.16em', textTransform: 'uppercase',
         },
         'variant:chip-danger': {
-          height: '28px', padding: '0 11px', lineHeight: '1', borderWidth: '0',
+          height: '28px', padding: '0 12px', lineHeight: '1', borderWidth: '0',
           backgroundColor: 'var(--color-error-muted)', color: 'var(--color-error)',
           fontSize: '14px', fontWeight: 'var(--font-weight-semibold)', letterSpacing: '0.03em',
         },

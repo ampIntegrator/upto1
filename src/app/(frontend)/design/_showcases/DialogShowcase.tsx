@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/OrbitaDialog */
+/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/Dialog */
 'use client';
 
 import {Card} from '@astryxdesign/core/Card';
@@ -8,15 +8,15 @@ import {HStack, VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
 import React, {useState} from 'react';
 
-import {OrbitaButton} from '@/components/OrbitaButton';
-import {OrbitaDialog, type OrbitaDialogSize, type OrbitaDialogTone} from '@/components/OrbitaDialog';
-import {OrbitaField} from '@/components/OrbitaField';
-import {OrbitaSelect} from '@/components/OrbitaSelect';
+import {Button} from '@/components/Button';
+import {Dialog, type OrbitaDialogSize, type DialogTone} from '@/components/Dialog';
+import {Field} from '@/components/Field';
+import {Select} from '@/components/Select';
 
 type Demo = {
   id: string;
   size: OrbitaDialogSize;
-  tone: OrbitaDialogTone;
+  tone: DialogTone;
   tag: string;
   name: string;
   desc: string;
@@ -50,7 +50,7 @@ export default function DialogShowcase() {
       <VStack gap={3}>
         <HStack gap={4} vAlign="center" hAlign="between" wrap="wrap">
           <Heading level={3}>Six cas de la maquette</Heading>
-          <OrbitaButton
+          <Button
             label={withEyebrow ? 'Eyebrow : affiché' : 'Eyebrow : masqué'}
             variant="ghost"
            
@@ -64,7 +64,7 @@ export default function DialogShowcase() {
                 <Text type="tag" color="secondary">{d.tag}</Text>
                 <Heading level={3}>{d.name}</Heading>
                 <Text type="supporting">{d.desc}</Text>
-                <OrbitaButton label="Ouvrir" variant="secondary" onClick={() => setOpen(d.id)} />
+                <Button label="Ouvrir" variant="secondary" onClick={() => setOpen(d.id)} />
               </VStack>
             </Card>
           ))}
@@ -73,7 +73,7 @@ export default function DialogShowcase() {
 
       {/* SM : confirmation */}
       {(['sm', 'sm-d'] as const).map((id) => (
-        <OrbitaDialog
+        <Dialog
           key={id}
           isOpen={open === id}
           onOpenChange={(o) => !o && close()}
@@ -83,17 +83,17 @@ export default function DialogShowcase() {
           title="Supprimer ce chiffrage ?"
           actions={
             <>
-              <OrbitaButton label="Annuler" variant="ghost" onClick={close} />
-              <OrbitaButton label="Supprimer" variant="destructive" onClick={close} />
+              <Button label="Annuler" variant="ghost" onClick={close} />
+              <Button label="Supprimer" variant="destructive" onClick={close} />
             </>
           }>
           <Text type="body">Le chiffrage et ses postes seront définitivement supprimés. Cette action est irréversible.</Text>
-        </OrbitaDialog>
+        </Dialog>
       ))}
 
       {/* MD : formulaire */}
       {(['md', 'md-d'] as const).map((id) => (
-        <OrbitaDialog
+        <Dialog
           key={id}
           isOpen={open === id}
           onOpenChange={(o) => !o && close()}
@@ -104,14 +104,14 @@ export default function DialogShowcase() {
           title="Démarrer une estimation"
           actions={
             <>
-              <OrbitaButton label="Annuler" variant="ghost" onClick={close} />
-              <OrbitaButton label="Créer le chiffrage" variant="primary" onClick={close} />
+              <Button label="Annuler" variant="ghost" onClick={close} />
+              <Button label="Créer le chiffrage" variant="primary" onClick={close} />
             </>
           }>
           <Text type="body">Renseignez les bases du projet, vous pourrez affiner chaque poste ensuite.</Text>
-          <OrbitaField label="Intitulé du projet" value={projet} onChange={setProjet} />
+          <Field label="Intitulé du projet" value={projet} onChange={setProjet} />
           <Grid columns={2} gap={4}>
-            <OrbitaSelect
+            <Select
               label="Type de bien"
               options={[
                 {value: 'collectif', label: 'Logement collectif'},
@@ -121,14 +121,14 @@ export default function DialogShowcase() {
               value={bien}
               onChange={setBien}
             />
-            <OrbitaField label="Surface (m²)" value={surface} onChange={setSurface} />
+            <Field label="Surface (m²)" value={surface} onChange={setSurface} />
           </Grid>
-        </OrbitaDialog>
+        </Dialog>
       ))}
 
       {/* LG : document long */}
       {(['lg', 'lg-d'] as const).map((id) => (
-        <OrbitaDialog
+        <Dialog
           key={id}
           isOpen={open === id}
           onOpenChange={(o) => !o && close()}
@@ -138,8 +138,8 @@ export default function DialogShowcase() {
           title="Conditions générales d'utilisation"
           actions={
             <>
-              <OrbitaButton label="Refuser" variant="ghost" onClick={close} />
-              <OrbitaButton label="Accepter" variant="primary" onClick={close} />
+              <Button label="Refuser" variant="ghost" onClick={close} />
+              <Button label="Accepter" variant="primary" onClick={close} />
             </>
           }>
           {Array.from({length: 6}, (_, i) => (
@@ -149,7 +149,7 @@ export default function DialogShowcase() {
               <Text type="body">{LOREM}</Text>
             </VStack>
           ))}
-        </OrbitaDialog>
+        </Dialog>
       ))}
     </VStack>
   );

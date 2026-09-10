@@ -23,13 +23,20 @@ import {SideNavItem, SideNavSection} from '@astryxdesign/core/SideNav';
 import {HStack, VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
 import {TopNav, TopNavHeading, TopNavItem, TopNavMegaMenu, TopNavMegaMenuFeaturedCard, TopNavMegaMenuItem, TopNavMenu} from '@astryxdesign/core/TopNav';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useSyncExternalStore} from 'react';
 
 import {ClockIcon, MailIcon, MenuIcon, NUCLEO_ICONS, PhoneIcon, SearchIcon} from '@/theme/icons/nucleo';
 import {Container} from './Container';
 import type {SiteHeaderData, SiteNavEntry, SiteNavLeaf} from './site-nav';
 import styles from './SiteHeader.module.css';
 
+
+const subscribeNoop = () => () => {};
+function detectTone(): 'light' | 'dark' {
+  const first = document.querySelector<HTMLElement>('header ~ section[data-background], header + * section[data-background], main section[data-background]');
+  const bg = first?.dataset.background;
+  return bg === 'image' || bg === 'video' || bg === 'night' ? 'dark' : 'light';
+}
 
 export type SiteHeaderProps = SiteHeaderData & {
   /** tonalité : 'auto' (défaut) la déduit du premier bloc de la page (Section image,
@@ -92,16 +99,10 @@ export function SiteHeader({brand, strip, nav, actions, languages = ['FR'], tone
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [lang, setLang] = useState(languages[0]);
-  const [detected, setDetected] = useState<'light' | 'dark'>('light');
+  // tonalité automatique : le premier bloc de page sous l'en-tête décide (lecture du DOM
+  // après hydratation ; 'light' côté serveur)
+  const detected = useSyncExternalStore(subscribeNoop, detectTone, () => 'light' as const);
   const resolvedTone = tone === 'auto' ? detected : tone;
-
-  // tonalité automatique : le premier bloc de page sous l'en-tête décide
-  useEffect(() => {
-    if (tone !== 'auto') return;
-    const first = document.querySelector<HTMLElement>('header ~ section[data-background], header + * section[data-background], main section[data-background]');
-    const bg = first?.dataset.background;
-    setDetected(bg === 'image' || bg === 'video' || bg === 'night' ? 'dark' : 'light');
-  }, [tone]);
 
   useEffect(() => {
     if (!fixed) return;

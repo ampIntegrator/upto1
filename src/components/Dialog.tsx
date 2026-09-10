@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * OrbitaDialog — modale du site, sur le Dialog Astryx.
+ * Dialog — modale du site, sur le Dialog Astryx.
  *
  * Signature Orbita (maquette 20-modal) : en-tête avec eyebrow doré optionnel
  * et titre display en accent, bouton fermer carré (icône Nucleo `close`),
@@ -12,7 +12,7 @@
  * eyebrow + titre est centré verticalement dans une zone de hauteur fixe,
  * puisqu'en back-office l'éditeur pourra remplir l'eyebrow ou non.
  */
-import {Dialog} from '@astryxdesign/core/Dialog';
+import {Dialog as AstryxDialog} from '@astryxdesign/core/Dialog';
 import {Heading} from '@astryxdesign/core/Heading';
 import {Icon} from '@astryxdesign/core/Icon';
 import {IconButton} from '@astryxdesign/core/IconButton';
@@ -24,10 +24,10 @@ import React, {useId} from 'react';
 
 import {CloseIcon} from '@/theme/icons/nucleo';
 import {useOrbitaTheme} from '@/theme/OrbitaThemeProvider';
-import styles from './OrbitaDialog.module.css';
+import styles from './Dialog.module.css';
 
 export type OrbitaDialogSize = 'sm' | 'md' | 'lg';
-export type OrbitaDialogTone = 'light' | 'night';
+export type DialogTone = 'light' | 'night';
 
 /** Largeurs Orbita : 420 / 620 / 840 px. */
 const WIDTH: Record<OrbitaDialogSize, number> = {sm: 420, md: 620, lg: 840};
@@ -35,7 +35,7 @@ const WIDTH: Record<OrbitaDialogSize, number> = {sm: 420, md: 620, lg: 840};
 /** Hauteur réservée à l'en-tête (eyebrow + titre + bouton fermer), constante. */
 const HEADER_MIN_HEIGHT = 92;
 
-export type OrbitaDialogProps = {
+export type DialogProps = {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   /** Titre (obligatoire : il nomme la modale pour l'accessibilité). */
@@ -45,7 +45,7 @@ export type OrbitaDialogProps = {
   /** Largeur : sm 420, md 620, lg 840 px. */
   size?: OrbitaDialogSize;
   /** Clair (défaut) ou nuit. */
-  tone?: OrbitaDialogTone;
+  tone?: DialogTone;
   /** Comportement de fermeture Astryx : info (défaut), form, required. */
   purpose?: 'info' | 'form' | 'required';
   /** Boutons du pied, alignés à droite. Sans `actions`, pas de pied. */
@@ -53,7 +53,7 @@ export type OrbitaDialogProps = {
   children: React.ReactNode;
 };
 
-export function OrbitaDialog({
+export function Dialog({
   isOpen,
   onOpenChange,
   title,
@@ -63,7 +63,7 @@ export function OrbitaDialog({
   purpose = 'info',
   actions,
   children,
-}: OrbitaDialogProps) {
+}: DialogProps) {
   const titleId = useId();
   const {theme, mode} = useOrbitaTheme();
 
@@ -117,7 +117,7 @@ export function OrbitaDialog({
   ) : null;
 
   const dialog = (
-    <Dialog
+    <AstryxDialog
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       width={WIDTH[size]}
@@ -134,7 +134,7 @@ export function OrbitaDialog({
         }
         footer={footer}
       />
-    </Dialog>
+    </AstryxDialog>
   );
 
   // Variante nuit : même silo, mode sombre forcé sur la modale seule.

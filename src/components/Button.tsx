@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * OrbitaButton — bouton du site, sur le Button Astryx.
+ * Button — bouton du site, sur le Button Astryx.
  *
  * Reprend toutes les props du Button Astryx (label, variant, size, href, icon,
  * isLoading, isDisabled…) et ajoute la signature Orbita :
@@ -18,15 +18,15 @@
  * Sans `arrow` ni `block`, c'est un Button Astryx tel quel : le thème Orbita
  * lui donne déjà angles vifs, graisse, halo accent et fantôme bordé.
  */
-import {Button, type ButtonProps} from '@astryxdesign/core/Button';
+import {Button as AstryxButton, type ButtonProps as AstryxButtonProps} from '@astryxdesign/core/Button';
 import {Icon} from '@astryxdesign/core/Icon';
 import React, {useId} from 'react';
 
 import {NUCLEO_GRID} from '@/theme/icons/keys';
 import {ArrowRightIcon, NUCLEO_ICONS, type NucleoIconKey} from '@/theme/icons/nucleo';
-import styles from './OrbitaButton.module.css';
+import styles from './Button.module.css';
 
-export type OrbitaButtonProps = Omit<ButtonProps, 'endContent' | 'width' | 'size'> & {
+export type ButtonProps = Omit<AstryxButtonProps, 'endContent' | 'width' | 'size'> & {
   /** Deux tailles seulement (Orbita) : md 48 px, lg 56 px. */
   size?: 'md' | 'lg';
   /** Split-button : cellule flèche à droite. */
@@ -37,7 +37,7 @@ export type OrbitaButtonProps = Omit<ButtonProps, 'endContent' | 'width' | 'size
   iconKey?: NucleoIconKey;
 };
 
-export function OrbitaButton({arrow = false, block = false, iconKey, icon, className, variant = 'primary', size = 'md', ...rest}: OrbitaButtonProps) {
+export function Button({arrow = false, block = false, iconKey, icon, className, variant = 'primary', size = 'md', ...rest}: ButtonProps) {
   const isSecondary = variant === 'secondary';
   const gradId = useId();
   const nucleoIcon = iconKey ? <Icon icon={NUCLEO_ICONS[iconKey]} /> : null;
@@ -76,7 +76,7 @@ export function OrbitaButton({arrow = false, block = false, iconKey, icon, class
     .join(' ') || undefined;
 
   return (
-    <Button
+    <AstryxButton
       {...rest}
       variant={variant}
       size={size}

@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/OrbitaCollapsible */
+/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/Collapsible */
 'use client';
 
 import {Grid} from '@astryxdesign/core/Grid';
@@ -8,15 +8,15 @@ import {Text} from '@astryxdesign/core/Text';
 import {Theme} from '@astryxdesign/core/theme';
 import React from 'react';
 
-import {OrbitaCollapsible} from '@/components/OrbitaCollapsible';
+import {Collapsible} from '@/components/Collapsible';
 import {useOrbitaTheme} from '@/theme/OrbitaThemeProvider';
 import {FAQ} from './faq.shared';
 
 function Pair() {
   return (
     <Grid columns={{minWidth: 420, max: 2}} gap={6} align="start">
-      <OrbitaCollapsible question={FAQ[0].q} defaultIsOpen><Text type="body">{FAQ[0].a}</Text></OrbitaCollapsible>
-      <OrbitaCollapsible question={FAQ[1].q}><Text type="body">{FAQ[1].a}</Text></OrbitaCollapsible>
+      <Collapsible question={FAQ[0].q} defaultIsOpen><Text type="body">{FAQ[0].a}</Text></Collapsible>
+      <Collapsible question={FAQ[1].q}><Text type="body">{FAQ[1].a}</Text></Collapsible>
     </Grid>
   );
 }
