@@ -1,6 +1,6 @@
 /*
  * Section — bloc pleine largeur : arrière-plan + padding vertical.
- * Le contenu (Container, Grid) passe au-dessus des couches média / voile / halo.
+ * Le contenu (Container, Grid) passe au-dessus des couches média et overlay.
  */
 .section {
   position: relative;
