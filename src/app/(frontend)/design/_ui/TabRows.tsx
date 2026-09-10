@@ -13,17 +13,17 @@ export const TABS = [
   {value: 'refacturation', label: 'La refacturation tourne mal', text: "Refacturer la maintenance à chaque site ou franchisé suppose un détail précis par poste. Sans données fiables, la refacturation est contestée, retardée, parfois abandonnée."},
 ] as const;
 
-/** Liste d'onglets à largeur égale + panneau (fond silo 10 %, carte, liseré dégradé). */
+/** Liste d'onglets à largeur égale + panneau (classes .orbita-tab-stack / .orbita-tab-panel de tabs.css). */
 export function TabsWithPanel({id}: {id: string}) {
   const [value, setValue] = useState<string>(TABS[0].value);
   const current = TABS.find((t) => t.value === value) ?? TABS[0];
   return (
-    <VStack style={{border: 'var(--border-width) solid var(--color-border)', background: 'var(--color-background-surface)', boxShadow: 'var(--shadow-md)'}}>
-      <TabList value={value} onChange={setValue} layout="fill" hasDivider role="tablist" aria-label="Situations">
+    <VStack style={{boxShadow: 'var(--shadow-md)'}}>
+      <TabList value={value} onChange={setValue} layout="fill" role="tablist" aria-label="Situations">
         {TABS.map((t) => <Tab key={t.value} value={t.value} label={t.label} panelId={`${id}-${t.value}`} />)}
       </TabList>
-      <VStack padding={10} style={{background: 'light-dark(var(--color-accent-muted), rgba(255,255,255,.04))'}}>
-        <VStack id={`${id}-${current.value}`} role="tabpanel" className="orbita-tab-panel" align="center" style={{background: 'var(--color-background-surface)', padding: '44px 56px'}}>
+      <VStack className="orbita-tab-stack">
+        <VStack id={`${id}-${current.value}`} role="tabpanel" className="orbita-tab-panel" align="center">
           <Text type="body" style={{fontSize: '16.5px', lineHeight: 1.65, maxWidth: '880px'}} color="secondary">{current.text}</Text>
         </VStack>
       </VStack>

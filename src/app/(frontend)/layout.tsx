@@ -3,6 +3,7 @@ import React from 'react'
 import {OrbitaThemeProvider} from '@/theme/OrbitaThemeProvider'
 import {fontVariables} from './fonts'
 import './styles.css'
+import './tabs.css'
 
 export const metadata = {
   description: 'Orbita — design system Astryx',

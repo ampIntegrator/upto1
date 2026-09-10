@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Thème : orbita.ts 'tab-menu' / 'tab-menu-item' */
+/* Showcase habillé Orbita — remplace la démo Astryx d'origine. CSS : src/app/(frontend)/tabs.css */
 'use client';
 
 import {VStack} from '@astryxdesign/core/Stack';
@@ -13,7 +13,7 @@ export default function TabMenuShowcase() {
       <Text type="body" color="secondary">
         Le menu de débordement regroupe les onglets secondaires dans une liste déroulante, au style des sélecteurs Orbita. Son libellé affiche l'option choisie.
       </Text>
-      <TabList value={value} onChange={setValue} hasDivider aria-label="Compte">
+      <TabList value={value} onChange={setValue} layout="fill" aria-label="Compte">
         <Tab value="apercu" label="Aperçu" />
         <Tab value="activite" label="Activité" />
         <TabMenu

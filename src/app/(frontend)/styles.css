@@ -227,24 +227,3 @@ body > [data-astryx-theme] {
 [data-astryx-theme^='orbita'] .astryx-field-status[data-variant='attached'][data-type='success'] { background-color: var(--color-success-muted) !important; }
 [data-astryx-theme^='orbita'] .astryx-field-status[data-variant='attached'][data-type='warning'] { background-color: var(--color-warning-muted) !important; }
 
-/* Onglets (06-tabs) : séparateur vertical entre onglets et menu de débordement ;
-   filet bas du TabList en couleur de bordure. Le panneau de contenu n'est pas un
-   composant : .orbita-tab-panel pose le liseré dégradé highlight → silo → highlight
-   sous la carte blanche (même gradient que le composant 13). */
-[data-astryx-theme^='orbita'] .astryx-tab-strip > .astryx-tab + .astryx-tab,
-[data-astryx-theme^='orbita'] .astryx-tab-strip > .astryx-tab + .astryx-tab-menu {
-  border-inline-start: var(--border-width) solid var(--color-border);
-}
-[data-astryx-theme^='orbita'] .astryx-tab-menu:has(.astryx-tab-indicator[data-selected]) {
-  color: light-dark(var(--color-text-accent), var(--color-highlight));
-}
-[data-astryx-theme^='orbita'] .orbita-tab-panel {
-  position: relative;
-}
-[data-astryx-theme^='orbita'] .orbita-tab-panel::after {
-  content: '';
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--color-highlight) 0%, var(--color-accent) 50%, var(--color-highlight) 100%);
-}

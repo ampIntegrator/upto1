@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Thème : orbita.ts 'tab' / 'tab-indicator' */
+/* Showcase habillé Orbita — remplace la démo Astryx d'origine. CSS : src/app/(frontend)/tabs.css */
 'use client';
 
 import {Badge} from '@astryxdesign/core/Badge';
@@ -20,7 +20,7 @@ export default function TabShowcase() {
       </Text>
       <VStack gap={3}>
         <Heading level={3}>Avec icônes</Heading>
-        <TabList value={value} onChange={setValue} hasDivider aria-label="Espaces">
+        <TabList value={value} onChange={setValue} layout="fill" aria-label="Espaces">
           <Tab value="activite" label="Activité" icon={<ChartIcon />} />
           <Tab value="dossiers" label="Dossiers" icon={<FilesIcon />} />
           <Tab value="reglages" label="Réglages" icon={<GearsIcon />} />
@@ -28,7 +28,7 @@ export default function TabShowcase() {
       </VStack>
       <VStack gap={3}>
         <Heading level={3}>Avec compteur</Heading>
-        <TabList value={v2} onChange={setV2} hasDivider aria-label="Devis">
+        <TabList value={v2} onChange={setV2} layout="fill" aria-label="Devis">
           <Tab value="tous" label="Tous" endContent={<Badge label="24" variant="neutral" />} />
           <Tab value="attente" label="En attente" endContent={<Badge label="3" variant="error" />} />
           <Tab value="valides" label="Validés" />

@@ -1,0 +1,124 @@
+/*
+ * Onglets Orbita (maquette 06-tabs) — Tab, TabList, TabMenu d'Astryx.
+ *
+ * Fichier unique et éditable à la main : toutes les règles des onglets sont
+ * ici (rien dans le thème orbita.ts). Même couche et même portée que le thème
+ * compilé (@layer astryx-theme + attribut data-astryx-theme), donc ces règles
+ * passent devant les styles de base Astryx sans !important.
+ *
+ * Classes Astryx :
+ *   .astryx-tab-list        la barre (nav ou tablist)            data-size, .has-divider
+ *   .astryx-tab-strip       la piste qui défile
+ *   .astryx-tab             un onglet                             .selected
+ *   .astryx-tab-indicator   le trait sous l'onglet (un par onglet), [data-selected]
+ *   .astryx-tab-menu        le déclencheur du menu de débordement
+ *   .astryx-tab-menu-item   une option du menu
+ * Tokens : var(--color-*), var(--spacing-*), var(--font-*), var(--duration-*), var(--ease-*).
+ * Clair / nuit : light-dark(clair, nuit).
+ */
+@layer astryx-theme {
+  [data-astryx-theme^='orbita'] {
+    /* ---- la barre : l'en-tête bordé du bloc (fond papier, filet tout autour) ---- */
+    .astryx-tab-list {
+      height: auto;
+      font-family: var(--font-family-body);
+      background: light-dark(var(--color-background-surface), rgba(255, 255, 255, 0.03));
+      border: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.15));
+    }
+    .astryx-tab-strip {
+      height: auto;
+    }
+
+    /* ---- un onglet ---- */
+    .astryx-tab,
+    .astryx-tab-menu {
+      height: auto;
+      padding: 18px 22px;
+      font-size: 15px;
+      font-weight: var(--font-weight-semibold);
+      line-height: 1.3;
+      text-align: center;
+      justify-content: center;
+      color: light-dark(var(--color-text-secondary), rgba(255, 255, 255, 0.8));
+      border-radius: 0;
+      transition:
+        color var(--duration-medium) var(--ease-standard),
+        background-color var(--duration-medium) var(--ease-standard);
+    }
+    /* à partir de 640 px les libellés peuvent passer sur deux lignes (maquette) ;
+       en dessous ils restent sur une ligne et la barre défile (reco Astryx) */
+    @media (min-width: 640px) {
+      .astryx-tab,
+      .astryx-tab span {
+        white-space: normal;
+      }
+    }
+    /* séparateur vertical entre onglets (et avant le menu de débordement) */
+    .astryx-tab-strip > .astryx-tab + .astryx-tab,
+    .astryx-tab-strip > .astryx-tab + .astryx-tab-menu {
+      border-inline-start: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.15));
+    }
+    /* survol : encre + fond silo 10 % */
+    .astryx-tab:hover:where(:not(:disabled, [aria-disabled='true'])),
+    .astryx-tab-menu:hover:where(:not(:disabled, [aria-disabled='true'])) {
+      color: light-dark(var(--color-text-primary), #ffffff);
+      background-color: light-dark(var(--color-accent-muted), rgba(255, 255, 255, 0.06));
+    }
+    /* actif : couleur silo (highlight en nuit) */
+    .astryx-tab.selected,
+    .astryx-tab-menu.selected,
+    .astryx-tab-menu:has(.astryx-tab-indicator[data-selected]) {
+      color: light-dark(var(--color-text-accent), var(--color-highlight));
+    }
+
+    /* ---- le trait sous l'onglet actif : 3 px, toute la largeur de l'onglet ---- */
+    .astryx-tab-indicator {
+      left: 0;
+      right: 0;
+      width: auto;
+      height: 3px;
+      border-radius: 0;
+      background-color: light-dark(var(--color-accent), var(--color-highlight));
+      transition: opacity var(--duration-medium) var(--ease-standard);
+    }
+
+    /* ---- menu de débordement (TabMenu) : mêmes rangées que les sélecteurs ---- */
+    .astryx-tab-menu-item {
+      border-radius: 0;
+      color: var(--color-text-secondary);
+      transition:
+        background-color var(--duration-medium) var(--ease-standard),
+        color var(--duration-medium) var(--ease-standard);
+    }
+    .astryx-tab-menu-item:hover:where(:not(:disabled, [aria-disabled='true'])) {
+      background-color: light-dark(var(--color-accent-muted), rgba(255, 255, 255, 0.08));
+      color: var(--color-text-primary);
+    }
+
+    /* ---- le panneau sous les onglets (contenu du bloc, pas un composant) ----
+       .orbita-tab-stack : la zone sur fond silo 10 %, bordée sur trois côtés
+       .orbita-tab-panel : la carte blanche avec le liseré dégradé en bas */
+    .orbita-tab-stack {
+      padding: 40px;
+      background: light-dark(var(--color-accent-muted), rgba(255, 255, 255, 0.04));
+      border: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.15));
+      border-top: 0;
+    }
+    .orbita-tab-panel {
+      position: relative;
+      padding: 44px 56px;
+      background: light-dark(var(--color-background-surface), var(--color-night));
+    }
+    .orbita-tab-panel::after {
+      content: '';
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--color-highlight) 0%, var(--color-accent) 50%, var(--color-highlight) 100%);
+    }
+    @media (max-width: 639px) {
+      .orbita-tab-stack { padding: 20px; }
+      .orbita-tab-panel { padding: 28px 24px; }
+    }
+  }
+}

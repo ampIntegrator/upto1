@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Thème : orbita.ts 'tab-list' / 'tab' / 'tab-indicator' (maquette 06-tabs) */
+/* Showcase habillé Orbita — remplace la démo Astryx d'origine. CSS : src/app/(frontend)/tabs.css (maquette 06-tabs) */
 'use client';
 
 import {Heading} from '@astryxdesign/core/Heading';
@@ -14,7 +14,7 @@ import {TABS, TabsWithPanel} from '../_ui/TabRows';
 function Hug() {
   const [value, setValue] = useState<string>('reporting');
   return (
-    <TabList value={value} onChange={setValue} hasDivider aria-label="Sections">
+    <TabList value={value} onChange={setValue} aria-label="Sections">
       {TABS.map((t) => <Tab key={t.value} value={t.value} label={t.label} />)}
     </TabList>
   );
@@ -29,7 +29,7 @@ export default function TabListShowcase() {
       </Text>
       <VStack gap={3}>
         <Heading level={3}>Largeur égale avec panneau</Heading>
-        <Text type="supporting">layout fill, hasDivider, role tablist ; panneau sur fond silo 10 %, carte et liseré dégradé (maquette 06).</Text>
+        <Text type="supporting">layout fill, role tablist ; panneau sur fond silo 10 %, carte et liseré dégradé (maquette 06). Tout le CSS est dans src/app/(frontend)/tabs.css.</Text>
         <TabsWithPanel id="tabs-light" />
       </VStack>
       <VStack gap={3}>
