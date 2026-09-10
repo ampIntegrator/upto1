@@ -221,6 +221,21 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           lineHeight: '1.4',
           color: 'var(--color-editorial)',
         },
+        // Eyebrow de tête de section (maquette .c-head-eyebrow) : même texte, avec un
+        // tiret de 40 px de chaque côté, or éditorial à 60 %
+        'type:eyebrow-lines': {
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '14px',
+          fontSize: '0.72rem',
+          fontWeight: 'var(--font-weight-semibold)',
+          letterSpacing: '0.16em',
+          textTransform: 'uppercase',
+          lineHeight: '1.4',
+          color: 'var(--color-editorial)',
+          '::before': {content: '""', width: '40px', height: '1px', backgroundColor: 'var(--color-editorial)', opacity: '0.6'},
+          '::after': {content: '""', width: '40px', height: '1px', backgroundColor: 'var(--color-editorial)', opacity: '0.6'},
+        },
         // Accent serif : Cormorant italique 600, couleur accent
         'type:serif': {
           fontFamily: 'var(--font-family-serif)',

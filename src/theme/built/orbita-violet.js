@@ -255,6 +255,31 @@ export const orbitaVioletTheme = {
         "lineHeight": "1.4",
         "color": "var(--color-editorial)"
       },
+      "type:eyebrow-lines": {
+        "display": "inline-flex",
+        "alignItems": "center",
+        "gap": "14px",
+        "fontSize": "0.72rem",
+        "fontWeight": "var(--font-weight-semibold)",
+        "letterSpacing": "0.16em",
+        "textTransform": "uppercase",
+        "lineHeight": "1.4",
+        "color": "var(--color-editorial)",
+        "::before": {
+          "content": "\"\"",
+          "width": "40px",
+          "height": "1px",
+          "backgroundColor": "var(--color-editorial)",
+          "opacity": "0.6"
+        },
+        "::after": {
+          "content": "\"\"",
+          "width": "40px",
+          "height": "1px",
+          "backgroundColor": "var(--color-editorial)",
+          "opacity": "0.6"
+        }
+      },
       "type:serif": {
         "fontFamily": "var(--font-family-serif)",
         "fontStyle": "italic",

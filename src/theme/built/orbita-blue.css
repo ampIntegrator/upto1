@@ -399,6 +399,34 @@
     color: var(--color-editorial);
   }
 
+  .astryx-text.eyebrow-lines {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 0.72rem;
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    line-height: 1.4;
+    color: var(--color-editorial);
+  }
+
+  .astryx-text.eyebrow-lines::before {
+    content: "";
+    width: 40px;
+    height: 1px;
+    background-color: var(--color-editorial);
+    opacity: 0.6;
+  }
+
+  .astryx-text.eyebrow-lines::after {
+    content: "";
+    width: 40px;
+    height: 1px;
+    background-color: var(--color-editorial);
+    opacity: 0.6;
+  }
+
   .astryx-text.serif {
     font-family: var(--font-family-serif);
     font-style: italic;

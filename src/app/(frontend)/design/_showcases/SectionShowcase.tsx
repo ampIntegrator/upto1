@@ -39,7 +39,7 @@ export default function SectionShowcase() {
               <Grid columns={12} gap={6} className="page-grid">
                 <GridSpan style={{gridColumn: '4 / span 6'}}>
                   <VStack gap={3} align="center" style={{textAlign: 'center'}}>
-                    <Text type="eyebrow">Section · {m.bg}</Text>
+                    <Text type="eyebrow-lines">Section · {m.bg}</Text>
                     <Heading level={3} type="display-3">
                       Titre de section <Text type="serif">accentué.</Text>
                     </Heading>

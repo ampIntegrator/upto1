@@ -9,6 +9,8 @@ declare module '@astryxdesign/core/theme' {
   interface CustomTextTypes {
     /** Petite capitale espacée, or éditorial — au-dessus d'un titre */
     eyebrow: true;
+    /** Eyebrow de tête de section : un tiret de 40 px de chaque côté (maquette .c-head-eyebrow) */
+    'eyebrow-lines': true;
     /** Cormorant Garamond italique 600, couleur accent — mot « signature » dans un titre */
     serif: true;
     /** Étiquette technique espacée (ex-Geist Mono) */

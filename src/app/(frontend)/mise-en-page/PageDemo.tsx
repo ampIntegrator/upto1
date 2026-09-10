@@ -20,7 +20,7 @@ const VIDEO = 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flo
 const LOREM = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
 
 function Eyebrow({children}: {children: string}) {
-  return <Text type="eyebrow">{children}</Text>;
+  return <Text type="eyebrow-lines">{children}</Text>;
 }
 
 export function PageDemo() {

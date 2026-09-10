@@ -18,7 +18,7 @@ const FONTS = [
 
 const HEADINGS = [1, 2, 3, 4, 5, 6] as const;
 const DISPLAYS = ['display-1', 'display-2', 'display-3'] as const;
-const TEXTS = ['large', 'body', 'label', 'supporting', 'code', 'eyebrow', 'tag'] as const;
+const TEXTS = ['large', 'body', 'label', 'supporting', 'code', 'eyebrow', 'eyebrow-lines', 'tag'] as const;
 
 export default function Page() {
   return (
@@ -87,7 +87,7 @@ export default function Page() {
 
       <VStack gap={3}>
         <Heading level={2}>Types de texte</Heading>
-        <Text type="supporting">Types Astryx natifs, plus les types Orbita ajoutés par le thème : eyebrow, serif, tag.</Text>
+        <Text type="supporting">Types Astryx natifs, plus les types ajoutés par le thème : eyebrow, eyebrow-lines (tête de section, avec tirets), serif, tag.</Text>
         <Card padding={6}>
           <VStack gap={4}>
             {TEXTS.map((t) => (
