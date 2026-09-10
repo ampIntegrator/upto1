@@ -32,8 +32,9 @@ import styles from './SiteHeader.module.css';
 
 
 export type SiteHeaderProps = SiteHeaderData & {
-  /** sombre : posé sur un hero média ou nuit (textes blancs jusqu'au défilement) */
-  tone?: 'light' | 'dark';
+  /** tonalité : 'auto' (défaut) la déduit du premier bloc de la page (Section image,
+   *  vidéo ou nuit → sombre) ; 'dark' / 'light' pour forcer */
+  tone?: 'auto' | 'light' | 'dark';
   /** fixé en haut de la fenêtre (défaut) ; false pour le catalogue */
   fixed?: boolean;
   /** entrée sélectionnée (href courant) */
@@ -82,10 +83,20 @@ function NavEntries({nav, currentHref}: {nav: SiteNavEntry[]; currentHref?: stri
   );
 }
 
-export function SiteHeader({brand, strip, nav, actions, languages = ['FR'], tone = 'light', fixed = true, currentHref}: SiteHeaderProps) {
+export function SiteHeader({brand, strip, nav, actions, languages = ['FR'], tone = 'auto', fixed = true, currentHref}: SiteHeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [lang, setLang] = useState(languages[0]);
+  const [detected, setDetected] = useState<'light' | 'dark'>('light');
+  const resolvedTone = tone === 'auto' ? detected : tone;
+
+  // tonalité automatique : le premier bloc de page sous l'en-tête décide
+  useEffect(() => {
+    if (tone !== 'auto') return;
+    const first = document.querySelector<HTMLElement>('header ~ section[data-background], header + * section[data-background], main section[data-background]');
+    const bg = first?.dataset.background;
+    setDetected(bg === 'image' || bg === 'video' || bg === 'night' ? 'dark' : 'light');
+  }, [tone]);
 
   useEffect(() => {
     if (!fixed) return;
@@ -96,7 +107,7 @@ export function SiteHeader({brand, strip, nav, actions, languages = ['FR'], tone
   }, [fixed]);
 
   return (
-    <VStack as="header" className={styles.header} data-tone={tone} data-scrolled={scrolled || undefined} data-fixed={fixed || undefined}>
+    <VStack as="header" className={styles.header} data-tone={resolvedTone} data-scrolled={scrolled || undefined} data-fixed={fixed || undefined}>
       {strip ? (
         <VStack className={styles.strip}>
           <Container>

@@ -139,23 +139,27 @@
   padding: 30px 20px;
   box-sizing: border-box;
 }
-/* intérieur : les groupes prennent la place, la zone libre (carte) fait 400 px à droite */
+/* intérieur : grille de trois colonnes égales — les groupes de liens sur deux tiers,
+   la zone libre (carte mise en avant, article, réalisation…) sur le dernier tiers */
 .desktopNav :global(.astryx-top-nav-mega-menu ~ [popover] [role='group'] > div) {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 40px;
   width: 100% !important;
   max-width: none !important;
-  gap: 40px;
 }
 .desktopNav :global(.astryx-top-nav-mega-menu ~ [popover] [role='group'] .astryx-grid) {
   display: flex !important;
-  flex: 1 1 auto !important;
+  grid-column: span 2;
   min-width: 0;
 }
 .desktopNav :global(.astryx-top-nav-mega-menu ~ [popover] [role='group'] > div > div:has(> .astryx-top-nav-mega-menu-featured-card)) {
-  flex: 0 0 400px !important;
+  grid-column: span 1;
+  min-width: 0;
 }
 /* méga-menu : groupes côte à côte, eyebrow + filet */
-.megaGroups { min-width: 0; width: 100%; }
-.megaGroup { flex: 1 1 0; min-width: 240px; }
+.megaGroups { min-width: 0; width: 100%; gap: 40px; }
+.megaGroup { flex: 1 1 0; min-width: 0; }
 .megaTitle {
   display: flex;
   align-items: center;

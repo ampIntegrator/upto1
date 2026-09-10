@@ -29,8 +29,8 @@ function Eyebrow({children}: {children: string}) {
 export function PageDemo() {
   return (
     <VStack className="page-demo">
-      {/* 0 · en-tête fixé, tonalité sombre car posé sur un hero image */}
-      <SiteHeader {...SITE_HEADER} tone="dark" />
+      {/* 0 · en-tête fixé ; tonalité déduite du premier bloc (ici image → sombre) */}
+      <SiteHeader {...SITE_HEADER} />
 
       {/* 1 · image pleine largeur, colonne de 8 centrée (maquette 13 : contenu à 900 px) */}
       <Section background="image" image={{src: IMG, alt: ''}} overlay={0.3} spacing="lg" minHeight={600}>
