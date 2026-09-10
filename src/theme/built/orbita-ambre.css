@@ -1274,7 +1274,7 @@
   }
 
   .astryx-top-nav {
-    height: 74px;
+    height: var(--site-header-bar);
     padding: 0;
     background-color: transparent;
     border-bottom: 0;

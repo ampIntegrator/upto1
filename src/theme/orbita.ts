@@ -463,7 +463,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
          ───────────────────────────────────────────────────────────────── */
       'top-nav': {
         base: {
-          height: '74px',
+          height: 'var(--site-header-bar)', // variable globale (styles.css), une seule source
           padding: '0',
           backgroundColor: 'transparent',
           borderBottom: '0',

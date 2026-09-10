@@ -1033,7 +1033,7 @@ export const orbitaGreenTheme = {
     },
     "top-nav": {
       "base": {
-        "height": "74px",
+        "height": "var(--site-header-bar)",
         "padding": "0",
         "backgroundColor": "transparent",
         "borderBottom": "0",
