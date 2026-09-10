@@ -1,0 +1,59 @@
+/* Hero — hauts de page (maquettes 02, 16, 25). Le fond et la hauteur viennent de Section. */
+.center { text-align: center; }
+.title { text-wrap: balance; }
+/* l'accent serif occupe sa propre ligne */
+.accent { display: block; }
+.lead { max-width: 640px; }
+.paragraph { max-width: 520px; font-size: 18px; line-height: 1.55; }
+.pageInner { padding-block: 64px; }
+
+/* invitation à défiler (maquette 16) */
+.scrollHint {
+  position: absolute;
+  left: 50%;
+  bottom: 32px;
+  z-index: 3;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: color var(--duration-medium) var(--ease-standard);
+  translate: -50% 0;
+}
+.scrollHint:hover { color: #fff; }
+.scrollLabel { color: inherit !important; letter-spacing: 0.22em; }
+.scrollHint svg { animation: heroBounce 1.8s var(--ease-standard) infinite; }
+@keyframes heroBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+@media (prefers-reduced-motion: reduce) { .scrollHint svg { animation: none; } }
+
+/* réassurance (maquette 02) */
+.check { color: var(--color-icon-accent); flex: 0 0 auto; }
+
+/* image de droite et ses étiquettes qui débordent des coins (maquette 02) */
+.mediaBox { position: relative; isolation: isolate; }
+.mediaImg {
+  display: block;
+  width: 100%;
+  height: clamp(400px, 56vh, 600px);
+  object-fit: cover;
+}
+.mediaBadge {
+  position: absolute;
+  z-index: 1;
+  padding: 8px;
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #fff !important;
+  box-shadow: 0 16px 32px rgba(12, 20, 40, 0.3);
+}
+.mediaBadge[data-tone='night'] { background: var(--color-night); }
+.mediaBadge[data-tone='accent'] { background: var(--color-accent); }
+.mediaBadge[data-corner='top-right'] { top: -20px; right: -24px; }
+.mediaBadge[data-corner='bottom-left'] { bottom: -20px; left: -24px; }

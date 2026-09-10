@@ -7,8 +7,9 @@
  * Elle ne porte que l'arrière-plan et le padding vertical ; le contenu se met
  * dans un <Container>, puis dans une Grid de 12 colonnes.
  *
- *   background : 'light' (fond de page) | 'paper' (blanc) | 'grid' | 'dots' |
- *                'losange' (textures, clair seulement) | 'night' | 'image' | 'video'
+ *   background : 'light' (fond de page) | 'paper' (blanc) | 'glow' (clair, lueur highlight
+ *                en haut) | 'grid' | 'dots' | 'losange' (textures, clair seulement) |
+ *                'night' | 'night-halo' (nuit à halos silo et or) | 'image' | 'video'
  *   image / video : le média (couvre toute la section)
  *   overlay    : calque noir posé sur l'image ou la vidéo, sous le contenu ;
  *                opacité de 0 à 1, réglable en admin (0 = aucun)
@@ -29,7 +30,7 @@ import React from 'react';
 import {useOrbitaTheme} from '@/theme/OrbitaThemeProvider';
 import styles from './Section.module.css';
 
-export type SectionBackground = 'light' | 'paper' | 'grid' | 'dots' | 'losange' | 'night' | 'image' | 'video';
+export type SectionBackground = 'light' | 'paper' | 'glow' | 'grid' | 'dots' | 'losange' | 'night' | 'night-halo' | 'image' | 'video';
 export type SectionSpacing = 'none' | 'xs' | 'sm' | 'md' | 'lg';
 
 export type SectionProps = {
@@ -49,12 +50,14 @@ export type SectionProps = {
   minHeight?: number | string;
   id?: string;
   children: React.ReactNode;
+  /** contenu posé sur la section hors du flux (ex. invitation à défiler), au-dessus du contenu */
+  foot?: React.ReactNode;
 };
 
-const DARK: SectionBackground[] = ['night', 'image', 'video'];
+const DARK: SectionBackground[] = ['night', 'night-halo', 'image', 'video'];
 const MEDIA: SectionBackground[] = ['image', 'video'];
 
-export function Section({background = 'light', image, video, overlay = 0, edge, spacing = 'md', dividers, underHeader, minHeight, id, children}: SectionProps) {
+export function Section({background = 'light', image, video, overlay = 0, edge, spacing = 'md', dividers, underHeader, minHeight, id, children, foot}: SectionProps) {
   const {theme} = useOrbitaTheme();
   const isMedia = MEDIA.includes(background);
   const showEdge = edge ?? isMedia;
@@ -80,6 +83,7 @@ export function Section({background = 'light', image, video, overlay = 0, edge, 
       ) : null}
       {isMedia && overlay > 0 ? <i className={styles.overlay} style={{opacity: Math.min(1, overlay)}} aria-hidden="true" /> : null}
       <VStack className={styles.content}>{children}</VStack>
+      {foot}
     </VStack>
   );
 

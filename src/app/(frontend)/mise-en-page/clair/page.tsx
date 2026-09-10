@@ -2,9 +2,8 @@ import React from 'react';
 
 import {PageDemo} from '../PageDemo';
 
-export const metadata = {title: 'Mise en page — hero clair'};
+export const metadata = {title: 'Mise en page — haut de page clair (maquette 25 B)'};
 
-/** Même page assemblée, avec un haut de page clair (sans média) : l'en-tête reste clair. */
 export default function Page() {
-  return <PageDemo hero="light" />;
+  return <PageDemo hero="page-glow" />;
 }

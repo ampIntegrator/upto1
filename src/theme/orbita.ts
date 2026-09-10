@@ -707,6 +707,22 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           backgroundColor: 'var(--color-accent)', color: 'var(--color-on-accent)',
           fontSize: '14px', fontWeight: 'var(--font-weight-medium)', letterSpacing: '0.16em', textTransform: 'uppercase',
         },
+        // chip « live » (maquette 02) : papier bordé, point silo devant le texte
+        'variant:chip-live': {
+          height: '32px', padding: '0 12px', gap: '8px', lineHeight: '1',
+          borderWidth: 'var(--border-width)', borderStyle: 'solid', borderColor: 'var(--color-border-emphasized)',
+          backgroundColor: 'var(--color-background-surface)', color: 'var(--color-text-secondary)',
+          fontSize: '14px', fontWeight: 'var(--font-weight-semibold)', letterSpacing: '0.04em',
+          '::before': {content: '""', width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-accent)'},
+        },
+        // chip « live » sur média (maquette 16) : translucide flouté, point highlight lumineux
+        'variant:chip-live-dark': {
+          height: '32px', padding: '0 16px', gap: '8px', lineHeight: '1',
+          borderWidth: 'var(--border-width)', borderStyle: 'solid', borderColor: 'rgba(255,255,255,.28)',
+          backgroundColor: 'rgba(255,255,255,.06)', backdropFilter: 'blur(4px)', color: 'rgba(255,255,255,.9)',
+          fontSize: '14px', fontWeight: 'var(--font-weight-semibold)', letterSpacing: '0.04em',
+          '::before': {content: '""', width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-highlight)', boxShadow: '0 0 8px var(--color-highlight)'},
+        },
         'variant:chip-danger': {
           height: '28px', padding: '0 12px', lineHeight: '1', borderWidth: '0',
           backgroundColor: 'var(--color-error-muted)', color: 'var(--color-error)',

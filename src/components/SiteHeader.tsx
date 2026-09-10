@@ -35,7 +35,7 @@ const subscribeNoop = () => () => {};
 function detectTone(): 'light' | 'dark' {
   const first = document.querySelector<HTMLElement>('header ~ section[data-background], header + * section[data-background], main section[data-background]');
   const bg = first?.dataset.background;
-  return bg === 'image' || bg === 'video' || bg === 'night' ? 'dark' : 'light';
+  return bg === 'image' || bg === 'video' || bg === 'night' || bg === 'night-halo' ? 'dark' : 'light';
 }
 
 export type SiteHeaderProps = SiteHeaderData & {

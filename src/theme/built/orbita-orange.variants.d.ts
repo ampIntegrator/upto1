@@ -31,6 +31,8 @@ declare module '@astryxdesign/core/Badge' {
     'chip-high': true;
     'chip-accent': true;
     'chip-cat': true;
+    'chip-live': true;
+    'chip-live-dark': true;
     'chip-danger': true;
   }
 }

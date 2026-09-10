@@ -9,6 +9,7 @@ import React from 'react';
 
 import {BreadcrumbBand} from '@/components/BreadcrumbBand';
 import {Container} from '@/components/Container';
+import {Hero, type HeroProps} from '@/components/Hero';
 import {Button} from '@/components/Button';
 import {Card} from '@/components/Card';
 import {Collapsible, CollapsibleGroup} from '@/components/Collapsible';
@@ -27,53 +28,62 @@ function Eyebrow({children}: {children: string}) {
   return <Text type="eyebrow-lines">{children}</Text>;
 }
 
-export function PageDemo({hero = 'media'}: {hero?: 'media' | 'light'}) {
+export type DemoHero = 'media' | 'split' | 'page-image' | 'page-glow' | 'page-night';
+
+/** Les cinq hauts de page (maquettes 16, 02 et 25 A/B/C), sur le même composant Hero. */
+const HEROES: Record<DemoHero, HeroProps> = {
+  media: {
+    variant: 'media', background: 'image', image: {src: IMG, alt: ''}, overlay: 0.3,
+    eyebrow: "L'IA au service du bâtiment & de l'immobilier",
+    title: {before: 'Toute la chaîne bâtiment,', accent: "d'un seul outil.", after: 'Du chiffrage à la maintenance.'},
+    lead: "Éditeur de logiciels pour les pros de l'immobilier et les gestionnaires de sites, du chiffrage de travaux à la maintenance multitechnique.",
+    primary: {label: 'Demander une démo', href: '#demo'}, secondary: {label: 'Voir la vidéo', href: '#video', iconKey: 'play'},
+    scrollHint: 'Défiler',
+  },
+  split: {
+    variant: 'split',
+    eyebrow: "850+ courtiers actifs · Mis à jour aujourd'hui",
+    title: {before: 'Chiffrez les travaux', accent: 'en 20 minutes.', after: 'Sans artisan.'},
+    lead: 'Le devis arrive jamais. Le client signe ailleurs. Chiffrage Pro vous sort de cette dépendance : estimation détaillée, validée expert, livrable client en moins de 48 heures.',
+    primary: {label: 'Faire mon 1er chiffrage gratuit', href: '#chiffrage'}, secondary: {label: 'Voir un exemple de rapport', href: '#rapport'},
+    reassurance: ['1er chiffrage offert', 'Sans carte bancaire', 'Première estimation en 20 min'],
+    media: {src: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1100&auto=format&fit=crop', alt: '', badges: [{label: '20 min chrono', tone: 'night'}, {label: '+34 % closing', tone: 'accent'}]},
+  },
+  'page-image': {
+    variant: 'page', background: 'image', image: {src: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1920&q=80&auto=format&fit=crop', alt: ''}, overlay: 0.5,
+    eyebrow: 'Plateforme',
+    title: {before: 'Le chiffrage,', accent: 'de A à Z.'},
+    lead: 'Du métré au devis signé, une seule plateforme pour estimer juste et répondre plus vite que la concurrence.',
+    primary: {label: 'Demander une démo', href: '#demo'}, secondary: {label: 'Voir la vidéo', href: '#video', iconKey: 'play'},
+    breadcrumb: {items: [], current: 'Nos solutions'},
+  },
+  'page-glow': {
+    variant: 'page', background: 'glow',
+    eyebrow: 'Tarification',
+    title: {before: 'Un prix clair,', accent: 'sans surprise.'},
+    lead: "Choisissez l'offre adaptée à votre volume de chantiers. Sans engagement, sans frais cachés, résiliable en un clic.",
+    primary: {label: 'Voir les tarifs', href: '#tarifs'}, secondary: {label: 'Parler à un conseiller', href: '#conseiller', iconKey: 'phone'},
+    breadcrumb: {items: [], current: 'Tarifs & offres'},
+  },
+  'page-night': {
+    variant: 'page', background: 'night-halo',
+    eyebrow: 'Support',
+    title: {before: 'Une question ?', accent: 'On vous répond.'},
+    lead: "Centre d'aide, documentation et équipe support : trouvez la réponse en quelques minutes, ou parlez à un humain.",
+    primary: {label: "Centre d'aide", href: '#aide'}, secondary: {label: 'Nous écrire', href: '#contact', iconKey: 'mail'},
+    breadcrumb: {items: [], current: 'Support'},
+  },
+};
+
+export function PageDemo({hero = 'media'}: {hero?: DemoHero}) {
   return (
     <VStack className="page-demo">
       {/* 0 · en-tête fixé ; tonalité déduite du premier bloc (ici image → sombre) */}
       <SiteHeader {...SITE_HEADER} />
 
-      {/* 1 · hero : média (image, en-tête sombre) ou clair (en-tête clair, hauteur réservée) */}
-      {hero === 'media' ? (
-        <Section background="image" image={{src: IMG, alt: ''}} overlay={0.3} spacing="lg" minHeight="100vh">
-          <Container>
-            <Grid columns={12} gap={6} className="page-grid">
-              <GridSpan style={{gridColumn: '3 / span 8'}}>
-                <VStack gap={4} align="center" style={{textAlign: 'center'}}>
-                  <Heading level={2} type="display-3">
-                    Gérez tout votre chantier en un seul outil. <Text type="serif" style={{'--serif-color': 'var(--color-editorial)'} as React.CSSProperties}>Mise en place en moins de 24 heures.</Text>
-                  </Heading>
-                  <Text type="large" color="secondary">Sans engagement. Notre équipe vous rappelle dans la journée.</Text>
-                  <Button variant="primary" size="lg" arrow label="Demander un rappel" />
-                </VStack>
-              </GridSpan>
-            </Grid>
-          </Container>
-        </Section>
-      ) : (
-        <Section background="light" spacing="lg" underHeader edge>
-          <Container>
-            <Grid columns={12} gap={6} className="page-grid">
-              <GridSpan style={{gridColumn: '3 / span 8'}}>
-                <VStack gap={4} align="center" style={{textAlign: 'center'}}>
-                  <Eyebrow>Tarification</Eyebrow>
-                  <Heading level={1} type="display-3">
-                    Un prix clair, <Text type="serif">sans surprise.</Text>
-                  </Heading>
-                  <Text type="large" color="secondary">Choisissez l'offre adaptée à votre volume de chantiers. Sans engagement, sans frais cachés, résiliable en un clic.</Text>
-                  <HStack gap={3} justify="center" wrap="wrap">
-                    <Button variant="primary" size="lg" arrow label="Voir les tarifs" />
-                    <Button variant="ghost" size="lg" label="Parler à un conseiller" />
-                  </HStack>
-                </VStack>
-              </GridSpan>
-            </Grid>
-          </Container>
-        </Section>
-      )}
-
-      {/* 1a · fil d'Ariane (maquette 25) : bande de 50 px sous le haut de page */}
-      <BreadcrumbBand items={[{label: 'Solutions', href: '#'}]} current={hero === 'media' ? 'Chiffrage instantané' : 'Tarifs & offres'} />
+      {/* 1 · haut de page : un seul composant Hero, cinq variantes (fil d'Ariane inclus pour « page ») */}
+      <Hero {...HEROES[hero]} />
+      {hero === 'media' || hero === 'split' ? <BreadcrumbBand items={[{label: 'Solutions', href: '#'}]} current="Chiffrage instantané" /> : null}
 
       {/* 1b · barre de chiffres (maquette 04) */}
       <StatsBar {...STATS_BARS[0]} />

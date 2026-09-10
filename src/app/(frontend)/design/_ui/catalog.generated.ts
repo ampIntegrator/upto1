@@ -643,6 +643,15 @@ export const CATALOG: CatalogCategory[] = [
     "href": "/design/composants#mise-en-page",
     "items": [
       {
+        "name": "Hero",
+        "label": "Hero",
+        "slug": "hero",
+        "href": "/design/composants/hero",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
         "name": "AppShell",
         "label": "App Shell",
         "slug": "app-shell",

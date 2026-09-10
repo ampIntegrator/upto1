@@ -35,6 +35,19 @@
 /* ---- papier (blanc / carte nuit) ---- */
 .section[data-background='paper'] { background-color: var(--color-background-surface); }
 
+/* ---- clair à lueur (maquette 25 B) : halo highlight discret en haut ---- */
+.section[data-background='glow'] {
+  background-image: radial-gradient(90% 120% at 50% 0%, color-mix(in srgb, var(--color-highlight) 11%, transparent), transparent 56%);
+}
+
+/* ---- nuit à halos (maquette 25 C) : nuit + halo silo en haut, halo or en bas à droite ---- */
+.section[data-background='night-halo'] {
+  background-color: var(--color-night);
+  background-image:
+    radial-gradient(80% 130% at 50% -16%, color-mix(in srgb, var(--color-accent) 30%, transparent), transparent 58%),
+    radial-gradient(70% 120% at 100% 120%, color-mix(in srgb, var(--color-editorial) 16%, transparent), transparent 55%);
+}
+
 /* ---- filets haut et bas (barre de chiffres) ---- */
 .section[data-dividers] {
   border-block: var(--border-width) solid var(--color-border);

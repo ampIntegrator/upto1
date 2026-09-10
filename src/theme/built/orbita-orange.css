@@ -1651,6 +1651,54 @@
     text-transform: uppercase;
   }
 
+  .astryx-badge.chip-live {
+    height: 32px;
+    padding: 0 12px;
+    gap: 8px;
+    line-height: 1;
+    border-width: var(--border-width);
+    border-style: solid;
+    border-color: var(--color-border-emphasized);
+    background-color: var(--color-background-surface);
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.04em;
+  }
+
+  .astryx-badge.chip-live::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--color-accent);
+  }
+
+  .astryx-badge.chip-live-dark {
+    height: 32px;
+    padding: 0 16px;
+    gap: 8px;
+    line-height: 1;
+    border-width: var(--border-width);
+    border-style: solid;
+    border-color: rgba(255,255,255,.28);
+    background-color: rgba(255,255,255,.06);
+    backdrop-filter: blur(4px);
+    color: rgba(255,255,255,.9);
+    font-size: 14px;
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.04em;
+  }
+
+  .astryx-badge.chip-live-dark::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--color-highlight);
+    box-shadow: 0 0 8px var(--color-highlight);
+  }
+
   .astryx-badge.chip-danger {
     height: 28px;
     padding: 0 12px;
