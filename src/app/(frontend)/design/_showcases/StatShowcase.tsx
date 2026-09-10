@@ -17,7 +17,7 @@ export default function StatShowcase() {
   return (
     <VStack gap={8}>
       <Text type="body" color="secondary">
-        Le chiffre clé : grand nombre couleur silo, préfixe et suffixe en highlight à 62 % du nombre, sous-libellé en capitales espacées. Seul, en taille barre (40 px) ou carte (40 à 52 px). La barre de chiffres est un assemblage : Section avec filets, Container, libellé, Divider vertical et grille de Stat, de deux à quatre chiffres.
+        Le chiffre clé : grand nombre couleur silo, préfixe et suffixe en highlight à 62 % du nombre, sous-libellé en capitales espacées. Seul, en taille barre (40 px) ou carte (40 à 52 px). La barre de chiffres est un assemblage : Section avec filets, Container, libellé centré, puis une grille de deux à quatre cases sur fond highlight-light.
       </Text>
 
       <VStack gap={3}>
@@ -32,7 +32,7 @@ export default function StatShowcase() {
 
       <VStack gap={3}>
         <Heading level={3}>Barres de chiffres</Heading>
-        <Text type="supporting">Quatre, trois et deux chiffres (maquette 04). La barre à deux chiffres est centrée.</Text>
+        <Text type="supporting">Libellé centré, puis quatre, trois ou deux cases à largeur égale, chacune centrée sur fond highlight-light.</Text>
         <VStack gap={6}>
           {STATS_BARS.map((b) => <StatsBar key={b.label} {...b} />)}
         </VStack>

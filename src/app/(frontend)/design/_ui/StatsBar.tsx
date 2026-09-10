@@ -1,10 +1,10 @@
 'use client';
 
-/* Barre de chiffres (maquette 04-statsBar) : assemblage Section (filets, padding xs)
-   > Container > libellé + Divider vertical + grille de Stat. Deux à quatre chiffres. */
-import {Divider} from '@astryxdesign/core/Divider';
+/* Barre de chiffres (maquette 04, revue le 10 sept.) : Section paper à filets >
+   Container > libellé centré sur une ligne, puis une grille de 2, 3 ou 4 cases à
+   largeur égale (avec gap) ; chaque case est centrée sur fond highlight-light. */
 import {Grid} from '@astryxdesign/core/Grid';
-import {HStack} from '@astryxdesign/core/Stack';
+import {VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
 import React from 'react';
 
@@ -15,25 +15,24 @@ import {Stat, type StatProps} from '@/components/Stat';
 export type StatsBarProps = {
   label: string;
   stats: Array<Pick<StatProps, 'value' | 'prefix' | 'suffix' | 'label'>>;
-  /** aligné à gauche (3–4 chiffres) ou centré (2 chiffres) */
-  align?: 'start' | 'center';
   background?: SectionBackground;
 };
 
-export function StatsBar({label, stats, align = 'start', background = 'paper'}: StatsBarProps) {
+export function StatsBar({label, stats, background = 'paper'}: StatsBarProps) {
   const n = Math.min(4, Math.max(2, stats.length));
   return (
     <Section background={background} spacing="xs" dividers edge={false}>
-      <Container>
-        <HStack gap={10} vAlign="center" hAlign={align === 'center' ? 'center' : 'start'} wrap="wrap">
-          <HStack gap={6} vAlign="center">
-            <Text type="tag" weight="semibold" color="secondary" style={{letterSpacing: '0.16em', whiteSpace: 'nowrap'}}>{label}</Text>
-            <HStack height={42}><Divider orientation="vertical" /></HStack>
-          </HStack>
-          <Grid columns={align === 'center' ? n : {minWidth: 150, max: n}} columnGap={10} rowGap={8} style={align === 'center' ? undefined : {flex: '1 1 420px'}}>
-            {stats.map((s, i) => <Stat key={i} {...s} size="bar" />)}
-          </Grid>
-        </HStack>
+      <Container gap={6}>
+        <VStack align="center">
+          <Text type="tag" weight="semibold" color="secondary" style={{letterSpacing: '0.16em', textAlign: 'center'}}>{label}</Text>
+        </VStack>
+        <Grid columns={{minWidth: 220, max: n}} gap={6}>
+          {stats.map((s, i) => (
+            <VStack key={i} align="center" padding={6} style={{background: 'var(--color-highlight-light)'}}>
+              <Stat {...s} size="bar" align="center" />
+            </VStack>
+          ))}
+        </Grid>
       </Container>
     </Section>
   );
@@ -52,7 +51,7 @@ export const STATS_BARS: StatsBarProps[] = [
     {value: '48', suffix: 'h', label: 'Validation expert'},
     {value: '8', prefix: '±', suffix: '%', label: 'Précision estimée'},
   ]},
-  {label: "L'impact business", align: 'center', stats: [
+  {label: "L'impact business", stats: [
     {value: '2', prefix: '×', suffix: 'ROI', label: 'Dès le 1er trimestre'},
     {value: '21 600', suffix: '€', label: 'Gagnés par mois'},
   ]},
