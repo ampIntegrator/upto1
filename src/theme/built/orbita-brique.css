@@ -269,6 +269,7 @@
     --color-editorial-deep: light-dark(#A37B1F, #C7972E);
     --color-night: light-dark(#2A1012, #2A1012);
     --color-background-light: light-dark(color-mix(in srgb, #C2362F 5%, transparent), rgba(255,255,255,.03));
+    --color-highlight-light: light-dark(color-mix(in srgb, #2ED3C3 5%, transparent), color-mix(in srgb, #2ED3C3 5%, transparent));
     --color-accent-deep: light-dark(#9F2620, #C2362F);
   }
 

@@ -22,7 +22,7 @@ export default function Page() {
       <SwatchGroup
         title="Signature Orbita"
         note="Tokens ajoutés hors nomenclature Astryx : highlight (signal du silo), or éditorial, fond nuit."
-        tokens={['--color-highlight', '--color-highlight-deep', '--color-highlight-muted', '--color-editorial', '--color-editorial-deep', '--color-night']}
+        tokens={['--color-highlight', '--color-highlight-deep', '--color-highlight-muted', '--color-highlight-light', '--color-editorial', '--color-editorial-deep', '--color-night']}
       />
       <SwatchGroup
         title="Surfaces"

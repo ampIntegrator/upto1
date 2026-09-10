@@ -141,6 +141,7 @@ export const orbitaAmbreTheme = {
     "--color-editorial-deep": "light-dark(#A37B1F, #C7972E)",
     "--color-night": "light-dark(#241B06, #241B06)",
     "--color-background-light": "light-dark(color-mix(in srgb, #C99016 5%, transparent), rgba(255,255,255,.03))",
+    "--color-highlight-light": "light-dark(color-mix(in srgb, #4DA3F0 5%, transparent), color-mix(in srgb, #4DA3F0 5%, transparent))",
     "--color-accent-deep": "light-dark(#9E6F08, #C99016)"
   },
   components: {

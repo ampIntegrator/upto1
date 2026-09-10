@@ -85,6 +85,8 @@ function orbitaOnlyTokens(silo: OrbitaSilo) {
     // fond « light » : couleur du silo à 5 % (translucide, comme les listes cochées),
     // pour des surfaces à peine teintées (ex. panneau d'onglet) ; nuit : voile blanc 3 %
     '--color-background-light': [mix(primary, 'transparent', 5), 'rgba(255,255,255,.03)'],
+    // même principe avec le highlight du silo à 5 % (essai : panneau d'onglet)
+    '--color-highlight-light': [mix(highlight, 'transparent', 5), mix(highlight, 'transparent', 5)],
     '--color-accent-deep': [primaryDeep, primary],
   } as unknown as Partial<Record<TokenName, TokenValue>>;
 }
