@@ -279,7 +279,7 @@
   background: transparent !important;
   border-color: rgba(255, 255, 255, 0.4) !important;
 }
-.header[data-tone='dark']:not([data-scrolled]) .actions :global(button[aria-label='Rechercher']) {
+.header[data-tone='dark']:not([data-scrolled]) .actions :global(.astryx-button[aria-label='Rechercher']) {
   background: transparent !important;
   border-color: transparent !important;
 }
