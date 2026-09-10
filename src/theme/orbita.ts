@@ -70,7 +70,7 @@ function mixHex(a: string, b: string, pctA: number): string {
  * de `tokens` les refuse, d'où le cast explicite ici et nulle part ailleurs.
  */
 function orbitaOnlyTokens(silo: OrbitaSilo) {
-  const {bg, bg2, primary, primaryDeep, highlight, highlightDeep, night} = silo;
+  const {primary, primaryDeep, highlight, highlightDeep, night} = silo;
   return {
     '--font-family-serif': FONT_SERIF,
     // épaisseur de trait des icônes Nucleo (grille 18), appliquée en CSS sans
@@ -82,10 +82,9 @@ function orbitaOnlyTokens(silo: OrbitaSilo) {
     '--color-editorial': [EDITORIAL, EDITORIAL],
     '--color-editorial-deep': [EDITORIAL_DEEP, EDITORIAL],
     '--color-night': [night, night],
-    // fond « light » : à mi-chemin entre background-muted (bg-2) et le fond de page (bg),
-    // pour des surfaces à peine teintées mais encore lisibles sur le fond de page
-    // (ex. panneau d'onglet) ; nuit : voile blanc très léger
-    '--color-background-light': [mixHex(bg2, bg, 50), 'rgba(255,255,255,.03)'],
+    // fond « light » : couleur du silo à 5 % (translucide, comme les listes cochées),
+    // pour des surfaces à peine teintées (ex. panneau d'onglet) ; nuit : voile blanc 3 %
+    '--color-background-light': [mix(primary, 'transparent', 5), 'rgba(255,255,255,.03)'],
     '--color-accent-deep': [primaryDeep, primary],
   } as unknown as Partial<Record<TokenName, TokenValue>>;
 }

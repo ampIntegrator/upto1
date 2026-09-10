@@ -26,7 +26,7 @@ export default function Page() {
       />
       <SwatchGroup
         title="Surfaces"
-        note="Hiérarchie body → surface → card → popover. Light est un fond à peine teinté, entre le papier et muted. En mode nuit : fond nuit du silo, cartes plus sombres, popovers plus clairs."
+        note="Hiérarchie body → surface → card → popover. Light est la couleur du silo à 5 %, pour une surface à peine teintée. En mode nuit : fond nuit du silo, cartes plus sombres, popovers plus clairs."
         tokens={['--color-background-body', '--color-background-surface', '--color-background-card', '--color-background-popover', '--color-background-light', '--color-background-muted', '--color-background-inverted']}
       />
       <SwatchGroup

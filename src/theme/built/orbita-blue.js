@@ -140,7 +140,7 @@ export const orbitaBlueTheme = {
     "--color-editorial": "light-dark(#C7972E, #C7972E)",
     "--color-editorial-deep": "light-dark(#A37B1F, #C7972E)",
     "--color-night": "light-dark(#1B1A4E, #1B1A4E)",
-    "--color-background-light": "light-dark(#EEF1F9, rgba(255,255,255,.03))",
+    "--color-background-light": "light-dark(color-mix(in srgb, #4F46E5 5%, transparent), rgba(255,255,255,.03))",
     "--color-accent-deep": "light-dark(#3D34C9, #4F46E5)"
   },
   components: {
