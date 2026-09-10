@@ -10,6 +10,8 @@
  *   background : 'light' | 'grid' | 'dots' | 'losange' (textures, clair
  *                seulement) | 'night' | 'image' | 'video'
  *   image / video : le média (couvre toute la section)
+ *   overlay    : calque noir posé sur l'image ou la vidéo, sous le contenu ;
+ *                opacité de 0 à 1, réglable en admin (0 = aucun)
  *   scrim / halo / edge : voile de lisibilité, halo nuit derrière le contenu,
  *                liseré dégradé en pied (maquette 13 ; actifs par défaut sur
  *                image et vidéo, edge disponible partout)
@@ -33,6 +35,8 @@ export type SectionProps = {
   background?: SectionBackground;
   image?: {src: string; alt?: string};
   video?: {src: string; poster?: string};
+  /** calque noir sur le média, sous le contenu : opacité 0 à 1 (image, vidéo) */
+  overlay?: number;
   /** voile léger haut/bas (image, vidéo) */
   scrim?: boolean;
   /** halo nuit derrière le contenu (image, vidéo) */
@@ -49,7 +53,7 @@ export type SectionProps = {
 const DARK: SectionBackground[] = ['night', 'image', 'video'];
 const MEDIA: SectionBackground[] = ['image', 'video'];
 
-export function Section({background = 'light', image, video, scrim, halo, edge, spacing = 'md', minHeight, id, children}: SectionProps) {
+export function Section({background = 'light', image, video, overlay = 0, scrim, halo, edge, spacing = 'md', minHeight, id, children}: SectionProps) {
   const {theme} = useOrbitaTheme();
   const isMedia = MEDIA.includes(background);
   const showScrim = scrim ?? isMedia;
@@ -75,6 +79,7 @@ export function Section({background = 'light', image, video, scrim, halo, edge, 
       {background === 'video' && video ? (
         <video className={styles.media} src={video.src} poster={video.poster} autoPlay muted loop playsInline aria-hidden="true" />
       ) : null}
+      {isMedia && overlay > 0 ? <i className={styles.overlay} style={{opacity: Math.min(1, overlay)}} aria-hidden="true" /> : null}
       {showHalo ? <i className={styles.halo} aria-hidden="true" /> : null}
       <VStack className={styles.content}>{children}</VStack>
     </VStack>

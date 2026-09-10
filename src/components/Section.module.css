@@ -62,6 +62,14 @@
   object-fit: cover;
   object-position: center;
 }
+/* calque noir administrable (opacité en style inline), sur le média, sous le voile */
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: rgb(0, 0, 0);
+}
 /* voile : très léger, l'image garde sa clarté */
 .section[data-scrim]::before {
   content: '';

@@ -20,7 +20,7 @@ const MODES: Array<{bg: SectionBackground; label: string; note: string}> = [
   {bg: 'dots', label: 'Texture points', note: 'Points 32 px.'},
   {bg: 'losange', label: 'Texture losanges', note: 'Losanges 32 px.'},
   {bg: 'night', label: 'Nuit', note: 'Nuit du silo + lueur silo centrale, pas de texture ; contenu en mode nuit.'},
-  {bg: 'image', label: 'Image', note: 'Image de fond, voile, halo derrière le contenu, liseré en pied ; contenu en mode nuit.'},
+  {bg: 'image', label: 'Image', note: 'Image de fond, calque noir administrable (ici 0,5), voile, halo derrière le contenu, liseré en pied ; contenu en mode nuit.'},
   {bg: 'video', label: 'Vidéo', note: 'Vidéo muette en boucle, mêmes couches que l\'image.'},
 ];
 
@@ -34,7 +34,7 @@ export default function SectionShowcase() {
         <VStack key={m.bg} gap={3}>
           <Heading level={3}>{m.label}</Heading>
           <Text type="supporting">{m.note}</Text>
-          <Section background={m.bg} spacing="sm" image={m.bg === 'image' ? {src: IMG} : undefined} video={m.bg === 'video' ? {src: VIDEO, poster: IMG} : undefined}>
+          <Section background={m.bg} spacing="sm" overlay={0.5} image={m.bg === 'image' ? {src: IMG} : undefined} video={m.bg === 'video' ? {src: VIDEO, poster: IMG} : undefined}>
             <Container>
               <Grid columns={12} gap={6} className="page-grid">
                 <GridSpan style={{gridColumn: '4 / span 6'}}>

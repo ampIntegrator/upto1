@@ -27,7 +27,7 @@ export function PageDemo() {
   return (
     <VStack className="page-demo">
       {/* 1 · image pleine largeur, colonne de 8 centrée (maquette 13 : contenu à 900 px) */}
-      <Section background="image" image={{src: IMG, alt: ''}} spacing="lg" minHeight={600}>
+      <Section background="image" image={{src: IMG, alt: ''}} overlay={0.5} spacing="lg" minHeight={600}>
         <Container>
           <Grid columns={12} gap={6} className="page-grid">
             <GridSpan style={{gridColumn: '3 / span 8'}}>
@@ -117,7 +117,7 @@ export function PageDemo() {
       </Section>
 
       {/* 5 · vidéo : appel à l'action sur 8 centré */}
-      <Section background="video" video={{src: VIDEO, poster: IMG}} spacing="lg" minHeight={520}>
+      <Section background="video" video={{src: VIDEO, poster: IMG}} overlay={0.5} spacing="lg" minHeight={520}>
         <Container>
           <Grid columns={12} gap={6} className="page-grid">
             <GridSpan style={{gridColumn: '3 / span 8'}}>
