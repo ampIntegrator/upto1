@@ -140,6 +140,8 @@ export const orbitaGreenTheme = {
     "--color-editorial": "light-dark(#C7972E, #C7972E)",
     "--color-editorial-deep": "light-dark(#A37B1F, #C7972E)",
     "--color-night": "light-dark(#0E2C2E, #0E2C2E)",
+    "--color-night-deep": "light-dark(color-mix(in srgb, #0E2C2E 68%, #000000), color-mix(in srgb, #0E2C2E 68%, #000000))",
+    "--color-night-deeper": "light-dark(color-mix(in srgb, #0E2C2E 40%, #000000), color-mix(in srgb, #0E2C2E 40%, #000000))",
     "--color-background-light": "light-dark(color-mix(in srgb, #40916C 5%, transparent), rgba(255,255,255,.03))",
     "--color-highlight-light": "light-dark(color-mix(in srgb, #F5B841 5%, transparent), color-mix(in srgb, #F5B841 5%, transparent))",
     "--color-accent-deep": "light-dark(#2F6E51, #40916C)"
@@ -394,6 +396,11 @@ export const orbitaGreenTheme = {
     "link": {
       "base": {
         "transition": "color var(--duration-medium) var(--ease-standard), text-decoration-color var(--duration-medium) var(--ease-standard)"
+      },
+      "color:secondary": {
+        ":hover": {
+          "color": "light-dark(var(--color-text-primary), #FFFFFF)"
+        }
       }
     },
     "text-input": {

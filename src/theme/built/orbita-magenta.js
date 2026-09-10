@@ -140,6 +140,8 @@ export const orbitaMagentaTheme = {
     "--color-editorial": "light-dark(#C7972E, #C7972E)",
     "--color-editorial-deep": "light-dark(#A37B1F, #C7972E)",
     "--color-night": "light-dark(#2A0E22, #2A0E22)",
+    "--color-night-deep": "light-dark(color-mix(in srgb, #2A0E22 68%, #000000), color-mix(in srgb, #2A0E22 68%, #000000))",
+    "--color-night-deeper": "light-dark(color-mix(in srgb, #2A0E22 40%, #000000), color-mix(in srgb, #2A0E22 40%, #000000))",
     "--color-background-light": "light-dark(color-mix(in srgb, #C42E86 5%, transparent), rgba(255,255,255,.03))",
     "--color-highlight-light": "light-dark(color-mix(in srgb, #4ADE9B 5%, transparent), color-mix(in srgb, #4ADE9B 5%, transparent))",
     "--color-accent-deep": "light-dark(#9E2068, #C42E86)"
@@ -394,6 +396,11 @@ export const orbitaMagentaTheme = {
     "link": {
       "base": {
         "transition": "color var(--duration-medium) var(--ease-standard), text-decoration-color var(--duration-medium) var(--ease-standard)"
+      },
+      "color:secondary": {
+        ":hover": {
+          "color": "light-dark(var(--color-text-primary), #FFFFFF)"
+        }
       }
     },
     "text-input": {

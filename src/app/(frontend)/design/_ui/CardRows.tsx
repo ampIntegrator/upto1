@@ -98,6 +98,14 @@ export function EditorialRows({seed = ''}: {seed?: string}) {
           <Card preset="realisation" media={{type: 'image', src: IMG('work3' + seed)}} chip={{label: 'Industriel', tone: 'accent'}} result="48 h de délai" title="Extension d'atelier, 900 m²" client={{name: 'Mécanique Vallée', location: 'Grenoble'}} cta={{label: "Voir l'étude", href: '#'}} />
         </Grid>
       </Section>
+
+      <Section title="En bref" note="Ni image ni cadre : chip, titre sur deux lignes, date. Le lien passe par le titre (pied de page).">
+        <Grid columns={{minWidth: 240, max: 3}} gap={8}>
+          <Card preset="brief" chip={{label: 'Chiffrage'}} date="02 / 06 / 2026" title="Du devis à la facturation : industrialiser le cycle commercial" cta={{label: 'Lire', href: '#'}} />
+          <Card preset="brief" chip={{label: 'Méthode'}} date="27 / 05 / 2026" title="Métré automatique : fiabiliser ses quantités dès l'esquisse" cta={{label: 'Lire', href: '#'}} />
+          <Card preset="brief" chip={{label: 'Terrain'}} date="19 / 05 / 2026" title="Suivi de chantier : garder le budget sous contrôle en temps réel" cta={{label: 'Lire', href: '#'}} />
+        </Grid>
+      </Section>
     </>
   );
 }

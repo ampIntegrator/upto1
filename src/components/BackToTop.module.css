@@ -1,0 +1,17 @@
+/* BackToTop — fixe en bas à droite, 48 px, apparaît après 200 px de défilement */
+.wrap {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 50;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity var(--duration-medium) var(--ease-standard), transform var(--duration-medium) var(--ease-standard);
+}
+.wrap[data-visible] { opacity: 1; transform: none; pointer-events: auto; }
+.wrap :global(.astryx-icon-button) {
+  width: 48px;
+  height: 48px;
+  box-shadow: 0 12px 28px var(--color-accent-muted), 0 4px 10px rgba(0, 0, 0, 0.3);
+}

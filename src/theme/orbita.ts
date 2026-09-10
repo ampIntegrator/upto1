@@ -82,6 +82,9 @@ function orbitaOnlyTokens(silo: OrbitaSilo) {
     '--color-editorial': [EDITORIAL, EDITORIAL],
     '--color-editorial-deep': [EDITORIAL_DEEP, EDITORIAL],
     '--color-night': [night, night],
+    // nuit assombrie du pied de page (maquette 21 : night 68 % + noir) et sa barre basse (40 %)
+    '--color-night-deep': [mix(night, '#000000', 68), mix(night, '#000000', 68)],
+    '--color-night-deeper': [mix(night, '#000000', 40), mix(night, '#000000', 40)],
     // fond « light » : couleur du silo à 5 % (translucide, comme les listes cochées),
     // pour des surfaces à peine teintées (ex. panneau d'onglet) ; nuit : voile blanc 3 %
     '--color-background-light': [mix(primary, 'transparent', 5), 'rgba(255,255,255,.03)'],
@@ -352,6 +355,8 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
       // liens : même transition que les boutons
       'link': {
         base: {transition: 'color var(--duration-medium) var(--ease-standard), text-decoration-color var(--duration-medium) var(--ease-standard)'},
+        // lien discret (piles du pied de page, liens légaux) : s'affirme au survol
+        'color:secondary': {':hover': {color: 'light-dark(var(--color-text-primary), #FFFFFF)'}},
       },
 
       /* Champs et sélecteurs Orbita (maquette 17-forms / .field-* et .selectx-*)

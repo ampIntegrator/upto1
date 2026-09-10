@@ -14,9 +14,10 @@ import {Button} from '@/components/Button';
 import {Card} from '@/components/Card';
 import {Collapsible, CollapsibleGroup} from '@/components/Collapsible';
 import {Section} from '@/components/Section';
+import {SiteFooter} from '@/components/SiteFooter';
 import {SiteHeader} from '@/components/SiteHeader';
 import {FAQ} from '../design/_showcases/faq.shared';
-import {SITE_HEADER} from '../design/_ui/siteNav';
+import {SITE_FOOTER, SITE_HEADER} from '../design/_ui/siteNav';
 import {STATS_BARS, StatsBar} from '../design/_ui/StatsBar';
 import {TabsWithPanel} from '../design/_ui/TabRows';
 
@@ -198,6 +199,9 @@ export function PageDemo({hero = 'media'}: {hero?: DemoHero}) {
           </Grid>
         </Container>
       </Section>
+
+      {/* 7 · pied de page (maquette 21), coordonnées et réseaux partagés avec l'en-tête */}
+      <SiteFooter {...SITE_FOOTER} strip={SITE_HEADER.strip} />
     </VStack>
   );
 }

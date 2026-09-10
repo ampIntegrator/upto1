@@ -8,6 +8,8 @@
  *                        avec ornement + texte + barre d'action
  *   preset="article"     image 16/10, chip + date, titre (2 lignes), barre d'action
  *   preset="realisation" image 16/10, chip + résultat, titre, client · ville, barre
+ *   preset="brief"       sans image ni cadre : chip, titre (2 lignes), date — l'article
+ *                        en bref du pied de page (maquette 21)
  *
  * Le titre est un Heading Astryx de type `card` : son style ne dépend pas du
  * niveau (h3 par défaut, h4 possible en admin). L'ornement au losange fait
@@ -33,7 +35,7 @@ export type CardMedia =
   | {type: 'none'};
 
 export type CardProps = {
-  preset?: 'bloc' | 'article' | 'realisation';
+  preset?: 'bloc' | 'article' | 'realisation' | 'brief';
   media?: CardMedia;
   title: string;
   /** niveau HTML du titre (SEO) ; l'apparence ne change pas */
@@ -56,6 +58,8 @@ export type CardProps = {
 
 export function Card({preset = 'bloc', media = {type: 'none'}, title, level = 3, accentTitle, text, chip, date, result, client, cta, style}: CardProps) {
   const editorial = preset !== 'bloc';
+  // en bref : le lien passe par le titre seulement, pas de barre d'action
+  const showBar = Boolean(cta) && preset !== 'brief';
 
   const mediaNode = (() => {
     switch (media.type) {
@@ -111,6 +115,7 @@ export function Card({preset = 'bloc', media = {type: 'none'}, title, level = 3,
             </div>
           ) : null}
           {text ? <p className={styles.text}>{text}</p> : null}
+          {preset === 'brief' && date ? <Text type="date" className={styles.briefDate}>{date}</Text> : null}
           {preset === 'realisation' && client ? (
             <div className={styles.client}>
               <PinIcon />
@@ -122,7 +127,7 @@ export function Card({preset = 'bloc', media = {type: 'none'}, title, level = 3,
           ) : null}
         </div>
       </div>
-      {cta ? (
+      {cta && showBar ? (
         <NextLink href={cta.href} className={styles.cta} tabIndex={editorial ? -1 : undefined} aria-hidden={editorial || undefined}>
           <span>{cta.label}</span>
           <ArrowRightIcon />

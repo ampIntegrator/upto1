@@ -813,6 +813,15 @@ export const CATALOG: CatalogCategory[] = [
         "doc": null
       },
       {
+        "name": "SiteFooter",
+        "label": "Site Footer",
+        "slug": "site-footer",
+        "href": "/design/composants/site-footer",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
         "name": "Breadcrumbs",
         "label": "Breadcrumbs",
         "slug": "breadcrumbs",

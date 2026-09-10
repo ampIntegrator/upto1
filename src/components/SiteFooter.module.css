@@ -1,0 +1,164 @@
+/*
+ * SiteFooter — pied de page (maquette 21-footer). Nuit profonde ; les niveaux 1 et 2
+ * sont des couches d'opacité blanche posées sur ce fond (décision du 10 sept.).
+ * Tailles reprises de la maquette avec un plancher à 12 px (à relire au cas par cas).
+ */
+.footer {
+  position: relative;
+  background-color: var(--color-night-deep);
+  color: #fff;
+}
+/* filet dégradé highlight → silo → highlight */
+.rule {
+  display: block;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-highlight) 0%, var(--color-accent) 50%, var(--color-highlight) 100%);
+}
+
+/* ---- bandeaux (niveaux 1 et 2) ---- */
+.band { padding-block: 28px; }
+.band[data-band='top'] { background: rgba(255, 255, 255, 0.075); }
+.band[data-band='articles'] { background: rgba(255, 255, 255, 0.045); }
+
+.eyebrow { font-size: 12px; letter-spacing: 0.18em; }
+/* eyebrow du pied de page en highlight (le type est éditorial ailleurs) */
+.footer .eyebrow { color: var(--color-highlight); }
+
+/* ---- lettre d'information ---- */
+.newsTitle { font-size: 18px; line-height: 1.2; letter-spacing: -0.02em; color: #fff; }
+.newsAccent { --serif-color: var(--color-highlight); }
+.newsText { font-size: 14px; line-height: 1.5; max-width: 440px; }
+.form { width: 100%; }
+.formRow :global(.astryx-button) { flex: 0 0 auto; }
+/* champ 58 px et bouton lg côte à côte : le bouton prend la hauteur du champ */
+.submit { height: auto; min-height: 56px; }
+.mention {
+  margin-top: 12px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ---- derniers articles ---- */
+.allLink { font-size: 13px; white-space: nowrap; flex: 0 0 auto; }
+.allLink > span { display: inline-flex; align-items: center; gap: 8px; }
+.allLink svg { transition: transform var(--duration-medium) var(--ease-standard); }
+.allLink:hover svg { transform: translateX(4px); }
+.articles { row-gap: 0; }
+/* colonnes séparées par un filet ; en pile (< 1024 px) le filet passe au-dessus */
+.article { padding: 16px 32px; }
+.article:first-child { padding-inline-start: 0; }
+.article:last-child { padding-inline-end: 0; }
+.article + .article { border-inline-start: var(--border-width) solid rgba(255, 255, 255, 0.09); }
+@media (max-width: 1023px) {
+  .articles { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .articles > .article { grid-column: span 1 !important; }
+  .article:nth-child(odd) { padding-inline-start: 0; border-inline-start: 0; }
+  .article:nth-child(even) { padding-inline-end: 0; }
+  .article:nth-child(n + 3) { border-top: var(--border-width) solid rgba(255, 255, 255, 0.07); }
+}
+@media (max-width: 767px) {
+  .articles { grid-template-columns: minmax(0, 1fr) !important; }
+  .article { padding-inline: 0; border-inline-start: 0 !important; }
+  .article + .article { border-top: var(--border-width) solid rgba(255, 255, 255, 0.07); }
+}
+
+/* ---- colonnes ---- */
+.cols { padding-block: 28px; }
+/* quatre colonnes ; deux par ligne sous 1024 px (la marque garde la première) */
+@media (max-width: 1023px) and (min-width: 768px) {
+  .colsGrid > * { grid-column: span 6 !important; }
+}
+.brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; }
+.logoMark {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  background: var(--color-accent);
+}
+.logoMark::before { content: ''; width: 14px; height: 14px; border: 2px solid #fff; border-radius: 50%; }
+.logoMark::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin: -3px;
+  border-radius: 50%;
+  background: var(--color-highlight);
+  transform: rotate(-34deg) translateX(26px);
+}
+.brandName {
+  font-family: var(--font-family-serif);
+  font-weight: var(--font-weight-medium);
+  font-size: 16px;
+  line-height: 1.2;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.brandText { font-size: 13.5px; line-height: 1.55; max-width: 330px; }
+.contact {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: color var(--duration-medium) var(--ease-standard);
+}
+.contact svg { color: var(--color-highlight); flex: 0 0 auto; }
+a.contact:hover { color: #fff; }
+.social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: rgba(255, 255, 255, 0.75);
+  border: var(--border-width) solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.03);
+  transition: color var(--duration-medium) var(--ease-standard), border-color var(--duration-medium) var(--ease-standard), background-color var(--duration-medium) var(--ease-standard);
+}
+.social:hover { color: #fff; border-color: var(--color-highlight); background: rgba(255, 255, 255, 0.06); }
+
+.colHead {
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  font-family: var(--font-family-body);
+}
+.pile { list-style: none; margin: 0; padding: 0; }
+.pile li { display: flex; }
+/* lien de pile : flèche highlight repliée (largeur 0), dépliée au survol */
+/* min-height : le Link Astryx isStandalone réserve 38 px, trop pour une pile serrée */
+.pileLink { display: inline-flex; align-items: center; white-space: nowrap; font-size: 14px; min-height: 0; line-height: 1.4; }
+.pileLink > span { display: inline-flex; align-items: center; min-height: 0; line-height: 1.4; }
+.pileLink svg {
+  width: 0;
+  margin-inline-end: 0;
+  opacity: 0;
+  color: var(--color-highlight);
+  flex: 0 0 auto;
+  overflow: hidden;
+  transition: opacity var(--duration-medium) var(--ease-standard), width var(--duration-medium) var(--ease-standard), margin var(--duration-medium) var(--ease-standard);
+}
+.pileLink:hover svg { width: 14px; margin-inline-end: 8px; opacity: 1; }
+
+/* ---- barre basse ---- */
+.bottom {
+  background: var(--color-night-deeper);
+  border-top: var(--border-width) solid rgba(255, 255, 255, 0.07);
+  padding-block: 16px;
+}
+.copyright { font-size: 13px; color: rgba(255, 255, 255, 0.65); }
+.sep { width: 1px; height: 14px; background: rgba(255, 255, 255, 0.15); }
+.legalLine { font-size: 12px; letter-spacing: 0.14em; color: rgba(255, 255, 255, 0.45); }
+.legalLink { font-size: 13px; }

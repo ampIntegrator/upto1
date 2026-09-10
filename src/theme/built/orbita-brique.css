@@ -268,6 +268,8 @@
     --color-editorial: light-dark(#C7972E, #C7972E);
     --color-editorial-deep: light-dark(#A37B1F, #C7972E);
     --color-night: light-dark(#2A1012, #2A1012);
+    --color-night-deep: light-dark(color-mix(in srgb, #2A1012 68%, #000000), color-mix(in srgb, #2A1012 68%, #000000));
+    --color-night-deeper: light-dark(color-mix(in srgb, #2A1012 40%, #000000), color-mix(in srgb, #2A1012 40%, #000000));
     --color-background-light: light-dark(color-mix(in srgb, #C2362F 5%, transparent), rgba(255,255,255,.03));
     --color-highlight-light: light-dark(color-mix(in srgb, #2ED3C3 5%, transparent), color-mix(in srgb, #2ED3C3 5%, transparent));
     --color-accent-deep: light-dark(#9F2620, #C2362F);
@@ -560,6 +562,10 @@
 
   .astryx-link {
     transition: color var(--duration-medium) var(--ease-standard), text-decoration-color var(--duration-medium) var(--ease-standard);
+  }
+
+  .astryx-link.secondary:hover:where(:not(:disabled,[aria-disabled="true"])) {
+    color: light-dark(var(--color-text-primary), #FFFFFF);
   }
 
   .astryx-text-input {

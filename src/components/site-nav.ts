@@ -20,6 +20,8 @@ export type SiteStrip = {
   phone?: {label: string; href: string};
   email?: {label: string; href: string};
   hours?: string;
+  /** adresse postale (pied de page) */
+  address?: string;
   socials?: Array<{label: string; href: string; iconKey: NucleoIconKey}>;
 };
 
@@ -34,4 +36,26 @@ export type SiteHeaderData = {
   nav: SiteNavEntry[];
   actions?: SiteActions;
   languages?: string[];
+};
+
+/** Article en bref du pied de page (alimenté par la collection Articles). */
+export type SiteFooterArticle = {category: string; title: string; date: string; href: string};
+
+/**
+ * Données du pied de page — global Payload « Pied de page ». Coordonnées et
+ * réseaux viennent du global « Coordonnées et réseaux » (SiteStrip), pas d'ici.
+ */
+export type SiteFooterData = {
+  brand: {name: string; href: string; description?: string};
+  newsletter?: {
+    eyebrow: string;
+    title: {before: string; accent?: string};
+    text?: string;
+    fieldLabel: string;
+    buttonLabel: string;
+    mention?: string;
+  };
+  articles?: {eyebrow: string; allLabel: string; allHref: string; items: SiteFooterArticle[]};
+  columns: Array<{title: string; links: Array<{label: string; href: string}>}>;
+  legal: {copyright: string; line?: string; links: Array<{label: string; href: string}>};
 };

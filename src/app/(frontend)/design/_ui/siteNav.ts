@@ -1,5 +1,5 @@
 /* Données de démonstration de l'en-tête (faux liens et textes, maquette 01-header). */
-import type {SiteHeaderData} from '@/components/site-nav';
+import type {SiteFooterData, SiteHeaderData} from '@/components/site-nav';
 
 export const SITE_HEADER: SiteHeaderData = {
   brand: {name: 'Vidomia', href: '/'},
@@ -7,6 +7,7 @@ export const SITE_HEADER: SiteHeaderData = {
     phone: {label: '01 84 80 09 12', href: 'tel:+33184800912'},
     email: {label: 'contact@vidomia.fr', href: 'mailto:contact@vidomia.fr'},
     hours: 'Lun–Ven · 9h–18h',
+    address: '14 rue de la Mécanique, 75011 Paris',
     socials: [
       {label: 'LinkedIn', href: '#', iconKey: 'linkedin'},
       {label: 'X', href: '#', iconKey: 'x-twitter'},
@@ -54,4 +55,38 @@ export const SITE_HEADER: SiteHeaderData = {
     cta: {label: 'Demander une démo', href: '#demo'},
   },
   languages: ['FR', 'EN', 'DE', 'ES'],
+};
+
+/* Données de démonstration du pied de page (maquette 21-footer). */
+export const SITE_FOOTER: SiteFooterData = {
+  brand: {name: 'Vidomia', href: '/', description: 'La plateforme de chiffrage BTP qui transforme un métré en devis pro, validé par un ingénieur, en moins de 48 h.'},
+  newsletter: {
+    eyebrow: 'La lettre Vidomia',
+    title: {before: 'Le chiffrage juste,', accent: 'une fois par mois.'},
+    text: 'Prix de référence, méthodes et retours terrain. Pas de spam, désinscription en un clic.',
+    fieldLabel: 'Votre adresse e-mail',
+    buttonLabel: "S'abonner",
+    mention: 'Vos données restent chez nous — RGPD',
+  },
+  articles: {
+    eyebrow: 'Derniers articles',
+    allLabel: 'Tout le blog',
+    allHref: '#blog',
+    items: [
+      {category: 'Chiffrage', title: 'Du devis à la facturation : industrialiser le cycle commercial', date: '02 / 06 / 2026', href: '#a1'},
+      {category: 'Méthode', title: "Métré automatique : fiabiliser ses quantités dès l'esquisse", date: '27 / 05 / 2026', href: '#a2'},
+      {category: 'Terrain', title: 'Suivi de chantier : garder le budget sous contrôle en temps réel', date: '19 / 05 / 2026', href: '#a3'},
+      {category: 'Produit', title: 'Signature électronique : faire valider un devis en deux clics', date: '12 / 05 / 2026', href: '#a4'},
+    ],
+  },
+  columns: [
+    {title: 'Produit', links: [{label: 'Chiffrage instantané', href: '#'}, {label: 'Suivi de chantier', href: '#'}, {label: 'Devis client', href: '#'}, {label: 'Métré automatique', href: '#'}, {label: 'Tarifs', href: '#'}]},
+    {title: 'Ressources', links: [{label: 'Guides & livres blancs', href: '#'}, {label: 'Webinaires', href: '#'}, {label: 'Blog', href: '#'}, {label: 'Prix de référence', href: '#'}, {label: 'API & docs', href: '#'}]},
+    {title: 'Entreprise', links: [{label: 'À propos', href: '#'}, {label: 'Clients', href: '#'}, {label: 'Carrières', href: '#'}, {label: 'Presse', href: '#'}, {label: 'Contact', href: '#'}]},
+  ],
+  legal: {
+    copyright: `© ${new Date().getFullYear()} Vidomia — Tous droits réservés.`,
+    line: 'SIRET 902 145 884 00021 · Conçu à Paris',
+    links: [{label: 'Mentions légales', href: '#'}, {label: 'Confidentialité', href: '#'}, {label: 'CGU', href: '#'}, {label: 'Cookies', href: '#'}],
+  },
 };
