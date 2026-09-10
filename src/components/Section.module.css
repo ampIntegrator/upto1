@@ -32,6 +32,9 @@
 /* ---- papier (blanc / carte nuit) ---- */
 .section[data-background='paper'] { background-color: var(--color-background-surface); }
 
+/* ---- contenu centré verticalement (hero texte 02, hauts de page) ---- */
+.section[data-centered] { justify-content: center; }
+
 /* ---- clair à lueur (maquette 25 B) : halo highlight discret en haut ---- */
 .section[data-background='glow'] {
   background-image: radial-gradient(90% 120% at 50% 0%, color-mix(in srgb, var(--color-highlight) 11%, transparent), transparent 56%);

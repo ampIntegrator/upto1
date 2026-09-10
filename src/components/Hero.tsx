@@ -120,7 +120,7 @@ export function Hero(props: HeroProps) {
 
   if (variant === 'split') {
     return (
-      <Section background="light" spacing="md" minHeight="100vh" underHeader={underHeader}>
+      <Section background="light" spacing="md" minHeight="100vh" underHeader={underHeader} centered>
         <Container>
           <Grid columns={12} gap={8} className="page-grid" align="center">
             <GridSpan columns={7}>
@@ -164,7 +164,7 @@ export function Hero(props: HeroProps) {
   const background = props.background === 'image' || props.background === 'night-halo' ? props.background : 'glow';
   return (
     <>
-      <Section background={background} image={image} overlay={overlay} spacing="none" minHeight={underHeader ? 'calc(500px + var(--site-header-height))' : 500} underHeader={underHeader} edge>
+      <Section background={background} image={image} overlay={overlay} spacing="none" minHeight={underHeader ? 'calc(500px + var(--site-header-height))' : 500} underHeader={underHeader} centered edge>
         <Container>
           <Grid columns={12} gap={6} className="page-grid">
             <GridSpan style={{gridColumn: '3 / span 8'}}>

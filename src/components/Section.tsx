@@ -46,6 +46,8 @@ export type SectionProps = {
   dividers?: boolean;
   /** premier bloc d'une page sous l'en-tête fixe : réserve sa hauteur en haut (hero clair) */
   underHeader?: boolean;
+  /** centre le contenu verticalement dans la hauteur de la section (avec minHeight) */
+  centered?: boolean;
   /** hauteur minimale (ex. 600 pour un bloc image) */
   minHeight?: number | string;
   id?: string;
@@ -57,7 +59,7 @@ export type SectionProps = {
 const DARK: SectionBackground[] = ['night', 'night-halo', 'image', 'video'];
 const MEDIA: SectionBackground[] = ['image', 'video'];
 
-export function Section({background = 'light', image, video, overlay = 0, edge, spacing = 'md', dividers, underHeader, minHeight, id, children, foot}: SectionProps) {
+export function Section({background = 'light', image, video, overlay = 0, edge, spacing = 'md', dividers, underHeader, centered, minHeight, id, children, foot}: SectionProps) {
   const {theme} = useOrbitaTheme();
   const isMedia = MEDIA.includes(background);
   const showEdge = edge ?? isMedia;
@@ -72,6 +74,7 @@ export function Section({background = 'light', image, video, overlay = 0, edge, 
       data-edge={showEdge || undefined}
       data-dividers={dividers || undefined}
       data-under-header={underHeader || undefined}
+      data-centered={centered || undefined}
       style={minHeight != null ? {minHeight} : undefined}
     >
       {background === 'image' && image ? (
