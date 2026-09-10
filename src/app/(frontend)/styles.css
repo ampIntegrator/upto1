@@ -424,3 +424,17 @@ body > [data-astryx-theme] {
 [data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item span + span { font-size: 14px !important; color: var(--color-text-disabled) !important; }
 [data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item:hover > div:first-child,
 [data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item:hover span { color: #fff !important; }
+
+/* Texte réservé aux lecteurs d'écran (ex. « Accueil » derrière l'icône maison du fil d'Ariane). */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+[data-astryx-theme^='orbita'] .astryx-breadcrumb-item a:has(> .visually-hidden) { display: inline-flex; align-items: center; }
