@@ -106,6 +106,15 @@ export const CATALOG: CatalogCategory[] = [
         "dressed": false,
         "parent": null,
         "doc": "toggle-button-group"
+      },
+      {
+        "name": "Toolbar",
+        "label": "Toolbar",
+        "slug": "toolbar",
+        "href": "/design/composants/toolbar",
+        "dressed": false,
+        "parent": null,
+        "doc": "toolbar"
       }
     ]
   },
@@ -856,6 +865,15 @@ export const CATALOG: CatalogCategory[] = [
         "dressed": false,
         "parent": null,
         "doc": "outline"
+      },
+      {
+        "name": "Pagination",
+        "label": "Pagination",
+        "slug": "pagination",
+        "href": "/design/composants/pagination",
+        "dressed": false,
+        "parent": null,
+        "doc": "pagination"
       },
       {
         "name": "SideNav",

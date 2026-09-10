@@ -56,7 +56,6 @@ export type OrbitaCardProps = {
 
 export function OrbitaCard({preset = 'bloc', media = {type: 'none'}, title, level = 3, accentTitle, text, chip, date, result, client, cta, style}: OrbitaCardProps) {
   const editorial = preset !== 'bloc';
-  const href = cta?.href ?? '#';
 
   const mediaNode = (() => {
     switch (media.type) {
@@ -81,8 +80,9 @@ export function OrbitaCard({preset = 'bloc', media = {type: 'none'}, title, leve
     }
   })();
 
-  const titleNode = editorial ? (
-    <NextLink href={href} className={styles.titleLink}>
+  // éditorial : le titre porte le lien de la carte, seulement s'il y a un appel à l'action
+  const titleNode = editorial && cta ? (
+    <NextLink href={cta.href} className={styles.titleLink}>
       {title}
     </NextLink>
   ) : (
