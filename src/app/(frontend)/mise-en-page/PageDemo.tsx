@@ -1,6 +1,7 @@
 'use client';
 
 /* Page de démonstration : sections empilées, chacune = Section > Container > Grid 12 > GridSpan > composants. */
+import {BreadcrumbItem, Breadcrumbs} from '@astryxdesign/core/Breadcrumbs';
 import {Grid, GridSpan} from '@astryxdesign/core/Grid';
 import {Heading} from '@astryxdesign/core/Heading';
 import {HStack, VStack} from '@astryxdesign/core/Stack';
@@ -9,6 +10,7 @@ import React from 'react';
 
 import {Container} from '@/components/Container';
 import {OrbitaButton} from '@/components/OrbitaButton';
+import {ChevronRightIcon, HomeIcon} from '@/theme/icons/nucleo';
 import {OrbitaCard} from '@/components/OrbitaCard';
 import {OrbitaCollapsible, OrbitaCollapsibleGroup} from '@/components/OrbitaCollapsible';
 import {Section} from '@/components/Section';
@@ -34,7 +36,7 @@ export function PageDemo({hero = 'media'}: {hero?: 'media' | 'light'}) {
 
       {/* 1 · hero : média (image, en-tête sombre) ou clair (en-tête clair, hauteur réservée) */}
       {hero === 'media' ? (
-        <Section background="image" image={{src: IMG, alt: ''}} overlay={0.3} spacing="lg" minHeight={600}>
+        <Section background="image" image={{src: IMG, alt: ''}} overlay={0.3} spacing="lg" minHeight="100vh">
           <Container>
             <Grid columns={12} gap={6} className="page-grid">
               <GridSpan style={{gridColumn: '3 / span 8'}}>
@@ -70,6 +72,19 @@ export function PageDemo({hero = 'media'}: {hero?: 'media' | 'light'}) {
           </Container>
         </Section>
       )}
+
+      {/* 1a · fil d'Ariane (maquette 25) : bande papier bordée sous le haut de page */}
+      <Section background="paper" spacing="none" dividers>
+        <Container>
+          <VStack style={{paddingBlock: 14}}>
+            <Breadcrumbs label="Fil d'Ariane" separator={<ChevronRightIcon width={12} height={12} />}>
+              <BreadcrumbItem href="/" startIcon={<HomeIcon width={14} height={14} />}><span className="visually-hidden">Accueil</span></BreadcrumbItem>
+              <BreadcrumbItem href="#">Solutions</BreadcrumbItem>
+              <BreadcrumbItem isCurrent>{hero === 'media' ? 'Chiffrage instantané' : 'Tarifs & offres'}</BreadcrumbItem>
+            </Breadcrumbs>
+          </VStack>
+        </Container>
+      </Section>
 
       {/* 1b · barre de chiffres (maquette 04) */}
       <StatsBar {...STATS_BARS[0]} />
