@@ -1,7 +1,7 @@
 'use client';
 
 /* Barre de chiffres (maquette 04, revue le 10 sept.) : Section paper à filets >
-   Container > libellé centré sur une ligne, puis une grille de 2, 3 ou 4 cases à
+   Container > libellé centré sur une ligne, puis une grille de 2, 3, 4 ou 6 cases à
    largeur égale (avec gap) ; chaque case est centrée sur fond highlight-light. */
 import {Grid} from '@astryxdesign/core/Grid';
 import {VStack} from '@astryxdesign/core/Stack';
@@ -19,14 +19,15 @@ export type StatsBarProps = {
 };
 
 export function StatsBar({label, stats, background = 'paper'}: StatsBarProps) {
-  const n = Math.min(4, Math.max(2, stats.length));
+  // 2, 3, 4 ou 6 chiffres (réglage Payload à venir)
+  const n = Math.min(6, Math.max(2, stats.length));
   return (
     <Section background={background} spacing="xs" dividers edge={false}>
       <Container gap={6}>
         <VStack align="center">
-          <Text type="tag" weight="semibold" color="secondary" style={{letterSpacing: '0.16em', textAlign: 'center'}}>{label}</Text>
+          <Text type="tag" weight="semibold" color="secondary" style={{fontSize: '16px', letterSpacing: '0.16em', textAlign: 'center'}}>{label}</Text>
         </VStack>
-        <Grid columns={{minWidth: 220, max: n}} gap={6}>
+        <Grid columns={{minWidth: n > 4 ? 150 : 220, max: n}} gap={6}>
           {stats.map((s, i) => (
             <VStack key={i} align="center" padding={6} style={{background: 'var(--color-highlight-light)'}}>
               <Stat {...s} size="bar" align="center" />

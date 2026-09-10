@@ -12,6 +12,7 @@
 }
 .label {
   margin-top: 8px;
+  font-size: 14px; /* jamais sous 14 px */
   color: var(--color-text-disabled);
   letter-spacing: 0.1em;
 }
