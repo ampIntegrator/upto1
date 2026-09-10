@@ -13,7 +13,7 @@ export const TABS = [
   {value: 'refacturation', label: 'La refacturation tourne mal', text: "Refacturer la maintenance à chaque site ou franchisé suppose un détail précis par poste. Sans données fiables, la refacturation est contestée, retardée, parfois abandonnée."},
 ] as const;
 
-/** Liste d'onglets à largeur égale + panneau (classes .orbita-tab-stack / .orbita-tab-panel de tabs.css). */
+/** Liste d'onglets à largeur égale + panneau (thème orbita.ts section ONGLETS ; panneau : classes .orbita-tab-stack / .orbita-tab-panel de styles.css). */
 export function TabsWithPanel({id}: {id: string}) {
   const [value, setValue] = useState<string>(TABS[0].value);
   const current = TABS.find((t) => t.value === value) ?? TABS[0];

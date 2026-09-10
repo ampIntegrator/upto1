@@ -758,6 +758,85 @@ export const orbitaBriqueTheme = {
         "borderBottom": "var(--border-width) solid var(--color-border)"
       }
     },
+    "tab-list": {
+      "base": {
+        "height": "auto",
+        "fontFamily": "var(--font-family-body)",
+        "backgroundColor": "light-dark(var(--color-background-surface), rgba(255,255,255,.03))",
+        "borderWidth": "var(--border-width)",
+        "borderStyle": "solid",
+        "borderColor": "light-dark(var(--color-border), rgba(255,255,255,.15))"
+      }
+    },
+    "tab-strip": {
+      "base": {
+        "height": "auto"
+      }
+    },
+    "tab": {
+      "base": {
+        "height": "auto",
+        "padding": "18px 22px",
+        "fontSize": "15px",
+        "fontWeight": "var(--font-weight-semibold)",
+        "lineHeight": "1.3",
+        "textAlign": "center",
+        "justifyContent": "center",
+        "color": "light-dark(var(--color-text-secondary), rgba(255,255,255,.8))",
+        "borderRadius": "0",
+        "transition": "color var(--duration-medium) var(--ease-standard), background-color var(--duration-medium) var(--ease-standard)",
+        ":hover": {
+          "color": "light-dark(var(--color-text-primary), #FFFFFF)",
+          "backgroundColor": "light-dark(var(--color-accent-muted), rgba(255,255,255,.06))"
+        }
+      },
+      "selected": {
+        "color": "light-dark(var(--color-text-accent), var(--color-highlight))"
+      }
+    },
+    "tab-menu": {
+      "base": {
+        "height": "auto",
+        "padding": "18px 22px",
+        "fontSize": "15px",
+        "fontWeight": "var(--font-weight-semibold)",
+        "lineHeight": "1.3",
+        "textAlign": "center",
+        "justifyContent": "center",
+        "color": "light-dark(var(--color-text-secondary), rgba(255,255,255,.8))",
+        "borderRadius": "0",
+        "transition": "color var(--duration-medium) var(--ease-standard), background-color var(--duration-medium) var(--ease-standard)",
+        ":hover": {
+          "color": "light-dark(var(--color-text-primary), #FFFFFF)",
+          "backgroundColor": "light-dark(var(--color-accent-muted), rgba(255,255,255,.06))"
+        }
+      },
+      "selected": {
+        "color": "light-dark(var(--color-text-accent), var(--color-highlight))"
+      }
+    },
+    "tab-indicator": {
+      "base": {
+        "left": "0",
+        "right": "0",
+        "width": "auto",
+        "height": "3px",
+        "borderRadius": "0",
+        "backgroundColor": "light-dark(var(--color-accent), var(--color-highlight))",
+        "transition": "opacity var(--duration-medium) var(--ease-standard)"
+      }
+    },
+    "tab-menu-item": {
+      "base": {
+        "borderRadius": "0",
+        "color": "var(--color-text-secondary)",
+        "transition": "background-color var(--duration-medium) var(--ease-standard), color var(--duration-medium) var(--ease-standard)",
+        ":hover": {
+          "backgroundColor": "light-dark(var(--color-accent-muted), rgba(255,255,255,.08))",
+          "color": "var(--color-text-primary)"
+        }
+      }
+    },
     "radio-indicator": {
       "base": {
         "width": "22px",

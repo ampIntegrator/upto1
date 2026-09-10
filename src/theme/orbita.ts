@@ -398,7 +398,79 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         ]),
       ),
 
-      /* Onglets : voir src/app/(frontend)/tabs.css (fichier CSS unique, éditable à la main). */
+      /* ─────────────────────────────────────────────────────────────────
+         ONGLETS (maquette 06-tabs) — Tab, TabList, TabMenu
+         Cibles Astryx : tab-list (la barre), tab-strip (la piste), tab (un
+         onglet, état selected), tab-indicator (trait sous l'onglet actif),
+         tab-menu (déclencheur du menu de débordement), tab-menu-item.
+         Ce que le thème ne sait pas cibler (séparateur « tous sauf le premier »,
+         libellés sur deux lignes selon la largeur, panneau .orbita-tab-*)
+         est dans src/app/(frontend)/styles.css, section Onglets.
+         ───────────────────────────────────────────────────────────────── */
+      // la barre : l'en-tête bordé du bloc (fond papier, filet tout autour)
+      'tab-list': {
+        base: {
+          height: 'auto',
+          fontFamily: 'var(--font-family-body)',
+          backgroundColor: 'light-dark(var(--color-background-surface), rgba(255,255,255,.03))',
+          borderWidth: 'var(--border-width)',
+          borderStyle: 'solid',
+          borderColor: 'light-dark(var(--color-border), rgba(255,255,255,.15))',
+        },
+      },
+      'tab-strip': {base: {height: 'auto'}},
+      // un onglet (et le déclencheur du menu, qui se présente comme un onglet)
+      ...Object.fromEntries(
+        ['tab', 'tab-menu'].map((k) => [
+          k,
+          {
+            base: {
+              height: 'auto',
+              padding: '18px 22px',
+              fontSize: '15px',
+              fontWeight: 'var(--font-weight-semibold)',
+              lineHeight: '1.3',
+              textAlign: 'center',
+              justifyContent: 'center',
+              color: 'light-dark(var(--color-text-secondary), rgba(255,255,255,.8))',
+              borderRadius: '0',
+              transition: 'color var(--duration-medium) var(--ease-standard), background-color var(--duration-medium) var(--ease-standard)',
+              // survol : encre + fond silo 10 %
+              ':hover': {
+                color: 'light-dark(var(--color-text-primary), #FFFFFF)',
+                backgroundColor: 'light-dark(var(--color-accent-muted), rgba(255,255,255,.06))',
+              },
+            },
+            // actif : couleur silo (highlight en nuit)
+            selected: {color: 'light-dark(var(--color-text-accent), var(--color-highlight))'},
+          },
+        ]),
+      ),
+      // le trait sous l'onglet actif : 3 px, toute la largeur de l'onglet, en fondu
+      'tab-indicator': {
+        base: {
+          left: '0',
+          right: '0',
+          width: 'auto',
+          height: '3px',
+          borderRadius: '0',
+          backgroundColor: 'light-dark(var(--color-accent), var(--color-highlight))',
+          transition: 'opacity var(--duration-medium) var(--ease-standard)',
+        },
+      },
+      // options du menu de débordement : mêmes rangées que les sélecteurs
+      'tab-menu-item': {
+        base: {
+          borderRadius: '0',
+          color: 'var(--color-text-secondary)',
+          transition: 'background-color var(--duration-medium) var(--ease-standard), color var(--duration-medium) var(--ease-standard)',
+          ':hover': {
+            backgroundColor: 'light-dark(var(--color-accent-muted), rgba(255,255,255,.08))',
+            color: 'var(--color-text-primary)',
+          },
+        },
+      },
+
 
       /* Contrôles d'option Orbita (maquette 17-forms .opt / .switch / .c-range) */
       'radio-indicator': {

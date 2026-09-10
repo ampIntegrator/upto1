@@ -227,3 +227,45 @@ body > [data-astryx-theme] {
 [data-astryx-theme^='orbita'] .astryx-field-status[data-variant='attached'][data-type='success'] { background-color: var(--color-success-muted) !important; }
 [data-astryx-theme^='orbita'] .astryx-field-status[data-variant='attached'][data-type='warning'] { background-color: var(--color-warning-muted) !important; }
 
+/* Onglets (06-tabs) : compléments au thème orbita.ts (section ONGLETS) pour ce
+   que defineTheme ne cible pas. Séparateur vertical entre onglets ; menu de
+   débordement en couleur silo quand son option est choisie ; libellés sur deux
+   lignes dès 640 px (en dessous : une ligne, la barre défile, reco Astryx).
+   Le panneau sous les onglets n'est pas un composant Astryx : .orbita-tab-stack
+   (zone silo 10 %, bordée sur trois côtés) et .orbita-tab-panel (carte + liseré
+   dégradé) habillent le contenu du bloc. */
+[data-astryx-theme^='orbita'] .astryx-tab-strip > .astryx-tab + .astryx-tab,
+[data-astryx-theme^='orbita'] .astryx-tab-strip > .astryx-tab + .astryx-tab-menu {
+  border-inline-start: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.15));
+}
+[data-astryx-theme^='orbita'] .astryx-tab-menu:has(.astryx-tab-indicator[data-selected]) {
+  color: light-dark(var(--color-text-accent), var(--color-highlight));
+}
+@media (min-width: 640px) {
+  [data-astryx-theme^='orbita'] .astryx-tab,
+  [data-astryx-theme^='orbita'] .astryx-tab span {
+    white-space: normal;
+  }
+}
+[data-astryx-theme^='orbita'] .orbita-tab-stack {
+  padding: 40px;
+  background: light-dark(var(--color-accent-muted), rgba(255, 255, 255, 0.04));
+  border: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.15));
+  border-top: 0;
+}
+[data-astryx-theme^='orbita'] .orbita-tab-panel {
+  position: relative;
+  padding: 44px 56px;
+  background: light-dark(var(--color-background-surface), var(--color-night));
+}
+[data-astryx-theme^='orbita'] .orbita-tab-panel::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-highlight) 0%, var(--color-accent) 50%, var(--color-highlight) 100%);
+}
+@media (max-width: 639px) {
+  [data-astryx-theme^='orbita'] .orbita-tab-stack { padding: 20px; }
+  [data-astryx-theme^='orbita'] .orbita-tab-panel { padding: 28px 24px; }
+}

@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — remplace la démo Astryx d'origine. CSS : src/app/(frontend)/tabs.css */
+/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Thème : orbita.ts section ONGLETS */
 'use client';
 
 import {VStack} from '@astryxdesign/core/Stack';
