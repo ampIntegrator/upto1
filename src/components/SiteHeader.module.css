@@ -4,8 +4,7 @@
  * Les éléments Astryx (TopNav, items, méga-menu, boutons) sont stylés par le thème.
  */
 .header {
-  --site-header-strip: 38px;
-  --site-header-bar: 74px;
+  /* hauteurs : variables globales de styles.css (--site-header-*) */
   position: relative;
   z-index: 60;
   width: 100%;
@@ -59,7 +58,7 @@
   background: color-mix(in oklab, var(--color-background-surface) 96%, transparent);
   box-shadow: 0 8px 30px rgba(12, 20, 40, 0.09);
 }
-.header[data-scrolled] :global(.astryx-top-nav) { height: 60px; }
+.header[data-scrolled] :global(.astryx-top-nav) { height: var(--site-header-bar-scrolled); }
 
 /* ---- logo (placeholder Vidomia : carré silo, cercle blanc) ---- */
 .logoMark {
@@ -112,7 +111,7 @@
 
 /* ---- entrées de navigation : soulignement silo qui se déploie au survol ---- */
 .desktopNav { height: var(--site-header-bar); gap: 2px; }
-.header[data-scrolled] .desktopNav { height: 60px; }
+.header[data-scrolled] .desktopNav { height: var(--site-header-bar-scrolled); }
 .desktopNav :global(.astryx-top-nav-item),
 .desktopNav :global(.astryx-top-nav-menu),
 .desktopNav :global(.astryx-top-nav-mega-menu) { position: relative; }
@@ -300,7 +299,7 @@
 
 /* ---- mobile : navigation et actions réduites, burger ---- */
 @media (max-width: 1279px) {
-  .strip { display: none; }
+  .strip { display: none; } /* --site-header-strip passe à 0 en même temps (styles.css) */
   .desktopNav { display: none; }
   .actionsSep,
   .cta { display: none; }

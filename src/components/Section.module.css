@@ -25,12 +25,9 @@
   .section[data-spacing='lg'] { --section-pad: 72px; }
 }
 
-/* ---- sous l'en-tête fixe : on réserve sa hauteur (bandeau 38 + barre 74 ; 74 seule sous 1280 px,
-   valeurs de SiteHeader.module.css) ---- */
-.section[data-under-header] { padding-top: calc(var(--section-pad) + 112px); }
-@media (max-width: 1279px) {
-  .section[data-under-header] { padding-top: calc(var(--section-pad) + 74px); }
-}
+/* ---- sous l'en-tête fixe : on réserve sa hauteur (variable globale --site-header-height,
+   qui perd le bandeau sous 1280 px) ---- */
+.section[data-under-header] { padding-top: calc(var(--section-pad) + var(--site-header-height)); }
 
 /* ---- papier (blanc / carte nuit) ---- */
 .section[data-background='paper'] { background-color: var(--color-background-surface); }

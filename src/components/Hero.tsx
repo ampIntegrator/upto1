@@ -164,7 +164,7 @@ export function Hero(props: HeroProps) {
   const background = props.background === 'image' || props.background === 'night-halo' ? props.background : 'glow';
   return (
     <>
-      <Section background={background} image={image} overlay={overlay} spacing="none" minHeight={underHeader ? 'calc(500px + 112px)' : 500} underHeader={underHeader} edge>
+      <Section background={background} image={image} overlay={overlay} spacing="none" minHeight={underHeader ? 'calc(500px + var(--site-header-height))' : 500} underHeader={underHeader} edge>
         <Container>
           <Grid columns={12} gap={6} className="page-grid">
             <GridSpan style={{gridColumn: '3 / span 8'}}>

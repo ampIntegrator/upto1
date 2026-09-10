@@ -15,6 +15,21 @@ body {
 }
 
 
+/* Dimensions de l'en-tête du site — SEULE SOURCE. SiteHeader, Section (réserve sous
+   l'en-tête fixe) et Hero (hauts de page de 500 px) lisent ces variables : changer une
+   valeur ici se propage partout. Sous 1280 px le bandeau disparaît. */
+:root {
+  --site-header-strip: 38px;
+  --site-header-bar: 74px;
+  --site-header-bar-scrolled: 60px;
+  --site-header-height: calc(var(--site-header-strip) + var(--site-header-bar));
+}
+@media (max-width: 1279px) {
+  :root {
+    --site-header-strip: 0px;
+  }
+}
+
 /* Icônes Nucleo : épaisseur de trait globale, sans modifier les SVG.
    Ne touche que les groupes exportés à 1 (les aplats et les traits à 0 restent). */
 [data-icon='nucleo'] [stroke-width='1'] {
