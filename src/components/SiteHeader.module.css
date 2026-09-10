@@ -138,6 +138,8 @@
   margin-inline: auto;
   padding: 0 20px;
   box-sizing: border-box;
+  box-shadow: none !important; /* Astryx ombre ce conteneur : visible sur les côtés au-delà de 1440 px */
+  overflow: visible !important;
 }
 .megaWrap,
 .menuWrap { height: 100%; }
