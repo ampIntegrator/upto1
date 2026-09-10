@@ -140,7 +140,7 @@ export const orbitaBriqueTheme = {
     "--color-editorial": "light-dark(#C7972E, #C7972E)",
     "--color-editorial-deep": "light-dark(#A37B1F, #C7972E)",
     "--color-night": "light-dark(#2A1012, #2A1012)",
-    "--color-background-light": "light-dark(#FAF1EF, rgba(255,255,255,.03))",
+    "--color-background-light": "light-dark(#F8E9E7, rgba(255,255,255,.03))",
     "--color-accent-deep": "light-dark(#9F2620, #C2362F)"
   },
   components: {
