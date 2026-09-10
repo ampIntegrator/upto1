@@ -262,7 +262,9 @@
   border-color: transparent;
   backdrop-filter: saturate(140%) blur(10px);
 }
-.header[data-tone='dark']:not([data-scrolled]) .strip { background: transparent; }
+/* bandeau sur hero (maquette 16) : voile nuit à 40 %, textes blancs à 82 % */
+.header[data-tone='dark']:not([data-scrolled]) .strip { background: rgba(10, 14, 26, 0.4); color: rgba(255, 255, 255, 0.82); }
+.header[data-tone='dark']:not([data-scrolled]) .social { color: rgba(255, 255, 255, 0.75); border-color: rgba(255, 255, 255, 0.18); }
 .header[data-tone='dark']:not([data-scrolled]) :global(.astryx-top-nav-heading),
 .header[data-tone='dark']:not([data-scrolled]) :global(.astryx-top-nav-item),
 .header[data-tone='dark']:not([data-scrolled]) :global(.astryx-top-nav-menu),
@@ -271,10 +273,15 @@
 .header[data-tone='dark']:not([data-scrolled]) .actions :global(.astryx-button.ghost) {
   color: #fff !important;
 }
-.header[data-tone='dark']:not([data-scrolled]) .actions :global(.astryx-icon-button),
+/* boutons sur hero (maquette 16) : fonds transparents ; recherche sans cadre,
+   langue cadre blanc 40 %, connexion cadre blanc 55 % */
 .header[data-tone='dark']:not([data-scrolled]) .actions :global(.astryx-button.ghost) {
-  background: rgba(255, 255, 255, 0.06) !important;
-  border-color: rgba(255, 255, 255, 0.5) !important;
+  background: transparent !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+.header[data-tone='dark']:not([data-scrolled]) .actions :global(button[aria-label='Rechercher']) {
+  background: transparent !important;
+  border-color: transparent !important;
 }
 .header[data-tone='dark']:not([data-scrolled]) .actions :global(.astryx-icon-button:hover),
 .header[data-tone='dark']:not([data-scrolled]) .actions :global(.astryx-button.ghost:hover) {
@@ -282,8 +289,8 @@
   color: var(--color-accent) !important;
 }
 .header[data-tone='dark']:not([data-scrolled]) .login {
-  background: rgba(255, 255, 255, 0.06) !important;
-  border: var(--border-width) solid rgba(255, 255, 255, 0.5) !important;
+  background: transparent !important;
+  border: var(--border-width) solid rgba(255, 255, 255, 0.55) !important;
   color: #fff !important;
 }
 .header[data-tone='dark']:not([data-scrolled]) .login:hover { background: #fff !important; color: var(--color-accent) !important; }
