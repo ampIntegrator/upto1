@@ -1,0 +1,100 @@
+/*
+ * OrbitaCollapsible — item d'accordéon (maquette 11-faq, orbita.css .faq-*).
+ * Les classes .astryx-collapsible-* sont celles du Collapsible Astryx ; les
+ * !important passent devant ses classes StyleX.
+ */
+.item {
+  --faq-border: light-dark(var(--color-border), rgba(255, 255, 255, 0.15));
+  --faq-border-hover: light-dark(var(--color-border-emphasized), rgba(255, 255, 255, 0.3));
+  --faq-bg: light-dark(var(--color-background-surface), rgba(255, 255, 255, 0.05));
+  --faq-icon: light-dark(var(--color-accent), var(--color-highlight));
+  --faq-open-fg: var(--color-on-accent);
+  position: relative;
+  background: var(--faq-bg);
+  border: var(--border-width) solid var(--faq-border);
+  transition:
+    background-color var(--duration-medium) var(--ease-standard),
+    border-color var(--duration-medium) var(--ease-standard);
+}
+.item:hover { border-color: var(--faq-border-hover); }
+.item:has(:global(.astryx-collapsible-trigger[aria-expanded='true'])) {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+/* déclencheur Astryx : pleine largeur, padding maquette, pas de chevron */
+.item :global(.astryx-collapsible-trigger) {
+  width: 100% !important;
+  padding: 21px 26px !important;
+  background: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  cursor: pointer;
+  text-align: left;
+}
+.item :global(.astryx-collapsible-trigger > .astryx-icon) { display: none !important; }
+.item :global(.astryx-collapsible-trigger:focus-visible) {
+  outline: 2px solid light-dark(var(--color-accent), var(--color-highlight));
+  outline-offset: -2px;
+}
+
+.question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  font-family: var(--font-family-body);
+  font-size: 16.5px;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  color: light-dark(var(--color-text-primary), #FFFFFF);
+  transition: color var(--duration-medium) var(--ease-standard);
+}
+.item:has(:global(.astryx-collapsible-trigger[aria-expanded='true'])) .question { color: var(--faq-open-fg); }
+
+/* icône plus → moins, dessinée en CSS (deux traits) */
+.icon { position: relative; flex: 0 0 auto; width: 18px; height: 18px; }
+.icon::before,
+.icon::after {
+  content: '';
+  position: absolute;
+  background: var(--faq-icon);
+  transition:
+    transform 0.28s var(--ease-standard),
+    background-color var(--duration-medium) var(--ease-standard);
+}
+.icon::before { left: 0; right: 0; top: 50%; height: 2px; transform: translateY(-50%); }
+.icon::after { top: 0; bottom: 0; left: 50%; width: 2px; transform: translateX(-50%); }
+.item:has(:global(.astryx-collapsible-trigger[aria-expanded='true'])) .icon::before,
+.item:has(:global(.astryx-collapsible-trigger[aria-expanded='true'])) .icon::after { background: var(--faq-open-fg); }
+.item:has(:global(.astryx-collapsible-trigger[aria-expanded='true'])) .icon::after { transform: translateX(-50%) scaleY(0); }
+
+/* réponse : Astryx la masque en display:none ; on la garde dans le flux et on
+   anime la hauteur (grille 0fr → 1fr) comme la maquette */
+.item :global(.astryx-collapsible-content) {
+  display: grid !important;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition: grid-template-rows 0.3s var(--ease-standard), visibility 0s linear 0.3s;
+}
+.item :global(.astryx-collapsible-trigger[aria-expanded='true'] + .astryx-collapsible-content) {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition: grid-template-rows 0.3s var(--ease-standard), visibility 0s linear 0s;
+}
+.answer {
+  overflow: hidden;
+  min-height: 0;
+}
+.answer > * {
+  margin: 0;
+  padding: 0 26px 24px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--faq-open-fg) 86%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .item :global(.astryx-collapsible-content), .icon::before, .icon::after { transition: none; }
+}

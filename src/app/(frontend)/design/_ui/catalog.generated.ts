@@ -147,7 +147,7 @@ export const CATALOG: CatalogCategory[] = [
         "label": "Collapsible",
         "slug": "collapsible",
         "href": "/design/composants/collapsible",
-        "dressed": false,
+        "dressed": true,
         "parent": null,
         "doc": "collapsible"
       },
@@ -156,7 +156,7 @@ export const CATALOG: CatalogCategory[] = [
         "label": "Collapsible Group",
         "slug": "collapsible-group",
         "href": "/design/composants/collapsible-group",
-        "dressed": false,
+        "dressed": true,
         "parent": "Collapsible",
         "doc": "collapsible"
       },

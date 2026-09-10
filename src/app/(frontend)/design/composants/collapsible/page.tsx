@@ -11,7 +11,7 @@ export const metadata = {title: 'Collapsible — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="Collapsible" id="collapsible" doc="collapsible" category="Conteneurs">
+      <ShowcaseBlock name="Collapsible" id="collapsible" doc="collapsible" dressed category="Conteneurs">
         <CollapsibleShowcase />
       </ShowcaseBlock>
       <ComponentNav category="conteneurs" current="collapsible" />
