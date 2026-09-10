@@ -26,11 +26,11 @@ function Eyebrow({children}: {children: string}) {
 export function PageDemo() {
   return (
     <VStack className="page-demo">
-      {/* 1 · image pleine largeur, colonne de 6 centrée (maquette 13) */}
+      {/* 1 · image pleine largeur, colonne de 8 centrée (maquette 13 : contenu à 900 px) */}
       <Section background="image" image={{src: IMG, alt: ''}} spacing="lg" minHeight={600}>
         <Container>
           <Grid columns={12} gap={6} className="page-grid">
-            <GridSpan style={{gridColumn: '4 / span 6'}}>
+            <GridSpan style={{gridColumn: '3 / span 8'}}>
               <VStack gap={4} align="center" style={{textAlign: 'center'}}>
                 <Heading level={2} type="display-3">
                   Gérez tout votre chantier en un seul outil. <Text type="serif" style={{'--serif-color': 'var(--color-editorial)'} as React.CSSProperties}>Mise en place en moins de 24 heures.</Text>

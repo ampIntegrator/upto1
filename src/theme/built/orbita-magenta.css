@@ -480,8 +480,8 @@
 
   .astryx-button.ghost:hover:where(:not(:disabled,[aria-disabled="true"])) {
     border-color: light-dark(var(--color-accent), #FFFFFF);
-    color: light-dark(var(--color-accent), #FFFFFF);
-    background-color: light-dark(var(--color-background-surface), rgba(255,255,255,.12));
+    color: light-dark(var(--color-accent), var(--color-accent));
+    background-color: light-dark(var(--color-background-surface), #FFFFFF);
   }
 
   .astryx-button.high {
@@ -969,7 +969,7 @@
   .astryx-tab-list {
     height: auto;
     font-family: var(--font-family-body);
-    background-color: light-dark(var(--color-highlight-muted), rgba(255,255,255,.03));
+    background-color: light-dark(color-mix(in srgb, var(--color-highlight) 12%, var(--color-background-surface)), var(--color-background-card));
     border-width: var(--border-width);
     border-style: solid;
     border-color: light-dark(var(--color-border), rgba(255,255,255,.15));

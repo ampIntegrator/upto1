@@ -293,10 +293,11 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           backgroundColor: 'light-dark(var(--color-background-surface), rgba(255,255,255,.04))',
           // texte et icône couleur silo au repos ; sur nuit, blanc (maquette .on-dark .c-btn-ghost)
           color: 'light-dark(var(--color-text-accent), #FFFFFF)',
+          // survol : clair = bordure silo ; nuit = fond blanc plein, texte et icône couleur silo
           ':hover': {
             borderColor: 'light-dark(var(--color-accent), #FFFFFF)',
-            color: 'light-dark(var(--color-accent), #FFFFFF)',
-            backgroundColor: 'light-dark(var(--color-background-surface), rgba(255,255,255,.12))',
+            color: 'light-dark(var(--color-accent), var(--color-accent))',
+            backgroundColor: 'light-dark(var(--color-background-surface), #FFFFFF)',
           },
         },
         'variant:high': {
@@ -412,8 +413,9 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         base: {
           height: 'auto',
           fontFamily: 'var(--font-family-body)',
-          // fond très clair à partir du highlight du silo (essai demandé le 10 sept.)
-          backgroundColor: 'light-dark(var(--color-highlight-muted), rgba(255,255,255,.03))',
+          // fond très clair à partir du highlight du silo, OPAQUE (mélangé au papier :
+          // sur une texture, un fond translucide laisse voir les points) ; nuit : fond carte
+          backgroundColor: 'light-dark(color-mix(in srgb, var(--color-highlight) 12%, var(--color-background-surface)), var(--color-background-card))',
           borderWidth: 'var(--border-width)',
           borderStyle: 'solid',
           borderColor: 'light-dark(var(--color-border), rgba(255,255,255,.15))',
