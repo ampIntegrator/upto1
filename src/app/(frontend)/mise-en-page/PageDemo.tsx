@@ -1,17 +1,15 @@
 'use client';
 
 /* Page de démonstration : sections empilées, chacune = Section > Container > Grid 12 > GridSpan > composants. */
-import {BreadcrumbItem, Breadcrumbs} from '@astryxdesign/core/Breadcrumbs';
-import {VisuallyHidden} from '@astryxdesign/core/VisuallyHidden';
 import {Grid, GridSpan} from '@astryxdesign/core/Grid';
 import {Heading} from '@astryxdesign/core/Heading';
 import {HStack, VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
 import React from 'react';
 
+import {BreadcrumbBand} from '@/components/BreadcrumbBand';
 import {Container} from '@/components/Container';
 import {Button} from '@/components/Button';
-import {ChevronRightIcon, HomeIcon} from '@/theme/icons/nucleo';
 import {Card} from '@/components/Card';
 import {Collapsible, CollapsibleGroup} from '@/components/Collapsible';
 import {Section} from '@/components/Section';
@@ -74,18 +72,8 @@ export function PageDemo({hero = 'media'}: {hero?: 'media' | 'light'}) {
         </Section>
       )}
 
-      {/* 1a · fil d'Ariane (maquette 25) : bande papier bordée sous le haut de page */}
-      <Section background="paper" spacing="none" dividers>
-        <Container>
-          <VStack paddingBlock={4}>
-            <Breadcrumbs label="Fil d'Ariane" separator={<ChevronRightIcon width={12} height={12} />}>
-              <BreadcrumbItem href="/" startIcon={<HomeIcon width={14} height={14} />}><VisuallyHidden>Accueil</VisuallyHidden></BreadcrumbItem>
-              <BreadcrumbItem href="#">Solutions</BreadcrumbItem>
-              <BreadcrumbItem isCurrent>{hero === 'media' ? 'Chiffrage instantané' : 'Tarifs & offres'}</BreadcrumbItem>
-            </Breadcrumbs>
-          </VStack>
-        </Container>
-      </Section>
+      {/* 1a · fil d'Ariane (maquette 25) : bande de 50 px sous le haut de page */}
+      <BreadcrumbBand items={[{label: 'Solutions', href: '#'}]} current={hero === 'media' ? 'Chiffrage instantané' : 'Tarifs & offres'} />
 
       {/* 1b · barre de chiffres (maquette 04) */}
       <StatsBar {...STATS_BARS[0]} />

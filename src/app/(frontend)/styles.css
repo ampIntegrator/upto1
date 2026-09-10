@@ -363,6 +363,14 @@ body {
   background: transparent !important;
   padding: 0 !important;
 }
+/* la liste interne (ol) du fil d'Ariane n'est pas une cible du thème : une seule ligne,
+   défilement latéral discret quand le fil est trop long */
+[data-astryx-theme^='orbita'] .astryx-breadcrumbs > ol {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  max-width: 100%;
+  scrollbar-width: none;
+}
 [data-astryx-theme^='orbita'] .astryx-breadcrumb-item > span[aria-hidden] { color: var(--color-accent); }
 [data-astryx-theme^='orbita'] .astryx-breadcrumb-item > [aria-current='page'] {
   color: var(--color-text-secondary);

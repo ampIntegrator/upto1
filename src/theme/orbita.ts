@@ -518,7 +518,8 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         base: {backgroundColor: 'var(--color-background-body)', borderRadius: '0'},
       },
       // fil d'Ariane (maquette 25 .crumb) : capitales espacées 14 px, gris, silo au survol
-      'breadcrumbs': {base: {gap: '8px'}},
+      // une seule ligne : pas de retour, défilement latéral si le fil est trop long
+      'breadcrumbs': {base: {gap: '8px', whiteSpace: 'nowrap', maxWidth: '100%'}},
       'breadcrumb-item': {
         base: {
           fontSize: '12px', // exception à la règle des 14 px (décidée le 10 sept.)

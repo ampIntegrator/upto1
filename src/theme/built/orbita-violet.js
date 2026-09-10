@@ -1149,7 +1149,9 @@ export const orbitaVioletTheme = {
     },
     "breadcrumbs": {
       "base": {
-        "gap": "8px"
+        "gap": "8px",
+        "whiteSpace": "nowrap",
+        "maxWidth": "100%"
       }
     },
     "breadcrumb-item": {

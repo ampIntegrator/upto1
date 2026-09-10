@@ -8,8 +8,7 @@ import {Text} from '@astryxdesign/core/Text';
 import {Theme} from '@astryxdesign/core/theme';
 import React from 'react';
 
-import {Container} from '@/components/Container';
-import {Section} from '@/components/Section';
+import {BreadcrumbBand} from '@/components/BreadcrumbBand';
 import {ChevronRightIcon, HomeIcon} from '@/theme/icons/nucleo';
 import {useOrbitaTheme} from '@/theme/OrbitaThemeProvider';
 
@@ -27,13 +26,9 @@ export default function BreadcrumbsShowcase() {
   const {theme} = useOrbitaTheme();
   return (
     <VStack gap={6}>
-      <Text type="body" color="secondary">Le fil d'Ariane : 12 px (exception à la règle des 14), capitales espacées, gris, silo au survol, chevrons Nucleo en couleur silo, page courante en encre secondaire. L'accueil est l'icône maison, le mot reste pour les lecteurs d'écran. Sous un haut de page, il vit dans une bande papier bordée.</Text>
+      <Text type="body" color="secondary">Le fil d'Ariane : 12 px (exception à la règle des 14), capitales espacées, gris, silo au survol, chevrons Nucleo en couleur silo, page courante en encre secondaire. L'accueil est l'icône maison, le mot reste pour les lecteurs d'écran. Sous un haut de page, il vit dans une bande papier bordée de 50 px, sur une seule ligne, qui défile latéralement si le fil est trop long.</Text>
       <Trail />
-      <Section background="paper" spacing="none" dividers>
-        <Container>
-          <VStack paddingBlock={4}><Trail /></VStack>
-        </Container>
-      </Section>
+      <BreadcrumbBand items={[{label: 'Solutions', href: '#'}, {label: 'Chiffrage', href: '#'}, {label: 'Métrés', href: '#'}, {label: 'Estimatif détaillé', href: '#'}]} current="Un fil volontairement trop long pour tenir sur la ligne, qui défile latéralement" />
       <Theme theme={theme} mode="dark">
         <VStack padding={4} style={{background: 'var(--color-background-body)'}}><Trail /></VStack>
       </Theme>

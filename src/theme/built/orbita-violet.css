@@ -1390,6 +1390,8 @@
 
   .astryx-breadcrumbs {
     gap: 8px;
+    white-space: nowrap;
+    max-width: 100%;
   }
 
   .astryx-breadcrumb-item {
