@@ -377,3 +377,12 @@ body > [data-astryx-theme] {
 [data-astryx-theme^='orbita'] .astryx-text.date[data-color='primary'] {
   color: var(--color-text-disabled) !important;
 }
+
+/* Liens et boutons : tout survol transitionne en 0,25 s avec la courbe douce du thème
+   (--ease-standard). Les composants Astryx passent par leurs propres transitions
+   sur les mêmes tokens ; cette règle couvre les <a> et <button> hors composant. */
+[data-astryx-theme^='orbita'] a,
+[data-astryx-theme^='orbita'] button {
+  transition-duration: var(--duration-medium);
+  transition-timing-function: var(--ease-standard);
+}

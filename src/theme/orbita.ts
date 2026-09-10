@@ -129,6 +129,9 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
       '--font-family-body': FONT_BODY,
       '--font-family-heading': FONT_HEADING,
       '--font-family-code': FONT_CODE,
+      /* — mouvement : survols des liens et boutons en 0,25 s, courbe douce — */
+      '--duration-medium': '250ms',
+      '--ease-standard': 'cubic-bezier(0.4, 0, 0.2, 1)',
 
       /* — surfaces — */
       '--color-background-body': [bg, night],
@@ -328,6 +331,10 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         },
       },
 
+      // liens : même transition que les boutons
+      'link': {
+        base: {transition: 'color var(--duration-medium) var(--ease-standard), text-decoration-color var(--duration-medium) var(--ease-standard)'},
+      },
       'icon-button': {
         base: {
           transition: [

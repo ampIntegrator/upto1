@@ -114,7 +114,7 @@ export const orbitaAmbreTheme = {
     "--duration-slow-min": "375ms",
     "--duration-slow": "500ms",
     "--duration-slow-max": "665ms",
-    "--ease-standard": "ease-in-out",
+    "--ease-standard": "cubic-bezier(0.4, 0, 0.2, 1)",
     "--font-family-body": "var(--font-geist), system-ui, sans-serif",
     "--font-family-heading": "var(--font-schibsted), system-ui, sans-serif",
     "--font-family-code": "\"SF Mono\", ui-monospace, Menlo, monospace",
@@ -363,6 +363,11 @@ export const orbitaAmbreTheme = {
         ":hover": {
           "backgroundColor": "var(--color-highlight-deep)"
         }
+      }
+    },
+    "link": {
+      "base": {
+        "transition": "color var(--duration-medium) var(--ease-standard), text-decoration-color var(--duration-medium) var(--ease-standard)"
       }
     },
     "icon-button": {

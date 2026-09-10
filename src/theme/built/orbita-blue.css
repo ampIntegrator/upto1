@@ -242,7 +242,7 @@
     --duration-slow-min: 375ms;
     --duration-slow: 500ms;
     --duration-slow-max: 665ms;
-    --ease-standard: ease-in-out;
+    --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
     --font-family-body: var(--font-geist), system-ui, sans-serif;
     --font-family-heading: var(--font-schibsted), system-ui, sans-serif;
     --font-family-code: "SF Mono", ui-monospace, Menlo, monospace;
@@ -522,6 +522,10 @@
 
   .astryx-button.high:hover:where(:not(:disabled,[aria-disabled="true"])) {
     background-color: var(--color-highlight-deep);
+  }
+
+  .astryx-link {
+    transition: color var(--duration-medium) var(--ease-standard), text-decoration-color var(--duration-medium) var(--ease-standard);
   }
 
   .astryx-icon-button {
@@ -1292,21 +1296,31 @@
 
   .astryx-heading.primary { color: var(--color-text-primary); }
 
+  .astryx-link.primary { color: var(--color-text-primary); }
+
   .astryx-text.secondary { color: var(--color-text-secondary); }
 
   .astryx-heading.secondary { color: var(--color-text-secondary); }
+
+  .astryx-link.secondary { color: var(--color-text-secondary); }
 
   .astryx-text.disabled { color: var(--color-text-disabled); }
 
   .astryx-heading.disabled { color: var(--color-text-disabled); }
 
+  .astryx-link.disabled { color: var(--color-text-disabled); }
+
   .astryx-text.placeholder { color: var(--color-text-secondary); }
 
   .astryx-heading.placeholder { color: var(--color-text-secondary); }
 
+  .astryx-link.placeholder { color: var(--color-text-secondary); }
+
   .astryx-text.accent { color: var(--color-text-accent); }
 
   .astryx-heading.accent { color: var(--color-text-accent); }
+
+  .astryx-link.accent { color: var(--color-text-accent); }
 
   .astryx-text.size-4xs { font-size: var(--font-size-4xs); }
 
