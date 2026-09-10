@@ -318,7 +318,7 @@ body > [data-astryx-theme] {
 [data-astryx-theme^='orbita'] .orbita-tab-stack {
   position: relative;
   padding: 0;
-  background: light-dark(var(--color-accent-muted), rgba(255, 255, 255, 0.04));
+  background: transparent; /* le panneau (background-light, translucide) porte seul la teinte */
   border-inline: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.15));
 }
 [data-astryx-theme^='orbita'] .orbita-tab-stack::after {
