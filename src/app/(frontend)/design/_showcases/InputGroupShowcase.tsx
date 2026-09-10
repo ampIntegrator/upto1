@@ -16,7 +16,7 @@ export default function InputGroupShowcase() {
   return (
     <VStack gap={4}>
       <Text type="body" color="secondary">Champ avec préfixe ou suffixe accolés : icône euro Nucleo pour un montant (dollar disponible, bascule à venir), texte pour une adresse web.</Text>
-      <VStack gap={4} style={{maxWidth: 400}}>
+      <VStack gap={4} maxWidth={400}>
         <InputGroup label="Prix">
           <InputGroupText>
             <Icon icon={CurrencyEuroIcon} size="sm" color="accent" />

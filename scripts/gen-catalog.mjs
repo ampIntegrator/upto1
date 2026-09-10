@@ -6,7 +6,7 @@
  *   - la table de navigation : _ui/catalog.generated.ts (menu plat par catégorie)
  * Même logique que astryx.atmeta.com/components : menu plat sous des titres de
  * catégorie non cliquables, tout visible, une URL par composant.
- * Une seule liste : un composant habillé Orbita (DRESSED) remplace la démo
+ * Une seule liste : un composant déjà habillé par le thème (DRESSED) remplace la démo
  * Astryx d'origine sous le même nom.
  *
  *   pnpm catalog:build
@@ -36,7 +36,7 @@ const CATS = {
 const DOC = {Select: 'selector'};
 /* Composants propres au design system (pas de doc Astryx) */
 const OWN = new Set(['Stat', 'SiteHeader']);
-/** Composants habillés Orbita (démo maison à la place de celle d'Astryx). */
+/** Composants habillés par le thème (démo maison à la place de celle d'origine). */
 const DRESSED = new Set(['Button', 'Dialog', 'Select', 'TextInput', 'TextArea', 'RadioList', 'CheckboxInput', 'Switch', 'Slider', 'FileInput', 'DateInput', 'DateTimeInput', 'TimeInput', 'DateRangeInput', 'FormLayout', 'InputGroup', 'NumberInput', 'PowerSearch', 'Card', 'ClickableCard', 'Badge', 'Collapsible', 'CollapsibleGroup', 'Tab', 'TabList', 'TabMenu', 'Section', 'Stat', 'SiteHeader', 'TopNav', 'TopNavHeading', 'TopNavItem', 'TopNavMenu', 'TopNavMegaMenu', 'TopNavMegaMenuItem', 'TopNavMegaMenuFeaturedCard', 'MobileNav', 'Breadcrumbs', 'BreadcrumbItem']);
 const PARENTS = {DropdownMenuItem:'DropdownMenu',SegmentedControlItem:'SegmentedControl',CollapsibleGroup:'Collapsible',AvatarGroupOverflow:'AvatarGroup',AvatarStatusDot:'Avatar',CheckboxListItem:'CheckboxList',FieldLabel:'Field',FieldStatus:'Field',RadioListItem:'RadioList',GridSpan:'Grid',LayoutContent:'Layout',LayoutFooter:'Layout',LayoutHeader:'Layout',LayoutPanel:'Layout',StackItem:'Stack',HStack:'Stack',VStack:'Stack',BreadcrumbItem:'Breadcrumbs',MobileNavToggle:'MobileNav',SideNavCollapseButton:'SideNav',SideNavHeading:'SideNav',SideNavItem:'SideNav',SideNavSection:'SideNav',Step:'Stepper',Tab:'TabList',TabMenu:'TabList',TopNavHeading:'TopNav',TopNavItem:'TopNav',TopNavMegaMenu:'TopNav',TopNavMegaMenuFeaturedCard:'TopNavMegaMenu',TopNavMegaMenuItem:'TopNavMegaMenu',TopNavMenu:'TopNav',CommandPaletteEmpty:'CommandPalette',CommandPaletteFooter:'CommandPalette',CommandPaletteGroup:'CommandPalette',CommandPaletteInput:'CommandPalette',CommandPaletteItem:'CommandPalette',CommandPaletteList:'CommandPalette',ContextMenuItem:'ContextMenu',DialogHeader:'Dialog',ListItem:'List',MetadataListItem:'MetadataList',ChatComposerDrawer:'ChatComposer',ChatComposerInput:'ChatComposer',ChatDictationButton:'ChatComposer',ChatSendButton:'ChatComposer',ChatMessageBubble:'ChatMessage',ChatMessageMetadata:'ChatMessage',ChatTokenizedText:'ChatMessage',NavHeadingMenu:'SideNav'};
 
@@ -68,7 +68,7 @@ import ${it.name}Showcase from '../../_showcases/${it.name}Showcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: '${it.label} — Orbita × Astryx'};
+export const metadata = {title: '${it.label} — Design system Vidomia'};
 
 export default function Page() {
   return (
@@ -92,7 +92,7 @@ import React from 'react';
 
 import {LibraryOverview} from '../_ui/LibraryOverview';
 
-export const metadata = {title: 'Composants — Orbita × Astryx'};
+export const metadata = {title: 'Composants — Design system Vidomia'};
 
 export default function Page() {
   return <LibraryOverview />;

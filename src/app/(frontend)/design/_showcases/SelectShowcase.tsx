@@ -62,7 +62,7 @@ export default function SelectShowcase() {
 
   return (
     <VStack gap={8}>
-      <Text type="body" color="secondary">Selector et MultiSelector d'Astryx réunis en un composant habillé Orbita (maquette 17-forms) : un choix ou plusieurs, label flottant, chevron qui pivote, panneau sous le champ, recherche dès six options, badges accent pour le multiple.</Text>
+      <Text type="body" color="secondary">Sélecteur simple et multiple réunis en un composant (maquette 17-forms) : un choix ou plusieurs, label flottant, chevron qui pivote, panneau sous le champ, recherche dès six options, badges accent pour le multiple.</Text>
 
       <Section title="Clair" note="Cliquez pour ouvrir : le label remonte en accent, le panneau se place sous le champ.">
         <Card padding={6}>

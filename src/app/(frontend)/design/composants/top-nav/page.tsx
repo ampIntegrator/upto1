@@ -6,7 +6,7 @@ import TopNavShowcase from '../../_showcases/TopNavShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Top Nav — Orbita × Astryx'};
+export const metadata = {title: 'Top Nav — Design system Vidomia'};
 
 export default function Page() {
   return (

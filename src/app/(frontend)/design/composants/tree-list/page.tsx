@@ -6,7 +6,7 @@ import TreeListShowcase from '../../_showcases/TreeListShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Tree List — Orbita × Astryx'};
+export const metadata = {title: 'Tree List — Design system Vidomia'};
 
 export default function Page() {
   return (

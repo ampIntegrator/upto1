@@ -6,7 +6,7 @@ import DateRangeInputShowcase from '../../_showcases/DateRangeInputShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Date Range Input — Orbita × Astryx'};
+export const metadata = {title: 'Date Range Input — Design system Vidomia'};
 
 export default function Page() {
   return (

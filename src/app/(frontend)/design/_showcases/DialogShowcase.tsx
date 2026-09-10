@@ -45,7 +45,7 @@ export default function DialogShowcase() {
 
   return (
     <VStack gap={8}>
-      <Text type="body" color="secondary">Le Dialog Astryx habillé Orbita : trois largeurs, clair ou nuit, eyebrow optionnel, bouton fermer Nucleo, pied avec filet dégradé qui suit le silo. L'en-tête garde la même hauteur avec ou sans eyebrow.</Text>
+      <Text type="body" color="secondary">Le dialogue : trois largeurs, clair ou nuit, eyebrow optionnel, bouton fermer Nucleo, pied avec filet dégradé qui suit le silo. L'en-tête garde la même hauteur avec ou sans eyebrow.</Text>
 
       <VStack gap={3}>
         <HStack gap={4} vAlign="center" hAlign="between" wrap="wrap">

@@ -7,7 +7,7 @@ import React from 'react';
 
 import {PageIntro} from '../../_ui/PageIntro';
 
-export const metadata = {title: 'Typographie — Orbita × Astryx'};
+export const metadata = {title: 'Typographie — Design system Vidomia'};
 
 const FONTS = [
   {role: 'Titres & display', family: 'Schibsted Grotesk', token: '--font-family-heading', sample: 'Chiffrez vos travaux en 20 minutes.'},
@@ -40,7 +40,7 @@ export default function Page() {
                   <VStack gap={0.5} style={{minWidth: 260}}>
                     <Text type="label">{f.role}</Text>
                     <Text type="supporting">{f.family}</Text>
-                    <Text type="code" size="xsm" color="secondary">{f.token}</Text>
+                    <Text type="code" size="sm" color="secondary">{f.token}</Text>
                   </VStack>
                   <Text
                     type="inherit"

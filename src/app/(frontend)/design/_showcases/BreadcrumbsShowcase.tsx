@@ -2,6 +2,7 @@
 'use client';
 
 import {BreadcrumbItem, Breadcrumbs} from '@astryxdesign/core/Breadcrumbs';
+import {VisuallyHidden} from '@astryxdesign/core/VisuallyHidden';
 import {VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
 import {Theme} from '@astryxdesign/core/theme';
@@ -15,7 +16,7 @@ import {useOrbitaTheme} from '@/theme/OrbitaThemeProvider';
 function Trail() {
   return (
     <Breadcrumbs label="Fil d'Ariane" separator={<ChevronRightIcon width={12} height={12} />}>
-      <BreadcrumbItem href="#" startIcon={<HomeIcon width={14} height={14} />}><span className="visually-hidden">Accueil</span></BreadcrumbItem>
+      <BreadcrumbItem href="#" startIcon={<HomeIcon width={14} height={14} />}><VisuallyHidden>Accueil</VisuallyHidden></BreadcrumbItem>
       <BreadcrumbItem href="#">Solutions</BreadcrumbItem>
       <BreadcrumbItem isCurrent>Chiffrage instantané</BreadcrumbItem>
     </Breadcrumbs>
@@ -30,7 +31,7 @@ export default function BreadcrumbsShowcase() {
       <Trail />
       <Section background="paper" spacing="none" dividers>
         <Container>
-          <VStack paddingBlock={3.5 as 3}><Trail /></VStack>
+          <VStack paddingBlock={4}><Trail /></VStack>
         </Container>
       </Section>
       <Theme theme={theme} mode="dark">

@@ -2,9 +2,11 @@ import {VStack} from '@astryxdesign/core/Stack';
 import React from 'react';
 
 import {PageIntro} from '../../_ui/PageIntro';
+import {Link} from '@astryxdesign/core/Link';
+
 import {SwatchGroup} from '../../_ui/TokenSwatch';
 
-export const metadata = {title: 'Couleurs — Orbita × Astryx'};
+export const metadata = {title: 'Couleurs — Design system Vidomia'};
 
 export default function Page() {
   return (
@@ -12,7 +14,7 @@ export default function Page() {
       <PageIntro
         eyebrow="Fondations"
         title="Couleurs"
-        lead="Chaque silo redéfinit l'accent, ses fonds teintés, le highlight et la nuit. Les neutres (encre, filets, papier) et l'or éditorial sont partagés par tous les silos. Changez de silo ou passez en mode nuit pour voir les tokens se résoudre."
+        lead="Chaque silo redéfinit l'accent, ses fonds teintés, le highlight et la nuit. Les neutres (encre, filets, papier) et l'or éditorial sont partagés par tous les silos. Changez de silo dans la barre latérale pour voir les tokens se résoudre ; le mode nuit s'observe dans les démos qui le déclarent."
       />
       <SwatchGroup
         title="Accent (primaire du silo)"
@@ -24,6 +26,7 @@ export default function Page() {
         note="Tokens ajoutés hors nomenclature Astryx : highlight (signal du silo), or éditorial, fond nuit."
         tokens={['--color-highlight', '--color-highlight-deep', '--color-highlight-muted', '--color-highlight-light', '--color-editorial', '--color-editorial-deep', '--color-night']}
       />
+      <Link href="/design/fondations/couleurs/comparatif">Voir le comparatif des highlights, avant et après l'harmonisation du 9 septembre</Link>
       <SwatchGroup
         title="Surfaces"
         note="Hiérarchie body → surface → card → popover. Light est la couleur du silo à 5 %, pour une surface à peine teintée. En mode nuit : fond nuit du silo, cartes plus sombres, popovers plus clairs."

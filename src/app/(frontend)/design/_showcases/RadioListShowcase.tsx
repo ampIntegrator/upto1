@@ -11,7 +11,7 @@ export default function RadioListShowcase() {
   const [taille, setTaille] = useState('1-10');
   return (
     <VStack gap={6}>
-      <Text type="body" color="secondary">Radio Orbita : disque de 22 px, bordure ligne, point accent de 8 px et libellé en couleur silo quand coché. Tout vient du thème, le composant est le RadioList Astryx.</Text>
+      <Text type="body" color="secondary">Bouton radio : disque de 22 px, bordure ligne, point accent de 8 px et libellé en couleur silo quand coché. Tout vient du thème, le composant est le RadioList Astryx.</Text>
       <Card padding={6}>
         <RadioList label="Taille du parc" value={taille} onChange={setTaille}>
           <RadioListItem value="1-10" label="1 à 10 sites" />

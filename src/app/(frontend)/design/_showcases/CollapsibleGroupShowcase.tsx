@@ -15,7 +15,7 @@ function Faq({columns, type = 'single', prefix}: {columns: 1 | 2; type?: 'single
   return (
     <OrbitaCollapsibleGroup type={type} columns={columns} defaultValue={type === 'multiple' ? [`${prefix}-0`] : `${prefix}-0`}>
       {FAQ.map((f, i) => (
-        <OrbitaCollapsible key={i} value={`${prefix}-${i}`} question={f.q}>
+        <OrbitaCollapsible key={f.q} value={`${prefix}-${i}`} question={f.q}>
           <Text type="body">{f.a}</Text>
         </OrbitaCollapsible>
       ))}

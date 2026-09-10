@@ -6,7 +6,7 @@ import ChatSendButtonShowcase from '../../_showcases/ChatSendButtonShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Chat Send Button — Orbita × Astryx'};
+export const metadata = {title: 'Chat Send Button — Design system Vidomia'};
 
 export default function Page() {
   return (

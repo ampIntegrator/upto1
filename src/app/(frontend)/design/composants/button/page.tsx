@@ -6,7 +6,7 @@ import ButtonShowcase from '../../_showcases/ButtonShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Button — Orbita × Astryx'};
+export const metadata = {title: 'Button — Design system Vidomia'};
 
 export default function Page() {
   return (

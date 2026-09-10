@@ -2,6 +2,7 @@
 
 import {AppShell} from '@astryxdesign/core/AppShell';
 import {SideNav, SideNavHeading, SideNavItem, SideNavSection} from '@astryxdesign/core/SideNav';
+import {Text} from '@astryxdesign/core/Text';
 import {Icon} from '@astryxdesign/core/Icon';
 import {VStack} from '@astryxdesign/core/Stack';
 import {TextInput} from '@astryxdesign/core/TextInput';
@@ -58,9 +59,9 @@ export function DesignShell({children}: {children: React.ReactNode}) {
       contentPadding={8}
       sideNav={
         <SideNav
-          header={<SideNavHeading heading="Orbita × Astryx" headingHref="/design" />}
+          header={<SideNavHeading heading="Vidomia · DS" headingHref="/design" />}
           topContent={<ThemeControls query={query} onQuery={setQuery} />}>
-          {nothing ? <span className={styles.empty}>Aucun résultat pour « {query} »</span> : null}
+          {nothing ? <Text type="supporting" className={styles.empty}>Aucun résultat pour « {query} »</Text> : null}
           <SideNavSection title="Fondations" isHeaderHidden={q !== '' && foundations.length === 0}>
             {!q ? <SideNavItem label="Vue d'ensemble" href="/design" isSelected={pathname === '/design'} /> : null}
             {foundations.map((e) => (
@@ -71,7 +72,7 @@ export function DesignShell({children}: {children: React.ReactNode}) {
             {!q ? <SideNavItem label="Vue d'ensemble" href="/design/composants" isSelected={pathname === '/design/composants'} /> : null}
             {catalog.map((cat) => (
               <React.Fragment key={cat.slug}>
-                <span className={styles.groupLabel}>{cat.label}</span>
+                <Text type="supporting" className={styles.groupLabel}>{cat.label}</Text>
                 {cat.items.map((it) => (
                   <SideNavItem key={it.slug} label={it.label} href={it.href} isSelected={pathname === it.href} />
                 ))}

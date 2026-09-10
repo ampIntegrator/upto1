@@ -14,14 +14,6 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Le fournisseur de thème est la racine visuelle : il porte le fond, la
-   couleur de texte et la police du silo actif. */
-body > [data-astryx-theme] {
-  min-height: 100dvh;
-  background: var(--color-background-body);
-  color: var(--color-text-primary);
-  font-family: var(--font-family-body);
-}
 
 /* Icônes Nucleo : épaisseur de trait globale, sans modifier les SVG.
    Ne touche que les groupes exportés à 1 (les aplats et les traits à 0 restent). */
@@ -191,7 +183,7 @@ body > [data-astryx-theme] {
 [data-astryx-theme^='orbita'] .astryx-power-search .astryx-field:has(.astryx-token) > .astryx-field-label,
 [data-astryx-theme^='orbita'] .astryx-power-search .astryx-field:has(input[placeholder]:not(:placeholder-shown)) > .astryx-field-label {
   top: 8px !important;
-  font-size: 11.5px !important;
+  font-size: 14px !important;
   letter-spacing: 0.02em;
   color: light-dark(var(--color-accent), var(--color-highlight)) !important;
 }
@@ -209,23 +201,9 @@ body > [data-astryx-theme] {
   background: light-dark(var(--color-accent-muted), rgba(255, 255, 255, 0.1)) !important;
   color: light-dark(var(--color-text-accent), var(--color-highlight)) !important;
   border-radius: 0 !important;
-  font-size: 12.5px !important;
+  font-size: 14px !important;
   font-weight: var(--font-weight-semibold) !important;
 }
-
-/* Message d'état accolé (erreur / succès / avertissement) : aligné sur le halo
-   de 3 px du champ, pour que le bloc coloré et le contour aient la même largeur. */
-[data-astryx-theme^='orbita'] .astryx-field-status[data-variant='attached'] {
-  margin-inline: -3px;
-  width: calc(100% + 6px);
-  /* le bloc commence sous le halo au lieu de se glisser sous le champ :
-     sinon halo et fond translucides se superposent et foncent la jonction */
-  margin-top: 3px !important;
-  padding-top: 8px !important;
-}
-[data-astryx-theme^='orbita'] .astryx-field-status[data-variant='attached'][data-type='error'] { background-color: var(--color-error-muted) !important; }
-[data-astryx-theme^='orbita'] .astryx-field-status[data-variant='attached'][data-type='success'] { background-color: var(--color-success-muted) !important; }
-[data-astryx-theme^='orbita'] .astryx-field-status[data-variant='attached'][data-type='warning'] { background-color: var(--color-warning-muted) !important; }
 
 /* Onglets (06-tabs) : compléments au thème orbita.ts (section ONGLETS) pour ce
    que defineTheme ne cible pas. Séparateur vertical entre onglets ; menu de
@@ -332,7 +310,7 @@ body > [data-astryx-theme] {
 }
 [data-astryx-theme^='orbita'] .orbita-tab-panel {
   padding: 44px 20px;
-  background: var(--color-highlight-light); /* essai : highlight du silo à 5 % (avant : background-light) */
+  background: var(--color-highlight-light); /* highlight du silo à 5 %, retenu le 10 sept. */
 }
 /* contenu d'un onglet : 900 px maximum, centré */
 [data-astryx-theme^='orbita'] .orbita-tab-panel > * {
@@ -356,27 +334,7 @@ body > [data-astryx-theme] {
   }
 }
 
-/* Types de texte du thème qui portent une couleur : la couleur « primary » par
-   défaut du Text (classe StyleX) passe sinon devant celle du type. On ne force
-   que quand aucune couleur n'a été demandée (data-color="primary" = défaut).
-   Serif : pour une autre couleur (or éditorial du hero 13),
-   style={{'--serif-color': 'var(--color-editorial)'}}. */
-[data-astryx-theme^='orbita'] .astryx-text.serif[data-color='primary'] {
-  color: var(--serif-color, light-dark(var(--color-accent), var(--color-highlight))) !important;
-}
-[data-astryx-theme^='orbita'] .astryx-text.eyebrow[data-color='primary'],
-[data-astryx-theme^='orbita'] .astryx-text.eyebrow-lines[data-color='primary'] {
-  color: var(--color-editorial) !important;
-}
-[data-astryx-theme^='orbita'] .astryx-text.number[data-color='primary'] {
-  color: var(--color-text-accent) !important;
-}
-[data-astryx-theme^='orbita'] .astryx-text.result[data-color='primary'] {
-  color: light-dark(var(--color-text-accent), var(--color-highlight)) !important;
-}
-[data-astryx-theme^='orbita'] .astryx-text.date[data-color='primary'] {
-  color: var(--color-text-disabled) !important;
-}
+/* Texte serif : une autre couleur se passe par style={{'--serif-color': …}} (lue par le thème). */
 
 /* Liens et boutons : tout survol transitionne en 0,25 s avec la courbe douce du thème
    (--ease-standard). Les composants Astryx passent par leurs propres transitions
@@ -391,7 +349,6 @@ body > [data-astryx-theme] {
    Carte mise en avant du méga-menu : textes blancs sur fond nuit, lien highlight,
    colonne sans fond, pleine hauteur. Fil d'Ariane : chevrons en couleur silo,
    page courante en encre secondaire. */
-[data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-featured-card { height: 100%; }
 [data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-featured-card .astryx-text,
 [data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-featured-card .astryx-heading,
 [data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-featured-card span,
@@ -427,16 +384,5 @@ body > [data-astryx-theme] {
 [data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item:hover > div:first-child,
 [data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item:hover span { color: #fff !important; }
 
-/* Texte réservé aux lecteurs d'écran (ex. « Accueil » derrière l'icône maison du fil d'Ariane). */
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-  border: 0;
-}
-[data-astryx-theme^='orbita'] .astryx-breadcrumb-item a:has(> .visually-hidden) { display: inline-flex; align-items: center; }
+/* Fil d'Ariane : maillon à icône seule (VisuallyHidden Astryx pour le nom) aligné. */
+[data-astryx-theme^='orbita'] .astryx-breadcrumb-item a:has(> svg) { display: inline-flex; align-items: center; }

@@ -6,7 +6,7 @@ import PowerSearchShowcase from '../../_showcases/PowerSearchShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Power Search — Orbita × Astryx'};
+export const metadata = {title: 'Power Search — Design system Vidomia'};
 
 export default function Page() {
   return (

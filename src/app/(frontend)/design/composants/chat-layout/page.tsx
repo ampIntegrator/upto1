@@ -6,7 +6,7 @@ import ChatLayoutShowcase from '../../_showcases/ChatLayoutShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Chat Layout — Orbita × Astryx'};
+export const metadata = {title: 'Chat Layout — Design system Vidomia'};
 
 export default function Page() {
   return (

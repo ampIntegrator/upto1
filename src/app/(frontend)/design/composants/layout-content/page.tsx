@@ -6,7 +6,7 @@ import LayoutContentShowcase from '../../_showcases/LayoutContentShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Layout Content — Orbita × Astryx'};
+export const metadata = {title: 'Layout Content — Design system Vidomia'};
 
 export default function Page() {
   return (

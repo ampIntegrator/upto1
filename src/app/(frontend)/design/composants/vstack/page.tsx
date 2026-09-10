@@ -6,7 +6,7 @@ import VStackShowcase from '../../_showcases/VStackShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'VStack — Orbita × Astryx'};
+export const metadata = {title: 'VStack — Design system Vidomia'};
 
 export default function Page() {
   return (

@@ -6,7 +6,7 @@ import BadgeShowcase from '../../_showcases/BadgeShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Badge — Orbita × Astryx'};
+export const metadata = {title: 'Badge — Design system Vidomia'};
 
 export default function Page() {
   return (

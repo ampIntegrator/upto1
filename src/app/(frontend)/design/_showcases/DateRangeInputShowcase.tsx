@@ -20,7 +20,7 @@ export default function DateRangeInputShowcase() {
   return (
     <VStack gap={4}>
       <Text type="body" color="secondary">Plage de dates avec raccourcis. Panneau à la largeur du champ, icône en couleur silo.</Text>
-      <Grid columns={{minWidth: 240, max: 2}} gap={6} style={{maxWidth: 400 * 2 + 24}}>
+      <Grid columns={{minWidth: 240, max: 2}} gap={6} maxWidth={824}>
         <DateRangeInput label="Période" value={range} onChange={setRange} presets={presets} />
       </Grid>
     </VStack>

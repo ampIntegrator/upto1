@@ -6,7 +6,7 @@ import LayoutFooterShowcase from '../../_showcases/LayoutFooterShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Layout Footer — Orbita × Astryx'};
+export const metadata = {title: 'Layout Footer — Design system Vidomia'};
 
 export default function Page() {
   return (

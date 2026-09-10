@@ -6,7 +6,7 @@ import NumberInputShowcase from '../../_showcases/NumberInputShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Number Input — Orbita × Astryx'};
+export const metadata = {title: 'Number Input — Design system Vidomia'};
 
 export default function Page() {
   return (

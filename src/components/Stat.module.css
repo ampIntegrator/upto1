@@ -6,12 +6,12 @@
 .sign {
   color: light-dark(var(--color-highlight-deep), var(--color-highlight));
   font-size: 0.62em;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   letter-spacing: 0;
   white-space: pre;
 }
 .label {
-  margin-top: 8px;
+  margin-top: var(--spacing-2, 8px);
   font-size: 14px; /* jamais sous 14 px */
   color: var(--color-text-disabled);
   letter-spacing: 0.1em;

@@ -6,7 +6,7 @@ import React from 'react';
 
 import {PageIntro} from '../../_ui/PageIntro';
 
-export const metadata = {title: 'Espacements — Orbita × Astryx'};
+export const metadata = {title: 'Espacements — Design system Vidomia'};
 
 const SPACING = ['0-5', '1', '1-5', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
 const SIZES = ['sm', 'md', 'lg'];
@@ -26,7 +26,7 @@ export default function Page() {
           <VStack gap={2}>
             {SPACING.map((s) => (
               <HStack key={s} gap={4} vAlign="center">
-                <Text type="code" size="xsm" color="secondary" style={{width: 130}}>{`--spacing-${s}`}</Text>
+                <Text type="code" size="sm" color="secondary" style={{width: 130}}>{`--spacing-${s}`}</Text>
                 <VStack style={{width: `var(--spacing-${s})`, height: 20, background: 'var(--color-accent)'}} />
                 <Text type="supporting">{`gap={${s.replace('-', '.')}}`}</Text>
               </HStack>
@@ -43,7 +43,7 @@ export default function Page() {
             {SIZES.map((s) => (
               <VStack key={s} gap={2} hAlign="center">
                 <VStack style={{width: 120, height: `var(--size-element-${s})`, background: 'var(--color-accent-muted)', border: '1px solid var(--color-accent)'}} />
-                <Text type="code" size="xsm" color="secondary">{`--size-element-${s}`}</Text>
+                <Text type="code" size="sm" color="secondary">{`--size-element-${s}`}</Text>
               </VStack>
             ))}
           </HStack>

@@ -6,7 +6,7 @@ import OverlayShowcase from '../../_showcases/OverlayShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Overlay — Orbita × Astryx'};
+export const metadata = {title: 'Overlay — Design system Vidomia'};
 
 export default function Page() {
   return (

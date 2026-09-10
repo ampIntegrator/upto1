@@ -6,7 +6,7 @@ import OutlineShowcase from '../../_showcases/OutlineShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Outline — Orbita × Astryx'};
+export const metadata = {title: 'Outline — Design system Vidomia'};
 
 export default function Page() {
   return (

@@ -6,7 +6,7 @@ import TableShowcase from '../../_showcases/TableShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Table — Orbita × Astryx'};
+export const metadata = {title: 'Table — Design system Vidomia'};
 
 export default function Page() {
   return (

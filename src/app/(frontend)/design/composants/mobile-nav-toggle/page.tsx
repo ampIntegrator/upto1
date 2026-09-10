@@ -6,7 +6,7 @@ import MobileNavToggleShowcase from '../../_showcases/MobileNavToggleShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Mobile Nav Toggle — Orbita × Astryx'};
+export const metadata = {title: 'Mobile Nav Toggle — Design system Vidomia'};
 
 export default function Page() {
   return (

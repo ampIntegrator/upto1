@@ -13,7 +13,7 @@ export default function SliderShowcase() {
     <VStack gap={6}>
       <Text type="body" color="secondary">Curseur Orbita : piste de 6 px en dégradé highlight → accent atténué, progression accent, poignée ronde de 16 px. Valeur affichée en tête, comme le calculateur de la maquette.</Text>
       <Card padding={6}>
-        <VStack gap={2} style={{maxWidth: 480}}>
+        <VStack gap={2} maxWidth={480}>
           <HStack hAlign="between" vAlign="center">
             <Text type="label" color="secondary">Budget travaux estimé</Text>
             <Text type="label"><strong>{budget}</strong> k€</Text>

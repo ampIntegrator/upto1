@@ -25,7 +25,7 @@ export default function TabListShowcase() {
   return (
     <VStack gap={8}>
       <Text type="body" color="secondary">
-        La liste d'onglets Astryx habillée par le thème : Geist 600, onglets séparés d'un filet, survol en silo 10 %, actif en couleur silo avec un indicateur de 3 px. Sur mobile la barre défile horizontalement et garde l'onglet actif en vue. Le panneau de contenu n'est pas un composant : il appartient au bloc qui assemble les onglets.
+        La liste d'onglets : Geist 600, onglets séparés d'un filet, survol en silo 10 %, actif en couleur silo avec un indicateur de 3 px. Sur mobile la barre défile horizontalement et garde l'onglet actif en vue. Le panneau de contenu n'est pas un composant : il appartient au bloc qui assemble les onglets.
       </Text>
       <VStack gap={3}>
         <Heading level={3}>Largeur égale avec panneau</Heading>

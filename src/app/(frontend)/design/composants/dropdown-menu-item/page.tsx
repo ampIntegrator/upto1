@@ -6,7 +6,7 @@ import DropdownMenuItemShowcase from '../../_showcases/DropdownMenuItemShowcase'
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Dropdown Menu Item — Orbita × Astryx'};
+export const metadata = {title: 'Dropdown Menu Item — Design system Vidomia'};
 
 export default function Page() {
   return (

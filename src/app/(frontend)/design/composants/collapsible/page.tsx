@@ -6,7 +6,7 @@ import CollapsibleShowcase from '../../_showcases/CollapsibleShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Collapsible — Orbita × Astryx'};
+export const metadata = {title: 'Collapsible — Design system Vidomia'};
 
 export default function Page() {
   return (

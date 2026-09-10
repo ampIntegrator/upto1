@@ -18,7 +18,7 @@ export function TabsWithPanel({id}: {id: string}) {
   const [value, setValue] = useState<string>(TABS[0].value);
   const current = TABS.find((t) => t.value === value) ?? TABS[0];
   return (
-    <VStack style={{boxShadow: 'var(--shadow-md)'}}>
+    <VStack style={{boxShadow: 'var(--shadow-med)'}}>
       <TabList value={value} onChange={setValue} layout="fill" role="tablist" aria-label="Situations">
         {TABS.map((t) => <Tab key={t.value} value={t.value} label={t.label} panelId={`${id}-${t.value}`} />)}
       </TabList>

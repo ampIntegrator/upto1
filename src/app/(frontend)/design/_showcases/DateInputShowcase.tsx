@@ -15,7 +15,7 @@ export default function DateInputShowcase() {
   return (
     <VStack gap={4}>
       <Text type="body" color="secondary">Champ de date Orbita : label flottant, icône calendrier en couleur silo, calendrier sur toute la largeur du champ, 6 px dessous, croix d'effacement nue.</Text>
-      <Grid columns={{minWidth: 240, max: 2}} gap={6} style={{maxWidth: 400 * 2 + 24}}>
+      <Grid columns={{minWidth: 240, max: 2}} gap={6} maxWidth={824}>
         <OrbitaDateField label="Date de début" value={date} onChange={setDate} />
         <OrbitaDateField label="Date de livraison" value={fixed} onChange={setFixed} />
       </Grid>

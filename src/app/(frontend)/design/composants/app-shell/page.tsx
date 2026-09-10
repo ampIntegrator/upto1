@@ -6,7 +6,7 @@ import AppShellShowcase from '../../_showcases/AppShellShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'App Shell — Orbita × Astryx'};
+export const metadata = {title: 'App Shell — Design system Vidomia'};
 
 export default function Page() {
   return (

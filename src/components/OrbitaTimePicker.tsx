@@ -62,8 +62,11 @@ function TimePanel({
   }, []);
 
   const pickNow = () => {
+    // arrondi au pas ; 23:58 avec un pas de 5 donne 24:00 → on borne à 23:55
     const m = Math.round(now.getMinutes() / minuteStep) * minuteStep;
-    onPick(now.getHours() + (m === 60 ? 1 : 0), m === 60 ? 0 : m, true);
+    const h = now.getHours() + (m === 60 ? 1 : 0);
+    if (h > 23) onPick(23, 60 - minuteStep, true);
+    else onPick(h, m === 60 ? 0 : m, true);
   };
 
   return (
@@ -147,6 +150,9 @@ function usePanel(wrapRef: React.RefObject<HTMLDivElement | null>, isTarget: (el
 }
 
 /* --------------------------------------------------------------- heure seule */
+
+/** AAAA-MM-JJ en heure locale (toISOString() donnerait la date UTC, fausse entre minuit et 2 h). */
+const localISODate = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
 export type OrbitaTimePickerProps = {
   label: string;
@@ -232,7 +238,7 @@ export function OrbitaDateTimePicker({label, value, onChange, placeholder = 'Dat
           minute={m}
           minuteStep={minuteStep}
           onPick={(hh, mm, done) => {
-            const date = datePart || new Date().toISOString().slice(0, 10); // sans date choisie : aujourd'hui
+            const date = datePart || localISODate(new Date()); // sans date choisie : aujourd'hui (date locale, pas UTC)
             onChange(`${date}T${pad(hh)}:${pad(mm ?? 0)}` as ISODateTimeString);
             if (done) setOpen(false);
           }}

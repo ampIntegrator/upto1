@@ -6,7 +6,7 @@ import HStackShowcase from '../../_showcases/HStackShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'HStack — Orbita × Astryx'};
+export const metadata = {title: 'HStack — Design system Vidomia'};
 
 export default function Page() {
   return (

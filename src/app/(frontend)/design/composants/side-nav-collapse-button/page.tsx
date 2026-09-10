@@ -6,7 +6,7 @@ import SideNavCollapseButtonShowcase from '../../_showcases/SideNavCollapseButto
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Side Nav Collapse Button — Orbita × Astryx'};
+export const metadata = {title: 'Side Nav Collapse Button — Design system Vidomia'};
 
 export default function Page() {
   return (

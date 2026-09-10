@@ -6,7 +6,7 @@ import ChatTokenizedTextShowcase from '../../_showcases/ChatTokenizedTextShowcas
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Chat Tokenized Text — Orbita × Astryx'};
+export const metadata = {title: 'Chat Tokenized Text — Design system Vidomia'};
 
 export default function Page() {
   return (

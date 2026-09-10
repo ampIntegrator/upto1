@@ -15,7 +15,7 @@
 .arrow::before {
   content: '';
   position: absolute;
-  inset: 5px;
+  inset: 4px;
   border: 1px solid var(--orbita-frame, rgba(255, 255, 255, 0.34));
   pointer-events: none;
   transition:

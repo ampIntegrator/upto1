@@ -14,7 +14,7 @@ export default function NumberInputShowcase() {
   return (
     <VStack gap={4}>
       <Text type="body" color="secondary">Champ numérique Orbita : label flottant, flèches Nucleo dans deux cases carrées empilées sur toute la hauteur, couleur silo.</Text>
-      <Grid columns={{minWidth: 240, max: 2}} gap={6} style={{maxWidth: 400 * 2 + 24}}>
+      <Grid columns={{minWidth: 240, max: 2}} gap={6} maxWidth={824}>
         <OrbitaNumberField label="Quantité" value={qte} onChange={setQte} formatValue={(n) => `${n} lot${n > 1 ? 's' : ''}`} />
         <OrbitaNumberField label="Surface (m²)" value={surface} onChange={setSurface} step={10} />
       </Grid>

@@ -6,7 +6,7 @@ import HeadingShowcase from '../../_showcases/HeadingShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Heading — Orbita × Astryx'};
+export const metadata = {title: 'Heading — Design system Vidomia'};
 
 export default function Page() {
   return (

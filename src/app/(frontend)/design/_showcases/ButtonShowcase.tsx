@@ -43,7 +43,7 @@ export default function ButtonShowcase() {
   const {theme} = useOrbitaTheme();
   return (
     <VStack gap={8}>
-      <Text type="body" color="secondary">Le Button Astryx habillé Orbita : angles vifs, Geist semi-gras, halo accent sur le primaire, fantôme bordé, variante high. OrbitaButton ajoute le split-button : cellule flèche pleine hauteur, cadre intérieur qui s'ouvre au survol, flèche qui rebondit.</Text>
+      <Text type="body" color="secondary">Le bouton : angles vifs, Geist semi-gras, halo accent sur le primaire, fantôme bordé, variante high. OrbitaButton ajoute le split-button : cellule flèche pleine hauteur, cadre intérieur qui s'ouvre au survol, flèche qui rebondit.</Text>
 
       <Section title="Bouton simple" note="Sans flèche : boutons de formulaires, de modales, de pieds de carte.">
         <Card padding={6}><Matrix arrow={false} /></Card>
@@ -102,7 +102,7 @@ export default function ButtonShowcase() {
 
       <Section title="Mode bloc" note="Pleine largeur, libellé à gauche, flèche au bord droit. Cartes de prix, formulaires, drawer mobile.">
         <Card padding={6}>
-          <VStack gap={3} style={{maxWidth: 420}}>
+          <VStack gap={3} maxWidth={420}>
             <OrbitaButton label="Choisir Pro" variant="primary" arrow block />
             <OrbitaButton label="Choisir Solo" variant="ghost" arrow block />
             <OrbitaButton label="Choisir Agence" variant="primary" block />

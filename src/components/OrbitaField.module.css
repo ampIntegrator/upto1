@@ -68,12 +68,12 @@
   color: var(--color-text-disabled);
   pointer-events: none;
   z-index: 2; /* au-dessus des segments Astryx (relative, z-index 1) */
-  transition: top 0.16s ease, font-size 0.16s ease, color 0.16s ease;
+  transition: top var(--duration-medium) var(--ease-standard), font-size var(--duration-medium) var(--ease-standard), color var(--duration-medium) var(--ease-standard);
 }
 .wrap.hasValue .label,
 .wrap:focus-within .label {
   top: 8px;
-  font-size: 11.5px;
+  font-size: 14px;
   letter-spacing: 0.02em;
   color: light-dark(var(--color-accent), var(--color-highlight));
 }
@@ -86,7 +86,7 @@
   align-items: center;
   gap: 6px;
   margin-top: 7px;
-  font-size: 12.5px;
+  font-size: 14px;
   color: var(--color-text-disabled);
 }
 .msg svg { width: 14px; height: 14px; }
@@ -124,7 +124,7 @@
 }
 .wrap :global(.astryx-date-input) > button,
 .wrap :global(.astryx-time-input) > div:first-child,
-.wrap :global(.astryx-date-input) > .astryx-icon { align-self: center; }
+.wrap :global(.astryx-date-input > .astryx-icon) { align-self: center; }
 
 /* date + heure : deux segments, même traitement, second label sur le segment heure */
 .wrap :global(.astryx-date-time-input) > div {
@@ -151,7 +151,7 @@
 .wrap.hasValue2 .label2,
 .wrap:has(:global(.astryx-date-time-input-time-segment):focus-within) .label2 {
   top: 8px;
-  font-size: 11.5px;
+  font-size: 14px;
   letter-spacing: 0.02em;
   color: light-dark(var(--color-accent), var(--color-highlight));
 }

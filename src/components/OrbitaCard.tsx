@@ -69,7 +69,7 @@ export function OrbitaCard({preset = 'bloc', media = {type: 'none'}, title, leve
           <div className={styles.img} role={media.alt ? 'img' : undefined} aria-label={media.alt} style={{backgroundImage: `url("${media.src}")`}} />
         );
       case 'icon':
-        return <IconSquare iconKey={media.iconKey} size={64} iconSize={28} style={{alignSelf: 'center', marginBottom: 28}} />;
+        return <div className={styles.iconMedia}><IconSquare iconKey={media.iconKey} size={64} iconSize={28} /></div>;
       case 'number':
         return (
           <div className={styles.numberMedia}>
@@ -133,4 +133,3 @@ export function OrbitaCard({preset = 'bloc', media = {type: 'none'}, title, leve
 }
 
 /** Icônes de contenu proposées par défaut à l'éditeur pour le média « icône ». */
-export const CARD_ICON_KEYS = Object.keys(NUCLEO_ICONS) as NucleoIconKey[];

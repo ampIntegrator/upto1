@@ -6,7 +6,7 @@ import DividerShowcase from '../../_showcases/DividerShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Divider — Orbita × Astryx'};
+export const metadata = {title: 'Divider — Design system Vidomia'};
 
 export default function Page() {
   return (

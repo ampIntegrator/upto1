@@ -15,7 +15,7 @@ export default function TimeInputShowcase() {
   return (
     <VStack gap={4}>
       <Text type="body" color="secondary">Champ d'heure du site : un clic ouvre un panneau à la largeur du champ, comme le calendrier. Heures à gauche, minutes à droite, valeur en cercle couleur silo, raccourci « Maintenant ». Choisir les minutes referme. La saisie au clavier reste possible.</Text>
-      <Grid columns={{minWidth: 240, max: 2}} gap={6} style={{maxWidth: 400 * 2 + 24}}>
+      <Grid columns={{minWidth: 240, max: 2}} gap={6} maxWidth={824}>
         <OrbitaTimePicker label="Heure du rendez-vous" value={time} onChange={setTime} />
         <OrbitaTimePicker label="Créneau (quart d'heure)" value={quart} onChange={setQuart} minuteStep={15} />
       </Grid>

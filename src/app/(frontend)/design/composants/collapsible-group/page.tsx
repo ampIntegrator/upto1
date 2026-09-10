@@ -6,7 +6,7 @@ import CollapsibleGroupShowcase from '../../_showcases/CollapsibleGroupShowcase'
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Collapsible Group — Orbita × Astryx'};
+export const metadata = {title: 'Collapsible Group — Design system Vidomia'};
 
 export default function Page() {
   return (

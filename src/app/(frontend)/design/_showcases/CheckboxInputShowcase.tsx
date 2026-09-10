@@ -11,7 +11,7 @@ export default function CheckboxInputShowcase() {
   const [v, setV] = useState({chiffrage: true, suivi: true, maintenance: false});
   return (
     <VStack gap={6}>
-      <Text type="body" color="secondary">Case Orbita : carré de 22 px à angles vifs ; cochée, fond accent et coche Nucleo centrée, libellé en couleur silo. Composant CheckboxInput Astryx, thème seul.</Text>
+      <Text type="body" color="secondary">Case à cocher : carré de 22 px à angles vifs ; cochée, fond accent et coche Nucleo centrée, libellé en couleur silo. Composant CheckboxInput Astryx, thème seul.</Text>
       <Card padding={6}>
         <VStack gap={3}>
           <CheckboxInput label="Chiffrage de travaux" value={v.chiffrage} onChange={(c) => setV({...v, chiffrage: c})} />

@@ -6,7 +6,7 @@ import MarkdownShowcase from '../../_showcases/MarkdownShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Markdown — Orbita × Astryx'};
+export const metadata = {title: 'Markdown — Design system Vidomia'};
 
 export default function Page() {
   return (

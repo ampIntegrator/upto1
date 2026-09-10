@@ -6,7 +6,7 @@ import TextShowcase from '../../_showcases/TextShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Text — Orbita × Astryx'};
+export const metadata = {title: 'Text — Design system Vidomia'};
 
 export default function Page() {
   return (

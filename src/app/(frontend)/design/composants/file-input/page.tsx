@@ -6,7 +6,7 @@ import FileInputShowcase from '../../_showcases/FileInputShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'File Input — Orbita × Astryx'};
+export const metadata = {title: 'File Input — Design system Vidomia'};
 
 export default function Page() {
   return (

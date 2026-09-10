@@ -6,7 +6,7 @@ import MobileNavShowcase from '../../_showcases/MobileNavShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Mobile Nav — Orbita × Astryx'};
+export const metadata = {title: 'Mobile Nav — Design system Vidomia'};
 
 export default function Page() {
   return (

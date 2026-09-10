@@ -58,15 +58,15 @@
   color: var(--color-text-disabled);
   pointer-events: none;
   transition:
-    top 0.16s ease,
-    font-size 0.16s ease,
-    color 0.16s ease;
+    top var(--duration-medium) var(--ease-standard),
+    font-size var(--duration-medium) var(--ease-standard),
+    color var(--duration-medium) var(--ease-standard);
   z-index: 1;
 }
 .wrap.hasValue .label,
 .wrap:has(button[aria-expanded='true']) .label {
   top: 8px;
-  font-size: 11.5px;
+  font-size: 14px;
   letter-spacing: 0.02em;
   color: light-dark(var(--color-accent), var(--color-highlight));
 }
@@ -159,7 +159,7 @@
   padding: 3px 5px 3px 9px;
   background: light-dark(var(--color-accent-muted), rgba(255, 255, 255, 0.1));
   color: light-dark(var(--color-text-accent), var(--color-highlight));
-  font-size: 12.5px;
+  font-size: 14px;
   font-weight: var(--font-weight-semibold);
   line-height: 1.5;
   white-space: nowrap;

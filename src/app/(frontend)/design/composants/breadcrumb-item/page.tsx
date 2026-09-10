@@ -6,7 +6,7 @@ import BreadcrumbItemShowcase from '../../_showcases/BreadcrumbItemShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Breadcrumb Item — Orbita × Astryx'};
+export const metadata = {title: 'Breadcrumb Item — Design system Vidomia'};
 
 export default function Page() {
   return (

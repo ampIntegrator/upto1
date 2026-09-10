@@ -6,7 +6,7 @@ import MediaThemeShowcase from '../../_showcases/MediaThemeShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Media Theme — Orbita × Astryx'};
+export const metadata = {title: 'Media Theme — Design system Vidomia'};
 
 export default function Page() {
   return (

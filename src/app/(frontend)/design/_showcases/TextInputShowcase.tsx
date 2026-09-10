@@ -37,7 +37,7 @@ export default function TextInputShowcase() {
   return (
     <VStack gap={8}>
       <Text type="body" color="secondary">
-        Le TextInput Astryx habillé Orbita (maquette 17-forms) : champ de 58 px, label flottant qui remonte en couleur silo au focus ou dès qu'il y a une valeur, icône de tête, états erreur et succès avec icône centrée et message sous le champ, aide, désactivé. Cliquez dans un champ vide pour voir le label monter.
+        Le champ texte (maquette 17-forms) : champ de 58 px, label flottant qui remonte en couleur silo au focus ou dès qu'il y a une valeur, icône de tête, états erreur et succès avec icône centrée et message sous le champ, aide, désactivé. Cliquez dans un champ vide pour voir le label monter.
       </Text>
       <VStack gap={3}>
         <Heading level={3}>Clair</Heading>

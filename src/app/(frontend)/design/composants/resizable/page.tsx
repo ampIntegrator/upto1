@@ -6,7 +6,7 @@ import ResizableShowcase from '../../_showcases/ResizableShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Resizable — Orbita × Astryx'};
+export const metadata = {title: 'Resizable — Design system Vidomia'};
 
 export default function Page() {
   return (

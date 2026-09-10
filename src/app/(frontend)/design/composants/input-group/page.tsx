@@ -6,7 +6,7 @@ import InputGroupShowcase from '../../_showcases/InputGroupShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Input Group — Orbita × Astryx'};
+export const metadata = {title: 'Input Group — Design system Vidomia'};
 
 export default function Page() {
   return (

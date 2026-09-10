@@ -6,7 +6,7 @@ import BannerShowcase from '../../_showcases/BannerShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Banner — Orbita × Astryx'};
+export const metadata = {title: 'Banner — Design system Vidomia'};
 
 export default function Page() {
   return (

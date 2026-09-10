@@ -1,4 +1,4 @@
-import {Badge} from '@astryxdesign/core/Badge';
+import {Token} from '@astryxdesign/core/Token';
 import {Card} from '@astryxdesign/core/Card';
 import {Heading} from '@astryxdesign/core/Heading';
 import {Link} from '@astryxdesign/core/Link';
@@ -6,7 +6,7 @@ import {HStack, VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
 import React from 'react';
 
-/** Un composant du catalogue : titre ancré, état (habillé ou démo d'origine), lien doc Astryx, démo dans une carte. */
+/** Un composant du catalogue : titre ancré, état (habillé par le thème ou démo d'origine), lien doc, démo dans une carte. */
 export function ShowcaseBlock({
   name,
   id,
@@ -22,7 +22,7 @@ export function ShowcaseBlock({
   doc: string | null;
   /** composant parent quand il s'agit d'une sous-partie (ex. TabMenu → TabList) */
   parent?: string;
-  /** habillé Orbita : démo maison à la place de celle d'Astryx */
+  /** habillé par le thème : démo maison à la place de celle d'origine */
   dressed?: boolean;
   /** catégorie (affichée en eyebrow) */
   category?: string;
@@ -37,7 +37,7 @@ export function ShowcaseBlock({
             <Heading level={1} type="display-3" id={id}>
               {name}
             </Heading>
-            <Badge label={dressed ? 'Habillé Orbita' : 'Démo Astryx'} variant={dressed ? 'success' : 'neutral'} />
+            <Token label={dressed ? 'Habillé' : 'À habiller'} color={dressed ? 'green' : 'gray'} size="sm" />
           </HStack>
           {parent ? <Text type="supporting">Sous-composant de {parent}</Text> : null}
         </VStack>

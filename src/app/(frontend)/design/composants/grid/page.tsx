@@ -6,7 +6,7 @@ import GridShowcase from '../../_showcases/GridShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Grid — Orbita × Astryx'};
+export const metadata = {title: 'Grid — Design system Vidomia'};
 
 export default function Page() {
   return (

@@ -6,7 +6,7 @@ import EmptyStateShowcase from '../../_showcases/EmptyStateShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Empty State — Orbita × Astryx'};
+export const metadata = {title: 'Empty State — Design system Vidomia'};
 
 export default function Page() {
   return (

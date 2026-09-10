@@ -6,7 +6,7 @@ import ThumbnailShowcase from '../../_showcases/ThumbnailShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Thumbnail — Orbita × Astryx'};
+export const metadata = {title: 'Thumbnail — Design system Vidomia'};
 
 export default function Page() {
   return (

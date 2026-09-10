@@ -6,7 +6,7 @@ import NavHeadingMenuShowcase from '../../_showcases/NavHeadingMenuShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Nav Heading Menu — Orbita × Astryx'};
+export const metadata = {title: 'Nav Heading Menu — Design system Vidomia'};
 
 export default function Page() {
   return (

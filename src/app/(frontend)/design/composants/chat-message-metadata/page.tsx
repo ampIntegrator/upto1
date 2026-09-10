@@ -6,7 +6,7 @@ import ChatMessageMetadataShowcase from '../../_showcases/ChatMessageMetadataSho
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Chat Message Metadata — Orbita × Astryx'};
+export const metadata = {title: 'Chat Message Metadata — Design system Vidomia'};
 
 export default function Page() {
   return (

@@ -47,8 +47,8 @@ export const orbitaMagentaTheme = {
     "--font-size-4xs": "0.375rem",
     "--font-size-3xs": "0.4375rem",
     "--font-size-2xs": "0.5625rem",
-    "--font-size-xs": "0.625rem",
-    "--font-size-sm": "0.8125rem",
+    "--font-size-xs": "0.875rem",
+    "--font-size-sm": "0.875rem",
     "--font-size-base": "0.9375rem",
     "--font-size-lg": "1.125rem",
     "--font-size-xl": "1.375rem",
@@ -310,6 +310,24 @@ export const orbitaMagentaTheme = {
         "color": "var(--color-text-disabled)",
         "whiteSpace": "nowrap"
       },
+      "type:eyebrow+color:primary": {
+        "color": "var(--color-editorial)"
+      },
+      "type:eyebrow-lines+color:primary": {
+        "color": "var(--color-editorial)"
+      },
+      "type:serif+color:primary": {
+        "color": "var(--serif-color, light-dark(var(--color-accent), var(--color-highlight)))"
+      },
+      "type:number+color:primary": {
+        "color": "var(--color-text-accent)"
+      },
+      "type:result+color:primary": {
+        "color": "light-dark(var(--color-text-accent), var(--color-highlight))"
+      },
+      "type:date+color:primary": {
+        "color": "var(--color-text-disabled)"
+      },
       "type:tag": {
         "fontSize": "14px",
         "fontWeight": "var(--font-weight-medium)",
@@ -376,11 +394,6 @@ export const orbitaMagentaTheme = {
     "link": {
       "base": {
         "transition": "color var(--duration-medium) var(--ease-standard), text-decoration-color var(--duration-medium) var(--ease-standard)"
-      }
-    },
-    "icon-button": {
-      "base": {
-        "transition": "background-color var(--duration-medium) var(--ease-standard), border-color var(--duration-medium) var(--ease-standard), color var(--duration-medium) var(--ease-standard)"
       }
     },
     "text-input": {
@@ -703,6 +716,166 @@ export const orbitaMagentaTheme = {
         }
       }
     },
+    "date-range-input": {
+      "base": {
+        "borderColor": "var(--color-border-emphasized)",
+        "backgroundColor": "var(--color-background-surface)",
+        "transition": "border-color var(--duration-medium) var(--ease-standard), box-shadow var(--duration-medium) var(--ease-standard)",
+        ":focus-within": {
+          "borderColor": "light-dark(var(--color-accent), var(--color-highlight))",
+          "boxShadow": "0 0 0 3px light-dark(var(--color-accent-muted), var(--color-highlight-muted))"
+        }
+      },
+      "disabled": {
+        "backgroundColor": "var(--color-background-muted)",
+        "borderColor": "var(--color-border)",
+        "color": "var(--color-text-disabled)"
+      },
+      "status:error": {
+        "borderColor": "var(--color-error)",
+        "boxShadow": "0 0 0 3px var(--color-error-muted)",
+        ":focus-within": {
+          "borderColor": "var(--color-error)",
+          "boxShadow": "0 0 0 3px var(--color-error-muted)"
+        }
+      },
+      "status:success": {
+        "borderColor": "var(--color-success)",
+        "boxShadow": "0 0 0 3px var(--color-success-muted)",
+        ":focus-within": {
+          "borderColor": "var(--color-success)",
+          "boxShadow": "0 0 0 3px var(--color-success-muted)"
+        }
+      },
+      "status:warning": {
+        "borderColor": "var(--color-warning)",
+        "boxShadow": "0 0 0 3px var(--color-warning-muted)",
+        ":focus-within": {
+          "borderColor": "var(--color-warning)",
+          "boxShadow": "0 0 0 3px var(--color-warning-muted)"
+        }
+      }
+    },
+    "date-time-input": {
+      "base": {
+        "borderColor": "var(--color-border-emphasized)",
+        "backgroundColor": "var(--color-background-surface)",
+        "transition": "border-color var(--duration-medium) var(--ease-standard), box-shadow var(--duration-medium) var(--ease-standard)",
+        ":focus-within": {
+          "borderColor": "light-dark(var(--color-accent), var(--color-highlight))",
+          "boxShadow": "0 0 0 3px light-dark(var(--color-accent-muted), var(--color-highlight-muted))"
+        }
+      },
+      "disabled": {
+        "backgroundColor": "var(--color-background-muted)",
+        "borderColor": "var(--color-border)",
+        "color": "var(--color-text-disabled)"
+      },
+      "status:error": {
+        "borderColor": "var(--color-error)",
+        "boxShadow": "0 0 0 3px var(--color-error-muted)",
+        ":focus-within": {
+          "borderColor": "var(--color-error)",
+          "boxShadow": "0 0 0 3px var(--color-error-muted)"
+        }
+      },
+      "status:success": {
+        "borderColor": "var(--color-success)",
+        "boxShadow": "0 0 0 3px var(--color-success-muted)",
+        ":focus-within": {
+          "borderColor": "var(--color-success)",
+          "boxShadow": "0 0 0 3px var(--color-success-muted)"
+        }
+      },
+      "status:warning": {
+        "borderColor": "var(--color-warning)",
+        "boxShadow": "0 0 0 3px var(--color-warning-muted)",
+        ":focus-within": {
+          "borderColor": "var(--color-warning)",
+          "boxShadow": "0 0 0 3px var(--color-warning-muted)"
+        }
+      }
+    },
+    "time-input": {
+      "base": {
+        "borderColor": "var(--color-border-emphasized)",
+        "backgroundColor": "var(--color-background-surface)",
+        "transition": "border-color var(--duration-medium) var(--ease-standard), box-shadow var(--duration-medium) var(--ease-standard)",
+        ":focus-within": {
+          "borderColor": "light-dark(var(--color-accent), var(--color-highlight))",
+          "boxShadow": "0 0 0 3px light-dark(var(--color-accent-muted), var(--color-highlight-muted))"
+        }
+      },
+      "disabled": {
+        "backgroundColor": "var(--color-background-muted)",
+        "borderColor": "var(--color-border)",
+        "color": "var(--color-text-disabled)"
+      },
+      "status:error": {
+        "borderColor": "var(--color-error)",
+        "boxShadow": "0 0 0 3px var(--color-error-muted)",
+        ":focus-within": {
+          "borderColor": "var(--color-error)",
+          "boxShadow": "0 0 0 3px var(--color-error-muted)"
+        }
+      },
+      "status:success": {
+        "borderColor": "var(--color-success)",
+        "boxShadow": "0 0 0 3px var(--color-success-muted)",
+        ":focus-within": {
+          "borderColor": "var(--color-success)",
+          "boxShadow": "0 0 0 3px var(--color-success-muted)"
+        }
+      },
+      "status:warning": {
+        "borderColor": "var(--color-warning)",
+        "boxShadow": "0 0 0 3px var(--color-warning-muted)",
+        ":focus-within": {
+          "borderColor": "var(--color-warning)",
+          "boxShadow": "0 0 0 3px var(--color-warning-muted)"
+        }
+      }
+    },
+    "input-group": {
+      "base": {
+        "borderColor": "var(--color-border-emphasized)",
+        "backgroundColor": "var(--color-background-surface)",
+        "transition": "border-color var(--duration-medium) var(--ease-standard), box-shadow var(--duration-medium) var(--ease-standard)",
+        ":focus-within": {
+          "borderColor": "light-dark(var(--color-accent), var(--color-highlight))",
+          "boxShadow": "0 0 0 3px light-dark(var(--color-accent-muted), var(--color-highlight-muted))"
+        }
+      },
+      "disabled": {
+        "backgroundColor": "var(--color-background-muted)",
+        "borderColor": "var(--color-border)",
+        "color": "var(--color-text-disabled)"
+      },
+      "status:error": {
+        "borderColor": "var(--color-error)",
+        "boxShadow": "0 0 0 3px var(--color-error-muted)",
+        ":focus-within": {
+          "borderColor": "var(--color-error)",
+          "boxShadow": "0 0 0 3px var(--color-error-muted)"
+        }
+      },
+      "status:success": {
+        "borderColor": "var(--color-success)",
+        "boxShadow": "0 0 0 3px var(--color-success-muted)",
+        ":focus-within": {
+          "borderColor": "var(--color-success)",
+          "boxShadow": "0 0 0 3px var(--color-success-muted)"
+        }
+      },
+      "status:warning": {
+        "borderColor": "var(--color-warning)",
+        "boxShadow": "0 0 0 3px var(--color-warning-muted)",
+        ":focus-within": {
+          "borderColor": "var(--color-warning)",
+          "boxShadow": "0 0 0 3px var(--color-warning-muted)"
+        }
+      }
+    },
     "selector-popup": {
       "base": {
         "borderRadius": "0",
@@ -796,6 +969,66 @@ export const orbitaMagentaTheme = {
     "multi-selector-search": {
       "base": {
         "borderBottom": "var(--border-width) solid var(--color-border)"
+      }
+    },
+    "field-status": {
+      "variant:attached": {
+        "marginInline": "-3px",
+        "width": "calc(100% + 6px)",
+        "marginTop": "3px",
+        "paddingTop": "8px"
+      },
+      "variant:attached+type:error": {
+        "backgroundColor": "var(--color-error-muted)"
+      },
+      "variant:attached+type:success": {
+        "backgroundColor": "var(--color-success-muted)"
+      },
+      "variant:attached+type:warning": {
+        "backgroundColor": "var(--color-warning-muted)"
+      }
+    },
+    "checkbox-label": {
+      "base": {
+        "fontSize": "14.5px"
+      }
+    },
+    "switch-label": {
+      "base": {
+        "fontSize": "14.5px"
+      }
+    },
+    "radio-list-item": {
+      "base": {
+        "fontSize": "14.5px"
+      },
+      "selected": {
+        "color": "var(--color-text-accent)"
+      }
+    },
+    "date-input-toggle-icon": {
+      "base": {
+        "color": "var(--color-icon-accent)"
+      }
+    },
+    "date-range-input-toggle-icon": {
+      "base": {
+        "color": "var(--color-icon-accent)"
+      }
+    },
+    "date-time-input-toggle-icon": {
+      "base": {
+        "color": "var(--color-icon-accent)"
+      }
+    },
+    "date-time-input-clock-icon": {
+      "base": {
+        "color": "var(--color-icon-accent)"
+      }
+    },
+    "token": {
+      "base": {
+        "borderRadius": "0"
       }
     },
     "top-nav": {
@@ -902,6 +1135,7 @@ export const orbitaMagentaTheme = {
     },
     "top-nav-mega-menu-featured-card": {
       "base": {
+        "height": "100%",
         "borderRadius": "0",
         "backgroundColor": "var(--color-night)",
         "color": "#FFFFFF"
@@ -915,7 +1149,7 @@ export const orbitaMagentaTheme = {
     },
     "breadcrumbs": {
       "base": {
-        "gap": "9px"
+        "gap": "8px"
       }
     },
     "breadcrumb-item": {
@@ -1120,23 +1354,6 @@ export const orbitaMagentaTheme = {
         }
       }
     },
-    "input-clear-button": {
-      "base": {
-        "borderWidth": "0",
-        "backgroundColor": "transparent",
-        "boxShadow": "none",
-        "color": "var(--color-icon-secondary)",
-        "padding": "0",
-        "minWidth": "0",
-        "width": "24px",
-        "height": "24px",
-        "transition": "color var(--duration-medium) var(--ease-standard)",
-        ":hover": {
-          "backgroundColor": "transparent",
-          "color": "var(--color-text-accent)"
-        }
-      }
-    },
     "input-clear-icon": {
       "base": {
         "width": "16px",
@@ -1156,7 +1373,7 @@ export const orbitaMagentaTheme = {
         "borderColor": "var(--color-border-emphasized)",
         "backgroundColor": "var(--color-background-surface)",
         "color": "var(--color-text-secondary)",
-        "fontSize": "11px",
+        "fontSize": "14px",
         "fontWeight": "var(--font-weight-semibold)",
         "letterSpacing": "0.03em"
       },
@@ -1167,7 +1384,7 @@ export const orbitaMagentaTheme = {
         "borderWidth": "0",
         "backgroundColor": "color-mix(in srgb, var(--color-highlight) 18%, transparent)",
         "color": "light-dark(var(--color-highlight-deep), var(--color-highlight))",
-        "fontSize": "11px",
+        "fontSize": "14px",
         "fontWeight": "var(--font-weight-semibold)",
         "letterSpacing": "0.03em"
       },
@@ -1178,7 +1395,7 @@ export const orbitaMagentaTheme = {
         "borderWidth": "0",
         "backgroundColor": "light-dark(var(--color-accent-muted), rgba(255,255,255,.1))",
         "color": "light-dark(var(--color-text-accent), var(--color-highlight))",
-        "fontSize": "11px",
+        "fontSize": "14px",
         "fontWeight": "var(--font-weight-semibold)",
         "letterSpacing": "0.03em"
       },
@@ -1189,7 +1406,7 @@ export const orbitaMagentaTheme = {
         "borderWidth": "0",
         "backgroundColor": "var(--color-accent)",
         "color": "var(--color-on-accent)",
-        "fontSize": "11px",
+        "fontSize": "14px",
         "fontWeight": "var(--font-weight-medium)",
         "letterSpacing": "0.16em",
         "textTransform": "uppercase"
@@ -1201,7 +1418,7 @@ export const orbitaMagentaTheme = {
         "borderWidth": "0",
         "backgroundColor": "var(--color-error-muted)",
         "color": "var(--color-error)",
-        "fontSize": "11px",
+        "fontSize": "14px",
         "fontWeight": "var(--font-weight-semibold)",
         "letterSpacing": "0.03em"
       }

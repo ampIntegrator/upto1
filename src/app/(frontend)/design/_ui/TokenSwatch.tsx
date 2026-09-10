@@ -17,7 +17,7 @@ export function ColorSwatch({token, label}: {token: string; label?: string}) {
         }}
       />
       <Text type="label">{label ?? token.replace(/^--color-/, '')}</Text>
-      <Text type="code" color="secondary" size="xsm">
+      <Text type="code" color="secondary" size="sm">
         {token}
       </Text>
     </VStack>

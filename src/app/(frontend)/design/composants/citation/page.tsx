@@ -6,7 +6,7 @@ import CitationShowcase from '../../_showcases/CitationShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Citation — Orbita × Astryx'};
+export const metadata = {title: 'Citation — Design system Vidomia'};
 
 export default function Page() {
   return (

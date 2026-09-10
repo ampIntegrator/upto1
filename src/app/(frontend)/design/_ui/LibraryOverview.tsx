@@ -1,4 +1,4 @@
-import {Badge} from '@astryxdesign/core/Badge';
+import {Token} from '@astryxdesign/core/Token';
 import {ClickableCard} from '@astryxdesign/core/ClickableCard';
 import {Grid} from '@astryxdesign/core/Grid';
 import {Heading} from '@astryxdesign/core/Heading';
@@ -18,7 +18,7 @@ export function LibraryOverview() {
       <PageIntro
         eyebrow={`Composants · ${total}`}
         title="Parcourir la bibliothèque"
-        lead={`Chaque composant Astryx, thémé Orbita, avec sa démo. ${dressed} sont habillés Orbita, les autres sont les démos d'origine.`}
+        lead={`Chaque composant du design system avec sa démo. ${dressed} sont déjà habillés par le thème, les autres gardent la démo d'origine.`}
       />
       {CATALOG.map((cat) => (
         <VStack key={cat.slug} gap={4}>
@@ -34,7 +34,7 @@ export function LibraryOverview() {
                 <VStack gap={2} hAlign="start">
                   <Heading level={3}>{it.label}</Heading>
                   <HStack gap={2} vAlign="center" wrap="wrap">
-                    <Badge label={it.dressed ? 'Habillé Orbita' : 'Démo Astryx'} variant={it.dressed ? 'success' : 'neutral'} />
+                    <Token label={it.dressed ? 'Habillé' : 'À habiller'} color={it.dressed ? 'green' : 'gray'} size="sm" />
                     {it.parent ? <Text type="supporting">de {it.parent}</Text> : null}
                   </HStack>
                 </VStack>

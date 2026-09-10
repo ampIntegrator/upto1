@@ -3,7 +3,7 @@ import React from 'react';
 import {DesignShell} from './_ui/DesignShell';
 
 export const metadata = {
-  title: 'Orbita × Astryx — catalogue du design system',
+  title: 'Design system Vidomia — catalogue',
 };
 
 export default function DesignLayout({children}: {children: React.ReactNode}) {

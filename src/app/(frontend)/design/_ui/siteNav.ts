@@ -30,7 +30,6 @@ export const SITE_HEADER: SiteHeaderData = {
         ]},
       ],
       featured: {
-        eyebrow: 'À la une',
         title: 'Chiffrer juste, gagner plus.',
         description: 'Comment 1 200 pros ont réduit leurs délais de devis de 40 % en six mois.',
         image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=70&auto=format&fit=crop',

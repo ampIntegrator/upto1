@@ -6,7 +6,7 @@ import RadioListShowcase from '../../_showcases/RadioListShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Radio List — Orbita × Astryx'};
+export const metadata = {title: 'Radio List — Design system Vidomia'};
 
 export default function Page() {
   return (

@@ -6,7 +6,7 @@ import SpinnerShowcase from '../../_showcases/SpinnerShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Spinner — Orbita × Astryx'};
+export const metadata = {title: 'Spinner — Design system Vidomia'};
 
 export default function Page() {
   return (

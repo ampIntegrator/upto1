@@ -6,7 +6,7 @@ import MetadataListShowcase from '../../_showcases/MetadataListShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Metadata List — Orbita × Astryx'};
+export const metadata = {title: 'Metadata List — Design system Vidomia'};
 
 export default function Page() {
   return (

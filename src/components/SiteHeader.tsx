@@ -144,7 +144,8 @@ export function SiteHeader({brand, strip, nav, actions, languages = ['FR'], tone
             startContent={<HStack className={styles.desktopNav} vAlign="stretch"><NavEntries nav={nav} currentHref={currentHref} /></HStack>}
             endContent={
               <HStack gap={2} vAlign="center" className={styles.actions}>
-                <IconButton label="Rechercher" icon={<SearchIcon />} variant="ghost" size="sm" />
+                {/* recherche : déclencheur seul pour l'instant (la recherche du site viendra avec Payload) */}
+                <IconButton label="Rechercher" icon={<SearchIcon />} variant="ghost" size="sm" onClick={() => undefined} />
                 <DropdownMenu
                   button={{label: lang, variant: 'ghost', size: 'sm'}}
                   items={languages.map((l) => ({label: l, onClick: () => setLang(l)}))}

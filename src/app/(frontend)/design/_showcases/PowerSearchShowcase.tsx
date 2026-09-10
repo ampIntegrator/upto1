@@ -47,8 +47,8 @@ export default function PowerSearchShowcase() {
   const [empty, setEmpty] = useState<PowerSearchFilter[]>([]);
   return (
     <VStack gap={4}>
-      <Text type="body" color="secondary">Recherche à filtres Astryx, aux codes des champs Orbita : 58 px, label « Rechercher » flottant, jetons de filtre en badges couleur silo, panneau de suggestions habillé comme les sélecteurs.</Text>
-      <VStack gap={4} style={{maxWidth: 640}}>
+      <Text type="body" color="secondary">Recherche à filtres, aux codes des champs : 58 px, label « Rechercher » flottant, jetons de filtre en badges couleur silo, panneau de suggestions habillé comme les sélecteurs.</Text>
+      <VStack gap={4} maxWidth={640}>
         <PowerSearch label="Rechercher" config={config} filters={filters} onChange={(next) => setFilters([...next])} placeholder=" " />
         <PowerSearch label="Rechercher un chantier" config={config} filters={empty} onChange={(next) => setEmpty([...next])} placeholder=" " />
       </VStack>

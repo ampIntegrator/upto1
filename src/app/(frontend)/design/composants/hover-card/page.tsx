@@ -6,7 +6,7 @@ import HoverCardShowcase from '../../_showcases/HoverCardShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Hover Card — Orbita × Astryx'};
+export const metadata = {title: 'Hover Card — Design system Vidomia'};
 
 export default function Page() {
   return (

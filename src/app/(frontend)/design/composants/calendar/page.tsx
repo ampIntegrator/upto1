@@ -6,7 +6,7 @@ import CalendarShowcase from '../../_showcases/CalendarShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Calendar — Orbita × Astryx'};
+export const metadata = {title: 'Calendar — Design system Vidomia'};
 
 export default function Page() {
   return (

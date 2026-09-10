@@ -6,7 +6,7 @@ import AspectRatioShowcase from '../../_showcases/AspectRatioShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Aspect Ratio — Orbita × Astryx'};
+export const metadata = {title: 'Aspect Ratio — Design system Vidomia'};
 
 export default function Page() {
   return (

@@ -6,7 +6,7 @@ import ChatComposerDrawerShowcase from '../../_showcases/ChatComposerDrawerShowc
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Chat Composer Drawer — Orbita × Astryx'};
+export const metadata = {title: 'Chat Composer Drawer — Design system Vidomia'};
 
 export default function Page() {
   return (

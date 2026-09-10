@@ -6,7 +6,7 @@ import ProgressBarShowcase from '../../_showcases/ProgressBarShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Progress Bar — Orbita × Astryx'};
+export const metadata = {title: 'Progress Bar — Design system Vidomia'};
 
 export default function Page() {
   return (

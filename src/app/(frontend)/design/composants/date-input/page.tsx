@@ -6,7 +6,7 @@ import DateInputShowcase from '../../_showcases/DateInputShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Date Input — Orbita × Astryx'};
+export const metadata = {title: 'Date Input — Design system Vidomia'};
 
 export default function Page() {
   return (

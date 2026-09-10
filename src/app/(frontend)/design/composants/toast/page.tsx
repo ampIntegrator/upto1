@@ -6,7 +6,7 @@ import ToastShowcase from '../../_showcases/ToastShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Toast — Orbita × Astryx'};
+export const metadata = {title: 'Toast — Design system Vidomia'};
 
 export default function Page() {
   return (

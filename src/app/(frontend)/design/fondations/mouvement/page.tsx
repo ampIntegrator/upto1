@@ -9,7 +9,7 @@ import {MotionDemo} from '../../_ui/MotionDemo';
 import {PageIntro} from '../../_ui/PageIntro';
 import {TokenValue} from '../../_ui/TokenValue';
 
-export const metadata = {title: 'Mouvement — Orbita × Astryx'};
+export const metadata = {title: 'Mouvement — Design system Vidomia'};
 
 const DURATIONS = ['fast-min', 'fast', 'fast-max', 'medium-min', 'medium', 'medium-max', 'slow-min', 'slow', 'slow-max'];
 
@@ -35,12 +35,12 @@ export default function Page() {
             <TableBody>
               {DURATIONS.map((d) => (
                 <TableRow key={d}>
-                  <TableCell><Text type="code" size="xsm">{`--duration-${d}`}</Text></TableCell>
+                  <TableCell><Text type="code" size="sm">{`--duration-${d}`}</Text></TableCell>
                   <TableCell><TokenValue token={`--duration-${d}`} /></TableCell>
                 </TableRow>
               ))}
               <TableRow>
-                <TableCell><Text type="code" size="xsm">--ease-standard</Text></TableCell>
+                <TableCell><Text type="code" size="sm">--ease-standard</Text></TableCell>
                 <TableCell><TokenValue token="--ease-standard" /></TableCell>
               </TableRow>
             </TableBody>

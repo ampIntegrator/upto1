@@ -12,26 +12,24 @@
 .content { position: relative; z-index: 2; width: 100%; }
 
 /* ---- padding vertical ---- */
-.section[data-spacing='none'] { padding-block: 0; }
-.section[data-spacing='xs'] { padding-block: 36px; }
-.section[data-spacing='sm'] { padding-block: 56px; }
-.section[data-spacing='md'] { padding-block: 96px; }
-.section[data-spacing='lg'] { padding-block: 128px; }
+.section[data-spacing='none'] { --section-pad: 0px; }
+.section[data-spacing='xs'] { --section-pad: 36px; }
+.section[data-spacing='sm'] { --section-pad: 56px; }
+.section[data-spacing='md'] { --section-pad: 96px; }
+.section[data-spacing='lg'] { --section-pad: 128px; }
+.section { padding-block: var(--section-pad); }
 @media (max-width: 639px) {
-  .section[data-spacing='xs'] { padding-block: 28px; }
-  .section[data-spacing='sm'] { padding-block: 40px; }
-  .section[data-spacing='md'] { padding-block: 56px; }
-  .section[data-spacing='lg'] { padding-block: 72px; }
+  .section[data-spacing='xs'] { --section-pad: 28px; }
+  .section[data-spacing='sm'] { --section-pad: 40px; }
+  .section[data-spacing='md'] { --section-pad: 56px; }
+  .section[data-spacing='lg'] { --section-pad: 72px; }
 }
 
-/* ---- sous l'en-tête fixe : on réserve sa hauteur (bandeau 38 + barre 74) ---- */
-.section[data-under-header] { padding-top: calc(var(--section-pad, 96px) + 112px); }
-.section[data-spacing='sm'][data-under-header] { padding-top: calc(56px + 112px); }
-.section[data-spacing='lg'][data-under-header] { padding-top: calc(128px + 112px); }
+/* ---- sous l'en-tête fixe : on réserve sa hauteur (bandeau 38 + barre 74 ; 74 seule sous 1280 px,
+   valeurs de SiteHeader.module.css) ---- */
+.section[data-under-header] { padding-top: calc(var(--section-pad) + 112px); }
 @media (max-width: 1279px) {
-  .section[data-under-header] { padding-top: calc(var(--section-pad, 56px) + 74px); }
-  .section[data-spacing='sm'][data-under-header] { padding-top: calc(40px + 74px); }
-  .section[data-spacing='lg'][data-under-header] { padding-top: calc(72px + 74px); }
+  .section[data-under-header] { padding-top: calc(var(--section-pad) + 74px); }
 }
 
 /* ---- papier (blanc / carte nuit) ---- */
@@ -63,7 +61,8 @@
   background-image:
     repeating-linear-gradient(45deg, var(--color-border) 0 1px, transparent 1px 32px),
     repeating-linear-gradient(-45deg, var(--color-border) 0 1px, transparent 1px 32px);
-  background-position: 16px 16px;
+  /* pas de décalage ici : les lignes sont obliques (aucun filet collé au bord) et un
+     décalage d'un dégradé répété crée une couture visible en haut de la section */
 }
 
 /* ---- nuit (orbita.css .c-darkbg : nuit + lueur silo centrale + bords assombris) ---- */

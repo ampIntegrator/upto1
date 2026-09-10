@@ -2,6 +2,7 @@
 
 /* Page de démonstration : sections empilées, chacune = Section > Container > Grid 12 > GridSpan > composants. */
 import {BreadcrumbItem, Breadcrumbs} from '@astryxdesign/core/Breadcrumbs';
+import {VisuallyHidden} from '@astryxdesign/core/VisuallyHidden';
 import {Grid, GridSpan} from '@astryxdesign/core/Grid';
 import {Heading} from '@astryxdesign/core/Heading';
 import {HStack, VStack} from '@astryxdesign/core/Stack';
@@ -76,9 +77,9 @@ export function PageDemo({hero = 'media'}: {hero?: 'media' | 'light'}) {
       {/* 1a · fil d'Ariane (maquette 25) : bande papier bordée sous le haut de page */}
       <Section background="paper" spacing="none" dividers>
         <Container>
-          <VStack style={{paddingBlock: 14}}>
+          <VStack paddingBlock={4}>
             <Breadcrumbs label="Fil d'Ariane" separator={<ChevronRightIcon width={12} height={12} />}>
-              <BreadcrumbItem href="/" startIcon={<HomeIcon width={14} height={14} />}><span className="visually-hidden">Accueil</span></BreadcrumbItem>
+              <BreadcrumbItem href="/" startIcon={<HomeIcon width={14} height={14} />}><VisuallyHidden>Accueil</VisuallyHidden></BreadcrumbItem>
               <BreadcrumbItem href="#">Solutions</BreadcrumbItem>
               <BreadcrumbItem isCurrent>{hero === 'media' ? 'Chiffrage instantané' : 'Tarifs & offres'}</BreadcrumbItem>
             </Breadcrumbs>

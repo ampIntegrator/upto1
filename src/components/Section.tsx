@@ -14,8 +14,7 @@
  *                opacité de 0 à 1, réglable en admin (0 = aucun)
  *   edge       : liseré dégradé en pied (actif par défaut sur image et vidéo,
  *                disponible partout)
- *   Le voile et le halo de la maquette 13 ont été retirés : l'overlay est le seul
- *   réglage d'assombrissement.
+ *   (pas de voile ni de halo : l'overlay est le seul réglage d'assombrissement)
  *   spacing    : padding vertical 'none' | 'xs' | 'sm' | 'md' | 'lg'
  *   dividers   : filets haut et bas (barre de chiffres)
  *

@@ -26,7 +26,7 @@ function Cell({name}: {name: NucleoIconKey}) {
     <VStack gap={1.5} hAlign="center" padding={2}>
       <Icon icon={NUCLEO_ICONS[name]} size="lg" color="primary" />
       <Text type="tag" color="secondary">{name}</Text>
-      {semantic ? <Text type="supporting" size="xsm">Astryx · {semantic}</Text> : null}
+      {semantic ? <Text type="supporting" size="sm">Astryx · {semantic}</Text> : null}
     </VStack>
   );
 }
@@ -51,7 +51,7 @@ export default function Page() {
       <VStack gap={3}>
         <Heading level={2}>Jeu de base · {BASE_KEYS.length}</Heading>
         <Text type="supporting">
-          Dossier icons/astryx. Contient les 28 noms sémantiques Astryx, que le thème remplace par ces tracés dans tous les composants (sélecteurs, modales, cases, carrousels…), plus le chrome du site, les réseaux sociaux et les icônes de contenu de départ. La mention « Astryx · nom » indique la clé sémantique remplacée.
+          Dossier icons/astryx. Contient les {Object.keys(ASTRYX_SEMANTIC_MAP).length} noms sémantiques Astryx, que le thème remplace par ces tracés dans tous les composants (sélecteurs, modales, cases, carrousels…), plus le chrome du site, les réseaux sociaux et les icônes de contenu de départ. La mention « Astryx · nom » indique la clé sémantique remplacée.
         </Text>
         <Card padding={5}><IconSet keys={BASE_KEYS} /></Card>
       </VStack>

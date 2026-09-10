@@ -15,7 +15,7 @@
  * `mode` reste dans l'API pour ces imbrications, mais n'est plus changé
  * globalement.
  *
- * Les 7 CSS compilés sont chargés ici : ~17 Ko chacun. En production, une page
+ * Les 7 CSS compilés sont chargés ici : ~48 Ko chacun. En production, une page
  * n'a besoin que de son silo — à affiner quand le silo sera fixé par Payload.
  */
 import {InternationalizationProvider} from '@astryxdesign/core/i18n';

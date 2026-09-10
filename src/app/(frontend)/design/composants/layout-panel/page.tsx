@@ -6,7 +6,7 @@ import LayoutPanelShowcase from '../../_showcases/LayoutPanelShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Layout Panel — Orbita × Astryx'};
+export const metadata = {title: 'Layout Panel — Design system Vidomia'};
 
 export default function Page() {
   return (

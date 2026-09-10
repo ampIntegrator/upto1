@@ -6,7 +6,7 @@ import SliderShowcase from '../../_showcases/SliderShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Slider — Orbita × Astryx'};
+export const metadata = {title: 'Slider — Design system Vidomia'};
 
 export default function Page() {
   return (

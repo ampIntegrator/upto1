@@ -6,7 +6,7 @@ import ClickableCardShowcase from '../../_showcases/ClickableCardShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Clickable Card — Orbita × Astryx'};
+export const metadata = {title: 'Clickable Card — Design system Vidomia'};
 
 export default function Page() {
   return (

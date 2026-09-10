@@ -14,7 +14,7 @@ export default function DateTimeInputShowcase() {
   return (
     <VStack gap={4}>
       <Text type="body" color="secondary">Date et heure en un champ à deux segments, « Date » et « Heure ». Le segment date ouvre le calendrier Astryx, étendu sur toute la largeur ; le segment heure ouvre le panneau heures et minutes. Sans date choisie, l'heure se pose sur aujourd'hui.</Text>
-      <Grid columns={{minWidth: 280, max: 2}} gap={6} style={{maxWidth: 400 * 2 + 24}}>
+      <Grid columns={{minWidth: 280, max: 2}} gap={6} maxWidth={824}>
         <OrbitaDateTimePicker label="Rendez-vous" value={value} onChange={setValue} />
       </Grid>
     </VStack>

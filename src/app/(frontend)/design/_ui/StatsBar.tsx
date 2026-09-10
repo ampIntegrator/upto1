@@ -28,8 +28,8 @@ export function StatsBar({label, stats, background = 'paper'}: StatsBarProps) {
           <Text type="tag" weight="semibold" color="secondary" style={{fontSize: '16px', letterSpacing: '0.16em', textAlign: 'center'}}>{label}</Text>
         </VStack>
         <Grid columns={{minWidth: n > 4 ? 150 : 220, max: n}} gap={6}>
-          {stats.map((s, i) => (
-            <VStack key={i} align="center" padding={6} style={{background: 'var(--color-highlight-light)'}}>
+          {stats.map((s) => (
+            <VStack key={s.label ?? s.value} align="center" padding={6} style={{background: 'var(--color-highlight-light)'}}>
               <Stat {...s} size="bar" align="center" />
             </VStack>
           ))}

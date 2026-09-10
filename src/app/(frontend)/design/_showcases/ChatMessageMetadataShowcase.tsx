@@ -22,7 +22,7 @@ import {
 
 export default function ChatMessageMetadataShowcase() {
   return (
-    <VStack style={{maxWidth: 600}}>
+    <VStack maxWidth={600}>
       <ChatMessageList>
         <ChatMessage sender="assistant">
           <ChatMessageBubble

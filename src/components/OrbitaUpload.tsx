@@ -41,7 +41,7 @@ export function OrbitaUpload({label, hint, value, onChange, accept, isDisabled, 
         status={status}
       />
       {hint ? (
-        <span className={styles.sub} aria-hidden="true">
+        <span className={styles.sub}>
           {hint}
         </span>
       ) : null}

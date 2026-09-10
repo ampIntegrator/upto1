@@ -6,7 +6,7 @@ import BlockquoteShowcase from '../../_showcases/BlockquoteShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Blockquote — Orbita × Astryx'};
+export const metadata = {title: 'Blockquote — Design system Vidomia'};
 
 export default function Page() {
   return (

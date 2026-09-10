@@ -27,9 +27,10 @@
 .stripText {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
   color: inherit;
   text-decoration: none;
+  transition: color var(--duration-medium) var(--ease-standard);
 }
 .stripLink:hover { color: var(--color-highlight); }
 .stripSep { width: 1px; height: 14px; background: rgba(255, 255, 255, 0.2); }
@@ -42,6 +43,7 @@
   height: 32px;
   color: rgba(255, 255, 255, 0.7);
   border: var(--border-width) solid rgba(255, 255, 255, 0.16);
+  transition: color var(--duration-medium) var(--ease-standard), border-color var(--duration-medium) var(--ease-standard);
 }
 .social:hover { color: #fff; border-color: var(--color-highlight); }
 

@@ -17,7 +17,7 @@ export default function StatShowcase() {
   return (
     <VStack gap={8}>
       <Text type="body" color="secondary">
-        Le chiffre clé : grand nombre couleur silo, préfixe et suffixe en highlight à 62 % du nombre, sous-libellé en capitales espacées. Seul, en taille barre (40 px) ou carte (40 à 52 px). La barre de chiffres est un assemblage : Section avec filets, Container, libellé centré, puis une grille de deux à quatre cases sur fond highlight-light.
+        Le chiffre clé : grand nombre couleur silo, préfixe et suffixe en highlight à 62 % du nombre, sous-libellé en capitales espacées. Seul, en taille barre (40 px) ou carte (40 à 52 px). La barre de chiffres est un assemblage : Section avec filets, Container, libellé centré, puis une grille de deux à six cases sur fond highlight-light.
       </Text>
 
       <VStack gap={3}>

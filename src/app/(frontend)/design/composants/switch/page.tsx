@@ -6,7 +6,7 @@ import SwitchShowcase from '../../_showcases/SwitchShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Switch — Orbita × Astryx'};
+export const metadata = {title: 'Switch — Design system Vidomia'};
 
 export default function Page() {
   return (

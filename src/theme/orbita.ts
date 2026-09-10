@@ -85,7 +85,7 @@ function orbitaOnlyTokens(silo: OrbitaSilo) {
     // fond « light » : couleur du silo à 5 % (translucide, comme les listes cochées),
     // pour des surfaces à peine teintées (ex. panneau d'onglet) ; nuit : voile blanc 3 %
     '--color-background-light': [mix(primary, 'transparent', 5), 'rgba(255,255,255,.03)'],
-    // même principe avec le highlight du silo à 5 % (essai : panneau d'onglet)
+    // même principe avec le highlight du silo à 5 % (panneau d'onglet, retenu le 10 sept.)
     '--color-highlight-light': [mix(highlight, 'transparent', 5), mix(highlight, 'transparent', 5)],
     '--color-accent-deep': [primaryDeep, primary],
   } as unknown as Partial<Record<TokenName, TokenValue>>;
@@ -129,6 +129,10 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
       '--font-family-body': FONT_BODY,
       '--font-family-heading': FONT_HEADING,
       '--font-family-code': FONT_CODE,
+      /* — tailles de texte : jamais sous 14 px (règle du 10 sept.) : les crans xs et sm
+         d'Astryx (10 et 13 px) sont remontés à 14 px — */
+      '--font-size-xs': '0.875rem',
+      '--font-size-sm': '0.875rem',
       /* — mouvement : survols des liens et boutons en 0,25 s, courbe douce — */
       '--duration-medium': '250ms',
       '--ease-standard': 'cubic-bezier(0.4, 0, 0.2, 1)',
@@ -218,6 +222,8 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
       /* Types de texte Orbita ajoutés à <Text type="…"> */
       text: {
         // Eyebrow : petite capitale espacée, or éditorial
+        // NB : Text pose color="primary" par défaut, dont la règle est émise après les types ;
+        // la couleur d'un type se déclare donc aussi en clé composée 'type:x+color:primary'.
         'type:eyebrow': {
           fontSize: '14px', // jamais sous 14 px (règle du 10 sept.)
           fontWeight: 'var(--font-weight-semibold)',
@@ -272,6 +278,12 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         // Date d'article (post-date)
         'type:date': {fontSize: '14px', color: 'var(--color-text-disabled)', whiteSpace: 'nowrap'},
         // Étiquette mono-like (ex-Geist Mono) : Geist, espacée
+        'type:eyebrow+color:primary': {color: 'var(--color-editorial)'},
+        'type:eyebrow-lines+color:primary': {color: 'var(--color-editorial)'},
+        'type:serif+color:primary': {color: 'var(--serif-color, light-dark(var(--color-accent), var(--color-highlight)))'},
+        'type:number+color:primary': {color: 'var(--color-text-accent)'},
+        'type:result+color:primary': {color: 'light-dark(var(--color-text-accent), var(--color-highlight))'},
+        'type:date+color:primary': {color: 'var(--color-text-disabled)'},
         'type:tag': {
           fontSize: '14px',
           fontWeight: 'var(--font-weight-medium)',
@@ -341,22 +353,13 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
       'link': {
         base: {transition: 'color var(--duration-medium) var(--ease-standard), text-decoration-color var(--duration-medium) var(--ease-standard)'},
       },
-      'icon-button': {
-        base: {
-          transition: [
-            'background-color var(--duration-medium) var(--ease-standard)',
-            'border-color var(--duration-medium) var(--ease-standard)',
-            'color var(--duration-medium) var(--ease-standard)',
-          ].join(', '),
-        },
-      },
 
       /* Champs et sélecteurs Orbita (maquette 17-forms / .field-* et .selectx-*)
          bordure line-2, fond papier, focus = bordure accent + halo 3 px ;
          panneaux : bordure fine, ombre portée profonde, option survolée en
          accent-muted, option choisie en accent semi-gras. */
       ...Object.fromEntries(
-        ['text-input', 'text-area', 'number-input', 'selector', 'multi-selector', 'typeahead', 'tokenizer', 'date-input'].map((k) => [
+        ['text-input', 'text-area', 'number-input', 'selector', 'multi-selector', 'typeahead', 'tokenizer', 'date-input', 'date-range-input', 'date-time-input', 'time-input', 'input-group'].map((k) => [
           k,
           {
             base: {
@@ -432,6 +435,26 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         ]),
       ),
 
+      /* Message d'état accolé (erreur / succès / avertissement) : aligné sur le halo
+         de 3 px du champ, commence sous le halo (sinon les fonds translucides se
+         superposent et foncent la jonction). */
+      'field-status': {
+        'variant:attached': {marginInline: '-3px', width: 'calc(100% + 6px)', marginTop: '3px', paddingTop: '8px'},
+        'variant:attached+type:error': {backgroundColor: 'var(--color-error-muted)'},
+        'variant:attached+type:success': {backgroundColor: 'var(--color-success-muted)'},
+        'variant:attached+type:warning': {backgroundColor: 'var(--color-warning-muted)'},
+      },
+      // libellés des contrôles d'option : 14,5 px ; radio cochée en couleur silo
+      'checkbox-label': {base: {fontSize: '14.5px'}},
+      'switch-label': {base: {fontSize: '14.5px'}},
+      'radio-list-item': {base: {fontSize: '14.5px'}, selected: {color: 'var(--color-text-accent)'}},
+      // icônes calendrier / horloge des champs de date : couleur du silo
+      ...Object.fromEntries(
+        ['date-input-toggle-icon', 'date-range-input-toggle-icon', 'date-time-input-toggle-icon', 'date-time-input-clock-icon'].map((k) => [k, {base: {color: 'var(--color-icon-accent)'}}]),
+      ),
+      // jetons : angles vifs (signature)
+      'token': {base: {borderRadius: '0'}},
+
       /* ─────────────────────────────────────────────────────────────────
          NAVIGATION (maquette 01-header) — TopNav et sa famille, MobileNav,
          Breadcrumbs (25-pageHeaders). Le fond, la hauteur, le repli au
@@ -489,13 +512,13 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
       },
       // carte mise en avant : fond nuit, angles vifs
       'top-nav-mega-menu-featured-card': {
-        base: {borderRadius: '0', backgroundColor: 'var(--color-night)', color: '#FFFFFF'},
+        base: {height: '100%', borderRadius: '0', backgroundColor: 'var(--color-night)', color: '#FFFFFF'},
       },
       'mobile-nav': {
         base: {backgroundColor: 'var(--color-background-body)', borderRadius: '0'},
       },
       // fil d'Ariane (maquette 25 .crumb) : capitales espacées 14 px, gris, silo au survol
-      'breadcrumbs': {base: {gap: '9px'}},
+      'breadcrumbs': {base: {gap: '8px'}},
       'breadcrumb-item': {
         base: {
           fontSize: '12px', // exception à la règle des 14 px (décidée le 10 sept.)
@@ -652,22 +675,9 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         },
       },
 
-      /* Bouton d'effacement des champs (date, texte, sélecteurs) : croix nue,
-         sans cadre ni fond, couleur secondaire, silo au survol */
-      'input-clear-button': {
-        base: {
-          borderWidth: '0',
-          backgroundColor: 'transparent',
-          boxShadow: 'none',
-          color: 'var(--color-icon-secondary)',
-          padding: '0',
-          minWidth: '0',
-          width: '24px',
-          height: '24px',
-          transition: 'color var(--duration-medium) var(--ease-standard)',
-          ':hover': {backgroundColor: 'transparent', color: 'var(--color-text-accent)'},
-        },
-      },
+      /* Bouton d'effacement des champs (date, texte, sélecteurs) : croix nue, sans cadre
+         ni fond — voir styles.css : la cible input-clear-button est battue par
+         variant:ghost du bouton (même couche, spécificité supérieure). */
       'input-clear-icon': {base: {width: '16px', height: '16px'}},
 
       /* Chips Orbita (maquette .c-chip*) : variantes ajoutées au Badge Astryx */
@@ -677,29 +687,29 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           height: '28px', padding: '0 11px', lineHeight: '1',
           borderWidth: 'var(--border-width)', borderStyle: 'solid', borderColor: 'var(--color-border-emphasized)',
           backgroundColor: 'var(--color-background-surface)', color: 'var(--color-text-secondary)',
-          fontSize: '11px', fontWeight: 'var(--font-weight-semibold)', letterSpacing: '0.03em',
+          fontSize: '14px', fontWeight: 'var(--font-weight-semibold)', letterSpacing: '0.03em',
         },
         'variant:chip-high': {
           height: '28px', padding: '0 11px', lineHeight: '1', borderWidth: '0',
           backgroundColor: 'color-mix(in srgb, var(--color-highlight) 18%, transparent)',
           color: 'light-dark(var(--color-highlight-deep), var(--color-highlight))',
-          fontSize: '11px', fontWeight: 'var(--font-weight-semibold)', letterSpacing: '0.03em',
+          fontSize: '14px', fontWeight: 'var(--font-weight-semibold)', letterSpacing: '0.03em',
         },
         'variant:chip-accent': {
           height: '28px', padding: '0 11px', lineHeight: '1', borderWidth: '0',
           backgroundColor: 'light-dark(var(--color-accent-muted), rgba(255,255,255,.1))',
           color: 'light-dark(var(--color-text-accent), var(--color-highlight))',
-          fontSize: '11px', fontWeight: 'var(--font-weight-semibold)', letterSpacing: '0.03em',
+          fontSize: '14px', fontWeight: 'var(--font-weight-semibold)', letterSpacing: '0.03em',
         },
         'variant:chip-cat': {
           height: '28px', padding: '0 13px', lineHeight: '1', borderWidth: '0',
           backgroundColor: 'var(--color-accent)', color: 'var(--color-on-accent)',
-          fontSize: '11px', fontWeight: 'var(--font-weight-medium)', letterSpacing: '0.16em', textTransform: 'uppercase',
+          fontSize: '14px', fontWeight: 'var(--font-weight-medium)', letterSpacing: '0.16em', textTransform: 'uppercase',
         },
         'variant:chip-danger': {
           height: '28px', padding: '0 11px', lineHeight: '1', borderWidth: '0',
           backgroundColor: 'var(--color-error-muted)', color: 'var(--color-error)',
-          fontSize: '11px', fontWeight: 'var(--font-weight-semibold)', letterSpacing: '0.03em',
+          fontSize: '14px', fontWeight: 'var(--font-weight-semibold)', letterSpacing: '0.03em',
         },
       },
 

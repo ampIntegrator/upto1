@@ -6,7 +6,7 @@ import ToggleButtonShowcase from '../../_showcases/ToggleButtonShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Toggle Button — Orbita × Astryx'};
+export const metadata = {title: 'Toggle Button — Design system Vidomia'};
 
 export default function Page() {
   return (

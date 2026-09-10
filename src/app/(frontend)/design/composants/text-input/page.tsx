@@ -6,7 +6,7 @@ import TextInputShowcase from '../../_showcases/TextInputShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Text Input — Orbita × Astryx'};
+export const metadata = {title: 'Text Input — Design system Vidomia'};
 
 export default function Page() {
   return (

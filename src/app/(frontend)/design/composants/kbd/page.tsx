@@ -6,7 +6,7 @@ import KbdShowcase from '../../_showcases/KbdShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Kbd — Orbita × Astryx'};
+export const metadata = {title: 'Kbd — Design system Vidomia'};
 
 export default function Page() {
   return (

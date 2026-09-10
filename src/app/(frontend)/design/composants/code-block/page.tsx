@@ -6,7 +6,7 @@ import CodeBlockShowcase from '../../_showcases/CodeBlockShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Code Block — Orbita × Astryx'};
+export const metadata = {title: 'Code Block — Design system Vidomia'};
 
 export default function Page() {
   return (

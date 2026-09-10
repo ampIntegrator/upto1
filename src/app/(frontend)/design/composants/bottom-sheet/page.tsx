@@ -6,7 +6,7 @@ import BottomSheetShowcase from '../../_showcases/BottomSheetShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Bottom Sheet — Orbita × Astryx'};
+export const metadata = {title: 'Bottom Sheet — Design system Vidomia'};
 
 export default function Page() {
   return (

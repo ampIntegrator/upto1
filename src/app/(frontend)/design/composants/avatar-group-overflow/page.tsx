@@ -6,7 +6,7 @@ import AvatarGroupOverflowShowcase from '../../_showcases/AvatarGroupOverflowSho
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Avatar Group Overflow — Orbita × Astryx'};
+export const metadata = {title: 'Avatar Group Overflow — Design system Vidomia'};
 
 export default function Page() {
   return (

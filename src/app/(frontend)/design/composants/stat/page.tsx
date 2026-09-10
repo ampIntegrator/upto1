@@ -6,7 +6,7 @@ import StatShowcase from '../../_showcases/StatShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Stat — Orbita × Astryx'};
+export const metadata = {title: 'Stat — Design system Vidomia'};
 
 export default function Page() {
   return (

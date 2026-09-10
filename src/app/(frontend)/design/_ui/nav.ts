@@ -1,5 +1,3 @@
-import {CATALOG} from './catalog.generated';
-
 /** Structure du catalogue : fondations + catégories de composants Astryx. */
 
 export type NavEntry = {slug: string; label: string; href: string; /** s'ouvre dans un nouvel onglet, hors catalogue */ external?: boolean};
@@ -15,4 +13,3 @@ export const FOUNDATIONS: NavEntry[] = [
   {slug: 'mise-en-page-clair', label: 'Mise en page · hero clair ↗', href: '/mise-en-page/clair', external: true},
 ];
 
-export const CATEGORIES: NavEntry[] = CATALOG.map((c) => ({slug: c.slug, label: c.label, href: c.href}));

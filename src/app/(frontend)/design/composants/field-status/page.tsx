@@ -6,7 +6,7 @@ import FieldStatusShowcase from '../../_showcases/FieldStatusShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Field Status — Orbita × Astryx'};
+export const metadata = {title: 'Field Status — Design system Vidomia'};
 
 export default function Page() {
   return (

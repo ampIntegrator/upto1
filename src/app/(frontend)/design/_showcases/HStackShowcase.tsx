@@ -8,7 +8,7 @@ import {Text} from '@astryxdesign/core/Text';
 
 export default function HStackShowcase() {
   return (
-    <VStack gap={6} width="100%" style={{maxWidth: 400}}>
+    <VStack gap={6} width="100%" maxWidth={400}>
       <VStack gap={2}>
         <Text type="supporting" color="secondary">
           HAlign: start

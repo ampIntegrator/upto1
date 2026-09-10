@@ -55,6 +55,3 @@ export const ASTRYX_NUCLEO_ICONS: ThemeIconOverrides = Object.fromEntries(
 ) as ThemeIconOverrides;
 
 /** Noms sémantiques encore servis par les tracés Astryx par défaut. */
-export const ASTRYX_ICONS_MISSING = Object.entries(ASTRYX_SEMANTIC_MAP)
-  .filter(([, key]) => !(key in NUCLEO_ICONS))
-  .map(([name]) => name);

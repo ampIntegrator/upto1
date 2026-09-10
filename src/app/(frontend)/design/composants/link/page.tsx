@@ -6,7 +6,7 @@ import LinkShowcase from '../../_showcases/LinkShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Link — Orbita × Astryx'};
+export const metadata = {title: 'Link — Design system Vidomia'};
 
 export default function Page() {
   return (

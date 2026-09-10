@@ -6,7 +6,7 @@ import OverflowListShowcase from '../../_showcases/OverflowListShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Overflow List — Orbita × Astryx'};
+export const metadata = {title: 'Overflow List — Design system Vidomia'};
 
 export default function Page() {
   return (

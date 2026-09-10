@@ -11,6 +11,8 @@ import {PageIntro} from './_ui/PageIntro';
 import {CATALOG} from './_ui/catalog.generated';
 import {FOUNDATIONS} from './_ui/nav';
 
+export const metadata = {title: 'Design system Vidomia'};
+
 export default function DesignHome() {
   return (
     <VStack gap={10}>
@@ -21,7 +23,7 @@ export default function DesignHome() {
             Orbita, écrit en <Text type="serif">Astryx.</Text>
           </>
         }
-        lead="La grammaire visuelle d'Orbita (couleurs, typographie, angles vifs, sections nuit) portée dans le système de thème Astryx. Les sept silos d'accent et le mode nuit se changent dans la barre latérale."
+        lead="La grammaire visuelle du design system Vidomia : couleurs, typographie, angles vifs, sections nuit, portée par le thème. Le silo d'accent se change dans la barre latérale ; le mode nuit vit dans les sections qui le déclarent."
       />
 
       <Card padding={8}>

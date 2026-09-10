@@ -6,7 +6,7 @@ import CenterShowcase from '../../_showcases/CenterShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Center — Orbita × Astryx'};
+export const metadata = {title: 'Center — Design system Vidomia'};
 
 export default function Page() {
   return (

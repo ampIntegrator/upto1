@@ -6,7 +6,7 @@ import ContextMenuItemShowcase from '../../_showcases/ContextMenuItemShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Context Menu Item — Orbita × Astryx'};
+export const metadata = {title: 'Context Menu Item — Design system Vidomia'};
 
 export default function Page() {
   return (

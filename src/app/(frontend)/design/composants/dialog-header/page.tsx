@@ -6,7 +6,7 @@ import DialogHeaderShowcase from '../../_showcases/DialogHeaderShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Dialog Header — Orbita × Astryx'};
+export const metadata = {title: 'Dialog Header — Design system Vidomia'};
 
 export default function Page() {
   return (

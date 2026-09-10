@@ -6,7 +6,7 @@ import StackItemShowcase from '../../_showcases/StackItemShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Stack Item — Orbita × Astryx'};
+export const metadata = {title: 'Stack Item — Design system Vidomia'};
 
 export default function Page() {
   return (

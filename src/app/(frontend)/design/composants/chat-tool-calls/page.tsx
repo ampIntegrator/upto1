@@ -6,7 +6,7 @@ import ChatToolCallsShowcase from '../../_showcases/ChatToolCallsShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Chat Tool Calls — Orbita × Astryx'};
+export const metadata = {title: 'Chat Tool Calls — Design system Vidomia'};
 
 export default function Page() {
   return (

@@ -6,7 +6,7 @@ import MoreMenuShowcase from '../../_showcases/MoreMenuShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'More Menu — Orbita × Astryx'};
+export const metadata = {title: 'More Menu — Design system Vidomia'};
 
 export default function Page() {
   return (

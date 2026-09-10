@@ -14,7 +14,7 @@ export default function TopNavShowcase() {
   return (
     <VStack gap={6}>
       <Text type="body" color="secondary">
-        La barre de navigation Astryx, trois zones : logo, navigation, actions. Hauteur 74 px, fond transparent (c'est SiteHeader qui porte le fond, le bandeau et le défilement). Entrées en 14,5 px, encre au survol et à la page courante.
+        La barre de navigation, trois zones : logo, navigation, actions. Hauteur 74 px, fond transparent (c'est SiteHeader qui porte le fond, le bandeau et le défilement). Entrées en 14,5 px, encre au survol et à la page courante.
       </Text>
       <VStack style={{border: 'var(--border-width) solid var(--color-border)'}}>
         <TopNav

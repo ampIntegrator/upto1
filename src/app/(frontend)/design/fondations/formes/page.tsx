@@ -8,7 +8,7 @@ import React from 'react';
 
 import {PageIntro} from '../../_ui/PageIntro';
 
-export const metadata = {title: 'Formes & ombres — Orbita × Astryx'};
+export const metadata = {title: 'Formes & ombres — Design system Vidomia'};
 
 const RADII = ['none', 'inner', 'element', 'container', 'page', 'full'];
 const SHADOWS = ['low', 'med', 'high'] as const;
@@ -29,7 +29,7 @@ export default function Page() {
             {RADII.map((r) => (
               <VStack key={r} gap={2} hAlign="center">
                 <VStack style={{width: 96, height: 96, borderRadius: `var(--radius-${r})`, background: 'var(--color-accent-muted)', border: '2px solid var(--color-accent)'}} />
-                <Text type="code" size="xsm" color="secondary">{`--radius-${r}`}</Text>
+                <Text type="code" size="sm" color="secondary">{`--radius-${r}`}</Text>
               </VStack>
             ))}
           </Grid>
@@ -45,7 +45,7 @@ export default function Page() {
               <Card key={s} elevation={s} padding={5}>
                 <VStack gap={1} style={{minWidth: 160}}>
                   <Text type="label">elevation="{s}"</Text>
-                  <Text type="code" size="xsm" color="secondary">{`--shadow-${s}`}</Text>
+                  <Text type="code" size="sm" color="secondary">{`--shadow-${s}`}</Text>
                 </VStack>
               </Card>
             ))}

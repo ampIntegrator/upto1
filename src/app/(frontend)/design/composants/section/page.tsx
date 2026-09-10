@@ -6,7 +6,7 @@ import SectionShowcase from '../../_showcases/SectionShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Section — Orbita × Astryx'};
+export const metadata = {title: 'Section — Design system Vidomia'};
 
 export default function Page() {
   return (

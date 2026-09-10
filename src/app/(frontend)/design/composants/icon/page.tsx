@@ -6,7 +6,7 @@ import IconShowcase from '../../_showcases/IconShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Icon — Orbita × Astryx'};
+export const metadata = {title: 'Icon — Design system Vidomia'};
 
 export default function Page() {
   return (

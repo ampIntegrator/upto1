@@ -6,7 +6,7 @@ import StatusDotShowcase from '../../_showcases/StatusDotShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Status Dot — Orbita × Astryx'};
+export const metadata = {title: 'Status Dot — Design system Vidomia'};
 
 export default function Page() {
   return (

@@ -4,7 +4,7 @@ import React from 'react';
 import {PageIntro} from '../../../_ui/PageIntro';
 import {HighlightCompare} from './HighlightCompare';
 
-export const metadata = {title: 'Comparatif highlight — Orbita × Astryx'};
+export const metadata = {title: 'Comparatif highlight — Design system Vidomia'};
 
 export default function Page() {
   return (

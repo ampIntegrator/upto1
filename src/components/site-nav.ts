@@ -13,7 +13,7 @@ export type SiteNavEntry =
       kind: 'mega';
       label: string;
       groups: Array<{title: string; items: SiteNavLeaf[]}>;
-      featured?: {eyebrow?: string; title: string; description?: string; image?: string; linkLabel: string; linkHref: string};
+      featured?: {title: string; description?: string; image?: string; linkLabel: string; linkHref: string};
     };
 
 export type SiteStrip = {

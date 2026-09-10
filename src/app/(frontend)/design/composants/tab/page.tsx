@@ -6,7 +6,7 @@ import TabShowcase from '../../_showcases/TabShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Tab — Orbita × Astryx'};
+export const metadata = {title: 'Tab — Design system Vidomia'};
 
 export default function Page() {
   return (

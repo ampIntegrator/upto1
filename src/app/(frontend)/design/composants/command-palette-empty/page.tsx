@@ -6,7 +6,7 @@ import CommandPaletteEmptyShowcase from '../../_showcases/CommandPaletteEmptySho
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Command Palette Empty — Orbita × Astryx'};
+export const metadata = {title: 'Command Palette Empty — Design system Vidomia'};
 
 export default function Page() {
   return (

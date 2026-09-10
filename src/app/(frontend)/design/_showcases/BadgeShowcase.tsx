@@ -27,7 +27,7 @@ export default function BadgeShowcase() {
   const {theme} = useOrbitaTheme();
   return (
     <VStack gap={6}>
-      <Text type="body" color="secondary">Chips Orbita, 28 px à angles vifs : bordé, highlight, accent, catégorie pleine en capitales espacées, danger. Ce sont des variantes du Badge Astryx déclarées par le thème ; OrbitaChip les nomme par leur ton. Les badges de statut Astryx restent disponibles.</Text>
+      <Text type="body" color="secondary">Chips, 28 px à angles vifs : bordé, highlight, accent, catégorie pleine en capitales espacées, danger. Ce sont des variantes du Badge déclarées par le thème ; OrbitaChip les nomme par leur ton. Les badges de statut restent disponibles.</Text>
       <Card padding={6}><Chips /></Card>
       <Theme theme={theme} mode="dark"><Card padding={6}><Chips /></Card></Theme>
       <Card padding={6}>

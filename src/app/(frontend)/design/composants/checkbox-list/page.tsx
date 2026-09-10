@@ -6,7 +6,7 @@ import CheckboxListShowcase from '../../_showcases/CheckboxListShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Checkbox List — Orbita × Astryx'};
+export const metadata = {title: 'Checkbox List — Design system Vidomia'};
 
 export default function Page() {
   return (

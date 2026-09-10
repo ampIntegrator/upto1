@@ -17,7 +17,7 @@ export default function FormLayoutShowcase() {
   return (
     <VStack gap={4}>
       <Text type="body" color="secondary">Mise en page de formulaire Astryx, lignes et colonnes, avec les champs Orbita : label flottant qui remonte au focus, 58 px de haut.</Text>
-      <VStack style={{maxWidth: 640}}>
+      <VStack maxWidth={640}>
         <FormLayout>
           <FormLayout direction="horizontal">
             <OrbitaField label="Prénom" value={prenom} onChange={setPrenom} />
