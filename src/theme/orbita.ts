@@ -82,6 +82,9 @@ function orbitaOnlyTokens(silo: OrbitaSilo) {
     '--color-editorial': [EDITORIAL, EDITORIAL],
     '--color-editorial-deep': [EDITORIAL_DEEP, EDITORIAL],
     '--color-night': [night, night],
+    // fond « light » : entre le papier et background-muted (surfaces à peine teintées,
+    // ex. panneau d'onglet) ; nuit : voile blanc très léger
+    '--color-background-light': [mixHex(bg2, '#FFFFFF', 45), 'rgba(255,255,255,.03)'],
     '--color-accent-deep': [primaryDeep, primary],
   } as unknown as Partial<Record<TokenName, TokenValue>>;
 }

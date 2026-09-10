@@ -24,7 +24,7 @@ export function TabsWithPanel({id}: {id: string}) {
       </TabList>
       <VStack className="orbita-tab-stack">
         <VStack id={`${id}-${current.value}`} role="tabpanel" className="orbita-tab-panel" align="center">
-          <Text type="body" style={{fontSize: '16.5px', lineHeight: 1.65, maxWidth: '880px'}} color="secondary">{current.text}</Text>
+          <Text type="body" style={{fontSize: '16.5px', lineHeight: 1.65}} color="secondary">{current.text}</Text>
         </VStack>
       </VStack>
     </VStack>

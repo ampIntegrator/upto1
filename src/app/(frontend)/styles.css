@@ -329,8 +329,14 @@ body > [data-astryx-theme] {
   background: linear-gradient(90deg, var(--color-highlight) 0%, var(--color-accent) 50%, var(--color-highlight) 100%);
 }
 [data-astryx-theme^='orbita'] .orbita-tab-panel {
-  padding: 44px 56px;
-  background: light-dark(var(--color-background-muted), var(--color-night));
+  padding: 44px 20px;
+  background: light-dark(var(--color-background-light), var(--color-night));
+}
+/* contenu d'un onglet : 900 px maximum, centré */
+[data-astryx-theme^='orbita'] .orbita-tab-panel > * {
+  width: 100%;
+  max-width: 900px;
+  margin-inline: auto;
 }
 @media (max-width: 639px) {
   [data-astryx-theme^='orbita'] .orbita-tab-panel { padding: 28px 24px; }
