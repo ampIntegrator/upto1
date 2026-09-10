@@ -24,6 +24,16 @@
   .section[data-spacing='lg'] { padding-block: 72px; }
 }
 
+/* ---- sous l'en-tête fixe : on réserve sa hauteur (bandeau 38 + barre 74) ---- */
+.section[data-under-header] { padding-top: calc(var(--section-pad, 96px) + 112px); }
+.section[data-spacing='sm'][data-under-header] { padding-top: calc(56px + 112px); }
+.section[data-spacing='lg'][data-under-header] { padding-top: calc(128px + 112px); }
+@media (max-width: 1279px) {
+  .section[data-under-header] { padding-top: calc(var(--section-pad, 56px) + 74px); }
+  .section[data-spacing='sm'][data-under-header] { padding-top: calc(40px + 74px); }
+  .section[data-spacing='lg'][data-under-header] { padding-top: calc(72px + 74px); }
+}
+
 /* ---- papier (blanc / carte nuit) ---- */
 .section[data-background='paper'] { background-color: var(--color-background-surface); }
 

@@ -26,28 +26,50 @@ function Eyebrow({children}: {children: string}) {
   return <Text type="eyebrow-lines">{children}</Text>;
 }
 
-export function PageDemo() {
+export function PageDemo({hero = 'media'}: {hero?: 'media' | 'light'}) {
   return (
     <VStack className="page-demo">
       {/* 0 · en-tête fixé ; tonalité déduite du premier bloc (ici image → sombre) */}
       <SiteHeader {...SITE_HEADER} />
 
-      {/* 1 · image pleine largeur, colonne de 8 centrée (maquette 13 : contenu à 900 px) */}
-      <Section background="image" image={{src: IMG, alt: ''}} overlay={0.3} spacing="lg" minHeight={600}>
-        <Container>
-          <Grid columns={12} gap={6} className="page-grid">
-            <GridSpan style={{gridColumn: '3 / span 8'}}>
-              <VStack gap={4} align="center" style={{textAlign: 'center'}}>
-                <Heading level={2} type="display-3">
-                  Gérez tout votre chantier en un seul outil. <Text type="serif" style={{'--serif-color': 'var(--color-editorial)'} as React.CSSProperties}>Mise en place en moins de 24 heures.</Text>
-                </Heading>
-                <Text type="large" color="secondary">Sans engagement. Notre équipe vous rappelle dans la journée.</Text>
-                <OrbitaButton variant="primary" size="lg" arrow label="Demander un rappel" />
-              </VStack>
-            </GridSpan>
-          </Grid>
-        </Container>
-      </Section>
+      {/* 1 · hero : média (image, en-tête sombre) ou clair (en-tête clair, hauteur réservée) */}
+      {hero === 'media' ? (
+        <Section background="image" image={{src: IMG, alt: ''}} overlay={0.3} spacing="lg" minHeight={600}>
+          <Container>
+            <Grid columns={12} gap={6} className="page-grid">
+              <GridSpan style={{gridColumn: '3 / span 8'}}>
+                <VStack gap={4} align="center" style={{textAlign: 'center'}}>
+                  <Heading level={2} type="display-3">
+                    Gérez tout votre chantier en un seul outil. <Text type="serif" style={{'--serif-color': 'var(--color-editorial)'} as React.CSSProperties}>Mise en place en moins de 24 heures.</Text>
+                  </Heading>
+                  <Text type="large" color="secondary">Sans engagement. Notre équipe vous rappelle dans la journée.</Text>
+                  <OrbitaButton variant="primary" size="lg" arrow label="Demander un rappel" />
+                </VStack>
+              </GridSpan>
+            </Grid>
+          </Container>
+        </Section>
+      ) : (
+        <Section background="light" spacing="lg" underHeader edge>
+          <Container>
+            <Grid columns={12} gap={6} className="page-grid">
+              <GridSpan style={{gridColumn: '3 / span 8'}}>
+                <VStack gap={4} align="center" style={{textAlign: 'center'}}>
+                  <Eyebrow>Tarification</Eyebrow>
+                  <Heading level={1} type="display-3">
+                    Un prix clair, <Text type="serif">sans surprise.</Text>
+                  </Heading>
+                  <Text type="large" color="secondary">Choisissez l'offre adaptée à votre volume de chantiers. Sans engagement, sans frais cachés, résiliable en un clic.</Text>
+                  <HStack gap={3} justify="center" wrap="wrap">
+                    <OrbitaButton variant="primary" size="lg" arrow label="Voir les tarifs" />
+                    <OrbitaButton variant="ghost" size="lg" label="Parler à un conseiller" />
+                  </HStack>
+                </VStack>
+              </GridSpan>
+            </Grid>
+          </Container>
+        </Section>
+      )}
 
       {/* 1b · barre de chiffres (maquette 04) */}
       <StatsBar {...STATS_BARS[0]} />
