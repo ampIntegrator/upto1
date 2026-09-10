@@ -398,6 +398,62 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         ]),
       ),
 
+      /* Onglets (maquette 06-tabs) : Geist 600 15 px, centrés, largeur égale
+         (layout="fill"), survol silo 10 %, actif en couleur silo ; l'indicateur
+         Astryx (un par onglet) fait 3 px sur toute la largeur de l'onglet et
+         apparaît en fondu. Le séparateur vertical entre onglets est dans
+         styles.css (le thème ne cible pas « tous sauf le premier »). */
+      'tab-list': {
+        base: {height: 'auto', fontFamily: 'var(--font-family-body)'},
+      },
+      'tab-strip': {base: {height: 'auto'}},
+      ...Object.fromEntries(
+        ['tab', 'tab-menu'].map((k) => [
+          k,
+          {
+            base: {
+              height: 'auto',
+              padding: '18px 22px',
+              fontSize: '15px',
+              fontWeight: 'var(--font-weight-semibold)',
+              lineHeight: '1.3',
+              textAlign: 'center',
+              justifyContent: 'center',
+              color: 'var(--color-text-secondary)',
+              borderRadius: '0',
+              transition: 'color var(--duration-medium) var(--ease-standard), background-color var(--duration-medium) var(--ease-standard)',
+              ':hover': {
+                color: 'var(--color-text-primary)',
+                backgroundColor: 'light-dark(var(--color-accent-muted), rgba(255,255,255,.06))',
+              },
+            },
+            selected: {color: 'light-dark(var(--color-text-accent), var(--color-highlight))'},
+          },
+        ]),
+      ),
+      'tab-indicator': {
+        base: {
+          left: '0',
+          right: '0',
+          width: 'auto',
+          height: '3px',
+          borderRadius: '0',
+          backgroundColor: 'light-dark(var(--color-accent), var(--color-highlight))',
+          transition: 'opacity var(--duration-medium) var(--ease-standard)',
+        },
+      },
+      'tab-menu-item': {
+        base: {
+          borderRadius: '0',
+          color: 'var(--color-text-secondary)',
+          transition: 'background-color var(--duration-medium) var(--ease-standard), color var(--duration-medium) var(--ease-standard)',
+          ':hover': {
+            backgroundColor: 'light-dark(var(--color-accent-muted), rgba(255,255,255,.08))',
+            color: 'var(--color-text-primary)',
+          },
+        },
+      },
+
       /* Contrôles d'option Orbita (maquette 17-forms .opt / .switch / .c-range) */
       'radio-indicator': {
         base: {

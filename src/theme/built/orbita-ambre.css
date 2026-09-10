@@ -966,6 +966,80 @@
     border-bottom: var(--border-width) solid var(--color-border);
   }
 
+  .astryx-tab-list {
+    height: auto;
+    font-family: var(--font-family-body);
+  }
+
+  .astryx-tab-strip {
+    height: auto;
+  }
+
+  .astryx-tab {
+    height: auto;
+    padding: 18px 22px;
+    font-size: 15px;
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.3;
+    text-align: center;
+    justify-content: center;
+    color: var(--color-text-secondary);
+    border-radius: 0;
+    transition: color var(--duration-medium) var(--ease-standard), background-color var(--duration-medium) var(--ease-standard);
+  }
+
+  .astryx-tab:hover:where(:not(:disabled,[aria-disabled="true"])) {
+    color: var(--color-text-primary);
+    background-color: light-dark(var(--color-accent-muted), rgba(255,255,255,.06));
+  }
+
+  .astryx-tab.selected {
+    color: light-dark(var(--color-text-accent), var(--color-highlight));
+  }
+
+  .astryx-tab-menu {
+    height: auto;
+    padding: 18px 22px;
+    font-size: 15px;
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.3;
+    text-align: center;
+    justify-content: center;
+    color: var(--color-text-secondary);
+    border-radius: 0;
+    transition: color var(--duration-medium) var(--ease-standard), background-color var(--duration-medium) var(--ease-standard);
+  }
+
+  .astryx-tab-menu:hover:where(:not(:disabled,[aria-disabled="true"])) {
+    color: var(--color-text-primary);
+    background-color: light-dark(var(--color-accent-muted), rgba(255,255,255,.06));
+  }
+
+  .astryx-tab-menu.selected {
+    color: light-dark(var(--color-text-accent), var(--color-highlight));
+  }
+
+  .astryx-tab-indicator {
+    left: 0;
+    right: 0;
+    width: auto;
+    height: 3px;
+    border-radius: 0;
+    background-color: light-dark(var(--color-accent), var(--color-highlight));
+    transition: opacity var(--duration-medium) var(--ease-standard);
+  }
+
+  .astryx-tab-menu-item {
+    border-radius: 0;
+    color: var(--color-text-secondary);
+    transition: background-color var(--duration-medium) var(--ease-standard), color var(--duration-medium) var(--ease-standard);
+  }
+
+  .astryx-tab-menu-item:hover:where(:not(:disabled,[aria-disabled="true"])) {
+    background-color: light-dark(var(--color-accent-muted), rgba(255,255,255,.08));
+    color: var(--color-text-primary);
+  }
+
   .astryx-radio-indicator {
     width: 22px;
     height: 22px;

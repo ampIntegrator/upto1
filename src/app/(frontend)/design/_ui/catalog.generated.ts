@@ -898,7 +898,7 @@ export const CATALOG: CatalogCategory[] = [
         "label": "Tab",
         "slug": "tab",
         "href": "/design/composants/tab",
-        "dressed": false,
+        "dressed": true,
         "parent": "TabList",
         "doc": "tab-list"
       },
@@ -907,7 +907,7 @@ export const CATALOG: CatalogCategory[] = [
         "label": "Tab List",
         "slug": "tab-list",
         "href": "/design/composants/tab-list",
-        "dressed": false,
+        "dressed": true,
         "parent": null,
         "doc": "tab-list"
       },
@@ -916,7 +916,7 @@ export const CATALOG: CatalogCategory[] = [
         "label": "Tab Menu",
         "slug": "tab-menu",
         "href": "/design/composants/tab-menu",
-        "dressed": false,
+        "dressed": true,
         "parent": "TabList",
         "doc": "tab-list"
       },
