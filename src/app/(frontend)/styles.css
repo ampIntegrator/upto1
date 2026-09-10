@@ -356,10 +356,24 @@ body > [data-astryx-theme] {
   }
 }
 
-/* Texte serif accentué (Text type="serif") : couleur silo en clair, highlight en
-   nuit. !important : la couleur « primary » par défaut du Text (StyleX) passe
-   sinon devant celle du type. Pour une autre couleur (or éditorial du hero 13) :
+/* Types de texte du thème qui portent une couleur : la couleur « primary » par
+   défaut du Text (classe StyleX) passe sinon devant celle du type. On ne force
+   que quand aucune couleur n'a été demandée (data-color="primary" = défaut).
+   Serif : pour une autre couleur (or éditorial du hero 13),
    style={{'--serif-color': 'var(--color-editorial)'}}. */
-[data-astryx-theme^='orbita'] .astryx-text.serif {
+[data-astryx-theme^='orbita'] .astryx-text.serif[data-color='primary'] {
   color: var(--serif-color, light-dark(var(--color-accent), var(--color-highlight))) !important;
+}
+[data-astryx-theme^='orbita'] .astryx-text.eyebrow[data-color='primary'],
+[data-astryx-theme^='orbita'] .astryx-text.eyebrow-lines[data-color='primary'] {
+  color: var(--color-editorial) !important;
+}
+[data-astryx-theme^='orbita'] .astryx-text.number[data-color='primary'] {
+  color: var(--color-text-accent) !important;
+}
+[data-astryx-theme^='orbita'] .astryx-text.result[data-color='primary'] {
+  color: light-dark(var(--color-text-accent), var(--color-highlight)) !important;
+}
+[data-astryx-theme^='orbita'] .astryx-text.date[data-color='primary'] {
+  color: var(--color-text-disabled) !important;
 }
