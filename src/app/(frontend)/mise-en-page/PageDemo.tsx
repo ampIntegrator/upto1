@@ -12,8 +12,8 @@ import {OrbitaButton} from '@/components/OrbitaButton';
 import {OrbitaCard} from '@/components/OrbitaCard';
 import {OrbitaCollapsible, OrbitaCollapsibleGroup} from '@/components/OrbitaCollapsible';
 import {Section} from '@/components/Section';
-import {FAQ} from '../../_showcases/faq.shared';
-import {TabsWithPanel} from '../../_ui/TabRows';
+import {FAQ} from '../design/_showcases/faq.shared';
+import {TabsWithPanel} from '../design/_ui/TabRows';
 
 const IMG = 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1920&q=80';
 const VIDEO = 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4';
@@ -36,7 +36,7 @@ export function PageDemo() {
                   Gérez tout votre chantier en un seul outil. <Text type="serif" style={{'--serif-color': 'var(--color-editorial)'} as React.CSSProperties}>Mise en place en moins de 24 heures.</Text>
                 </Heading>
                 <Text type="large" color="secondary">Sans engagement. Notre équipe vous rappelle dans la journée.</Text>
-                <OrbitaButton variant="ghost" size="lg" arrow label="Demander un rappel" />
+                <OrbitaButton variant="primary" size="lg" arrow label="Demander un rappel" />
               </VStack>
             </GridSpan>
           </Grid>

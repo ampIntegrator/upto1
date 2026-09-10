@@ -762,7 +762,7 @@ export const orbitaAmbreTheme = {
       "base": {
         "height": "auto",
         "fontFamily": "var(--font-family-body)",
-        "backgroundColor": "light-dark(var(--color-background-surface), rgba(255,255,255,.03))",
+        "backgroundColor": "light-dark(var(--color-highlight-muted), rgba(255,255,255,.03))",
         "borderWidth": "var(--border-width)",
         "borderStyle": "solid",
         "borderColor": "light-dark(var(--color-border), rgba(255,255,255,.15))"
@@ -778,6 +778,7 @@ export const orbitaAmbreTheme = {
       "base": {
         "height": "auto",
         "padding": "18px 22px",
+        "gap": "12px",
         "fontSize": "15px",
         "fontWeight": "var(--font-weight-semibold)",
         "lineHeight": "1.3",
@@ -799,6 +800,7 @@ export const orbitaAmbreTheme = {
       "base": {
         "height": "auto",
         "padding": "18px 22px",
+        "gap": "12px",
         "fontSize": "15px",
         "fontWeight": "var(--font-weight-semibold)",
         "lineHeight": "1.3",

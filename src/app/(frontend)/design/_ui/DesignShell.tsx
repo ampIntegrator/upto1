@@ -71,7 +71,7 @@ export function DesignShell({children}: {children: React.ReactNode}) {
           <SideNavSection title="Fondations" isHeaderHidden={q !== '' && foundations.length === 0}>
             {!q ? <SideNavItem label="Vue d'ensemble" href="/design" isSelected={pathname === '/design'} /> : null}
             {foundations.map((e) => (
-              <SideNavItem key={e.slug} label={e.label} href={e.href} isSelected={pathname === e.href} />
+              <SideNavItem key={e.slug} label={e.label} href={e.href} isSelected={pathname === e.href} {...(e.external ? {target: '_blank', rel: 'noopener'} : {})} />
             ))}
           </SideNavSection>
           <SideNavSection title="Composants" isHeaderHidden={q !== '' && catalog.length === 0}>

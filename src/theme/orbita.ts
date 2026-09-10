@@ -412,7 +412,8 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         base: {
           height: 'auto',
           fontFamily: 'var(--font-family-body)',
-          backgroundColor: 'light-dark(var(--color-background-surface), rgba(255,255,255,.03))',
+          // fond très clair à partir du highlight du silo (essai demandé le 10 sept.)
+          backgroundColor: 'light-dark(var(--color-highlight-muted), rgba(255,255,255,.03))',
           borderWidth: 'var(--border-width)',
           borderStyle: 'solid',
           borderColor: 'light-dark(var(--color-border), rgba(255,255,255,.15))',
@@ -427,6 +428,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
             base: {
               height: 'auto',
               padding: '18px 22px',
+              gap: '12px', // icône ↔ libellé ↔ compteur : une demi-icône
               fontSize: '15px',
               fontWeight: 'var(--font-weight-semibold)',
               lineHeight: '1.3',

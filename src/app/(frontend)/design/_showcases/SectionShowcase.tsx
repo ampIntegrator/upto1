@@ -28,7 +28,7 @@ export default function SectionShowcase() {
   return (
     <VStack gap={8}>
       <Text type="body" color="secondary">
-        Le bloc pleine largeur qui empile les pages. Il porte l'arrière-plan et le padding vertical, rien d'autre : le contenu se place dans le Container (1440 px, marges de 20 px), puis dans la Grid de 12 colonnes. Sept arrière-plans, montrés ici en padding sm ; la page Fondations › Mise en page les assemble en pleine largeur.
+        Le bloc pleine largeur qui empile les pages. Il porte l'arrière-plan et le padding vertical, rien d'autre : le contenu se place dans le Container (1440 px, marges de 20 px), puis dans la Grid de 12 colonnes (GridSpan de 2, 3, 4, 6, 8 ou 9 ; pleine largeur sous 768 px). Sept arrière-plans, montrés ici en padding sm. La page « Mise en page » du menu les assemble en pleine largeur, hors catalogue.
       </Text>
       {MODES.map((m) => (
         <VStack key={m.bg} gap={3}>
@@ -44,7 +44,7 @@ export default function SectionShowcase() {
                       Titre de section <Text type="serif">accentué.</Text>
                     </Heading>
                     <Text type="large" color="secondary">Colonne de six sur douze, centrée. Titre, texte et bouton du catalogue.</Text>
-                    <OrbitaButton variant={m.bg === 'light' || m.bg === 'grid' || m.bg === 'dots' || m.bg === 'losange' ? 'primary' : 'ghost'} arrow label="Découvrir" />
+                    <OrbitaButton variant="primary" arrow label="Découvrir" />
                   </VStack>
                 </GridSpan>
               </Grid>
