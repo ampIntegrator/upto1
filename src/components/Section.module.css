@@ -32,21 +32,26 @@
   border-block: var(--border-width) solid var(--color-border);
 }
 
-/* ---- textures (00-fondations §4 : filets discrets, clair seulement) ---- */
+/* ---- textures (00-fondations §4 : filets discrets, clair seulement) ----
+   Décalées d'une demi-cellule : sans cela, le premier filet tombe sur le bord de
+   la section et double le filet de la section voisine (2 px au lieu de 1). */
 .section[data-background='grid'] {
   background-image:
     linear-gradient(var(--color-border) 1px, transparent 1px),
     linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
   background-size: 48px 48px;
+  background-position: 24px 24px;
 }
 .section[data-background='dots'] {
   background-image: radial-gradient(var(--color-border-emphasized) 1.3px, transparent 1.5px);
   background-size: 32px 32px;
+  background-position: 16px 16px;
 }
 .section[data-background='losange'] {
   background-image:
     repeating-linear-gradient(45deg, var(--color-border) 0 1px, transparent 1px 32px),
     repeating-linear-gradient(-45deg, var(--color-border) 0 1px, transparent 1px 32px);
+  background-position: 16px 16px;
 }
 
 /* ---- nuit (orbita.css .c-darkbg : nuit + lueur silo centrale + bords assombris) ---- */
