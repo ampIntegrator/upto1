@@ -97,7 +97,7 @@ export function PageDemo() {
         </Container>
       </Section>
 
-      {/* 4 · clair + points : onglets sur 12 */}
+      {/* 4 · clair + points : tête sur 8 centrée, onglets sur 9 + carte icône sur 3, même hauteur */}
       <Section background="dots" spacing="md">
         <Container gap={10}>
           <Grid columns={12} gap={6} className="page-grid">
@@ -109,8 +109,13 @@ export function PageDemo() {
                 </Heading>
               </VStack>
             </GridSpan>
-            <GridSpan columns="full">
+          </Grid>
+          <Grid columns={12} gap={6} className="page-grid" align="stretch">
+            <GridSpan columns={9}>
               <TabsWithPanel id="page-tabs" />
+            </GridSpan>
+            <GridSpan columns={3}>
+              <OrbitaCard media={{type: 'icon', iconKey: 'gauge'}} title="Un seul tableau de bord" text="Chiffrage, suivi, devis et validation au même endroit, pour tous les sites." cta={{label: 'Découvrir', href: '#'}} />
             </GridSpan>
           </Grid>
         </Container>
