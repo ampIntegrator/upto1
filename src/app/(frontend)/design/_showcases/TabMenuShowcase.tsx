@@ -11,13 +11,14 @@ export default function TabMenuShowcase() {
   return (
     <VStack gap={6}>
       <Text type="body" color="secondary">
-        Le menu de débordement regroupe les onglets secondaires dans une liste déroulante, au style des sélecteurs Orbita. Son libellé affiche l'option choisie.
+        Le menu de débordement regroupe les onglets secondaires dans une liste déroulante. Son libellé reste fixe, l'option choisie est cochée dans la liste.
       </Text>
       <TabList value={value} onChange={setValue} layout="fill" aria-label="Compte">
         <Tab value="apercu" label="Aperçu" />
         <Tab value="activite" label="Activité" />
         <TabMenu
           label="Plus"
+          style={{'--tab-menu-label': '"Plus"'} as React.CSSProperties}
           options={[
             {value: 'reglages', label: 'Réglages'},
             {value: 'integrations', label: 'Intégrations'},

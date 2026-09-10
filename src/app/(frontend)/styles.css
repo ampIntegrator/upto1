@@ -232,7 +232,7 @@ body > [data-astryx-theme] {
    débordement en couleur silo quand son option est choisie ; libellés sur deux
    lignes dès 640 px (en dessous : une ligne, la barre défile, reco Astryx) ;
    calque de survol Astryx neutralisé (sinon il se superpose au fond silo 10 %) ;
-   icône d'onglet à 19 px, toujours en couleur silo.
+   icône d'onglet à 24 px, toujours en couleur silo ; libellé fixe du menu.
    Le panneau sous les onglets n'est pas un composant Astryx : .orbita-tab-stack
    (zone silo 10 %, bordée sur trois côtés, liseré dégradé en pied) et
    .orbita-tab-panel (carte) habillent le contenu du bloc. */
@@ -252,10 +252,20 @@ body > [data-astryx-theme] {
 }
 [data-astryx-theme^='orbita'] .astryx-tab > span:has(> svg),
 [data-astryx-theme^='orbita'] .astryx-tab > span > svg {
-  width: 19px !important;
-  height: 19px !important;
-  inline-size: 19px !important;
-  block-size: 19px !important;
+  width: 24px !important;
+  height: 24px !important;
+  inline-size: 24px !important;
+  block-size: 24px !important;
+}
+/* Menu de débordement : libellé fixe — Astryx affiche sinon l'option choisie,
+   ce qui change la largeur de l'onglet. Le texte d'origine est masqué et
+   remplacé par la variable --tab-menu-label posée sur le TabMenu
+   (style={{'--tab-menu-label': '"Plus"'}}) ; « Plus » par défaut. */
+[data-astryx-theme^='orbita'] .astryx-tab-menu > span:nth-child(2) {
+  display: none;
+}
+[data-astryx-theme^='orbita'] .astryx-tab-menu::before {
+  content: var(--tab-menu-label, 'Plus');
 }
 @media (min-width: 640px) {
   [data-astryx-theme^='orbita'] .astryx-tab,
