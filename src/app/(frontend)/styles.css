@@ -263,12 +263,53 @@ body > [data-astryx-theme] {
     white-space: normal;
   }
 }
+/* Trait actif qui glisse (maquette .tab-marker) : un seul trait, dessiné sur la
+   piste et ancré à l'onglet actif (CSS anchor positioning, sans JavaScript).
+   Sa position et sa largeur transitionnent d'un onglet à l'autre. Les traits
+   par onglet d'Astryx sont masqués. Navigateurs sans ancres : on garde le trait
+   Astryx en fondu. */
+@supports (anchor-name: --orbita) {
+  /* Le débord de focus d'Astryx (--_tab-strip-bleed : marge négative + padding
+     de 4 px pour laisser passer l'anneau de focus) est figé en permanence :
+     sinon la piste change de géométrie au premier focus et le trait saute. */
+  [data-astryx-theme^='orbita'] .astryx-tab-strip {
+    position: relative;
+    --_tab-strip-bleed: 4px !important;
+  }
+  /* L'ancre est le trait Astryx de l'onglet actif (invisible mais en place),
+     pas l'onglet lui-même : au focus, Astryx pose un anchor-name inline sur
+     l'onglet, ce qui débrancherait le glissement. */
+  [data-astryx-theme^='orbita'] .astryx-tab-indicator {
+    opacity: 0;
+    transition: none;
+  }
+  [data-astryx-theme^='orbita'] .astryx-tab-indicator[data-selected] {
+    anchor-name: --orbita-active-tab;
+  }
+  [data-astryx-theme^='orbita'] .astryx-tab-strip::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    height: 3px;
+    z-index: 1;
+    pointer-events: none;
+    background: light-dark(var(--color-accent), var(--color-highlight));
+    position-anchor: --orbita-active-tab;
+    left: anchor(left);
+    width: anchor-size(width);
+    transition:
+      left 0.42s cubic-bezier(0.65, 0.05, 0.36, 1),
+      width 0.42s cubic-bezier(0.65, 0.05, 0.36, 1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-astryx-theme^='orbita'] .astryx-tab-strip::after { transition: none; }
+  }
+}
 [data-astryx-theme^='orbita'] .orbita-tab-stack {
   position: relative;
   padding: 0;
   background: light-dark(var(--color-accent-muted), rgba(255, 255, 255, 0.04));
-  border: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.15));
-  border-top: 0;
+  border-inline: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.15));
 }
 [data-astryx-theme^='orbita'] .orbita-tab-stack::after {
   content: '';
