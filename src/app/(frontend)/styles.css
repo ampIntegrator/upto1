@@ -422,6 +422,8 @@ body > [data-astryx-theme] {
 }
 [data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item span:first-of-type { font-size: 14.5px !important; font-weight: var(--font-weight-semibold) !important; }
 [data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item span + span { font-size: 14px !important; color: var(--color-text-disabled) !important; }
+[data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item > div:first-child,
+[data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item span { transition: color var(--duration-medium) var(--ease-standard) !important; }
 [data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item:hover > div:first-child,
 [data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item:hover span { color: #fff !important; }
 

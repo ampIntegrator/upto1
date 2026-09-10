@@ -84,6 +84,30 @@
   transform: rotate(-34deg) translateX(25px);
 }
 
+/* ---- panneaux (méga-menu, sous-menu) : fondu + glissement de 6 px à l'ouverture et à la fermeture ---- */
+.megaWrap :global([popover]),
+.menuWrap :global([popover]) {
+  opacity: 1;
+  translate: 0 0;
+  transition:
+    opacity var(--duration-medium) var(--ease-standard),
+    translate var(--duration-medium) var(--ease-standard),
+    display var(--duration-medium) allow-discrete,
+    overlay var(--duration-medium) allow-discrete;
+}
+.megaWrap :global([popover]:not(:popover-open)),
+.menuWrap :global([popover]:not(:popover-open)) {
+  opacity: 0;
+  translate: 0 -6px;
+}
+@starting-style {
+  .megaWrap :global([popover]:popover-open),
+  .menuWrap :global([popover]:popover-open) {
+    opacity: 0;
+    translate: 0 -6px;
+  }
+}
+
 /* ---- entrées de navigation : soulignement silo qui se déploie au survol ---- */
 .desktopNav { height: var(--site-header-bar); gap: 2px; }
 .header[data-scrolled] .desktopNav { height: 60px; }
@@ -102,7 +126,7 @@
   background: var(--color-accent);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform var(--duration-medium) var(--ease-standard);
+  transition: transform var(--duration-medium) var(--ease-standard) !important;
 }
 .desktopNav :global(.astryx-top-nav-item:hover)::after,
 .desktopNav :global(.astryx-top-nav-item.selected)::after,
@@ -202,6 +226,8 @@
   transition: background-color var(--duration-medium) var(--ease-standard), color var(--duration-medium) var(--ease-standard);
 }
 .menuWrap :global([popover] a + a) { margin-top: 6px !important; }
+.menuWrap :global([popover] a > div:first-child),
+.menuWrap :global([popover] a span) { transition: color var(--duration-medium) var(--ease-standard) !important; }
 .menuWrap :global([popover] a > div:first-child) {
   width: 44px !important;
   height: 44px !important;
