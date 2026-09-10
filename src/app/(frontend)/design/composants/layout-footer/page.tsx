@@ -11,7 +11,7 @@ export const metadata = {title: 'Layout Footer — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="LayoutFooter" id="layout-footer" doc="layout" parent="Layout" category="Mise en page">
+      <ShowcaseBlock name="LayoutFooter" id="layout-footer" doc={"layout"} parent="Layout" category="Mise en page">
         <LayoutFooterShowcase />
       </ShowcaseBlock>
       <ComponentNav category="mise-en-page" current="layout-footer" />

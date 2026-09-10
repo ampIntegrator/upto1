@@ -11,7 +11,7 @@ export const metadata = {title: 'Segmented Control Item — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="SegmentedControlItem" id="segmented-control-item" doc="segmented-control" parent="SegmentedControl" category="Actions">
+      <ShowcaseBlock name="SegmentedControlItem" id="segmented-control-item" doc={"segmented-control"} parent="SegmentedControl" category="Actions">
         <SegmentedControlItemShowcase />
       </ShowcaseBlock>
       <ComponentNav category="actions" current="segmented-control-item" />

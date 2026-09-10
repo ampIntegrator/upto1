@@ -11,7 +11,7 @@ export const metadata = {title: 'Tooltip — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="Tooltip" id="tooltip" doc="tooltip" category="Surcouches">
+      <ShowcaseBlock name="Tooltip" id="tooltip" doc={"tooltip"} category="Surcouches">
         <TooltipShowcase />
       </ShowcaseBlock>
       <ComponentNav category="surcouches" current="tooltip" />

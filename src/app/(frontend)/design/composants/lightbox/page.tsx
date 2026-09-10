@@ -11,7 +11,7 @@ export const metadata = {title: 'Lightbox — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="Lightbox" id="lightbox" doc="lightbox" category="Surcouches">
+      <ShowcaseBlock name="Lightbox" id="lightbox" doc={"lightbox"} category="Surcouches">
         <LightboxShowcase />
       </ShowcaseBlock>
       <ComponentNav category="surcouches" current="lightbox" />

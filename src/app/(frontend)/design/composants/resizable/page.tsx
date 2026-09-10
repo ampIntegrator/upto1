@@ -11,7 +11,7 @@ export const metadata = {title: 'Resizable — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="Resizable" id="resizable" doc="resizable" category="Mise en page">
+      <ShowcaseBlock name="Resizable" id="resizable" doc={"resizable"} category="Mise en page">
         <ResizableShowcase />
       </ShowcaseBlock>
       <ComponentNav category="mise-en-page" current="resizable" />

@@ -11,7 +11,7 @@ export const metadata = {title: 'Aspect Ratio — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="AspectRatio" id="aspect-ratio" doc="aspect-ratio" category="Mise en page">
+      <ShowcaseBlock name="AspectRatio" id="aspect-ratio" doc={"aspect-ratio"} category="Mise en page">
         <AspectRatioShowcase />
       </ShowcaseBlock>
       <ComponentNav category="mise-en-page" current="aspect-ratio" />

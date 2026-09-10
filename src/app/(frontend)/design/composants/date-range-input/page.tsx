@@ -11,7 +11,7 @@ export const metadata = {title: 'Date Range Input — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="DateRangeInput" id="date-range-input" doc="date-range-input" dressed category="Formulaires">
+      <ShowcaseBlock name="DateRangeInput" id="date-range-input" doc={"date-range-input"} dressed category="Formulaires">
         <DateRangeInputShowcase />
       </ShowcaseBlock>
       <ComponentNav category="formulaires" current="date-range-input" />

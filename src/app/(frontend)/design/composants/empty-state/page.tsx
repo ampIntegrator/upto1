@@ -11,7 +11,7 @@ export const metadata = {title: 'Empty State — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="EmptyState" id="empty-state" doc="empty-state" category="Contenu">
+      <ShowcaseBlock name="EmptyState" id="empty-state" doc={"empty-state"} category="Contenu">
         <EmptyStateShowcase />
       </ShowcaseBlock>
       <ComponentNav category="contenu" current="empty-state" />

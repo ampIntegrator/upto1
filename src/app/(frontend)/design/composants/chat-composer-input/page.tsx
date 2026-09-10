@@ -11,7 +11,7 @@ export const metadata = {title: 'Chat Composer Input — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="ChatComposerInput" id="chat-composer-input" doc="chat-composer" parent="ChatComposer" category="Chat">
+      <ShowcaseBlock name="ChatComposerInput" id="chat-composer-input" doc={"chat-composer"} parent="ChatComposer" category="Chat">
         <ChatComposerInputShowcase />
       </ShowcaseBlock>
       <ComponentNav category="chat" current="chat-composer-input" />

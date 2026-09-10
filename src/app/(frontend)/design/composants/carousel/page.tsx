@@ -11,7 +11,7 @@ export const metadata = {title: 'Carousel — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="Carousel" id="carousel" doc="carousel" category="Conteneurs">
+      <ShowcaseBlock name="Carousel" id="carousel" doc={"carousel"} category="Conteneurs">
         <CarouselShowcase />
       </ShowcaseBlock>
       <ComponentNav category="conteneurs" current="carousel" />

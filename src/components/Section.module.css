@@ -13,13 +13,23 @@
 
 /* ---- padding vertical ---- */
 .section[data-spacing='none'] { padding-block: 0; }
+.section[data-spacing='xs'] { padding-block: 36px; }
 .section[data-spacing='sm'] { padding-block: 56px; }
 .section[data-spacing='md'] { padding-block: 96px; }
 .section[data-spacing='lg'] { padding-block: 128px; }
 @media (max-width: 639px) {
+  .section[data-spacing='xs'] { padding-block: 28px; }
   .section[data-spacing='sm'] { padding-block: 40px; }
   .section[data-spacing='md'] { padding-block: 56px; }
   .section[data-spacing='lg'] { padding-block: 72px; }
+}
+
+/* ---- papier (blanc / carte nuit) ---- */
+.section[data-background='paper'] { background-color: var(--color-background-surface); }
+
+/* ---- filets haut et bas (barre de chiffres) ---- */
+.section[data-dividers] {
+  border-block: var(--border-width) solid var(--color-border);
 }
 
 /* ---- textures (00-fondations §4 : filets discrets, clair seulement) ---- */

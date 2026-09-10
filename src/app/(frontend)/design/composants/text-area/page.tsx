@@ -11,7 +11,7 @@ export const metadata = {title: 'Text Area — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="TextArea" id="text-area" doc="text-area" dressed category="Formulaires">
+      <ShowcaseBlock name="TextArea" id="text-area" doc={"text-area"} dressed category="Formulaires">
         <TextAreaShowcase />
       </ShowcaseBlock>
       <ComponentNav category="formulaires" current="text-area" />

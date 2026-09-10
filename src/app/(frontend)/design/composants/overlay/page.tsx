@@ -11,7 +11,7 @@ export const metadata = {title: 'Overlay — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="Overlay" id="overlay" doc="overlay" category="Surcouches">
+      <ShowcaseBlock name="Overlay" id="overlay" doc={"overlay"} category="Surcouches">
         <OverlayShowcase />
       </ShowcaseBlock>
       <ComponentNav category="surcouches" current="overlay" />

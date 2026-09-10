@@ -11,7 +11,7 @@ export const metadata = {title: 'Radio List Item — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="RadioListItem" id="radio-list-item" doc="radio-list" parent="RadioList" category="Formulaires">
+      <ShowcaseBlock name="RadioListItem" id="radio-list-item" doc={"radio-list"} parent="RadioList" category="Formulaires">
         <RadioListItemShowcase />
       </ShowcaseBlock>
       <ComponentNav category="formulaires" current="radio-list-item" />

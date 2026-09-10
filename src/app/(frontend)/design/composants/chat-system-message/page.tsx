@@ -11,7 +11,7 @@ export const metadata = {title: 'Chat System Message — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="ChatSystemMessage" id="chat-system-message" doc="chat-system-message" category="Chat">
+      <ShowcaseBlock name="ChatSystemMessage" id="chat-system-message" doc={"chat-system-message"} category="Chat">
         <ChatSystemMessageShowcase />
       </ShowcaseBlock>
       <ComponentNav category="chat" current="chat-system-message" />

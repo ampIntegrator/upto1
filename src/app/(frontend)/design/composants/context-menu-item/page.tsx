@@ -11,7 +11,7 @@ export const metadata = {title: 'Context Menu Item — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="ContextMenuItem" id="context-menu-item" doc="context-menu" parent="ContextMenu" category="Surcouches">
+      <ShowcaseBlock name="ContextMenuItem" id="context-menu-item" doc={"context-menu"} parent="ContextMenu" category="Surcouches">
         <ContextMenuItemShowcase />
       </ShowcaseBlock>
       <ComponentNav category="surcouches" current="context-menu-item" />

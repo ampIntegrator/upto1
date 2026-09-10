@@ -11,7 +11,7 @@ export const metadata = {title: 'Select — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="Select" id="select" doc="selector" dressed category="Formulaires">
+      <ShowcaseBlock name="Select" id="select" doc={"selector"} dressed category="Formulaires">
         <SelectShowcase />
       </ShowcaseBlock>
       <ComponentNav category="formulaires" current="select" />

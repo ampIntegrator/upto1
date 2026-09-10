@@ -11,7 +11,7 @@ export const metadata = {title: 'Grid Span — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="GridSpan" id="grid-span" doc="grid" parent="Grid" category="Mise en page">
+      <ShowcaseBlock name="GridSpan" id="grid-span" doc={"grid"} parent="Grid" category="Mise en page">
         <GridSpanShowcase />
       </ShowcaseBlock>
       <ComponentNav category="mise-en-page" current="grid-span" />

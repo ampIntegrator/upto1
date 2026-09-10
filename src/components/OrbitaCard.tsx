@@ -23,6 +23,7 @@ import React from 'react';
 import {ArrowRightIcon, NUCLEO_ICONS, PinIcon, type NucleoIconKey} from '@/theme/icons/nucleo';
 import {IconSquare} from './IconSquare';
 import {OrbitaChip, type OrbitaChipTone} from './OrbitaChip';
+import {Stat} from './Stat';
 import styles from './OrbitaCard.module.css';
 
 export type OrbitaCardMedia =
@@ -72,11 +73,7 @@ export function OrbitaCard({preset = 'bloc', media = {type: 'none'}, title, leve
       case 'number':
         return (
           <div className={styles.numberMedia}>
-            <Text type="number" color="accent">
-              {media.prefix ? <span className={styles.sign}>{media.prefix} </span> : null}
-              {media.value}
-              {media.suffix ? <span className={styles.sign}> {media.suffix}</span> : null}
-            </Text>
+            <Stat value={media.value} prefix={media.prefix} suffix={media.suffix} size="card" align="center" />
           </div>
         );
       default:

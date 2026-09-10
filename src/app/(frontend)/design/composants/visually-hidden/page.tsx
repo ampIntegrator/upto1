@@ -11,7 +11,7 @@ export const metadata = {title: 'Visually Hidden — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="VisuallyHidden" id="visually-hidden" doc="visually-hidden" category="Utilitaires">
+      <ShowcaseBlock name="VisuallyHidden" id="visually-hidden" doc={"visually-hidden"} category="Utilitaires">
         <VisuallyHiddenShowcase />
       </ShowcaseBlock>
       <ComponentNav category="utilitaires" current="visually-hidden" />

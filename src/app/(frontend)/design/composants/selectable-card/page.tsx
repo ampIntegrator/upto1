@@ -11,7 +11,7 @@ export const metadata = {title: 'Selectable Card — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="SelectableCard" id="selectable-card" doc="selectable-card" category="Conteneurs">
+      <ShowcaseBlock name="SelectableCard" id="selectable-card" doc={"selectable-card"} category="Conteneurs">
         <SelectableCardShowcase />
       </ShowcaseBlock>
       <ComponentNav category="conteneurs" current="selectable-card" />

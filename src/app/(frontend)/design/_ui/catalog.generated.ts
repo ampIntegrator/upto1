@@ -1,5 +1,5 @@
 /* @generated par scripts/gen-catalog.mjs — ne pas éditer. */
-export type CatalogItem = {name: string; label: string; slug: string; href: string; dressed: boolean; parent: string | null; doc: string};
+export type CatalogItem = {name: string; label: string; slug: string; href: string; dressed: boolean; parent: string | null; doc: string | null};
 export type CatalogCategory = {slug: string; label: string; lead: string; href: string; items: CatalogItem[]};
 export const CATALOG: CatalogCategory[] = [
   {
@@ -177,6 +177,15 @@ export const CATALOG: CatalogCategory[] = [
     "lead": "Texte, titres, médias et éléments éditoriaux.",
     "href": "/design/composants#contenu",
     "items": [
+      {
+        "name": "Stat",
+        "label": "Stat",
+        "slug": "stat",
+        "href": "/design/composants/stat",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
       {
         "name": "Avatar",
         "label": "Avatar",

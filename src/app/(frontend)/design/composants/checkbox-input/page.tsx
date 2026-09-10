@@ -11,7 +11,7 @@ export const metadata = {title: 'Checkbox Input — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="CheckboxInput" id="checkbox-input" doc="checkbox-input" dressed category="Formulaires">
+      <ShowcaseBlock name="CheckboxInput" id="checkbox-input" doc={"checkbox-input"} dressed category="Formulaires">
         <CheckboxInputShowcase />
       </ShowcaseBlock>
       <ComponentNav category="formulaires" current="checkbox-input" />

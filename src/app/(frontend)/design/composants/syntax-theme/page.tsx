@@ -11,7 +11,7 @@ export const metadata = {title: 'Syntax Theme — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="SyntaxTheme" id="syntax-theme" doc="syntax-theme" category="Utilitaires">
+      <ShowcaseBlock name="SyntaxTheme" id="syntax-theme" doc={"syntax-theme"} category="Utilitaires">
         <SyntaxThemeShowcase />
       </ShowcaseBlock>
       <ComponentNav category="utilitaires" current="syntax-theme" />

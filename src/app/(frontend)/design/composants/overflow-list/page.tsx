@@ -11,7 +11,7 @@ export const metadata = {title: 'Overflow List — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="OverflowList" id="overflow-list" doc="overflow-list" category="Tables & listes">
+      <ShowcaseBlock name="OverflowList" id="overflow-list" doc={"overflow-list"} category="Tables & listes">
         <OverflowListShowcase />
       </ShowcaseBlock>
       <ComponentNav category="tables-listes" current="overflow-list" />

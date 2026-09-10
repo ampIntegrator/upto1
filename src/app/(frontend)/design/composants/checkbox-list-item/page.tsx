@@ -11,7 +11,7 @@ export const metadata = {title: 'Checkbox List Item — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="CheckboxListItem" id="checkbox-list-item" doc="checkbox-list" parent="CheckboxList" category="Formulaires">
+      <ShowcaseBlock name="CheckboxListItem" id="checkbox-list-item" doc={"checkbox-list"} parent="CheckboxList" category="Formulaires">
         <CheckboxListItemShowcase />
       </ShowcaseBlock>
       <ComponentNav category="formulaires" current="checkbox-list-item" />

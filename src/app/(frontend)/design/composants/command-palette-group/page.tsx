@@ -11,7 +11,7 @@ export const metadata = {title: 'Command Palette Group — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="CommandPaletteGroup" id="command-palette-group" doc="command-palette" parent="CommandPalette" category="Surcouches">
+      <ShowcaseBlock name="CommandPaletteGroup" id="command-palette-group" doc={"command-palette"} parent="CommandPalette" category="Surcouches">
         <CommandPaletteGroupShowcase />
       </ShowcaseBlock>
       <ComponentNav category="surcouches" current="command-palette-group" />

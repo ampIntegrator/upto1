@@ -18,8 +18,8 @@ export function ShowcaseBlock({
 }: {
   name: string;
   id: string;
-  /** slug de la page de doc astryx.atmeta.com/components/<doc> */
-  doc: string;
+  /** slug de la page de doc astryx.atmeta.com/components/<doc> ; null = composant propre au DS */
+  doc: string | null;
   /** composant parent quand il s'agit d'une sous-partie (ex. TabMenu → TabList) */
   parent?: string;
   /** habillé Orbita : démo maison à la place de celle d'Astryx */
@@ -41,9 +41,13 @@ export function ShowcaseBlock({
           </HStack>
           {parent ? <Text type="supporting">Sous-composant de {parent}</Text> : null}
         </VStack>
-        <Link href={`https://astryx.atmeta.com/components/${doc}`} target="_blank" rel="noreferrer">
-          Doc Astryx
-        </Link>
+        {doc ? (
+          <Link href={`https://astryx.atmeta.com/components/${doc}`} target="_blank" rel="noreferrer">
+            Doc Astryx
+          </Link>
+        ) : (
+          <Text type="supporting">Composant du design system</Text>
+        )}
       </HStack>
       <Card padding={6}>{children}</Card>
     </VStack>

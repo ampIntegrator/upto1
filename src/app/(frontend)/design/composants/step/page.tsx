@@ -11,7 +11,7 @@ export const metadata = {title: 'Step — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="Step" id="step" doc="stepper" parent="Stepper" category="Navigation">
+      <ShowcaseBlock name="Step" id="step" doc={"stepper"} parent="Stepper" category="Navigation">
         <StepShowcase />
       </ShowcaseBlock>
       <ComponentNav category="navigation" current="step" />

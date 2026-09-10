@@ -11,7 +11,7 @@ export const metadata = {title: 'Progress Bar — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="ProgressBar" id="progress-bar" doc="progress-bar" category="Retours & statuts">
+      <ShowcaseBlock name="ProgressBar" id="progress-bar" doc={"progress-bar"} category="Retours & statuts">
         <ProgressBarShowcase />
       </ShowcaseBlock>
       <ComponentNav category="retours" current="progress-bar" />

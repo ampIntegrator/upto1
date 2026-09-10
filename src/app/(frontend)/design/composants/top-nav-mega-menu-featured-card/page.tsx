@@ -11,7 +11,7 @@ export const metadata = {title: 'Top Nav Mega Menu Featured Card — Orbita × A
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="TopNavMegaMenuFeaturedCard" id="top-nav-mega-menu-featured-card" doc="top-nav-mega-menu" parent="TopNavMegaMenu" category="Navigation">
+      <ShowcaseBlock name="TopNavMegaMenuFeaturedCard" id="top-nav-mega-menu-featured-card" doc={"top-nav-mega-menu"} parent="TopNavMegaMenu" category="Navigation">
         <TopNavMegaMenuFeaturedCardShowcase />
       </ShowcaseBlock>
       <ComponentNav category="navigation" current="top-nav-mega-menu-featured-card" />

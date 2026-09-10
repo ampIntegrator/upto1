@@ -44,8 +44,7 @@
 }
 .postImg img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .iconMedia { align-self: center; margin-bottom: 28px; }
-.numberMedia { text-align: center; margin-bottom: 16px; }
-.sign { color: light-dark(var(--color-highlight-deep), var(--color-highlight)); font-size: 0.62em; font-weight: 600; letter-spacing: 0; white-space: pre; }
+.numberMedia { display: flex; justify-content: center; margin-bottom: 16px; }
 
 /* métadonnées (article / réalisation) */
 .meta {

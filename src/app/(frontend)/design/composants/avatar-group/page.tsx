@@ -11,7 +11,7 @@ export const metadata = {title: 'Avatar Group — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="AvatarGroup" id="avatar-group" doc="avatar-group" category="Contenu">
+      <ShowcaseBlock name="AvatarGroup" id="avatar-group" doc={"avatar-group"} category="Contenu">
         <AvatarGroupShowcase />
       </ShowcaseBlock>
       <ComponentNav category="contenu" current="avatar-group" />

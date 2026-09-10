@@ -11,7 +11,7 @@ export const metadata = {title: 'Mobile Nav — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="MobileNav" id="mobile-nav" doc="mobile-nav" category="Navigation">
+      <ShowcaseBlock name="MobileNav" id="mobile-nav" doc={"mobile-nav"} category="Navigation">
         <MobileNavShowcase />
       </ShowcaseBlock>
       <ComponentNav category="navigation" current="mobile-nav" />

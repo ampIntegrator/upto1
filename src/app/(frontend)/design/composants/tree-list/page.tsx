@@ -11,7 +11,7 @@ export const metadata = {title: 'Tree List — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="TreeList" id="tree-list" doc="tree-list" category="Tables & listes">
+      <ShowcaseBlock name="TreeList" id="tree-list" doc={"tree-list"} category="Tables & listes">
         <TreeListShowcase />
       </ShowcaseBlock>
       <ComponentNav category="tables-listes" current="tree-list" />

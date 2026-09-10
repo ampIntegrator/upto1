@@ -11,7 +11,7 @@ export const metadata = {title: 'App Shell — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="AppShell" id="app-shell" doc="app-shell" category="Mise en page">
+      <ShowcaseBlock name="AppShell" id="app-shell" doc={"app-shell"} category="Mise en page">
         <AppShellShowcase />
       </ShowcaseBlock>
       <ComponentNav category="mise-en-page" current="app-shell" />

@@ -7,8 +7,8 @@
  * Elle ne porte que l'arrière-plan et le padding vertical ; le contenu se met
  * dans un <Container>, puis dans une Grid de 12 colonnes.
  *
- *   background : 'light' | 'grid' | 'dots' | 'losange' (textures, clair
- *                seulement) | 'night' | 'image' | 'video'
+ *   background : 'light' (fond de page) | 'paper' (blanc) | 'grid' | 'dots' |
+ *                'losange' (textures, clair seulement) | 'night' | 'image' | 'video'
  *   image / video : le média (couvre toute la section)
  *   overlay    : calque noir posé sur l'image ou la vidéo, sous le contenu ;
  *                opacité de 0 à 1, réglable en admin (0 = aucun)
@@ -16,7 +16,8 @@
  *                disponible partout)
  *   Le voile et le halo de la maquette 13 ont été retirés : l'overlay est le seul
  *   réglage d'assombrissement.
- *   spacing    : padding vertical 'sm' | 'md' | 'lg' | 'none'
+ *   spacing    : padding vertical 'none' | 'xs' | 'sm' | 'md' | 'lg'
+ *   dividers   : filets haut et bas (barre de chiffres)
  *
  * night, image et video basculent leur contenu en mode nuit (Theme dark) :
  * titres, textes, boutons et cartes suivent d'eux-mêmes.
@@ -29,8 +30,8 @@ import React from 'react';
 import {useOrbitaTheme} from '@/theme/OrbitaThemeProvider';
 import styles from './Section.module.css';
 
-export type SectionBackground = 'light' | 'grid' | 'dots' | 'losange' | 'night' | 'image' | 'video';
-export type SectionSpacing = 'none' | 'sm' | 'md' | 'lg';
+export type SectionBackground = 'light' | 'paper' | 'grid' | 'dots' | 'losange' | 'night' | 'image' | 'video';
+export type SectionSpacing = 'none' | 'xs' | 'sm' | 'md' | 'lg';
 
 export type SectionProps = {
   background?: SectionBackground;
@@ -41,6 +42,8 @@ export type SectionProps = {
   /** liseré dégradé silo → highlight → silo en pied */
   edge?: boolean;
   spacing?: SectionSpacing;
+  /** filets haut et bas */
+  dividers?: boolean;
   /** hauteur minimale (ex. 600 pour un bloc image) */
   minHeight?: number | string;
   id?: string;
@@ -50,7 +53,7 @@ export type SectionProps = {
 const DARK: SectionBackground[] = ['night', 'image', 'video'];
 const MEDIA: SectionBackground[] = ['image', 'video'];
 
-export function Section({background = 'light', image, video, overlay = 0, edge, spacing = 'md', minHeight, id, children}: SectionProps) {
+export function Section({background = 'light', image, video, overlay = 0, edge, spacing = 'md', dividers, minHeight, id, children}: SectionProps) {
   const {theme} = useOrbitaTheme();
   const isMedia = MEDIA.includes(background);
   const showEdge = edge ?? isMedia;
@@ -63,6 +66,7 @@ export function Section({background = 'light', image, video, overlay = 0, edge, 
       data-background={background}
       data-spacing={spacing}
       data-edge={showEdge || undefined}
+      data-dividers={dividers || undefined}
       style={minHeight != null ? {minHeight} : undefined}
     >
       {background === 'image' && image ? (

@@ -11,7 +11,7 @@ export const metadata = {title: 'Chat Dictation Button — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="ChatDictationButton" id="chat-dictation-button" doc="chat-composer" parent="ChatComposer" category="Chat">
+      <ShowcaseBlock name="ChatDictationButton" id="chat-dictation-button" doc={"chat-composer"} parent="ChatComposer" category="Chat">
         <ChatDictationButtonShowcase />
       </ShowcaseBlock>
       <ComponentNav category="chat" current="chat-dictation-button" />

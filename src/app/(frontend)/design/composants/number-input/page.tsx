@@ -11,7 +11,7 @@ export const metadata = {title: 'Number Input — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="NumberInput" id="number-input" doc="number-input" dressed category="Formulaires">
+      <ShowcaseBlock name="NumberInput" id="number-input" doc={"number-input"} dressed category="Formulaires">
         <NumberInputShowcase />
       </ShowcaseBlock>
       <ComponentNav category="formulaires" current="number-input" />

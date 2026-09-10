@@ -11,7 +11,7 @@ export const metadata = {title: 'Time Input — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="TimeInput" id="time-input" doc="time-input" dressed category="Formulaires">
+      <ShowcaseBlock name="TimeInput" id="time-input" doc={"time-input"} dressed category="Formulaires">
         <TimeInputShowcase />
       </ShowcaseBlock>
       <ComponentNav category="formulaires" current="time-input" />

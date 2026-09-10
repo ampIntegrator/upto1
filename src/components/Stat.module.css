@@ -1,0 +1,17 @@
+.stat { align-items: flex-start; text-align: left; }
+.stat[data-align='center'] { align-items: center; text-align: center; }
+.value { white-space: nowrap; }
+.stat[data-size='bar'] .value { font-size: 40px; letter-spacing: -0.02em; }
+/* préfixe / suffixe : 62 % du nombre, highlight-deep (highlight en nuit) */
+.sign {
+  color: light-dark(var(--color-highlight-deep), var(--color-highlight));
+  font-size: 0.62em;
+  font-weight: 600;
+  letter-spacing: 0;
+  white-space: pre;
+}
+.label {
+  margin-top: 8px;
+  color: var(--color-text-disabled);
+  letter-spacing: 0.1em;
+}

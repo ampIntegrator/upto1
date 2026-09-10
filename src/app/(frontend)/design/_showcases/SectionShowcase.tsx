@@ -16,6 +16,7 @@ const VIDEO = 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flo
 
 const MODES: Array<{bg: SectionBackground; label: string; note: string}> = [
   {bg: 'light', label: 'Clair', note: 'Fond de page, sans texture.'},
+  {bg: 'paper', label: 'Papier', note: 'Blanc (carte en nuit) : barres de chiffres, bandes sur fond de page.'},
   {bg: 'grid', label: 'Texture grid', note: 'Filets 48 px (00-fondations §4).'},
   {bg: 'dots', label: 'Texture points', note: 'Points 32 px.'},
   {bg: 'losange', label: 'Texture losanges', note: 'Losanges 32 px.'},

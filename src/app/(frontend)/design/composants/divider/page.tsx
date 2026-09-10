@@ -11,7 +11,7 @@ export const metadata = {title: 'Divider — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="Divider" id="divider" doc="divider" category="Mise en page">
+      <ShowcaseBlock name="Divider" id="divider" doc={"divider"} category="Mise en page">
         <DividerShowcase />
       </ShowcaseBlock>
       <ComponentNav category="mise-en-page" current="divider" />

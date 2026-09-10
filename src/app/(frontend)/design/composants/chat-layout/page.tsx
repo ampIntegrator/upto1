@@ -11,7 +11,7 @@ export const metadata = {title: 'Chat Layout — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="ChatLayout" id="chat-layout" doc="chat-layout" category="Chat">
+      <ShowcaseBlock name="ChatLayout" id="chat-layout" doc={"chat-layout"} category="Chat">
         <ChatLayoutShowcase />
       </ShowcaseBlock>
       <ComponentNav category="chat" current="chat-layout" />

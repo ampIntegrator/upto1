@@ -11,7 +11,7 @@ export const metadata = {title: 'Dialog Header — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="DialogHeader" id="dialog-header" doc="dialog" parent="Dialog" category="Surcouches">
+      <ShowcaseBlock name="DialogHeader" id="dialog-header" doc={"dialog"} parent="Dialog" category="Surcouches">
         <DialogHeaderShowcase />
       </ShowcaseBlock>
       <ComponentNav category="surcouches" current="dialog-header" />

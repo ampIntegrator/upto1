@@ -11,7 +11,7 @@ export const metadata = {title: 'Bottom Sheet Switcher — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="BottomSheetSwitcher" id="bottom-sheet-switcher" doc="bottom-sheet-switcher" category="Surcouches">
+      <ShowcaseBlock name="BottomSheetSwitcher" id="bottom-sheet-switcher" doc={"bottom-sheet-switcher"} category="Surcouches">
         <BottomSheetSwitcherShowcase />
       </ShowcaseBlock>
       <ComponentNav category="surcouches" current="bottom-sheet-switcher" />

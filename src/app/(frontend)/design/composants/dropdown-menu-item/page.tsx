@@ -11,7 +11,7 @@ export const metadata = {title: 'Dropdown Menu Item — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="DropdownMenuItem" id="dropdown-menu-item" doc="dropdown-menu" parent="DropdownMenu" category="Actions">
+      <ShowcaseBlock name="DropdownMenuItem" id="dropdown-menu-item" doc={"dropdown-menu"} parent="DropdownMenu" category="Actions">
         <DropdownMenuItemShowcase />
       </ShowcaseBlock>
       <ComponentNav category="actions" current="dropdown-menu-item" />

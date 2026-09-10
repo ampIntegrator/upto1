@@ -11,7 +11,7 @@ export const metadata = {title: 'Icon Button — Orbita × Astryx'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="IconButton" id="icon-button" doc="icon-button" category="Actions">
+      <ShowcaseBlock name="IconButton" id="icon-button" doc={"icon-button"} category="Actions">
         <IconButtonShowcase />
       </ShowcaseBlock>
       <ComponentNav category="actions" current="icon-button" />
