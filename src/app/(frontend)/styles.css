@@ -230,16 +230,32 @@ body > [data-astryx-theme] {
 /* Onglets (06-tabs) : compléments au thème orbita.ts (section ONGLETS) pour ce
    que defineTheme ne cible pas. Séparateur vertical entre onglets ; menu de
    débordement en couleur silo quand son option est choisie ; libellés sur deux
-   lignes dès 640 px (en dessous : une ligne, la barre défile, reco Astryx).
+   lignes dès 640 px (en dessous : une ligne, la barre défile, reco Astryx) ;
+   calque de survol Astryx neutralisé (sinon il se superpose au fond silo 10 %) ;
+   icône d'onglet à 19 px, toujours en couleur silo.
    Le panneau sous les onglets n'est pas un composant Astryx : .orbita-tab-stack
-   (zone silo 10 %, bordée sur trois côtés) et .orbita-tab-panel (carte + liseré
-   dégradé) habillent le contenu du bloc. */
+   (zone silo 10 %, bordée sur trois côtés, liseré dégradé en pied) et
+   .orbita-tab-panel (carte) habillent le contenu du bloc. */
 [data-astryx-theme^='orbita'] .astryx-tab-strip > .astryx-tab + .astryx-tab,
 [data-astryx-theme^='orbita'] .astryx-tab-strip > .astryx-tab + .astryx-tab-menu {
   border-inline-start: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.15));
 }
 [data-astryx-theme^='orbita'] .astryx-tab-menu:has(.astryx-tab-indicator[data-selected]) {
   color: light-dark(var(--color-text-accent), var(--color-highlight));
+}
+[data-astryx-theme^='orbita'] .astryx-tab > span[aria-hidden]:first-child:empty,
+[data-astryx-theme^='orbita'] .astryx-tab-menu > span[aria-hidden]:first-child:empty {
+  background: transparent;
+}
+[data-astryx-theme^='orbita'] .astryx-tab > span:has(> svg) {
+  color: light-dark(var(--color-icon-accent), var(--color-highlight));
+}
+[data-astryx-theme^='orbita'] .astryx-tab > span:has(> svg),
+[data-astryx-theme^='orbita'] .astryx-tab > span > svg {
+  width: 19px !important;
+  height: 19px !important;
+  inline-size: 19px !important;
+  block-size: 19px !important;
 }
 @media (min-width: 640px) {
   [data-astryx-theme^='orbita'] .astryx-tab,
@@ -248,24 +264,23 @@ body > [data-astryx-theme] {
   }
 }
 [data-astryx-theme^='orbita'] .orbita-tab-stack {
-  padding: 40px;
+  position: relative;
+  padding: 0;
   background: light-dark(var(--color-accent-muted), rgba(255, 255, 255, 0.04));
   border: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.15));
   border-top: 0;
 }
-[data-astryx-theme^='orbita'] .orbita-tab-panel {
-  position: relative;
-  padding: 44px 56px;
-  background: light-dark(var(--color-background-surface), var(--color-night));
-}
-[data-astryx-theme^='orbita'] .orbita-tab-panel::after {
+[data-astryx-theme^='orbita'] .orbita-tab-stack::after {
   content: '';
   position: absolute;
   inset: auto 0 0 0;
   height: 4px;
   background: linear-gradient(90deg, var(--color-highlight) 0%, var(--color-accent) 50%, var(--color-highlight) 100%);
 }
+[data-astryx-theme^='orbita'] .orbita-tab-panel {
+  padding: 44px 56px;
+  background: light-dark(var(--color-background-surface), var(--color-night));
+}
 @media (max-width: 639px) {
-  [data-astryx-theme^='orbita'] .orbita-tab-stack { padding: 20px; }
   [data-astryx-theme^='orbita'] .orbita-tab-panel { padding: 28px 24px; }
 }

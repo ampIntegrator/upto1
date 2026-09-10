@@ -418,7 +418,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           borderColor: 'light-dark(var(--color-border), rgba(255,255,255,.15))',
         },
       },
-      'tab-strip': {base: {height: 'auto'}},
+      'tab-strip': {base: {height: 'auto', gap: '0'}},
       // un onglet (et le déclencheur du menu, qui se présente comme un onglet)
       ...Object.fromEntries(
         ['tab', 'tab-menu'].map((k) => [

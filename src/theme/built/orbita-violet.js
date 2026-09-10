@@ -770,7 +770,8 @@ export const orbitaVioletTheme = {
     },
     "tab-strip": {
       "base": {
-        "height": "auto"
+        "height": "auto",
+        "gap": "0"
       }
     },
     "tab": {
