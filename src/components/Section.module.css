@@ -41,6 +41,8 @@
 .section[data-dividers] {
   border-block: var(--border-width) solid var(--color-border);
 }
+/* deux sections à filets qui se suivent : un seul filet entre elles */
+.section[data-dividers] + .section[data-dividers] { border-top: 0; }
 
 /* ---- textures (00-fondations §4 : filets discrets, clair seulement) ----
    Décalées d'une demi-cellule : sans cela, le premier filet tombe sur le bord de
