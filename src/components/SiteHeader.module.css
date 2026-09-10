@@ -149,6 +149,7 @@
   gap: 40px;
   width: 100% !important;
   max-width: none !important;
+  padding: 0 !important; /* Astryx pose 12 px ; la zone libre doit courir bord à bord */
 }
 .megaWrap :global([popover] [role='group'] .astryx-grid) {
   display: flex !important;
