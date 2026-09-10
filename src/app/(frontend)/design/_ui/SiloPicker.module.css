@@ -1,0 +1,25 @@
+.swatch {
+  position: relative;
+  display: block;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+}
+.input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.dot {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--swatch);
+  border-radius: 0;
+  transition: border-radius var(--duration-medium) var(--ease-standard), transform var(--duration-medium) var(--ease-standard);
+}
+.swatch:hover .dot { transform: scale(1.08); }
+.input:checked + .dot { border-radius: 50%; }
+.input:focus-visible + .dot { outline: 2px solid var(--color-accent); outline-offset: 2px; }

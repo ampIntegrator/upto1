@@ -259,7 +259,7 @@ export const orbitaGreenTheme = {
         "display": "inline-flex",
         "alignItems": "center",
         "gap": "14px",
-        "fontSize": "0.72rem",
+        "fontSize": "15px",
         "fontWeight": "var(--font-weight-semibold)",
         "letterSpacing": "0.16em",
         "textTransform": "uppercase",

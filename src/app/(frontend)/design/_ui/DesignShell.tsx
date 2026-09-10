@@ -1,7 +1,6 @@
 'use client';
 
 import {AppShell} from '@astryxdesign/core/AppShell';
-import {Selector} from '@astryxdesign/core/Selector';
 import {SideNav, SideNavHeading, SideNavItem, SideNavSection} from '@astryxdesign/core/SideNav';
 import {Icon} from '@astryxdesign/core/Icon';
 import {VStack} from '@astryxdesign/core/Stack';
@@ -11,7 +10,7 @@ import React, {useMemo, useState} from 'react';
 
 import {SearchIcon} from '@/theme/icons/nucleo';
 
-import {SILO_LABELS, SILO_NAMES, type SiloName} from '@/theme';
+import {SiloPicker} from './SiloPicker';
 import {useOrbitaTheme} from '@/theme/OrbitaThemeProvider';
 import styles from './DesignShell.module.css';
 import {CATALOG} from './catalog.generated';
@@ -24,13 +23,7 @@ function ThemeControls({query, onQuery}: {query: string; onQuery: (q: string) =>
   const {silo, setSilo} = useOrbitaTheme();
   return (
     <VStack gap={2} padding={2}>
-      <Selector
-        label="Silo d'accent"
-        value={silo}
-        onChange={(v) => setSilo(v as SiloName)}
-        options={SILO_NAMES.map((s) => ({value: s, label: SILO_LABELS[s]}))}
-        size="sm"
-      />
+      <SiloPicker value={silo} onChange={setSilo} />
       <TextInput
         label="Filtrer le catalogue"
         isLabelHidden
