@@ -762,7 +762,7 @@ export const orbitaMagentaTheme = {
       "base": {
         "height": "auto",
         "fontFamily": "var(--font-family-body)",
-        "backgroundColor": "light-dark(color-mix(in srgb, var(--color-highlight) 12%, var(--color-background-surface)), var(--color-background-card))",
+        "backgroundColor": "light-dark(var(--color-background-surface), var(--color-background-card))",
         "borderWidth": "var(--border-width)",
         "borderStyle": "solid",
         "borderColor": "light-dark(var(--color-border), rgba(255,255,255,.15))"

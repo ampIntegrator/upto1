@@ -413,9 +413,8 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         base: {
           height: 'auto',
           fontFamily: 'var(--font-family-body)',
-          // fond très clair à partir du highlight du silo, OPAQUE (mélangé au papier :
-          // sur une texture, un fond translucide laisse voir les points) ; nuit : fond carte
-          backgroundColor: 'light-dark(color-mix(in srgb, var(--color-highlight) 12%, var(--color-background-surface)), var(--color-background-card))',
+          // barre sur papier (maquette 06) ; la teinte highlight va sur le panneau de contenu
+          backgroundColor: 'light-dark(var(--color-background-surface), var(--color-background-card))',
           borderWidth: 'var(--border-width)',
           borderStyle: 'solid',
           borderColor: 'light-dark(var(--color-border), rgba(255,255,255,.15))',

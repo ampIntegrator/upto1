@@ -969,7 +969,7 @@
   .astryx-tab-list {
     height: auto;
     font-family: var(--font-family-body);
-    background-color: light-dark(color-mix(in srgb, var(--color-highlight) 12%, var(--color-background-surface)), var(--color-background-card));
+    background-color: light-dark(var(--color-background-surface), var(--color-background-card));
     border-width: var(--border-width);
     border-style: solid;
     border-color: light-dark(var(--color-border), rgba(255,255,255,.15));
