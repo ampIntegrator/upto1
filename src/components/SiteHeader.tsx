@@ -53,11 +53,15 @@ function NavEntries({nav, currentHref}: {nav: SiteNavEntry[]; currentHref?: stri
       {nav.map((e) => {
         if (e.kind === 'link') return <TopNavItem key={e.label} label={e.label} href={e.href} isSelected={e.href === currentHref} />;
         if (e.kind === 'menu') {
-          return <TopNavMenu key={e.label} label={e.label} items={e.items.map((it) => ({title: it.title, description: it.description, icon: <LeafIcon iconKey={it.iconKey} />, href: it.href}))} />;
+          return (
+            <HStack key={e.label} className={styles.menuWrap} vAlign="stretch">
+              <TopNavMenu label={e.label} items={e.items.map((it) => ({title: it.title, description: it.description, icon: <LeafIcon iconKey={it.iconKey} />, href: it.href}))} />
+            </HStack>
+          );
         }
         return (
+          <HStack key={e.label} className={styles.megaWrap} vAlign="stretch">
           <TopNavMegaMenu
-            key={e.label}
             label={e.label}
             items={
               <HStack gap={8} align="start" className={styles.megaGroups}>
@@ -77,6 +81,7 @@ function NavEntries({nav, currentHref}: {nav: SiteNavEntry[]; currentHref?: stri
               ) : undefined
             }
           />
+          </HStack>
         );
       })}
     </>

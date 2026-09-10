@@ -114,7 +114,7 @@
 /* méga-menu : bande blanche pleine largeur sous la barre (maquette), contenu dans
    le container. Le popover Astryx est fixé et ancré à la barre : on garde l'ancre
    pour le haut, on étire de bord à bord. */
-.desktopNav :global(.astryx-top-nav-mega-menu ~ [popover]) {
+.megaWrap :global([popover]) {
   position: fixed;
   position-area: none !important;
   top: anchor(bottom) !important;
@@ -124,7 +124,7 @@
   max-width: none !important;
   margin: 0 !important;
 }
-.desktopNav :global(.astryx-top-nav-mega-menu ~ [popover] > .astryx-popover-surface) {
+.megaWrap :global([popover] > .astryx-popover-surface) {
   width: 100% !important;
   padding: 0 !important;
   border: 0 !important;
@@ -132,34 +132,89 @@
   box-shadow: 0 30px 70px rgba(12, 20, 40, 0.18) !important;
   background: var(--color-background-surface) !important;
 }
-.desktopNav :global(.astryx-top-nav-mega-menu ~ [popover] [role='group']) {
+.megaWrap :global([popover] [role='group']) {
   width: 100%;
   max-width: 1440px;
   margin-inline: auto;
-  padding: 30px 20px;
+  padding: 0 20px;
   box-sizing: border-box;
 }
+.megaWrap,
+.menuWrap { height: 100%; }
 /* intérieur : grille de trois colonnes égales — les groupes de liens sur deux tiers,
    la zone libre (carte mise en avant, article, réalisation…) sur le dernier tiers */
-.desktopNav :global(.astryx-top-nav-mega-menu ~ [popover] [role='group'] > div) {
+.megaWrap :global([popover] [role='group'] > div) {
   display: grid !important;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 40px;
   width: 100% !important;
   max-width: none !important;
 }
-.desktopNav :global(.astryx-top-nav-mega-menu ~ [popover] [role='group'] .astryx-grid) {
+.megaWrap :global([popover] [role='group'] .astryx-grid) {
   display: flex !important;
   grid-column: span 2;
   min-width: 0;
 }
-.desktopNav :global(.astryx-top-nav-mega-menu ~ [popover] [role='group'] > div > div:has(> .astryx-top-nav-mega-menu-featured-card)) {
+.megaWrap :global([popover] [role='group'] > div > div:has(> .astryx-top-nav-mega-menu-featured-card)) {
   grid-column: span 1;
   min-width: 0;
 }
 /* méga-menu : groupes côte à côte, eyebrow + filet */
-.megaGroups { min-width: 0; width: 100%; gap: 40px; }
-.megaGroup { flex: 1 1 0; min-width: 0; }
+.megaGroups { min-width: 0; width: 100%; gap: 0; }
+/* colonnes (maquette) : padding 30 × 32, filet vertical entre les groupes */
+.megaGroup { flex: 1 1 0; min-width: 0; padding: 30px 32px 30px 0; }
+.megaGroup + .megaGroup { padding-left: 32px; border-left: var(--border-width) solid var(--color-border); }
+.megaWrap :global(.astryx-top-nav-mega-menu-featured-card img) { height: 168px; object-fit: cover; }
+
+/* ---- sous-menu simple (maquette .submenu) : 340 px sous son déclencheur, papier
+   bordé + ombre, items sur fond de page espacés de 6 px, icône silo, survol silo ---- */
+.menuWrap :global(.astryx-top-nav-menu) { anchor-name: --site-submenu !important; } /* !important : Astryx pose son propre nom d'ancre en inline */
+.menuWrap :global([popover]) {
+  position: fixed;
+  position-anchor: --site-submenu !important;
+  position-area: none !important;
+  top: anchor(bottom) !important;
+  left: anchor(left) !important;
+  right: auto !important;
+  width: auto !important;
+  min-width: 340px;
+  margin: 0 !important;
+}
+.menuWrap :global([popover] > .astryx-popover-surface) {
+  padding: 8px !important;
+  border: var(--border-width) solid var(--color-border) !important;
+  border-top: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: 0 26px 60px rgba(12, 20, 40, 0.16) !important;
+  background: var(--color-background-surface) !important;
+}
+.menuWrap :global([popover] a) {
+  display: flex !important;
+  align-items: center;
+  gap: 14px !important;
+  padding: 12px 14px !important;
+  border-radius: 0 !important;
+  background: var(--color-background-body) !important;
+  color: var(--color-text-primary) !important;
+  transition: background-color var(--duration-medium) var(--ease-standard), color var(--duration-medium) var(--ease-standard);
+}
+.menuWrap :global([popover] a + a) { margin-top: 6px !important; }
+.menuWrap :global([popover] a > div:first-child) {
+  width: 44px !important;
+  height: 44px !important;
+  flex: 0 0 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent !important;
+  border: 0 !important;
+  color: var(--color-accent) !important;
+}
+.menuWrap :global([popover] a span:first-of-type) { font-size: 14.5px !important; font-weight: var(--font-weight-semibold) !important; color: var(--color-text-primary) !important; }
+.menuWrap :global([popover] a span + span) { font-size: 14px !important; color: var(--color-text-disabled) !important; }
+.menuWrap :global([popover] a:hover) { background: var(--color-accent) !important; }
+.menuWrap :global([popover] a:hover > div:first-child),
+.menuWrap :global([popover] a:hover span) { color: #fff !important; }
 .megaTitle {
   display: flex;
   align-items: center;

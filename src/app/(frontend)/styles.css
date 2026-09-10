@@ -411,3 +411,16 @@ body > [data-astryx-theme] {
   color: var(--color-text-secondary);
   font-weight: var(--font-weight-medium);
 }
+/* item de méga-menu : icône silo 24 px dans 44 px sans boîte, titre 14,5 semi-gras,
+   description 14 px grise ; survol : tout en blanc */
+[data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item > div:first-child {
+  width: 44px !important;
+  height: 44px !important;
+  background: transparent !important;
+  border: 0 !important;
+  color: var(--color-accent) !important;
+}
+[data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item span:first-of-type { font-size: 14.5px !important; font-weight: var(--font-weight-semibold) !important; }
+[data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item span + span { font-size: 14px !important; color: var(--color-text-disabled) !important; }
+[data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item:hover > div:first-child,
+[data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item:hover span { color: #fff !important; }

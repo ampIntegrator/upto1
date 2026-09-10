@@ -249,7 +249,7 @@ export const orbitaVioletTheme = {
         "lineHeight": "var(--text-display-3-leading)"
       },
       "type:eyebrow": {
-        "fontSize": "0.72rem",
+        "fontSize": "14px",
         "fontWeight": "var(--font-weight-semibold)",
         "letterSpacing": "0.16em",
         "textTransform": "uppercase",
@@ -299,19 +299,19 @@ export const orbitaVioletTheme = {
         "color": "var(--color-text-accent)"
       },
       "type:result": {
-        "fontSize": "12px",
+        "fontSize": "14px",
         "fontWeight": "var(--font-weight-semibold)",
         "letterSpacing": "0.02em",
         "color": "light-dark(var(--color-text-accent), var(--color-highlight))",
         "whiteSpace": "nowrap"
       },
       "type:date": {
-        "fontSize": "12px",
+        "fontSize": "14px",
         "color": "var(--color-text-disabled)",
         "whiteSpace": "nowrap"
       },
       "type:tag": {
-        "fontSize": "0.7rem",
+        "fontSize": "14px",
         "fontWeight": "var(--font-weight-medium)",
         "letterSpacing": "0.14em",
         "textTransform": "uppercase",
@@ -823,6 +823,7 @@ export const orbitaVioletTheme = {
       "base": {
         "height": "100%",
         "padding": "0 14px",
+        "gap": "6px",
         "borderRadius": "0",
         "backgroundColor": "transparent",
         "fontSize": "14.5px",
@@ -844,6 +845,7 @@ export const orbitaVioletTheme = {
       "base": {
         "height": "100%",
         "padding": "0 14px",
+        "gap": "6px",
         "borderRadius": "0",
         "backgroundColor": "transparent",
         "fontSize": "14.5px",
@@ -865,6 +867,7 @@ export const orbitaVioletTheme = {
       "base": {
         "height": "100%",
         "padding": "0 14px",
+        "gap": "6px",
         "borderRadius": "0",
         "backgroundColor": "transparent",
         "fontSize": "14.5px",

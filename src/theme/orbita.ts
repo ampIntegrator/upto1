@@ -219,7 +219,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
       text: {
         // Eyebrow : petite capitale espacée, or éditorial
         'type:eyebrow': {
-          fontSize: '0.72rem',
+          fontSize: '14px', // jamais sous 14 px (règle du 10 sept.)
           fontWeight: 'var(--font-weight-semibold)',
           letterSpacing: '0.16em',
           textTransform: 'uppercase',
@@ -263,17 +263,17 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         },
         // Résultat chiffré des réalisations (work-result)
         'type:result': {
-          fontSize: '12px',
+          fontSize: '14px',
           fontWeight: 'var(--font-weight-semibold)',
           letterSpacing: '0.02em',
           color: 'light-dark(var(--color-text-accent), var(--color-highlight))',
           whiteSpace: 'nowrap',
         },
         // Date d'article (post-date)
-        'type:date': {fontSize: '12px', color: 'var(--color-text-disabled)', whiteSpace: 'nowrap'},
+        'type:date': {fontSize: '14px', color: 'var(--color-text-disabled)', whiteSpace: 'nowrap'},
         // Étiquette mono-like (ex-Geist Mono) : Geist, espacée
         'type:tag': {
-          fontSize: '0.7rem',
+          fontSize: '14px',
           fontWeight: 'var(--font-weight-medium)',
           letterSpacing: '0.14em',
           textTransform: 'uppercase',
@@ -460,6 +460,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
             base: {
               height: '100%',
               padding: '0 14px',
+              gap: '6px',
               borderRadius: '0',
               backgroundColor: 'transparent',
               fontSize: '14.5px',
