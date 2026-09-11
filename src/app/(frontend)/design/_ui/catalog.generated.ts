@@ -134,6 +134,15 @@ export const CATALOG: CatalogCategory[] = [
         "doc": "card"
       },
       {
+        "name": "CardGrid",
+        "label": "Card Grid",
+        "slug": "card-grid",
+        "href": "/design/composants/card-grid",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
         "name": "CompareCard",
         "label": "Compare Card",
         "slug": "compare-card",

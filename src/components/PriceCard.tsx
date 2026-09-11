@@ -5,8 +5,8 @@
  * PriceCard — la carte de prix unique (maquettes 08 et 09 « Un prix ») : à gauche le détail
  * de l'offre (eyebrow, CheckList dense avec valeurs barrées, ligne « Valeur totale »), à
  * droite sur fond atténué le prix (Price 84 px), le bouton split pleine largeur, la mention
- * et le Callout garantie. 900 px maximum, deux colonnes 1,4 / 1 ; sous 1024 px, une colonne
- * avec le prix en premier. Nuit via la Section.
+ * et le Callout garantie. 900 px maximum, deux colonnes 1,4 / 1 ; quand sa colonne de page fait
+ * moins de 720 px, une seule colonne avec le prix en premier (requête de conteneur). Nuit via la Section.
  */
 import {HStack, VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
@@ -32,6 +32,7 @@ export type PriceCardProps = {
 
 export function PriceCard({featuresLabel = 'Ce que vous obtenez', features, total, priceLabel = 'Votre prix', price, cta, mention, guarantee}: PriceCardProps) {
   return (
+    <VStack className={styles.host}>
     <VStack as="article" className={styles.card}>
       <VStack gap={5} className={styles.detail}>
         <Text type="eyebrow">{featuresLabel}</Text>
@@ -55,6 +56,7 @@ export function PriceCard({featuresLabel = 'Ce que vous obtenez', features, tota
           {guarantee ? <Callout title={guarantee.title} text={guarantee.text} /> : null}
         </VStack>
       </VStack>
+    </VStack>
     </VStack>
   );
 }

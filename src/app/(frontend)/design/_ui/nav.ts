@@ -6,6 +6,7 @@ export const FOUNDATIONS: NavEntry[] = [
   {slug: 'couleurs', label: 'Couleurs', href: '/design/fondations/couleurs'},
   {slug: 'typographie', label: 'Typographie', href: '/design/fondations/typographie'},
   {slug: 'espacements', label: 'Espacements', href: '/design/fondations/espacements'},
+  {slug: 'grille', label: 'Grille & emprises', href: '/design/fondations/grille'},
   {slug: 'formes', label: 'Formes & ombres', href: '/design/fondations/formes'},
   {slug: 'mouvement', label: 'Mouvement', href: '/design/fondations/mouvement'},
   {slug: 'icones', label: 'Icônes', href: '/design/fondations/icones'},

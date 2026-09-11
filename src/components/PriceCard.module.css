@@ -1,4 +1,5 @@
-/* PriceCard — carte de prix unique (maquettes 08, 09). */
+/* PriceCard — carte de prix unique (maquettes 08, 09). La disposition suit la largeur de la colonne de page. */
+.host { width: 100%; container-type: inline-size; }
 .card {
   display: grid;
   grid-template-columns: 1.4fr 1fr;
@@ -21,7 +22,7 @@
 .priceLabel { color: var(--color-text-disabled) !important; }
 .period { font-size: 14px; color: var(--color-text-disabled); }
 .mention { font-size: 12px; text-align: center; color: var(--color-text-disabled); }
-@media (max-width: 1023px) {
+@container (max-width: 719px) {
   .card { grid-template-columns: minmax(0, 1fr); max-width: 600px; }
   .side { order: -1; }
 }

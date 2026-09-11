@@ -1,0 +1,14 @@
+/* CardGrid — grille de cartes réglée sur la largeur de sa colonne (requêtes de conteneur). */
+.host { width: 100%; container-type: inline-size; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--columns, 3), minmax(0, 1fr));
+  gap: 24px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cell { margin: 0; min-width: 0; }
+@container (max-width: 719px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@container (max-width: 479px) { .grid { grid-template-columns: minmax(0, 1fr); } }
