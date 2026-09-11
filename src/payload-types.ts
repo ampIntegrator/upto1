@@ -151,7 +151,7 @@ export interface Page {
     variant: 'media-image' | 'media-video' | 'split' | 'page-image' | 'page-glow' | 'page-night';
     eyebrow?: string | null;
     /**
-     * Un retour à la ligne = une nouvelle ligne du titre. Entourez la partie en serif de <span>…</span>.
+     * Un retour à la ligne = une nouvelle ligne du titre. Entourez la partie à mettre en serif de la balise <span>…</span>.
      */
     title: string;
     lead?: string | null;
@@ -643,7 +643,7 @@ export interface Footer {
   newsletter?: {
     eyebrow?: string | null;
     /**
-     * Un retour à la ligne = une nouvelle ligne du titre. Entourez la partie en serif de <span>…</span>.
+     * Un retour à la ligne = une nouvelle ligne du titre. Entourez la partie à mettre en serif de la balise <span>…</span>.
      */
     title?: string | null;
     text?: string | null;
