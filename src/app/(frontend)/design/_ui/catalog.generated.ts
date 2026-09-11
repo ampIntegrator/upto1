@@ -134,6 +134,15 @@ export const CATALOG: CatalogCategory[] = [
         "doc": "card"
       },
       {
+        "name": "CompareCard",
+        "label": "Compare Card",
+        "slug": "compare-card",
+        "href": "/design/composants/compare-card",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
         "name": "Carousel",
         "label": "Carousel",
         "slug": "carousel",
@@ -141,6 +150,24 @@ export const CATALOG: CatalogCategory[] = [
         "dressed": false,
         "parent": null,
         "doc": "carousel"
+      },
+      {
+        "name": "TestimonialCarousel",
+        "label": "Testimonial Carousel",
+        "slug": "testimonial-carousel",
+        "href": "/design/composants/testimonial-carousel",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
+        "name": "TestimonialCard",
+        "label": "Testimonial Card",
+        "slug": "testimonial-card",
+        "href": "/design/composants/testimonial-card",
+        "dressed": true,
+        "parent": "TestimonialCarousel",
+        "doc": null
       },
       {
         "name": "ClickableCard",
@@ -656,6 +683,15 @@ export const CATALOG: CatalogCategory[] = [
         "label": "Section Heading",
         "slug": "section-heading",
         "href": "/design/composants/section-heading",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
+        "name": "ProcessSteps",
+        "label": "Process Steps",
+        "slug": "process-steps",
+        "href": "/design/composants/process-steps",
         "dressed": true,
         "parent": null,
         "doc": null

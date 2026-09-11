@@ -1,0 +1,23 @@
+/* TestimonialCard — carte témoignage (maquette 07). */
+.card {
+  height: 100%;
+  margin: 0;
+  padding: 32px;
+  background: light-dark(var(--color-background-surface), var(--color-background-card));
+  border: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.1));
+}
+.mark { font-size: 48px; line-height: 0.5; margin-bottom: 12px; }
+.quote {
+  flex: 1 1 auto;
+  margin-bottom: 24px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: light-dark(var(--color-text-secondary), rgba(255, 255, 255, 0.75));
+}
+.foot {
+  padding-top: 16px;
+  border-top: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.1));
+}
+.name { font-size: 14px; font-weight: var(--font-weight-semibold); color: light-dark(var(--color-text-accent), var(--color-highlight)); }
+.role { color: light-dark(var(--color-text-disabled), rgba(255, 255, 255, 0.45)); }
+.result { margin-top: 12px; }

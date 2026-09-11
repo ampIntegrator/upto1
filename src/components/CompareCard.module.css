@@ -1,0 +1,19 @@
+/* CompareCard — carte comparative (maquette 05). */
+.card {
+  height: 100%;
+  padding: 32px;
+  background: light-dark(var(--color-background-surface), var(--color-background-card));
+  border: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.15));
+}
+/* mise en avant : cadre silo de 2 px, ombre teintée */
+.card[data-featured] {
+  border: 2px solid light-dark(var(--color-accent), var(--color-highlight));
+  box-shadow: 0 20px 50px light-dark(var(--color-accent-muted), rgba(0, 0, 0, 0.35));
+}
+.head { margin-bottom: 24px; }
+/* le chip ne se compresse pas (le Badge tronque sinon) ; le repère passe à la ligne */
+.head > :first-child { flex: 0 0 auto; }
+.meta { color: var(--color-text-disabled); text-align: right; min-width: 0; }
+.card[data-featured] .meta { color: var(--color-editorial); }
+.quote { margin-bottom: 24px; font-size: 18px; line-height: 1.5; color: var(--color-text-primary); }
+@media (max-width: 639px) { .card { padding: 24px; } }

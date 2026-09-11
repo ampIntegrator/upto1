@@ -1,0 +1,42 @@
+/* TestimonialCarousel — carrousel de témoignages (maquette 07). */
+.root { width: 100%; }
+/* Le scroller Astryx enveloppe les cartes dans une piste dimensionnée par son contenu :
+   les largeurs se calculent donc en unités de conteneur (cqw) sur le scroller,  ; l'écart de 24 px
+   dépasse l'échelle de la prop gap (4 = 16 px), il est posé ici sur le scroller. Une carte par vue, deux dès 640 px, trois dès 1280 px. */
+/* le conteneur de requête a une taille intrinsèque nulle : le scroller (item flex) doit prendre toute la largeur */
+.root :global(.astryx-carousel-scroller) { container-type: inline-size; flex: 1 1 100%; width: 100%; min-width: 0; gap: 24px; align-items: stretch; } /* cartes à hauteur égale (Astryx centre) */
+.slide { flex: 0 0 100cqw; min-width: 0; scroll-snap-align: start; }
+@media (min-width: 640px) { .slide { flex-basis: calc((100cqw - 24px) / 2); } }
+@media (min-width: 1280px) { .slide { flex-basis: calc((100cqw - 48px) / 3); } }
+@media (max-width: 639px) { .ui { display: none !important; } }
+/* segments de page : barres carrées, la page courante s'allonge en couleur silo */
+.seg {
+  width: 34px;
+  height: 4px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  cursor: pointer;
+  background: light-dark(var(--color-border-emphasized), rgba(255, 255, 255, 0.2));
+  transition: background-color var(--duration-medium) var(--ease-standard), width var(--duration-medium) var(--ease-standard);
+}
+.seg:hover { background: light-dark(var(--color-text-disabled), rgba(255, 255, 255, 0.4)); }
+.seg[aria-selected='true'] { width: 44px; background: light-dark(var(--color-accent), var(--color-highlight)); }
+/* flèches carrées de 46 px, cadre, silo au survol ; nuit : voile blanc, highlight au survol */
+.arrow {
+  width: 46px;
+  height: 46px;
+  border-radius: 0;
+  border: var(--border-width) solid light-dark(var(--color-border-emphasized), rgba(255, 255, 255, 0.42));
+  background: light-dark(var(--color-background-surface), rgba(255, 255, 255, 0.09));
+  color: light-dark(var(--color-text-secondary), #ffffff);
+  transition: border-color var(--duration-medium) var(--ease-standard), color var(--duration-medium) var(--ease-standard), background-color var(--duration-medium) var(--ease-standard);
+}
+.arrow:hover {
+  border-color: light-dark(var(--color-accent), var(--color-highlight));
+  color: light-dark(var(--color-accent), var(--color-night));
+  background: light-dark(var(--color-background-surface), var(--color-highlight));
+}
+.arrow[aria-disabled='true'],
+.arrow:disabled { opacity: 0.32; pointer-events: none; }
+.arrow svg { width: 18px; height: 18px; }

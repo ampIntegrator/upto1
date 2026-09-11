@@ -13,6 +13,8 @@ declare module '@astryxdesign/core/theme' {
     'eyebrow-lines': true;
     /** Cormorant Garamond italique 600, couleur accent — mot « signature » dans un titre */
     serif: true;
+    /** Cormorant Garamond droit 500, couleur silo — numéros d'étape, guillemet des témoignages */
+    'serif-upright': true;
     /** Étiquette technique espacée (ex-Geist Mono) */
     tag: true;
     /** Grand nombre de carte, Schibsted 800, couleur silo */
