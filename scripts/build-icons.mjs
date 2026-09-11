@@ -43,7 +43,8 @@ for (const {dir, set} of SETS) {
     continue;
   }
   for (const f of files) {
-    const key = f.replace(/\.svg$/, '');
+    // clé = nom du fichier sans extension ni préfixe de taille des exports Nucleo (« 18-bed-empty.svg »)
+    const key = f.replace(/\.svg$/, '').replace(/^\d+-/, '');
     const svg = readFileSync(join(dir, f), 'utf8');
     const viewBox = (svg.match(/viewBox="([^"]+)"/) || [, '0 0 18 18'])[1];
     const inner = (svg.match(/<svg[^>]*>(.*)<\/svg>/s) || [, ''])[1];
