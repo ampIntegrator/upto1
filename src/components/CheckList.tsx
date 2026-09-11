@@ -26,12 +26,12 @@ export type CheckListProps = {
 
 export function CheckList({items, tone = 'check', divided = false, className}: CheckListProps) {
   return (
-    <VStack as="ul" gap={divided ? 0 : 1.5} className={[styles.list, className].filter(Boolean).join(' ')} data-divided={divided || undefined}>
+    <VStack as="ul" gap={divided ? 0 : 3} className={[styles.list, className].filter(Boolean).join(' ')} data-divided={divided || undefined}>
       {items.map((it, i) => {
         const label = typeof it === 'string' ? it : it.label;
         const t = typeof it === 'string' ? tone : (it.tone ?? tone);
         return (
-          <HStack as="li" key={i} gap={divided ? 2 : 1.5} vAlign={divided ? 'center' : 'start'} className={styles.item}>
+          <HStack as="li" key={i} gap={3} vAlign={divided ? 'center' : 'start'} className={styles.item}>
             <i className={styles.dot} data-tone={t} aria-hidden="true">
               {t === 'cross' ? <CloseIcon width={12} height={12} /> : <CheckIcon width={12} height={12} />}
             </i>

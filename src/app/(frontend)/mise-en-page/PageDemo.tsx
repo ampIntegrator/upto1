@@ -89,7 +89,7 @@ function Blocks({mode}: {mode: 'light' | 'dark'}) {
     <>
       {/* 4b · étapes : en-tête centré, panneau, note + bouton */}
       <Section background={dark ? 'night' : 'light'} spacing="md">
-        <Container gap={6}>
+        <Container gap={10}>
           <SectionHeading eyebrow="Comment ça marche" title="3 étapes. <span>48 h max.</span>" />
           <ProcessSteps steps={PROCESS_STEPS} />
           <SectionNote strong="Première estimation offerte." text="La première estimation est gratuite et sans engagement, y compris le rapport PDF validé par expert. Aucune carte bancaire n'est requise à l'inscription." cta={{label: 'Démarrer gratuitement', href: '#'}} />
@@ -98,7 +98,7 @@ function Blocks({mode}: {mode: 'light' | 'dark'}) {
 
       {/* 4c · comparatif : avant / après sur 6 + 6, puis trois métiers sur 4 */}
       <Section background={dark ? 'night-halo' : 'dots'} spacing="md">
-        <Container gap={6}>
+        <Container gap={10}>
           <SectionHeading eyebrow="Le déclic" title="Sortez <span>de l'attente.</span>" text="Le même chantier, deux trajectoires. D'un côté l'attente du devis artisan ; de l'autre, un chiffrage validé, livré, pendant que le client est encore en face de vous." />
           <Grid columns={12} gap={6} className="page-grid" align="stretch">
             <GridSpan columns={6}><CompareCard {...AVANT} /></GridSpan>
@@ -111,10 +111,10 @@ function Blocks({mode}: {mode: 'light' | 'dark'}) {
         </Container>
       </Section>
 
-      {/* 4d · témoignages : en-tête à mot contouré, carrousel */}
+      {/* 4d · témoignages : en-tête, carrousel */}
       <Section background={dark ? 'night' : 'paper'} spacing="md" dividers={!dark}>
-        <Container gap={8}>
-          <SectionHeading eyebrow="Ils ont arrêté d'attendre" title="Ils <span>closent.</span>" ghost="CLOSENT" />
+        <Container gap={10}>
+          <SectionHeading eyebrow="Ils ont arrêté d'attendre" title="Ils <span>closent.</span>" />
           <TestimonialCarousel items={TESTIMONIALS} />
         </Container>
       </Section>

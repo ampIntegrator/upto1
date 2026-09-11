@@ -22,8 +22,8 @@ export default function TestimonialCarouselShowcase() {
       <VStack gap={3}>
         <Heading level={3}>Clair (maquette 07)</Heading>
         <Section background="light" spacing="md">
-          <Container gap={8}>
-            <SectionHeading eyebrow="Ils ont arrêté d'attendre" title="Ils <span>closent.</span>" ghost="CLOSENT" />
+          <Container gap={10}>
+            <SectionHeading eyebrow="Ils ont arrêté d'attendre" title="Ils <span>closent.</span>" />
             <TestimonialCarousel items={TESTIMONIALS} />
           </Container>
         </Section>
@@ -31,8 +31,8 @@ export default function TestimonialCarouselShowcase() {
       <VStack gap={3}>
         <Heading level={3}>Nuit à halos (maquette 07b)</Heading>
         <Section background="night-halo" spacing="md">
-          <Container gap={8}>
-            <SectionHeading eyebrow="Ils ont arrêté d'attendre" title="Ils <span>closent.</span>" ghost="CLOSENT" />
+          <Container gap={10}>
+            <SectionHeading eyebrow="Ils ont arrêté d'attendre" title="Ils <span>closent.</span>" />
             <TestimonialCarousel items={TESTIMONIALS} />
           </Container>
         </Section>

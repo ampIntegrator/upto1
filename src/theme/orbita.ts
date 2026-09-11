@@ -300,7 +300,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         'type:date+color:primary': {color: 'var(--color-text-disabled)'},
         'type:tag': {
           fontSize: '14px',
-          fontWeight: 'var(--font-weight-medium)',
+          fontWeight: 'var(--font-weight-semibold)',
           letterSpacing: '0.14em',
           textTransform: 'uppercase',
           lineHeight: '1.4',

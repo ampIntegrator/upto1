@@ -14,21 +14,13 @@ export default function SectionHeadingShowcase() {
   return (
     <VStack gap={8}>
       <Text type="body" color="secondary">
-        L'en-tête de section : eyebrow à tirets or, titre display avec accent serif (saisi comme un titre de haut de page : retours à la ligne et span), chapô sur 640 px, appel à l'action. Centré sur 820 px ; les blocs étapes, comparatif et témoignages l'embarquent en tête. Le mot contouré derrière le titre est une option.
+        L'en-tête de section : eyebrow à tirets or, titre display avec accent serif (saisi comme un titre de haut de page : retours à la ligne et span), chapô sur 640 px, appel à l'action. Centré sur 820 px ; les blocs étapes, comparatif et témoignages l'embarquent en tête.
       </Text>
       <VStack gap={3}>
         <Heading level={3}>Complet (maquette 15)</Heading>
         <Section background="light" spacing="sm">
           <Container>
             <SectionHeading eyebrow="Notre approche" title="Le chiffrage adapté <span>à votre métier.</span>" text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation." cta={{label: 'Découvrir la méthode', href: '#'}} />
-          </Container>
-        </Section>
-      </VStack>
-      <VStack gap={3}>
-        <Heading level={3}>Avec mot contouré (maquette 07)</Heading>
-        <Section background="light" spacing="sm">
-          <Container>
-            <SectionHeading eyebrow="Ils ont arrêté d'attendre" title="Ils <span>closent.</span>" ghost="CLOSENT" size="display-2" />
           </Container>
         </Section>
       </VStack>

@@ -80,7 +80,7 @@ export function TestimonialCarousel({items, label = 'Témoignages'}: Testimonial
   }, [pages, perView]);
 
   return (
-    <VStack gap={4} className={styles.root}>
+    <VStack gap={6} className={styles.root}>
       <Carousel ref={root} handleRef={handle} hasSnap hasButtons={false} hasEdgeFade={false} gap={0} aria-label={label}>
         {items.map((t, i) => (
           <VStack key={i} className={styles.slide} data-slide>

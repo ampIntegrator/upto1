@@ -23,7 +23,7 @@ export default function ProcessStepsShowcase() {
       <VStack gap={3}>
         <Heading level={3}>Bloc complet, 3 étapes (maquette 03)</Heading>
         <Section background="light" spacing="md">
-          <Container gap={6}>
+          <Container gap={10}>
             <SectionHeading eyebrow="Comment ça marche" title="3 étapes. <span>48 h max.</span>" />
             <ProcessSteps steps={PROCESS_STEPS} />
             <SectionNote strong="Première estimation offerte." text="La première estimation est gratuite et sans engagement, y compris le rapport PDF validé par expert. Aucune carte bancaire n'est requise à l'inscription. Vous décidez ensuite si vous souhaitez activer l'abonnement Chiffrage Pro à 79 € / mois pour des estimations illimitées." cta={{label: 'Démarrer gratuitement', href: '#'}} />

@@ -24,7 +24,7 @@ export type SectionNoteProps = {
 
 export function SectionNote({strong, text, asterisk = true, cta}: SectionNoteProps) {
   return (
-    <HStack gap={4} vAlign="center" justify="between" className={styles.root}>
+    <HStack gap={8} vAlign="center" justify="between" className={styles.root}>
       <Text type="body" color="secondary" className={styles.note}>
         {asterisk ? <i className={styles.asterisk} aria-hidden="true">*</i> : null}
         {strong ? <strong className={styles.strong}>{strong}</strong> : null}

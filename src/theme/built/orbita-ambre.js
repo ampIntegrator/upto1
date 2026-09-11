@@ -343,7 +343,7 @@ export const orbitaAmbreTheme = {
       },
       "type:tag": {
         "fontSize": "14px",
-        "fontWeight": "var(--font-weight-medium)",
+        "fontWeight": "var(--font-weight-semibold)",
         "letterSpacing": "0.14em",
         "textTransform": "uppercase",
         "lineHeight": "1.4"

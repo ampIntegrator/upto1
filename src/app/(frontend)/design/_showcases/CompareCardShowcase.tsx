@@ -24,7 +24,7 @@ export default function CompareCardShowcase() {
       <VStack gap={3}>
         <Heading level={3}>Avant / après (maquette 05)</Heading>
         <Section background="light" spacing="md">
-          <Container gap={6}>
+          <Container gap={10}>
             <SectionHeading eyebrow="Le déclic" title="Sortez <span>de l'attente.</span>" text="Le même chantier, deux trajectoires. D'un côté l'attente du devis artisan ; de l'autre, un chiffrage chiffré, validé, livré, pendant que le client est encore en face de vous." />
             <Grid columns={12} gap={6} className="page-grid" align="stretch">
               <GridSpan columns={6}><CompareCard {...AVANT} /></GridSpan>
