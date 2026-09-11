@@ -30,7 +30,7 @@ async function main() {
   // 1 · utilisateur
   const users = await payload.count({collection: 'users'});
   if (users.totalDocs === 0) {
-    await payload.create({collection: 'users', data: ADMIN});
+    await payload.create({collection: 'users', data: {...ADMIN, name: 'Admin Vidomia'}});
     log(`Utilisateur créé : ${ADMIN.email}`);
   }
 
