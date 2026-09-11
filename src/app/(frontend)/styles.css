@@ -45,7 +45,7 @@ body {
 [data-astryx-theme^='orbita'] .astryx-checkbox-label,
 [data-astryx-theme^='orbita'] .astryx-radio-list-item,
 [data-astryx-theme^='orbita'] .astryx-switch-label {
-  font-size: 14.5px;
+  font-size: 14px;
 }
 [data-astryx-theme^='orbita'] .astryx-slider-track + div {
   height: 6px;
@@ -421,7 +421,7 @@ body {
   border: 0 !important;
   color: var(--color-accent) !important;
 }
-[data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item span:first-of-type { font-size: 14.5px !important; font-weight: var(--font-weight-semibold) !important; }
+[data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item span:first-of-type { font-size: 14px !important; font-weight: var(--font-weight-semibold) !important; }
 [data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item span + span { font-size: 14px !important; color: var(--color-text-disabled) !important; }
 [data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item > div:first-child,
 [data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item span { transition: color var(--duration-medium) var(--ease-standard) !important; }

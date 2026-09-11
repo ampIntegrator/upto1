@@ -1023,17 +1023,17 @@ export const orbitaMagentaTheme = {
     },
     "checkbox-label": {
       "base": {
-        "fontSize": "14.5px"
+        "fontSize": "14px"
       }
     },
     "switch-label": {
       "base": {
-        "fontSize": "14.5px"
+        "fontSize": "14px"
       }
     },
     "radio-list-item": {
       "base": {
-        "fontSize": "14.5px"
+        "fontSize": "14px"
       },
       "selected": {
         "color": "var(--color-text-accent)"
@@ -1093,7 +1093,7 @@ export const orbitaMagentaTheme = {
         "gap": "8px",
         "borderRadius": "0",
         "backgroundColor": "transparent",
-        "fontSize": "14.5px",
+        "fontSize": "14px",
         "fontWeight": "var(--font-weight-medium)",
         "whiteSpace": "nowrap",
         "color": "var(--color-text-secondary)",
@@ -1115,7 +1115,7 @@ export const orbitaMagentaTheme = {
         "gap": "8px",
         "borderRadius": "0",
         "backgroundColor": "transparent",
-        "fontSize": "14.5px",
+        "fontSize": "14px",
         "fontWeight": "var(--font-weight-medium)",
         "whiteSpace": "nowrap",
         "color": "var(--color-text-secondary)",
@@ -1137,7 +1137,7 @@ export const orbitaMagentaTheme = {
         "gap": "8px",
         "borderRadius": "0",
         "backgroundColor": "transparent",
-        "fontSize": "14.5px",
+        "fontSize": "14px",
         "fontWeight": "var(--font-weight-medium)",
         "whiteSpace": "nowrap",
         "color": "var(--color-text-secondary)",

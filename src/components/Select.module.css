@@ -126,13 +126,13 @@
 .wrap :global(.astryx-multi-selector-option) {
   padding: 0 12px;
   min-height: 0;
-  font-size: 14.5px;
+  font-size: 14px;
 }
 .wrap :global(.astryx-selector-option-row) :global(.astryx-item),
 .wrap :global(.astryx-multi-selector-option) :global(.astryx-item) {
   min-height: 0;
   padding: 12px 0;
-  font-size: 14.5px;
+  font-size: 14px;
 }
 .wrap :global(.astryx-multi-selector-option) > * {
   padding-block: 8px;

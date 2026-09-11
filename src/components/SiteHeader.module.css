@@ -241,7 +241,7 @@
   border: 0 !important;
   color: var(--color-accent) !important;
 }
-.menuWrap :global([popover] a span:first-of-type) { font-size: 14.5px !important; font-weight: var(--font-weight-semibold) !important; color: var(--color-text-primary) !important; }
+.menuWrap :global([popover] a span:first-of-type) { font-size: 14px !important; font-weight: var(--font-weight-semibold) !important; color: var(--color-text-primary) !important; }
 .menuWrap :global([popover] a span + span) { font-size: 14px !important; color: var(--color-text-disabled) !important; }
 .menuWrap :global([popover] a:hover) { background: var(--color-accent) !important; }
 .menuWrap :global([popover] a:hover > div:first-child),

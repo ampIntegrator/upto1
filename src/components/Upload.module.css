@@ -29,7 +29,7 @@
 .wrap :global(.astryx-file-input[data-mode='dropzone']) > :global(.astryx-icon) svg { width: 20px; height: 20px; }
 /* titre : 14,5 px semi-gras, calé en haut pour laisser le sous-titre dessous */
 .wrap :global(.astryx-file-input[data-mode='dropzone']) > span:last-child {
-  font-size: 14.5px;
+  font-size: 14px;
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
   align-self: flex-start;

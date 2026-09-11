@@ -29,8 +29,8 @@ export function TabsWithPanel({id}: {id: string}) {
           return (
             <VStack key={t.value} id={`${id}-${t.value}`} role="tabpanel" className="orbita-tab-panel" align="center" data-active={active || undefined} aria-hidden={!active} inert={!active}>
               <VStack gap={4}>
-                <Text type="body" style={{fontSize: '16.5px', lineHeight: 1.65}} color="secondary">{t.text}</Text>
-                <Text type="body" style={{fontSize: '16.5px', lineHeight: 1.65}} color="secondary">{t.more}</Text>
+                <Text type="body" style={{fontSize: '16px', lineHeight: 1.65}} color="secondary">{t.text}</Text>
+                <Text type="body" style={{fontSize: '16px', lineHeight: 1.65}} color="secondary">{t.more}</Text>
               </VStack>
             </VStack>
           );

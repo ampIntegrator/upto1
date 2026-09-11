@@ -475,9 +475,9 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         'variant:attached+type:warning': {backgroundColor: 'var(--color-warning-muted)'},
       },
       // libellés des contrôles d'option : 14,5 px ; radio cochée en couleur silo
-      'checkbox-label': {base: {fontSize: '14.5px'}},
-      'switch-label': {base: {fontSize: '14.5px'}},
-      'radio-list-item': {base: {fontSize: '14.5px'}, selected: {color: 'var(--color-text-accent)'}},
+      'checkbox-label': {base: {fontSize: '14px'}},
+      'switch-label': {base: {fontSize: '14px'}},
+      'radio-list-item': {base: {fontSize: '14px'}, selected: {color: 'var(--color-text-accent)'}},
       // icônes calendrier / horloge des champs de date : couleur du silo
       ...Object.fromEntries(
         ['date-input-toggle-icon', 'date-range-input-toggle-icon', 'date-time-input-toggle-icon', 'date-time-input-clock-icon'].map((k) => [k, {base: {color: 'var(--color-icon-accent)'}}]),
@@ -517,7 +517,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
               gap: '8px',
               borderRadius: '0',
               backgroundColor: 'transparent',
-              fontSize: '14.5px',
+              fontSize: '14px',
               fontWeight: 'var(--font-weight-medium)',
               whiteSpace: 'nowrap',
               color: 'var(--color-text-secondary)',

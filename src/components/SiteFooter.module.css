@@ -111,7 +111,7 @@
   letter-spacing: 1px;
   text-transform: uppercase;
 }
-.brandText { font-size: 13.5px; line-height: 1.55; max-width: 330px; }
+.brandText { font-size: 14px; line-height: 1.55; max-width: 330px; }
 .contact {
   display: inline-flex;
   align-items: center;

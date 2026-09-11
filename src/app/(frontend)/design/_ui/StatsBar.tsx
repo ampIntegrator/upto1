@@ -25,7 +25,7 @@ export function StatsBar({label, stats, background = 'paper'}: StatsBarProps) {
     <Section background={background} spacing="xs" dividers edge={false}>
       <Container gap={6}>
         <VStack align="center">
-          <Text type="tag" weight="semibold" color="secondary" style={{fontFamily: 'var(--font-family-body)', fontSize: '12.5px', letterSpacing: '0.16em', textAlign: 'center'}} /* maquette .stat-label : Geist semibold 12,5 */>{label}</Text>
+          <Text type="tag" weight="semibold" color="secondary" style={{fontFamily: 'var(--font-family-body)', fontSize: '12px', letterSpacing: '0.16em', textAlign: 'center'}} /* maquette .stat-label : Geist semibold 12,5 → 12 (pas de demi-pixel) */>{label}</Text>
         </VStack>
         <Grid columns={{minWidth: n > 4 ? 150 : 220, max: n}} gap={6}>
           {stats.map((s) => (
