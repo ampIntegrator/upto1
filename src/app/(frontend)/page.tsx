@@ -17,7 +17,7 @@ export default async function Page() {
   const page = res.docs[0];
   if (!page) redirect('/design');
   const site = await getSite(locale);
-  const hero = toHero(page);
+  const hero = toHero(page, site.settings);
   const tone = hero.variant === 'media' || hero.background === 'night-halo' || hero.background === 'image' ? 'dark' : 'light';
   return (
     <SitePage silo={pageSilo(page, site.settings)} header={toHeader(site.settings, site.header)} footer={toFooter(site.settings, site.footer, site.posts, locale)} tone={tone} currentHref="/">

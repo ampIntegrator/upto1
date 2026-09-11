@@ -67,6 +67,7 @@ async function main() {
         {label: 'YouTube', href: 'https://www.youtube.com/', iconKey: 'youtube'},
       ],
       languages: ['fr', 'en', 'de', 'es'],
+      breadcrumb: {enabled: true, homeLabel: 'Accueil'},
     },
   });
 
@@ -154,11 +155,34 @@ async function main() {
           primary: {label: 'Demander une démo', href: '/demo'},
           secondary: {label: 'Voir la vidéo', href: '/video', iconKey: 'play'},
           overlay: 0.3,
-          breadcrumb: false,
+          breadcrumbMode: 'hide',
         },
       },
     });
     log('Page « accueil » créée');
+  }
+
+  // 7 · une page intérieure, pour le fil d'Ariane et le silo par page
+  const tarifs = await payload.find({collection: 'pages', where: {slug: {equals: 'tarifs'}}, limit: 1});
+  if (!tarifs.docs.length) {
+    await payload.create({
+      collection: 'pages',
+      data: {
+        title: 'Tarifs',
+        slug: 'tarifs',
+        silo: 'green',
+        hero: {
+          variant: 'page-night',
+          eyebrow: 'Tarification',
+          title: 'Un prix clair,\n<span>sans surprise.</span>',
+          lead: 'Sans engagement, sans frais cachés, résiliable en un clic.',
+          primary: {label: 'Voir les tarifs', href: '#tarifs'},
+          secondary: {label: 'Parler à un conseiller', href: '/contact', iconKey: 'phone'},
+          breadcrumbMode: 'inherit',
+        },
+      },
+    });
+    log('Page « tarifs » créée');
   }
 
   log('Peuplement terminé.');

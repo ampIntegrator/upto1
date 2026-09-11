@@ -182,6 +182,7 @@ export interface Page {
         }[]
       | null;
     breadcrumb?: boolean | null;
+    breadcrumbMode?: ('inherit' | 'show' | 'hide') | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -413,6 +414,7 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
             };
         breadcrumb?: T;
+        breadcrumbMode?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -549,6 +551,10 @@ export interface Setting {
         id?: string | null;
       }[]
     | null;
+  breadcrumb?: {
+    enabled?: boolean | null;
+    homeLabel?: string | null;
+  };
   /**
    * Les contenus sont traduisibles champ par champ (onglet de langue en haut de chaque page d'admin). Une langue non traduite affiche le français.
    */
@@ -693,6 +699,12 @@ export interface SettingsSelect<T extends boolean = true> {
         href?: T;
         iconKey?: T;
         id?: T;
+      };
+  breadcrumb?:
+    | T
+    | {
+        enabled?: T;
+        homeLabel?: T;
       };
   languages?: T;
   updatedAt?: T;

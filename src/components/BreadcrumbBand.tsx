@@ -19,16 +19,18 @@ export type BreadcrumbBandProps = {
   /** page courante (dernier maillon, sans lien) */
   current: string;
   homeHref?: string;
+  /** libellé de l'accueil pour les lecteurs d'écran (réglage du site) */
+  homeLabel?: string;
 };
 
-export function BreadcrumbBand({items, current, homeHref = '/'}: BreadcrumbBandProps) {
+export function BreadcrumbBand({items, current, homeHref = '/', homeLabel = 'Accueil'}: BreadcrumbBandProps) {
   return (
     <Section background="paper" spacing="none" dividers>
       <Container>
         <HStack height={44} vAlign="center">
           <Breadcrumbs label="Fil d'Ariane" separator={<ChevronRightIcon width={12} height={12} />}>
             <BreadcrumbItem href={homeHref} startIcon={<HomeIcon width={14} height={14} />}>
-              <VisuallyHidden>Accueil</VisuallyHidden>
+              <VisuallyHidden>{homeLabel}</VisuallyHidden>
             </BreadcrumbItem>
             {items.map((it) => (
               <BreadcrumbItem key={it.label} href={it.href}>

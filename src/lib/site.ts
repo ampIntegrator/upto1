@@ -89,8 +89,17 @@ export function toFooter(s: Settings, f: Footer, posts: Post[], locale: Locale):
   };
 }
 
+/** Fil d'Ariane affiché ? réglage du site, surchargé par la page ; jamais sur l'accueil. */
+export function showBreadcrumb(page: Page, s: Settings): boolean {
+  if (page.slug === 'accueil') return false;
+  const mode = page.hero?.breadcrumbMode ?? 'inherit';
+  if (mode === 'show') return true;
+  if (mode === 'hide') return false;
+  return s.breadcrumb?.enabled !== false;
+}
+
 /** Le haut de page d'une page Payload → props du composant Hero. */
-export function toHero(page: Page): HeroProps {
+export function toHero(page: Page, s: Settings): HeroProps {
   const h = page.hero;
   const action = (a?: {label?: string | null; href?: string | null; iconKey?: string | null} | null) => (a?.label && a?.href ? {label: a.label, href: a.href, iconKey: icon(a.iconKey)} : undefined);
   const base = {eyebrow: h.eyebrow ?? undefined, title: h.title, lead: h.lead ?? undefined, primary: action(h.primary), secondary: action(h.secondary)};
@@ -105,7 +114,7 @@ export function toHero(page: Page): HeroProps {
     case 'page-glow':
     case 'page-night': {
       const background = h.variant === 'page-image' ? 'image' : h.variant === 'page-glow' ? 'glow' : 'night-halo';
-      return {...base, variant: 'page', background, image: background === 'image' ? {src: mediaUrl(h.image) ?? '', alt: mediaAlt(h.image)} : undefined, overlay: h.overlay ?? 0.3, breadcrumb: h.breadcrumb !== false ? {items: [], current: page.title} : undefined};
+      return {...base, variant: 'page', background, image: background === 'image' ? {src: mediaUrl(h.image) ?? '', alt: mediaAlt(h.image)} : undefined, overlay: h.overlay ?? 0.3, breadcrumb: showBreadcrumb(page, s) ? {items: [], current: page.title, homeLabel: s.breadcrumb?.homeLabel ?? 'Accueil'} : undefined};
     }
   }
 }

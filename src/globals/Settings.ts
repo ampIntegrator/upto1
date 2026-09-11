@@ -51,6 +51,18 @@ export const Settings: GlobalConfig = {
           ],
         },
         {
+          label: 'Navigation',
+          fields: [
+            {
+              name: 'breadcrumb', type: 'group', label: "Fil d'Ariane",
+              fields: [
+                {name: 'enabled', type: 'checkbox', label: 'Afficher le fil d\'Ariane sous les hauts de page', defaultValue: true},
+                {name: 'homeLabel', type: 'text', label: 'Libellé de l\'accueil (lecteurs d\'écran)', localized: true, defaultValue: 'Accueil', admin: {condition: (_d, s) => s?.enabled !== false}},
+              ],
+            },
+          ],
+        },
+        {
           label: 'Langues',
           fields: [
             {
