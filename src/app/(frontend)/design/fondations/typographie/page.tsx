@@ -13,7 +13,7 @@ const FONTS = [
   {role: 'Titres & display', family: 'Schibsted Grotesk', token: '--font-family-heading', sample: 'Chiffrez vos travaux en 20 minutes.'},
   {role: 'Texte courant, étiquettes, boutons', family: 'Geist', token: '--font-family-body', sample: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.'},
   {role: 'Accent serif éditorial', family: 'Cormorant Garamond italique 600', token: '--font-family-serif', sample: 'à votre métier.'},
-  {role: 'Code (système)', family: 'SF Mono / ui-monospace', token: '--font-family-code', sample: 'const silo = "blue";'},
+  {role: 'Repères techniques (type tag) et code', family: 'Geist Mono 600', token: '--font-family-mono', sample: '20 MIN CHRONO · const silo = "blue";'},
 ];
 
 const HEADINGS = [1, 2, 3, 4, 5, 6] as const;
@@ -26,7 +26,7 @@ export default function Page() {
       <PageIntro
         eyebrow="Fondations"
         title="Typographie"
-        lead="Trois polices au lieu de quatre : Geist Mono est remplacée par Geist espacée pour les étiquettes. Échelle géométrique Astryx (base 15 px, ratio 1,2) ; les titres display reprennent les clamp() Orbita."
+        lead="Quatre polices : Schibsted Grotesk, Geist, Cormorant Garamond et Geist Mono (repères techniques et code). Échelle géométrique Astryx (base 15 px, ratio 1,2) ; les titres display reprennent les clamp() Orbita."
       />
 
       <VStack gap={3}>

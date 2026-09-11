@@ -117,7 +117,7 @@ export const orbitaOrangeTheme = {
     "--ease-standard": "cubic-bezier(0.4, 0, 0.2, 1)",
     "--font-family-body": "var(--font-geist), system-ui, sans-serif",
     "--font-family-heading": "var(--font-schibsted), system-ui, sans-serif",
-    "--font-family-code": "\"SF Mono\", ui-monospace, Menlo, monospace",
+    "--font-family-code": "var(--font-geist-mono), \"SF Mono\", ui-monospace, Menlo, monospace",
     "--size-element-sm": "36px",
     "--size-element-md": "48px",
     "--size-element-lg": "56px",
@@ -133,6 +133,7 @@ export const orbitaOrangeTheme = {
     "--focus-outline-color": "var(--color-accent)",
     "--focus-outline-offset": "2px",
     "--font-family-serif": "var(--font-cormorant), Georgia, serif",
+    "--font-family-mono": "var(--font-geist-mono), \"SF Mono\", ui-monospace, Menlo, monospace",
     "--icon-stroke-width": "1.25",
     "--color-highlight": "light-dark(#38BDF8, #38BDF8)",
     "--color-highlight-deep": "light-dark(#0F7FC0, #38BDF8)",
@@ -342,9 +343,10 @@ export const orbitaOrangeTheme = {
         "color": "var(--color-text-disabled)"
       },
       "type:tag": {
+        "fontFamily": "var(--font-family-mono)",
         "fontSize": "14px",
         "fontWeight": "var(--font-weight-semibold)",
-        "letterSpacing": "0.14em",
+        "letterSpacing": "0.1em",
         "textTransform": "uppercase",
         "lineHeight": "1.4"
       }

@@ -45,7 +45,8 @@ const OK = '#1F8A5B';
 const FONT_BODY = 'var(--font-geist), system-ui, sans-serif';
 const FONT_HEADING = 'var(--font-schibsted), system-ui, sans-serif';
 const FONT_SERIF = 'var(--font-cormorant), Georgia, serif';
-const FONT_CODE = '"SF Mono", ui-monospace, Menlo, monospace';
+const FONT_MONO = 'var(--font-geist-mono), "SF Mono", ui-monospace, Menlo, monospace';
+const FONT_CODE = FONT_MONO; // une seule mono : Geist Mono (repères type tag, code)
 
 /** Teinte dérivée : mélange en sRGB, résolu par le navigateur (tokens seulement). */
 const mix = (a: string, b: string, pctA: number) =>
@@ -73,6 +74,7 @@ function orbitaOnlyTokens(silo: OrbitaSilo) {
   const {primary, primaryDeep, highlight, highlightDeep, night} = silo;
   return {
     '--font-family-serif': FONT_SERIF,
+    '--font-family-mono': FONT_MONO, // Geist Mono : repères type tag et code
     // épaisseur de trait des icônes Nucleo (grille 18), appliquée en CSS sans
     // toucher aux SVG : voir styles.css [data-icon="nucleo"]
     '--icon-stroke-width': '1.25',
@@ -118,7 +120,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         weight: 'bold',
         weights: {1: 'bold', 2: 'bold', 3: 'bold', 4: 'semibold', 5: 'semibold', 6: 'semibold'},
       },
-      code: {family: 'SF Mono', fallbacks: 'ui-monospace, Menlo, monospace'},
+      code: {family: 'Geist Mono', fallbacks: '"SF Mono", ui-monospace, Menlo, monospace'},
     },
 
     // Signature Orbita : angles vifs partout.
@@ -299,9 +301,10 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         'type:result+color:primary': {color: 'light-dark(var(--color-text-accent), var(--color-highlight))'},
         'type:date+color:primary': {color: 'var(--color-text-disabled)'},
         'type:tag': {
+          fontFamily: 'var(--font-family-mono)', // Geist Mono (maquette .font-mono), réadoptée le 11 sept. 2026
           fontSize: '14px',
           fontWeight: 'var(--font-weight-semibold)',
-          letterSpacing: '0.14em',
+          letterSpacing: '0.1em',
           textTransform: 'uppercase',
           lineHeight: '1.4',
         },
