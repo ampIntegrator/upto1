@@ -19,5 +19,11 @@
   border-top: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.1));
 }
 .name { font-size: 14px; font-weight: var(--font-weight-semibold); color: light-dark(var(--color-text-accent), var(--color-highlight)); }
-.role { color: light-dark(var(--color-text-disabled), rgba(255, 255, 255, 0.45)); }
+.role {
+  font-family: var(--font-family-body); /* maquette : Geist semibold (pas mono), 11 → 12 */
+  font-size: 12px;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.08em;
+  color: light-dark(var(--color-text-disabled), rgba(255, 255, 255, 0.45));
+}
 .result { margin-top: 12px; }

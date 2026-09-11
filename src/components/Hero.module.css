@@ -21,7 +21,7 @@
   translate: -50% 0;
 }
 .scrollHint:hover { color: #fff; }
-.scrollLabel { color: inherit !important; letter-spacing: 0.22em; }
+.scrollLabel { color: inherit !important; font-size: 12px; letter-spacing: 0.22em; } /* maquette .hero-chevron : Geist Mono (type tag), 10,5 → 12 */
 .scrollHint svg { animation: heroBounce 1.8s var(--ease-standard) infinite; }
 @keyframes heroBounce {
   0%, 100% { transform: translateY(0); }

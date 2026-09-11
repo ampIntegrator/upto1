@@ -239,6 +239,16 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         },
         // Eyebrow de tête de section (maquette .c-head-eyebrow) : même texte, avec un
         // tiret de 40 px de chaque côté, or éditorial à 60 %
+        // Eyebrow en mono (maquettes 20 .modal-eyebrow, 21 .ftr-eyebrow) : Geist Mono 500, 12 px (11 → plancher 12)
+        'type:eyebrow-mono': {
+          fontFamily: 'var(--font-family-mono)',
+          fontSize: '12px',
+          fontWeight: 'var(--font-weight-medium)',
+          letterSpacing: '0.16em',
+          textTransform: 'uppercase',
+          lineHeight: '1.4',
+          color: 'var(--color-editorial)',
+        },
         'type:eyebrow-lines': {
           display: 'inline-flex',
           alignItems: 'center',
@@ -291,10 +301,11 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           whiteSpace: 'nowrap',
         },
         // Date d'article (post-date)
-        'type:date': {fontSize: '14px', color: 'var(--color-text-disabled)', whiteSpace: 'nowrap'},
+        'type:date': {fontFamily: 'var(--font-family-mono)', fontSize: '12px', color: 'var(--color-text-disabled)', whiteSpace: 'nowrap'}, // maquette .post-date : Geist Mono 12
         // Étiquette mono-like (ex-Geist Mono) : Geist, espacée
         'type:eyebrow+color:primary': {color: 'var(--color-editorial)'},
         'type:eyebrow-lines+color:primary': {color: 'var(--color-editorial)'},
+        'type:eyebrow-mono+color:primary': {color: 'var(--color-editorial)'},
         'type:serif+color:primary': {color: 'var(--serif-color, light-dark(var(--color-accent), var(--color-highlight)))'},
         'type:serif-upright+color:primary': {color: 'light-dark(var(--color-accent), var(--color-highlight))'},
         'type:number+color:primary': {color: 'var(--color-text-accent)'},
@@ -541,6 +552,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
       'breadcrumbs': {base: {gap: '8px', whiteSpace: 'nowrap', maxWidth: '100%'}},
       'breadcrumb-item': {
         base: {
+          fontFamily: 'var(--font-family-mono)', // maquette .crumb : Geist Mono
           fontSize: '12px', // exception à la règle des 14 px (décidée le 10 sept.)
           letterSpacing: '0.08em',
           textTransform: 'uppercase',
@@ -730,7 +742,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         'variant:chip-cat': {
           height: '28px', padding: '0 12px', lineHeight: '1', borderWidth: '0',
           backgroundColor: 'var(--color-accent)', color: 'var(--color-on-accent)',
-          fontSize: '14px', fontWeight: 'var(--font-weight-medium)', letterSpacing: '0.16em', textTransform: 'uppercase',
+          fontFamily: 'var(--font-family-mono)', fontSize: '12px', fontWeight: 'var(--font-weight-medium)', letterSpacing: '0.16em', textTransform: 'uppercase',
         },
         // chip « live » (maquette 02) : papier bordé, point silo devant le texte
         'variant:chip-live': {

@@ -48,7 +48,7 @@ function Newsletter({newsletter, onSubscribe}: {newsletter: NonNullable<SiteFoot
         <Grid columns={12} gap={8} className="page-grid" align="center">
           <GridSpan columns={6}>
             <VStack gap={2}>
-              <Text type="eyebrow" className={styles.eyebrow}>{newsletter.eyebrow}</Text>
+              <Text type="eyebrow-mono" className={styles.eyebrow}>{newsletter.eyebrow}</Text>
               <Heading level={2} className={styles.newsTitle}>
                 {renderTitle(newsletter.title, styles.newsAccent)}
               </Heading>
@@ -85,7 +85,7 @@ function Articles({articles}: {articles: NonNullable<SiteFooterData['articles']>
     <VStack className={styles.band} data-band="articles">
       <Container gap={4}>
         <HStack hAlign="between" vAlign="center" gap={6}>
-          <Text type="eyebrow" className={styles.eyebrow}>{articles.eyebrow}</Text>
+          <Text type="eyebrow-mono" className={styles.eyebrow}>{articles.eyebrow}</Text>
           <Link href={articles.allHref} color="secondary" weight="semibold" isStandalone className={styles.allLink}>
             {articles.allLabel}
             <ArrowRightIcon width={16} height={16} />

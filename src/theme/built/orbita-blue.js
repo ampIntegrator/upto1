@@ -259,6 +259,15 @@ export const orbitaBlueTheme = {
         "lineHeight": "1.4",
         "color": "var(--color-editorial)"
       },
+      "type:eyebrow-mono": {
+        "fontFamily": "var(--font-family-mono)",
+        "fontSize": "12px",
+        "fontWeight": "var(--font-weight-medium)",
+        "letterSpacing": "0.16em",
+        "textTransform": "uppercase",
+        "lineHeight": "1.4",
+        "color": "var(--color-editorial)"
+      },
       "type:eyebrow-lines": {
         "display": "inline-flex",
         "alignItems": "center",
@@ -317,7 +326,8 @@ export const orbitaBlueTheme = {
         "whiteSpace": "nowrap"
       },
       "type:date": {
-        "fontSize": "14px",
+        "fontFamily": "var(--font-family-mono)",
+        "fontSize": "12px",
         "color": "var(--color-text-disabled)",
         "whiteSpace": "nowrap"
       },
@@ -325,6 +335,9 @@ export const orbitaBlueTheme = {
         "color": "var(--color-editorial)"
       },
       "type:eyebrow-lines+color:primary": {
+        "color": "var(--color-editorial)"
+      },
+      "type:eyebrow-mono+color:primary": {
         "color": "var(--color-editorial)"
       },
       "type:serif+color:primary": {
@@ -1176,6 +1189,7 @@ export const orbitaBlueTheme = {
     },
     "breadcrumb-item": {
       "base": {
+        "fontFamily": "var(--font-family-mono)",
         "fontSize": "12px",
         "letterSpacing": "0.08em",
         "textTransform": "uppercase",
@@ -1441,7 +1455,8 @@ export const orbitaBlueTheme = {
         "borderWidth": "0",
         "backgroundColor": "var(--color-accent)",
         "color": "var(--color-on-accent)",
-        "fontSize": "14px",
+        "fontFamily": "var(--font-family-mono)",
+        "fontSize": "12px",
         "fontWeight": "var(--font-weight-medium)",
         "letterSpacing": "0.16em",
         "textTransform": "uppercase"

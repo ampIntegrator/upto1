@@ -12,7 +12,9 @@
 }
 .label {
   margin-top: var(--spacing-2, 8px);
-  font-size: 14px; /* jamais sous 14 px */
+  font-family: var(--font-family-body); /* maquette .stat-sub : Geist (pas mono), medium, 11,5 → 12 */
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
   color: var(--color-text-disabled);
   letter-spacing: 0.1em;
 }

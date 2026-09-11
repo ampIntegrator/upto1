@@ -11,6 +11,8 @@ declare module '@astryxdesign/core/theme' {
     eyebrow: true;
     /** Eyebrow de tête de section : un tiret de 40 px de chaque côté (maquette .c-head-eyebrow) */
     'eyebrow-lines': true;
+    /** Eyebrow en Geist Mono 500, 12 px — modale, pied de page */
+    'eyebrow-mono': true;
     /** Cormorant Garamond italique 600, couleur accent — mot « signature » dans un titre */
     serif: true;
     /** Cormorant Garamond droit 500, couleur silo — numéros d'étape, guillemet des témoignages */

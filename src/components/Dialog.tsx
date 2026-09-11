@@ -80,7 +80,7 @@ export function Dialog({
       }}>
       <VStack gap={1} vAlign="center">
         {eyebrow ? (
-          <Text type="eyebrow" className={styles.eyebrow}>
+          <Text type="eyebrow-mono" className={styles.eyebrow}>
             {eyebrow}
           </Text>
         ) : null}
