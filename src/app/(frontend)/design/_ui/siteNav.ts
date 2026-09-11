@@ -62,7 +62,7 @@ export const SITE_FOOTER: SiteFooterData = {
   brand: {name: 'Vidomia', href: '/', description: 'La plateforme de chiffrage BTP qui transforme un métré en devis pro, validé par un ingénieur, en moins de 48 h.'},
   newsletter: {
     eyebrow: 'La lettre Vidomia',
-    title: {before: 'Le chiffrage juste,', accent: 'une fois par mois.'},
+    title: 'Le chiffrage juste, <span>une fois par mois.</span>',
     text: 'Prix de référence, méthodes et retours terrain. Pas de spam, désinscription en un clic.',
     fieldLabel: 'Votre adresse e-mail',
     buttonLabel: "S'abonner",

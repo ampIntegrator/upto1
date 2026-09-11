@@ -1,8 +1,6 @@
 /* Hero — hauts de page (maquettes 02, 16, 25). Le fond et la hauteur viennent de Section. */
 .center { text-align: center; }
 .title { text-wrap: balance; }
-/* l'accent serif occupe sa propre ligne */
-.accent { display: block; }
 .lead { max-width: 640px; }
 .paragraph { max-width: 520px; font-size: 18px; line-height: 1.55; }
 .pageInner { padding-block: 64px; }

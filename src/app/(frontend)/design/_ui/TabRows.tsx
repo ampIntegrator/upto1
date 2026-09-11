@@ -13,22 +13,28 @@ export const TABS = [
   {value: 'refacturation', label: 'La refacturation tourne mal', text: "Refacturer la maintenance à chaque site ou franchisé suppose un détail précis par poste. Sans données fiables, la refacturation est contestée, retardée, parfois abandonnée.", more: "Les écarts entre devis, bon d'intervention et facture finissent en avoirs, en relances et en tension commerciale. Une seule chaîne de données, du chiffrage à la facture, évite d'y revenir."},
 ] as const;
 
-/** Liste d'onglets à largeur égale + panneau (thème orbita.ts section ONGLETS ; panneau : classes .orbita-tab-stack / .orbita-tab-panel de styles.css). */
+/** Liste d'onglets à largeur égale + panneau (thème orbita.ts section ONGLETS ; panneau : classes .orbita-tab-stack / .orbita-tab-panel de styles.css).
+ *  Tous les panneaux sont rendus, empilés dans la même case de grille : le bloc garde la hauteur du plus haut
+ *  quel que soit l'onglet ouvert, et le liseré reste collé au bas du bloc même si la grille de page l'étire. */
 export function TabsWithPanel({id}: {id: string}) {
   const [value, setValue] = useState<string>(TABS[0].value);
-  const current = TABS.find((t) => t.value === value) ?? TABS[0];
   return (
     <VStack style={{boxShadow: 'var(--shadow-med)'}}>
       <TabList value={value} onChange={setValue} layout="fill" role="tablist" aria-label="Situations">
         {TABS.map((t) => <Tab key={t.value} value={t.value} label={t.label} panelId={`${id}-${t.value}`} />)}
       </TabList>
       <VStack className="orbita-tab-stack">
-        <VStack id={`${id}-${current.value}`} role="tabpanel" className="orbita-tab-panel" align="center">
-          <VStack gap={4}>
-            <Text type="body" style={{fontSize: '16.5px', lineHeight: 1.65}} color="secondary">{current.text}</Text>
-            <Text type="body" style={{fontSize: '16.5px', lineHeight: 1.65}} color="secondary">{current.more}</Text>
-          </VStack>
-        </VStack>
+        {TABS.map((t) => {
+          const active = t.value === value;
+          return (
+            <VStack key={t.value} id={`${id}-${t.value}`} role="tabpanel" className="orbita-tab-panel" align="center" data-active={active || undefined} aria-hidden={!active} inert={!active}>
+              <VStack gap={4}>
+                <Text type="body" style={{fontSize: '16.5px', lineHeight: 1.65}} color="secondary">{t.text}</Text>
+                <Text type="body" style={{fontSize: '16.5px', lineHeight: 1.65}} color="secondary">{t.more}</Text>
+              </VStack>
+            </VStack>
+          );
+        })}
       </VStack>
     </VStack>
   );

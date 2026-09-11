@@ -31,6 +31,7 @@ import {Container} from './Container';
 import {Field} from './Field';
 import type {SiteFooterData, SiteStrip} from './site-nav';
 import styles from './SiteFooter.module.css';
+import {renderTitle} from './TitleText';
 
 export type SiteFooterProps = SiteFooterData & {
   strip?: SiteStrip;
@@ -49,8 +50,7 @@ function Newsletter({newsletter, onSubscribe}: {newsletter: NonNullable<SiteFoot
             <VStack gap={2}>
               <Text type="eyebrow" className={styles.eyebrow}>{newsletter.eyebrow}</Text>
               <Heading level={2} className={styles.newsTitle}>
-                {newsletter.title.before}{' '}
-                {newsletter.title.accent ? <Text type="serif" className={styles.newsAccent}>{newsletter.title.accent}</Text> : null}
+                {renderTitle(newsletter.title, styles.newsAccent)}
               </Heading>
               {newsletter.text ? <Text type="body" color="secondary" className={styles.newsText}>{newsletter.text}</Text> : null}
             </VStack>

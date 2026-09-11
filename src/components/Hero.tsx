@@ -4,7 +4,7 @@
  * Hero — le haut de page, en trois dispositions qui couvrent les cinq maquettes :
  *
  *   variant="media"  plein écran sur image ou vidéo (maquette 16) : chip translucide,
- *                    titre sur trois lignes (accent serif or au milieu), chapô, deux
+ *                    titre sur trois lignes (accent serif or), chapô, deux
  *                    boutons, invitation à défiler.
  *   variant="split"  plein écran clair, texte à gauche sur 7 colonnes et image à droite
  *                    sur 5 (maquette 02) : chip live, titre sur trois lignes (accent
@@ -25,6 +25,7 @@ import {Text} from '@astryxdesign/core/Text';
 import React from 'react';
 
 import {CheckIcon, ChevronDownIcon, type NucleoIconKey} from '@/theme/icons/nucleo';
+import {renderTitle, type TitleText} from './TitleText';
 import {BreadcrumbBand, type BreadcrumbBandProps} from './BreadcrumbBand';
 import {Button} from './Button';
 import {Chip} from './Chip';
@@ -44,8 +45,8 @@ export type HeroProps = {
   overlay?: number;
   /** petit texte au-dessus du titre : chip (media, split) ou tirets (page) */
   eyebrow?: string;
-  /** titre : avant / accent serif (sur sa ligne) / après */
-  title: {before?: string; accent?: string; after?: string};
+  /** titre saisi en textarea : retours à la ligne = <br />, <span>…</span> = accent serif (voir TitleText) */
+  title: TitleText;
   lead?: string;
   primary?: HeroAction;
   secondary?: HeroAction;
@@ -64,9 +65,7 @@ export type HeroProps = {
 function Title({title, level = 1, type}: {title: HeroProps['title']; level?: 1 | 2; type: 'display-1' | 'display-3'}) {
   return (
     <Heading level={level} type={type} className={styles.title}>
-      {title.before}
-      {title.accent ? <Text type="serif" className={styles.accent}>{title.accent}</Text> : null}
-      {title.after}
+      {renderTitle(title)}
     </Heading>
   );
 }

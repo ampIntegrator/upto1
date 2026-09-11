@@ -164,6 +164,7 @@
   padding: 0 20px;
   box-sizing: border-box;
   box-shadow: none !important; /* Astryx ombre ce conteneur : visible sur les côtés au-delà de 1440 px */
+  border: 0 !important; /* Astryx pose un filet de 1 px : ligne blanche entre la barre et la zone libre */
   overflow: visible !important;
 }
 .megaWrap,

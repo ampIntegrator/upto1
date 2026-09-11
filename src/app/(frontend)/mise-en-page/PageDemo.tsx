@@ -36,7 +36,7 @@ const HEROES: Record<DemoHero, HeroProps> = {
   media: {
     variant: 'media', background: 'image', image: {src: IMG, alt: ''}, overlay: 0.3,
     eyebrow: "L'IA au service du bâtiment & de l'immobilier",
-    title: {before: 'Toute la chaîne bâtiment,', accent: "d'un seul outil.", after: 'Du chiffrage à la maintenance.'},
+    title: "Toute la chaîne bâtiment,\n<span>d'un seul outil.</span>\nDu chiffrage à la maintenance.",
     lead: "Éditeur de logiciels pour les pros de l'immobilier et les gestionnaires de sites, du chiffrage de travaux à la maintenance multitechnique.",
     primary: {label: 'Demander une démo', href: '#demo'}, secondary: {label: 'Voir la vidéo', href: '#video', iconKey: 'play'},
     scrollHint: 'Défiler',
@@ -44,7 +44,7 @@ const HEROES: Record<DemoHero, HeroProps> = {
   split: {
     variant: 'split',
     eyebrow: "850+ courtiers actifs · Mis à jour aujourd'hui",
-    title: {before: 'Chiffrez les travaux', accent: 'en 20 minutes.', after: 'Sans artisan.'},
+    title: 'Chiffrez les travaux\n<span>en 20 minutes.</span>\nSans artisan.',
     lead: 'Le devis arrive jamais. Le client signe ailleurs. Chiffrage Pro vous sort de cette dépendance : estimation détaillée, validée expert, livrable client en moins de 48 heures.',
     primary: {label: 'Faire mon 1er chiffrage gratuit', href: '#chiffrage'}, secondary: {label: 'Voir un exemple de rapport', href: '#rapport'},
     reassurance: ['1er chiffrage offert', 'Sans carte bancaire', 'Première estimation en 20 min'],
@@ -53,7 +53,7 @@ const HEROES: Record<DemoHero, HeroProps> = {
   'page-image': {
     variant: 'page', background: 'image', image: {src: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1920&q=80&auto=format&fit=crop', alt: ''}, overlay: 0.5,
     eyebrow: 'Plateforme',
-    title: {before: 'Le chiffrage,', accent: 'de A à Z.'},
+    title: 'Le chiffrage,\n<span>de A à Z.</span>',
     lead: 'Du métré au devis signé, une seule plateforme pour estimer juste et répondre plus vite que la concurrence.',
     primary: {label: 'Demander une démo', href: '#demo'}, secondary: {label: 'Voir la vidéo', href: '#video', iconKey: 'play'},
     breadcrumb: {items: [], current: 'Nos solutions'},
@@ -61,7 +61,7 @@ const HEROES: Record<DemoHero, HeroProps> = {
   'page-glow': {
     variant: 'page', background: 'glow',
     eyebrow: 'Tarification',
-    title: {before: 'Un prix clair,', accent: 'sans surprise.'},
+    title: 'Un prix clair,\n<span>sans surprise.</span>',
     lead: "Choisissez l'offre adaptée à votre volume de chantiers. Sans engagement, sans frais cachés, résiliable en un clic.",
     primary: {label: 'Voir les tarifs', href: '#tarifs'}, secondary: {label: 'Parler à un conseiller', href: '#conseiller', iconKey: 'phone'},
     breadcrumb: {items: [], current: 'Tarifs & offres'},
@@ -69,7 +69,7 @@ const HEROES: Record<DemoHero, HeroProps> = {
   'page-night': {
     variant: 'page', background: 'night-halo',
     eyebrow: 'Support',
-    title: {before: 'Une question ?', accent: 'On vous répond.'},
+    title: 'Une question ?\n<span>On vous répond.</span>',
     lead: "Centre d'aide, documentation et équipe support : trouvez la réponse en quelques minutes, ou parlez à un humain.",
     primary: {label: "Centre d'aide", href: '#aide'}, secondary: {label: 'Nous écrire', href: '#contact', iconKey: 'mail'},
     breadcrumb: {items: [], current: 'Support'},

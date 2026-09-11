@@ -49,7 +49,8 @@ export type SiteFooterData = {
   brand: {name: string; href: string; description?: string};
   newsletter?: {
     eyebrow: string;
-    title: {before: string; accent?: string};
+    /** titre saisi en textarea (retours à la ligne, <span> serif) : voir TitleText */
+    title: string;
     text?: string;
     fieldLabel: string;
     buttonLabel: string;
