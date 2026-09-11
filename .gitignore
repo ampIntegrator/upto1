@@ -60,6 +60,7 @@ node_modules/
 /Orbita/*
 !/Orbita/orbita/
 /consignes.md
+/payload.md
 
 # sauvegardes locales de la base SQLite (pnpm db:backup)
 /backups/
