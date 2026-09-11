@@ -132,7 +132,7 @@ export function Hero(props: HeroProps) {
                   <HStack gap={6} wrap="wrap" className={styles.reassurance}>
                     {reassurance.map((r) => (
                       <HStack key={r} gap={1.5} vAlign="center">
-                        <CheckIcon width={14} height={14} className={styles.check} />
+                        <CheckIcon width={18} height={18} className={styles.check} />
                         <Text size="sm" color="secondary">{r}</Text>
                       </HStack>
                     ))}

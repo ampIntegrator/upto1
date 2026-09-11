@@ -125,7 +125,7 @@ a.contact:hover { color: #fff; }
   background: rgba(255, 255, 255, 0.03);
   transition: color var(--duration-medium) var(--ease-standard), border-color var(--duration-medium) var(--ease-standard), background-color var(--duration-medium) var(--ease-standard);
 }
-.social:hover { color: #fff; border-color: var(--color-highlight); background: rgba(255, 255, 255, 0.06); }
+.social:hover { color: var(--color-highlight); border-color: var(--color-highlight); background: rgba(255, 255, 255, 0.06); } /* icône et cadre de la même couleur */
 
 .colHead {
   font-size: 12px;

@@ -44,7 +44,7 @@
   border: var(--border-width) solid rgba(255, 255, 255, 0.16);
   transition: color var(--duration-medium) var(--ease-standard), border-color var(--duration-medium) var(--ease-standard);
 }
-.social:hover { color: #fff; border-color: var(--color-highlight); }
+.social:hover { color: var(--color-highlight); border-color: var(--color-highlight); } /* icône et cadre de la même couleur */
 
 /* ---- barre principale : papier translucide flouté, opaque + ombre au défilement ---- */
 .main {
@@ -267,6 +267,7 @@
 /* bandeau sur hero (maquette 16) : voile nuit à 40 %, textes blancs à 82 % */
 .header[data-tone='dark']:not([data-scrolled]) .strip { background: rgba(10, 14, 26, 0.4); color: rgba(255, 255, 255, 0.82); }
 .header[data-tone='dark']:not([data-scrolled]) .social { color: rgba(255, 255, 255, 0.75); border-color: rgba(255, 255, 255, 0.18); }
+.header[data-tone='dark']:not([data-scrolled]) .social:hover { color: var(--color-highlight); border-color: var(--color-highlight); }
 .header[data-tone='dark']:not([data-scrolled]) :global(.astryx-top-nav-heading),
 .header[data-tone='dark']:not([data-scrolled]) :global(.astryx-top-nav-heading span),
 .header[data-tone='dark']:not([data-scrolled]) :global(.astryx-top-nav-item),

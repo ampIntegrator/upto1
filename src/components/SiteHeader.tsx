@@ -27,6 +27,7 @@ import React, {useEffect, useState, useSyncExternalStore} from 'react';
 
 import {ClockIcon, MailIcon, MenuIcon, NUCLEO_ICONS, PhoneIcon, SearchIcon} from '@/theme/icons/nucleo';
 import {Container} from './Container';
+import {Flag} from './Flag';
 import type {SiteHeaderData, SiteNavEntry, SiteNavLeaf} from './site-nav';
 import styles from './SiteHeader.module.css';
 
@@ -149,7 +150,7 @@ export function SiteHeader({brand, strip, nav, actions, languages = ['FR'], tone
                 <IconButton label="Rechercher" icon={<SearchIcon />} variant="ghost" size="sm" onClick={() => undefined} />
                 <DropdownMenu
                   button={{label: lang, variant: 'ghost', size: 'sm'}}
-                  items={languages.map((l) => ({label: l, onClick: () => setLang(l)}))}
+                  items={languages.map((l) => ({id: l, label: <HStack gap={2} vAlign="center"><Flag code={l} />{l}</HStack>, onClick: () => setLang(l)}))}
                   alignment="end"
                 />
                 <HStack height={26} className={styles.actionsSep}><Divider orientation="vertical" /></HStack>
