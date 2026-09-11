@@ -31,7 +31,7 @@ export function SiloPicker(props: SelectFieldClientProps) {
   return (
     <div className="field-type" style={{marginBottom: 'var(--base)'}}>
       <FieldLabel label={label} path={path} required={field.required} />
-      <div role="radiogroup" aria-label={label} style={{display: 'flex', flexWrap: 'wrap', gap: 8}}>
+      <div role="radiogroup" aria-label={label} style={{display: 'grid', gridTemplateColumns: 'repeat(3, 48px)', gap: 8}}>
         {options.map((o) => {
           const silo = o.value as SiloName;
           const selected = shown === o.value;
