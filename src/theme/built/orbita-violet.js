@@ -292,6 +292,14 @@ export const orbitaVioletTheme = {
         "lineHeight": "inherit",
         "letterSpacing": "-0.01em"
       },
+      "type:serif-upright": {
+        "fontFamily": "var(--font-family-serif)",
+        "fontStyle": "normal",
+        "fontWeight": "500",
+        "color": "var(--color-accent)",
+        "fontSize": "inherit",
+        "lineHeight": "inherit"
+      },
       "type:number": {
         "fontFamily": "var(--font-family-heading)",
         "fontWeight": "800",
@@ -320,6 +328,9 @@ export const orbitaVioletTheme = {
       },
       "type:serif+color:primary": {
         "color": "var(--serif-color, light-dark(var(--color-accent), var(--color-highlight)))"
+      },
+      "type:serif-upright+color:primary": {
+        "color": "light-dark(var(--color-accent), var(--color-highlight))"
       },
       "type:number+color:primary": {
         "color": "var(--color-text-accent)"
@@ -1172,6 +1183,17 @@ export const orbitaVioletTheme = {
         }
       }
     },
+    "blockquote": {
+      "base": {
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "color": "inherit",
+        "fontStyle": "normal",
+        "fontSize": "inherit",
+        "lineHeight": "inherit"
+      }
+    },
     "tab-list": {
       "base": {
         "height": "auto",
@@ -1207,7 +1229,8 @@ export const orbitaVioletTheme = {
         }
       },
       "selected": {
-        "color": "light-dark(var(--color-text-accent), var(--color-highlight))"
+        "color": "light-dark(var(--color-text-accent), var(--color-highlight))",
+        "backgroundColor": "var(--color-highlight-light)"
       }
     },
     "tab-menu": {
@@ -1229,7 +1252,8 @@ export const orbitaVioletTheme = {
         }
       },
       "selected": {
-        "color": "light-dark(var(--color-text-accent), var(--color-highlight))"
+        "color": "light-dark(var(--color-text-accent), var(--color-highlight))",
+        "backgroundColor": "var(--color-highlight-light)"
       }
     },
     "tab-indicator": {

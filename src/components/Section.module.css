@@ -116,5 +116,5 @@
   inset: auto 0 0 0;
   z-index: 3;
   height: 4px;
-  background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-highlight) 50%, var(--color-accent) 100%);
+  background: var(--gradient-edge);
 }

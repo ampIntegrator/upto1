@@ -33,7 +33,6 @@ import './built/orbita-blue.css';
 import './built/orbita-green.css';
 import './built/orbita-orange.css';
 import './built/orbita-violet.css';
-import './built/orbita-brique.css';
 import './built/orbita-magenta.css';
 import './built/orbita-ambre.css';
 

@@ -652,6 +652,24 @@ export const CATALOG: CatalogCategory[] = [
         "doc": null
       },
       {
+        "name": "SectionHeading",
+        "label": "Section Heading",
+        "slug": "section-heading",
+        "href": "/design/composants/section-heading",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
+        "name": "SectionNote",
+        "label": "Section Note",
+        "slug": "section-note",
+        "href": "/design/composants/section-note",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
         "name": "AppShell",
         "label": "App Shell",
         "slug": "app-shell",
@@ -1224,6 +1242,15 @@ export const CATALOG: CatalogCategory[] = [
     "lead": "Données en lignes : tables, listes, arborescences.",
     "href": "/design/composants#tables-listes",
     "items": [
+      {
+        "name": "CheckList",
+        "label": "Check List",
+        "slug": "check-list",
+        "href": "/design/composants/check-list",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
       {
         "name": "Item",
         "label": "Item",

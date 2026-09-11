@@ -220,6 +220,16 @@ body {
   font-weight: var(--font-weight-semibold) !important;
 }
 
+/* Dégradés signature (liserés, séparateurs) : une seule source.
+   edge           : silo aux bords, highlight au centre (pied de Section média)
+   edge-highlight : highlight aux bords, silo au centre (pied des onglets, séparateurs
+                    du bloc étapes) ; -v : le même à la verticale */
+[data-astryx-theme^='orbita'] {
+  --gradient-edge: linear-gradient(90deg, var(--color-accent) 0%, var(--color-highlight) 50%, var(--color-accent) 100%);
+  --gradient-edge-highlight: linear-gradient(90deg, var(--color-highlight) 0%, var(--color-accent) 50%, var(--color-highlight) 100%);
+  --gradient-edge-highlight-v: linear-gradient(180deg, var(--color-highlight) 0%, var(--color-accent) 50%, var(--color-highlight) 100%);
+}
+
 /* Onglets (06-tabs) : compléments au thème orbita.ts (section ONGLETS) pour ce
    que defineTheme ne cible pas. Séparateur vertical entre onglets ; menu de
    débordement en couleur silo quand son option est choisie ; libellés sur deux
@@ -326,7 +336,7 @@ body {
   position: absolute;
   inset: auto 0 0 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--color-highlight) 0%, var(--color-accent) 50%, var(--color-highlight) 100%);
+  background: var(--gradient-edge-highlight);
 }
 [data-astryx-theme^='orbita'] .orbita-tab-panel {
   grid-area: 1 / 1;

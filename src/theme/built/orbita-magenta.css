@@ -440,6 +440,15 @@
     letter-spacing: -0.01em;
   }
 
+  .astryx-text.serif-upright {
+    font-family: var(--font-family-serif);
+    font-style: normal;
+    font-weight: 500;
+    color: var(--color-accent);
+    font-size: inherit;
+    line-height: inherit;
+  }
+
   .astryx-text.number {
     font-family: var(--font-family-heading);
     font-weight: 800;
@@ -473,6 +482,10 @@
 
   .astryx-text.serif.primary {
     color: var(--serif-color, light-dark(var(--color-accent), var(--color-highlight)));
+  }
+
+  .astryx-text.serif-upright.primary {
+    color: light-dark(var(--color-accent), var(--color-highlight));
   }
 
   .astryx-text.number.primary {
@@ -1411,6 +1424,16 @@
     color: var(--color-accent);
   }
 
+  .astryx-blockquote {
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    color: inherit;
+    font-style: normal;
+    font-size: inherit;
+    line-height: inherit;
+  }
+
   .astryx-tab-list {
     height: auto;
     font-family: var(--font-family-body);
@@ -1446,6 +1469,7 @@
 
   .astryx-tab.selected {
     color: light-dark(var(--color-text-accent), var(--color-highlight));
+    background-color: var(--color-highlight-light);
   }
 
   .astryx-tab-menu {
@@ -1469,6 +1493,7 @@
 
   .astryx-tab-menu.selected {
     color: light-dark(var(--color-text-accent), var(--color-highlight));
+    background-color: var(--color-highlight-light);
   }
 
   .astryx-tab-indicator {

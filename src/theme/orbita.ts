@@ -261,6 +261,16 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           lineHeight: 'inherit',
           letterSpacing: '-0.01em',
         },
+        // Serif droit (maquette .c-serif) : Cormorant 500, couleur silo — numéros d'étape,
+        // guillemet des témoignages ; hérite de la taille du parent
+        'type:serif-upright': {
+          fontFamily: 'var(--font-family-serif)',
+          fontStyle: 'normal',
+          fontWeight: '500',
+          color: 'var(--color-accent)',
+          fontSize: 'inherit',
+          lineHeight: 'inherit',
+        },
         // Grand nombre de carte (card-num) : Schibsted 800, couleur silo
         'type:number': {
           fontFamily: 'var(--font-family-heading)',
@@ -284,6 +294,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         'type:eyebrow+color:primary': {color: 'var(--color-editorial)'},
         'type:eyebrow-lines+color:primary': {color: 'var(--color-editorial)'},
         'type:serif+color:primary': {color: 'var(--serif-color, light-dark(var(--color-accent), var(--color-highlight)))'},
+        'type:serif-upright+color:primary': {color: 'light-dark(var(--color-accent), var(--color-highlight))'},
         'type:number+color:primary': {color: 'var(--color-text-accent)'},
         'type:result+color:primary': {color: 'light-dark(var(--color-text-accent), var(--color-highlight))'},
         'type:date+color:primary': {color: 'var(--color-text-disabled)'},
@@ -535,6 +546,12 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         },
       },
 
+      /* Citation (Blockquote Astryx) : sans filet ni retrait, elle hérite du contexte —
+         la carte témoignage (maquette 07) et la carte comparative (05) l'habillent. */
+      blockquote: {
+        base: {margin: '0', padding: '0', borderWidth: '0', color: 'inherit', fontStyle: 'normal', fontSize: 'inherit', lineHeight: 'inherit'},
+      },
+
       /* ─────────────────────────────────────────────────────────────────
          ONGLETS (maquette 06-tabs) — Tab, TabList, TabMenu
          Cibles Astryx : tab-list (la barre), tab-strip (la piste), tab (un
@@ -580,8 +597,8 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
                 backgroundColor: 'light-dark(var(--color-accent-muted), rgba(255,255,255,.06))',
               },
             },
-            // actif : couleur silo (highlight en nuit)
-            selected: {color: 'light-dark(var(--color-text-accent), var(--color-highlight))'},
+            // actif : couleur silo (highlight en nuit), fond highlight 5 % comme le panneau
+            selected: {color: 'light-dark(var(--color-text-accent), var(--color-highlight))', backgroundColor: 'var(--color-highlight-light)'},
           },
         ]),
       ),

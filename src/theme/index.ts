@@ -7,7 +7,6 @@ import type {DefinedTheme} from '@astryxdesign/core/theme';
 
 import {orbitaAmbreTheme} from './built/orbita-ambre';
 import {orbitaBlueTheme} from './built/orbita-blue';
-import {orbitaBriqueTheme} from './built/orbita-brique';
 import {orbitaGreenTheme} from './built/orbita-green';
 import {orbitaMagentaTheme} from './built/orbita-magenta';
 import {orbitaOrangeTheme} from './built/orbita-orange';
@@ -21,7 +20,6 @@ export const ORBITA_THEMES: Record<SiloName, DefinedTheme> = {
   green: orbitaGreenTheme,
   orange: orbitaOrangeTheme,
   violet: orbitaVioletTheme,
-  brique: orbitaBriqueTheme,
   magenta: orbitaMagentaTheme,
   ambre: orbitaAmbreTheme,
 };
@@ -31,7 +29,6 @@ export const SILO_LABELS: Record<SiloName, string> = {
   green: 'Vert',
   orange: 'Orange',
   violet: 'Violet',
-  brique: 'Brique',
   magenta: 'Magenta',
   ambre: 'Ambre',
 };

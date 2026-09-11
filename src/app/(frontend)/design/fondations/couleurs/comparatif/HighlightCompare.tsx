@@ -17,7 +17,6 @@ const BEFORE: Record<SiloName, {highlight: string; highlightDeep: string}> = {
   green:   {highlight: '#90D150', highlightDeep: '#5AA81F'},
   orange:  {highlight: '#F5C403', highlightDeep: '#C99700'},
   violet:  {highlight: '#C77DFF', highlightDeep: '#9D4EDD'},
-  brique:  {highlight: '#FF8A5B', highlightDeep: '#C24A22'},
   magenta: {highlight: '#FF7AC4', highlightDeep: '#C42E86'},
   ambre:   {highlight: '#F5CE5B', highlightDeep: '#B5810F'},
 };

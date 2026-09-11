@@ -1,0 +1,15 @@
+/* SectionNote — note + appel à l'action en pied de bloc (maquettes 03, 05). */
+.root { width: 100%; }
+.note { max-width: 760px; font-size: 14px; line-height: 1.6; }
+.asterisk {
+  font-style: normal;
+  font-weight: var(--font-weight-bold);
+  color: light-dark(var(--color-text-accent), var(--color-highlight));
+  vertical-align: top;
+  margin-right: 6px;
+}
+.strong { font-weight: var(--font-weight-semibold); color: var(--color-text-primary); }
+.cta { flex: 0 0 auto; }
+@media (max-width: 767px) {
+  .root { flex-direction: column !important; align-items: flex-start !important; }
+}
