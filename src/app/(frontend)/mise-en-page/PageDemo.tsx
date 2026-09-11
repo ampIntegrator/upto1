@@ -13,9 +13,15 @@ import {Hero, type HeroProps} from '@/components/Hero';
 import {Button} from '@/components/Button';
 import {Card} from '@/components/Card';
 import {Collapsible, CollapsibleGroup} from '@/components/Collapsible';
+import {CompareCard} from '@/components/CompareCard';
+import {ProcessSteps} from '@/components/ProcessSteps';
+import {SectionHeading} from '@/components/SectionHeading';
+import {SectionNote} from '@/components/SectionNote';
+import {TestimonialCarousel} from '@/components/TestimonialCarousel';
 import {Section} from '@/components/Section';
 import {SiteFooter} from '@/components/SiteFooter';
 import {SiteHeader} from '@/components/SiteHeader';
+import {AVANT, APRES, METIERS, PROCESS_STEPS, TESTIMONIALS} from '../design/_showcases/blocks.shared';
 import {FAQ} from '../design/_showcases/faq.shared';
 import {SITE_FOOTER, SITE_HEADER} from '../design/_ui/siteNav';
 import {STATS_BARS, StatsBar} from '../design/_ui/StatsBar';
@@ -76,7 +82,47 @@ const HEROES: Record<DemoHero, HeroProps> = {
   },
 };
 
-export function PageDemo({hero = 'media'}: {hero?: DemoHero}) {
+/** Les blocs étapes, comparatif et témoignages (maquettes 03, 05, 07), en clair ou en nuit. */
+function Blocks({mode}: {mode: 'light' | 'dark'}) {
+  const dark = mode === 'dark';
+  return (
+    <>
+      {/* 4b · étapes : en-tête centré, panneau, note + bouton */}
+      <Section background={dark ? 'night' : 'light'} spacing="md">
+        <Container gap={6}>
+          <SectionHeading eyebrow="Comment ça marche" title="3 étapes. <span>48 h max.</span>" />
+          <ProcessSteps steps={PROCESS_STEPS} />
+          <SectionNote strong="Première estimation offerte." text="La première estimation est gratuite et sans engagement, y compris le rapport PDF validé par expert. Aucune carte bancaire n'est requise à l'inscription." cta={{label: 'Démarrer gratuitement', href: '#'}} />
+        </Container>
+      </Section>
+
+      {/* 4c · comparatif : avant / après sur 6 + 6, puis trois métiers sur 4 */}
+      <Section background={dark ? 'night-halo' : 'dots'} spacing="md">
+        <Container gap={6}>
+          <SectionHeading eyebrow="Le déclic" title="Sortez <span>de l'attente.</span>" text="Le même chantier, deux trajectoires. D'un côté l'attente du devis artisan ; de l'autre, un chiffrage validé, livré, pendant que le client est encore en face de vous." />
+          <Grid columns={12} gap={6} className="page-grid" align="stretch">
+            <GridSpan columns={6}><CompareCard {...AVANT} /></GridSpan>
+            <GridSpan columns={6}><CompareCard {...APRES} /></GridSpan>
+          </Grid>
+          <Grid columns={12} gap={6} className="page-grid" align="stretch">
+            {METIERS.map((m) => <GridSpan key={m.chip.label} columns={4}><CompareCard {...m} /></GridSpan>)}
+          </Grid>
+          <SectionNote strong="Un compte, tous les métiers." text="L'interface s'adapte à votre profil à l'inscription. Vous pouvez basculer de vue à tout moment depuis votre tableau de bord." cta={{label: 'Trouver mon profil', href: '#'}} />
+        </Container>
+      </Section>
+
+      {/* 4d · témoignages : en-tête à mot contouré, carrousel */}
+      <Section background={dark ? 'night' : 'paper'} spacing="md" dividers={!dark}>
+        <Container gap={8}>
+          <SectionHeading eyebrow="Ils ont arrêté d'attendre" title="Ils <span>closent.</span>" ghost="CLOSENT" />
+          <TestimonialCarousel items={TESTIMONIALS} />
+        </Container>
+      </Section>
+    </>
+  );
+}
+
+export function PageDemo({hero = 'media', blocks}: {hero?: DemoHero; /** blocs 03, 05, 07 insérés après les onglets, en clair ou en nuit */ blocks?: 'light' | 'dark'}) {
   return (
     <VStack className="page-demo">
       {/* 0 · en-tête fixé ; tonalité déduite du premier bloc (ici image → sombre) */}
@@ -166,6 +212,8 @@ export function PageDemo({hero = 'media'}: {hero?: DemoHero}) {
           </Grid>
         </Container>
       </Section>
+
+      {blocks ? <Blocks mode={blocks} /> : null}
 
       {/* 5 · vidéo : appel à l'action sur 8 centré */}
       <Section background="video" video={{src: VIDEO, poster: IMG}} overlay={0.3} spacing="lg" minHeight={520}>

@@ -10,7 +10,7 @@ import React from 'react';
 import {Container} from '@/components/Container';
 import {Section} from '@/components/Section';
 import {TestimonialCard} from '@/components/TestimonialCard';
-import {TESTIMONIALS} from './TestimonialCarouselShowcase';
+import {TESTIMONIALS} from './blocks.shared';
 
 export default function TestimonialCardShowcase() {
   return (

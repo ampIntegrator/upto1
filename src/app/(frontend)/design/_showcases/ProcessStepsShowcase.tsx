@@ -7,16 +7,12 @@ import {Text} from '@astryxdesign/core/Text';
 import React from 'react';
 
 import {Container} from '@/components/Container';
-import {ProcessSteps, type ProcessStep} from '@/components/ProcessSteps';
+import {ProcessSteps} from '@/components/ProcessSteps';
+import {PROCESS_STEPS} from './blocks.shared';
 import {Section} from '@/components/Section';
 import {SectionHeading} from '@/components/SectionHeading';
 import {SectionNote} from '@/components/SectionNote';
 
-export const PROCESS_STEPS: ProcessStep[] = [
-  {title: 'Vous décrivez', duration: '5 min', text: "Un questionnaire guidé en 18 questions. Surface, typologie, état du bâti, travaux souhaités, contraintes. L'interface adapte les questions à votre cas.", checks: ['Aucune compétence BTP requise', 'Sauvegarde automatique entre étapes', 'Téléversement de photos & plans existants']},
-  {title: 'Vous recevez', duration: '15 min', asterisk: true, text: 'Notre algorithme compare votre projet à 50 000 chantiers similaires. Détail poste par poste, fourchette de prix, hypothèses techniques, alertes structure.', checks: ['Estimation poste par poste · ± 8 %', 'Préconisation IPN / HEB si mur porteur', 'Note de calcul exportable']},
-  {title: 'Un expert valide', duration: '48 h', text: "Un ingénieur BTP, 15 ans d'expérience minimum, relit, ajuste, signe. Vous recevez un PDF à votre nom, prêt à être remis au client.", checks: ['Validation par expert agréé', 'PDF à votre charte graphique', 'Recours hotline pendant 30 jours']},
-];
 
 export default function ProcessStepsShowcase() {
   return (

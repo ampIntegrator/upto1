@@ -12,14 +12,8 @@ import {Container} from '@/components/Container';
 import {Section} from '@/components/Section';
 import {SectionHeading} from '@/components/SectionHeading';
 import {SectionNote} from '@/components/SectionNote';
+import {AVANT, APRES, METIERS} from './blocks.shared';
 
-const AVANT = {chip: {label: 'AVANT', tone: 'danger' as const}, meta: "3 semaines d'attente", quote: "« Je ne sais pas, j'attends le devis de l'artisan… »", tone: 'cross' as const, items: ["Vous appelez · l'artisan dit « Je vous rappelle »", 'Vous relancez · 4 fois', 'Le client signe ailleurs', 'Le mandat est perdu']};
-const APRES = {chip: {label: 'APRÈS', tone: 'high' as const}, meta: '20 min chrono', quote: '« Voici le détail : 67 400 € ± 8 %. Et le PDF. »', featured: true, items: ['Vous chiffrez en visite, devant le client', 'Détail par poste, validé expert BTP', 'Rapport PDF à votre nom, sous 48 h', 'Le mandat est signé']};
-const METIERS = [
-  {chip: {label: 'COURTIERS'}, meta: 'Closing +34 %', quote: '« Je chiffre devant le client, je signe le mandat. »', items: ['Estimation en rendez-vous', 'Argumentaire chiffré, poste par poste', 'Mandat sécurisé avant le concurrent']},
-  {chip: {label: 'ARCHITECTES'}, meta: 'Du métré au prix', quote: '« Mon estimatif est prêt avant la prochaine réunion. »', featured: true, items: ['Métré importé, prix calculés', 'Détail compatible CCTP', 'Note de calcul exportable']},
-  {chip: {label: 'PROMOTEURS'}, meta: 'Budget fiable', quote: "« Je fiabilise mon budget dès l'esquisse. »", items: ["Chiffrage dès l'avant-projet", 'Fourchettes ± 8 % documentées', 'Suivi des coûts en temps réel']},
-];
 
 export default function CompareCardShowcase() {
   return (
