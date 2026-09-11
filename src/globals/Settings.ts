@@ -57,7 +57,12 @@ export const Settings: GlobalConfig = {
               name: 'breadcrumb', type: 'group', label: "Fil d'Ariane",
               fields: [
                 {name: 'enabled', type: 'checkbox', label: 'Afficher le fil d\'Ariane sous les hauts de page', defaultValue: true},
-                {name: 'homeLabel', type: 'text', label: 'Libellé de l\'accueil (lecteurs d\'écran)', localized: true, defaultValue: 'Accueil', admin: {condition: (_d, s) => s?.enabled !== false}},
+                {
+                  name: 'homeStyle', type: 'radio', label: 'Premier maillon (accueil)', defaultValue: 'icon',
+                  options: [{label: 'Icône maison', value: 'icon'}, {label: 'Texte', value: 'text'}],
+                  admin: {layout: 'horizontal', condition: (_d, s) => s?.enabled !== false},
+                },
+                {name: 'homeLabel', type: 'text', label: 'Libellé de l\'accueil (affiché en texte, sinon lu par les lecteurs d\'écran)', localized: true, defaultValue: 'Accueil', admin: {condition: (_d, s) => s?.enabled !== false}},
               ],
             },
           ],

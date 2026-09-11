@@ -143,7 +143,10 @@ export interface Page {
    * Minuscules, chiffres et tirets. « accueil » = page d'accueil.
    */
   slug: string;
-  silo?: ('inherit' | 'blue' | 'green' | 'orange' | 'violet' | 'magenta' | 'ambre') | null;
+  /**
+   * Présélectionné sur le silo du site ; changez-le pour cette page seulement.
+   */
+  silo?: ('blue' | 'green' | 'orange' | 'violet' | 'magenta' | 'ambre') | null;
   hero: {
     variant: 'media-image' | 'media-video' | 'split' | 'page-image' | 'page-glow' | 'page-night';
     eyebrow?: string | null;
@@ -553,6 +556,7 @@ export interface Setting {
     | null;
   breadcrumb?: {
     enabled?: boolean | null;
+    homeStyle?: ('icon' | 'text') | null;
     homeLabel?: string | null;
   };
   /**
@@ -704,6 +708,7 @@ export interface SettingsSelect<T extends boolean = true> {
     | T
     | {
         enabled?: T;
+        homeStyle?: T;
         homeLabel?: T;
       };
   languages?: T;

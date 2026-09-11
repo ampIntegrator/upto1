@@ -6,7 +6,7 @@ import React from 'react';
 import {BreadcrumbBand} from '@/components/BreadcrumbBand';
 import {Hero} from '@/components/Hero';
 import {SitePage} from '@/components/SitePage';
-import {getLocale, getSite, pageSilo, showBreadcrumb, toFooter, toHeader, toHero} from '@/lib/site';
+import {breadcrumbProps, getLocale, getSite, pageSilo, showBreadcrumb, toFooter, toHeader, toHero} from '@/lib/site';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,7 +34,7 @@ export default async function Page({params}: {params: Promise<{slug: string}>}) 
   return (
     <SitePage silo={pageSilo(page, site.settings)} header={toHeader(site.settings, site.header)} footer={toFooter(site.settings, site.footer, site.posts, locale)} tone={tone} currentHref={`/${slug}`}>
       <Hero {...hero} />
-      {bandBreadcrumb ? <BreadcrumbBand items={[]} current={page.title} homeLabel={site.settings.breadcrumb?.homeLabel ?? 'Accueil'} /> : null}
+      {bandBreadcrumb ? <BreadcrumbBand {...breadcrumbProps(page, site.settings)} /> : null}
     </SitePage>
   );
 }

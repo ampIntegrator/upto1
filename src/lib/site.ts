@@ -98,6 +98,11 @@ export function showBreadcrumb(page: Page, s: Settings): boolean {
   return s.breadcrumb?.enabled !== false;
 }
 
+/** Props du fil d'Ariane d'une page : accueil en icône ou en texte selon le réglage. */
+export function breadcrumbProps(page: Page, s: Settings) {
+  return {items: [], current: page.title, homeLabel: s.breadcrumb?.homeLabel ?? 'Accueil', homeStyle: (s.breadcrumb?.homeStyle ?? 'icon') as 'icon' | 'text'};
+}
+
 /** Le haut de page d'une page Payload → props du composant Hero. */
 export function toHero(page: Page, s: Settings): HeroProps {
   const h = page.hero;
@@ -114,13 +119,14 @@ export function toHero(page: Page, s: Settings): HeroProps {
     case 'page-glow':
     case 'page-night': {
       const background = h.variant === 'page-image' ? 'image' : h.variant === 'page-glow' ? 'glow' : 'night-halo';
-      return {...base, variant: 'page', background, image: background === 'image' ? {src: mediaUrl(h.image) ?? '', alt: mediaAlt(h.image)} : undefined, overlay: h.overlay ?? 0.3, breadcrumb: showBreadcrumb(page, s) ? {items: [], current: page.title, homeLabel: s.breadcrumb?.homeLabel ?? 'Accueil'} : undefined};
+      return {...base, variant: 'page', background, image: background === 'image' ? {src: mediaUrl(h.image) ?? '', alt: mediaAlt(h.image)} : undefined, overlay: h.overlay ?? 0.3, breadcrumb: showBreadcrumb(page, s) ? breadcrumbProps(page, s) : undefined};
     }
   }
 }
 
-/** Silo effectif d'une page : le sien, sinon celui des réglages. */
+/** Silo effectif d'une page : le sien, sinon celui des réglages (pages anciennes sans valeur ou « inherit »). */
 export function pageSilo(page: Page | null, s: Settings): SiloName {
-  const own = page?.silo && page.silo !== 'inherit' ? (page.silo as SiloName) : null;
+  const raw = (page?.silo ?? null) as string | null;
+  const own = raw && raw !== 'inherit' ? (raw as SiloName) : null;
   return own ?? (s.silo as SiloName);
 }

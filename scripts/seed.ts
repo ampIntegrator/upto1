@@ -67,7 +67,7 @@ async function main() {
         {label: 'YouTube', href: 'https://www.youtube.com/', iconKey: 'youtube'},
       ],
       languages: ['fr', 'en', 'de', 'es'],
-      breadcrumb: {enabled: true, homeLabel: 'Accueil'},
+      breadcrumb: {enabled: true, homeStyle: 'icon', homeLabel: 'Accueil'},
     },
   });
 
@@ -146,7 +146,6 @@ async function main() {
       data: {
         title: 'Accueil',
         slug: 'accueil',
-        silo: 'inherit',
         hero: {
           variant: 'page-glow',
           eyebrow: 'Plateforme',

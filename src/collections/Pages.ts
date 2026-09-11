@@ -23,7 +23,7 @@ export const Pages: CollectionConfig = {
   fields: [
     {name: 'title', type: 'text', label: 'Titre', required: true, localized: true},
     slugField,
-    siloField({name: 'silo', allowInherit: true, admin: {position: 'sidebar'}}),
+    siloField({name: 'silo', fromSettings: true, admin: {position: 'sidebar', description: 'Présélectionné sur le silo du site ; changez-le pour cette page seulement.'}}),
     {
       type: 'tabs',
       tabs: [
