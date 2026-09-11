@@ -67,8 +67,11 @@ export interface Config {
   };
   blocks: {};
   collections: {
-    users: User;
+    pages: Page;
+    posts: Post;
+    categories: Category;
     media: Media;
+    users: User;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -76,8 +79,11 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
+    posts: PostsSelect<false> | PostsSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -86,10 +92,19 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
-  locale: null;
+  fallbackLocale:
+    ('false' | 'none' | 'null') | false | null | ('fr' | 'en' | 'de' | 'es') | ('fr' | 'en' | 'de' | 'es')[];
+  globals: {
+    settings: Setting;
+    header: Header;
+    footer: Footer;
+  };
+  globalsSelect: {
+    settings: SettingsSelect<false> | SettingsSelect<true>;
+    header: HeaderSelect<false> | HeaderSelect<true>;
+    footer: FooterSelect<false> | FooterSelect<true>;
+  };
+  locale: 'fr' | 'en' | 'de' | 'es';
   widgets: {
     collections: CollectionsWidget;
   };
@@ -119,6 +134,126 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: number;
+  title: string;
+  /**
+   * Minuscules, chiffres et tirets. « accueil » = page d'accueil.
+   */
+  slug: string;
+  silo?: ('inherit' | 'blue' | 'green' | 'orange' | 'violet' | 'magenta' | 'ambre') | null;
+  hero: {
+    variant: 'media-image' | 'media-video' | 'split' | 'page-image' | 'page-glow' | 'page-night';
+    eyebrow?: string | null;
+    /**
+     * Un retour à la ligne = une nouvelle ligne du titre. Entourez la partie en serif de <span>…</span>.
+     */
+    title: string;
+    lead?: string | null;
+    primary?: {
+      label?: string | null;
+      href?: string | null;
+      iconKey?: string | null;
+    };
+    secondary?: {
+      label?: string | null;
+      href?: string | null;
+      iconKey?: string | null;
+    };
+    image?: (number | null) | Media;
+    video?: (number | null) | Media;
+    poster?: (number | null) | Media;
+    overlay?: number | null;
+    scrollHint?: string | null;
+    reassurance?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+    media?: (number | null) | Media;
+    badges?:
+      | {
+          label: string;
+          tone?: ('accent' | 'night') | null;
+          id?: string | null;
+        }[]
+      | null;
+    breadcrumb?: boolean | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  alt: string;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: number;
+  title: string;
+  /**
+   * Minuscules, chiffres et tirets. « accueil » = page d'accueil.
+   */
+  slug: string;
+  category: number | Category;
+  publishedAt: string;
+  cover?: (number | null) | Media;
+  excerpt?: string | null;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  title: string;
+  /**
+   * Minuscules, chiffres et tirets. « accueil » = page d'accueil.
+   */
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -141,25 +276,6 @@ export interface User {
     | null;
   password?: string | null;
   collection: 'users';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: number;
-  alt: string;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -186,12 +302,24 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
-        relationTo: 'users';
-        value: number | User;
+        relationTo: 'pages';
+        value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'posts';
+        value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'categories';
+        value: number | Category;
       } | null)
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'users';
+        value: number | User;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -237,6 +365,102 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  silo?: T;
+  hero?:
+    | T
+    | {
+        variant?: T;
+        eyebrow?: T;
+        title?: T;
+        lead?: T;
+        primary?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+              iconKey?: T;
+            };
+        secondary?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+              iconKey?: T;
+            };
+        image?: T;
+        video?: T;
+        poster?: T;
+        overlay?: T;
+        scrollHint?: T;
+        reassurance?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        media?: T;
+        badges?:
+          | T
+          | {
+              label?: T;
+              tone?: T;
+              id?: T;
+            };
+        breadcrumb?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts_select".
+ */
+export interface PostsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  category?: T;
+  publishedAt?: T;
+  cover?: T;
+  excerpt?: T;
+  content?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
@@ -256,24 +480,6 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media_select".
- */
-export interface MediaSelect<T extends boolean = true> {
-  alt?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -314,6 +520,305 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "settings".
+ */
+export interface Setting {
+  id: number;
+  /**
+   * Couleur de référence de tout le site. Une page peut la surcharger.
+   */
+  silo: 'blue' | 'green' | 'orange' | 'violet' | 'magenta' | 'ambre';
+  brandName: string;
+  logo?: (number | null) | Media;
+  baseline?: string | null;
+  phone?: string | null;
+  phoneHref?: string | null;
+  email?: string | null;
+  hours?: string | null;
+  address?: string | null;
+  socials?:
+    | {
+        label: string;
+        href: string;
+        iconKey: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Les contenus sont traduisibles champ par champ (onglet de langue en haut de chaque page d'admin). Une langue non traduite affiche le français.
+   */
+  languages?: ('fr' | 'en' | 'de' | 'es')[] | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Coordonnées et réseaux du bandeau viennent des Réglages du site.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header".
+ */
+export interface Header {
+  id: number;
+  nav?:
+    | (
+        | {
+            label: string;
+            href: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'link';
+          }
+        | {
+            label: string;
+            items: {
+              title: string;
+              href: string;
+              description?: string | null;
+              iconKey?: string | null;
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'menu';
+          }
+        | {
+            label: string;
+            groups: {
+              title: string;
+              items: {
+                title: string;
+                href: string;
+                description?: string | null;
+                iconKey?: string | null;
+                id?: string | null;
+              }[];
+              id?: string | null;
+            }[];
+            /**
+             * Image, titre, extrait et lien viennent de l'article.
+             */
+            featured?: (number | null) | Post;
+            featuredLinkLabel?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'mega';
+          }
+      )[]
+    | null;
+  login?: {
+    label?: string | null;
+    href?: string | null;
+  };
+  cta?: {
+    label?: string | null;
+    href?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Marque, coordonnées et réseaux viennent des Réglages du site ; les articles en bref sont les trois derniers publiés.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer".
+ */
+export interface Footer {
+  id: number;
+  newsletterEnabled?: boolean | null;
+  newsletter?: {
+    eyebrow?: string | null;
+    /**
+     * Un retour à la ligne = une nouvelle ligne du titre. Entourez la partie en serif de <span>…</span>.
+     */
+    title?: string | null;
+    text?: string | null;
+    fieldLabel?: string | null;
+    buttonLabel?: string | null;
+    mention?: string | null;
+  };
+  articlesEnabled?: boolean | null;
+  articles?: {
+    eyebrow?: string | null;
+    allLabel?: string | null;
+    allHref?: string | null;
+  };
+  columns?:
+    | {
+        title: string;
+        links?:
+          | {
+              label: string;
+              href: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  copyright?: string | null;
+  legalLine?: string | null;
+  legalLinks?:
+    | {
+        label: string;
+        href: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "settings_select".
+ */
+export interface SettingsSelect<T extends boolean = true> {
+  silo?: T;
+  brandName?: T;
+  logo?: T;
+  baseline?: T;
+  phone?: T;
+  phoneHref?: T;
+  email?: T;
+  hours?: T;
+  address?: T;
+  socials?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        iconKey?: T;
+        id?: T;
+      };
+  languages?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header_select".
+ */
+export interface HeaderSelect<T extends boolean = true> {
+  nav?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+              id?: T;
+              blockName?: T;
+            };
+        menu?:
+          | T
+          | {
+              label?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    href?: T;
+                    description?: T;
+                    iconKey?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        mega?:
+          | T
+          | {
+              label?: T;
+              groups?:
+                | T
+                | {
+                    title?: T;
+                    items?:
+                      | T
+                      | {
+                          title?: T;
+                          href?: T;
+                          description?: T;
+                          iconKey?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              featured?: T;
+              featuredLinkLabel?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  login?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+      };
+  cta?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer_select".
+ */
+export interface FooterSelect<T extends boolean = true> {
+  newsletterEnabled?: T;
+  newsletter?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        text?: T;
+        fieldLabel?: T;
+        buttonLabel?: T;
+        mention?: T;
+      };
+  articlesEnabled?: T;
+  articles?:
+    | T
+    | {
+        eyebrow?: T;
+        allLabel?: T;
+        allHref?: T;
+      };
+  columns?:
+    | T
+    | {
+        title?: T;
+        links?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  copyright?: T;
+  legalLine?: T;
+  legalLinks?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
