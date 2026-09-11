@@ -1,6 +1,7 @@
 'use client';
 
 /**
+ * (brique interne de PriceList, pas au catalogue)
  * PlanCard — la carte de palier (maquettes 08 et 09 « Trois volumes ») : tête sur fond
  * atténué (nom, accroche, Price), corps (eyebrow « Tout Solo, plus » + CheckList dense),
  * pied sur fond atténué (bouton pleine largeur, mention, Callout garantie). `featured` :

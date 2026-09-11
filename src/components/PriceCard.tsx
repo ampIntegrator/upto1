@@ -1,6 +1,7 @@
 'use client';
 
 /**
+ * (brique interne de PriceList, pas au catalogue)
  * PriceCard — la carte de prix unique (maquettes 08 et 09 « Un prix ») : à gauche le détail
  * de l'offre (eyebrow, CheckList dense avec valeurs barrées, ligne « Valeur totale »), à
  * droite sur fond atténué le prix (Price 84 px), le bouton split pleine largeur, la mention

@@ -1,6 +1,7 @@
 'use client';
 
 /**
+ * (brique interne de PriceList, pas au catalogue)
  * Price — le prix (maquettes 08 et 09) : montant Schibsted 800 en couleur silo, devise en
  * semibold silo alignée sur la ligne de base, période en 14 px gris. Deux tailles :
  * `plan` (56 px, carte de palier) et `single` (84 px, prix unique). Un contenu, comme Stat,

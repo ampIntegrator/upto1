@@ -14,8 +14,7 @@ import {Button} from '@/components/Button';
 import {Card} from '@/components/Card';
 import {Collapsible, CollapsibleGroup} from '@/components/Collapsible';
 import {CompareCard} from '@/components/CompareCard';
-import {PlanCard} from '@/components/PlanCard';
-import {PriceCard} from '@/components/PriceCard';
+import {PriceList} from '@/components/PriceList';
 import {ProcessSteps} from '@/components/ProcessSteps';
 import {SectionHeading} from '@/components/SectionHeading';
 import {SectionNote} from '@/components/SectionNote';
@@ -125,7 +124,7 @@ function Blocks({mode}: {mode: 'light' | 'dark'}) {
       <Section background={dark ? 'night-beam' : 'blueprint'} spacing="md">
         <Container gap={10}>
           <SectionHeading eyebrow="L'offre" title="Un prix. <span>Tout dedans.</span>" text="Pas de palier, pas d'option cachée : tout ce qu'il vous faut pour chiffrer, certifier et livrer est compris dans un seul forfait." />
-          <PriceCard {...PRICE_SINGLE} />
+          <PriceList variant="single" {...PRICE_SINGLE} />
         </Container>
       </Section>
 
@@ -133,9 +132,7 @@ function Blocks({mode}: {mode: 'light' | 'dark'}) {
       <Section background={dark ? 'night' : 'paper'} spacing="md" dividers={!dark}>
         <Container gap={10}>
           <SectionHeading eyebrow="Plusieurs volumes" title="Trois volumes. <span>Une seule promesse.</span>" text="Chaque palier reprend tout le précédent et y ajoute ce qu'il faut pour passer à l'échelle." />
-          <Grid columns={12} gap={6} className="page-grid" align="stretch">
-            {PLANS.map((pl) => <GridSpan key={pl.name} columns={4}><PlanCard {...pl} /></GridSpan>)}
-          </Grid>
+          <PriceList variant="columns" plans={PLANS} />
         </Container>
       </Section>
     </>

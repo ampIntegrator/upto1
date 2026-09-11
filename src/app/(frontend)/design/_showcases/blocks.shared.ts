@@ -1,8 +1,7 @@
 /* Contenus de démonstration des blocs étapes (03), comparatif (05) et témoignages (07) :
    partagés par le catalogue et les pages de démonstration. */
 import type {CompareCardProps} from '@/components/CompareCard';
-import type {PlanCardProps} from '@/components/PlanCard';
-import type {PriceCardProps} from '@/components/PriceCard';
+import type {PriceListPlan, PriceListSingle} from '@/components/PriceList';
 import type {ProcessStep} from '@/components/ProcessSteps';
 import type {Testimonial} from '@/components/TestimonialCard';
 
@@ -32,7 +31,7 @@ export const TESTIMONIALS: Testimonial[] = [
 /* Tarifs (maquettes 08 et 09) */
 export const GUARANTEE = {title: 'Garantie 30 jours', text: 'Pas de mandat supplémentaire en 30 jours ? Remboursé. Sans questions.'};
 
-export const PRICE_SINGLE: PriceCardProps = {
+export const PRICE_SINGLE: PriceListSingle = {
   features: [
     {label: 'Chiffrage travaux en 20 min', end: '97 €'},
     {label: 'Rapport certifié expert BTP', end: '147 €'},
@@ -49,7 +48,7 @@ export const PRICE_SINGLE: PriceCardProps = {
   guarantee: GUARANTEE,
 };
 
-export const PLANS: PlanCardProps[] = [
+export const PLANS: PriceListPlan[] = [
   {name: 'Solo', tagline: 'Pour démarrer en solo', price: {value: '49'}, cta: {label: 'Commencer', href: '#'}, features: ['Chiffrage travaux en 20 min', 'Rapport certifié expert BTP', 'Note de calcul détaillée', 'PDF à votre nom'], mention: 'Sans CB · Sans engagement', guarantee: GUARANTEE},
   {name: 'Pro', tagline: 'Le choix des courtiers actifs', price: {value: '79'}, cta: {label: 'Commencer gratuitement', href: '#'}, featured: true, inherits: 'Solo', features: ['Préconisation IPN / HEB', 'Plans et rapports complets', 'Historique illimité', 'Support prioritaire'], mention: 'Sans CB · Sans engagement', guarantee: GUARANTEE},
   {name: 'Agence', tagline: 'Pour les équipes', price: {value: '149'}, cta: {label: 'Parler à un expert', href: '#'}, inherits: 'Pro', features: ['Comptes multi-utilisateurs', 'Marque blanche complète', 'API & intégrations', 'Account manager dédié'], mention: 'Sans CB · Sans engagement', guarantee: GUARANTEE},

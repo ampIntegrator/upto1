@@ -2,19 +2,19 @@
 import {VStack} from '@astryxdesign/core/Stack';
 import React from 'react';
 
-import PriceCardShowcase from '../../_showcases/PriceCardShowcase';
+import PriceListShowcase from '../../_showcases/PriceListShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Price Card — Design system Vidomia'};
+export const metadata = {title: 'Price List — Design system Vidomia'};
 
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="PriceCard" id="price-card" doc={null} dressed category="Conteneurs">
-        <PriceCardShowcase />
+      <ShowcaseBlock name="PriceList" id="price-list" doc={null} dressed category="Contenu">
+        <PriceListShowcase />
       </ShowcaseBlock>
-      <ComponentNav category="conteneurs" current="price-card" />
+      <ComponentNav category="contenu" current="price-list" />
     </VStack>
   );
 }
