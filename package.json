@@ -18,7 +18,12 @@
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
     "theme:build": "node scripts/build-themes.mjs",
     "icons:build": "node scripts/build-icons.mjs",
-    "catalog:build": "node scripts/gen-catalog.mjs"
+    "catalog:build": "node scripts/gen-catalog.mjs",
+    "db:backup": "mkdir -p backups && cp upto1.db \"backups/upto1-$(date +%Y%m%d-%H%M%S).db\" && ls -1 backups | tail -1",
+    "migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
+    "migrate:create": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:create",
+    "migrate:status": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:status",
+    "seed": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/seed.ts"
   },
   "dependencies": {
     "@astryxdesign/core": "0.5.4",
@@ -26,6 +31,7 @@
     "@payloadcms/db-sqlite": "3.88.0",
     "@payloadcms/next": "3.88.0",
     "@payloadcms/richtext-lexical": "3.88.0",
+    "@payloadcms/translations": "3.88.0",
     "@payloadcms/ui": "3.88.0",
     "@stylexjs/stylex": "0.19.0",
     "cross-env": "^7.0.3",

@@ -78,15 +78,18 @@ export function OrbitaThemeProvider({
   children,
   initialSilo = DEFAULT_SILO,
   initialMode = 'light',
+  fixedSilo,
 }: {
   children: React.ReactNode;
   initialSilo?: SiloName;
   initialMode?: ColorMode;
+  /** silo imposé (site : réglage Payload ou silo de la page) — ignore la mémoire locale du catalogue */
+  fixedSilo?: SiloName;
 }) {
   // Silo mémorisé : store minimal sur localStorage, lu après hydratation (SSR : initialSilo).
   const storedSilo = useSyncExternalStore(subscribeStorage, () => readStored().silo ?? null, () => null);
   const [override, setSiloState] = useState<SiloName | null>(null);
-  const silo: SiloName = override ?? storedSilo ?? initialSilo;
+  const silo: SiloName = fixedSilo ?? override ?? storedSilo ?? initialSilo;
   const [mode, setModeState] = useState<ColorMode>(initialMode);
 
   const persist = useCallback((next: {silo: SiloName; mode: ColorMode}) => {
