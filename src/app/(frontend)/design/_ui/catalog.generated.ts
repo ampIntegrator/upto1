@@ -143,6 +143,24 @@ export const CATALOG: CatalogCategory[] = [
         "doc": null
       },
       {
+        "name": "PlanCard",
+        "label": "Plan Card",
+        "slug": "plan-card",
+        "href": "/design/composants/plan-card",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
+        "name": "PriceCard",
+        "label": "Price Card",
+        "slug": "price-card",
+        "href": "/design/composants/price-card",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
         "name": "Carousel",
         "label": "Carousel",
         "slug": "carousel",
@@ -218,6 +236,15 @@ export const CATALOG: CatalogCategory[] = [
         "label": "Stat",
         "slug": "stat",
         "href": "/design/composants/stat",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
+        "name": "Price",
+        "label": "Price",
+        "slug": "price",
+        "href": "/design/composants/price",
         "dressed": true,
         "parent": null,
         "doc": null
@@ -400,6 +427,15 @@ export const CATALOG: CatalogCategory[] = [
         "dressed": false,
         "parent": null,
         "doc": "banner"
+      },
+      {
+        "name": "Callout",
+        "label": "Callout",
+        "slug": "callout",
+        "href": "/design/composants/callout",
+        "dressed": true,
+        "parent": null,
+        "doc": null
       },
       {
         "name": "ProgressBar",

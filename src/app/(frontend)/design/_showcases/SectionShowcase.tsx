@@ -20,7 +20,9 @@ const MODES: Array<{bg: SectionBackground; label: string; note: string}> = [
   {bg: 'grid', label: 'Texture grid', note: 'Filets 48 px (00-fondations §4).'},
   {bg: 'dots', label: 'Texture points', note: 'Points 32 px.'},
   {bg: 'losange', label: 'Texture losanges', note: 'Losanges 32 px.'},
+  {bg: 'blueprint', label: 'Texture blueprint', note: 'Filets 48 px en silo atténué (maquette 08, section tarifs).'},
   {bg: 'night', label: 'Nuit', note: 'Nuit du silo + lueur silo centrale, pas de texture ; contenu en mode nuit.'},
+  {bg: 'night-beam', label: 'Nuit à faisceau', note: 'Nuit + bande silo horizontale au centre, bords assombris (maquette 09, tarifs nuit).'},
   {bg: 'image', label: 'Image', note: 'Image de fond, calque noir administrable (ici 0,3), liseré en pied ; contenu en mode nuit.'},
   {bg: 'video', label: 'Vidéo', note: 'Vidéo muette en boucle, mêmes couches que l\'image.'},
 ];

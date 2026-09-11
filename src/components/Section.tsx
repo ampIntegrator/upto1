@@ -30,7 +30,7 @@ import React from 'react';
 import {useOrbitaTheme} from '@/theme/OrbitaThemeProvider';
 import styles from './Section.module.css';
 
-export type SectionBackground = 'light' | 'paper' | 'glow' | 'grid' | 'dots' | 'losange' | 'night' | 'night-halo' | 'image' | 'video';
+export type SectionBackground = 'light' | 'paper' | 'glow' | 'grid' | 'dots' | 'losange' | 'blueprint' | 'night' | 'night-halo' | 'night-beam' | 'image' | 'video';
 export type SectionSpacing = 'none' | 'xs' | 'sm' | 'md' | 'lg';
 
 export type SectionProps = {
@@ -56,7 +56,7 @@ export type SectionProps = {
   foot?: React.ReactNode;
 };
 
-const DARK: SectionBackground[] = ['night', 'night-halo', 'image', 'video'];
+const DARK: SectionBackground[] = ['night', 'night-halo', 'night-beam', 'image', 'video'];
 const MEDIA: SectionBackground[] = ['image', 'video'];
 
 export function Section({background = 'light', image, video, overlay = 0, edge, spacing = 'md', dividers, underHeader, centered, minHeight, id, children, foot}: SectionProps) {

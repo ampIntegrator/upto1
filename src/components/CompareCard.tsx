@@ -38,7 +38,7 @@ export function CompareCard({chip, meta, quote, items, tone = 'check', featured}
       <VStack className={styles.quote}>
         <Blockquote>{quote}</Blockquote>
       </VStack>
-      <CheckList items={items} tone={tone} divided />
+      <CheckList items={items} tone={tone} density="divided" />
     </VStack>
   );
 }

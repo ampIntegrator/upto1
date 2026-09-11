@@ -1,0 +1,28 @@
+/* PlanCard — carte de palier (maquettes 08, 09). */
+.card {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  min-width: 0; /* la carte ne dépasse jamais sa colonne : le libellé du bouton passe à la ligne */
+  background: light-dark(var(--color-background-surface), var(--color-background-card));
+  border: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.12));
+}
+.card[data-featured] {
+  border-color: light-dark(var(--color-accent), var(--color-highlight));
+  box-shadow: 0 14px 36px -22px light-dark(var(--color-accent), rgba(0, 0, 0, 0.8));
+}
+/* chip à cheval sur le bord haut, centré */
+.badge { position: absolute; top: -12px; left: 50%; translate: -50% 0; z-index: 1; }
+.head,
+.foot { padding: 24px 32px; background: light-dark(var(--color-background-muted), rgba(255, 255, 255, 0.04)); }
+.foot { border-top: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.12)); }
+.body { flex: 1 1 auto; padding: 24px 32px; }
+.name { font-family: var(--font-family-heading); font-size: 22px; font-weight: var(--font-weight-bold); letter-spacing: -0.01em; color: var(--color-text-primary); }
+.tagline { font-size: 14px; color: var(--color-text-disabled); }
+.mention { font-size: 12px; text-align: center; color: var(--color-text-disabled); }
+/* bouton plein des paliers sans mise en avant : libellé centré */
+.solid { justify-content: center !important; }
+/* libellé du bouton : autorisé à passer à la ligne dans une colonne étroite */
+.foot :global(.astryx-button) { min-width: 0; max-width: 100%; height: auto; min-height: 56px; }
+.foot :global(.astryx-button) > span { white-space: normal; }
+@media (max-width: 639px) { .head, .body, .foot { padding: 20px 24px; } }

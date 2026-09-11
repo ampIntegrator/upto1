@@ -1,0 +1,11 @@
+/* Callout — encadré highlight (maquettes 08, 09, 18, 23). */
+.root {
+  width: 100%;
+  padding: 16px;
+  border: var(--border-width) solid light-dark(var(--color-highlight-deep), var(--color-highlight));
+  background: color-mix(in srgb, var(--color-highlight) 12%, transparent);
+}
+.root[data-size='sm'] { padding: 14px; }
+.eyebrow { color: light-dark(var(--color-highlight-deep), var(--color-highlight)); }
+.title { font-size: 14px; font-weight: var(--font-weight-bold); color: light-dark(var(--color-highlight-deep), var(--color-highlight)); }
+.text { font-size: 12px; line-height: 1.5; color: light-dark(var(--color-text-secondary), rgba(255, 255, 255, 0.72)); }

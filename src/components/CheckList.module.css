@@ -1,4 +1,4 @@
-/* CheckList — pastilles rondes (maquettes 03, 05). */
+/* CheckList — pastilles rondes (maquettes 03, 05, 08). */
 .list { margin: 0; padding: 0; list-style: none; width: 100%; }
 .item {
   margin: 0;
@@ -6,14 +6,21 @@
   line-height: 1.5;
   color: light-dark(var(--color-text-secondary), rgba(255, 255, 255, 0.75));
 }
+.main { min-width: 0; }
 /* compacte : la pastille descend de 2 px pour s'aligner sur la première ligne */
-.list:not([data-divided]) .dot { margin-top: 2px; }
-/* rangées à filets */
-.list[data-divided] .item {
+.list[data-density='compact'] .dot { margin-top: 2px; }
+/* rangées à filets (cartes comparatives) */
+.list[data-density='divided'] .item {
   font-size: 15px;
   padding-block: 14px;
   border-top: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.12));
 }
+/* rangées serrées (tarifs) : filet dessous, le dernier optionnel */
+.list[data-density='dense'] .item {
+  padding-block: 10px;
+  border-bottom: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.12));
+}
+.list[data-density='dense']:not([data-trailing]) .item:last-child { border-bottom: 0; }
 .dot {
   display: inline-flex;
   align-items: center;
@@ -27,3 +34,12 @@
 }
 .dot[data-tone='cross'] { background: var(--color-error); }
 .dot svg { width: 12px; height: 12px; }
+/* valeur en fin de ligne (maquette 08) : Geist Mono 12 px barré, gris */
+.end {
+  flex: 0 0 auto;
+  font-family: var(--font-family-mono);
+  font-size: 12px;
+  color: var(--color-text-disabled);
+  text-decoration: line-through;
+  white-space: nowrap;
+}

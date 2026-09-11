@@ -14,6 +14,8 @@ import {Button} from '@/components/Button';
 import {Card} from '@/components/Card';
 import {Collapsible, CollapsibleGroup} from '@/components/Collapsible';
 import {CompareCard} from '@/components/CompareCard';
+import {PlanCard} from '@/components/PlanCard';
+import {PriceCard} from '@/components/PriceCard';
 import {ProcessSteps} from '@/components/ProcessSteps';
 import {SectionHeading} from '@/components/SectionHeading';
 import {SectionNote} from '@/components/SectionNote';
@@ -21,7 +23,7 @@ import {TestimonialCarousel} from '@/components/TestimonialCarousel';
 import {Section} from '@/components/Section';
 import {SiteFooter} from '@/components/SiteFooter';
 import {SiteHeader} from '@/components/SiteHeader';
-import {AVANT, APRES, METIERS, PROCESS_STEPS, TESTIMONIALS} from '../design/_showcases/blocks.shared';
+import {AVANT, APRES, METIERS, PLANS, PRICE_SINGLE, PROCESS_STEPS, TESTIMONIALS} from '../design/_showcases/blocks.shared';
 import {FAQ} from '../design/_showcases/faq.shared';
 import {SITE_FOOTER, SITE_HEADER} from '../design/_ui/siteNav';
 import {STATS_BARS, StatsBar} from '../design/_ui/StatsBar';
@@ -116,6 +118,24 @@ function Blocks({mode}: {mode: 'light' | 'dark'}) {
         <Container gap={10}>
           <SectionHeading eyebrow="Ils ont arrêté d'attendre" title="Ils <span>closent.</span>" />
           <TestimonialCarousel items={TESTIMONIALS} />
+        </Container>
+      </Section>
+
+      {/* 4e · tarifs : prix unique (maquette 08 / 09) */}
+      <Section background={dark ? 'night-beam' : 'blueprint'} spacing="md">
+        <Container gap={10}>
+          <SectionHeading eyebrow="L'offre" title="Un prix. <span>Tout dedans.</span>" text="Pas de palier, pas d'option cachée : tout ce qu'il vous faut pour chiffrer, certifier et livrer est compris dans un seul forfait." />
+          <PriceCard {...PRICE_SINGLE} />
+        </Container>
+      </Section>
+
+      {/* 4f · tarifs : trois paliers */}
+      <Section background={dark ? 'night' : 'paper'} spacing="md" dividers={!dark}>
+        <Container gap={10}>
+          <SectionHeading eyebrow="Plusieurs volumes" title="Trois volumes. <span>Une seule promesse.</span>" text="Chaque palier reprend tout le précédent et y ajoute ce qu'il faut pour passer à l'échelle." />
+          <Grid columns={12} gap={6} className="page-grid" align="stretch">
+            {PLANS.map((pl) => <GridSpan key={pl.name} columns={4}><PlanCard {...pl} /></GridSpan>)}
+          </Grid>
         </Container>
       </Section>
     </>

@@ -1,0 +1,21 @@
+/* Price — prix des tarifs (maquettes 08, 09). */
+.price { width: 100%; align-items: baseline; } /* montant, devise et période sur la même ligne de base */
+.value {
+  font-family: var(--font-family-heading);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--color-text-accent);
+  white-space: nowrap;
+}
+.currency {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  color: var(--color-text-accent);
+}
+.period { font-size: 14px; color: var(--color-text-disabled); margin-inline-start: 4px; }
+.price[data-size='plan'] .value { font-size: 56px; }
+.price[data-size='plan'] .currency { font-size: 24px; }
+.price[data-size='single'] .value { font-size: 84px; }
+.price[data-size='single'] .currency { font-size: 32px; }

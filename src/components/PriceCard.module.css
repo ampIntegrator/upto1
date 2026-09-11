@@ -1,0 +1,28 @@
+/* PriceCard — carte de prix unique (maquettes 08, 09). */
+.card {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  width: 100%;
+  max-width: 900px;
+  margin-inline: auto;
+  background: light-dark(var(--color-background-surface), var(--color-background-card));
+  border: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.12));
+  overflow: hidden;
+}
+.detail { padding: 40px; }
+.side {
+  padding: 40px;
+  justify-content: center;
+  background: light-dark(var(--color-background-muted), rgba(255, 255, 255, 0.04));
+}
+.total { padding-top: 16px; }
+.totalLabel { font-size: 15px; font-weight: var(--font-weight-semibold); color: var(--color-text-primary); }
+.totalValue { font-size: 15px; font-weight: var(--font-weight-semibold); color: var(--color-text-disabled); text-decoration: line-through; white-space: nowrap; }
+.priceLabel { color: var(--color-text-disabled) !important; }
+.period { font-size: 14px; color: var(--color-text-disabled); }
+.mention { font-size: 12px; text-align: center; color: var(--color-text-disabled); }
+@media (max-width: 1023px) {
+  .card { grid-template-columns: minmax(0, 1fr); max-width: 600px; }
+  .side { order: -1; }
+}
+@media (max-width: 639px) { .detail, .side { padding: 24px; } }
