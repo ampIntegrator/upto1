@@ -95,7 +95,7 @@ function PresetTiles({current, onReplace, onAdd}: {current: string; onReplace: (
   );
 }
 
-/** Une case de la rangée : largeur, résumé des contenus, clic pour ouvrir le tiroir. */
+/** Une case de la rangée : largeur dans un coin, résumé des contenus, clic pour ouvrir le tiroir. */
 function Cell({cell, index, onOpen}: {cell: CellSnapshot; index: number; onOpen: () => void}) {
   const empty = cell.contents.length === 0;
   return (
@@ -106,13 +106,16 @@ function Cell({cell, index, onOpen}: {cell: CellSnapshot; index: number; onOpen:
         onOpen();
       }}
       aria-label={`Colonne ${index + 1}, ${cell.span} sur 12, ${empty ? 'vide' : cell.contents.join(', ')}`}
+      title={empty ? 'Vide, cliquer pour remplir' : cell.contents.join(', ')}
       style={{
+        position: 'relative',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'stretch',
-        gap: 6,
-        minHeight: 80,
-        padding: 10,
+        gap: 2,
+        minWidth: 0,
+        minHeight: 72,
+        padding: '24px 8px 8px',
         textAlign: 'left',
         cursor: 'pointer',
         borderRadius: 4,
@@ -121,18 +124,15 @@ function Cell({cell, index, onOpen}: {cell: CellSnapshot; index: number; onOpen:
         color: 'var(--theme-elevation-1000)',
         ...text14,
       }}>
-      <span style={{display: 'flex', justifyContent: 'space-between', gap: 8, ...dim}}>
-        <span>Colonne {index + 1}</span>
-        <span>{cell.span} / 12</span>
-      </span>
+      <span style={{position: 'absolute', top: 4, right: 8, ...dim}}>{cell.span}/12</span>
       {empty ? (
-        <span style={dim}>Vide, cliquer pour remplir</span>
+        <span style={{...dim, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Vide</span>
       ) : (
-        <span style={{display: 'flex', flexDirection: 'column', gap: 2}}>
-          {cell.contents.map((label, k) => (
-            <span key={k}>{label}</span>
-          ))}
-        </span>
+        cell.contents.map((label, k) => (
+          <span key={k} style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
+            {label}
+          </span>
+        ))
       )}
     </button>
   );
