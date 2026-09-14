@@ -4,9 +4,10 @@
  * RowsBuilder — la vue « constructeur » du champ Rangées d'une section, à la place des
  * accordéons imbriqués de Payload.
  *
- *   - une bande par rangée : en tête, ses actions (monter, descendre, supprimer) ; puis les
- *     dispositions en vignettes (un rectangle découpé aux proportions des colonnes) ; puis la
- *     rangée elle-même, une case par colonne, à sa largeur ;
+ *   - un seul bandeau de dispositions en vignettes (un rectangle découpé aux proportions des
+ *     colonnes) : un clic ajoute une rangée, ou change la disposition de la rangée sélectionnée ;
+ *   - les rangées empilées dessous, une case par colonne à sa largeur ; sur le côté, monter,
+ *     descendre, dupliquer, supprimer ;
  *   - une case résume ses contenus, ou « Vide » ; un clic ouvre un tiroir Payload avec les
  *     champs de cette colonne (largeur, contenus). Le formulaire est partagé : ce qui est
  *     saisi dans le tiroir est déjà dans la page, on enregistre la page comme d'habitude.
@@ -84,14 +85,17 @@ function Cell({cell, index, onOpen}: {cell: CellSnapshot; index: number; onOpen:
   return (
     <button
       type="button"
-      onClick={onOpen}
+      onClick={(e) => {
+        e.stopPropagation();
+        onOpen();
+      }}
       aria-label={`Colonne ${index + 1}, ${cell.span} sur 12, ${empty ? 'vide' : cell.contents.join(', ')}`}
       style={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'stretch',
         gap: 6,
-        minHeight: 96,
+        minHeight: 80,
         padding: 10,
         textAlign: 'left',
         cursor: 'pointer',
@@ -129,6 +133,8 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
   const {openModal, closeModal} = useModal();
   const drawerSlug = useDrawerSlug(`rows-builder-${path}`);
   const [open, setOpen] = useState<{row: number; col: number} | null>(null);
+  // rangée sélectionnée : les vignettes agissent sur elle ; sans sélection, elles ajoutent une rangée
+  const [selected, setSelected] = useState<number | null>(null);
 
   // instantané des rangées : largeurs et contenus, pour dessiner les bandes sans déplier
   const snapshotJson = useFormFields(([fields]) => {
@@ -154,7 +160,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
   });
   const snapshot = useMemo<RowSnapshot[]>(() => JSON.parse(snapshotJson) as RowSnapshot[], [snapshotJson]);
 
-  const applyPreset = useCallback(
+  const setSpans = useCallback(
     (rowIndex: number, spans: readonly number[]) => {
       const columnsPath = `${path}.${rowIndex}.columns`;
       const existing = getDataByPath<unknown[]>(columnsPath);
@@ -170,14 +176,38 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
     [addFieldRow, columnsSchemaPath, dispatchFields, getDataByPath, path, removeFieldRow, setModified],
   );
 
-  const addRow = useCallback(() => {
-    const index = rows.length;
-    addFieldRow({path, rowIndex: index, schemaPath});
-    addFieldRow({path: `${path}.${index}.columns`, rowIndex: 0, schemaPath: columnsSchemaPath, subFieldState: {span: {value: '12', initialValue: '12', valid: true}}});
+  /** vignette cliquée : applique à la rangée sélectionnée, sinon ajoute une rangée (qui devient sélectionnée) */
+  const onTile = useCallback(
+    (spans: readonly number[]) => {
+      if (selected !== null && selected < rows.length) {
+        setSpans(selected, spans);
+        return;
+      }
+      const index = rows.length;
+      addFieldRow({path, rowIndex: index, schemaPath});
+      spans.forEach((s, j) => addFieldRow({path: `${path}.${index}.columns`, rowIndex: j, schemaPath: columnsSchemaPath, subFieldState: {span: {value: String(s), initialValue: String(s), valid: true}}}));
+      setModified(true);
+      setSelected(index);
+    },
+    [addFieldRow, columnsSchemaPath, path, rows.length, schemaPath, selected, setModified, setSpans],
+  );
+
+  const move = (from: number, to: number) => {
+    moveFieldRow({path, moveFromIndex: from, moveToIndex: to});
+    setSelected(to);
+  };
+  const duplicate = (i: number) => {
+    dispatchFields({type: 'DUPLICATE_ROW', path, rowIndex: i});
     setModified(true);
-  }, [addFieldRow, columnsSchemaPath, path, rows.length, schemaPath, setModified]);
+    setSelected(i + 1);
+  };
+  const remove = (i: number) => {
+    removeFieldRow({path, rowIndex: i});
+    setSelected(null);
+  };
 
   const openCell = (row: number, col: number) => {
+    setSelected(row);
     setOpen({row, col});
     openModal(drawerSlug);
   };
@@ -190,6 +220,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
   const openCellSnapshot = open ? snapshot[open.row]?.columns[open.col] : undefined;
   const label = typeof field.label === 'string' ? field.label : 'Rangées';
   const description = typeof field.admin?.description === 'string' ? field.admin.description : undefined;
+  const selectedSpans = selected !== null ? (snapshot[selected]?.columns ?? []).map((c) => c.span).join('|') : '';
 
   return (
     <div className="field-type" style={{marginBottom: 'var(--base)'}}>
@@ -197,61 +228,86 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
         <span style={{...text14, fontWeight: 600}}>
           {label} <span style={dim}>({rows.length})</span>
         </span>
-        {!readOnly ? (
-          <Button size="small" buttonStyle="secondary" onClick={addRow}>
-            Ajouter une rangée
+        {selected !== null && !readOnly ? (
+          <Button size="small" buttonStyle="pill" onClick={() => setSelected(null)}>
+            Désélectionner la rangée {selected + 1}
           </Button>
         ) : null}
       </div>
       {description ? <p style={{...text14, ...dim, margin: '0 0 12px'}}>{description}</p> : null}
+      {!readOnly ? (
+        <div style={{marginBottom: 12}}>
+          <PresetTiles current={selectedSpans} onApply={onTile} />
+          <p style={{...text14, ...dim, margin: '8px 0 0'}}>
+            {selected === null ? 'Cliquez une disposition pour ajouter une rangée. Cliquez une rangée pour la sélectionner et changer sa disposition.' : `Rangée ${selected + 1} sélectionnée : une disposition s’applique à elle. Même nombre de colonnes, seules les largeurs changent ; sinon elle est recréée vide.`}
+          </p>
+        </div>
+      ) : null}
       {showError && errorPaths?.length ? <p style={{...text14, color: 'var(--theme-error-500)', margin: '0 0 12px'}}>Une rangée contient une erreur : ouvrez ses colonnes.</p> : null}
 
-      <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
+      <div style={{display: 'flex', flexDirection: 'column', gap: 10}}>
         {rows.map((row, i) => {
           const snap = snapshot[i] ?? {columns: []};
           const spans = snap.columns.map((c) => c.span);
           const rowError = row.isLoading ? null : validateRow(spans);
+          const isSelected = selected === i;
           return (
-            <div key={row.id} style={{border: '1px solid var(--theme-elevation-200)', borderRadius: 4, padding: 12, background: 'var(--theme-elevation-50)'}}>
-              <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: 10}}>
-                <span style={text14}>
-                  <strong>Rangée {i + 1}</strong> {spans.length ? <span style={dim}>· {presetLabel(spans)}</span> : null}
-                  {rowError ? <span style={{color: 'var(--theme-error-500)'}}> · {rowError}</span> : null}
-                </span>
-                {!readOnly ? (
-                  <span style={{display: 'flex', gap: 6}}>
-                    <Button size="small" buttonStyle="pill" disabled={i === 0} onClick={() => moveFieldRow({path, moveFromIndex: i, moveToIndex: i - 1})} aria-label="Monter la rangée">
-                      Monter
-                    </Button>
-                    <Button size="small" buttonStyle="pill" disabled={i === rows.length - 1} onClick={() => moveFieldRow({path, moveFromIndex: i, moveToIndex: i + 1})} aria-label="Descendre la rangée">
-                      Descendre
-                    </Button>
-                    <Button size="small" buttonStyle="pill" onClick={() => removeFieldRow({path, rowIndex: i})} aria-label="Supprimer la rangée">
-                      Supprimer
-                    </Button>
-                  </span>
-                ) : null}
+            <div key={row.id} style={{display: 'flex', gap: 8, alignItems: 'flex-start'}}>
+              <div
+                role="button"
+                tabIndex={0}
+                aria-label={`Rangée ${i + 1}${isSelected ? ', sélectionnée' : ''}`}
+                aria-pressed={isSelected}
+                onClick={() => setSelected(isSelected ? null : i)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setSelected(isSelected ? null : i);
+                  }
+                }}
+                style={{
+                  flex: 1,
+                  minWidth: 0,
+                  padding: 10,
+                  borderRadius: 4,
+                  border: `2px solid ${isSelected ? 'var(--theme-elevation-1000)' : 'var(--theme-elevation-200)'}`,
+                  background: 'var(--theme-elevation-50)',
+                  cursor: 'pointer',
+                }}>
+                {rowError ? <p style={{...text14, color: 'var(--theme-error-500)', margin: '0 0 8px'}}>{rowError}</p> : null}
+                {row.isLoading ? (
+                  <p style={{...text14, ...dim, margin: 0}}>Chargement…</p>
+                ) : snap.columns.length ? (
+                  <div style={{display: 'grid', gridTemplateColumns: spans.map((s) => `${s}fr`).join(' '), gap: 8}}>
+                    {snap.columns.map((cell, j) => (
+                      <Cell
+                        key={j}
+                        cell={cell}
+                        index={j}
+                        onOpen={() => openCell(i, j)}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <p style={{...text14, ...dim, margin: 0}}>Sélectionnez cette rangée puis une disposition.</p>
+                )}
               </div>
-              {row.isLoading ? (
-                <p style={{...text14, ...dim, margin: 0}}>Chargement…</p>
-              ) : (
-                <>
-                  {!readOnly ? (
-                    <div style={{marginBottom: 10}}>
-                      <PresetTiles current={spans.join('|')} onApply={(s) => applyPreset(i, s)} />
-                    </div>
-                  ) : null}
-                  {snap.columns.length ? (
-                    <div style={{display: 'grid', gridTemplateColumns: spans.map((s) => `${s}fr`).join(' '), gap: 8}}>
-                      {snap.columns.map((cell, j) => (
-                        <Cell key={j} cell={cell} index={j} onOpen={() => openCell(i, j)} />
-                      ))}
-                    </div>
-                  ) : (
-                    <p style={{...text14, ...dim, margin: 0}}>Choisissez une disposition.</p>
-                  )}
-                </>
-              )}
+              {!readOnly ? (
+                <div className="rows-builder__actions" style={{display: 'flex', flexDirection: 'column', gap: 4}}>
+                  <Button size="small" buttonStyle="pill" disabled={i === 0} onClick={() => move(i, i - 1)} aria-label={`Monter la rangée ${i + 1}`} tooltip="Monter">
+                    ↑
+                  </Button>
+                  <Button size="small" buttonStyle="pill" disabled={i === rows.length - 1} onClick={() => move(i, i + 1)} aria-label={`Descendre la rangée ${i + 1}`} tooltip="Descendre">
+                    ↓
+                  </Button>
+                  <Button size="small" buttonStyle="pill" onClick={() => duplicate(i)} aria-label={`Dupliquer la rangée ${i + 1}`} tooltip="Dupliquer">
+                    ⧉
+                  </Button>
+                  <Button size="small" buttonStyle="pill" onClick={() => remove(i)} aria-label={`Supprimer la rangée ${i + 1}`} tooltip="Supprimer">
+                    ✕
+                  </Button>
+                </div>
+              ) : null}
             </div>
           );
         })}
