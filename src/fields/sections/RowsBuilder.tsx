@@ -5,7 +5,8 @@
  * accordéons imbriqués de Payload.
  *
  *   - un seul bandeau de dispositions en vignettes (un rectangle découpé aux proportions des
- *     colonnes) : un clic ajoute une rangée, ou change la disposition de la rangée sélectionnée ;
+ *     colonnes) : un clic remplace la disposition de la rangée sélectionnée, un double clic ajoute
+ *     une rangée sous la sélection ;
  *   - les rangées empilées dessous, une case par colonne à sa largeur ; sur le côté, monter,
  *     descendre, dupliquer, supprimer ;
  *   - une case résume ses contenus, ou « Vide » ; un clic ouvre un tiroir Payload avec les
@@ -18,7 +19,7 @@
  */
 import {Button, Drawer, RenderFields, useDrawerSlug, useField, useForm, useFormFields, useModal} from '@payloadcms/ui';
 import type {ArrayFieldClient, ArrayFieldClientProps, ClientField, SanitizedFieldPermissions, SanitizedFieldsPermissions} from 'payload';
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 
 import {validateRow, type ColumnSpan} from '@/components/content-specs';
 import {contentLabel} from './contentRef';
@@ -55,7 +56,21 @@ function Tile({spans, active}: {spans: readonly number[]; active: boolean}) {
   );
 }
 
-function PresetTiles({current, onApply}: {current: string; onApply: (spans: readonly number[]) => void}) {
+/** Vignettes : un clic remplace la disposition de la rangée sélectionnée, un double clic ajoute une rangée. */
+function PresetTiles({current, onReplace, onAdd}: {current: string; onReplace: (spans: readonly number[]) => void; onAdd: (spans: readonly number[]) => void}) {
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const click = (spans: readonly number[]) => {
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(() => {
+      timer.current = null;
+      onReplace(spans);
+    }, 220);
+  };
+  const dblClick = (spans: readonly number[]) => {
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = null;
+    onAdd(spans);
+  };
   return (
     <div role="radiogroup" aria-label="Disposition" style={{display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gap: 8}}>
       {ROW_PRESETS.map((spans) => {
@@ -68,8 +83,9 @@ function PresetTiles({current, onApply}: {current: string; onApply: (spans: read
             role="radio"
             aria-checked={active}
             aria-label={label}
-            title={label}
-            onClick={() => onApply(spans)}
+            title={`${label} · clic : remplacer la rangée sélectionnée · double clic : ajouter une rangée`}
+            onClick={() => click(spans)}
+            onDoubleClick={() => dblClick(spans)}
             style={{display: 'block', width: '100%', padding: 0, border: 0, background: 'transparent', cursor: 'pointer'}}>
             <Tile spans={spans} active={active} />
           </button>
@@ -176,20 +192,25 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
     [addFieldRow, columnsSchemaPath, dispatchFields, getDataByPath, path, removeFieldRow, setModified],
   );
 
-  /** vignette cliquée : applique à la rangée sélectionnée, sinon ajoute une rangée (qui devient sélectionnée) */
-  const onTile = useCallback(
+  /** double clic : ajoute une rangée sous la rangée sélectionnée (sinon en bas), qui devient sélectionnée */
+  const addRow = useCallback(
     (spans: readonly number[]) => {
-      if (selected !== null && selected < rows.length) {
-        setSpans(selected, spans);
-        return;
-      }
-      const index = rows.length;
+      const index = selected !== null && selected < rows.length ? selected + 1 : rows.length;
       addFieldRow({path, rowIndex: index, schemaPath});
       spans.forEach((s, j) => addFieldRow({path: `${path}.${index}.columns`, rowIndex: j, schemaPath: columnsSchemaPath, subFieldState: {span: {value: String(s), initialValue: String(s), valid: true}}}));
       setModified(true);
       setSelected(index);
     },
-    [addFieldRow, columnsSchemaPath, path, rows.length, schemaPath, selected, setModified, setSpans],
+    [addFieldRow, columnsSchemaPath, path, rows.length, schemaPath, selected, setModified],
+  );
+
+  /** clic : remplace la disposition de la rangée sélectionnée ; sans sélection, ajoute une rangée */
+  const replaceRow = useCallback(
+    (spans: readonly number[]) => {
+      if (selected !== null && selected < rows.length) setSpans(selected, spans);
+      else addRow(spans);
+    },
+    [addRow, rows.length, selected, setSpans],
   );
 
   const move = (from: number, to: number) => {
@@ -237,9 +258,9 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
       {description ? <p style={{...text14, ...dim, margin: '0 0 12px'}}>{description}</p> : null}
       {!readOnly ? (
         <div style={{marginBottom: 12}}>
-          <PresetTiles current={selectedSpans} onApply={onTile} />
+          <PresetTiles current={selectedSpans} onReplace={replaceRow} onAdd={addRow} />
           <p style={{...text14, ...dim, margin: '8px 0 0'}}>
-            {selected === null ? 'Cliquez une disposition pour ajouter une rangée. Cliquez une rangée pour la sélectionner et changer sa disposition.' : `Rangée ${selected + 1} sélectionnée : une disposition s’applique à elle. Même nombre de colonnes, seules les largeurs changent ; sinon elle est recréée vide.`}
+            {selected === null ? 'Double clic sur une disposition : ajoute une rangée. Clic sur une rangée : la sélectionne ; un clic sur une disposition la remplace alors.' : `Rangée ${selected + 1} sélectionnée. Clic : remplace sa disposition (même nombre de colonnes, seules les largeurs changent ; sinon recréée vide). Double clic : ajoute une rangée dessous.`}
           </p>
         </div>
       ) : null}
