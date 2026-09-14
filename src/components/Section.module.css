@@ -11,26 +11,33 @@
 }
 .content { position: relative; z-index: 2; width: 100%; }
 
-/* ---- padding vertical ---- */
+/* ---- padding vertical : l'échelle (data-spacing, deux bords) ou une valeur par bord en
+   pixels posée en variable inline (--section-pad-top / --section-pad-bottom, sections
+   administrées). Sous 640 px, tout est divisé par deux. ---- */
+.section {
+  --section-pad-top: var(--section-pad);
+  --section-pad-bottom: var(--section-pad);
+  --section-pad-scale: 1;
+  padding-block: calc(var(--section-pad-top) * var(--section-pad-scale)) calc(var(--section-pad-bottom) * var(--section-pad-scale));
+}
+@media (max-width: 639px) {
+  .section { --section-pad-scale: 0.5; }
+}
 .section[data-spacing='none'] { --section-pad: 0px; }
 .section[data-spacing='xs'] { --section-pad: 36px; }
 .section[data-spacing='sm'] { --section-pad: 56px; }
 .section[data-spacing='md'] { --section-pad: 96px; }
 .section[data-spacing='lg'] { --section-pad: 128px; }
-.section { padding-block: var(--section-pad); }
-@media (max-width: 639px) {
-  .section[data-spacing='xs'] { --section-pad: 28px; }
-  .section[data-spacing='sm'] { --section-pad: 40px; }
-  .section[data-spacing='md'] { --section-pad: 56px; }
-  .section[data-spacing='lg'] { --section-pad: 72px; }
-}
 
 /* ---- sous l'en-tête fixe : on réserve sa hauteur (variable globale --site-header-height,
    qui perd le bandeau sous 1280 px) ---- */
-.section[data-under-header] { padding-top: calc(var(--section-pad) + var(--site-header-height)); }
+.section[data-under-header] { padding-top: calc(var(--section-pad-top) * var(--section-pad-scale) + var(--site-header-height)); }
 
 /* ---- papier (blanc / carte nuit) ---- */
 .section[data-background='paper'] { background-color: var(--color-background-surface); }
+
+/* ---- couleur du fond clair : highlight clair du silo (5 %), compose avec les textures ---- */
+.section[data-tint='highlight'] { background-color: var(--color-highlight-light); }
 
 /* ---- contenu centré verticalement (hero texte 02, hauts de page) ---- */
 .section[data-centered] { justify-content: center; }

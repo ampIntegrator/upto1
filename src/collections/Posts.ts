@@ -8,13 +8,24 @@ export const Posts: CollectionConfig = {
   admin: {useAsTitle: 'title', group: 'Blog', defaultColumns: ['title', 'category', 'publishedAt']},
   access: {read: () => true},
   defaultSort: '-publishedAt',
+  // les onglets en premier : le plugin SEO ajoute son onglet à la suite ; slug, catégorie et date en barre latérale
   fields: [
-    {name: 'title', type: 'text', label: 'Titre', required: true, localized: true},
+    {
+      type: 'tabs',
+      tabs: [
+        {
+          label: 'Article',
+          fields: [
+            {name: 'title', type: 'text', label: 'Titre', required: true, localized: true},
+            {name: 'cover', type: 'upload', relationTo: 'media', label: 'Image de couverture'},
+            {name: 'excerpt', type: 'textarea', label: 'Extrait', localized: true, admin: {rows: 3}},
+            {name: 'content', type: 'richText', label: 'Contenu', localized: true},
+          ],
+        },
+      ],
+    },
     slugField,
     {name: 'category', type: 'relationship', relationTo: 'categories', label: 'Catégorie', required: true, admin: {position: 'sidebar'}},
     {name: 'publishedAt', type: 'date', label: 'Date de publication', required: true, defaultValue: () => new Date().toISOString(), admin: {position: 'sidebar', date: {pickerAppearance: 'dayOnly', displayFormat: 'd MMMM yyyy'}}},
-    {name: 'cover', type: 'upload', relationTo: 'media', label: 'Image de couverture'},
-    {name: 'excerpt', type: 'textarea', label: 'Extrait', localized: true, admin: {rows: 3}},
-    {name: 'content', type: 'richText', label: 'Contenu', localized: true},
   ],
 };

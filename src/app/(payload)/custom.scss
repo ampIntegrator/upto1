@@ -1,0 +1,19 @@
+/* Ajustements de l'admin Payload (chargé après le CSS de Payload, hors de ses @layer). */
+
+/* Barre latérale d'un document : un tiers de la largeur, mais 400 px au plus.
+   (Payload la met à 33,33 % sans plafond ; on garde son cas « barre vide » à 0.) */
+.document-fields__sidebar-wrap:not(:has(.document-fields__sidebar-fields > .render-fields:empty)) {
+  --sidebar-wrap-width: min(33.33%, 400px);
+}
+
+/* Sélecteur de silo : deux rangées de trois pastilles, une seule rangée de six au-delà de 1400 px. */
+.silo-picker {
+  display: grid;
+  grid-template-columns: repeat(3, 48px);
+  gap: 8px;
+}
+@media (min-width: 1400px) {
+  .silo-picker {
+    grid-template-columns: repeat(6, 48px);
+  }
+}

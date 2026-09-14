@@ -16,7 +16,10 @@
  *   edge       : liseré dégradé en pied (actif par défaut sur image et vidéo,
  *                disponible partout)
  *   (pas de voile ni de halo : l'overlay est le seul réglage d'assombrissement)
+ *   tint       : couleur du fond clair : 'body' (fond de page) | 'highlight' (highlight clair du silo)
  *   spacing    : padding vertical 'none' | 'xs' | 'sm' | 'md' | 'lg'
+ *   spacingTop / spacingBottom : haut et bas séparés, en pixels (0 à 160 par pas de 20 en admin) ;
+ *                priment sur spacing ; divisés par deux sous 640 px
  *   dividers   : filets haut et bas (barre de chiffres)
  *
  * night, image et video basculent leur contenu en mode nuit (Theme dark) :
@@ -32,6 +35,7 @@ import styles from './Section.module.css';
 
 export type SectionBackground = 'light' | 'paper' | 'glow' | 'grid' | 'dots' | 'losange' | 'blueprint' | 'night' | 'night-halo' | 'night-beam' | 'image' | 'video';
 export type SectionSpacing = 'none' | 'xs' | 'sm' | 'md' | 'lg';
+export type SectionTint = 'body' | 'highlight';
 
 export type SectionProps = {
   background?: SectionBackground;
@@ -41,7 +45,11 @@ export type SectionProps = {
   overlay?: number;
   /** liseré dégradé silo → highlight → silo en pied */
   edge?: boolean;
+  /** couleur du fond clair (compose avec les textures) */
+  tint?: SectionTint;
   spacing?: SectionSpacing;
+  spacingTop?: number;
+  spacingBottom?: number;
   /** filets haut et bas */
   dividers?: boolean;
   /** premier bloc d'une page sous l'en-tête fixe : réserve sa hauteur en haut (hero clair) */
@@ -59,7 +67,7 @@ export type SectionProps = {
 const DARK: SectionBackground[] = ['night', 'night-halo', 'night-beam', 'image', 'video'];
 const MEDIA: SectionBackground[] = ['image', 'video'];
 
-export function Section({background = 'light', image, video, overlay = 0, edge, spacing = 'md', dividers, underHeader, centered, minHeight, id, children, foot}: SectionProps) {
+export function Section({background = 'light', image, video, overlay = 0, edge, tint, spacing = 'md', spacingTop, spacingBottom, dividers, underHeader, centered, minHeight, id, children, foot}: SectionProps) {
   const {theme} = useOrbitaTheme();
   const isMedia = MEDIA.includes(background);
   const showEdge = edge ?? isMedia;
@@ -71,11 +79,16 @@ export function Section({background = 'light', image, video, overlay = 0, edge, 
       className={styles.section}
       data-background={background}
       data-spacing={spacing}
+      data-tint={tint}
       data-edge={showEdge || undefined}
       data-dividers={dividers || undefined}
       data-under-header={underHeader || undefined}
       data-centered={centered || undefined}
-      style={minHeight != null ? {minHeight} : undefined}
+      style={{
+        ...(minHeight != null ? {minHeight} : null),
+        ...(spacingTop != null ? {'--section-pad-top': `${spacingTop}px`} : null),
+        ...(spacingBottom != null ? {'--section-pad-bottom': `${spacingBottom}px`} : null),
+      } as React.CSSProperties}
     >
       {background === 'image' && image ? (
         // eslint-disable-next-line @next/next/no-img-element
