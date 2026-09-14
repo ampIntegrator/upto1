@@ -11,9 +11,9 @@
  *     dépendre de ses réglages (une grille de cartes à 3 colonnes internes demande 9).
  *   - Sous 768 px, toutes les colonnes passent en pleine largeur (styles.css, .page-grid).
  *
- * Ce fichier est consommé par le front (page Fondations « Grille ») et, plus tard, par la
- * config Payload : `validateColumn` et `validateRow` deviennent les validations des blocs
- * Colonne et Rangée, avec ces messages en français dans l'admin. Aucune valeur visuelle ici :
+ * Ce fichier est consommé par le front (page Fondations « Grille ») et par la config Payload
+ * (src/fields/sections) : `validateColumn` et `validateRow` sont les validations de la largeur
+ * d'une colonne, avec ces messages en français dans l'admin. Aucune valeur visuelle ici :
  * uniquement des largeurs de grille et des règles.
  */
 

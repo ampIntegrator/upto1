@@ -1,10 +1,12 @@
 import type {CollectionConfig} from 'payload';
 
 import {heroField} from '@/fields/hero';
+import {shareSections} from '@/fields/sections/shareSections';
+import {sectionsField} from '@/fields/sections/sectionFields';
 import {siloField} from '@/fields/siloField';
 import {slugField} from '@/fields/shared';
 
-/** Pages du site : titre, slug, silo (barre latérale), haut de page. Les sections de contenu viendront ensuite. */
+/** Pages du site : titre, slug, silo (barre latérale), haut de page, puis les sections de contenu empilées. */
 export const Pages: CollectionConfig = {
   slug: 'pages',
   labels: {singular: 'Page', plural: 'Pages'},
@@ -20,20 +22,22 @@ export const Pages: CollectionConfig = {
     },
   },
   access: {read: () => true},
+  hooks: {beforeChange: [shareSections]},
+  // les onglets en premier : le plugin SEO ajoute son onglet à la suite (sinon il englobe tout
+  // dans un onglet « Page » et la barre latérale disparaît) ; slug et silo restent en barre latérale
   fields: [
-    {name: 'title', type: 'text', label: 'Titre', required: true, localized: true},
-    slugField,
-    siloField({name: 'silo', fromSettings: true, admin: {position: 'sidebar', description: 'Présélectionné sur le silo du site ; changez-le pour cette page seulement.'}}),
     {
       type: 'tabs',
       tabs: [
-        {label: 'Haut de page', fields: [heroField]},
+        {label: 'Haut de page', fields: [{name: 'title', type: 'text', label: 'Titre de la page', required: true, localized: true}, heroField]},
         {
           label: 'Contenu',
-          description: 'Les sections de contenu (rangées, colonnes, contenus) arrivent ensuite : voir la page Fondations « Grille & emprises » du catalogue.',
-          fields: [{name: 'contentPlaceholder', type: 'ui', admin: {components: {Field: '@/fields/ContentPlaceholder#ContentPlaceholder'}}}],
+          description: 'Une page est une pile de sections ; chaque section, des rangées de colonnes remplies de contenus (Fondations « Grille & emprises » du catalogue).',
+          fields: [sectionsField],
         },
       ],
     },
+    slugField,
+    siloField({name: 'silo', fromSettings: true, admin: {position: 'sidebar', description: 'Présélectionné sur le silo du site ; changez-le pour cette page seulement.'}}),
   ],
 };

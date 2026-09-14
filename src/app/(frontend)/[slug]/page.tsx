@@ -5,21 +5,24 @@ import React from 'react';
 
 import {BreadcrumbBand} from '@/components/BreadcrumbBand';
 import {Hero} from '@/components/Hero';
+import {PageSections} from '@/components/PageSections';
 import {SitePage} from '@/components/SitePage';
+import {toSections} from '@/lib/sections';
 import {breadcrumbProps, getLocale, getSite, pageSilo, showBreadcrumb, toFooter, toHeader, toHero} from '@/lib/site';
 
 export const dynamic = 'force-dynamic';
 
 async function loadPage(slug: string, locale: Awaited<ReturnType<typeof getLocale>>) {
   const payload = await getPayload({config});
-  const res = await payload.find({collection: 'pages', where: {slug: {equals: slug}}, locale, depth: 1, limit: 1});
+  const res = await payload.find({collection: 'pages', where: {slug: {equals: slug}}, locale, depth: 2, limit: 1});
   return res.docs[0] ?? null;
 }
 
 export async function generateMetadata({params}: {params: Promise<{slug: string}>}) {
   const {slug} = await params;
   const page = await loadPage(slug, await getLocale());
-  return {title: page ? `${page.title} · Vidomia` : 'Vidomia'};
+  if (!page) return {title: 'Vidomia'};
+  return {title: page.meta?.title || `${page.title} · Vidomia`, description: page.meta?.description || undefined};
 }
 
 export default async function Page({params}: {params: Promise<{slug: string}>}) {
@@ -35,6 +38,7 @@ export default async function Page({params}: {params: Promise<{slug: string}>}) 
     <SitePage silo={pageSilo(page, site.settings)} header={toHeader(site.settings, site.header)} footer={toFooter(site.settings, site.footer, site.posts, locale)} tone={tone} currentHref={`/${slug}`}>
       <Hero {...hero} />
       {bandBreadcrumb ? <BreadcrumbBand {...breadcrumbProps(page, site.settings)} /> : null}
+      <PageSections sections={toSections(page.sections)} />
     </SitePage>
   );
 }

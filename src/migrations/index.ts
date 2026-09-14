@@ -2,6 +2,10 @@ import * as migration_20260911_154044_site_initial from './20260911_154044_site_
 import * as migration_20260911_155220_users_name from './20260911_155220_users_name';
 import * as migration_20260911_160753_breadcrumb_settings from './20260911_160753_breadcrumb_settings';
 import * as migration_20260911_161603_breadcrumb_home_style from './20260911_161603_breadcrumb_home_style';
+import * as migration_20260914_085627_page_sections from './20260914_085627_page_sections';
+import * as migration_20260914_092235_section_questions from './20260914_092235_section_questions';
+import * as migration_20260914_093340_seo from './20260914_093340_seo';
+import * as migration_20260914_094621_card_blocks from './20260914_094621_card_blocks';
 
 export const migrations = [
   {
@@ -22,6 +26,26 @@ export const migrations = [
   {
     up: migration_20260911_161603_breadcrumb_home_style.up,
     down: migration_20260911_161603_breadcrumb_home_style.down,
-    name: '20260911_161603_breadcrumb_home_style'
+    name: '20260911_161603_breadcrumb_home_style',
+  },
+  {
+    up: migration_20260914_085627_page_sections.up,
+    down: migration_20260914_085627_page_sections.down,
+    name: '20260914_085627_page_sections',
+  },
+  {
+    up: migration_20260914_092235_section_questions.up,
+    down: migration_20260914_092235_section_questions.down,
+    name: '20260914_092235_section_questions',
+  },
+  {
+    up: migration_20260914_093340_seo.up,
+    down: migration_20260914_093340_seo.down,
+    name: '20260914_093340_seo',
+  },
+  {
+    up: migration_20260914_094621_card_blocks.up,
+    down: migration_20260914_094621_card_blocks.down,
+    name: '20260914_094621_card_blocks'
   },
 ];

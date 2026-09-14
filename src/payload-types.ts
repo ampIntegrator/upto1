@@ -68,6 +68,7 @@ export interface Config {
   blocks: {};
   collections: {
     pages: Page;
+    sections: Section;
     posts: Post;
     categories: Category;
     media: Media;
@@ -80,6 +81,7 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
+    sections: SectionsSelect<false> | SectionsSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -139,14 +141,6 @@ export interface UserAuthOperations {
 export interface Page {
   id: number;
   title: string;
-  /**
-   * Minuscules, chiffres et tirets. « accueil » = page d'accueil.
-   */
-  slug: string;
-  /**
-   * Présélectionné sur le silo du site ; changez-le pour cette page seulement.
-   */
-  silo?: ('blue' | 'green' | 'orange' | 'violet' | 'magenta' | 'ambre') | null;
   hero: {
     variant: 'media-image' | 'media-video' | 'split' | 'page-image' | 'page-glow' | 'page-night';
     eyebrow?: string | null;
@@ -187,6 +181,172 @@ export interface Page {
     breadcrumb?: boolean | null;
     breadcrumbMode?: ('inherit' | 'show' | 'hide') | null;
   };
+  /**
+   * Les sections s’empilent de haut en bas sous le haut de page.
+   */
+  sections?:
+    | (
+        | {
+            mode: 'light' | 'dark' | 'media';
+            tint?: ('body' | 'highlight') | null;
+            texture?: ('none' | 'grid' | 'dots' | 'losange') | null;
+            darkStyle?: ('night' | 'night-halo') | null;
+            mediaType?: ('image' | 'video') | null;
+            image?: (number | null) | Media;
+            video?: (number | null) | Media;
+            poster?: (number | null) | Media;
+            overlay?: number | null;
+            spacingTop?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
+            spacingBottom?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
+            /**
+             * Identifiant pour un lien #ancre : minuscules, chiffres, tirets.
+             */
+            anchor?: string | null;
+            /**
+             * Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre.
+             */
+            rows?:
+              | {
+                  columns?:
+                    | {
+                        span: '2' | '3' | '4' | '6' | '8' | '9' | '12';
+                        /**
+                         * Empilés de haut en bas. Laissez vide pour une case vide.
+                         */
+                        contents?:
+                          | (
+                              | {
+                                  /**
+                                   * Une ligne vide sépare deux paragraphes.
+                                   */
+                                  text: string;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'text';
+                                }
+                              | {
+                                  image: number | Media;
+                                  title: string;
+                                  text?: string | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'cardImage';
+                                }
+                              | {
+                                  iconKey: string;
+                                  title: string;
+                                  text?: string | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'cardIcon';
+                                }
+                              | {
+                                  prefix?: string | null;
+                                  value: string;
+                                  suffix?: string | null;
+                                  title: string;
+                                  text?: string | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'cardNumber';
+                                }
+                              | {
+                                  title: string;
+                                  text?: string | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'cardTitle';
+                                }
+                              | {
+                                  image: number | Media;
+                                  title: string;
+                                  text?: string | null;
+                                  cta: {
+                                    label: string;
+                                    href: string;
+                                  };
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'cardImageLink';
+                                }
+                              | {
+                                  iconKey: string;
+                                  title: string;
+                                  text?: string | null;
+                                  cta: {
+                                    label: string;
+                                    href: string;
+                                  };
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'cardIconLink';
+                                }
+                              | {
+                                  prefix?: string | null;
+                                  value: string;
+                                  suffix?: string | null;
+                                  title: string;
+                                  text?: string | null;
+                                  cta: {
+                                    label: string;
+                                    href: string;
+                                  };
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'cardNumberLink';
+                                }
+                              | {
+                                  title: string;
+                                  text?: string | null;
+                                  cta: {
+                                    label: string;
+                                    href: string;
+                                  };
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'cardTitleLink';
+                                }
+                            )[]
+                          | null;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                }[]
+              | null;
+            /**
+             * À l’enregistrement, la section est copiée dans « Sections partagées » et la page y fait référence.
+             */
+            saveAsShared?: boolean | null;
+            sharedTitle?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'section';
+          }
+        | {
+            section: number | Section;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'sharedSection';
+          }
+      )[]
+    | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+  };
+  /**
+   * Minuscules, chiffres et tirets. « accueil » = page d'accueil.
+   */
+  slug: string;
+  /**
+   * Présélectionné sur le silo du site ; changez-le pour cette page seulement.
+   */
+  silo?: ('blue' | 'green' | 'orange' | 'violet' | 'magenta' | 'ambre') | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -211,17 +371,148 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sections".
+ */
+export interface Section {
+  id: number;
+  title: string;
+  mode: 'light' | 'dark' | 'media';
+  tint?: ('body' | 'highlight') | null;
+  texture?: ('none' | 'grid' | 'dots' | 'losange') | null;
+  darkStyle?: ('night' | 'night-halo') | null;
+  mediaType?: ('image' | 'video') | null;
+  image?: (number | null) | Media;
+  video?: (number | null) | Media;
+  poster?: (number | null) | Media;
+  overlay?: number | null;
+  spacingTop?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
+  spacingBottom?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
+  /**
+   * Identifiant pour un lien #ancre : minuscules, chiffres, tirets.
+   */
+  anchor?: string | null;
+  /**
+   * Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre.
+   */
+  rows?:
+    | {
+        columns?:
+          | {
+              span: '2' | '3' | '4' | '6' | '8' | '9' | '12';
+              /**
+               * Empilés de haut en bas. Laissez vide pour une case vide.
+               */
+              contents?:
+                | (
+                    | {
+                        /**
+                         * Une ligne vide sépare deux paragraphes.
+                         */
+                        text: string;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'text';
+                      }
+                    | {
+                        image: number | Media;
+                        title: string;
+                        text?: string | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'cardImage';
+                      }
+                    | {
+                        iconKey: string;
+                        title: string;
+                        text?: string | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'cardIcon';
+                      }
+                    | {
+                        prefix?: string | null;
+                        value: string;
+                        suffix?: string | null;
+                        title: string;
+                        text?: string | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'cardNumber';
+                      }
+                    | {
+                        title: string;
+                        text?: string | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'cardTitle';
+                      }
+                    | {
+                        image: number | Media;
+                        title: string;
+                        text?: string | null;
+                        cta: {
+                          label: string;
+                          href: string;
+                        };
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'cardImageLink';
+                      }
+                    | {
+                        iconKey: string;
+                        title: string;
+                        text?: string | null;
+                        cta: {
+                          label: string;
+                          href: string;
+                        };
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'cardIconLink';
+                      }
+                    | {
+                        prefix?: string | null;
+                        value: string;
+                        suffix?: string | null;
+                        title: string;
+                        text?: string | null;
+                        cta: {
+                          label: string;
+                          href: string;
+                        };
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'cardNumberLink';
+                      }
+                    | {
+                        title: string;
+                        text?: string | null;
+                        cta: {
+                          label: string;
+                          href: string;
+                        };
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'cardTitleLink';
+                      }
+                  )[]
+                | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts".
  */
 export interface Post {
   id: number;
   title: string;
-  /**
-   * Minuscules, chiffres et tirets. « accueil » = page d'accueil.
-   */
-  slug: string;
-  category: number | Category;
-  publishedAt: string;
   cover?: (number | null) | Media;
   excerpt?: string | null;
   content?: {
@@ -239,6 +530,20 @@ export interface Post {
     };
     [k: string]: unknown;
   } | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+  };
+  /**
+   * Minuscules, chiffres et tirets. « accueil » = page d'accueil.
+   */
+  slug: string;
+  category: number | Category;
+  publishedAt: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -311,6 +616,10 @@ export interface PayloadLockedDocument {
         value: number | Page;
       } | null)
     | ({
+        relationTo: 'sections';
+        value: number | Section;
+      } | null)
+    | ({
         relationTo: 'posts';
         value: number | Post;
       } | null)
@@ -374,8 +683,6 @@ export interface PayloadMigration {
  */
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
-  slug?: T;
-  silo?: T;
   hero?:
     | T
     | {
@@ -419,6 +726,307 @@ export interface PagesSelect<T extends boolean = true> {
         breadcrumb?: T;
         breadcrumbMode?: T;
       };
+  sections?:
+    | T
+    | {
+        section?:
+          | T
+          | {
+              mode?: T;
+              tint?: T;
+              texture?: T;
+              darkStyle?: T;
+              mediaType?: T;
+              image?: T;
+              video?: T;
+              poster?: T;
+              overlay?: T;
+              spacingTop?: T;
+              spacingBottom?: T;
+              anchor?: T;
+              rows?:
+                | T
+                | {
+                    columns?:
+                      | T
+                      | {
+                          span?: T;
+                          contents?:
+                            | T
+                            | {
+                                text?:
+                                  | T
+                                  | {
+                                      text?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                cardImage?:
+                                  | T
+                                  | {
+                                      image?: T;
+                                      title?: T;
+                                      text?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                cardIcon?:
+                                  | T
+                                  | {
+                                      iconKey?: T;
+                                      title?: T;
+                                      text?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                cardNumber?:
+                                  | T
+                                  | {
+                                      prefix?: T;
+                                      value?: T;
+                                      suffix?: T;
+                                      title?: T;
+                                      text?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                cardTitle?:
+                                  | T
+                                  | {
+                                      title?: T;
+                                      text?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                cardImageLink?:
+                                  | T
+                                  | {
+                                      image?: T;
+                                      title?: T;
+                                      text?: T;
+                                      cta?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            href?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                cardIconLink?:
+                                  | T
+                                  | {
+                                      iconKey?: T;
+                                      title?: T;
+                                      text?: T;
+                                      cta?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            href?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                cardNumberLink?:
+                                  | T
+                                  | {
+                                      prefix?: T;
+                                      value?: T;
+                                      suffix?: T;
+                                      title?: T;
+                                      text?: T;
+                                      cta?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            href?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                cardTitleLink?:
+                                  | T
+                                  | {
+                                      title?: T;
+                                      text?: T;
+                                      cta?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            href?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                              };
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              saveAsShared?: T;
+              sharedTitle?: T;
+              id?: T;
+              blockName?: T;
+            };
+        sharedSection?:
+          | T
+          | {
+              section?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  slug?: T;
+  silo?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sections_select".
+ */
+export interface SectionsSelect<T extends boolean = true> {
+  title?: T;
+  mode?: T;
+  tint?: T;
+  texture?: T;
+  darkStyle?: T;
+  mediaType?: T;
+  image?: T;
+  video?: T;
+  poster?: T;
+  overlay?: T;
+  spacingTop?: T;
+  spacingBottom?: T;
+  anchor?: T;
+  rows?:
+    | T
+    | {
+        columns?:
+          | T
+          | {
+              span?: T;
+              contents?:
+                | T
+                | {
+                    text?:
+                      | T
+                      | {
+                          text?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    cardImage?:
+                      | T
+                      | {
+                          image?: T;
+                          title?: T;
+                          text?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    cardIcon?:
+                      | T
+                      | {
+                          iconKey?: T;
+                          title?: T;
+                          text?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    cardNumber?:
+                      | T
+                      | {
+                          prefix?: T;
+                          value?: T;
+                          suffix?: T;
+                          title?: T;
+                          text?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    cardTitle?:
+                      | T
+                      | {
+                          title?: T;
+                          text?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    cardImageLink?:
+                      | T
+                      | {
+                          image?: T;
+                          title?: T;
+                          text?: T;
+                          cta?:
+                            | T
+                            | {
+                                label?: T;
+                                href?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    cardIconLink?:
+                      | T
+                      | {
+                          iconKey?: T;
+                          title?: T;
+                          text?: T;
+                          cta?:
+                            | T
+                            | {
+                                label?: T;
+                                href?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    cardNumberLink?:
+                      | T
+                      | {
+                          prefix?: T;
+                          value?: T;
+                          suffix?: T;
+                          title?: T;
+                          text?: T;
+                          cta?:
+                            | T
+                            | {
+                                label?: T;
+                                href?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    cardTitleLink?:
+                      | T
+                      | {
+                          title?: T;
+                          text?: T;
+                          cta?:
+                            | T
+                            | {
+                                label?: T;
+                                href?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -428,12 +1036,19 @@ export interface PagesSelect<T extends boolean = true> {
  */
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
-  slug?: T;
-  category?: T;
-  publishedAt?: T;
   cover?: T;
   excerpt?: T;
   content?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  slug?: T;
+  category?: T;
+  publishedAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }
