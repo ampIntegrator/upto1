@@ -27,3 +27,9 @@
 .rows-builder__actions .btn {
   margin: 0;
 }
+
+.rows-builder__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

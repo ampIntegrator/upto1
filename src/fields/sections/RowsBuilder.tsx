@@ -7,8 +7,8 @@
  *   - un seul bandeau de dispositions en vignettes (un rectangle découpé aux proportions des
  *     colonnes) : un clic remplace la disposition de la rangée sélectionnée, un double clic ajoute
  *     une rangée sous la sélection ;
- *   - les rangées empilées dessous, une case par colonne à sa largeur ; sur le côté, monter,
- *     descendre, dupliquer, supprimer ;
+ *   - les rangées empilées dessous, réordonnées par glisser-déposer (poignée) ; sur le côté,
+ *     dupliquer et supprimer ; dans chaque case, deux flèches décalent la colonne ;
  *   - une case résume ses contenus, ou « Vide » ; un clic ouvre un tiroir Payload avec les
  *     champs de cette colonne (largeur, contenus). Le formulaire est partagé : ce qui est
  *     saisi dans le tiroir est déjà dans la page, on enregistre la page comme d'habitude.
@@ -17,7 +17,7 @@
  * exactement comme son propre champ tableau ; le rendu des champs du tiroir est celui de
  * Payload (RenderFields), avec les chemins et permissions qu'il attend.
  */
-import {Button, Drawer, RenderFields, useDrawerSlug, useField, useForm, useFormFields, useModal} from '@payloadcms/ui';
+import {Button, DraggableSortable, DraggableSortableItem, Drawer, RenderFields, useDrawerSlug, useField, useForm, useFormFields, useModal} from '@payloadcms/ui';
 import type {ArrayFieldClient, ArrayFieldClientProps, ClientField, SanitizedFieldPermissions, SanitizedFieldsPermissions} from 'payload';
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 
@@ -95,15 +95,37 @@ function PresetTiles({current, onReplace, onAdd}: {current: string; onReplace: (
   );
 }
 
-/** Une case de la rangée : largeur dans un coin, résumé des contenus, clic pour ouvrir le tiroir. */
-function Cell({cell, index, onOpen}: {cell: CellSnapshot; index: number; onOpen: () => void}) {
+/** Une case de la rangée : largeur dans un coin, flèches pour la décaler, résumé des contenus, clic pour ouvrir le tiroir. */
+function Cell({cell, index, count, onOpen, onMove}: {cell: CellSnapshot; index: number; count: number; onOpen: () => void; onMove?: (to: number) => void}) {
   const empty = cell.contents.length === 0;
-  return (
+  const arrow = (dir: -1 | 1, glyph: string, label: string) => (
     <button
       type="button"
+      aria-label={label}
+      title={label}
+      disabled={dir === -1 ? index === 0 : index === count - 1}
+      onClick={(e) => {
+        e.stopPropagation();
+        onMove?.(index + dir);
+      }}
+      style={{border: 0, background: 'transparent', padding: '0 4px', cursor: 'pointer', color: 'inherit', ...text14}}>
+      {glyph}
+    </button>
+  );
+  return (
+    <div
+      role="button"
+      tabIndex={0}
       onClick={(e) => {
         e.stopPropagation();
         onOpen();
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          e.stopPropagation();
+          onOpen();
+        }
       }}
       aria-label={`Colonne ${index + 1}, ${cell.span} sur 12, ${empty ? 'vide' : cell.contents.join(', ')}`}
       title={empty ? 'Vide, cliquer pour remplir' : cell.contents.join(', ')}
@@ -115,7 +137,7 @@ function Cell({cell, index, onOpen}: {cell: CellSnapshot; index: number; onOpen:
         gap: 2,
         minWidth: 0,
         minHeight: 72,
-        padding: '24px 8px 8px',
+        padding: '26px 8px 8px',
         textAlign: 'left',
         cursor: 'pointer',
         borderRadius: 4,
@@ -124,6 +146,12 @@ function Cell({cell, index, onOpen}: {cell: CellSnapshot; index: number; onOpen:
         color: 'var(--theme-elevation-1000)',
         ...text14,
       }}>
+      {onMove ? (
+        <span style={{position: 'absolute', top: 2, left: 2, display: 'flex', ...dim}}>
+          {arrow(-1, '◀', `Décaler la colonne ${index + 1} vers la gauche`)}
+          {arrow(1, '▶', `Décaler la colonne ${index + 1} vers la droite`)}
+        </span>
+      ) : null}
       <span style={{position: 'absolute', top: 4, right: 8, ...dim}}>{cell.span}/12</span>
       {empty ? (
         <span style={{...dim, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Vide</span>
@@ -134,7 +162,7 @@ function Cell({cell, index, onOpen}: {cell: CellSnapshot; index: number; onOpen:
           </span>
         ))
       )}
-    </button>
+    </div>
   );
 }
 
@@ -217,6 +245,10 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
     moveFieldRow({path, moveFromIndex: from, moveToIndex: to});
     setSelected(to);
   };
+  const moveColumn = (row: number, from: number, to: number) => {
+    moveFieldRow({path: `${path}.${row}.columns`, moveFromIndex: from, moveToIndex: to});
+    setModified(true);
+  };
   const duplicate = (i: number) => {
     dispatchFields({type: 'DUPLICATE_ROW', path, rowIndex: i});
     setModified(true);
@@ -266,73 +298,82 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
       ) : null}
       {showError && errorPaths?.length ? <p style={{...text14, color: 'var(--theme-error-500)', margin: '0 0 12px'}}>Une rangée contient une erreur : ouvrez ses colonnes.</p> : null}
 
-      <div style={{display: 'flex', flexDirection: 'column', gap: 10}}>
+      <DraggableSortable ids={rows.map((r) => r.id)} onDragEnd={({moveFromIndex, moveToIndex}) => move(moveFromIndex, moveToIndex)} className="rows-builder__rows">
         {rows.map((row, i) => {
           const snap = snapshot[i] ?? {columns: []};
           const spans = snap.columns.map((c) => c.span);
           const rowError = row.isLoading ? null : validateRow(spans);
           const isSelected = selected === i;
           return (
-            <div key={row.id} style={{display: 'flex', gap: 8, alignItems: 'flex-start'}}>
-              <div
-                role="button"
-                tabIndex={0}
-                aria-label={`Rangée ${i + 1}${isSelected ? ', sélectionnée' : ''}`}
-                aria-pressed={isSelected}
-                onClick={() => setSelected(isSelected ? null : i)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    setSelected(isSelected ? null : i);
-                  }
-                }}
-                style={{
-                  flex: 1,
-                  minWidth: 0,
-                  padding: 10,
-                  borderRadius: 4,
-                  border: `2px solid ${isSelected ? 'var(--theme-elevation-1000)' : 'var(--theme-elevation-200)'}`,
-                  background: 'var(--theme-elevation-50)',
-                  cursor: 'pointer',
-                }}>
-                {rowError ? <p style={{...text14, color: 'var(--theme-error-500)', margin: '0 0 8px'}}>{rowError}</p> : null}
-                {row.isLoading ? (
-                  <p style={{...text14, ...dim, margin: 0}}>Chargement…</p>
-                ) : snap.columns.length ? (
-                  <div style={{display: 'grid', gridTemplateColumns: spans.map((s) => `${s}fr`).join(' '), gap: 8}}>
-                    {snap.columns.map((cell, j) => (
-                      <Cell
-                        key={j}
-                        cell={cell}
-                        index={j}
-                        onOpen={() => openCell(i, j)}
-                      />
-                    ))}
+            <DraggableSortableItem key={row.id} id={row.id} disabled={readOnly}>
+              {({attributes, listeners, setNodeRef, transform, transition, isDragging}) => (
+                <div ref={setNodeRef} style={{display: 'flex', gap: 8, alignItems: 'flex-start', transform, transition, zIndex: isDragging ? 1 : undefined, position: 'relative'}}>
+                  <div
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Rangée ${i + 1}${isSelected ? ', sélectionnée' : ''}`}
+                    aria-pressed={isSelected}
+                    onClick={() => setSelected(isSelected ? null : i)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setSelected(isSelected ? null : i);
+                      }
+                    }}
+                    style={{
+                      flex: 1,
+                      minWidth: 0,
+                      padding: 10,
+                      borderRadius: 4,
+                      border: `2px solid ${isSelected ? 'var(--theme-elevation-1000)' : 'var(--theme-elevation-200)'}`,
+                      background: 'var(--theme-elevation-50)',
+                      cursor: 'pointer',
+                    }}>
+                    {rowError ? <p style={{...text14, color: 'var(--theme-error-500)', margin: '0 0 8px'}}>{rowError}</p> : null}
+                    {row.isLoading ? (
+                      <p style={{...text14, ...dim, margin: 0}}>Chargement…</p>
+                    ) : snap.columns.length ? (
+                      <div style={{display: 'grid', gridTemplateColumns: spans.map((s) => `${s}fr`).join(' '), gap: 8}}>
+                        {snap.columns.map((cell, j) => (
+                          <Cell
+                            key={j}
+                            cell={cell}
+                            index={j}
+                            count={snap.columns.length}
+                            onOpen={() => openCell(i, j)}
+                            onMove={readOnly ? undefined : (to) => moveColumn(i, j, to)}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <p style={{...text14, ...dim, margin: 0}}>Sélectionnez cette rangée puis une disposition.</p>
+                    )}
                   </div>
-                ) : (
-                  <p style={{...text14, ...dim, margin: 0}}>Sélectionnez cette rangée puis une disposition.</p>
-                )}
-              </div>
-              {!readOnly ? (
-                <div className="rows-builder__actions" style={{display: 'flex', flexDirection: 'column', gap: 4}}>
-                  <Button size="small" buttonStyle="pill" disabled={i === 0} onClick={() => move(i, i - 1)} aria-label={`Monter la rangée ${i + 1}`} tooltip="Monter">
-                    ↑
-                  </Button>
-                  <Button size="small" buttonStyle="pill" disabled={i === rows.length - 1} onClick={() => move(i, i + 1)} aria-label={`Descendre la rangée ${i + 1}`} tooltip="Descendre">
-                    ↓
-                  </Button>
-                  <Button size="small" buttonStyle="pill" onClick={() => duplicate(i)} aria-label={`Dupliquer la rangée ${i + 1}`} tooltip="Dupliquer">
-                    ⧉
-                  </Button>
-                  <Button size="small" buttonStyle="pill" onClick={() => remove(i)} aria-label={`Supprimer la rangée ${i + 1}`} tooltip="Supprimer">
-                    ✕
-                  </Button>
+                  {!readOnly ? (
+                    <div className="rows-builder__actions" style={{display: 'flex', flexDirection: 'column', gap: 4}}>
+                      <button
+                        type="button"
+                        {...attributes}
+                        {...listeners}
+                        aria-label={`Déplacer la rangée ${i + 1}`}
+                        title="Glisser pour déplacer"
+                        style={{...text14, width: 28, height: 26, border: '1px solid var(--theme-elevation-200)', borderRadius: 4, background: 'var(--theme-elevation-100)', color: 'var(--theme-elevation-800)', cursor: 'grab', padding: 0}}>
+                        ⋮⋮
+                      </button>
+                      <Button size="small" buttonStyle="pill" onClick={() => duplicate(i)} aria-label={`Dupliquer la rangée ${i + 1}`} tooltip="Dupliquer">
+                        ⧉
+                      </Button>
+                      <Button size="small" buttonStyle="pill" onClick={() => remove(i)} aria-label={`Supprimer la rangée ${i + 1}`} tooltip="Supprimer">
+                        ✕
+                      </Button>
+                    </div>
+                  ) : null}
                 </div>
-              ) : null}
-            </div>
+              )}
+            </DraggableSortableItem>
           );
         })}
-      </div>
+      </DraggableSortable>
 
       {columnsField ? (
         <Drawer slug={drawerSlug} title={open && openCellSnapshot ? `Rangée ${open.row + 1} · colonne ${open.col + 1} · ${openCellSnapshot.span} / 12` : 'Colonne'}>
