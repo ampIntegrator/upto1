@@ -1,4 +1,5 @@
 import { IconPicker as IconPicker_8bfb3e3bce55055cefcbdba58b426cf6 } from '@/fields/IconPicker'
+import { BlockNameField as BlockNameField_4061162db6db9be055e809ce229cfb8b } from '@/fields/sections/BlockNameField'
 import { RowsBuilder as RowsBuilder_dd50ec209b50fe76207de513e3d57a2a } from '@/fields/sections/RowsBuilder'
 import { OverviewComponent as OverviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { MetaTitleComponent as MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
@@ -35,6 +36,7 @@ import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } f
 /** @type import('payload').ImportMap */
 export const importMap = {
   "@/fields/IconPicker#IconPicker": IconPicker_8bfb3e3bce55055cefcbdba58b426cf6,
+  "@/fields/sections/BlockNameField#BlockNameField": BlockNameField_4061162db6db9be055e809ce229cfb8b,
   "@/fields/sections/RowsBuilder#RowsBuilder": RowsBuilder_dd50ec209b50fe76207de513e3d57a2a,
   "@payloadcms/plugin-seo/client#OverviewComponent": OverviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#MetaTitleComponent": MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c0860,

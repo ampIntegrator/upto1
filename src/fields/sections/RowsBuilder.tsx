@@ -35,7 +35,7 @@ import {type SortableHandle, SortableItem, SortableList} from './sortable';
 
 /** filled : la colonne a un vrai composant (une case vide ne compte pas) */
 /** narrow : largeur minimale exigée par le composant quand la colonne est trop étroite, sinon null */
-type CellSnapshot = {span: ColumnSpan; contents: string[]; types?: string[]; filled: boolean; narrow: number | null; mobileOrder: number | null};
+type CellSnapshot = {span: ColumnSpan; contents: string[]; types?: string[]; names?: string[]; filled: boolean; narrow: number | null; mobileOrder: number | null};
 type RowSnapshot = {ids?: string[]; columns: CellSnapshot[]};
 
 const TILE_H = 40;
@@ -145,12 +145,13 @@ function Cell({cell, index, onOpen, drag}: {cell: CellSnapshot; index: number; o
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'stretch',
+        alignItems: 'center',
+        justifyContent: 'center',
         gap: 2,
         minWidth: 0,
         minHeight: 72,
         padding: '26px 8px 8px',
-        textAlign: 'left',
+        textAlign: 'center',
         cursor: 'pointer',
         borderRadius: 4,
         border: cell.narrow ? '2px solid var(--theme-error-500)' : `1px ${empty ? 'dashed' : 'solid'} var(--theme-elevation-${empty ? '300' : '400'})`,
@@ -180,10 +181,10 @@ function Cell({cell, index, onOpen, drag}: {cell: CellSnapshot; index: number; o
       ) : null}
       <span style={{position: 'absolute', top: 4, right: 8, ...dim}}>{cell.span}/12</span>
       {empty ? (
-        <span style={{...dim, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>{cell.contents.length ? 'Case vide' : 'Vide'}</span>
+        <span style={{...dim, maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>{cell.contents.length ? cell.contents.join(', ') : 'Vide'}</span>
       ) : (
         cell.contents.map((label, k) => (
-          <span key={k} style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
+          <span key={k} style={{maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
             {label}
           </span>
         ))
@@ -240,6 +241,10 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
         (out[i].columns[j].types ??= [])[k] = blockType;
         if (blockType && blockType !== EMPTY_SLUG) out[i].columns[j].filled = true;
       }
+      // nom affiché choisi dans le tiroir (blockName natif)
+      if (parts[3] === 'contents' && parts[5] === 'blockName' && parts.length === 6) {
+        (out[i].columns[j].names ??= [])[Number(parts[4])] = String(fields[key]?.value ?? '');
+      }
     }
     return JSON.stringify(out.map((r) => ({ids: r?.ids ?? [], columns: (r?.columns ?? []).map((c) => {
       const span = c?.span ?? 12;
@@ -248,7 +253,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
         const ref = t ? toContentRef({blockType: t}) : null;
         return ref ? Math.max(m, minSpan(ref)) : m;
       }, 0);
-      return {span, contents: (c?.contents ?? []).filter(Boolean), filled: Boolean(c?.filled), narrow: need > span ? need : null, mobileOrder: c?.mobileOrder ?? null};
+      return {span, contents: (c?.contents ?? []).map((label, k) => c?.names?.[k]?.trim() || label).filter(Boolean), filled: Boolean(c?.filled), narrow: need > span ? need : null, mobileOrder: c?.mobileOrder ?? null};
     })})));
   });
   const snapshot = useMemo<RowSnapshot[]>(() => JSON.parse(snapshotJson) as RowSnapshot[], [snapshotJson]);
