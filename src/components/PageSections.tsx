@@ -18,6 +18,7 @@ import type {ContentData, SectionData} from '@/lib/sections';
 import {Card} from './Card';
 import {Container} from './Container';
 import {Media} from './Media';
+import {MediaQuote} from './MediaQuote';
 import {Section} from './Section';
 
 function Content({content}: {content: ContentData}) {
@@ -40,6 +41,8 @@ function Content({content}: {content: ContentData}) {
       return <Card {...content.card} />;
     case 'media':
       return <Media {...content.media} />;
+    case 'mediaQuote':
+      return <MediaQuote {...content.mediaQuote} />;
     default:
       return null;
   }

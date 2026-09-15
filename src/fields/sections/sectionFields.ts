@@ -1,10 +1,11 @@
 import type {Block, Field} from 'payload';
 
-import {type ColumnSpan, validateColumn, validateRow} from '@/components/content-specs';
+import {type ColumnSpan, minSpan, validateColumn, validateRow} from '@/components/content-specs';
 import {CARD_BLOCKS} from './cardBlocks';
 import {emptyBlock} from './emptyBlock';
 import {mediaBlock} from './mediaBlock';
-import {toContentRefs} from './contentRef';
+import {mediaQuoteBlock} from './mediaQuoteBlock';
+import {toContentRef, toContentRefs} from './contentRef';
 import {SECTION_GAP_OPTIONS, SITE_GAP} from './gaps';
 import {SPAN_OPTIONS, toSpan} from './presets';
 
@@ -24,6 +25,7 @@ const whenChecked = (name: string) => (_d: unknown, s: Sibling) => Boolean(s?.[n
 export const CONTENT_BLOCKS: Block[] = [
   emptyBlock,
   mediaBlock,
+  mediaQuoteBlock,
   {
     slug: 'text',
     labels: {singular: 'Texte', plural: 'Textes'},
@@ -32,6 +34,13 @@ export const CONTENT_BLOCKS: Block[] = [
   },
   ...CARD_BLOCKS,
 ];
+
+/** Blocs proposés dans une colonne : ceux dont l'emprise minimale (registre) tient dans sa largeur. */
+const blocksForSpan = (span: ColumnSpan): string[] =>
+  CONTENT_BLOCKS.filter((b) => {
+    const ref = toContentRef({blockType: b.slug});
+    return !ref || minSpan(ref) <= span;
+  }).map((b) => b.slug);
 
 const getByPath = (data: unknown, path: (number | string)[]): unknown => path.reduce<unknown>((o, k) => (o && typeof o === 'object' ? (o as Record<string, unknown>)[String(k)] : undefined), data);
 
@@ -85,6 +94,8 @@ const rowsField: Field = {
           label: 'Contenu',
           labels: {singular: 'Composant', plural: 'Composants'},
           maxRows: 1,
+          // le sélecteur ne propose que les composants qui tiennent dans la largeur de la colonne
+          filterOptions: ({siblingData}) => blocksForSpan(toSpan((siblingData as Sibling | undefined)?.span)),
           // message explicite plutôt que celui, générique, de maxRows
           validate: (value: unknown) => (Array.isArray(value) && value.length > 1 ? 'Un seul composant par colonne.' : true),
           blocks: CONTENT_BLOCKS,

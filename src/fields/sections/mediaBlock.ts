@@ -15,7 +15,7 @@ export const MEDIA_SLUG = 'media';
 
 /** Hauteurs minimales proposées, en px (valeurs paires). */
 export const MEDIA_HEIGHTS = ['160', '240', '320', '400', '480', '560', '640'] as const;
-const HEIGHT_OPTIONS = MEDIA_HEIGHTS.map((v) => ({label: `${v} px`, value: v}));
+export const HEIGHT_OPTIONS = MEDIA_HEIGHTS.map((v) => ({label: `${v} px`, value: v}));
 
 export const mediaBlock: Block = {
   slug: MEDIA_SLUG,

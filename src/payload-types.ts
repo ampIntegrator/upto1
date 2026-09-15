@@ -247,6 +247,33 @@ export interface Page {
                                 }
                               | {
                                   /**
+                                   * Le texte alternatif se règle dans la médiathèque. Vide : image décorative.
+                                   */
+                                  image: number | Media;
+                                  text: string;
+                                  /**
+                                   * Pour la structure et le référencement ; ne change pas la taille.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                                  size?: ('display-1' | 'display-2' | 'display-3' | 'heading-1' | 'heading-2') | null;
+                                  /**
+                                   * Seulement si la rangée n'a pas d'autre contenu ; sinon l'image prend la hauteur de la rangée.
+                                   */
+                                  minHeight?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
+                                  /**
+                                   * Sous 768 px, colonnes empilées.
+                                   */
+                                  minHeightMobile?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
+                                  /**
+                                   * À ajuster selon l’image, pour que la phrase reste lisible.
+                                   */
+                                  overlay?: number | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'mediaQuote';
+                                }
+                              | {
+                                  /**
                                    * Une ligne vide sépare deux paragraphes.
                                    */
                                   text: string;
@@ -463,6 +490,33 @@ export interface Section {
                         id?: string | null;
                         blockName?: string | null;
                         blockType: 'media';
+                      }
+                    | {
+                        /**
+                         * Le texte alternatif se règle dans la médiathèque. Vide : image décorative.
+                         */
+                        image: number | Media;
+                        text: string;
+                        /**
+                         * Pour la structure et le référencement ; ne change pas la taille.
+                         */
+                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                        size?: ('display-1' | 'display-2' | 'display-3' | 'heading-1' | 'heading-2') | null;
+                        /**
+                         * Seulement si la rangée n'a pas d'autre contenu ; sinon l'image prend la hauteur de la rangée.
+                         */
+                        minHeight?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
+                        /**
+                         * Sous 768 px, colonnes empilées.
+                         */
+                        minHeightMobile?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
+                        /**
+                         * À ajuster selon l’image, pour que la phrase reste lisible.
+                         */
+                        overlay?: number | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'mediaQuote';
                       }
                     | {
                         /**
@@ -834,6 +888,19 @@ export interface PagesSelect<T extends boolean = true> {
                                       id?: T;
                                       blockName?: T;
                                     };
+                                mediaQuote?:
+                                  | T
+                                  | {
+                                      image?: T;
+                                      text?: T;
+                                      tag?: T;
+                                      size?: T;
+                                      minHeight?: T;
+                                      minHeightMobile?: T;
+                                      overlay?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
                                 text?:
                                   | T
                                   | {
@@ -1011,6 +1078,19 @@ export interface SectionsSelect<T extends boolean = true> {
                       | T
                       | {
                           image?: T;
+                          minHeight?: T;
+                          minHeightMobile?: T;
+                          overlay?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    mediaQuote?:
+                      | T
+                      | {
+                          image?: T;
+                          text?: T;
+                          tag?: T;
+                          size?: T;
                           minHeight?: T;
                           minHeightMobile?: T;
                           overlay?: T;

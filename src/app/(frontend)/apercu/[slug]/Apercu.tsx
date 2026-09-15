@@ -6,9 +6,11 @@ import React from 'react';
 
 import {Card, type CardProps} from '@/components/Card';
 import {Media} from '@/components/Media';
+import {MediaQuote} from '@/components/MediaQuote';
 import {CARD_VARIANTS} from '@/fields/sections/cardBlocks';
 import {EMPTY_SLUG} from '@/fields/sections/emptyBlock';
 import {MEDIA_SLUG} from '@/fields/sections/mediaBlock';
+import {MEDIA_QUOTE_SLUG} from '@/fields/sections/mediaQuoteBlock';
 import {OrbitaThemeProvider} from '@/theme/OrbitaThemeProvider';
 
 const IMG = 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80';
@@ -37,7 +39,9 @@ export function Apercu({slug}: {slug: string}) {
   return (
     <OrbitaThemeProvider fixedSilo="blue" initialMode="light">
       <VStack data-apercu style={{width: 'var(--apercu-width, 360px)', padding: 'var(--spacing-6)', background: 'var(--color-background-body)'}}>
-        {slug === MEDIA_SLUG ? (
+        {slug === MEDIA_QUOTE_SLUG ? (
+          <MediaQuote image={{src: IMG, alt: ''}} text="Le chiffrage juste." size="display-3" overlay={0.45} minHeight={240} sizes="360px" />
+        ) : slug === MEDIA_SLUG ? (
           <Media image={{src: IMG, alt: ''}} minHeight={240} sizes="360px" />
         ) : slug === EMPTY_SLUG ? (
           // case vide : un emplacement en pointillés, à la hauteur d'une carte
