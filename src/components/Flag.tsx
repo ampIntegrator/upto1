@@ -1,7 +1,7 @@
 /**
- * Flag — petit drapeau SVG (18 × 12) pour le sélecteur de langue. Dessiné en SVG, pas
- * en emoji : Windows n'affiche pas les drapeaux emoji. Codes connus : FR, EN, DE, ES ;
- * un code inconnu ne rend rien.
+ * Flag — small SVG flag (18 × 12) for the language switcher. Drawn in SVG, not
+ * as emoji: Windows does not display flag emoji. Known codes: FR, EN, DE, ES;
+ * an unknown code renders nothing.
  */
 import React from 'react';
 

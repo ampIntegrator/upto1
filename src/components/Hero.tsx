@@ -1,22 +1,22 @@
 'use client';
 
 /**
- * Hero — le haut de page, en trois dispositions qui couvrent les cinq maquettes :
+ * Hero — the page header, in three layouts covering the five mockups:
  *
- *   variant="media"  plein écran sur image ou vidéo (maquette 16) : chip translucide,
- *                    titre sur trois lignes (accent serif or), chapô, deux
- *                    boutons, invitation à défiler.
- *   variant="split"  plein écran clair, texte à gauche sur 7 colonnes et image à droite
- *                    sur 5 (maquette 02) : chip live, titre sur trois lignes (accent
- *                    serif silo), paragraphe, deux boutons, ligne de réassurance,
- *                    image avec deux étiquettes qui débordent des coins.
- *   variant="page"   haut de page de 500 px (maquette 25) : eyebrow à tirets, titre sur
- *                    deux lignes, chapô, deux boutons ; fond image (A), clair à lueur (B)
- *                    ou nuit à halos (C) ; fil d'Ariane en bande dessous.
+ *   variant="media"  full screen over image or video (mockup 16): translucent chip,
+ *                    three-line title (gold serif accent), lead, two
+ *                    buttons, scroll hint.
+ *   variant="split"  light full screen, text on the left over 7 columns and image on the right
+ *                    over 5 (mockup 02): live chip, three-line title (silo serif
+ *                    accent), paragraph, two buttons, reassurance line,
+ *                    image with two labels overflowing the corners.
+ *   variant="page"   500 px page header (mockup 25): dashed eyebrow, two-line
+ *                    title, lead, two buttons; image background (A), light with glow (B)
+ *                    or night with halos (C); breadcrumb band below.
  *
- * Assemblage : Section (fond, hauteur, réserve de l'en-tête) > Container > Grid 12 >
- * Heading, Text, Chip, Button, BreadcrumbBand. Les données sont celles du futur bloc
- * Payload « Haut de page » (une variante + champs communs).
+ * Assembly: Section (background, height, header offset) > Container > Grid 12 >
+ * Heading, Text, Chip, Button, BreadcrumbBand. The data matches the upcoming
+ * Payload « Haut de page » block (one variant + shared fields).
  */
 import {Grid, GridSpan} from '@astryxdesign/core/Grid';
 import {Heading} from '@astryxdesign/core/Heading';
@@ -37,28 +37,28 @@ export type HeroAction = {label: string; href: string; iconKey?: NucleoIconKey};
 
 export type HeroProps = {
   variant: 'media' | 'split' | 'page';
-  /** media : image | video · split : light (fixe) · page : image | glow | night-halo */
+  /** media: image | video · split: light (fixed) · page: image | glow | night-halo */
   background?: SectionBackground;
   image?: {src: string; alt?: string};
   video?: {src: string; poster?: string};
-  /** calque noir sur le média (0–1) */
+  /** black overlay on the media (0–1) */
   overlay?: number;
-  /** petit texte au-dessus du titre : chip (media, split) ou tirets (page) */
+  /** small text above the title: chip (media, split) or dashes (page) */
   eyebrow?: string;
-  /** titre saisi en textarea : retours à la ligne = <br />, <span>…</span> = accent serif (voir TitleText) */
+  /** title entered in a textarea: line breaks = <br />, <span>…</span> = serif accent (see TitleText) */
   title: TitleText;
   lead?: string;
   primary?: HeroAction;
   secondary?: HeroAction;
-  /** split : ligne de réassurance sous les boutons */
+  /** split: reassurance line below the buttons */
   reassurance?: string[];
-  /** split : image de droite et ses étiquettes */
+  /** split: right-hand image and its labels */
   media?: {src: string; alt?: string; badges?: Array<{label: string; tone: 'night' | 'accent'}>};
-  /** media : libellé de l'invitation à défiler (rien = pas d'invitation) */
+  /** media: scroll hint label (none = no hint) */
   scrollHint?: string;
-  /** page : fil d'Ariane sous le haut de page */
+  /** page: breadcrumb below the page header */
   breadcrumb?: BreadcrumbBandProps;
-  /** premier bloc sous l'en-tête fixe : réserve sa hauteur (défaut : oui) */
+  /** first block under the fixed header: reserves its height (default: yes) */
   underHeader?: boolean;
 };
 
@@ -143,7 +143,7 @@ export function Hero(props: HeroProps) {
             <GridSpan columns={5}>
               {media ? (
                 <VStack className={styles.mediaBox}>
-                  {/* eslint-disable-next-line @next/next/no-img-element -- source distante libre (next/image viendra avec Payload) */}
+                  {/* eslint-disable-next-line @next/next/no-img-element -- free remote source (next/image will come with Payload) */}
                   <img className={styles.mediaImg} src={media.src} alt={media.alt ?? ''} />
                   {media.badges?.map((b, i) => (
                     <Text key={b.label} type="tag" className={styles.mediaBadge} data-tone={b.tone} data-corner={i === 0 ? 'top-right' : 'bottom-left'}>

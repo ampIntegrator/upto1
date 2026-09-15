@@ -1,7 +1,7 @@
 /**
- * Compile les thèmes Orbita (src/theme/silos/*.ts) avec le CLI Astryx puis
- * déplace les artefacts (.css/.js/.d.ts) dans src/theme/built/, séparés des
- * sources pour que l'app importe bien la version compilée (SSR sans flash).
+ * Compiles the Orbita themes (src/theme/silos/*.ts) with the Astryx CLI, then
+ * moves the artifacts (.css/.js/.d.ts) into src/theme/built/, kept apart from
+ * the sources so the app imports the compiled version (SSR without flash).
  *
  *   pnpm theme:build
  */
@@ -13,7 +13,7 @@ const SRC = 'src/theme/silos';
 const OUT = 'src/theme/built';
 
 const sources = readdirSync(SRC).filter((f) => /^orbita-[a-z]+\.ts$/.test(f));
-if (sources.length === 0) throw new Error(`Aucun thème dans ${SRC}`);
+if (sources.length === 0) throw new Error(`No theme in ${SRC}`);
 
 execSync(`pnpm exec astryx theme build ${sources.map((f) => join(SRC, f)).join(' ')}`, {
   stdio: 'inherit',
@@ -27,4 +27,4 @@ for (const f of readdirSync(SRC)) {
     moved++;
   }
 }
-console.log(`\n→ ${moved} artefacts déplacés dans ${OUT}/`);
+console.log(`\n→ ${moved} artifacts moved to ${OUT}/`);

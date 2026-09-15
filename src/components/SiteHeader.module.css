@@ -1,17 +1,17 @@
 /*
- * SiteHeader — chrome de l'en-tête (maquette 01-header) : bandeau, barre,
- * repli au défilement, tonalité sombre sur hero, navigation mobile.
- * Les éléments Astryx (TopNav, items, méga-menu, boutons) sont stylés par le thème.
+ * SiteHeader — header chrome (mockup 01-header): strip, bar,
+ * collapse on scroll, dark tone over hero, mobile navigation.
+ * Astryx elements (TopNav, items, mega menu, buttons) are styled by the theme.
  */
 .header {
-  /* hauteurs : variables globales de styles.css (--site-header-*) */
+  /* heights: global variables from styles.css (--site-header-*) */
   position: relative;
   z-index: 60;
   width: 100%;
 }
 .header[data-fixed] { position: fixed; inset-inline: 0; top: 0; }
 
-/* ---- bandeau utilitaire ---- */
+/* ---- utility strip ---- */
 .strip {
   height: var(--site-header-strip);
   overflow: hidden;
@@ -44,9 +44,9 @@
   border: var(--border-width) solid rgba(255, 255, 255, 0.16);
   transition: color var(--duration-medium) var(--ease-standard), border-color var(--duration-medium) var(--ease-standard);
 }
-.social:hover { color: var(--color-highlight); border-color: var(--color-highlight); } /* icône et cadre de la même couleur */
+.social:hover { color: var(--color-highlight); border-color: var(--color-highlight); } /* icon and border in the same color */
 
-/* ---- barre principale : papier translucide flouté, opaque + ombre au défilement ---- */
+/* ---- main bar: blurred translucent paper, opaque + shadow on scroll ---- */
 .main {
   position: relative;
   border-bottom: var(--border-width) solid var(--color-border);
@@ -60,7 +60,7 @@
 }
 .header[data-scrolled] :global(.astryx-top-nav) { height: var(--site-header-bar-scrolled); }
 
-/* ---- logo (placeholder Vidomia : carré silo, cercle blanc) ---- */
+/* ---- logo (Vidomia placeholder: silo square, white circle) ---- */
 .logoMark {
   position: relative;
   display: inline-flex;
@@ -85,7 +85,7 @@
   transform: rotate(-34deg) translateX(25px);
 }
 
-/* ---- panneaux (méga-menu, sous-menu) : fondu + glissement de 6 px à l'ouverture et à la fermeture ---- */
+/* ---- panels (mega menu, submenu): fade + 6 px slide on open and close ---- */
 .megaWrap :global([popover]),
 .menuWrap :global([popover]) {
   opacity: 1;
@@ -109,7 +109,7 @@
   }
 }
 
-/* ---- entrées de navigation : soulignement silo qui se déploie au survol ---- */
+/* ---- navigation entries: silo underline that expands on hover ---- */
 .desktopNav { height: var(--site-header-bar); gap: 2px; }
 .header[data-scrolled] .desktopNav { height: var(--site-header-bar-scrolled); }
 .desktopNav :global(.astryx-top-nav-item),
@@ -136,9 +136,9 @@
 .desktopNav :global(.astryx-top-nav-mega-menu:hover)::after,
 .desktopNav :global(.astryx-top-nav-mega-menu[aria-expanded='true'])::after { transform: scaleX(1); }
 
-/* méga-menu : bande blanche pleine largeur sous la barre (maquette), contenu dans
-   le container. Le popover Astryx est fixé et ancré à la barre : on garde l'ancre
-   pour le haut, on étire de bord à bord. */
+/* mega menu: full-width white band under the bar (mockup), content inside
+   the container. The Astryx popover is fixed and anchored to the bar: we keep the anchor
+   for the top, and stretch edge to edge. */
 .megaWrap :global([popover]) {
   position: fixed;
   position-area: none !important;
@@ -163,21 +163,21 @@
   margin-inline: auto;
   padding: 0 20px;
   box-sizing: border-box;
-  box-shadow: none !important; /* Astryx ombre ce conteneur : visible sur les côtés au-delà de 1440 px */
-  border: 0 !important; /* Astryx pose un filet de 1 px : ligne blanche entre la barre et la zone libre */
+  box-shadow: none !important; /* Astryx shadows this container: visible on the sides beyond 1440 px */
+  border: 0 !important; /* Astryx sets a 1 px rule: white line between the bar and the free area */
   overflow: visible !important;
 }
 .megaWrap,
 .menuWrap { height: 100%; }
-/* intérieur : grille de trois colonnes égales — les groupes de liens sur deux tiers,
-   la zone libre (carte mise en avant, article, réalisation…) sur le dernier tiers */
+/* inner: grid of three equal columns — link groups over two thirds,
+   the free area (featured card, article, project…) over the last third */
 .megaWrap :global([popover] [role='group'] > div) {
   display: grid !important;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 40px;
   width: 100% !important;
   max-width: none !important;
-  padding: 0 !important; /* Astryx pose 12 px ; la zone libre doit courir bord à bord */
+  padding: 0 !important; /* Astryx sets 12 px; the free area must run edge to edge */
 }
 .megaWrap :global([popover] [role='group'] .astryx-grid) {
   display: flex !important;
@@ -188,16 +188,16 @@
   grid-column: span 1;
   min-width: 0;
 }
-/* méga-menu : groupes côte à côte, eyebrow + filet */
+/* mega menu: groups side by side, eyebrow + rule */
 .megaGroups { min-width: 0; width: 100%; gap: 0; }
-/* colonnes (maquette) : padding 30 × 32, filet vertical entre les groupes */
+/* columns (mockup): padding 30 × 32, vertical rule between groups */
 .megaGroup { flex: 1 1 0; min-width: 0; padding: 32px 32px 32px 0; }
 .megaGroup + .megaGroup { padding-left: 32px; border-left: var(--border-width) solid var(--color-border); }
 .megaWrap :global(.astryx-top-nav-mega-menu-featured-card img) { height: 168px; object-fit: cover; }
 
-/* ---- sous-menu simple (maquette .submenu) : 340 px sous son déclencheur, papier
-   bordé + ombre, items sur fond de page espacés de 6 px, icône silo, survol silo ---- */
-.menuWrap :global(.astryx-top-nav-menu) { anchor-name: --site-submenu !important; } /* !important : Astryx pose son propre nom d'ancre en inline */
+/* ---- simple submenu (mockup .submenu): 340 px under its trigger, bordered
+   paper + shadow, items on page background spaced 6 px apart, silo icon, silo hover ---- */
+.menuWrap :global(.astryx-top-nav-menu) { anchor-name: --site-submenu !important; } /* !important: Astryx sets its own anchor name inline */
 .menuWrap :global([popover]) {
   position: fixed;
   position-anchor: --site-submenu !important;
@@ -254,17 +254,17 @@
 }
 .megaTitle::after { content: ''; flex: 1; height: 1px; background: color-mix(in srgb, var(--color-editorial) 35%, transparent); }
 
-/* ---- actions à droite ---- */
+/* ---- right-hand actions ---- */
 .actions { margin-inline-start: auto; flex-shrink: 0; }
 .burger { display: none; }
 
-/* ---- tonalité sombre (sur hero) : jusqu'au premier défilement ---- */
+/* ---- dark tone (over hero): until the first scroll ---- */
 .header[data-tone='dark']:not([data-scrolled]) .main {
   background: rgba(10, 14, 26, 0.34);
   border-color: transparent;
   backdrop-filter: saturate(140%) blur(10px);
 }
-/* bandeau sur hero (maquette 16) : voile nuit à 40 %, textes blancs à 82 % */
+/* strip over hero (mockup 16): night veil at 40 %, white text at 82 % */
 .header[data-tone='dark']:not([data-scrolled]) .strip { background: rgba(10, 14, 26, 0.4); color: rgba(255, 255, 255, 0.82); }
 .header[data-tone='dark']:not([data-scrolled]) .social { color: rgba(255, 255, 255, 0.75); border-color: rgba(255, 255, 255, 0.18); }
 .header[data-tone='dark']:not([data-scrolled]) .social:hover { color: var(--color-highlight); border-color: var(--color-highlight); }
@@ -277,8 +277,8 @@
 .header[data-tone='dark']:not([data-scrolled]) .actions :global(.astryx-button.ghost) {
   color: #fff !important;
 }
-/* boutons sur hero (maquette 16) : fonds transparents ; recherche sans cadre,
-   langue cadre blanc 40 %, connexion cadre blanc 55 % */
+/* buttons over hero (mockup 16): transparent backgrounds; search without border,
+   language with 40 % white border, sign-in with 55 % white border */
 .header[data-tone='dark']:not([data-scrolled]) .actions :global(.astryx-button.ghost) {
   background: transparent !important;
   border-color: rgba(255, 255, 255, 0.4) !important;
@@ -299,9 +299,9 @@
 }
 .header[data-tone='dark']:not([data-scrolled]) .login:hover { background: #fff !important; color: var(--color-accent) !important; }
 
-/* ---- mobile : navigation et actions réduites, burger ---- */
+/* ---- mobile: reduced navigation and actions, burger ---- */
 @media (max-width: 1279px) {
-  .strip { display: none; } /* --site-header-strip passe à 0 en même temps (styles.css) */
+  .strip { display: none; } /* --site-header-strip drops to 0 at the same time (styles.css) */
   .desktopNav { display: none; }
   .actionsSep,
   .cta { display: none; }

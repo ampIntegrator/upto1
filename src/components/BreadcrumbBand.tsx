@@ -1,8 +1,8 @@
 /**
- * BreadcrumbBand — la bande fil d'Ariane sous un haut de page (maquette 25) :
- * Section papier à filets, 44 px de haut, contenu sur une ligne (défilement latéral
- * si le fil est trop long, réglé par le thème), accueil en icône maison ou en texte (réglage du site).
- * Assemblage Astryx (Breadcrumbs, VisuallyHidden) ; utilisé par le futur bloc Haut de page.
+ * BreadcrumbBand — the breadcrumb band below a page header (mockup 25):
+ * paper Section with dividers, 44 px tall, content on one line (horizontal scrolling
+ * if the trail is too long, handled by the theme), home as a house icon or as text (site setting).
+ * Astryx assembly (Breadcrumbs, VisuallyHidden); used by the upcoming page header block.
  */
 import {BreadcrumbItem, Breadcrumbs} from '@astryxdesign/core/Breadcrumbs';
 import {HStack} from '@astryxdesign/core/Stack';
@@ -14,12 +14,12 @@ import {Container} from './Container';
 import {Section} from './Section';
 
 export type BreadcrumbBandProps = {
-  /** maillons intermédiaires (l'accueil est ajouté devant) */
+  /** intermediate links (home is prepended) */
   items: Array<{label: string; href?: string}>;
-  /** page courante (dernier maillon, sans lien) */
+  /** current page (last link, not clickable) */
   current: string;
   homeHref?: string;
-  /** libellé de l'accueil : affiché si `homeStyle="text"`, sinon réservé aux lecteurs d'écran (réglage du site) */
+  /** home label: shown if `homeStyle="text"`, otherwise screen readers only (site setting) */
   homeLabel?: string;
   homeStyle?: 'icon' | 'text';
 };

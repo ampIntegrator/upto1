@@ -1,28 +1,28 @@
 /**
- * Registre des emprises — la seule source de vérité sur « quel contenu tient dans quelle
- * colonne ». Décidé le 11 sept. 2026 :
+ * Span registry — the single source of truth on "which content fits in which
+ * column". Decided on 11 Sept. 2026:
  *
- *   - Une page = des Sections ; une Section = des rangées ; une rangée = des colonnes dont
- *     les largeurs (sur 12) font 12 ; une colonne = des contenus empilés verticalement.
- *   - Un seul niveau de colonnes, jamais d'imbrication. Ce qui doit se subdiviser est un
- *     contenu qui porte sa propre grille (grille de cartes, liste de prix en colonnes,
- *     étapes, carrousel…).
- *   - Chaque contenu déclare ici son emprise minimale en colonnes de page ; elle peut
- *     dépendre de ses réglages (une grille de cartes à 3 colonnes internes demande 9).
- *   - Sous 768 px, toutes les colonnes passent en pleine largeur, dans l'ordre mobile de la
- *     section, colonnes vides masquées (styles.css, .page-grid ; fields/sections/mobileOrder.ts).
+ *   - A page = Sections; a Section = rows; a row = columns whose
+ *     widths (out of 12) add up to 12; a column = contents stacked vertically.
+ *   - A single level of columns, never nested. Anything that must subdivide is a
+ *     content that carries its own grid (card grid, price list in columns,
+ *     steps, carousel…).
+ *   - Each content declares its minimum span in page columns here; it may
+ *     depend on its settings (a card grid with 3 inner columns requires 9).
+ *   - Below 768 px, all columns go full width, in the section's mobile
+ *     order, empty columns hidden (styles.css, .page-grid; fields/sections/mobileOrder.ts).
  *
- * Ce fichier est consommé par le front (page Fondations « Grille ») et par la config Payload
- * (src/fields/sections) : `validateColumn` et `validateRow` sont les validations de la largeur
- * d'une colonne, avec ces messages en français dans l'admin. Aucune valeur visuelle ici :
- * uniquement des largeurs de grille et des règles.
+ * This file is consumed by the front end (Fondations « Grille » page) and by the Payload config
+ * (src/fields/sections): `validateColumn` and `validateRow` are the validations of a column's
+ * width, with these messages in French in the admin. No visual values here:
+ * only grid widths and rules.
  */
 
-/** Largeurs de colonne autorisées (sur 12). */
+/** Allowed column widths (out of 12). */
 export const COLUMN_SPANS = [2, 3, 4, 5, 6, 7, 8, 9, 12] as const;
 export type ColumnSpan = (typeof COLUMN_SPANS)[number];
 
-/** Un contenu placé dans une colonne, avec les seuls réglages qui changent son emprise. */
+/** A content placed in a column, with only the settings that change its span. */
 export type ContentRef =
   | {type: 'text'}
   | {type: 'image'}
@@ -46,16 +46,16 @@ export type ContentRef =
 
 export type ContentType = ContentRef['type'];
 
-/** Arrondit une emprise calculée à la largeur de colonne autorisée juste au-dessus. */
+/** Rounds a computed span up to the next allowed column width. */
 function snapUp(n: number): ColumnSpan {
   return COLUMN_SPANS.find((s) => s >= n) ?? 12;
 }
 
-/** Libellé (admin, catalogue) et emprise minimale de chaque contenu. */
+/** Label (admin, catalog) and minimum span of each content. */
 export const CONTENT_SPECS: {[T in ContentType]: {label: string; minSpan: (c: Extract<ContentRef, {type: T}>) => ColumnSpan}} = {
   text: {label: 'Texte', minSpan: () => 2},
   image: {label: 'Image', minSpan: () => 2},
-  // image avec phrase centrée : au moins la moitié de la largeur
+  // image with centered sentence: at least half the width
   mediaQuote: {label: 'Image avec citation', minSpan: () => 6},
   stat: {label: 'Chiffre clé', minSpan: () => 2},
   checkList: {label: 'Liste à pastilles', minSpan: () => 2},
@@ -63,32 +63,32 @@ export const CONTENT_SPECS: {[T in ContentType]: {label: string; minSpan: (c: Ex
   card: {label: 'Carte', minSpan: () => 3},
   testimonialCard: {label: 'Carte témoignage', minSpan: () => 3},
   compareCard: {label: 'Carte comparative', minSpan: () => 4},
-  // grille de cartes : 3 colonnes de page par colonne interne (2 → 6, 3 → 9, 4 → 12)
+  // card grid: 3 page columns per inner column (2 → 6, 3 → 9, 4 → 12)
   cardGrid: {label: 'Grille de cartes', minSpan: (c) => snapUp(c.columns * 3)},
   sectionHeading: {label: 'En-tête de section', minSpan: () => 6},
   sectionNote: {label: 'Note et bouton', minSpan: () => 6},
   tabs: {label: 'Onglets', minSpan: () => 6},
   collapsibleGroup: {label: 'Dépliants (FAQ)', minSpan: () => 6},
   testimonialCarousel: {label: 'Carrousel de témoignages', minSpan: () => 8},
-  // étapes : 4 colonnes de page par étape (2 → 8, 3 et 4 → 12)
+  // steps: 4 page columns per step (2 → 8, 3 and 4 → 12)
   processSteps: {label: 'Étapes', minSpan: (c) => snapUp(c.steps * 4)},
-  // liste de prix : prix unique 8 ; colonnes, 4 par palier (2 → 8, 3 et 4 → 12)
+  // price list: single price 8; columns, 4 per tier (2 → 8, 3 and 4 → 12)
   priceList: {label: 'Liste de prix', minSpan: (c) => (c.variant === 'single' ? 8 : snapUp(c.plans * 4))},
   statsBar: {label: 'Barre de chiffres', minSpan: () => 12},
 };
 
-/** Emprise minimale d'un contenu. */
+/** Minimum span of a content. */
 export function minSpan(content: ContentRef): ColumnSpan {
   const spec = CONTENT_SPECS[content.type] as {minSpan: (c: ContentRef) => ColumnSpan};
   return spec.minSpan(content);
 }
 
-/** Emprise minimale d'une colonne : celle de son contenu le plus large. */
+/** Minimum span of a column: that of its widest content. */
 export function columnMinSpan(contents: ContentRef[]): ColumnSpan {
   return contents.reduce<ColumnSpan>((m, c) => Math.max(m, minSpan(c)) as ColumnSpan, 2);
 }
 
-/** Libellé lisible d'un contenu, avec son réglage déterminant. */
+/** Readable label of a content, with its determining setting. */
 export function describeContent(content: ContentRef): string {
   const label = CONTENT_SPECS[content.type].label;
   switch (content.type) {
@@ -103,7 +103,7 @@ export function describeContent(content: ContentRef): string {
   }
 }
 
-/** Erreurs d'une colonne : chaque contenu trop large pour la largeur choisie. */
+/** Errors of a column: each content too wide for the chosen width. */
 export function validateColumn(span: ColumnSpan, contents: ContentRef[]): string[] {
   return contents.flatMap((c) => {
     const min = minSpan(c);
@@ -111,7 +111,7 @@ export function validateColumn(span: ColumnSpan, contents: ContentRef[]): string
   });
 }
 
-/** Erreur d'une rangée : les largeurs doivent faire 12. */
+/** Error of a row: the widths must add up to 12. */
 export function validateRow(spans: ColumnSpan[]): string | null {
   if (!spans.length) return 'Une rangée contient au moins une colonne.';
   const total = spans.reduce<number>((s, n) => s + n, 0);

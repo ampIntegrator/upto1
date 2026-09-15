@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * Callout — encadré de mise en avant (maquettes 08 et 09 « Garantie 30 jours », 18 et 23
- * callout d'article) : cadre highlight-deep, fond highlight à 12 %, titre 14 px gras,
- * texte 12 px ; eyebrow optionnel en Geist Mono (articles). Nuit : cadre et titre en
- * highlight. Pas le Banner Astryx, qui est un composant de statut avec icône.
+ * Callout — emphasis box (mockups 08 and 09 « Garantie 30 jours », 18 and 23
+ * article callout): highlight-deep frame, highlight background at 12 %, bold 14 px title,
+ * 12 px text; optional eyebrow in Geist Mono (articles). Night: frame and title in
+ * highlight. Not the Astryx Banner, which is a status component with an icon.
  */
 import {VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
@@ -16,7 +16,7 @@ export type CalloutProps = {
   eyebrow?: string;
   title?: string;
   text: string;
-  /** rembourrage : `sm` (14 px, cartes de palier) ou `md` (16 px, défaut) */
+  /** padding: `sm` (14 px, pricing tier cards) or `md` (16 px, default) */
   size?: 'sm' | 'md';
 };
 

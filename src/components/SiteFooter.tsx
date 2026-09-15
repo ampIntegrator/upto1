@@ -1,17 +1,17 @@
 'use client';
 
 /**
- * SiteFooter — le pied de page du site (maquette 21-footer), identique partout.
+ * SiteFooter — the site footer (mockup 21-footer), identical everywhere.
  *
- * Assemblage des composants Astryx (Theme dark, Grid, Stack, Text, Heading,
- * Link, Divider) et du design system (Container, Field, Button, Card « brief »,
- * BackToTop). Quatre niveaux sur nuit profonde :
- *   1. lettre d'information (bandeau clair) ;
- *   2. derniers articles en bref (bandeau plus discret) ;
- *   3. marque + coordonnées + réseaux, puis piles de liens ;
- *   4. barre basse (copyright, ligne légale, liens).
- * Les données : SiteFooterData (global « Pied de page ») + SiteStrip
- * (global « Coordonnées et réseaux », le même que l'en-tête).
+ * Assembly of Astryx components (Theme dark, Grid, Stack, Text, Heading,
+ * Link, Divider) and design system ones (Container, Field, Button, « brief » Card,
+ * BackToTop). Four levels on deep night:
+ *   1. newsletter (light strip);
+ *   2. latest article briefs (more subdued strip);
+ *   3. brand + contact details + social networks, then link stacks;
+ *   4. bottom bar (copyright, legal line, links).
+ * Data: SiteFooterData (« Pied de page » global) + SiteStrip
+ * (« Coordonnées et réseaux » global, the same as the header).
  */
 import {Divider} from '@astryxdesign/core/Divider';
 import {Grid, GridSpan} from '@astryxdesign/core/Grid';
@@ -35,7 +35,7 @@ import {renderTitle} from './TitleText';
 
 export type SiteFooterProps = SiteFooterData & {
   strip?: SiteStrip;
-  /** bouton fixe « haut de page » (défaut : oui) */
+  /** fixed « haut de page » button (default: yes) */
   backToTop?: boolean;
   onSubscribe?: (email: string) => void;
 };

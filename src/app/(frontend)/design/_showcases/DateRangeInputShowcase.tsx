@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — DateRangeInput Astryx : libellés et intitulés français courts, effacement, thème Orbita (icônes silo, panneau à la largeur du champ). */
+/* Orbita-styled showcase — Astryx DateRangeInput: short French labels and captions, clearing, Orbita theme (silo icons, panel as wide as the field). */
 'use client';
 
 import type {ISODateString} from '@astryxdesign/core/Calendar';

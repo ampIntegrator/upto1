@@ -1,6 +1,6 @@
 'use client';
 
-/** DateField — DateInput Astryx avec label flottant Orbita (icône calendrier en tête). */
+/** DateField — Astryx DateInput with Orbita floating label (leading calendar icon). */
 import type {ISODateString} from '@astryxdesign/core/Calendar';
 import {DateInput} from '@astryxdesign/core/DateInput';
 import React from 'react';

@@ -9,7 +9,7 @@ import React from 'react';
 import {CATALOG} from './catalog.generated';
 import {PageIntro} from './PageIntro';
 
-/** Vue d'ensemble de la bibliothèque : toutes les catégories, une carte par composant (comme astryx.atmeta.com/components). */
+/** Library overview: all categories, one card per component (like astryx.atmeta.com/components). */
 export function LibraryOverview() {
   const total = CATALOG.reduce((n, c) => n + c.items.length, 0);
   const dressed = CATALOG.reduce((n, c) => n + c.items.filter((i) => i.dressed).length, 0);

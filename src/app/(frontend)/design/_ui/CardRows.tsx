@@ -1,4 +1,4 @@
-/* Rangées de cartes partagées (_showcases) entre CardShowcase (sans lien) et ClickableCardShowcase (avec lien). */
+/* Card rows shared (_showcases) between CardShowcase (no link) and ClickableCardShowcase (with link). */
 'use client';
 
 import {Grid} from '@astryxdesign/core/Grid';
@@ -24,7 +24,7 @@ export function Section({title, note, children}: {title: string; note?: string; 
   );
 }
 
-/** Section nuit : même contenu dans un <Theme mode="dark">. */
+/** Night section: same content inside a <Theme mode="dark">. */
 export function Night({children}: {children: React.ReactNode}) {
   const {theme} = useOrbitaTheme();
   return (
@@ -39,7 +39,7 @@ export function Night({children}: {children: React.ReactNode}) {
 type Cta = {label: string; href: string} | undefined;
 const cta = (linked: boolean, label: string): Cta => (linked ? {label, href: '#'} : undefined);
 
-/** Les quatre types de haut de carte, une rangée de quatre par type. */
+/** The four card-top types, one row of four per type. */
 export function BlocRows({linked, seed = ''}: {linked: boolean; seed?: string}) {
   return (
     <>
@@ -79,7 +79,7 @@ export function BlocRows({linked, seed = ''}: {linked: boolean; seed?: string}) 
   );
 }
 
-/** Trois articles et trois réalisations, sur trois colonnes. Toujours cliquables. */
+/** Three articles and three projects, in three columns. Always clickable. */
 export function EditorialRows({seed = ''}: {seed?: string}) {
   return (
     <>

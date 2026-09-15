@@ -1,4 +1,4 @@
-/* Composant propre au design system : src/components/CheckList (liste à pastilles, maquettes 03 et 05). */
+/* Design-system-specific component: src/components/CheckList (dotted list, mockups 03 and 05). */
 'use client';
 
 import {Grid, GridSpan} from '@astryxdesign/core/Grid';

@@ -1,6 +1,6 @@
 'use client';
 
-/* Page de démonstration : sections empilées, chacune = Section > Container > Grid 12 > GridSpan > composants. */
+/* Demo page: stacked sections, each = Section > Container > Grid 12 > GridSpan > components. */
 import {Grid, GridSpan} from '@astryxdesign/core/Grid';
 import {Heading} from '@astryxdesign/core/Heading';
 import {HStack, VStack} from '@astryxdesign/core/Stack';
@@ -38,7 +38,7 @@ function Eyebrow({children}: {children: string}) {
 
 export type DemoHero = 'media' | 'split' | 'page-image' | 'page-glow' | 'page-night';
 
-/** Les cinq hauts de page (maquettes 16, 02 et 25 A/B/C), sur le même composant Hero. */
+/** The five page tops (mockups 16, 02 and 25 A/B/C), on the same Hero component. */
 const HEROES: Record<DemoHero, HeroProps> = {
   media: {
     variant: 'media', background: 'image', image: {src: IMG, alt: ''}, overlay: 0.3,
@@ -83,12 +83,12 @@ const HEROES: Record<DemoHero, HeroProps> = {
   },
 };
 
-/** Les blocs étapes, comparatif et témoignages (maquettes 03, 05, 07), en clair ou en nuit. */
+/** The steps, comparison and testimonials blocks (mockups 03, 05, 07), in light or night. */
 function Blocks({mode}: {mode: 'light' | 'dark'}) {
   const dark = mode === 'dark';
   return (
     <>
-      {/* 4b · étapes : en-tête centré, panneau, note + bouton */}
+      {/* 4b · steps: centered heading, panel, note + button */}
       <Section background={dark ? 'night' : 'light'} spacing="md">
         <Container gap={10}>
           <SectionHeading eyebrow="Comment ça marche" title="3 étapes. <span>48 h max.</span>" />
@@ -97,7 +97,7 @@ function Blocks({mode}: {mode: 'light' | 'dark'}) {
         </Container>
       </Section>
 
-      {/* 4c · comparatif : avant / après sur 6 + 6, puis trois métiers sur 4 */}
+      {/* 4c · comparison: before / after on 6 + 6, then three trades on 4 */}
       <Section background={dark ? 'night-halo' : 'dots'} spacing="md">
         <Container gap={10}>
           <SectionHeading eyebrow="Le déclic" title="Sortez <span>de l'attente.</span>" text="Le même chantier, deux trajectoires. D'un côté l'attente du devis artisan ; de l'autre, un chiffrage validé, livré, pendant que le client est encore en face de vous." />
@@ -112,7 +112,7 @@ function Blocks({mode}: {mode: 'light' | 'dark'}) {
         </Container>
       </Section>
 
-      {/* 4d · témoignages : en-tête, carrousel */}
+      {/* 4d · testimonials: heading, carousel */}
       <Section background={dark ? 'night' : 'paper'} spacing="md" dividers={!dark}>
         <Container gap={10}>
           <SectionHeading eyebrow="Ils ont arrêté d'attendre" title="Ils <span>closent.</span>" />
@@ -120,7 +120,7 @@ function Blocks({mode}: {mode: 'light' | 'dark'}) {
         </Container>
       </Section>
 
-      {/* 4e · tarifs : prix unique (maquette 08 / 09) */}
+      {/* 4e · pricing: single price (mockup 08 / 09) */}
       <Section background={dark ? 'night-beam' : 'blueprint'} spacing="md">
         <Container gap={10}>
           <SectionHeading eyebrow="L'offre" title="Un prix. <span>Tout dedans.</span>" text="Pas de palier, pas d'option cachée : tout ce qu'il vous faut pour chiffrer, certifier et livrer est compris dans un seul forfait." />
@@ -128,7 +128,7 @@ function Blocks({mode}: {mode: 'light' | 'dark'}) {
         </Container>
       </Section>
 
-      {/* 4f · tarifs : trois paliers */}
+      {/* 4f · pricing: three tiers */}
       <Section background={dark ? 'night' : 'paper'} spacing="md" dividers={!dark}>
         <Container gap={10}>
           <SectionHeading eyebrow="Plusieurs volumes" title="Trois volumes. <span>Une seule promesse.</span>" text="Chaque palier reprend tout le précédent et y ajoute ce qu'il faut pour passer à l'échelle." />
@@ -139,20 +139,20 @@ function Blocks({mode}: {mode: 'light' | 'dark'}) {
   );
 }
 
-export function PageDemo({hero = 'media', blocks}: {hero?: DemoHero; /** blocs 03, 05, 07 insérés après les onglets, en clair ou en nuit */ blocks?: 'light' | 'dark'}) {
+export function PageDemo({hero = 'media', blocks}: {hero?: DemoHero; /** blocks 03, 05, 07 inserted after the tabs, in light or night */ blocks?: 'light' | 'dark'}) {
   return (
     <VStack className="page-demo">
-      {/* 0 · en-tête fixé ; tonalité déduite du premier bloc (ici image → sombre) */}
+      {/* 0 · fixed header; tone derived from the first block (here image → dark) */}
       <SiteHeader {...SITE_HEADER} />
 
-      {/* 1 · haut de page : un seul composant Hero, cinq variantes (fil d'Ariane inclus pour « page ») */}
+      {/* 1 · page top: a single Hero component, five variants (breadcrumb included for « page ») */}
       <Hero {...HEROES[hero]} />
       {hero === 'media' || hero === 'split' ? <BreadcrumbBand items={[{label: 'Solutions', href: '#'}]} current="Chiffrage instantané" /> : null}
 
-      {/* 1b · barre de chiffres (maquette 04) */}
+      {/* 1b · stats bar (mockup 04) */}
       <StatsBar {...STATS_BARS[0]} />
 
-      {/* 2 · clair + texture grid, en-tête centré sur 8, quatre cartes sur 3 */}
+      {/* 2 · light + grid texture, heading centered on 8, four cards on 3 */}
       <Section background="grid" spacing="md">
         <Container gap={10}>
           <Grid columns={12} gap={6} className="page-grid">
@@ -176,7 +176,7 @@ export function PageDemo({hero = 'media', blocks}: {hero?: DemoHero; /** blocs 0
         </Container>
       </Section>
 
-      {/* 3 · nuit : texte sur 5, FAQ sur 7 */}
+      {/* 3 · night: text on 5, FAQ on 7 */}
       <Section background="night" spacing="md">
         <Container>
           <Grid columns={12} gap={8} className="page-grid" align="start">
@@ -206,7 +206,7 @@ export function PageDemo({hero = 'media', blocks}: {hero?: DemoHero; /** blocs 0
         </Container>
       </Section>
 
-      {/* 4 · clair + points : tête sur 8 centrée, onglets sur 9 + carte icône sur 3, même hauteur */}
+      {/* 4 · light + dots: heading on 8 centered, tabs on 9 + icon card on 3, same height */}
       <Section background="dots" spacing="md">
         <Container gap={10}>
           <Grid columns={12} gap={6} className="page-grid">
@@ -232,7 +232,7 @@ export function PageDemo({hero = 'media', blocks}: {hero?: DemoHero; /** blocs 0
 
       {blocks ? <Blocks mode={blocks} /> : null}
 
-      {/* 5 · vidéo : appel à l'action sur 8 centré */}
+      {/* 5 · video: call to action on 8 centered */}
       <Section background="video" video={{src: VIDEO, poster: IMG}} overlay={0.3} spacing="lg" minHeight={520}>
         <Container>
           <Grid columns={12} gap={6} className="page-grid">
@@ -252,7 +252,7 @@ export function PageDemo({hero = 'media', blocks}: {hero?: DemoHero; /** blocs 0
         </Container>
       </Section>
 
-      {/* 6 · clair + losanges : trois colonnes de 4 */}
+      {/* 6 · light + diamonds: three columns of 4 */}
       <Section background="losange" spacing="md">
         <Container>
           <Grid columns={12} gap={6} className="page-grid">
@@ -265,7 +265,7 @@ export function PageDemo({hero = 'media', blocks}: {hero?: DemoHero; /** blocs 0
         </Container>
       </Section>
 
-      {/* 7 · pied de page (maquette 21), coordonnées et réseaux partagés avec l'en-tête */}
+      {/* 7 · footer (mockup 21), contact details and social links shared with the header */}
       <SiteFooter {...SITE_FOOTER} strip={SITE_HEADER.strip} />
     </VStack>
   );

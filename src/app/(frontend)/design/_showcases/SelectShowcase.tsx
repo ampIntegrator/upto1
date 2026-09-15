@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — remplace Selector et MultiSelector. Composant : src/components/Select */
+/* Orbita-styled showcase — replaces Selector and MultiSelector. Component: src/components/Select */
 'use client';
 
 import {Card} from '@astryxdesign/core/Card';
@@ -12,7 +12,7 @@ import React, {useState} from 'react';
 import {Select, type OrbitaOption} from '@/components/Select';
 import {useOrbitaTheme} from '@/theme/OrbitaThemeProvider';
 
-/* Jeux de la maquette 17-forms : m4 (4 options, sans recherche) et m8 (8 options, recherche). */
+/* Sets from mockup 17-forms: m4 (4 options, no search) and m8 (8 options, search). */
 const M4: OrbitaOption[] = [
   {value: 'archi', label: 'Architecte'},
   {value: 'moe', label: "Maître d'œuvre"},

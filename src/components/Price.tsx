@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * (brique interne de PriceList, pas au catalogue)
- * Price — le prix (maquettes 08 et 09) : montant Schibsted 800 en couleur silo, devise en
- * semibold silo alignée sur la ligne de base, période en 14 px gris. Deux tailles :
- * `plan` (56 px, carte de palier) et `single` (84 px, prix unique). Un contenu, comme Stat,
- * réservé aux tarifs ; Stat reste le chiffre clé.
+ * (internal building block of PriceList, not in the catalog)
+ * Price — the price (mockups 08 and 09): Schibsted 800 amount in silo color, currency in
+ * silo semibold aligned on the baseline, period in 14 px gray. Two sizes:
+ * `plan` (56 px, tier card) and `single` (84 px, single price). A content item, like Stat,
+ * reserved for pricing; Stat remains the key figure.
  */
 import {HStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
@@ -14,7 +14,7 @@ import React from 'react';
 import styles from './Price.module.css';
 
 export type PriceProps = {
-  /** montant tel qu'affiché (« 79 », « 1 490 ») */
+  /** amount as displayed (« 79 », « 1 490 ») */
   value: string;
   currency?: string;
   /** « / mois », « par mois · soit 2,60 € / jour » */

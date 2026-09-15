@@ -1,11 +1,11 @@
 /* ============================================================
-   orbita.css — fondation partagée (tokens + signature DS)
-   Généré : tokens fusionnés + classes communes (≥2 fichiers, identiques).
-   Le CSS propre à un composant reste inline dans son fichier.
+   orbita.css — shared foundation (tokens + DS signature)
+   Generated: merged tokens + common classes (≥2 files, identical).
+   Component-specific CSS stays inline in its own file.
    ============================================================ */
 
 :root {
-  /* transitions — vitesse + courbe centralisées (modifier ICI = tout le DS suit) */
+  /* transitions — centralized speed + curve (change HERE = the whole DS follows) */
   --t-dur: .25s;
   --t-ease: ease-in-out;
   --paper: #FFFFFF;
@@ -104,7 +104,7 @@
   --night: #241B06;
 }
 
-/* ---- classes communes ---- */
+/* ---- common classes ---- */
 @keyframes c-orbit { from{ transform:rotate(0) translateX(25px) rotate(0);} to{ transform:rotate(360deg) translateX(25px) rotate(-360deg);} }
 .c-orbit-dot { animation:c-orbit 7s linear infinite; }
 .hdr.is-scrolled .hdr-strip { height:0; opacity:0; }
@@ -130,7 +130,7 @@
 .c-serif-i { font-family:var(--f-serif); font-style:italic; font-weight:600; }
 .c-btn-split:hover { background-color:var(--primary-deep); }
 .c-btn-split::before { content:''; position:absolute; inset:5px; border:1px solid rgba(255,255,255,.34); pointer-events:none; transition:inset var(--t-dur) var(--t-ease), opacity var(--t-dur) var(--t-ease); }
-/* hover : le cadre s'étend jusqu'aux bords et disparaît, la barre verticale s'efface, la flèche ne bouge pas */
+/* hover: the frame expands to the edges and disappears, the vertical bar fades out, the arrow does not move */
 .c-btn-split:hover::before { inset:0; opacity:0; }
 .c-btn-split:hover .arw { border-left-color:transparent; }
 .silo-btn:hover { color:#fff; border-color:rgba(255,255,255,.5); }
@@ -172,7 +172,7 @@
 .tier-badge { display:inline-flex; align-items:center; gap:6px; height:var(--chip-h); background:var(--primary); color:#fff; font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; padding:0 12px; line-height:1; font-family:"Geist",sans-serif; }
 .c-btn-solid { display:flex; align-items:center; justify-content:center; width:100%; padding:16px 26px; font-size:15px; font-weight:600; color:#fff; background:var(--primary); border:none; transition:background var(--t-dur) var(--t-ease); text-decoration:none; transition:background .2s; cursor:pointer; }
 .c-btn-solid:hover { background:var(--primary-deep); }
-/* bouton ghost (sur fond sombre/image) — même hauteur que le split : padding 14px + bordure 1px = 15px */
+/* ghost button (on dark/image background) — same height as the split: 14px padding + 1px border = 15px */
 .c-btn-ghost { display:inline-flex; align-items:center; gap:10px; padding:14px 26px; font-size:15px; font-weight:600; color:#fff; border:1px solid rgba(255,255,255,.5); background:rgba(255,255,255,.04); text-decoration:none; transition:background var(--t-dur) var(--t-ease), border-color var(--t-dur) var(--t-ease); font-family:"Geist",sans-serif; cursor:pointer; }
 .c-btn-ghost:hover { background:rgba(255,255,255,.12); border-color:#fff; }
 .c-darkbg {
@@ -197,7 +197,7 @@
       100% { transform: rotate(405deg); border-radius: 3px; background: var(--highlight); }
     }
 
-/* ---- titre "3 lignes" tag-agnostique (l'apparence dépend de la CLASSE, jamais de la balise) ---- */
+/* ---- tag-agnostic "3 lines" title (appearance depends on the CLASS, never the tag) ---- */
 .o-headline {
   display: block; margin: 0; padding: 0;
   text-align: center; text-wrap: balance;
@@ -216,7 +216,7 @@
 
 
 /* ============================================================
-   Formulaires & contrôles (composant 17) — light + dark
+   Forms & controls (component 17) — light + dark
    ============================================================ */
 .field { position:relative; }
 .field-input {
@@ -366,8 +366,8 @@ textarea.field-input { height:auto; min-height:128px; padding-top:26px; resize:v
 .on-dark .ctrl-tag { color:rgba(255,255,255,.4); }
 
 /* ============================================================
-   FAQ — accordéon (composants 11 & 18). Partagé & identique.
-   Le conteneur .faq-grid reste inline par fichier (largeur variable).
+   FAQ — accordion (components 11 & 18). Shared & identical.
+   The .faq-grid container stays inline per file (variable width).
    ============================================================ */
 .faq-item { border:1px solid var(--line); background:var(--paper); transition:background-color var(--t-dur) var(--t-ease), border-color var(--t-dur) var(--t-ease); }
 .faq-item:hover { border-color:var(--line-2); }
@@ -385,7 +385,7 @@ textarea.field-input { height:auto; min-height:128px; padding-top:26px; resize:v
 .faq-item.is-open .faq-a { grid-template-rows:1fr; }
 .faq-a-inner { overflow:hidden; }
 .faq-a-inner p { margin:0; padding:0 26px 24px; font-size:14.5px; line-height:1.6; color:rgba(255,255,255,.86); }
-/* scope dark */
+/* dark scope */
 .faq-dark .faq-item { background:rgba(255,255,255,.05); border-color:rgba(255,255,255,.15); }
 .faq-dark .faq-item:hover { border-color:rgba(255,255,255,.3); }
 .faq-dark .faq-q-text { color:#fff; }
@@ -395,8 +395,8 @@ textarea.field-input { height:auto; min-height:128px; padding-top:26px; resize:v
 @media (prefers-reduced-motion: reduce){ .faq-a, .faq-ico::before, .faq-ico::after { transition:none; } }
 
 /* ============================================================
-   Breadcrumb / fil d'ariane — injectable sur toutes les pages.
-   Pose .crumb sur le conteneur flex ; chevrons en accent primaire.
+   Breadcrumb — injectable on every page.
+   Put .crumb on the flex container; chevrons in primary accent.
    ============================================================ */
 .crumb { display:flex; align-items:center; flex-wrap:wrap; gap:9px; font-family:"Geist Mono",monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; }
 .crumb a { color:var(--ink-3); text-decoration:none; white-space:nowrap; transition:color var(--t-dur) var(--t-ease); }
@@ -405,8 +405,8 @@ textarea.field-input { height:auto; min-height:128px; padding-top:26px; resize:v
 .crumb .current { color:var(--ink-2); white-space:nowrap; }
 
 /* ============================================================
-   Cartes article / blog (composant 19) — block-link, injectable.
-   La grille + l'en-tête de section restent inline (layout par page).
+   Article / blog cards (component 19) — block-link, injectable.
+   The grid + section heading stay inline (per-page layout).
    ============================================================ */
 .post-card { position:relative; background:var(--paper); display:flex; flex-direction:column;
   transition:box-shadow var(--t-dur) var(--t-ease); }
@@ -419,11 +419,11 @@ textarea.field-input { height:auto; min-height:128px; padding-top:26px; resize:v
 .post-title { margin:0; font-family:"Schibsted Grotesk",system-ui,sans-serif; font-weight:700; font-size:18px; line-height:1.3; letter-spacing:-.015em; color:var(--ink);
   display:-webkit-box; -webkit-line-clamp:2; line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
 .post-title a { color:inherit; text-decoration:none; transition:color var(--t-dur) var(--t-ease); }
-/* l'overlay couvre toute la carte → un seul lien, carte entièrement cliquable */
+/* the overlay covers the whole card → a single link, fully clickable card */
 .post-title a::after { content:''; position:absolute; inset:0; z-index:2; }
 .post-card:hover .post-title a { color:var(--primary); }
 .post-card .card-cta { margin-top:auto; }
-/* scope nuit — surface dédiée (même fond que les cartes du composant form) */
+/* night scope — dedicated surface (same background as the form component cards) */
 .posts-dark .post-card { background:var(--night-card); }
 .posts-dark .post-card:hover { box-shadow:0 22px 46px -18px rgba(0,0,0,.55); }
 .posts-dark .post-img { background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.10); }
@@ -437,10 +437,10 @@ textarea.field-input { height:auto; min-height:128px; padding-top:26px; resize:v
 @media (prefers-reduced-motion:reduce){ .post-img img, .post-card { transition:none; } }
 
 /* ============================================================
-   MODALE / DIALOG — centrée, overlay teinté par l'accent.
-   3 tailles : .modal-sm / .modal-md / .modal-lg.
-   Le corps (.modal-body) scrolle quand le contenu dépasse ;
-   en-tête et pied restent fixes.
+   MODAL / DIALOG — centered, accent-tinted overlay.
+   3 sizes: .modal-sm / .modal-md / .modal-lg.
+   The body (.modal-body) scrolls when content overflows;
+   header and footer stay fixed.
    ============================================================ */
 .modal-overlay { position:fixed; inset:0; z-index:200; display:flex; align-items:center; justify-content:center;
   padding:24px;
@@ -452,7 +452,7 @@ textarea.field-input { height:auto; min-height:128px; padding-top:26px; resize:v
   transition:opacity var(--t-dur) var(--t-ease), visibility var(--t-dur) var(--t-ease); }
 .modal-overlay.is-open { opacity:1; visibility:visible; pointer-events:auto; }
 
-/* overlay sombre : cœur primaire, voile nuit léger */
+/* dark overlay: primary core, light night veil */
 .modal-overlay:has(.modal-dark) {
   background:
     radial-gradient(120% 120% at 50% -10%, color-mix(in srgb, var(--primary) 40%, transparent), transparent 64%),
@@ -484,7 +484,7 @@ textarea.field-input { height:auto; min-height:128px; padding-top:26px; resize:v
 .modal-body p { margin:0 0 16px; }
 .modal-body h3 { font-family:var(--f-display); font-weight:700; letter-spacing:-.015em; font-size:18px;
   color:var(--ink); margin:26px 0 10px; }
-/* filet de défilement : ombres haut/bas pour signaler le scroll */
+/* scroll rule: top/bottom shadows to signal scrolling */
 .modal-body { scrollbar-width:thin; scrollbar-color:var(--line-2) transparent; }
 .modal-body::-webkit-scrollbar { width:8px; }
 .modal-body::-webkit-scrollbar-thumb { background:var(--line-2); }
@@ -494,7 +494,7 @@ textarea.field-input { height:auto; min-height:128px; padding-top:26px; resize:v
 .modal-foot::before { content:''; position:absolute; top:0; left:0; right:0; height:3px;
   background:linear-gradient(90deg, var(--highlight) 0%, var(--primary) 50%, var(--highlight) 100%); }
 
-/* boutons de pied de modale (contexte clair) */
+/* modal footer buttons (light context) */
 .modal-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:11px 22px;
   font-family:"Geist",sans-serif; font-size:14.5px; font-weight:600; cursor:pointer; border:1px solid transparent;
   transition:background var(--t-dur) var(--t-ease), color var(--t-dur) var(--t-ease), border-color var(--t-dur) var(--t-ease); }
@@ -513,7 +513,7 @@ textarea.field-input { height:auto; min-height:128px; padding-top:26px; resize:v
   .modal { transform:none; }
 }
 
-/* ----- variante sombre : .modal.modal-dark ----- */
+/* ----- dark variant: .modal.modal-dark ----- */
 .modal-dark { background:var(--night-card); box-shadow:0 30px 80px -24px rgba(0,0,0,.7); }
 .modal-dark .modal-head { border-bottom-color:rgba(255,255,255,.12); }
 .modal-dark .modal-eyebrow { color:var(--highlight); }
@@ -530,32 +530,32 @@ textarea.field-input { height:auto; min-height:128px; padding-top:26px; resize:v
 .modal-dark .m-label { color:rgba(255,255,255,.5); }
 
 /* ============================================================
-   FOOTER (composant 21) — bloc nuit unique, dense, dark only.
-   « Le même footer partout » → entièrement partagé/identique,
-   donc centralisé ici. Le markup reste 100 % utilitaires Tailwind ;
-   ces classes ne portent que ce que Tailwind ne fait pas
-   proprement (pseudo-éléments, hover descendant, line-clamp,
-   filets full-bleed, transitions tokenisées).
+   FOOTER (component 21) — single dense night block, dark only.
+   "The same footer everywhere" → fully shared/identical,
+   hence centralized here. Markup stays 100% Tailwind utilities;
+   these classes only carry what Tailwind does not do
+   cleanly (pseudo-elements, descendant hover, line-clamp,
+   full-bleed rules, tokenized transitions).
    ============================================================ */
 .ftr { position:relative; background-color:color-mix(in srgb, var(--night) 68%, #000); }
-/* filet d'accent en tête (même signature que .modal-foot::before) */
+/* accent rule at the top (same signature as .modal-foot::before) */
 .ftr-rule { height:3px; background:linear-gradient(90deg, var(--highlight) 0%, var(--primary) 50%, var(--highlight) 100%); }
-/* séparateurs bord à bord (full-bleed) entre les niveaux */
+/* edge-to-edge (full-bleed) separators between levels */
 .ftr-divide { position:relative; }
 .ftr-divide::before { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%); width:100vw; border-top:1px solid rgba(255,255,255,.09); }
-/* bande basse : full-bleed, encore plus sombre */
+/* bottom band: full-bleed, even darker */
 .ftr-bottombar { background:color-mix(in srgb, var(--night) 40%, #000); border-top:1px solid rgba(255,255,255,.07); }
-/* bande mise en avant : full-bleed, légèrement plus claire (niveau "derniers articles") */
+/* featured band: full-bleed, slightly lighter ("latest articles" level) */
 .ftr-band { position:relative; }
 .ftr-band::after { content:''; position:absolute; inset:0; left:50%; transform:translateX(-50%); width:100vw; background:rgba(255,255,255,.045); z-index:0; pointer-events:none; }
 .ftr-band > * { position:relative; z-index:1; }
-/* variante haute : encore un cran plus claire (newsletter) — dégradé descendant clair → sombre */
+/* top variant: one more step lighter (newsletter) — downward gradient light → dark */
 .ftr-band--top::after { background:rgba(255,255,255,.075); }
 
-/* eyebrow mono à losange (signature) */
+/* mono eyebrow with diamond (signature) */
 .ftr-eyebrow { display:inline-flex; align-items:center; gap:9px; font-family:"Geist Mono",monospace; font-size:11px; font-weight:500; letter-spacing:.18em; text-transform:uppercase; color:var(--highlight); }
 
-/* niveau 2 — derniers articles (sans photo) */
+/* level 2 — latest articles (no photo) */
 .ftr-art { display:block; text-decoration:none; }
 .ftr-art-cat { display:inline-flex; align-items:center; gap:7px; padding:0 11px; height:24px; line-height:1; font-family:"Geist Mono",monospace; font-size:10px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; color:var(--highlight); background:color-mix(in srgb, var(--highlight) 12%, transparent); text-decoration:none; transition:background var(--t-dur) var(--t-ease), color var(--t-dur) var(--t-ease); }
 .ftr-art-cat:hover { background:color-mix(in srgb, var(--highlight) 22%, transparent); color:#fff; }
@@ -563,7 +563,7 @@ textarea.field-input { height:auto; min-height:128px; padding-top:26px; resize:v
 .ftr-art:hover .ftr-art-title { color:var(--highlight); }
 .ftr-art-date { display:block; font-family:"Geist Mono",monospace; font-size:11px; color:rgba(255,255,255,.55); }
 
-/* niveau 3 — titres de colonne + piles de liens */
+/* level 3 — column titles + link stacks */
 .ftr-col-head { display:inline-flex; align-items:center; gap:8px; font-family:"Geist Mono",monospace; font-size:11px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; color:rgba(255,255,255,.55); }
 .ftr-link { display:inline-flex; align-items:center; white-space:nowrap; font-size:14px; color:rgba(255,255,255,.7); text-decoration:none; transition:color var(--t-dur) var(--t-ease); }
 .ftr-link o-icon { width:0; overflow:hidden; margin-right:0; opacity:0; color:var(--highlight); flex:0 0 auto; transition:opacity var(--t-dur) var(--t-ease), width var(--t-dur) var(--t-ease), margin-right var(--t-dur) var(--t-ease); }
@@ -575,22 +575,22 @@ textarea.field-input { height:auto; min-height:128px; padding-top:26px; resize:v
 .ftr-contact svg { color:var(--highlight); flex:0 0 auto; }
 .ftr-contact:hover { color:#fff; }
 
-/* réseaux sociaux */
+/* social networks */
 .ftr-soc { width:38px; height:38px; display:inline-flex; align-items:center; justify-content:center; color:rgba(255,255,255,.75); border:1px solid rgba(255,255,255,.16); background:rgba(255,255,255,.03); transition:color var(--t-dur) var(--t-ease), border-color var(--t-dur) var(--t-ease), background var(--t-dur) var(--t-ease); }
 .ftr-soc:hover { color:#fff; border-color:var(--highlight); background:rgba(255,255,255,.06); }
 
-/* bas de footer */
+/* footer bottom */
 .ftr-legal { color:rgba(255,255,255,.62); text-decoration:none; font-size:13px; transition:color var(--t-dur) var(--t-ease); }
 .ftr-legal:hover { color:#fff; }
 
-/* back-to-top — fixe, icône seule, primaire */
+/* back-to-top — fixed, icon only, primary */
 .ftr-top { position:fixed; right:24px; bottom:24px; z-index:50; width:48px; height:48px; display:inline-flex; align-items:center; justify-content:center; color:#fff; background:var(--primary); text-decoration:none; box-shadow:0 12px 28px var(--primary-soft), 0 4px 10px rgba(0,0,0,.3); transition:background var(--t-dur) var(--t-ease), transform var(--t-dur) var(--t-ease); }
 .ftr-top:hover { background:var(--primary-deep); transform:translateY(-2px); }
 .ftr-top:active { transform:translateY(0); }
 
 /* ============================================================
-   Split-button — variante highlight (CTA sur fond nuit/turquoise).
-   Réutilise toute la mécanique .c-btn-split ; change la couleur.
+   Split-button — highlight variant (CTA on night/turquoise background).
+   Reuses all the .c-btn-split mechanics; changes the color.
    ============================================================ */
 .c-btn-split--high { background:var(--highlight); color:var(--night); box-shadow:0 10px 26px color-mix(in srgb, var(--highlight) 34%, transparent); }
 .c-btn-split--high:hover { background:var(--highlight-deep); }
@@ -598,10 +598,10 @@ textarea.field-input { height:auto; min-height:128px; padding-top:26px; resize:v
 .c-btn-split--high::before { border-color:rgba(0,0,0,.2); }
 
 /* ============================================================
-   Range / slider Orbita (.c-range) — sans bordure. La PISTE est le
-   fond de l'<input> (creux blanc + remplissage accent piloté par
-   --val en %, JS) ; seul le pouce est stylé (rond accent).
-   Évite ::-webkit-slider-runnable-track (non stylable ici).
+   Orbita range / slider (.c-range) — borderless. The TRACK is the
+   <input> background (white groove + accent fill driven by
+   --val in %, JS); only the thumb is styled (accent circle).
+   Avoids ::-webkit-slider-runnable-track (not stylable here).
    ============================================================ */
 .c-range { -webkit-appearance:none; appearance:none; width:100%; height:6px; margin:8px 0; border:none; border-radius:3px; cursor:pointer;
   background-image:linear-gradient(var(--primary),var(--primary)), linear-gradient(90deg, color-mix(in srgb, var(--highlight) 26%, #fff), color-mix(in srgb, var(--primary) 26%, #fff)); background-repeat:no-repeat, no-repeat; background-size:var(--val,50%) 100%, 100% 100%; }
@@ -615,9 +615,9 @@ textarea.field-input { height:auto; min-height:128px; padding-top:26px; resize:v
 .c-range::-moz-range-thumb { width:16px; height:16px; border:none; border-radius:50%; background:var(--primary); box-shadow:0 1px 4px rgba(0,0,0,.3); }
 
 /* ============================================================
-   Fond de section sombre (.c-darkhalo) — nuit profonde + halos
-   radiaux doux dans les coins (highlight haut-droite, editorial
-   bas-gauche), tous deux teintés par l'accent. Contenu posé dessus.
+   Dark section background (.c-darkhalo) — deep night + soft radial
+   halos in the corners (highlight top-right, editorial
+   bottom-left), both tinted by the accent. Content sits on top.
    ============================================================ */
 .c-darkhalo {
   background-color:var(--night);
@@ -626,36 +626,36 @@ textarea.field-input { height:auto; min-height:128px; padding-top:26px; resize:v
     radial-gradient(900px 520px at -5% 112%, color-mix(in srgb, var(--editorial) 16%, transparent), transparent 55%);
 }
 
-/* eyebrow mono à losange — signature partagée (footer, calculateur, …) */
+/* mono eyebrow with diamond — shared signature (footer, calculator, …) */
 .c-eyebrow-dot { display:inline-flex; align-items:center; gap:9px; white-space:nowrap; font-family:"Geist Mono",monospace; font-size:11px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; }
 .c-eyebrow-dot::before { content:''; width:6px; height:6px; background:currentColor; transform:rotate(45deg); flex:0 0 auto; }
-/* nombre display (helper générique, surchargeable par utilitaires Tailwind) */
+/* display number (generic helper, overridable by Tailwind utilities) */
 .c-num { font-family:"Schibsted Grotesk",system-ui,sans-serif; font-weight:800; letter-spacing:-.03em; line-height:1; }
 
-/* coche Nucleo : gras synthétique pour mieux ressortir dans les pastilles */
+/* Nucleo check: synthetic bold to stand out better in the pills */
 .icon.icon-check-2 { font-weight:700; }
 .icon.icon-xmark-1 { font-weight:700; }
 
 /* ============================================================
-   CAROUSEL (composants 07 témoignages, 24 portfolio) — partagé.
-   Piste scroll-snap horizontale, slides 1→2→3 responsive,
-   pagination segments + flèches carrées. Variantes sombres pour
-   les blocs posés sur fond nuit (.posts-dark).
+   CAROUSEL (components 07 testimonials, 24 portfolio) — shared.
+   Horizontal scroll-snap track, responsive 1→2→3 slides,
+   segment pagination + square arrows. Dark variants for
+   blocks placed on a night background (.posts-dark).
    ============================================================ */
 .track { display:flex; gap:24px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth; -ms-overflow-style:none; scrollbar-width:none; }
 .track::-webkit-scrollbar { display:none; }
 .slide { flex:0 0 100%; scroll-snap-align:start; }
 @media (min-width:640px){ .slide { flex-basis:calc((100% - 24px)/2); } }
 @media (min-width:1280px){ .slide { flex-basis:calc((100% - 48px)/3); } }
-/* pagination — segments carrés (signature angles vifs) */
+/* pagination — square segments (sharp-corner signature) */
 .seg { width:34px; height:4px; background:var(--line-2); border:0; padding:0; cursor:pointer; border-radius:0; transition:background .2s, width .25s ease; }
 .seg:hover { background:var(--ink-3); }
 .seg.is-active { width:44px; background:var(--primary); }
-/* flèches carrées */
+/* square arrows */
 .nav-arw { width:46px; height:46px; display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--line-2); background:var(--paper); color:var(--ink-2); cursor:pointer; transition:border-color .2s, color .2s, background .2s; }
 .nav-arw:hover { border-color:var(--primary); color:var(--primary); }
 .nav-arw[disabled] { opacity:.32; pointer-events:none; }
-/* contexte sombre */
+/* dark context */
 .posts-dark .seg { background:rgba(255,255,255,.2); }
 .posts-dark .seg:hover { background:rgba(255,255,255,.4); }
 .posts-dark .seg.is-active { background:var(--highlight); }
@@ -665,30 +665,30 @@ textarea.field-input { height:auto; min-height:128px; padding-top:26px; resize:v
 @media (prefers-reduced-motion: reduce){ .track { scroll-behavior:auto; } }
 
 /* ============================================================
-   POST ÉDITORIAL (composants 18 blog, 23 portfolio) — partagé.
-   Chrome de lecture (header sticky + progress), image à la une,
-   métas/auteur, prose, encart « à retenir ». Conteneurs de grille
-   (toc, faq-grid) restent inline par fichier (layout variable).
+   EDITORIAL POST (components 18 blog, 23 portfolio) — shared.
+   Reading chrome (sticky header + progress), featured image,
+   meta/author, prose, "key takeaways" box. Grid containers
+   (toc, faq-grid) stay inline per file (variable layout).
    ============================================================ */
-/* chrome de lecture : header sticky condensé + barre de progression */
+/* reading chrome: condensed sticky header + progress bar */
 .post-hdr-bar { height:96px; transition:height .3s ease; }
 .post-hdr.is-scrolled .post-hdr-bar { height:64px; }
 .post-hdr.is-scrolled { box-shadow:0 8px 30px rgba(0,0,0,.24); }
 .post-hdr-spacer { height:96px; }
 .read-bar { position:absolute; left:0; bottom:0; height:3px; width:0%; background:linear-gradient(90deg, var(--primary), var(--highlight)); transition:width .08s linear; }
 
-/* métas / auteur */
+/* meta / author */
 .post-meta { display:flex; align-items:center; flex-wrap:wrap; gap:18px 22px; }
 .post-author { display:flex; align-items:center; gap:12px; }
 .post-av { width:46px; height:46px; object-fit:cover; border:1px solid var(--line-2); flex:0 0 auto; }
 .meta-div { width:1px; height:34px; background:var(--line); }
 
-/* image à la une (contenue) */
+/* featured image (contained) */
 .post-hero { position:relative; border:1px solid var(--line); background:var(--bg-2); }
 .post-hero img { width:100%; aspect-ratio:16/7; object-fit:cover; display:block; }
 .post-cap { font-family:"Geist Mono",monospace; font-size:11px; letter-spacing:.04em; color:var(--ink-3); margin-top:11px; }
 
-/* prose éditoriale */
+/* editorial prose */
 .prose > h2 { font-family:"Schibsted Grotesk",system-ui,sans-serif; font-weight:800;
   font-size:clamp(28px,3vw,38px); line-height:1.08; letter-spacing:-.022em; color:var(--ink); margin:58px 0 18px; scroll-margin-top:96px; }
 .prose > h2:first-child { margin-top:0; }
@@ -718,7 +718,7 @@ textarea.field-input { height:auto; min-height:128px; padding-top:26px; resize:v
 .prose figure img { width:100%; display:block; border:1px solid var(--line); background:var(--bg-2); }
 .prose figcaption { font-family:"Geist Mono",monospace; font-size:11px; letter-spacing:.04em; color:var(--ink-3); margin-top:11px; }
 
-/* encart « à retenir » */
+/* "key takeaways" box */
 .callout { border:1px solid var(--line-2); background:var(--paper); padding:28px 30px; margin:40px 0; box-shadow:var(--shadow); }
 .callout-head { display:inline-flex; align-items:center; gap:12px; margin-bottom:16px; }
 .callout-head::before { content:''; width:30px; height:1px; background:var(--editorial); opacity:.6; }
@@ -727,7 +727,7 @@ textarea.field-input { height:auto; min-height:128px; padding-top:26px; resize:v
 .callout li { margin-bottom:11px; color:var(--ink); }
 .callout li:last-child { margin-bottom:0; }
 
-/* tableau éditorial — injectable dans la prose */
+/* editorial table — injectable in the prose */
 .prose-table { margin:40px 0; border:1px solid var(--line-2); overflow-x:auto; box-shadow:var(--shadow); }
 .prose-table table { width:100%; border-collapse:collapse; font-size:15px; background:var(--paper); }
 .prose-table thead th { background:var(--night); color:#fff; font-family:"Geist Mono",monospace; font-size:10.5px; font-weight:500;
@@ -742,7 +742,7 @@ textarea.field-input { height:auto; min-height:128px; padding-top:26px; resize:v
 .prose-table caption { caption-side:bottom; padding:11px 20px; text-align:left; font-family:"Geist Mono",monospace;
   font-size:11px; letter-spacing:.04em; color:var(--ink-3); background:var(--paper); border-top:1px solid var(--line); }
 
-/* bloc CTA inline — pavé nuit sobre, icône encadrée + texte + bouton plein (angles vifs DS) */
+/* inline CTA block — plain night panel, framed icon + text + solid button (DS sharp corners) */
 .prose-cta { display:flex; align-items:center; gap:20px; flex-wrap:wrap; margin:40px 0; padding:14px 16px 14px 20px; background:var(--night); }
 .prose-cta-ico { flex:0 0 auto; width:46px; height:46px; display:inline-flex; align-items:center; justify-content:center; border:1.5px solid var(--highlight); color:var(--highlight); }
 .prose-cta-txt { flex:1 1 220px; min-width:0; font-family:"Schibsted Grotesk",system-ui,sans-serif; font-weight:600; font-size:18px; letter-spacing:-.01em; color:#fff; line-height:1.3; }

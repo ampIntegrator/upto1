@@ -6,7 +6,7 @@ import {HStack, VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
 import React from 'react';
 
-/** Un composant du catalogue : titre ancré, état (habillé par le thème ou démo d'origine), lien doc, démo dans une carte. */
+/** A catalog component: anchored title, status (styled by the theme or original demo), doc link, demo inside a card. */
 export function ShowcaseBlock({
   name,
   id,
@@ -18,13 +18,13 @@ export function ShowcaseBlock({
 }: {
   name: string;
   id: string;
-  /** slug de la page de doc astryx.atmeta.com/components/<doc> ; null = composant propre au DS */
+  /** slug of the doc page astryx.atmeta.com/components/<doc>; null = DS-specific component */
   doc: string | null;
-  /** composant parent quand il s'agit d'une sous-partie (ex. TabMenu → TabList) */
+  /** parent component when this is a sub-part (e.g. TabMenu → TabList) */
   parent?: string;
-  /** habillé par le thème : démo maison à la place de celle d'origine */
+  /** styled by the theme: custom demo instead of the original one */
   dressed?: boolean;
-  /** catégorie (affichée en eyebrow) */
+  /** category (shown as eyebrow) */
   category?: string;
   children: React.ReactNode;
 }) {

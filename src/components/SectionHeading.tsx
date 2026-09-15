@@ -1,13 +1,13 @@
 'use client';
 
 /**
- * SectionHeading — l'en-tête de section (maquette 15-sectionHeading) : eyebrow à
- * tirets or, titre display avec accent serif (format TitleText : retours à la ligne
- * et <span>), chapô, appel à l'action. Centré sur 820 px par défaut ; `align="start"`
- * pour une tête alignée à gauche. Nuit : hérite du <Theme mode="dark"> de la Section.
- * Le futur bloc Payload « En-tête de section » remplit ces champs, et les blocs étapes,
- * comparatif et témoignages l'embarquent en tête. (Le mot contouré derrière le titre de
- * la maquette 07 a été retiré : point de maquette amendé le 11 sept. 2026.)
+ * SectionHeading — the section header (mockup 15-sectionHeading): eyebrow with
+ * gold dashes, display title with serif accent (TitleText format: line breaks
+ * and <span>), lead, call to action. Centered on 820 px by default; `align="start"`
+ * for a left-aligned header. Night: inherits the Section's <Theme mode="dark">.
+ * The future Payload block « En-tête de section » fills these fields, and the steps,
+ * comparison and testimonials blocks embed it at the top. (The outlined word behind the title of
+ * mockup 07 was removed: mockup point amended on 11 Sept. 2026.)
  */
 import {Heading} from '@astryxdesign/core/Heading';
 import {HStack, VStack} from '@astryxdesign/core/Stack';
@@ -22,9 +22,9 @@ import styles from './SectionHeading.module.css';
 export type SectionHeadingProps = {
   eyebrow?: string;
   title: TitleText;
-  /** niveau HTML (h2 par défaut ; h1 pour une page sans haut de page) */
+  /** HTML level (h2 by default; h1 for a page without a page header) */
   level?: 1 | 2 | 3;
-  /** taille du titre : display-2 (64 px max, défaut) ou display-3 */
+  /** title size: display-2 (64 px max, default) or display-3 */
   size?: 'display-2' | 'display-3';
   text?: string;
   cta?: {label: string; href: string; iconKey?: NucleoIconKey};

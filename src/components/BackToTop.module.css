@@ -1,4 +1,4 @@
-/* BackToTop — fixe en bas à droite, 48 px, apparaît après 200 px de défilement */
+/* BackToTop — fixed bottom right, 48 px, appears after 200 px of scrolling */
 .wrap {
   position: fixed;
   right: 24px;

@@ -1,22 +1,22 @@
 'use client';
 
 /**
- * Fournisseur de thème Orbita.
+ * Orbita theme provider.
  *
- * - Monte le <Theme> Astryx avec le silo d'accent et le mode (clair / sombre /
- *   système) courants ;
- * - branche next/link dans tous les liens Astryx (LinkProvider) ;
- * - passe les composants Astryx en français (InternationalizationProvider) ;
- * - expose `useOrbitaTheme()` pour changer de silo (catalogue, futur sélecteur
- *   back-office). Le silo est mémorisé dans localStorage.
+ * - Mounts the Astryx <Theme> with the current accent silo and mode (light / dark /
+ *   system);
+ * - wires next/link into all Astryx links (LinkProvider);
+ * - switches Astryx components to French (InternationalizationProvider);
+ * - exposes `useOrbitaTheme()` to change silo (catalog, future back-office
+ *   selector). The silo is persisted in localStorage.
  *
- * Le site n'a qu'un mode : clair. Les sections « nuit » sont des blocs qui
- * imbriquent leur propre <Theme mode="dark"> (voir les composants habillés).
- * `mode` reste dans l'API pour ces imbrications, mais n'est plus changé
- * globalement.
+ * The site has only one mode: light. « Night » sections are blocks that
+ * nest their own <Theme mode="dark"> (see the dressed components).
+ * `mode` stays in the API for these nested themes, but is no longer changed
+ * globally.
  *
- * Les 7 CSS compilés sont chargés ici : ~48 Ko chacun. En production, une page
- * n'a besoin que de son silo — à affiner quand le silo sera fixé par Payload.
+ * The 7 compiled CSS files are loaded here: ~48 KB each. In production, a page
+ * only needs its silo — to refine once the silo is set by Payload.
  */
 import {InternationalizationProvider} from '@astryxdesign/core/i18n';
 import {LinkProvider} from '@astryxdesign/core/Link';
@@ -37,7 +37,7 @@ import './built/orbita-magenta.css';
 import './built/orbita-ambre.css';
 
 type OrbitaThemeContextValue = {
-  /** Objet thème Astryx courant (tokens compilés + icônes Nucleo), pour un <Theme> imbriqué (section nuit…). */
+  /** Current Astryx theme object (compiled tokens + Nucleo icons), for a nested <Theme> (night section…). */
   theme: DefinedTheme;
   silo: SiloName;
   setSilo: (silo: SiloName) => void;
@@ -49,7 +49,7 @@ const OrbitaThemeContext = createContext<OrbitaThemeContextValue | null>(null);
 
 const STORAGE_KEY = 'orbita:theme';
 
-/** Abonnement aux changements de localStorage (autres onglets + nos propres écritures). */
+/** Subscription to localStorage changes (other tabs + our own writes). */
 const listeners = new Set<() => void>();
 function subscribeStorage(cb: () => void) {
   listeners.add(cb);
@@ -83,10 +83,10 @@ export function OrbitaThemeProvider({
   children: React.ReactNode;
   initialSilo?: SiloName;
   initialMode?: ColorMode;
-  /** silo imposé (site : réglage Payload ou silo de la page) — ignore la mémoire locale du catalogue */
+  /** forced silo (site: Payload setting or page silo) — ignores the catalog's local storage */
   fixedSilo?: SiloName;
 }) {
-  // Silo mémorisé : store minimal sur localStorage, lu après hydratation (SSR : initialSilo).
+  // Persisted silo: minimal store on localStorage, read after hydration (SSR: initialSilo).
   const storedSilo = useSyncExternalStore(subscribeStorage, () => readStored().silo ?? null, () => null);
   const [override, setSiloState] = useState<SiloName | null>(null);
   const silo: SiloName = fixedSilo ?? override ?? storedSilo ?? initialSilo;
@@ -97,7 +97,7 @@ export function OrbitaThemeProvider({
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
       listeners.forEach((cb) => cb());
     } catch {
-      /* stockage indisponible : on ignore */
+      /* storage unavailable: ignore */
     }
   }, []);
 
@@ -117,7 +117,7 @@ export function OrbitaThemeProvider({
     [silo, persist],
   );
 
-  // Thème compilé (tokens, CSS) + icônes Nucleo (React, donc hors compilation CLI).
+  // Compiled theme (tokens, CSS) + Nucleo icons (React, hence outside CLI compilation).
   const theme = useMemo<DefinedTheme>(() => ({...ORBITA_THEMES[silo], icons: ASTRYX_NUCLEO_ICONS}), [silo]);
 
   const value = useMemo(() => ({theme, silo, setSilo, mode, setMode}), [theme, silo, setSilo, mode, setMode]);

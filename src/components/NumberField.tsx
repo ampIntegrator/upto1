@@ -1,6 +1,6 @@
 'use client';
 
-/** NumberField — NumberInput Astryx avec label flottant Orbita et flèches Nucleo. */
+/** NumberField — Astryx NumberInput with Orbita floating label and Nucleo arrows. */
 import {NumberInput} from '@astryxdesign/core/NumberInput';
 import React from 'react';
 

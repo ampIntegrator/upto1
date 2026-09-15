@@ -10,7 +10,7 @@ import {PageIntro} from '../../_ui/PageIntro';
 
 export const metadata = {title: 'Grille & emprises — Design system Vidomia'};
 
-/** Un exemple par contenu et par réglage déterminant : ce que la table affiche. */
+/** One example per content type and per decisive setting: what the table displays. */
 const SAMPLES: ContentRef[] = [
   {type: 'text'}, {type: 'image'}, {type: 'stat'}, {type: 'checkList'}, {type: 'callout'}, {type: 'card'}, {type: 'testimonialCard'}, {type: 'compareCard'},
   {type: 'cardGrid', columns: 2}, {type: 'cardGrid', columns: 3}, {type: 'cardGrid', columns: 4},

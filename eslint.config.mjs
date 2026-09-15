@@ -1,5 +1,5 @@
-/* ESLint 9 (flat config) : règles Next (Core Web Vitals + TypeScript) sans FlatCompat,
-   qui casse avec eslint-config-next 16. */
+/* ESLint 9 (flat config): Next rules (Core Web Vitals + TypeScript) without FlatCompat,
+   which breaks with eslint-config-next 16. */
 import nextVitals from 'eslint-config-next/core-web-vitals';
 import nextTs from 'eslint-config-next/typescript';
 
@@ -8,7 +8,7 @@ const eslintConfig = [
   ...nextTs,
   {
     rules: {
-      // textes français en JSX : les apostrophes ne sont pas une erreur
+      // French text in JSX: apostrophes are not an error
       'react/no-unescaped-entities': 'off',
       '@typescript-eslint/ban-ts-comment': 'warn',
       '@typescript-eslint/no-empty-object-type': 'warn',
@@ -28,7 +28,7 @@ const eslintConfig = [
     },
   },
   {
-    // sorties générées et exports de maquette
+    // generated outputs and mockup exports
     ignores: ['.next/', 'src/payload-types.ts', 'src/payload-generated-schema.ts', 'src/theme/built/', 'src/theme/icons/nucleo.tsx', 'src/theme/icons/keys.ts', 'Orbita/', 'captures/'],
   },
 ];

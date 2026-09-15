@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/Collapsible (CollapsibleGroup) */
+/* Orbita-styled showcase — replaces the original Astryx demo. Component: src/components/Collapsible (CollapsibleGroup) */
 'use client';
 
 import {Heading} from '@astryxdesign/core/Heading';

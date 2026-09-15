@@ -1,4 +1,4 @@
-/* Composant propre au design system : src/components/SiteFooter (pied de page, assemblage sur nuit profonde). */
+/* Design-system-specific component: src/components/SiteFooter (footer, assembly on deep night). */
 'use client';
 
 import {VStack} from '@astryxdesign/core/Stack';

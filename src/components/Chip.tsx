@@ -1,6 +1,6 @@
 'use client';
 
-/** Chip — les chips de la maquette (.c-chip*), sur le Badge Astryx et ses variantes ajoutées par le thème. */
+/** Chip — the mockup chips (.c-chip*), built on the Astryx Badge and the variants added by the theme. */
 import {Badge} from '@astryxdesign/core/Badge';
 import {Icon} from '@astryxdesign/core/Icon';
 import React from 'react';
@@ -19,6 +19,6 @@ const VARIANT: Record<ChipTone, 'chip' | 'chip-high' | 'chip-accent' | 'chip-cat
   'live-dark': 'chip-live-dark',
 };
 
-export function Chip({label, tone = 'line', iconKey}: {label: string; tone?: ChipTone; /** icône Nucleo à gauche du libellé (ex. clock) */ iconKey?: NucleoIconKey}) {
+export function Chip({label, tone = 'line', iconKey}: {label: string; tone?: ChipTone; /** Nucleo icon left of the label (e.g. clock) */ iconKey?: NucleoIconKey}) {
   return <Badge label={label} variant={VARIANT[tone]} icon={iconKey ? <Icon icon={NUCLEO_ICONS[iconKey]} /> : undefined} />;
 }

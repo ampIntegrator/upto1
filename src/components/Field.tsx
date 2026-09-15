@@ -1,14 +1,14 @@
 'use client';
 
 /**
- * Field — champ texte / zone de texte du site, iso maquette 17-forms.
+ * Field — the site text input / text area, matching mockup 17-forms.
  *
- * Sur TextInput et TextArea d'Astryx : label flottant dans le champ (remonte au
- * focus ou dès qu'il y a une valeur), icône de tête par clé Nucleo, états
- * erreur / succès avec icône centrée et message accolé sous le champ, aide en
- * dessous, désactivé. Aide et message sont rendus par Astryx (description /
- * status.message), donc reliés au champ pour les lecteurs d'écran.
- * Le placeholder n'existe pas : c'est le label.
+ * On Astryx TextInput and TextArea: floating label inside the field (moves up on
+ * focus or as soon as there is a value), leading icon by Nucleo key,
+ * error / success states with centered icon and attached message below the field, help
+ * below, disabled. Help and message are rendered by Astryx (description /
+ * status.message), so linked to the field for screen readers.
+ * There is no placeholder: the label serves as one.
  */
 import {Icon} from '@astryxdesign/core/Icon';
 import {TextArea} from '@astryxdesign/core/TextArea';
@@ -22,15 +22,15 @@ export type FieldProps = {
   label: string;
   value: string;
   onChange: (value: string) => void;
-  /** Zone de texte multi-lignes. */
+  /** Multi-line text area. */
   multiline?: boolean;
-  /** Type HTML pour le champ simple. */
+  /** HTML type for the single-line input. */
   type?: 'text' | 'email' | 'password';
-  /** Icône Nucleo de tête (téléphone, loupe…), champ simple seulement. */
+  /** Leading Nucleo icon (phone, magnifier…), single-line input only. */
   iconKey?: NucleoIconKey;
-  /** Aide sous le champ. */
+  /** Help below the field. */
   help?: string;
-  /** État avec message. */
+  /** Status with message. */
   status?: {type: 'error' | 'success'; message?: string};
   isDisabled?: boolean;
   isRequired?: boolean;
@@ -58,7 +58,7 @@ export function Field({label, value, onChange, multiline = false, type = 'text',
     isDisabled,
     isRequired,
     description: help,
-    // bordure, icône d'état et message accolé (variant attached, stylé par le thème)
+    // border, status icon and attached message (attached variant, styled by the theme)
     status: status ? {type: status.type, message: status.message, variant: 'attached' as const} : undefined,
     width: '100%',
   };

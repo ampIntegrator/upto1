@@ -5,7 +5,7 @@ import {VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
 import React from 'react';
 
-/** Pastille de couleur lisant un token CSS du thème actif. */
+/** Color swatch reading a CSS token from the active theme. */
 export function ColorSwatch({token, label}: {token: string; label?: string}) {
   return (
     <VStack gap={1.5}>
@@ -24,7 +24,7 @@ export function ColorSwatch({token, label}: {token: string; label?: string}) {
   );
 }
 
-/** Groupe de pastilles sous un titre. */
+/** Group of swatches under a title. */
 export function SwatchGroup({title, tokens, note}: {title: string; tokens: string[]; note?: string}) {
   return (
     <VStack gap={3}>

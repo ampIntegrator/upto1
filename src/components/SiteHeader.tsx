@@ -1,18 +1,18 @@
 'use client';
 
 /**
- * SiteHeader — l'en-tête du site (maquette 01-header, 16-heroFullscreen).
+ * SiteHeader — the site header (mockup 01-header, 16-heroFullscreen).
  *
- * Assemblage des composants Astryx : TopNav (+ TopNavHeading, TopNavItem,
+ * Assembly of Astryx components: TopNav (+ TopNavHeading, TopNavItem,
  * TopNavMenu, TopNavMegaMenu, TopNavMegaMenuItem, TopNavMegaMenuFeaturedCard),
- * IconButton, DropdownMenu, Divider, Button, MobileNav + SideNav. Ce composant
- * n'ajoute que ce qu'Astryx n'a pas :
- *   - le bandeau utilitaire (coordonnées, horaires, réseaux) ;
- *   - le repli au défilement (bandeau qui disparaît, barre plus basse, fond papier + ombre) ;
- *   - la tonalité : `tone="dark"` quand l'en-tête est posé sur un hero média ou nuit
- *     (fond translucide sombre, textes blancs), jusqu'au premier défilement ;
- *   - la navigation mobile (burger + tiroir MobileNav) sous 1280 px.
- * Les données (SiteHeaderData) sont celles que le back-office remplira.
+ * IconButton, DropdownMenu, Divider, Button, MobileNav + SideNav. This component
+ * only adds what Astryx lacks:
+ *   - the utility strip (contact details, opening hours, social networks);
+ *   - collapse on scroll (strip disappears, lower bar, paper background + shadow);
+ *   - the tone: `tone="dark"` when the header sits on a media or night hero
+ *     (dark translucent background, white text), until the first scroll;
+ *   - mobile navigation (burger + MobileNav drawer) below 1280 px.
+ * The data (SiteHeaderData) is what the back office will fill in.
  */
 import {Button} from '@astryxdesign/core/Button';
 import {Divider} from '@astryxdesign/core/Divider';
@@ -40,12 +40,12 @@ function detectTone(): 'light' | 'dark' {
 }
 
 export type SiteHeaderProps = SiteHeaderData & {
-  /** tonalité : 'auto' (défaut) la déduit du premier bloc de la page (Section image,
-   *  vidéo ou nuit → sombre) ; 'dark' / 'light' pour forcer */
+  /** tone: 'auto' (default) infers it from the page's first block (image, video
+   *  or night Section → dark); 'dark' / 'light' to force */
   tone?: 'auto' | 'light' | 'dark';
-  /** fixé en haut de la fenêtre (défaut) ; false pour le catalogue */
+  /** fixed to the top of the window (default); false for the catalog */
   fixed?: boolean;
-  /** entrée sélectionnée (href courant) */
+  /** selected entry (current href) */
   currentHref?: string;
 };
 
@@ -100,8 +100,8 @@ export function SiteHeader({brand, strip, nav, actions, languages = ['FR'], tone
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [lang, setLang] = useState(languages[0]);
-  // tonalité automatique : le premier bloc de page sous l'en-tête décide (lecture du DOM
-  // après hydratation ; 'light' côté serveur)
+  // automatic tone: the first page block under the header decides (DOM read
+  // after hydration; 'light' on the server)
   const detected = useSyncExternalStore(subscribeNoop, detectTone, () => 'light' as const);
   const resolvedTone = tone === 'auto' ? detected : tone;
 
@@ -146,7 +146,7 @@ export function SiteHeader({brand, strip, nav, actions, languages = ['FR'], tone
             startContent={<HStack className={styles.desktopNav} vAlign="stretch"><NavEntries nav={nav} currentHref={currentHref} /></HStack>}
             endContent={
               <HStack gap={2} vAlign="center" className={styles.actions}>
-                {/* recherche : déclencheur seul pour l'instant (la recherche du site viendra avec Payload) */}
+                {/* search: trigger only for now (site search will come with Payload) */}
                 <IconButton label="Rechercher" icon={<SearchIcon />} variant="ghost" size="sm" onClick={() => undefined} />
                 <DropdownMenu
                   button={{label: lang, variant: 'ghost', size: 'sm'}}

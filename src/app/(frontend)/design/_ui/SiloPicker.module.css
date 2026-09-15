@@ -21,6 +21,6 @@
   transition: border-radius var(--duration-medium) var(--ease-standard), transform var(--duration-medium) var(--ease-standard);
 }
 .swatch:hover .dot { transform: scale(1.06); }
-/* choisie : pilule (rayon = moitié de la hauteur) */
+/* selected: pill (radius = half the height) */
 .input:checked + .dot { border-radius: 14px; }
 .input:focus-visible + .dot { outline: 2px solid var(--color-accent); outline-offset: 2px; }

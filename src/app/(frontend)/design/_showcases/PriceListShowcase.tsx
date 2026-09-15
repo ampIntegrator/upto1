@@ -1,4 +1,4 @@
-/* Composant propre au design system : src/components/PriceList (liste de prix, maquettes 08 et 09). */
+/* Design-system-specific component: src/components/PriceList (price list, mockups 08 and 09). */
 'use client';
 
 import {Heading} from '@astryxdesign/core/Heading';

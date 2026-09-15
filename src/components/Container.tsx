@@ -1,7 +1,7 @@
 /**
- * Container — l'unique conteneur de contenu du site : 1440 px maximum,
- * 20 px de marge de chaque côté, centré. Un seul, toujours le même ; un
- * contenu plus étroit se place dans des colonnes de la Grid (12 colonnes).
+ * Container — the site's single content container: 1440 px maximum,
+ * 20 px margin on each side, centered. Only one, always the same; narrower
+ * content goes into Grid columns (12 columns).
  */
 import {VStack} from '@astryxdesign/core/Stack';
 import React from 'react';

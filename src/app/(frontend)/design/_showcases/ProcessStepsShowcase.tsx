@@ -1,4 +1,4 @@
-/* Composant propre au design system : src/components/ProcessSteps (panneau d'étapes, maquette 03). */
+/* Design-system-specific component: src/components/ProcessSteps (steps panel, mockup 03). */
 'use client';
 
 import {Heading} from '@astryxdesign/core/Heading';

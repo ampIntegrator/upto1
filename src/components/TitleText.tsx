@@ -1,31 +1,31 @@
 /**
- * TitleText — rendu d'un titre saisi dans un textarea (futur champ Payload).
+ * TitleText — renders a title entered in a textarea (future Payload field).
  *
- * Syntaxe volontairement minimale, celle que l'administrateur tapera :
- *   - un retour à la ligne (ou <br>)      → saut de ligne dans le titre
- *   - <span>…</span>                       → accent serif (Cormorant italique, couleur silo ;
- *                                            or éditorial là où --serif-color le demande)
- * Tout autre balisage est affiché tel quel : rien n'est injecté en HTML brut, le texte est
- * découpé puis rendu en nœuds React (Text type="serif", <br />).
+ * Deliberately minimal syntax, the one the administrator will type:
+ *   - a line break (or <br>)              → line break in the title
+ *   - <span>…</span>                       → serif accent (Cormorant italic, silo color;
+ *                                            editorial gold where --serif-color asks for it)
+ * Any other markup is displayed as is: nothing is injected as raw HTML, the text is
+ * split then rendered as React nodes (Text type="serif", <br />).
  *
- * Exemple (textarea) :
+ * Example (textarea):
  *   Toute la chaîne bâtiment,
  *   <span>d'un seul outil.</span>
  *   Du chiffrage à la maintenance.
  *
- * Utilisé par Hero (h1) et SiteFooter (titre newsletter). Côté Payload : un champ
- * `textarea` avec, en description, ces deux règles.
+ * Used by Hero (h1) and SiteFooter (newsletter title). Payload side: a
+ * `textarea` field with these two rules in its description.
  */
 import {Text} from '@astryxdesign/core/Text';
 import React from 'react';
 
-/** Un titre saisi : texte brut + retours à la ligne + <span> pour l'accent serif. */
+/** An entered title: plain text + line breaks + <span> for the serif accent. */
 export type TitleText = string;
 
 const TOKENS = /(<span(?:\s[^>]*)?>[\s\S]*?<\/span>|<br\s*\/?>|\n)/gi;
 const SPAN = /^<span(?:\s[^>]*)?>([\s\S]*?)<\/span>$/i;
 
-/** Découpe le titre et rend chaque morceau : texte, <br />, ou Text serif. */
+/** Splits the title and renders each piece: text, <br />, or serif Text. */
 export function renderTitle(text: TitleText | undefined | null, serifClassName?: string): React.ReactNode {
   if (!text) return null;
   const parts = text.replace(/\r\n?/g, '\n').trim().split(TOKENS).filter(Boolean);

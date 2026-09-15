@@ -1,6 +1,6 @@
 /**
- * Point d'entrée des thèmes Orbita compilés (SSR-safe).
- * Régénérer après toute modification de src/theme/orbita.ts ou des palettes :
+ * Entry point for the compiled Orbita themes (SSR-safe).
+ * Regenerate after any change to src/theme/orbita.ts or the palettes:
  *   pnpm theme:build
  */
 import type {DefinedTheme} from '@astryxdesign/core/theme';

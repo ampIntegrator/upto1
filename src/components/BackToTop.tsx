@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * BackToTop — bouton fixe « haut de page » (maquette 21 .ftr-top) : IconButton
- * Astryx primaire, en bas à droite, visible après 200 px de défilement.
- * Rendu par SiteFooter, donc présent sur toutes les pages.
+ * BackToTop — fixed "back to top" button (mockup 21 .ftr-top): primary Astryx
+ * IconButton, bottom right, visible after 200 px of scrolling.
+ * Rendered by SiteFooter, so present on every page.
  */
 import {IconButton} from '@astryxdesign/core/IconButton';
 import React, {useEffect, useState} from 'react';

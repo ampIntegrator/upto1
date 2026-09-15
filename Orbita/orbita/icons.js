@@ -1,11 +1,11 @@
 /* ============================================================
-   Orbita — système d'icônes <o-icon name="…" size sw>
-   Police Nucleo (icons.css) en priorité ; repli SVG (tracés Feather
-   d'origine) pour les clés pas encore mappées → migration sans casse.
-   Lie icons.css dans le composant pour charger la police.
+   Orbita — icon system <o-icon name="…" size sw>
+   Nucleo font (icons.css) first; SVG fallback (original Feather
+   paths) for keys not yet mapped → non-breaking migration.
+   Link icons.css in the component to load the font.
    ============================================================ */
 (function () {
-  // clé sémantique Orbita -> classe Nucleo (icons.css)
+  // Orbita semantic key -> Nucleo class (icons.css)
   const NUCLEO = {
     'arrow-right':   'arrow-right',
     'arrow-left':    'arrow-left',
@@ -24,7 +24,7 @@
     'globe':         'globe-2',
     'play':          'circle-play',
     'info':          'square-info',
-    // — icônes de contenu (décoratives, gérées par les users) —
+    // — content icons (decorative, managed by users) —
     'gauge':         'gauge',
     'chart':         'chart-bar-trend-up-1',
     'coins':         'coins',
@@ -40,7 +40,7 @@
     'key':           'key',
     'bolt':          'bolt-2'
   };
-  // repli SVG (tracés d'origine) pour les clés pas encore validées côté police
+  // SVG fallback (original paths) for keys not yet validated in the font
   const SVG = {
     'play': '<path d="M8 5v14l11-7z" fill="currentColor" stroke="none"/>',
     'info': '<circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/>',

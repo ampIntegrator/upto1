@@ -1,13 +1,13 @@
 /*
- * TimePicker — panneau de choix d'heure et de minutes au clic, dans
- * l'esprit du calendrier Astryx : sous le champ, à sa largeur, deux colonnes
- * défilantes, valeur choisie en cercle couleur silo.
+ * TimePicker — click-to-open hour and minute picker panel, in
+ * the spirit of the Astryx calendar: below the field, at its width, two scrolling
+ * columns, selected value in a silo-colored circle.
  */
 .wrap { position: relative; }
 
 .panel {
-  /* comme les panneaux Astryx : fixe, ancré au champ (anchor-name posé en
-     style inline), largeur du champ, dessous ou dessus si la place manque */
+  /* like Astryx panels: fixed, anchored to the field (anchor-name set as
+     inline style), field width, below or above if space is lacking */
   position: fixed;
   position-area: block-end span-inline-end;
   position-try-fallbacks: flip-block;
@@ -22,10 +22,10 @@
 
 .columns {
   display: grid;
-  grid-template-columns: 2fr 1fr; /* heures sur 4 colonnes, minutes sur 2 */
+  grid-template-columns: 2fr 1fr; /* hours over 4 columns, minutes over 2 */
   gap: var(--spacing-3);
 }
-/* séparation discrète entre les deux colonnes, comme le filet du pied */
+/* subtle separation between the two columns, like the footer rule */
 .columns > div + div {
   border-inline-start: var(--border-width) solid var(--color-border);
   padding-inline-start: var(--spacing-3);
@@ -43,7 +43,7 @@
   padding-block: var(--spacing-1) var(--spacing-2);
 }
 .list {
-  max-height: 272px; /* 6 rangées d'heures sans défilement */
+  max-height: 272px; /* 6 rows of hours without scrolling */
   overflow-y: auto;
   display: grid;
   grid-template-columns: repeat(4, 1fr);

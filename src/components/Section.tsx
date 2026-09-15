@@ -1,30 +1,30 @@
 'use client';
 
 /**
- * Section — le bloc pleine largeur qui empile les pages (maquettes 13
- * fullwidthtextimage, 00-fondations §4 textures, sections .c-darkbg).
+ * Section — the full-width block that pages are stacked from (mockups 13
+ * fullwidthtextimage, 00-fondations §4 textures, .c-darkbg sections).
  *
- * Elle ne porte que l'arrière-plan et le padding vertical ; le contenu se met
- * dans un <Container>, puis dans une Grid de 12 colonnes.
+ * It only carries the background and vertical padding; content goes
+ * in a <Container>, then in a 12-column Grid.
  *
- *   background : 'light' (fond de page) | 'paper' (blanc) | 'glow' (clair, lueur highlight
- *                en haut) | 'grid' | 'dots' | 'losange' (textures, clair seulement) |
- *                'night' | 'night-halo' (nuit à halos silo et or) | 'image' | 'video'
- *   image / video : le média (couvre toute la section)
- *   overlay    : calque noir posé sur l'image ou la vidéo, sous le contenu ;
- *                opacité de 0 à 1, réglable en admin (0 = aucun)
- *   edge       : liseré dégradé en pied (actif par défaut sur image et vidéo,
- *                disponible partout)
- *   (pas de voile ni de halo : l'overlay est le seul réglage d'assombrissement)
- *   tint       : couleur du fond clair : 'body' (fond de page) | 'highlight' (highlight clair du silo)
- *   spacing    : padding vertical 'none' | 'xs' | 'sm' | 'md' | 'lg'
- *   spacingTop / spacingBottom : haut et bas séparés, en pixels (0 à 160 par pas de 20 en admin) ;
- *                priment sur spacing ; divisés par deux sous 640 px
- *   dividers   : filets haut et bas (barre de chiffres)
+ *   background : 'light' (page background) | 'paper' (white) | 'glow' (light, highlight glow
+ *                at the top) | 'grid' | 'dots' | 'losange' (textures, light only) |
+ *                'night' | 'night-halo' (night with silo and gold halos) | 'image' | 'video'
+ *   image / video : the media (covers the whole section)
+ *   overlay    : black layer over the image or video, under the content;
+ *                opacity from 0 to 1, adjustable in admin (0 = none)
+ *   edge       : gradient edge line at the bottom (on by default for image and video,
+ *                available everywhere)
+ *   (no veil or halo: the overlay is the only darkening setting)
+ *   tint       : light background color: 'body' (page background) | 'highlight' (light silo highlight)
+ *   spacing    : vertical padding 'none' | 'xs' | 'sm' | 'md' | 'lg'
+ *   spacingTop / spacingBottom : separate top and bottom, in pixels (0 to 160 in steps of 20 in admin);
+ *                override spacing; halved below 640 px
+ *   dividers   : top and bottom rules (figures bar)
  *
- * night, image et video basculent leur contenu en mode nuit (Theme dark) :
- * titres, textes, boutons et cartes suivent d'eux-mêmes.
- * Rend un <section> (Stack Astryx as="section") ; s'utilise avec <Container>.
+ * night, image and video switch their content to night mode (Theme dark):
+ * headings, text, buttons and cards follow on their own.
+ * Renders a <section> (Astryx Stack as="section"); used with <Container>.
  */
 import {VStack} from '@astryxdesign/core/Stack';
 import {Theme} from '@astryxdesign/core/theme';
@@ -41,26 +41,26 @@ export type SectionProps = {
   background?: SectionBackground;
   image?: {src: string; alt?: string};
   video?: {src: string; poster?: string};
-  /** calque noir sur le média, sous le contenu : opacité 0 à 1 (image, vidéo) */
+  /** black layer over the media, under the content: opacity 0 to 1 (image, video) */
   overlay?: number;
-  /** liseré dégradé silo → highlight → silo en pied */
+  /** silo → highlight → silo gradient edge line at the bottom */
   edge?: boolean;
-  /** couleur du fond clair (compose avec les textures) */
+  /** light background color (combines with textures) */
   tint?: SectionTint;
   spacing?: SectionSpacing;
   spacingTop?: number;
   spacingBottom?: number;
-  /** filets haut et bas */
+  /** top and bottom rules */
   dividers?: boolean;
-  /** premier bloc d'une page sous l'en-tête fixe : réserve sa hauteur en haut (hero clair) */
+  /** first block of a page under the fixed header: reserves its height at the top (light hero) */
   underHeader?: boolean;
-  /** centre le contenu verticalement dans la hauteur de la section (avec minHeight) */
+  /** vertically centers the content within the section height (with minHeight) */
   centered?: boolean;
-  /** hauteur minimale (ex. 600 pour un bloc image) */
+  /** minimum height (e.g. 600 for an image block) */
   minHeight?: number | string;
   id?: string;
   children: React.ReactNode;
-  /** contenu posé sur la section hors du flux (ex. invitation à défiler), au-dessus du contenu */
+  /** content placed on the section outside the flow (e.g. scroll prompt), above the content */
   foot?: React.ReactNode;
 };
 

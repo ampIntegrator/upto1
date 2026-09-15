@@ -1,4 +1,4 @@
-/* Composant propre au design system : src/components/CompareCard (carte comparative, maquette 05). */
+/* Design-system-specific component: src/components/CompareCard (comparison card, mockup 05). */
 'use client';
 
 import {Grid, GridSpan} from '@astryxdesign/core/Grid';

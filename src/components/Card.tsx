@@ -1,21 +1,21 @@
 'use client';
 
 /**
- * Card — la carte du site, un seul châssis et trois préréglages
- * (maquettes 12 cardBlocks / 14 mosaic, 19 blogCards, 24 portfolioCards).
+ * Card — the site card, a single chassis and three presets
+ * (mockups 12 cardBlocks / 14 mosaic, 19 blogCards, 24 portfolioCards).
  *
- *   preset="bloc"        média (image, icône, nombre ou rien) + titre centré
- *                        avec ornement + texte + barre d'action
- *   preset="article"     image 16/10, chip + date, titre (2 lignes), barre d'action
- *   preset="realisation" image 16/10, chip + résultat, titre, client · ville, barre
- *   preset="brief"       sans image ni cadre : chip, titre (2 lignes), date — l'article
- *                        en bref du pied de page (maquette 21)
+ *   preset="bloc"        media (image, icon, number or none) + centered title
+ *                        with ornament + text + action bar
+ *   preset="article"     16/10 image, chip + date, title (2 lines), action bar
+ *   preset="realisation" 16/10 image, chip + result, title, client · city, bar
+ *   preset="brief"       no image or frame: chip, title (2 lines), date — the brief
+ *                        article in the footer (mockup 21)
  *
- * Le titre est un Heading Astryx de type `card` : son style ne dépend pas du
- * niveau (h3 par défaut, h4 possible en admin). L'ornement au losange fait
- * partie du titre (preset bloc). Avec `cta`, la carte entière est cliquable et
- * son survol remplit la barre d'action ; sans `cta`, pas de barre ni de lien.
- * Nuit : poser la carte dans un <Theme mode="dark">.
+ * The title is an Astryx Heading of type `card`: its style does not depend on
+ * the level (h3 by default, h4 possible in the admin). The diamond ornament is
+ * part of the title (bloc preset). With `cta`, the whole card is clickable and
+ * hovering it fills the action bar; without `cta`, no bar and no link.
+ * Night: place the card inside a <Theme mode="dark">.
  */
 import {Heading} from '@astryxdesign/core/Heading';
 import {Text} from '@astryxdesign/core/Text';
@@ -38,27 +38,27 @@ export type CardProps = {
   preset?: 'bloc' | 'article' | 'realisation' | 'brief';
   media?: CardMedia;
   title: string;
-  /** niveau HTML du titre (SEO) ; l'apparence ne change pas */
+  /** HTML level of the title (SEO); appearance does not change */
   level?: 3 | 4;
-  /** bloc : titre en couleur silo (cas « titre seul ») */
+  /** bloc: title in silo color (« titre seul » case) */
   accentTitle?: boolean;
   text?: string;
-  /** article / réalisation : chip de catégorie */
+  /** article / realisation: category chip */
   chip?: {label: string; tone?: ChipTone};
-  /** article : date affichée */
+  /** article: displayed date */
   date?: string;
-  /** réalisation : résultat chiffré (« +34 % closing ») */
+  /** realisation: numeric result (« +34 % closing ») */
   result?: string;
-  /** réalisation : client et ville */
+  /** realisation: client and city */
   client?: {name: string; location?: string};
-  /** barre d'action */
+  /** action bar */
   cta?: {label: string; href: string};
   style?: React.CSSProperties;
 };
 
 export function Card({preset = 'bloc', media = {type: 'none'}, title, level = 3, accentTitle, text, chip, date, result, client, cta, style}: CardProps) {
   const editorial = preset !== 'bloc';
-  // en bref : le lien passe par le titre seulement, pas de barre d'action
+  // brief: the link goes through the title only, no action bar
   const showBar = Boolean(cta) && preset !== 'brief';
 
   const mediaNode = (() => {
@@ -84,7 +84,7 @@ export function Card({preset = 'bloc', media = {type: 'none'}, title, level = 3,
     }
   })();
 
-  // éditorial : le titre porte le lien de la carte, seulement s'il y a un appel à l'action
+  // editorial: the title carries the card link, only when there is a call to action
   const titleNode = editorial && cta ? (
     <NextLink href={cta.href} className={styles.titleLink}>
       {title}
@@ -137,4 +137,4 @@ export function Card({preset = 'bloc', media = {type: 'none'}, title, level = 3,
   );
 }
 
-/** Icônes de contenu proposées par défaut à l'éditeur pour le média « icône ». */
+/** Content icons offered by default to the editor for the « icône » media. */

@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * (brique interne de PriceList, pas au catalogue)
- * PriceCard — la carte de prix unique (maquettes 08 et 09 « Un prix ») : à gauche le détail
- * de l'offre (eyebrow, CheckList dense avec valeurs barrées, ligne « Valeur totale »), à
- * droite sur fond atténué le prix (Price 84 px), le bouton split pleine largeur, la mention
- * et le Callout garantie. 900 px maximum, deux colonnes 1,4 / 1 ; quand sa colonne de page fait
- * moins de 720 px, une seule colonne avec le prix en premier (requête de conteneur). Nuit via la Section.
+ * (internal building block of PriceList, not in the catalog)
+ * PriceCard — the single price card (mockups 08 and 09 « Un prix »): on the left the offer
+ * details (eyebrow, dense CheckList with struck-through values, « Valeur totale » line), on the
+ * right on a muted background the price (Price 84 px), the full-width split button, the note
+ * and the guarantee Callout. 900 px max, two columns 1.4 / 1; when its page column is
+ * under 720 px, a single column with the price first (container query). Night via the Section.
  */
 import {HStack, VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
@@ -21,7 +21,7 @@ import styles from './PriceCard.module.css';
 export type PriceCardProps = {
   featuresLabel?: string;
   features: CheckListItem[];
-  /** ligne de total sous la liste : libellé + valeur barrée */
+  /** total line below the list: label + struck-through value */
   total?: {label: string; value: string};
   priceLabel?: string;
   price: {value: string; currency?: string; period?: string};

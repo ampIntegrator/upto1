@@ -1,6 +1,6 @@
 /*
- * Media — image qui remplit son conteneur. La hauteur vient du conteneur (rangée étirée)
- * ou des hauteurs minimales posées en variables par le composant (px, admin).
+ * Media — image that fills its container. Height comes from the container (stretched row)
+ * or from minimum heights set as variables by the component (px, admin).
  */
 .root {
   position: relative;
@@ -9,27 +9,27 @@
   height: 100%;
   min-height: var(--media-min-height, 0px);
 }
-/* colonnes empilées : hauteur minimale mobile, sinon celle du desktop */
+/* stacked columns: mobile minimum height, otherwise the desktop one */
 @media (max-width: 767px) {
   .root {
     min-height: var(--media-min-height-mobile, var(--media-min-height, 0px));
   }
 }
-/* next/image (fill) : l'image couvre la boîte, recadrée au centre */
+/* next/image (fill): the image covers the box, cropped at the center */
 .image {
   object-fit: cover;
   object-position: center;
 }
-/* calque noir administrable (opacité en style inline), au-dessus de l'image */
+/* admin-controlled black overlay (opacity as inline style), above the image */
 .overlay {
   position: absolute;
   inset: 0;
   pointer-events: none;
   background: rgb(0, 0, 0);
 }
-/* contenu posé sur l'image (MediaQuote) : centré, au-dessus du calque, marge intérieure.
-   Dans le flux (pas en absolu) : il remplit la hauteur minimale et agrandit le bloc si le
-   texte est plus haut, au lieu d'être coupé. */
+/* content placed over the image (MediaQuote): centered, above the overlay, inner padding.
+   In the flow (not absolute): it fills the minimum height and grows the block if the
+   text is taller, instead of being clipped. */
 .content {
   position: relative;
   flex: 1 1 auto;

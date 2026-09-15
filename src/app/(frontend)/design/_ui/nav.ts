@@ -1,6 +1,6 @@
-/** Structure du catalogue : fondations + catégories de composants Astryx. */
+/** Catalog structure: foundations + Astryx component categories. */
 
-export type NavEntry = {slug: string; label: string; href: string; /** s'ouvre dans un nouvel onglet, hors catalogue */ external?: boolean};
+export type NavEntry = {slug: string; label: string; href: string; /** opens in a new tab, outside the catalog */ external?: boolean};
 
 export const FOUNDATIONS: NavEntry[] = [
   {slug: 'couleurs', label: 'Couleurs', href: '/design/fondations/couleurs'},

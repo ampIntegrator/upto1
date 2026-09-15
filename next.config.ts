@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
         pathname: '/api/media/file/**',
       },
     ],
-    // photos de démonstration du catalogue (composant Media) : paramètres de recadrage autorisés
+    // catalog demo photos (Media component): cropping parameters allowed
     remotePatterns: [
       {
         protocol: 'https',

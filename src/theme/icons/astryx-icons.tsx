@@ -1,8 +1,8 @@
 /**
- * Icônes sémantiques Astryx → tracés Nucleo.
- * Injectées dans chaque thème Orbita par OrbitaThemeProvider (clé `icons` du
- * thème) : tout composant Astryx qui demande `chevronDown`, `close`, `check`…
- * reçoit le tracé Nucleo. Une clé absente du lot garde l'icône Astryx par défaut.
+ * Astryx semantic icons → Nucleo paths.
+ * Injected into each Orbita theme by OrbitaThemeProvider (theme `icons`
+ * key): any Astryx component requesting `chevronDown`, `close`, `check`…
+ * receives the Nucleo path. A key missing from the set keeps the default Astryx icon.
  */
 import type {DefinedTheme} from '@astryxdesign/core/theme';
 
@@ -11,7 +11,7 @@ import React from 'react';
 
 import {NUCLEO_ICONS, type NucleoIconKey} from './nucleo';
 
-/** nom sémantique Astryx → clé Nucleo (nom de fichier dans icons/astryx). */
+/** Astryx semantic name → Nucleo key (file name in icons/astryx). */
 export const ASTRYX_SEMANTIC_MAP: Record<string, string> = {
   close: 'close',
   chevronDown: 'chevron-down',
@@ -41,7 +41,7 @@ export const ASTRYX_SEMANTIC_MAP: Record<string, string> = {
   wrench: 'wrench',
   stop: 'stop',
   microphone: 'microphone',
-  // clé namespacée : flèche des champs numériques (Astryx retourne la même pour le haut)
+  // namespaced key: number field arrow (Astryx flips the same one for up)
   'numberInput:stepperDown': 'chevron-down',
 };
 
@@ -54,4 +54,4 @@ export const ASTRYX_NUCLEO_ICONS: ThemeIconOverrides = Object.fromEntries(
     }),
 ) as ThemeIconOverrides;
 
-/** Noms sémantiques encore servis par les tracés Astryx par défaut. */
+/** Semantic names still served by the default Astryx paths. */

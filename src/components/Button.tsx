@@ -1,22 +1,22 @@
 'use client';
 
 /**
- * Button — bouton du site, sur le Button Astryx.
+ * Button — the site button, built on the Astryx Button.
  *
- * Reprend toutes les props du Button Astryx (label, variant, size, href, icon,
- * isLoading, isDisabled…) et ajoute la signature Orbita :
- *   - `arrow`  : split-button — cellule flèche pleine hauteur à droite
- *                (icône Nucleo arrow-right), cadre intérieur animé au survol ;
- *   - `block`  : pleine largeur, libellé à gauche, flèche collée au bord droit ;
- *   - `iconKey`: icône Nucleo à gauche du libellé, par sa clé (chaîne stockable
- *                dans Payload, donc modifiable en admin) ; l'écart avec le texte
- *                vaut la moitié du padding horizontal (thème, par taille) ;
- *   - variante `high` : fond highlight, texte nuit (déclarée par le thème) ;
- *   - variante `secondary` : libellé en dégradé accent → encre, qui glisse vers
- *                l'accent foncé au survol (seule touche de silo sur ce bouton).
+ * Takes all Astryx Button props (label, variant, size, href, icon,
+ * isLoading, isDisabled…) and adds the Orbita signature:
+ *   - `arrow`  : split-button — full-height arrow cell on the right
+ *                (Nucleo arrow-right icon), inner frame animated on hover;
+ *   - `block`  : full width, label on the left, arrow against the right edge;
+ *   - `iconKey`: Nucleo icon left of the label, by key (a string storable
+ *                in Payload, so editable in the admin); the gap to the text
+ *                is half the horizontal padding (theme, per size);
+ *   - `high` variant: highlight background, night text (declared by the theme);
+ *   - `secondary` variant: accent → ink gradient label that slides toward
+ *                the dark accent on hover (the only silo touch on this button).
  *
- * Sans `arrow` ni `block`, c'est un Button Astryx tel quel : le thème Orbita
- * lui donne déjà angles vifs, graisse, halo accent et fantôme bordé.
+ * Without `arrow` or `block`, it is a plain Astryx Button: the Orbita theme
+ * already gives it sharp corners, weight, accent glow and outlined ghost.
  */
 import {Button as AstryxButton, type ButtonProps as AstryxButtonProps} from '@astryxdesign/core/Button';
 import {Icon} from '@astryxdesign/core/Icon';
@@ -27,13 +27,13 @@ import {ArrowRightIcon, NUCLEO_ICONS, type NucleoIconKey} from '@/theme/icons/nu
 import styles from './Button.module.css';
 
 export type ButtonProps = Omit<AstryxButtonProps, 'endContent' | 'width' | 'size'> & {
-  /** Deux tailles seulement (Orbita) : md 48 px, lg 56 px. */
+  /** Only two sizes (Orbita): md 48 px, lg 56 px. */
   size?: 'md' | 'lg';
-  /** Split-button : cellule flèche à droite. */
+  /** Split-button: arrow cell on the right. */
   arrow?: boolean;
-  /** Pleine largeur, flèche au bord droit. */
+  /** Full width, arrow at the right edge. */
   block?: boolean;
-  /** Icône Nucleo à gauche, par sa clé (ex. 'search'). Prioritaire sur `icon`. */
+  /** Leading Nucleo icon, by key (e.g. 'search'). Takes precedence over `icon`. */
   iconKey?: NucleoIconKey;
 };
 
@@ -41,12 +41,12 @@ export function Button({arrow = false, block = false, iconKey, icon, className, 
   const isSecondary = variant === 'secondary';
   const gradId = useId();
   const nucleoIcon = iconKey ? <Icon icon={NUCLEO_ICONS[iconKey]} /> : null;
-  /** Dégradé SVG encre → accent (stops pilotés par le survol du bouton), étiré sur la grille de l'icône. */
+  /** Ink → accent SVG gradient (stops driven by button hover), stretched over the icon grid. */
   const gradientDefs = (id: string, grid: number) => (
     <svg width={0} height={0} aria-hidden="true" style={{position: 'absolute'}}>
       <defs>
-        {/* userSpaceOnUse : un dégradé en boîte englobante disparaît sur un trait
-            droit (hauteur nulle), ex. la hampe de la flèche. */}
+        {/* userSpaceOnUse: a bounding-box gradient disappears on a straight
+            stroke (zero height), e.g. the arrow shaft. */}
         <linearGradient id={id} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={grid} y2="0">
           <stop offset="0" className={styles.stopA} />
           <stop offset="1" className={styles.stopB} />
@@ -54,8 +54,8 @@ export function Button({arrow = false, block = false, iconKey, icon, className, 
       </defs>
     </svg>
   );
-  // secondary : l'icône Nucleo reçoit un dégradé SVG (encre → accent), défini
-  // localement pour que le survol du bouton pilote ses stops.
+  // secondary: the Nucleo icon gets an SVG gradient (ink → accent), defined
+  // locally so the button hover drives its stops.
   const leadingIcon =
     nucleoIcon && isSecondary ? (
       <span className={styles.iconGrad} style={{'--orbita-grad': `url(#${gradId})`} as React.CSSProperties}>
@@ -82,7 +82,7 @@ export function Button({arrow = false, block = false, iconKey, icon, className, 
       size={size}
       icon={leadingIcon}
       className={classes}
-      // libellé visible surchargé pour le dégradé ; `label` reste le nom accessible
+      // visible label overridden for the gradient; `label` remains the accessible name
       {...(isSecondary && !rest.children ? {children: <span className={styles.secondaryLabel}>{rest.label}</span>} : {})}
       width={block ? '100%' : undefined}
       endContent={

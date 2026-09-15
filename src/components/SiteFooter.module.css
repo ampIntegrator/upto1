@@ -1,36 +1,36 @@
 /*
- * SiteFooter — pied de page (maquette 21-footer). Nuit profonde ; les niveaux 1 et 2
- * sont des couches d'opacité blanche posées sur ce fond (décision du 10 sept.).
- * Tailles reprises de la maquette avec un plancher à 12 px (à relire au cas par cas).
+ * SiteFooter — page footer (mockup 21-footer). Deep night; levels 1 and 2
+ * are white-opacity layers laid over this background (decision of 10 Sept.).
+ * Sizes taken from the mockup with a 12 px floor (to review case by case).
  */
 .footer {
   position: relative;
   background-color: var(--color-night-deep);
   color: #fff;
 }
-/* filet dégradé highlight → silo → highlight */
+/* highlight → silo → highlight gradient rule */
 .rule {
   display: block;
   height: 3px;
   background: linear-gradient(90deg, var(--color-highlight) 0%, var(--color-accent) 50%, var(--color-highlight) 100%);
 }
 
-/* ---- bandeaux (niveaux 1 et 2) ---- */
+/* ---- strips (levels 1 and 2) ---- */
 .band { padding-block: 28px; }
 .band[data-band='top'] { background: rgba(255, 255, 255, 0.075); }
 .band[data-band='articles'] { background: rgba(255, 255, 255, 0.045); }
 
-.eyebrow { letter-spacing: 0.18em; } /* maquette .ftr-eyebrow : Geist Mono 500 (type eyebrow-mono), 0,18 em */
-/* eyebrow du pied de page en highlight (le type est éditorial ailleurs) */
+.eyebrow { letter-spacing: 0.18em; } /* mockup .ftr-eyebrow: Geist Mono 500 (eyebrow-mono type), 0.18 em */
+/* footer eyebrow in highlight (the type is editorial elsewhere) */
 .footer .eyebrow { color: var(--color-highlight); }
 
-/* ---- lettre d'information ---- */
+/* ---- newsletter ---- */
 .newsTitle { font-size: 18px; line-height: 1.2; letter-spacing: -0.02em; color: #fff; }
 .newsAccent { --serif-color: var(--color-highlight); }
 .newsText { font-size: 14px; line-height: 1.5; max-width: 440px; }
 .form { width: 100%; }
 .formRow :global(.astryx-button) { flex: 0 0 auto; }
-/* champ 58 px et bouton lg côte à côte : le bouton prend la hauteur du champ */
+/* 58 px field and lg button side by side: the button takes the field's height */
 .submit { height: auto; min-height: 56px; }
 .mention {
   margin-top: 12px;
@@ -40,15 +40,15 @@
   color: rgba(255, 255, 255, 0.45);
 }
 
-/* ---- derniers articles ---- */
+/* ---- latest articles ---- */
 .allLink { font-size: 13px; white-space: nowrap; flex: 0 0 auto; }
 .allLink > span { display: inline-flex; align-items: center; gap: 8px; }
 .allLink svg { transition: transform var(--duration-medium) var(--ease-standard); }
 .allLink:hover svg { transform: translateX(4px); }
 .articles { row-gap: 0; }
-/* colonnes séparées par un filet ; en pile (< 1024 px) le filet passe au-dessus */
+/* columns separated by a rule; when stacked (< 1024 px) the rule moves above */
 .article { padding: 16px 32px; }
-/* chip catégorie des articles en bref (maquette .ftr-art-cat) : Geist Mono 500, 12 px, 24 px de haut */
+/* category chip of the article briefs (mockup .ftr-art-cat): Geist Mono 500, 12 px, 24 px tall */
 .article :global(.astryx-badge) {
   height: 24px;
   font-family: var(--font-family-mono);
@@ -73,9 +73,9 @@
   .article + .article { border-top: var(--border-width) solid rgba(255, 255, 255, 0.07); }
 }
 
-/* ---- colonnes ---- */
+/* ---- columns ---- */
 .cols { padding-block: 28px; }
-/* quatre colonnes ; deux par ligne sous 1024 px (la marque garde la première) */
+/* four columns; two per row below 1024 px (the brand keeps the first) */
 @media (max-width: 1023px) and (min-width: 768px) {
   .colsGrid > * { grid-column: span 6 !important; }
 }
@@ -134,7 +134,7 @@ a.contact:hover { color: #fff; }
   background: rgba(255, 255, 255, 0.03);
   transition: color var(--duration-medium) var(--ease-standard), border-color var(--duration-medium) var(--ease-standard), background-color var(--duration-medium) var(--ease-standard);
 }
-.social:hover { color: var(--color-highlight); border-color: var(--color-highlight); background: rgba(255, 255, 255, 0.06); } /* icône et cadre de la même couleur */
+.social:hover { color: var(--color-highlight); border-color: var(--color-highlight); background: rgba(255, 255, 255, 0.06); } /* icon and border in the same color */
 
 .colHead {
   font-size: 12px;
@@ -142,12 +142,12 @@ a.contact:hover { color: #fff; }
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.55);
-  font-family: var(--font-family-mono); /* maquette .ftr-col-head : Geist Mono 500 */
+  font-family: var(--font-family-mono); /* mockup .ftr-col-head: Geist Mono 500 */
 }
 .pile { list-style: none; margin: 0; padding: 0; }
 .pile li { display: flex; }
-/* lien de pile : flèche highlight repliée (largeur 0), dépliée au survol */
-/* min-height : le Link Astryx isStandalone réserve 38 px, trop pour une pile serrée */
+/* stack link: highlight arrow collapsed (width 0), expanded on hover */
+/* min-height: the Astryx isStandalone Link reserves 38 px, too much for a tight stack */
 .pileLink { display: inline-flex; align-items: center; white-space: nowrap; font-size: 14px; min-height: 0; line-height: 1.4; }
 .pileLink > span { display: inline-flex; align-items: center; min-height: 0; line-height: 1.4; }
 .pileLink svg {
@@ -161,7 +161,7 @@ a.contact:hover { color: #fff; }
 }
 .pileLink:hover svg { width: 14px; margin-inline-end: 8px; opacity: 1; }
 
-/* ---- barre basse ---- */
+/* ---- bottom bar ---- */
 .bottom {
   background: var(--color-night-deeper);
   border-top: var(--border-width) solid rgba(255, 255, 255, 0.07);

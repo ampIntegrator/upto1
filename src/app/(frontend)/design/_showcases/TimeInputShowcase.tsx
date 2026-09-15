@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/TimePicker */
+/* Orbita-styled showcase — replaces the original Astryx demo. Component: src/components/TimePicker */
 'use client';
 
 import {Grid} from '@astryxdesign/core/Grid';

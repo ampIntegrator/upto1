@@ -1,4 +1,4 @@
-/* Composant propre au design system : src/components/TestimonialCarousel (carrousel de témoignages, maquettes 07 et 07b). */
+/* Design-system-specific component: src/components/TestimonialCarousel (testimonial carousel, mockups 07 and 07b). */
 'use client';
 
 import {Heading} from '@astryxdesign/core/Heading';

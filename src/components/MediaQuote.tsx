@@ -1,16 +1,16 @@
 /**
- * MediaQuote — une image qui remplit sa colonne, avec une phrase centrée en X et en Y.
- * Composant de colonne : au moins 6 colonnes sur 12 (registre des emprises).
+ * MediaQuote — an image that fills its column, with a sentence centered on X and Y.
+ * Column component: at least 6 columns out of 12 (span registry).
  *
- *   text  : la phrase (texte simple)
- *   tag   : balise de la phrase, pour la sémantique et le référencement :
- *           h2 à h6, p ou span (défaut h2)
- *   size  : taille visuelle, indépendante de la balise, prise dans l'échelle du thème
- *           (valeurs paires) : display-1, display-2, display-3 (défaut), heading-1, heading-2
- *   + tout Media : image, minHeight, minHeightMobile, overlay, sizes
+ *   text  : the sentence (plain text)
+ *   tag   : tag of the sentence, for semantics and SEO:
+ *           h2 to h6, p or span (default h2)
+ *   size  : visual size, independent of the tag, taken from the theme scale
+ *           (even values): display-1, display-2, display-3 (default), heading-1, heading-2
+ *   + all Media props: image, minHeight, minHeightMobile, overlay, sizes
  *
- * Texte en couleurs claires via MediaTheme (mode sombre) : le calque règle la lisibilité
- * selon l'image.
+ * Text in light colors via MediaTheme (dark mode): the overlay sets legibility
+ * depending on the image.
  */
 import {Heading} from '@astryxdesign/core/Heading';
 import {Text} from '@astryxdesign/core/Text';

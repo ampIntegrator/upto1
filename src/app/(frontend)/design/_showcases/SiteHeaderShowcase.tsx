@@ -1,4 +1,4 @@
-/* Composant propre au design system : src/components/SiteHeader (en-tête du site, assemblage TopNav + bandeau + repli + tonalité). */
+/* Design-system-specific component: src/components/SiteHeader (site header, assembly of TopNav + banner + collapse + tone). */
 'use client';
 
 import {Heading} from '@astryxdesign/core/Heading';

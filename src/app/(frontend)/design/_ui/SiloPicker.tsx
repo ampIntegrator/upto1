@@ -1,7 +1,7 @@
 'use client';
 
-/* Sélecteur de silo de la barre latérale : un groupe de boutons radio, une pastille
-   rectangulaire par silo (4 puis 3), qui devient une pilule une fois choisie. Pas de menu. */
+/* Sidebar silo picker: a radio button group, one rectangular chip
+   per silo (4 then 3), which becomes a pill once selected. No menu. */
 import {Grid} from '@astryxdesign/core/Grid';
 import {VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';

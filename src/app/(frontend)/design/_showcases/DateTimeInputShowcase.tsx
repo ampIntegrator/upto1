@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/TimePicker (DateTimePicker) */
+/* Orbita-styled showcase — replaces the original Astryx demo. Component: src/components/TimePicker (DateTimePicker) */
 'use client';
 
 import type {ISODateTimeString} from '@astryxdesign/core/DateTimeInput';

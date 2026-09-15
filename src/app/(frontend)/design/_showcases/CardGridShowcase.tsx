@@ -1,4 +1,4 @@
-/* Composant propre au design system : src/components/CardGrid (grille de cartes, contenu générique). */
+/* Design-system-specific component: src/components/CardGrid (card grid, generic content). */
 'use client';
 
 import {Grid, GridSpan} from '@astryxdesign/core/Grid';

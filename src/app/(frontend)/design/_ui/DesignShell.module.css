@@ -1,5 +1,5 @@
-/* Titres de section de la barre latérale (Fondations / Composants) :
-   24 px, semi-gras, capitales, couleur du silo. */
+/* Sidebar section titles (Fondations / Composants):
+   24 px, semibold, uppercase, silo color. */
 .shell :global(.astryx-side-nav-section) > div:first-child,
 .shell :global(.astryx-side-nav-section) > div:first-child * {
   font-family: var(--font-family-heading) !important;
@@ -11,12 +11,12 @@
   line-height: 1.2 !important;
 }
 
-/* Titres de catégorie dans la liste des composants : même traitement que
-   Fondations / Composants, en 20 px */
+/* Category titles in the component list: same treatment as
+   Fondations / Composants, at 20 px */
 .groupLabel {
   display: block;
   margin: var(--spacing-5) 0 var(--spacing-1);
-  padding-inline: 0; /* aligné sur Fondations / Composants */
+  padding-inline: 0; /* aligned with Fondations / Composants */
   font-family: var(--font-family-heading);
   font-size: 20px;
   font-weight: var(--font-weight-semibold);

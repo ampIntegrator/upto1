@@ -1,13 +1,13 @@
 /**
- * PageSections — les sections d'une page, empilées sous le haut de page.
- * Chaque section : Section (fond, paddings) > Container > une seule Grid de 12 colonnes pour
- * toutes ses rangées (classe page-grid) > GridSpan par colonne, à sa largeur et sur la ligne
- * de sa rangée > contenus empilés. Une seule grille, pour que l'ordre mobile puisse mêler les
- * colonnes de plusieurs rangées : sous 768 px, toutes les colonnes de la section s'empilent
- * dans l'ordre --mobile-order et les colonnes vides disparaissent (styles.css). Écarts :
- * variables --section-gap-x, --section-gap-y et --section-gap-y-mobile, en pixels (réglage de
- * la section, sinon Réglages du site › Mise en page), lues par .section-grid (styles.css).
- * Une colonne qui contient une image s'étire à la hauteur de sa rangée (l'image la remplit).
+ * PageSections — the sections of a page, stacked under the page header.
+ * Each section: Section (background, paddings) > Container > a single 12-column Grid for
+ * all its rows (page-grid class) > one GridSpan per column, at its width and on the line
+ * of its row > stacked contents. A single grid, so the mobile order can mix the
+ * columns of several rows: below 768 px, all the section's columns stack
+ * in --mobile-order order and empty columns disappear (styles.css). Gaps:
+ * variables --section-gap-x, --section-gap-y and --section-gap-y-mobile, in pixels (section
+ * setting, otherwise Site settings › Layout), read by .section-grid (styles.css).
+ * A column containing an image stretches to its row's height (the image fills it).
  */
 import {Grid, GridSpan} from '@astryxdesign/core/Grid';
 import {VStack} from '@astryxdesign/core/Stack';

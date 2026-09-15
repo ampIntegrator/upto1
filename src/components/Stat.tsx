@@ -1,12 +1,12 @@
 /**
- * Stat — un chiffre clé : grand nombre Schibsted 800 couleur silo, préfixe et
- * suffixe en highlight-deep à 62 % du nombre (highlight en nuit), sous-libellé
- * facultatif en capitales espacées (maquettes 04-statsBar et 12-cardBlocks).
+ * Stat — a key figure: large Schibsted 800 number in silo color, prefix and
+ * suffix in highlight-deep at 62 % of the number (highlight in night), optional
+ * sub-label in spaced capitals (mockups 04-statsBar and 12-cardBlocks).
  *
- *   size  : 'bar' (40 px, barre de chiffres) | 'card' (clamp 40–52 px, carte nombre)
+ *   size  : 'bar' (40 px, figures bar) | 'card' (clamp 40–52 px, number card)
  *   align : 'start' | 'center'
  *
- * Utilisé seul dans une barre de chiffres, et par la carte nombre.
+ * Used alone in a figures bar, and by the number card.
  */
 import {VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
@@ -18,7 +18,7 @@ export type StatProps = {
   value: string;
   prefix?: string;
   suffix?: string;
-  /** sous-libellé (« Courtiers actifs ») */
+  /** sub-label (« Courtiers actifs ») */
   label?: string;
   size?: 'bar' | 'card';
   align?: 'start' | 'center';

@@ -1,4 +1,4 @@
-/* Composant propre au design system : src/components/Hero (haut de page, 3 dispositions / 5 maquettes). */
+/* Design-system-specific component: src/components/Hero (page top, 3 layouts / 5 mockups). */
 'use client';
 
 import {Heading} from '@astryxdesign/core/Heading';

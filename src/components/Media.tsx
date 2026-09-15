@@ -1,19 +1,19 @@
 /**
- * Media — une image qui remplit tout l'espace de son conteneur, recadrée au centre
- * (composant de colonne ; la vidéo viendra ensuite).
+ * Media — an image that fills all the space of its container, cropped at the center
+ * (column component; video will come later).
  *
- *   image           : source et texte alternatif (vide = image décorative)
- *   minHeight       : hauteur minimale sur desktop, en px ; absente, le média prend la
- *                     hauteur de son conteneur (dans une rangée, celle des contenus voisins)
- *   minHeightMobile : hauteur minimale sous 768 px (colonnes empilées) ; défaut : minHeight
- *   overlay         : calque noir entre 0 et 1 (0 par défaut, aucun calque)
- *   sizes           : largeur affichée selon l'écran, pour que le navigateur télécharge la
- *                     bonne taille (défaut : pleine largeur sur mobile, moitié au-delà)
- *   children        : contenu optionnel posé sur l'image, centré en X et en Y (MediaQuote)
+ *   image           : source and alt text (empty = decorative image)
+ *   minHeight       : minimum height on desktop, in px; if absent, the media takes the
+ *                     height of its container (in a row, that of the neighboring contents)
+ *   minHeightMobile : minimum height below 768 px (stacked columns); default: minHeight
+ *   overlay         : black overlay between 0 and 1 (0 by default, no overlay)
+ *   sizes           : displayed width per screen, so the browser downloads the
+ *                     right size (default: full width on mobile, half above)
+ *   children        : optional content placed over the image, centered on X and Y (MediaQuote)
  *
- * Image via next/image en mode fill : tailles adaptées à l'écran, chargement différé,
- * texte alternatif. Angles droits. Le conteneur doit avoir une hauteur (rangée étirée ou
- * hauteur minimale), sinon le média fait 0 px de haut.
+ * Image via next/image in fill mode: screen-adapted sizes, lazy loading,
+ * alt text. Square corners. The container must have a height (stretched row or
+ * minimum height), otherwise the media is 0 px tall.
  */
 import {VStack} from '@astryxdesign/core/Stack';
 import Image from 'next/image';
