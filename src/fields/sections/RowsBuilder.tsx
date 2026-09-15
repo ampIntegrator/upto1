@@ -27,10 +27,12 @@ import React, {useCallback, useMemo, useRef, useState} from 'react';
 
 import {validateRow, type ColumnSpan} from '@/components/content-specs';
 import {contentLabel} from './contentRef';
+import {EMPTY_SLUG} from './emptyBlock';
 import {hasMobileOrder, mobileSequence} from './mobileOrder';
 import {presetLabel, ROW_PRESETS, toSpan} from './presets';
 
-type CellSnapshot = {span: ColumnSpan; contents: string[]; mobileOrder: number | null};
+/** filled : la colonne a un vrai composant (une case vide ne compte pas) */
+type CellSnapshot = {span: ColumnSpan; contents: string[]; filled: boolean; mobileOrder: number | null};
 type RowSnapshot = {columns: CellSnapshot[]};
 
 const TILE_H = 40;
@@ -112,7 +114,7 @@ function PresetTiles({current, onReplace, onAdd}: {current: string; onReplace: (
 
 /** Une case de la rangée : largeur dans un coin, flèches pour la décaler, résumé des contenus, clic pour ouvrir le tiroir. */
 function Cell({cell, index, count, onOpen, onMove}: {cell: CellSnapshot; index: number; count: number; onOpen: () => void; onMove?: (to: number) => void}) {
-  const empty = cell.contents.length === 0;
+  const empty = !cell.filled;
   const arrow = (dir: -1 | 1, glyph: string, label: string) => (
     <button
       type="button"
@@ -169,7 +171,7 @@ function Cell({cell, index, count, onOpen, onMove}: {cell: CellSnapshot; index: 
       ) : null}
       <span style={{position: 'absolute', top: 4, right: 8, ...dim}}>{cell.span}/12</span>
       {empty ? (
-        <span style={{...dim, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Vide</span>
+        <span style={{...dim, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>{cell.contents.length ? 'Case vide' : 'Vide'}</span>
       ) : (
         cell.contents.map((label, k) => (
           <span key={k} style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
@@ -211,7 +213,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
       if (parts[1] !== 'columns') continue;
       const j = Number(parts[2]);
       if (!Number.isInteger(j)) continue;
-      out[i].columns[j] ??= {span: 12, contents: [], mobileOrder: null};
+      out[i].columns[j] ??= {span: 12, contents: [], filled: false, mobileOrder: null};
       if (parts[3] === 'span' && parts.length === 4) out[i].columns[j].span = toSpan(fields[key]?.value);
       if (parts[3] === 'mobileOrder' && parts.length === 4) {
         const v = fields[key]?.value;
@@ -219,10 +221,12 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
       }
       if (parts[3] === 'contents' && parts[5] === 'blockType' && parts.length === 6) {
         const k = Number(parts[4]);
-        out[i].columns[j].contents[k] = contentLabel({blockType: String(fields[key]?.value ?? '')});
+        const blockType = String(fields[key]?.value ?? '');
+        out[i].columns[j].contents[k] = contentLabel({blockType});
+        if (blockType && blockType !== EMPTY_SLUG) out[i].columns[j].filled = true;
       }
     }
-    return JSON.stringify(out.map((r) => ({columns: (r?.columns ?? []).map((c) => ({span: c?.span ?? 12, contents: (c?.contents ?? []).filter(Boolean), mobileOrder: c?.mobileOrder ?? null}))})));
+    return JSON.stringify(out.map((r) => ({columns: (r?.columns ?? []).map((c) => ({span: c?.span ?? 12, contents: (c?.contents ?? []).filter(Boolean), filled: Boolean(c?.filled), mobileOrder: c?.mobileOrder ?? null}))})));
   });
   const snapshot = useMemo<RowSnapshot[]>(() => JSON.parse(snapshotJson) as RowSnapshot[], [snapshotJson]);
 
@@ -283,7 +287,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
 
   /** colonnes de la section à plat, rangée par rangée, pour l'ordre mobile */
   const flatColumns = useMemo(
-    () => snapshot.flatMap((r, row) => r.columns.map((c, col) => ({row, col, span: c.span, contents: c.contents, mobileOrder: c.mobileOrder, empty: c.contents.length === 0}))),
+    () => snapshot.flatMap((r, row) => r.columns.map((c, col) => ({row, col, span: c.span, contents: c.contents, mobileOrder: c.mobileOrder, empty: !c.filled}))),
     [snapshot],
   );
   /** écrit l'ordre mobile de la section : position pour les colonnes listées, vide pour les autres */
@@ -458,7 +462,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
                       {empties.map((c) => (
                         <li key={`${c.row}-${c.col}`} className="rows-mobile__item" style={dim}>
                           <span style={{...text14, flex: 1}}>
-                            {where(c)} · vide, masquée sur mobile
+                            {where(c)} · {c.contents.length ? 'case vide' : 'vide'}, masquée sur mobile
                           </span>
                         </li>
                       ))}

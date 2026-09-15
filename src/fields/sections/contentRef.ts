@@ -1,6 +1,7 @@
 import {CONTENT_SPECS, type ContentRef} from '@/components/content-specs';
 
 import {CARD_VARIANTS} from './cardBlocks';
+import {EMPTY_SLUG} from './emptyBlock';
 
 /**
  * Passerelle entre les blocs Payload d'une colonne et le registre des emprises
@@ -28,6 +29,7 @@ export function toContentRefs(blocks: unknown): ContentRef[] {
 
 /** Libellé court d'un bloc, pour les libellés de rangée et de colonne. */
 export function contentLabel(block: ContentBlockData | null | undefined): string {
+  if (block?.blockType === EMPTY_SLUG) return 'Case vide';
   const variant = CARD_VARIANTS[block?.blockType ?? ''];
   if (variant) return variant.label;
   const ref = toContentRef(block);

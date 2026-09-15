@@ -8,6 +8,7 @@ import type {CardProps} from '@/components/Card';
 import type {SectionBackground, SectionTint} from '@/components/Section';
 import type {ColumnSpan} from '@/components/content-specs';
 import {CARD_VARIANTS} from '@/fields/sections/cardBlocks';
+import {EMPTY_SLUG} from '@/fields/sections/emptyBlock';
 import {type Gaps, sectionGaps, siteGaps} from '@/fields/sections/gaps';
 import {hasMobileOrder, mobileRanks} from '@/fields/sections/mobileOrder';
 import {toSpan} from '@/fields/sections/presets';
@@ -79,6 +80,8 @@ function toCard(b: CardBlockData): CardProps {
 }
 
 function toContent(block: ContentBlock): ContentData | null {
+  // case vide : aucun contenu, la colonne est traitée comme vide (masquée sur mobile)
+  if (block.blockType === EMPTY_SLUG) return null;
   if (block.blockType in CARD_VARIANTS) return {type: 'card', card: toCard(block as unknown as CardBlockData)};
   switch (block.blockType) {
     case 'text':
