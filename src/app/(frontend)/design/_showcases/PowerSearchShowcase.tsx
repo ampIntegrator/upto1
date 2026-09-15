@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — PowerSearch Astryx aux codes des champs Orbita (58 px, label flottant, jetons accent). */
+/* Orbita-styled showcase — Astryx PowerSearch following Orbita field conventions (58 px, floating label, accent tokens). */
 'use client';
 
 import {PowerSearch, type PowerSearchConfig, type PowerSearchFilter} from '@astryxdesign/core/PowerSearch';

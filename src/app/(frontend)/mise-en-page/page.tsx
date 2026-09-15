@@ -4,8 +4,8 @@ import {PageDemo} from './PageDemo';
 
 export const metadata = {title: 'Mise en page — plein écran · image (maquette 16)'};
 
-/** Page autonome, sans le catalogue : une pile de sections pleine largeur,
- *  assemblée uniquement avec les composants du design system. */
+/** Standalone page, without the catalog: a stack of full-width sections,
+ *  built only with design system components. */
 export default function Page() {
   return <PageDemo blocks="light" />;
 }

@@ -1,4 +1,4 @@
-/* Composant propre au design system : src/components/Stat (chiffre clé) + barre de chiffres (assemblage). */
+/* Design-system-specific component: src/components/Stat (key figure) + figures bar (assembly). */
 'use client';
 
 import {Grid} from '@astryxdesign/core/Grid';

@@ -1,15 +1,15 @@
-/* TestimonialCarousel — carrousel de témoignages (maquette 07). */
+/* TestimonialCarousel — testimonials carousel (mockup 07). */
 .root { width: 100%; }
-/* Le scroller Astryx enveloppe les cartes dans une piste dimensionnée par son contenu :
-   les largeurs se calculent donc en unités de conteneur (cqw) sur le scroller,  ; l'écart de 24 px
-   dépasse l'échelle de la prop gap (4 = 16 px), il est posé ici sur le scroller. Une carte par vue, deux dès 640 px, trois dès 1280 px. */
-/* le conteneur de requête a une taille intrinsèque nulle : le scroller (item flex) doit prendre toute la largeur */
-.root :global(.astryx-carousel-scroller) { container-type: inline-size; flex: 1 1 100%; width: 100%; min-width: 0; gap: 24px; align-items: stretch; } /* cartes à hauteur égale (Astryx centre) */
+/* The Astryx scroller wraps the cards in a track sized by its content:
+   widths are therefore computed in container units (cqw) on the scroller; the 24 px gap
+   exceeds the gap prop scale (4 = 16 px), so it is set here on the scroller. One card per view, two from 640 px, three from 1280 px. */
+/* the query container has zero intrinsic size: the scroller (flex item) must take the full width */
+.root :global(.astryx-carousel-scroller) { container-type: inline-size; flex: 1 1 100%; width: 100%; min-width: 0; gap: 24px; align-items: stretch; } /* equal-height cards (Astryx centers) */
 .slide { flex: 0 0 100cqw; min-width: 0; scroll-snap-align: start; }
 @media (min-width: 640px) { .slide { flex-basis: calc((100cqw - 24px) / 2); } }
 @media (min-width: 1280px) { .slide { flex-basis: calc((100cqw - 48px) / 3); } }
 @media (max-width: 639px) { .ui { display: none !important; } }
-/* segments de page : barres carrées, la page courante s'allonge en couleur silo */
+/* page segments: square bars, the current page lengthens in silo color */
 .seg {
   width: 34px;
   height: 4px;
@@ -22,7 +22,7 @@
 }
 .seg:hover { background: light-dark(var(--color-text-disabled), rgba(255, 255, 255, 0.4)); }
 .seg[aria-selected='true'] { width: 44px; background: light-dark(var(--color-accent), var(--color-highlight)); }
-/* flèches carrées de 46 px, cadre, silo au survol ; nuit : voile blanc, highlight au survol */
+/* 46 px square arrows, border, silo on hover; night: white veil, highlight on hover */
 .arrow {
   width: 46px;
   height: 46px;

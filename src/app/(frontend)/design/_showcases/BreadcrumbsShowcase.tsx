@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — thème : orbita.ts section NAVIGATION (fil d'Ariane, maquette 25) */
+/* Orbita-styled showcase — theme: orbita.ts NAVIGATION section (breadcrumb, mockup 25) */
 'use client';
 
 import {BreadcrumbItem, Breadcrumbs} from '@astryxdesign/core/Breadcrumbs';

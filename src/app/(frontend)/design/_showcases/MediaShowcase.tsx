@@ -1,4 +1,4 @@
-/* Composant propre au design system : src/components/Media (image qui remplit sa colonne). */
+/* Design-system-specific component: src/components/Media (image that fills its column). */
 'use client';
 
 import {Grid, GridSpan} from '@astryxdesign/core/Grid';

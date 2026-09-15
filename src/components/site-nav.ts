@@ -1,6 +1,6 @@
 /**
- * Données de l'en-tête du site — la forme que Payload remplira plus tard
- * (global « En-tête » : coordonnées, réseaux, navigation, actions).
+ * Site header data — the shape Payload will fill in later
+ * (« En-tête » global: contact details, social networks, navigation, actions).
  */
 import type {NucleoIconKey} from '@/theme/icons/nucleo';
 
@@ -20,7 +20,7 @@ export type SiteStrip = {
   phone?: {label: string; href: string};
   email?: {label: string; href: string};
   hours?: string;
-  /** adresse postale (pied de page) */
+  /** postal address (footer) */
   address?: string;
   socials?: Array<{label: string; href: string; iconKey: NucleoIconKey}>;
 };
@@ -38,18 +38,18 @@ export type SiteHeaderData = {
   languages?: string[];
 };
 
-/** Article en bref du pied de page (alimenté par la collection Articles). */
+/** Footer article brief (fed by the Articles collection). */
 export type SiteFooterArticle = {category: string; title: string; date: string; href: string};
 
 /**
- * Données du pied de page — global Payload « Pied de page ». Coordonnées et
- * réseaux viennent du global « Coordonnées et réseaux » (SiteStrip), pas d'ici.
+ * Footer data — Payload global « Pied de page ». Contact details and
+ * social networks come from the « Coordonnées et réseaux » global (SiteStrip), not from here.
  */
 export type SiteFooterData = {
   brand: {name: string; href: string; description?: string};
   newsletter?: {
     eyebrow: string;
-    /** titre saisi en textarea (retours à la ligne, <span> serif) : voir TitleText */
+    /** title entered in a textarea (line breaks, <span> serif): see TitleText */
     title: string;
     text?: string;
     fieldLabel: string;

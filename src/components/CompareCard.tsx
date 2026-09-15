@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * CompareCard — la carte comparative (maquette 05-compareCards) : chip et repère à
- * droite, citation, CheckList à filets (coches ou croix). `featured` : cadre silo de
- * 2 px et ombre teintée, repère en or éditorial. Deux cartes (avant / après) ou trois
- * (métiers) dans une Grid de page ; nuit via la Section. Composant à part entière plutôt
- * qu'un preset de Card : son anatomie (citation + liste, pas de titre ni de média) n'a
- * rien en commun avec les cartes éditoriales, et ses props restent lisibles.
+ * CompareCard — the compare card (mockup 05-compareCards): chip and marker on the
+ * right, quote, CheckList with dividers (checks or crosses). `featured`: 2 px silo
+ * frame and tinted shadow, marker in editorial gold. Two cards (before / after) or three
+ * (trades) in a page Grid; night via the Section. A standalone component rather
+ * than a Card preset: its anatomy (quote + list, no title or media) has
+ * nothing in common with editorial cards, and its props stay readable.
  */
 import {Blockquote} from '@astryxdesign/core/Blockquote';
 import {HStack, VStack} from '@astryxdesign/core/Stack';
@@ -19,11 +19,11 @@ import styles from './CompareCard.module.css';
 
 export type CompareCardProps = {
   chip: {label: string; tone?: ChipTone};
-  /** repère à droite du chip (« 3 semaines d'attente », « Closing +34 % ») */
+  /** marker to the right of the chip (« 3 semaines d'attente », « Closing +34 % ») */
   meta?: string;
   quote: string;
   items: CheckListItem[];
-  /** ton des pastilles : coche silo (défaut) ou croix danger */
+  /** dot tone: silo check (default) or danger cross */
   tone?: CheckTone;
   featured?: boolean;
 };

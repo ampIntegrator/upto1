@@ -1,5 +1,5 @@
-/* Contenus de démonstration des blocs étapes (03), comparatif (05) et témoignages (07) :
-   partagés par le catalogue et les pages de démonstration. */
+/* Demo content for the steps (03), comparison (05) and testimonials (07) blocks:
+   shared by the catalog and the demo pages. */
 import type {CompareCardProps} from '@/components/CompareCard';
 import type {PriceListPlan, PriceListSingle} from '@/components/PriceList';
 import type {ProcessStep} from '@/components/ProcessSteps';
@@ -28,7 +28,7 @@ export const TESTIMONIALS: Testimonial[] = [
   {quote: 'Le rapport validé par un expert rassure mes clients. Mon taux de transformation a tout simplement bondi.', name: 'Karim Z.', role: 'Mandataire · Lille', result: '+ 28 % de closing'},
 ];
 
-/* Tarifs (maquettes 08 et 09) */
+/* Pricing (mockups 08 and 09) */
 export const GUARANTEE = {title: 'Garantie 30 jours', text: 'Pas de mandat supplémentaire en 30 jours ? Remboursé. Sans questions.'};
 
 export const PRICE_SINGLE: PriceListSingle = {

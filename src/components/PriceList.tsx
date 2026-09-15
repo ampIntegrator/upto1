@@ -1,19 +1,19 @@
 'use client';
 
 /**
- * PriceList — la liste de prix (maquettes 08 et 09), un contenu comme Stat, en deux variantes :
+ * PriceList — the price list (mockups 08 and 09), a content item like Stat, in two variants:
  *
- *   variant="single"   un prix unique : carte en deux colonnes, détail de l'offre à gauche
- *                      (liste avec valeurs barrées, valeur totale), prix, bouton, mention et
- *                      garantie à droite sur fond atténué ; une colonne sous 1024 px, prix en
- *                      premier. 900 px maximum, centrée.
- *   variant="columns"  plusieurs paliers côte à côte (2 à 4) : nom, accroche, prix, liste
- *                      « Tout Solo, plus », bouton, mention, garantie ; le palier mis en avant
- *                      porte le chip « Populaire », un cadre silo et le bouton split.
+ *   variant="single"   a single price: two-column card, offer details on the left
+ *                      (list with struck-through values, total value), price, button, note and
+ *                      guarantee on the right on a muted background; one column below 1024 px, price
+ *                      first. 900 px max, centered.
+ *   variant="columns"  several tiers side by side (2 to 4): name, tagline, price, list
+ *                      « Tout Solo, plus », button, note, guarantee; the featured tier
+ *                      carries the « Populaire » chip, a silo border and the split button.
  *
- * Le prix lui-même (montant Schibsted 800 silo, devise, période) et l'encadré de garantie
- * (Callout) sont les briques internes. L'en-tête de section vient du bloc, pas d'ici.
- * Nuit via la Section (fond « nuit à faisceau » pour la maquette 09).
+ * The price itself (Schibsted 800 silo amount, currency, period) and the guarantee box
+ * (Callout) are the internal building blocks. The section header comes from the block, not from here.
+ * Night via the Section (« nuit à faisceau » background for mockup 09).
  */
 import {Grid, GridSpan} from '@astryxdesign/core/Grid';
 import React from 'react';

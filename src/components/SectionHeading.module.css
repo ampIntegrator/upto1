@@ -1,5 +1,5 @@
-/* SectionHeading — en-tête de section (maquette 15). */
+/* SectionHeading — section header (mockup 15). */
 .root { width: 100%; max-width: 820px; }
 .root[data-align='center'] { margin-inline: auto; text-align: center; }
 .title { margin: 0; text-wrap: balance; }
-.text { max-width: 640px; font-weight: var(--font-weight-normal); } /* chapô en regular (le type large est en 600) */
+.text { max-width: 640px; font-weight: var(--font-weight-normal); } /* lead in regular (the large type is 600) */

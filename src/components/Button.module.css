@@ -1,17 +1,17 @@
 /*
- * Button — signature split-button (maquette orbita.css .c-btn-split).
- * Le Button Astryx porte le fond, la taille et la variante (thème) ; ce module
- * ajoute la cellule flèche pleine hauteur, le cadre intérieur et le rebond.
- * Valeurs de mouvement : tokens Astryx (durée medium, courbe standard).
+ * Button — signature split-button (mockup orbita.css .c-btn-split).
+ * The Astryx Button carries the background, size and variant (theme); this module
+ * adds the full-height arrow cell, the inner frame and the bounce.
+ * Motion values: Astryx tokens (medium duration, standard easing).
  */
 .arrow {
-  /* réserve la cellule à droite : padding de taille (thème) + largeur cellule */
+  /* reserves the cell on the right: size padding (theme) + cell width */
   --orbita-arrow-w: 54px;
   padding-inline-end: calc(var(--orbita-arrow-w) + var(--spacing-6)) !important;
 }
 .arrow[data-size='lg'] { --orbita-arrow-w: 60px; padding-inline-end: calc(var(--orbita-arrow-w) + var(--spacing-8)) !important; }
 
-/* cadre intérieur : s'étend jusqu'aux bords et disparaît au survol */
+/* inner frame: expands to the edges and disappears on hover */
 .arrow::before {
   content: '';
   position: absolute;
@@ -26,11 +26,11 @@
 .arrow[data-variant='ghost']::before { --orbita-frame: rgba(0, 0, 0, 0.2); }
 .arrow[data-variant='secondary']::before { --orbita-frame: rgba(0, 0, 0, 0.12); }
 
-/* le conteneur Astryx du contenu de fin sort du flux : il ne doit ni prendre
-   de largeur ni déclencher le gap, sinon le libellé n'est plus centré */
+/* the Astryx end-content container leaves the flow: it must neither take
+   width nor trigger the gap, otherwise the label is no longer centered */
 .arrow :has(.cell) { display: contents; }
 
-/* cellule flèche : pleine hauteur, filet à gauche */
+/* arrow cell: full height, divider on the left */
 .cell {
   position: absolute;
   inset-block: 0;
@@ -62,21 +62,21 @@
   .arrow:hover .cell svg { transform: none; }
 }
 
-/* mode bloc : pleine largeur, libellé à gauche, flèche collée au bord droit */
+/* block mode: full width, label on the left, arrow against the right edge */
 .block { display: flex !important; width: 100%; justify-content: flex-start !important; }
 
-/* icône à gauche : les tracés Nucleo laissent 2,5 px de marge dans leur boîte ;
-   en lg la boîte n'est plus rognée par le conteneur, on compense pour garder
-   un padding optique égal des deux côtés et un écart = padding / 2 */
+/* leading icon: Nucleo paths leave a 2.5 px margin inside their box;
+   in lg the box is no longer clipped by the container, so we compensate to keep
+   equal optical padding on both sides and a gap = padding / 2 */
 .withIcon[data-size='lg'] {
   padding-inline-start: calc(var(--spacing-8) - 2px) !important;
   gap: calc(var(--spacing-4) - 2px) !important;
 }
 
-/* secondary : fond neutre Astryx, mais libellé et icône portent le silo.
-   Libellé : dégradé accent → encre, inversé au survol (glissement).
-   Icône  : dégradé inverse encre → accent, inversé au survol (stops SVG).
-   Appliqué au libellé (span) et aux tracés SVG, jamais au bouton entier. */
+/* secondary: neutral Astryx background, but label and icon carry the silo.
+   Label: accent → ink gradient, reversed on hover (slide).
+   Icon : reverse ink → accent gradient, reversed on hover (SVG stops).
+   Applied to the label (span) and SVG paths, never to the whole button. */
 .secondaryLabel {
   background-image: linear-gradient(
     90deg,

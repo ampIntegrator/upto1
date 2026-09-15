@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * TestimonialCarousel — le carrousel de témoignages (maquette 07) : Carousel Astryx
- * (défilement natif, snap, poignée) sans ses boutons ni son fondu de bord ; en dessous,
- * les contrôles de la maquette : segments de page à gauche, flèches carrées à droite
- * (masqués sous 640 px, où l'on balaie). 1, 2 ou 3 cartes par vue selon la largeur
- * (640, 1280) ; les segments comptent les pages, pas les cartes. Clair ou nuit via la
- * Section (night-halo pour la maquette 07b).
+ * TestimonialCarousel — the testimonials carousel (mockup 07): Astryx Carousel
+ * (native scrolling, snap, drag) without its buttons or edge fade; below it,
+ * the mockup's controls: page segments on the left, square arrows on the right
+ * (hidden below 640 px, where you swipe). 1, 2 or 3 cards per view depending on width
+ * (640, 1280); the segments count pages, not cards. Light or night via the
+ * Section (night-halo for mockup 07b).
  */
 import {Carousel, type CarouselHandle} from '@astryxdesign/core/Carousel';
 import {IconButton} from '@astryxdesign/core/IconButton';
@@ -21,7 +21,7 @@ import styles from './TestimonialCarousel.module.css';
 
 export type TestimonialCarouselProps = {
   items: Testimonial[];
-  /** libellé accessible de la région */
+  /** accessible label of the region */
   label?: string;
 };
 
@@ -39,7 +39,7 @@ export function TestimonialCarousel({items, label = 'Témoignages'}: Testimonial
   const [page, setPage] = useState(0);
   const pages = Math.max(1, Math.ceil(items.length / perView));
 
-  // cartes par vue : suit les points de rupture
+  // cards per view: follows the breakpoints
   useEffect(() => {
     const queries = [window.matchMedia('(min-width: 1280px)'), window.matchMedia('(min-width: 640px)')];
     const update = () => setPerView(perViewNow());
@@ -48,7 +48,7 @@ export function TestimonialCarousel({items, label = 'Témoignages'}: Testimonial
     return () => queries.forEach((q) => q.removeEventListener('change', update));
   }, []);
 
-  // page active : lue sur le défilement de la piste (la première carte de chaque page)
+  // active page: read from the track's scroll position (the first card of each page)
   useEffect(() => {
     const el = root.current;
     if (!el) return;

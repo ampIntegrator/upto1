@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * ProcessSteps — le panneau d'étapes (maquette 03-process) : 2 à 4 étapes côte à côte
- * dans un cadre papier ombré, séparées par le dégradé signature (vertical ; horizontal
- * quand les étapes s'empilent, sous 1024 px). Une étape = numéro serif droit, chip de
- * durée avec horloge, titre, texte, filet, CheckList. Le nombre de colonnes suit le
- * nombre d'étapes reçues (Payload : 2, 3 ou 4 lignes de tableau). L'en-tête de section
- * et le pied « note + bouton » sont posés autour par le bloc (SectionHeading, SectionNote).
+ * ProcessSteps — the steps panel (mockup 03-process): 2 to 4 steps side by side
+ * in a shadowed paper frame, separated by the signature gradient (vertical; horizontal
+ * when the steps stack, below 1024 px). A step = upright serif number, duration chip
+ * with clock, title, text, rule, CheckList. The number of columns follows the
+ * number of steps received (Payload: 2, 3 or 4 array rows). The section header
+ * and the « note + bouton » footer are placed around it by the block (SectionHeading, SectionNote).
  */
 import {Divider} from '@astryxdesign/core/Divider';
 import {Heading} from '@astryxdesign/core/Heading';
@@ -21,10 +21,10 @@ import styles from './ProcessSteps.module.css';
 export type ProcessStep = {
   title: string;
   text: string;
-  /** durée affichée dans le chip (« 5 min », « 48 h ») */
+  /** duration shown in the chip (« 5 min », « 48 h ») */
   duration?: string;
   checks?: string[];
-  /** astérisque silo après le titre (renvoi vers la note du pied) */
+  /** silo asterisk after the title (reference to the footer note) */
   asterisk?: boolean;
 };
 

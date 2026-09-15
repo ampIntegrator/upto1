@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — Switch Astryx, apparence par le thème (maquette 17-forms .switch) */
+/* Orbita-styled showcase — Astryx Switch, appearance via the theme (mockup 17-forms .switch) */
 'use client';
 
 import {Card} from '@astryxdesign/core/Card';

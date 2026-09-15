@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — thème : orbita.ts section NAVIGATION (tiroir mobile) */
+/* Orbita-styled showcase — theme: orbita.ts NAVIGATION section (mobile drawer) */
 'use client';
 
 import {IconButton} from '@astryxdesign/core/IconButton';

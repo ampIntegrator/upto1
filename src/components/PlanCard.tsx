@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * (brique interne de PriceList, pas au catalogue)
- * PlanCard — la carte de palier (maquettes 08 et 09 « Trois volumes ») : tête sur fond
- * atténué (nom, accroche, Price), corps (eyebrow « Tout Solo, plus » + CheckList dense),
- * pied sur fond atténué (bouton pleine largeur, mention, Callout garantie). `featured` :
- * cadre silo, ombre teintée, chip « Populaire » à cheval sur le bord haut, bouton split.
- * Hauteur égale dans une Grid de page ; nuit via la Section.
+ * (internal building block of PriceList, not in the catalog)
+ * PlanCard — the tier card (mockups 08 and 09 « Trois volumes »): head on a muted
+ * background (name, tagline, Price), body (eyebrow « Tout Solo, plus » + dense CheckList),
+ * foot on a muted background (full-width button, note, guarantee Callout). `featured`:
+ * silo border, tinted shadow, « Populaire » chip straddling the top edge, split button.
+ * Equal height in a page Grid; night via the Section.
  */
 import {HStack, VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
@@ -25,14 +25,14 @@ export type PlanCardProps = {
   price: {value: string; currency?: string; period?: string};
   cta: {label: string; href: string};
   featured?: boolean;
-  /** étiquette de la carte mise en avant (« Populaire ») */
+  /** label of the featured card (« Populaire ») */
   badge?: string;
-  /** nom du palier précédent : « Tout Solo, plus » ; sinon « Ce que vous obtenez » */
+  /** name of the previous tier: « Tout Solo, plus »; otherwise « Ce que vous obtenez » */
   inherits?: string;
-  /** titre de la liste quand rien n'est hérité */
+  /** list title when nothing is inherited */
   featuresLabel?: string;
   features: CheckListItem[];
-  /** sous le bouton (« Sans CB · Sans engagement ») */
+  /** below the button (« Sans CB · Sans engagement ») */
   mention?: string;
   guarantee?: Pick<CalloutProps, 'title' | 'text'>;
 };

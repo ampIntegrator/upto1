@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — RadioList Astryx, apparence par le thème (maquette 17-forms .opt.radio) */
+/* Orbita-styled showcase — Astryx RadioList, appearance via the theme (mockup 17-forms .opt.radio) */
 'use client';
 
 import {Card} from '@astryxdesign/core/Card';

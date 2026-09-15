@@ -1,6 +1,6 @@
 /*
- * Section — bloc pleine largeur : arrière-plan + padding vertical.
- * Le contenu (Container, Grid) passe au-dessus des couches média et overlay.
+ * Section — full-width block: background + vertical padding.
+ * The content (Container, Grid) sits above the media and overlay layers.
  */
 .section {
   position: relative;
@@ -11,9 +11,9 @@
 }
 .content { position: relative; z-index: 2; width: 100%; }
 
-/* ---- padding vertical : l'échelle (data-spacing, deux bords) ou une valeur par bord en
-   pixels posée en variable inline (--section-pad-top / --section-pad-bottom, sections
-   administrées). Sous 640 px, tout est divisé par deux. ---- */
+/* ---- vertical padding: the scale (data-spacing, both edges) or one value per edge in
+   pixels set as an inline variable (--section-pad-top / --section-pad-bottom, admin-managed
+   sections). Below 640 px, everything is halved. ---- */
 .section {
   --section-pad-top: var(--section-pad);
   --section-pad-bottom: var(--section-pad);
@@ -29,25 +29,25 @@
 .section[data-spacing='md'] { --section-pad: 96px; }
 .section[data-spacing='lg'] { --section-pad: 128px; }
 
-/* ---- sous l'en-tête fixe : on réserve sa hauteur (variable globale --site-header-height,
-   qui perd le bandeau sous 1280 px) ---- */
+/* ---- under the fixed header: reserve its height (global variable --site-header-height,
+   which loses the strip below 1280 px) ---- */
 .section[data-under-header] { padding-top: calc(var(--section-pad-top) * var(--section-pad-scale) + var(--site-header-height)); }
 
-/* ---- papier (blanc / carte nuit) ---- */
+/* ---- paper (white / night card) ---- */
 .section[data-background='paper'] { background-color: var(--color-background-surface); }
 
-/* ---- couleur du fond clair : highlight clair du silo (5 %), compose avec les textures ---- */
+/* ---- light background color: light silo highlight (5 %), combines with textures ---- */
 .section[data-tint='highlight'] { background-color: var(--color-highlight-light); }
 
-/* ---- contenu centré verticalement (hero texte 02, hauts de page) ---- */
+/* ---- vertically centered content (text hero 02, page headers) ---- */
 .section[data-centered] { justify-content: center; }
 
-/* ---- clair à lueur (maquette 25 B) : halo highlight discret en haut ---- */
+/* ---- light with glow (mockup 25 B): subtle highlight halo at the top ---- */
 .section[data-background='glow'] {
   background-image: radial-gradient(90% 120% at 50% 0%, color-mix(in srgb, var(--color-highlight) 11%, transparent), transparent 56%);
 }
 
-/* ---- nuit à faisceau (maquette 09 .c-darkbg) : nuit + bande silo horizontale au centre, bords assombris ---- */
+/* ---- night with beam (mockup 09 .c-darkbg): night + horizontal silo band in the center, darkened edges ---- */
 .section[data-background='night-beam'] {
   background-color: var(--color-night);
   background-image:
@@ -55,7 +55,7 @@
     linear-gradient(90deg, rgba(0, 0, 0, 0.36) 0%, transparent 24%, transparent 76%, rgba(0, 0, 0, 0.36) 100%);
 }
 
-/* ---- nuit à halos (maquette 25 C) : nuit + halo silo en haut, halo or en bas à droite ---- */
+/* ---- night with halos (mockup 25 C): night + silo halo at the top, gold halo bottom right ---- */
 .section[data-background='night-halo'] {
   background-color: var(--color-night);
   background-image:
@@ -63,16 +63,16 @@
     radial-gradient(70% 120% at 100% 120%, color-mix(in srgb, var(--color-editorial) 16%, transparent), transparent 55%);
 }
 
-/* ---- filets haut et bas (barre de chiffres) ---- */
+/* ---- top and bottom rules (figures bar) ---- */
 .section[data-dividers] {
   border-block: var(--border-width) solid var(--color-border);
 }
-/* deux sections à filets qui se suivent : un seul filet entre elles */
+/* two consecutive sections with rules: a single rule between them */
 .section[data-dividers] + .section[data-dividers] { border-top: 0; }
 
-/* ---- textures (00-fondations §4 : filets discrets, clair seulement) ----
-   Décalées d'une demi-cellule : sans cela, le premier filet tombe sur le bord de
-   la section et double le filet de la section voisine (2 px au lieu de 1). */
+/* ---- textures (00-fondations §4: subtle rules, light only) ----
+   Offset by half a cell: otherwise the first rule falls on the edge of
+   the section and doubles the neighboring section's rule (2 px instead of 1). */
 .section[data-background='grid'] {
   background-image:
     linear-gradient(var(--color-border) 1px, transparent 1px),
@@ -80,7 +80,7 @@
   background-size: 48px 48px;
   background-position: 24px 24px;
 }
-/* blueprint (maquette 08 .c-blueprint) : filets en silo atténué, 48 px */
+/* blueprint (mockup 08 .c-blueprint): muted silo rules, 48 px */
 .section[data-background='blueprint'] {
   background-image:
     linear-gradient(var(--color-accent-muted) 1px, transparent 1px),
@@ -97,11 +97,11 @@
   background-image:
     repeating-linear-gradient(45deg, var(--color-border) 0 1px, transparent 1px 32px),
     repeating-linear-gradient(-45deg, var(--color-border) 0 1px, transparent 1px 32px);
-  /* pas de décalage ici : les lignes sont obliques (aucun filet collé au bord) et un
-     décalage d'un dégradé répété crée une couture visible en haut de la section */
+  /* no offset here: the lines are diagonal (no rule touching the edge) and
+     offsetting a repeating gradient creates a visible seam at the top of the section */
 }
 
-/* ---- nuit (orbita.css .c-darkbg : nuit + lueur silo centrale + bords assombris) ---- */
+/* ---- night (orbita.css .c-darkbg: night + central silo glow + darkened edges) ---- */
 .section[data-background='night'] {
   background-color: var(--color-night);
   background-image:
@@ -109,7 +109,7 @@
     linear-gradient(90deg, rgba(0, 0, 0, 0.36) 0%, transparent 24%, transparent 76%, rgba(0, 0, 0, 0.36) 100%);
 }
 
-/* ---- image / vidéo (maquette 13) ---- */
+/* ---- image / video (mockup 13) ---- */
 .section[data-background='image'],
 .section[data-background='video'] {
   justify-content: center;
@@ -124,7 +124,7 @@
   object-fit: cover;
   object-position: center;
 }
-/* calque noir administrable (opacité en style inline), sur le média, sous le contenu */
+/* admin-managed black layer (opacity as inline style), over the media, under the content */
 .overlay {
   position: absolute;
   inset: 0;
@@ -132,7 +132,7 @@
   pointer-events: none;
   background: rgb(0, 0, 0);
 }
-/* liseré en pied : silo aux bords, highlight au centre */
+/* bottom edge line: silo at the edges, highlight in the center */
 .section[data-edge]::after {
   content: '';
   position: absolute;

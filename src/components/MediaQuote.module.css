@@ -1,7 +1,7 @@
 /*
- * MediaQuote — phrase centrée sur l'image. La taille visuelle (data-size) est indépendante
- * de la balise : mêmes variables que les styles display et titres du thème. Sélecteur
- * renforcé (balise + classe + attribut) pour primer sur le style propre de Heading et Text.
+ * MediaQuote — sentence centered over the image. The visual size (data-size) is independent
+ * of the tag: same variables as the theme's display and heading styles. Strengthened
+ * selector (tag + class + attribute) to take precedence over Heading and Text's own styles.
  */
 :is(h2, h3, h4, h5, h6, p, span).quote {
   margin: 0;

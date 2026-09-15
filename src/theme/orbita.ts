@@ -1,34 +1,34 @@
 /**
- * Orbita × Astryx — fabrique de thème.
+ * Orbita × Astryx — theme factory.
  *
- * Un seul socle (typo, rayons, mouvement, neutres, or éditorial) décliné en
- * silos d'accent. Chaque silo est un thème Astryx complet, compilé par
- * `pnpm theme:build` (voir src/theme/silos/*.ts).
+ * A single foundation (type, radii, motion, neutrals, editorial gold) declined into
+ * accent silos. Each silo is a complete Astryx theme, compiled by
+ * `pnpm theme:build` (see src/theme/silos/*.ts).
  *
- * Valeurs source : Orbita/orbita/orbita.css (tokens :root + [data-theme]).
+ * Source values: Orbita/orbita/orbita.css (tokens :root + [data-theme]).
  */
 import {defineTheme, type TokenName, type TokenValue} from '@astryxdesign/core/theme';
 
 export type OrbitaSilo = {
-  /** Suffixe du nom de thème : `orbita-<slug>` */
+  /** Theme name suffix: `orbita-<slug>` */
   slug: string;
-  /** Fond clair teinté par l'accent */
+  /** Light background tinted by the accent */
   bg: string;
-  /** Fond clair, second niveau */
+  /** Light background, second level */
   bg2: string;
-  /** Couleur primaire (accent) */
+  /** Primary color (accent) */
   primary: string;
-  /** Primaire foncé (hover / pressed) */
+  /** Dark primary (hover / pressed) */
   primaryDeep: string;
-  /** Couleur secondaire / signal */
+  /** Secondary / signal color */
   highlight: string;
-  /** Highlight foncé (texte sur fond clair) */
+  /** Dark highlight (text on light background) */
   highlightDeep: string;
-  /** Fond sombre du silo (sections « nuit ») */
+  /** Silo dark background (« night » sections) */
   night: string;
 };
 
-/* ---- constantes partagées, jamais teintées par l'accent ---- */
+/* ---- shared constants, never tinted by the accent ---- */
 const PAPER = '#FFFFFF';
 const INK = '#0C1424';
 const INK_2 = '#3A4456';
@@ -40,21 +40,21 @@ const EDITORIAL_DEEP = '#A37B1F';
 const DANGER = '#D0342C';
 const OK = '#1F8A5B';
 
-/* ---- polices : chargées par next/font (src/app/(frontend)/fonts.ts),
-   exposées en variables CSS ; Astryx ne charge jamais de police lui-même ---- */
+/* ---- fonts: loaded by next/font (src/app/(frontend)/fonts.ts),
+   exposed as CSS variables; Astryx never loads a font itself ---- */
 const FONT_BODY = 'var(--font-geist), system-ui, sans-serif';
 const FONT_HEADING = 'var(--font-schibsted), system-ui, sans-serif';
 const FONT_SERIF = 'var(--font-cormorant), Georgia, serif';
 const FONT_MONO = 'var(--font-geist-mono), "SF Mono", ui-monospace, Menlo, monospace';
-const FONT_CODE = FONT_MONO; // une seule mono : Geist Mono (repères type tag, code)
+const FONT_CODE = FONT_MONO; // a single mono: Geist Mono (tag-type markers, code)
 
-/** Teinte dérivée : mélange en sRGB, résolu par le navigateur (tokens seulement). */
+/** Derived tint: sRGB mix, resolved by the browser (tokens only). */
 const mix = (a: string, b: string, pctA: number) =>
   `color-mix(in srgb, ${a} ${pctA}%, ${b})`;
 
 /**
- * Même mélange, calculé ici en hex : obligatoire pour `color.accent`, dont le
- * générateur HCT d'Astryx a besoin d'une couleur littérale.
+ * Same mix, computed here in hex: required for `color.accent`, whose
+ * Astryx HCT generator needs a literal color.
  */
 function mixHex(a: string, b: string, pctA: number): string {
   const pa = parseInt(a.slice(1), 16);
@@ -66,17 +66,17 @@ function mixHex(a: string, b: string, pctA: number): string {
 }
 
 /**
- * Tokens hors nomenclature Astryx (highlight, or éditorial, nuit, serif).
- * Le compilateur de thème les accepte et les émet tels quels ; seul le typage
- * de `tokens` les refuse, d'où le cast explicite ici et nulle part ailleurs.
+ * Tokens outside the Astryx naming scheme (highlight, editorial gold, night, serif).
+ * The theme compiler accepts them and emits them as is; only the typing
+ * of `tokens` rejects them, hence the explicit cast here and nowhere else.
  */
 function orbitaOnlyTokens(silo: OrbitaSilo) {
   const {primary, primaryDeep, highlight, highlightDeep, night} = silo;
   return {
     '--font-family-serif': FONT_SERIF,
-    '--font-family-mono': FONT_MONO, // Geist Mono : repères type tag et code
-    // épaisseur de trait des icônes Nucleo (grille 18), appliquée en CSS sans
-    // toucher aux SVG : voir styles.css [data-icon="nucleo"]
+    '--font-family-mono': FONT_MONO, // Geist Mono: tag-type markers and code
+    // Nucleo icon stroke width (18 grid), applied in CSS without
+    // touching the SVGs: see styles.css [data-icon="nucleo"]
     '--icon-stroke-width': '1.25',
     '--color-highlight': [highlight, highlight],
     '--color-highlight-deep': [highlightDeep, highlight],
@@ -84,13 +84,13 @@ function orbitaOnlyTokens(silo: OrbitaSilo) {
     '--color-editorial': [EDITORIAL, EDITORIAL],
     '--color-editorial-deep': [EDITORIAL_DEEP, EDITORIAL],
     '--color-night': [night, night],
-    // nuit assombrie du pied de page (maquette 21 : night 68 % + noir) et sa barre basse (40 %)
+    // darkened night for the footer (mockup 21: night 68 % + black) and its bottom bar (40 %)
     '--color-night-deep': [mix(night, '#000000', 68), mix(night, '#000000', 68)],
     '--color-night-deeper': [mix(night, '#000000', 40), mix(night, '#000000', 40)],
-    // fond « light » : couleur du silo à 5 % (translucide, comme les listes cochées),
-    // pour des surfaces à peine teintées (ex. panneau d'onglet) ; nuit : voile blanc 3 %
+    // « light » background: silo color at 5 % (translucent, like checked lists),
+    // for barely tinted surfaces (e.g. tab panel); night: 3 % white veil
     '--color-background-light': [mix(primary, 'transparent', 5), 'rgba(255,255,255,.03)'],
-    // même principe avec le highlight du silo à 5 % (panneau d'onglet, retenu le 10 sept.)
+    // same principle with the silo highlight at 5 % (tab panel, chosen on Sept 10)
     '--color-highlight-light': [mix(highlight, 'transparent', 5), mix(highlight, 'transparent', 5)],
     '--color-accent-deep': [primaryDeep, primary],
   } as unknown as Partial<Record<TokenName, TokenValue>>;
@@ -99,7 +99,7 @@ function orbitaOnlyTokens(silo: OrbitaSilo) {
 export function defineOrbitaSilo(silo: OrbitaSilo) {
   const {bg, bg2, primary, night} = silo;
 
-  // Accent éclairci pour rester lisible sur le fond nuit.
+  // Lightened accent to stay readable on the night background.
   const primaryOnNight = mixHex(primary, '#FFFFFF', 68);
   const nightCard = mix(night, '#000000', 82);
   const nightPopover = mix(night, '#FFFFFF', 88);
@@ -107,8 +107,8 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
   return defineTheme({
     name: `orbita-${silo.slug}`,
 
-    // L'accent reste identique en nuit (Orbita : un bouton sur section nuit garde
-    // son fond primaire) ; seuls texte et icônes accent s'éclaircissent.
+    // The accent stays the same in night (Orbita: a button on a night section keeps
+    // its primary background); only accent text and icons get lighter.
     color: {accent: primary, neutralStyle: 'cool', contrast: 'standard'},
 
     typography: {
@@ -123,22 +123,22 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
       code: {family: 'Geist Mono', fallbacks: '"SF Mono", ui-monospace, Menlo, monospace'},
     },
 
-    // Signature Orbita : angles vifs partout.
+    // Orbita signature: sharp corners everywhere.
     radius: {base: 0, multiplier: 0},
 
-    // Orbita : une seule vitesse (.25s) et une seule courbe (ease-in-out).
+    // Orbita: a single speed (.25s) and a single curve (ease-in-out).
     motion: {fast: 200, medium: 250, slow: 500, ratio: 0.75, easing: 'ease-in-out'},
 
     tokens: {
-      /* — polices (variables next/font) — */
+      /* — fonts (next/font variables) — */
       '--font-family-body': FONT_BODY,
       '--font-family-heading': FONT_HEADING,
       '--font-family-code': FONT_CODE,
-      /* — tailles de texte : jamais sous 14 px (règle du 10 sept.) : les crans xs et sm
-         d'Astryx (10 et 13 px) sont remontés à 14 px — */
+      /* — text sizes: never below 14 px (Sept 10 rule): Astryx's xs and sm
+         steps (10 and 13 px) are raised to 14 px — */
       '--font-size-xs': '0.875rem',
       '--font-size-sm': '0.875rem',
-      /* — mouvement : survols des liens et boutons en 0,25 s, courbe douce — */
+      /* — motion: link and button hovers in 0.25 s, smooth curve — */
       '--duration-medium': '250ms',
       '--ease-standard': 'cubic-bezier(0.4, 0, 0.2, 1)',
 
@@ -150,10 +150,10 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
       '--color-background-muted': [bg2, 'rgba(255,255,255,.06)'],
       '--color-background-inverted': [night, PAPER],
 
-      /* — accent : forcé identique en nuit (le générateur l'éclaircirait) — */
+      /* — accent: forced identical in night (the generator would lighten it) — */
       '--color-accent': [primary, primary],
 
-      /* — texte & icônes — */
+      /* — text & icons — */
       '--color-text-accent': [primary, primaryOnNight],
       '--color-icon-accent': [primary, primaryOnNight],
       '--color-on-accent': [PAPER, PAPER],
@@ -164,18 +164,18 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
       '--color-icon-secondary': [INK_2, 'rgba(255,255,255,.72)'],
       '--color-icon-disabled': [INK_3, 'rgba(255,255,255,.4)'],
 
-      /* — hauteurs de contrôle (boutons, champs, sélecteurs) : Orbita 36 / 48 / 56 — */
+      /* — control heights (buttons, fields, selects): Orbita 36 / 48 / 56 — */
       '--size-element-sm': '36px',
       '--size-element-md': '48px',
       '--size-element-lg': '56px',
 
-      /* — filets — */
+      /* — rules — */
       '--color-border': [LINE, 'rgba(255,255,255,.14)'],
       '--color-border-emphasized': [LINE_2, 'rgba(255,255,255,.3)'],
       '--color-track': [LINE_2, 'rgba(255,255,255,.2)'],
       '--color-skeleton': [LINE, 'rgba(255,255,255,.12)'],
 
-      /* — états — */
+      /* — statuses — */
       '--color-error': [DANGER, '#F0655D'],
       '--color-error-muted': ['rgba(208,52,44,.10)', 'rgba(240,101,93,.18)'],
       '--color-success': [OK, '#3FB57F'],
@@ -183,13 +183,13 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
       '--color-warning': [EDITORIAL, '#E0B04A'],
       '--color-warning-muted': ['rgba(199,151,46,.12)', 'rgba(224,176,74,.18)'],
 
-      /* — voile des dialogues (::backdrop Astryx lit --color-overlay) — */
+      /* — dialog overlay (Astryx ::backdrop reads --color-overlay) — */
       '--color-overlay': [
         `color-mix(in srgb, ${primary} 26%, rgba(28,38,68,.4))`,
         `color-mix(in srgb, ${night} 58%, rgba(7,9,26,.6))`,
       ],
 
-      /* — ombre & focus — */
+      /* — shadow & focus — */
       '--color-shadow': ['rgba(12,20,40,.07)', 'rgba(0,0,0,.4)'],
       '--shadow-low': '0 2px 6px var(--color-shadow)',
       '--shadow-med': '0 2px 6px rgba(12,20,40,.05), 0 14px 36px var(--color-shadow)',
@@ -197,10 +197,10 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
       '--focus-outline-color': 'var(--color-accent)',
       '--focus-outline-offset': '2px',
 
-      /* — tokens propres à Orbita : voir orbitaOnlyTokens() — */
+      /* — Orbita-specific tokens: see orbitaOnlyTokens() — */
       ...orbitaOnlyTokens(silo),
 
-      /* — échelle display : titres Orbita (clamp) — */
+      /* — display scale: Orbita headings (clamp) — */
       '--text-display-1-size': 'clamp(42px, 6vw, 76px)',
       '--text-display-1-weight': '800',
       '--text-display-1-leading': '1.04',
@@ -215,31 +215,31 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
     },
 
     components: {
-      /* Titres display : chasse resserrée Orbita */
+      /* Display headings: Orbita tight letter spacing */
       heading: {
-        // titre de carte (maquette 12/19/24) : indépendant du niveau h3/h4 choisi en admin
+        // card title (mockup 12/19/24): independent of the h3/h4 level chosen in the admin
         'type:card': {fontSize: '18px', fontWeight: 'var(--font-weight-bold)', lineHeight: '1.3', letterSpacing: '-0.015em'},
         'type:display-1': {letterSpacing: '-0.025em'},
         'type:display-2': {letterSpacing: '-0.025em'},
         'type:display-3': {letterSpacing: '-0.02em'},
       },
 
-      /* Types de texte Orbita ajoutés à <Text type="…"> */
+      /* Orbita text types added to <Text type="…"> */
       text: {
-        // Eyebrow : petite capitale espacée, or éditorial
-        // NB : Text pose color="primary" par défaut, dont la règle est émise après les types ;
-        // la couleur d'un type se déclare donc aussi en clé composée 'type:x+color:primary'.
+        // Eyebrow: spaced small caps, editorial gold
+        // NB: Text sets color="primary" by default, whose rule is emitted after the types;
+        // a type's color is therefore also declared as a compound key 'type:x+color:primary'.
         'type:eyebrow': {
-          fontSize: '14px', // jamais sous 14 px (règle du 10 sept.)
+          fontSize: '14px', // never below 14 px (Sept 10 rule)
           fontWeight: 'var(--font-weight-semibold)',
           letterSpacing: '0.16em',
           textTransform: 'uppercase',
           lineHeight: '1.4',
           color: 'var(--color-editorial)',
         },
-        // Eyebrow de tête de section (maquette .c-head-eyebrow) : même texte, avec un
-        // tiret de 40 px de chaque côté, or éditorial à 60 %
-        // Eyebrow en mono (maquettes 20 .modal-eyebrow, 21 .ftr-eyebrow) : Geist Mono 500, 12 px (11 → plancher 12)
+        // Section heading eyebrow (mockup .c-head-eyebrow): same text, with a
+        // 40 px dash on each side, editorial gold at 60 %
+        // Mono eyebrow (mockups 20 .modal-eyebrow, 21 .ftr-eyebrow): Geist Mono 500, 12 px (11 → floor 12)
         'type:eyebrow-mono': {
           fontFamily: 'var(--font-family-mono)',
           fontSize: '12px',
@@ -262,19 +262,19 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           '::before': {content: '""', width: '40px', height: '1px', backgroundColor: 'var(--color-editorial)', opacity: '0.6'},
           '::after': {content: '""', width: '40px', height: '1px', backgroundColor: 'var(--color-editorial)', opacity: '0.6'},
         },
-        // Accent serif : Cormorant italique 600, couleur accent
+        // Serif accent: Cormorant italic 600, accent color
         'type:serif': {
           fontFamily: 'var(--font-family-serif)',
           fontStyle: 'italic',
           fontWeight: '600',
           color: 'var(--color-accent)',
-          // Hérite de la taille du parent : utilisable dans un titre display.
+          // Inherits the parent's size: usable inside a display heading.
           fontSize: 'inherit',
           lineHeight: 'inherit',
           letterSpacing: '-0.01em',
         },
-        // Serif droit (maquette .c-serif) : Cormorant 500, couleur silo — numéros d'étape,
-        // guillemet des témoignages ; hérite de la taille du parent
+        // Upright serif (mockup .c-serif): Cormorant 500, silo color — step numbers,
+        // testimonial quote mark; inherits the parent's size
         'type:serif-upright': {
           fontFamily: 'var(--font-family-serif)',
           fontStyle: 'normal',
@@ -283,7 +283,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           fontSize: 'inherit',
           lineHeight: 'inherit',
         },
-        // Grand nombre de carte (card-num) : Schibsted 800, couleur silo
+        // Large card number (card-num): Schibsted 800, silo color
         'type:number': {
           fontFamily: 'var(--font-family-heading)',
           fontWeight: '800',
@@ -292,7 +292,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           letterSpacing: '-0.03em',
           color: 'var(--color-text-accent)',
         },
-        // Résultat chiffré des réalisations (work-result)
+        // Numeric result of case studies (work-result)
         'type:result': {
           fontSize: '14px',
           fontWeight: 'var(--font-weight-semibold)',
@@ -300,9 +300,9 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           color: 'light-dark(var(--color-text-accent), var(--color-highlight))',
           whiteSpace: 'nowrap',
         },
-        // Date d'article (post-date)
-        'type:date': {fontFamily: 'var(--font-family-mono)', fontSize: '12px', color: 'var(--color-text-disabled)', whiteSpace: 'nowrap'}, // maquette .post-date : Geist Mono 12
-        // Étiquette mono-like (ex-Geist Mono) : Geist, espacée
+        // Article date (post-date)
+        'type:date': {fontFamily: 'var(--font-family-mono)', fontSize: '12px', color: 'var(--color-text-disabled)', whiteSpace: 'nowrap'}, // mockup .post-date: Geist Mono 12
+        // Mono-like label (formerly Geist Mono): Geist, spaced
         'type:eyebrow+color:primary': {color: 'var(--color-editorial)'},
         'type:eyebrow-lines+color:primary': {color: 'var(--color-editorial)'},
         'type:eyebrow-mono+color:primary': {color: 'var(--color-editorial)'},
@@ -312,7 +312,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         'type:result+color:primary': {color: 'light-dark(var(--color-text-accent), var(--color-highlight))'},
         'type:date+color:primary': {color: 'var(--color-text-disabled)'},
         'type:tag': {
-          fontFamily: 'var(--font-family-mono)', // Geist Mono (maquette .font-mono), réadoptée le 11 sept. 2026
+          fontFamily: 'var(--font-family-mono)', // Geist Mono (mockup .font-mono), readopted on Sept 11, 2026
           fontSize: '14px',
           fontWeight: 'var(--font-weight-semibold)',
           letterSpacing: '0.1em',
@@ -321,19 +321,19 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         },
       },
 
-      /* Boutons Orbita (maquette 00-fondations + orbita.css .c-btn-*)
-         - primary  : fond accent, halo accent, hover accent-deep
-         - ghost    : « fantôme » bordé ; sur nuit, bordure et voile blancs
-         - high     : fond highlight, texte nuit (variante ajoutée, typée au build)
-         - secondary/destructive : Astryx, angles vifs
-         Padding horizontal fixé par taille : Button s'en sert pour
-         réserver la cellule flèche (voir src/components/Button). */
+      /* Orbita buttons (mockup 00-fondations + orbita.css .c-btn-*)
+         - primary  : accent background, accent glow, hover accent-deep
+         - ghost    : bordered « ghost »; on night, white border and veil
+         - high     : highlight background, night text (added variant, typed at build)
+         - secondary/destructive : Astryx, sharp corners
+         Horizontal padding set per size: Button uses it to
+         reserve the arrow cell (see src/components/Button). */
       button: {
         base: {
           fontWeight: 'var(--font-weight-semibold)',
           position: 'relative',
           overflow: 'visible',
-          // Astryx ne transitionne pas les couleurs : Orbita, si (.25s ease-in-out)
+          // Astryx does not transition colors: Orbita does (.25s ease-in-out)
           transition: [
             'background-color var(--duration-medium) var(--ease-standard)',
             'border-color var(--duration-medium) var(--ease-standard)',
@@ -341,7 +341,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
             'box-shadow var(--duration-medium) var(--ease-standard)',
           ].join(', '),
         },
-        // gap icône ↔ libellé = moitié du padding horizontal
+        // icon ↔ label gap = half the horizontal padding
         'size:sm': {paddingInline: 'var(--spacing-4)', gap: 'var(--spacing-2)'},
         'size:md': {paddingInline: 'var(--spacing-6)', gap: 'var(--spacing-3)'},
         'size:lg': {paddingInline: 'var(--spacing-8)', gap: 'var(--spacing-4)', fontSize: 'var(--font-size-lg)'},
@@ -354,9 +354,9 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           borderStyle: 'solid',
           borderColor: 'light-dark(var(--color-border-emphasized), rgba(255,255,255,.5))',
           backgroundColor: 'light-dark(var(--color-background-surface), rgba(255,255,255,.04))',
-          // texte et icône couleur silo au repos ; sur nuit, blanc (maquette .on-dark .c-btn-ghost)
+          // text and icon in silo color at rest; on night, white (mockup .on-dark .c-btn-ghost)
           color: 'light-dark(var(--color-text-accent), #FFFFFF)',
-          // survol : clair = bordure silo ; nuit = fond blanc plein, texte et icône couleur silo
+          // hover: light = silo border; night = solid white background, text and icon in silo color
           ':hover': {
             borderColor: 'light-dark(var(--color-accent), #FFFFFF)',
             color: 'light-dark(var(--color-accent), var(--color-accent))',
@@ -369,7 +369,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           boxShadow: '0 10px 26px var(--color-highlight-muted)',
           ':hover': {backgroundColor: 'var(--color-highlight-deep)'},
         },
-        // ink : encre pleine, texte blanc, survol silo (bouton « Connexion » de l'en-tête)
+        // ink: solid ink, white text, silo hover (header « Connexion » button)
         'variant:ink': {
           backgroundColor: 'light-dark(var(--color-text-primary), #FFFFFF)',
           color: 'light-dark(#FFFFFF, var(--color-night))',
@@ -377,17 +377,17 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         },
       },
 
-      // liens : même transition que les boutons
+      // links: same transition as buttons
       'link': {
         base: {transition: 'color var(--duration-medium) var(--ease-standard), text-decoration-color var(--duration-medium) var(--ease-standard)'},
-        // lien discret (piles du pied de page, liens légaux) : s'affirme au survol
+        // subtle link (footer stacks, legal links): stands out on hover
         'color:secondary': {':hover': {color: 'light-dark(var(--color-text-primary), #FFFFFF)'}},
       },
 
-      /* Champs et sélecteurs Orbita (maquette 17-forms / .field-* et .selectx-*)
-         bordure line-2, fond papier, focus = bordure accent + halo 3 px ;
-         panneaux : bordure fine, ombre portée profonde, option survolée en
-         accent-muted, option choisie en accent semi-gras. */
+      /* Orbita fields and selects (mockup 17-forms / .field-* and .selectx-*)
+         line-2 border, paper background, focus = accent border + 3 px glow;
+         panels: thin border, deep drop shadow, hovered option in
+         accent-muted, selected option in semibold accent. */
       ...Object.fromEntries(
         ['text-input', 'text-area', 'number-input', 'selector', 'multi-selector', 'typeahead', 'tokenizer', 'date-input', 'date-range-input', 'date-time-input', 'time-input', 'input-group'].map((k) => [
           k,
@@ -396,7 +396,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
               borderColor: 'var(--color-border-emphasized)',
               backgroundColor: 'var(--color-background-surface)',
               transition: 'border-color var(--duration-medium) var(--ease-standard), box-shadow var(--duration-medium) var(--ease-standard)',
-              // focus : accent sur clair, highlight sur nuit (maquette 17-forms .on-dark)
+              // focus: accent on light, highlight on night (mockup 17-forms .on-dark)
               ':focus-within': {
                 borderColor: 'light-dark(var(--color-accent), var(--color-highlight))',
                 boxShadow: '0 0 0 3px light-dark(var(--color-accent-muted), var(--color-highlight-muted))',
@@ -407,7 +407,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
               borderColor: 'var(--color-border)',
               color: 'var(--color-text-disabled)',
             },
-            // états : bordure et halo colorés (maquette .field.is-error / .is-success)
+            // statuses: colored border and glow (mockup .field.is-error / .is-success)
             'status:error': {
               borderColor: 'var(--color-error)',
               boxShadow: '0 0 0 3px var(--color-error-muted)',
@@ -465,35 +465,35 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         ]),
       ),
 
-      /* Message d'état accolé (erreur / succès / avertissement) : aligné sur le halo
-         de 3 px du champ, commence sous le halo (sinon les fonds translucides se
-         superposent et foncent la jonction). */
+      /* Attached status message (error / success / warning): aligned with the field's
+         3 px glow, starts below the glow (otherwise the translucent backgrounds
+         overlap and darken the junction). */
       'field-status': {
         'variant:attached': {marginInline: '-3px', width: 'calc(100% + 6px)', marginTop: '3px', paddingTop: '8px'},
         'variant:attached+type:error': {backgroundColor: 'var(--color-error-muted)'},
         'variant:attached+type:success': {backgroundColor: 'var(--color-success-muted)'},
         'variant:attached+type:warning': {backgroundColor: 'var(--color-warning-muted)'},
       },
-      // libellés des contrôles d'option : 14,5 px ; radio cochée en couleur silo
+      // option control labels: 14.5 px; checked radio in silo color
       'checkbox-label': {base: {fontSize: '14px'}},
       'switch-label': {base: {fontSize: '14px'}},
       'radio-list-item': {base: {fontSize: '14px'}, selected: {color: 'var(--color-text-accent)'}},
-      // icônes calendrier / horloge des champs de date : couleur du silo
+      // calendar / clock icons of date fields: silo color
       ...Object.fromEntries(
         ['date-input-toggle-icon', 'date-range-input-toggle-icon', 'date-time-input-toggle-icon', 'date-time-input-clock-icon'].map((k) => [k, {base: {color: 'var(--color-icon-accent)'}}]),
       ),
-      // jetons : angles vifs (signature)
+      // tokens: sharp corners (signature)
       'token': {base: {borderRadius: '0'}},
 
       /* ─────────────────────────────────────────────────────────────────
-         NAVIGATION (maquette 01-header) — TopNav et sa famille, MobileNav,
-         Breadcrumbs (25-pageHeaders). Le fond, la hauteur, le repli au
-         défilement et la tonalité sur hero sont portés par SiteHeader
-         (src/components/SiteHeader) ; ici, le style des éléments Astryx.
+         NAVIGATION (mockup 01-header) — TopNav and its family, MobileNav,
+         Breadcrumbs (25-pageHeaders). The background, height, collapse on
+         scroll and tone over the hero are handled by SiteHeader
+         (src/components/SiteHeader); here, the styling of the Astryx elements.
          ───────────────────────────────────────────────────────────────── */
       'top-nav': {
         base: {
-          height: 'var(--site-header-bar)', // variable globale (styles.css), une seule source
+          height: 'var(--site-header-bar)', // global variable (styles.css), single source
           padding: '0',
           backgroundColor: 'transparent',
           borderBottom: '0',
@@ -503,10 +503,10 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         },
       },
       'top-nav-heading': {
-        // padding 0 : le logo s'aligne sur le bord du container, comme le fil d'Ariane et les blocs
+        // padding 0: the logo aligns with the container edge, like the breadcrumb and the blocks
         base: {padding: '0', fontFamily: 'var(--font-family-serif)', fontSize: '18px', fontWeight: '500', letterSpacing: '1px', lineHeight: '1.2', textTransform: 'uppercase'},
       },
-      // entrées de navigation : 14,5 px medium encre secondaire, encre au survol, pas de pastille
+      // navigation entries: 14.5 px medium secondary ink, ink on hover, no pill
       ...Object.fromEntries(
         ['top-nav-item', 'top-nav-menu', 'top-nav-mega-menu'].map((k) => [
           k,
@@ -528,7 +528,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           },
         ]),
       ),
-      // item de méga-menu / sous-menu : bloc sur fond de page, survol silo texte blanc
+      // mega-menu / submenu item: block on page background, silo hover with white text
       'top-nav-mega-menu-item': {
         base: {
           borderRadius: '0',
@@ -540,20 +540,20 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           ':hover': {backgroundColor: 'var(--color-accent)', color: '#FFFFFF'},
         },
       },
-      // carte mise en avant : fond nuit, angles vifs
+      // featured card: night background, sharp corners
       'top-nav-mega-menu-featured-card': {
         base: {height: '100%', borderRadius: '0', backgroundColor: 'var(--color-night)', color: '#FFFFFF'},
       },
       'mobile-nav': {
         base: {backgroundColor: 'var(--color-background-body)', borderRadius: '0'},
       },
-      // fil d'Ariane (maquette 25 .crumb) : capitales espacées 14 px, gris, silo au survol
-      // une seule ligne : pas de retour, défilement latéral si le fil est trop long
+      // breadcrumb (mockup 25 .crumb): spaced caps 14 px, gray, silo on hover
+      // a single line: no wrapping, horizontal scrolling if the trail is too long
       'breadcrumbs': {base: {gap: '8px', whiteSpace: 'nowrap', maxWidth: '100%'}},
       'breadcrumb-item': {
         base: {
-          fontFamily: 'var(--font-family-mono)', // maquette .crumb : Geist Mono
-          fontSize: '12px', // exception à la règle des 14 px (décidée le 10 sept.)
+          fontFamily: 'var(--font-family-mono)', // mockup .crumb: Geist Mono
+          fontSize: '12px', // exception to the 14 px rule (decided on Sept 10)
           letterSpacing: '0.08em',
           textTransform: 'uppercase',
           color: 'var(--color-text-disabled)',
@@ -561,27 +561,27 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         },
       },
 
-      /* Citation (Blockquote Astryx) : sans filet ni retrait, elle hérite du contexte —
-         la carte témoignage (maquette 07) et la carte comparative (05) l'habillent. */
+      /* Quote (Astryx Blockquote): no rule or indent, it inherits from its context —
+         the testimonial card (mockup 07) and the comparison card (05) dress it. */
       blockquote: {
         base: {margin: '0', padding: '0', borderWidth: '0', color: 'inherit', fontStyle: 'normal', fontSize: 'inherit', lineHeight: 'inherit'},
       },
 
       /* ─────────────────────────────────────────────────────────────────
-         ONGLETS (maquette 06-tabs) — Tab, TabList, TabMenu
-         Cibles Astryx : tab-list (la barre), tab-strip (la piste), tab (un
-         onglet, état selected), tab-indicator (trait sous l'onglet actif),
-         tab-menu (déclencheur du menu de débordement), tab-menu-item.
-         Ce que le thème ne sait pas cibler (séparateur « tous sauf le premier »,
-         libellés sur deux lignes selon la largeur, panneau .orbita-tab-*)
-         est dans src/app/(frontend)/styles.css, section Onglets.
+         TABS (mockup 06-tabs) — Tab, TabList, TabMenu
+         Astryx targets: tab-list (the bar), tab-strip (the track), tab (a
+         tab, selected state), tab-indicator (line under the active tab),
+         tab-menu (overflow menu trigger), tab-menu-item.
+         What the theme cannot target (« all but the first » separator,
+         two-line labels depending on width, .orbita-tab-* panel)
+         is in src/app/(frontend)/styles.css, Tabs section.
          ───────────────────────────────────────────────────────────────── */
-      // la barre : l'en-tête bordé du bloc (fond papier, filet tout autour)
+      // the bar: the block's bordered header (paper background, rule all around)
       'tab-list': {
         base: {
           height: 'auto',
           fontFamily: 'var(--font-family-body)',
-          // barre sur papier (maquette 06) ; la teinte highlight va sur le panneau de contenu
+          // bar on paper (mockup 06); the highlight tint goes on the content panel
           backgroundColor: 'light-dark(var(--color-background-surface), var(--color-background-card))',
           borderWidth: 'var(--border-width)',
           borderStyle: 'solid',
@@ -589,7 +589,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         },
       },
       'tab-strip': {base: {height: 'auto', gap: '0'}},
-      // un onglet (et le déclencheur du menu, qui se présente comme un onglet)
+      // a tab (and the menu trigger, which looks like a tab)
       ...Object.fromEntries(
         ['tab', 'tab-menu'].map((k) => [
           k,
@@ -597,7 +597,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
             base: {
               height: 'auto',
               padding: '20px 24px',
-              gap: '12px', // icône ↔ libellé ↔ compteur : une demi-icône
+              gap: '12px', // icon ↔ label ↔ counter: half an icon
               fontSize: '15px',
               fontWeight: 'var(--font-weight-semibold)',
               lineHeight: '1.3',
@@ -606,18 +606,18 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
               color: 'light-dark(var(--color-text-secondary), rgba(255,255,255,.8))',
               borderRadius: '0',
               transition: 'color var(--duration-medium) var(--ease-standard), background-color var(--duration-medium) var(--ease-standard)',
-              // survol : encre + fond silo 10 %
+              // hover: ink + 10 % silo background
               ':hover': {
                 color: 'light-dark(var(--color-text-primary), #FFFFFF)',
                 backgroundColor: 'light-dark(var(--color-accent-muted), rgba(255,255,255,.06))',
               },
             },
-            // actif : couleur silo (highlight en nuit), fond highlight 5 % comme le panneau
+            // active: silo color (highlight in night), 5 % highlight background like the panel
             selected: {color: 'light-dark(var(--color-text-accent), var(--color-highlight))', backgroundColor: 'var(--color-highlight-light)'},
           },
         ]),
       ),
-      // le trait sous l'onglet actif : 3 px, toute la largeur de l'onglet, en fondu
+      // the line under the active tab: 3 px, full tab width, with a fade
       'tab-indicator': {
         base: {
           left: '0',
@@ -629,7 +629,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           transition: 'opacity var(--duration-medium) var(--ease-standard)',
         },
       },
-      // options du menu de débordement : mêmes rangées que les sélecteurs
+      // overflow menu options: same rows as the selects
       'tab-menu-item': {
         base: {
           borderRadius: '0',
@@ -643,7 +643,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
       },
 
 
-      /* Contrôles d'option Orbita (maquette 17-forms .opt / .switch / .c-range) */
+      /* Orbita option controls (mockup 17-forms .opt / .switch / .c-range) */
       'radio-indicator': {
         base: {
           width: '22px', height: '22px',
@@ -664,7 +664,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           position: 'relative',
           transition: 'border-color var(--duration-medium) var(--ease-standard), background-color var(--duration-medium) var(--ease-standard)',
         },
-        // coché : fond accent, coche Nucleo centrée (blanche ; nuit sur highlight)
+        // checked: accent background, centered Nucleo check (white; night on highlight)
         checked: {
           backgroundColor: 'light-dark(var(--color-accent), var(--color-highlight))',
           borderColor: 'light-dark(var(--color-accent), var(--color-highlight))',
@@ -713,12 +713,12 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         },
       },
 
-      /* Bouton d'effacement des champs (date, texte, sélecteurs) : croix nue, sans cadre
-         ni fond — voir styles.css : la cible input-clear-button est battue par
-         variant:ghost du bouton (même couche, spécificité supérieure). */
+      /* Field clear button (date, text, selects): bare cross, no frame
+         or background — see styles.css: the input-clear-button target loses to
+         the button's variant:ghost (same layer, higher specificity). */
       'input-clear-icon': {base: {width: '16px', height: '16px'}},
 
-      /* Chips Orbita (maquette .c-chip*) : variantes ajoutées au Badge Astryx */
+      /* Orbita chips (mockup .c-chip*): variants added to the Astryx Badge */
       badge: {
         base: {borderRadius: '0'},
         'variant:chip': {
@@ -744,7 +744,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           backgroundColor: 'var(--color-accent)', color: 'var(--color-on-accent)',
           fontFamily: 'var(--font-family-mono)', fontSize: '12px', fontWeight: 'var(--font-weight-medium)', letterSpacing: '0.16em', textTransform: 'uppercase',
         },
-        // chip « live » (maquette 02) : papier bordé, point silo devant le texte
+        // « live » chip (mockup 02): bordered paper, silo dot before the text
         'variant:chip-live': {
           height: '32px', padding: '0 12px', gap: '8px', lineHeight: '1',
           borderWidth: 'var(--border-width)', borderStyle: 'solid', borderColor: 'var(--color-border-emphasized)',
@@ -752,7 +752,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           fontSize: '14px', fontWeight: 'var(--font-weight-semibold)', letterSpacing: '0.04em',
           '::before': {content: '""', width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-accent)'},
         },
-        // chip « live » sur média (maquette 16) : translucide flouté, point highlight lumineux
+        // « live » chip on media (mockup 16): blurred translucent, glowing highlight dot
         'variant:chip-live-dark': {
           height: '32px', padding: '0 16px', gap: '8px', lineHeight: '1',
           borderWidth: 'var(--border-width)', borderStyle: 'solid', borderColor: 'rgba(255,255,255,.28)',
@@ -769,11 +769,11 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
 
       card: {base: {borderRadius: '0'}},
 
-      /* Dialogue : ombre portée Orbita, voile flouté avec halo accent */
+      /* Dialog: Orbita drop shadow, blurred veil with accent glow */
       dialog: {
         base: {
           borderRadius: '0',
-          backgroundColor: 'var(--color-background-surface)', // nuit : carte nuit, pas le popover plus clair
+          backgroundColor: 'var(--color-background-surface)', // night: night card, not the lighter popover
           boxShadow: '0 30px 80px -24px rgba(7,9,26,.6)',
           '::backdrop': {
             backgroundImage:

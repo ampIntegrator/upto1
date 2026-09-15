@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * CardGrid — la grille de cartes, le contenu générique qui pose des cartes côte à côte
- * dans une colonne de page (2, 3 ou 4 colonnes internes). C'est lui qui porte le
- * côte à côte : la page ne découpe qu'une fois (voir content-specs.ts). La grille suit la
- * largeur de sa colonne, pas de l'écran : sous 720 px de colonne elle passe à 2, sous
- * 480 px à 1. Emprise minimale : 3 colonnes de page par colonne interne.
+ * CardGrid — the card grid, the generic content that places cards side by side
+ * in a page column (2, 3 or 4 inner columns). It is what provides the
+ * side-by-side layout: the page splits only once (see content-specs.ts). The grid follows
+ * its column width, not the screen: below a 720 px column it drops to 2, below
+ * 480 px to 1. Minimum span: 3 page columns per inner column.
  */
 import {VStack} from '@astryxdesign/core/Stack';
 import React from 'react';

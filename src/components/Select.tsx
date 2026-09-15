@@ -1,21 +1,21 @@
 'use client';
 
 /**
- * Select — sélecteur du site, iso maquette Orbita (17-forms, .selectx).
+ * Select — site selector, matching the Orbita mockup (17-forms, .selectx).
  *
- *   mode="single"    → Selector       (un choix)
- *   mode="multiple"  → MultiSelector  (plusieurs choix, cases dans le panneau, badges dans le champ)
+ *   mode="single"    → Selector       (one choice)
+ *   mode="multiple"  → MultiSelector  (several choices, checkboxes in the panel, badges in the field)
  *
- * Signature de la maquette : champ de 58 px avec label flottant qui remonte en
- * petit accent dès qu'il y a une valeur ou que le panneau est ouvert, chevron
- * qui pivote, panneau sous le champ, recherche automatique au-delà de
- * `searchFrom` options (5), option choisie cochée. Pas de croix d'effacement,
- * pas d'icône dans les options. En multiple, chaque choix est un badge avec sa
- * croix dans le champ (retrait en un clic, comme PowerSearch) ; le champ grandit
- * avec les badges.
+ * Mockup signature: 58 px field with a floating label that moves up as
+ * small accent text once there is a value or the panel is open, chevron
+ * that rotates, panel below the field, automatic search beyond
+ * `searchFrom` options (5), selected option checked. No clear button,
+ * no icon in options. In multiple mode, each choice is a badge with its
+ * clear button in the field (one-click removal, like PowerSearch); the field grows
+ * with the badges.
  *
- * Les options ont la forme {value, label, disabled?} que Payload stockera.
- * L'apparence vient du thème Orbita + Select.module.css.
+ * Options have the {value, label, disabled?} shape that Payload will store.
+ * The appearance comes from the Orbita theme + Select.module.css.
  */
 import {MultiSelector} from '@astryxdesign/core/MultiSelector';
 import {Selector} from '@astryxdesign/core/Selector';
@@ -29,16 +29,16 @@ export type OrbitaOption = {value: string; label: string; disabled?: boolean};
 type Status = {type: 'error' | 'warning' | 'success'; message?: string};
 
 type Common = {
-  /** Libellé flottant dans le champ (« Votre métier »). */
+  /** Floating label inside the field (« Votre métier »). */
   label: string;
   options: OrbitaOption[];
   description?: string;
   status?: Status;
   isRequired?: boolean;
   isDisabled?: boolean;
-  /** Nombre d'options à partir duquel la recherche apparaît. */
+  /** Number of options from which the search appears. */
   searchFrom?: number;
-  /** Texte de la recherche vide. */
+  /** Empty search text. */
   emptyText?: string;
   style?: React.CSSProperties;
 };
@@ -55,7 +55,7 @@ export function Select(props: SelectProps) {
 
   const wrapClass = [styles.wrap, hasValue ? styles.hasValue : null, isDisabled ? styles.disabled : null, mode === 'multiple' ? styles.multi : null].filter(Boolean).join(' ');
 
-  // multiple : la hauteur du déclencheur suit la couche de badges
+  // multiple: the trigger height follows the badge layer
   const wrapRef = useRef<HTMLDivElement>(null);
   const badgesRef = useRef<HTMLDivElement>(null);
   const [minHeight, setMinHeight] = useState<number | undefined>(undefined);
@@ -80,7 +80,7 @@ export function Select(props: SelectProps) {
   }, [minHeight]);
   const shared = {
     label,
-    isLabelHidden: true, // le label accessible reste ; le visible est le flottant ci-dessous
+    isLabelHidden: true, // the accessible label remains; the visible one is the floating label below
     placeholder: label,
     description,
     status,

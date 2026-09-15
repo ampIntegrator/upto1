@@ -14,7 +14,7 @@ import {ASTRYX_SEMANTIC_MAP} from '@/theme/icons/astryx-icons';
 import {NUCLEO_ICONS, NUCLEO_KEYS, NUCLEO_SETS, type NucleoIconKey} from '@/theme/icons/nucleo';
 import {PageIntro} from '../../_ui/PageIntro';
 
-/** clé Nucleo → nom sémantique Astryx (quand la clé en remplace un). */
+/** Nucleo key → Astryx semantic name (when the key replaces one). */
 const SEMANTIC_BY_KEY = Object.fromEntries(Object.entries(ASTRYX_SEMANTIC_MAP).map(([name, key]) => [key, name]));
 
 const BASE_KEYS = NUCLEO_KEYS.filter((k) => NUCLEO_SETS[k] === 'astryx');

@@ -1,8 +1,8 @@
 'use client';
 
-/* Barre de chiffres (maquette 04, revue le 10 sept.) : Section paper à filets >
-   Container > libellé centré sur une ligne, puis une grille de 2, 3, 4 ou 6 cases à
-   largeur égale (avec gap) ; chaque case est centrée sur fond highlight-light. */
+/* Figures bar (mockup 04, revised on Sept. 10): ruled paper Section >
+   Container > label centered on one line, then a grid of 2, 3, 4 or 6 equal-width
+   cells (with gap); each cell is centered on a highlight-light background. */
 import {Grid} from '@astryxdesign/core/Grid';
 import {VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
@@ -19,13 +19,13 @@ export type StatsBarProps = {
 };
 
 export function StatsBar({label, stats, background = 'paper'}: StatsBarProps) {
-  // 2, 3, 4 ou 6 chiffres (réglage Payload à venir)
+  // 2, 3, 4 or 6 figures (Payload setting to come)
   const n = Math.min(6, Math.max(2, stats.length));
   return (
     <Section background={background} spacing="xs" dividers edge={false}>
       <Container gap={6}>
         <VStack align="center">
-          <Text type="tag" weight="semibold" color="secondary" style={{fontFamily: 'var(--font-family-body)', fontSize: '12px', letterSpacing: '0.16em', textAlign: 'center'}} /* maquette .stat-label : Geist semibold 12,5 → 12 (pas de demi-pixel) */>{label}</Text>
+          <Text type="tag" weight="semibold" color="secondary" style={{fontFamily: 'var(--font-family-body)', fontSize: '12px', letterSpacing: '0.16em', textAlign: 'center'}} /* mockup .stat-label: Geist semibold 12.5 → 12 (no half pixel) */>{label}</Text>
         </VStack>
         <Grid columns={{minWidth: n > 4 ? 150 : 220, max: n}} gap={6}>
           {stats.map((s) => (
@@ -39,7 +39,7 @@ export function StatsBar({label, stats, background = 'paper'}: StatsBarProps) {
   );
 }
 
-/** Les trois barres de la maquette. */
+/** The three bars from the mockup. */
 export const STATS_BARS: StatsBarProps[] = [
   {label: 'Ils chiffrent avec nous', stats: [
     {value: '850', suffix: '+', label: 'Courtiers actifs'},

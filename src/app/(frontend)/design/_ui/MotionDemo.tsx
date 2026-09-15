@@ -7,7 +7,7 @@ import {Switch} from '@astryxdesign/core/Switch';
 import {Text} from '@astryxdesign/core/Text';
 import React, {useState} from 'react';
 
-/** Démo interactive des transitions (survol, bascule, repli). */
+/** Interactive demo of transitions (hover, toggle, collapse). */
 export function MotionDemo() {
   const [on, setOn] = useState(true);
   return (

@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/Dialog */
+/* Orbita-styled showcase — replaces the original Astryx demo. Component: src/components/Dialog */
 'use client';
 
 import {Card} from '@astryxdesign/core/Card';
@@ -71,7 +71,7 @@ export default function DialogShowcase() {
         </Grid>
       </VStack>
 
-      {/* SM : confirmation */}
+      {/* SM: confirmation */}
       {(['sm', 'sm-d'] as const).map((id) => (
         <Dialog
           key={id}
@@ -91,7 +91,7 @@ export default function DialogShowcase() {
         </Dialog>
       ))}
 
-      {/* MD : formulaire */}
+      {/* MD: form */}
       {(['md', 'md-d'] as const).map((id) => (
         <Dialog
           key={id}
@@ -126,7 +126,7 @@ export default function DialogShowcase() {
         </Dialog>
       ))}
 
-      {/* LG : document long */}
+      {/* LG: long document */}
       {(['lg', 'lg-d'] as const).map((id) => (
         <Dialog
           key={id}

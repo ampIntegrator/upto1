@@ -1,7 +1,7 @@
 /*
- * Card — châssis unique des cartes (maquettes 12 cardBlocks, 14 mosaic,
- * 19 blogCards, 24 portfolioCards) : média, métadonnées, titre + ornement,
- * texte, barre d'action. Le survol de la carte remplit la barre d'action.
+ * Card — single chassis for cards (mockups 12 cardBlocks, 14 mosaic,
+ * 19 blogCards, 24 portfolioCards): media, metadata, title + ornament,
+ * text, action bar. Hovering the card fills the action bar.
  */
 .card {
   position: relative;
@@ -18,7 +18,7 @@
   border: var(--border-width) solid var(--color-border);
   border-bottom: 0;
 }
-/* sans barre d'action, le corps ferme la carte */
+/* without an action bar, the body closes the card */
 .card:not([data-link]) .body { border-bottom: var(--border-width) solid var(--color-border); }
 .inner {
   display: flex;
@@ -28,7 +28,7 @@
 }
 .card[data-preset='article'] .inner,
 .card[data-preset='realisation'] .inner { padding: 16px 20px 12px; }
-/* en bref : ni cadre ni fond, le conteneur (pied de page) fait la mise en page */
+/* brief: no frame or background, the container (footer) handles the layout */
 .card[data-preset='brief'] { background: transparent; }
 .card[data-preset='brief'] .body,
 .card[data-preset='brief']:not([data-link]) .body { border: 0; }
@@ -37,7 +37,7 @@
 .card[data-preset='brief'] .title { font-size: 15px; font-weight: var(--font-weight-semibold); }
 .briefDate { margin-top: 8px; }
 
-/* médias */
+/* media */
 .img {
   height: 230px;
   background-size: cover;
@@ -54,7 +54,7 @@
 .iconMedia { display: flex; justify-content: center; margin-bottom: 32px; }
 .numberMedia { display: flex; justify-content: center; margin-bottom: 16px; }
 
-/* métadonnées (article / réalisation) */
+/* metadata (article / realisation) */
 .meta {
   display: flex;
   align-items: center;
@@ -63,7 +63,7 @@
   margin-bottom: 12px;
 }
 
-/* titre + ornement */
+/* title + ornament */
 .title { margin: 0; }
 .card[data-preset='bloc'] .title { text-align: center; margin-bottom: 12px; }
 .card[data-preset='article'] .title,
@@ -80,8 +80,8 @@
   text-decoration: none;
   transition: color var(--duration-medium) var(--ease-standard);
 }
-/* toute la carte cliquable : via le lien du titre (article / réalisation),
-   via la barre d'action (bloc avec lien) */
+/* whole card clickable: via the title link (article / realisation),
+   via the action bar (bloc with link) */
 .titleLink::after,
 .card[data-preset='bloc'][data-link] .cta::after { content: ''; position: absolute; inset: 0; z-index: 2; }
 .card[data-link] { cursor: pointer; }
@@ -133,7 +133,7 @@
 }
 .client svg { width: 14px; height: 14px; flex: 0 0 auto; }
 
-/* barre d'action : bordée, couleur silo, se remplit au survol de la carte */
+/* action bar: bordered, silo color, fills on card hover */
 .cta {
   margin-top: auto;
   display: flex;

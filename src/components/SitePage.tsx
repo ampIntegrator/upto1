@@ -1,6 +1,6 @@
 /**
- * SitePage — la coquille d'une page du site : thème au silo de la page, en-tête, contenu,
- * pied de page. Serveur : reçoit les données déjà converties (lib/site.ts).
+ * SitePage — the shell of a site page: theme set to the page's silo, header, content,
+ * footer. Server: receives already-converted data (lib/site.ts).
  */
 import React from 'react';
 

@@ -1,190 +1,190 @@
-# Orbita — Design System & bibliothèque de composants
+# Orbita — Design System & component library
 
-Maquettes HTML haute-fidélité du design system **Orbita**, prêtes à servir de
-référence pour l'intégration **Next.js**. Chaque fichier est un composant
-autonome et directement ouvrable dans un navigateur.
+High-fidelity HTML mockups of the **Orbita** design system, ready to serve as
+reference for the **Next.js** integration. Each file is a standalone
+component that opens directly in a browser.
 
 ---
 
-## 1. Principes du système
+## 1. System principles
 
-### Les 4 silos d'accent
-Un socle unique se décline en **4 accents** pilotés par l'attribut
-`data-theme` sur `<html>`/`<body>` : **bleu** (défaut), **vert**, **orange**,
-**violet**. Chaque silo redéfinit le même jeu de variables :
+### The 4 accent silos
+A single base comes in **4 accents** driven by the
+`data-theme` attribute on `<html>`/`<body>`: **blue** (default), **green**, **orange**,
+**purple**. Each silo redefines the same set of variables:
 
 ```
---bg, --bg-2        fonds clairs (teintés par l'accent)
+--bg, --bg-2        light backgrounds (tinted by the accent)
 --primary, --primary-deep, --primary-soft
---highlight, --highlight-deep        couleur secondaire / signal
---night                              fond sombre du silo
+--highlight, --highlight-deep        secondary / signal colour
+--night                              dark background of the silo
 ```
 
-Constantes **partagées par tous les silos** (jamais teintées par l'accent) :
+Constants **shared by all silos** (never tinted by the accent):
 
 ```
---ink / --ink-2 / --ink-3    texte
---line / --line-2            filets
---editorial / --editorial-deep   OR éditorial (accents serif)
---paper                      blanc
---danger / --ok              états (form)
---header-h                   hauteur réservée du header
+--ink / --ink-2 / --ink-3    text
+--line / --line-2            rules
+--editorial / --editorial-deep   editorial GOLD (serif accents)
+--paper                      white
+--danger / --ok              states (forms)
+--header-h                   height reserved for the header
 ```
 
-**Transitions — centralisées en 2 tokens** (dans `orbita.css`) :
+**Transitions — centralized in 2 tokens** (in `orbita.css`):
 
 ```
---t-dur:  .25s;        /* vitesse de TOUTES les transitions */
---t-ease: ease-in-out; /* courbe de TOUTES les transitions */
+--t-dur:  .25s;        /* speed of ALL transitions */
+--t-ease: ease-in-out; /* curve of ALL transitions */
 ```
 
-Tout le DS pointe dessus, en CSS (`transition: … var(--t-dur) var(--t-ease)`)
-comme en markup Tailwind (`duration-[var(--t-dur)] ease-[var(--t-ease)]`).
-Changer ces 2 lignes = toute l'animation du DS suit.
+The whole DS points to them, in CSS (`transition: … var(--t-dur) var(--t-ease)`)
+as well as in Tailwind markup (`duration-[var(--t-dur)] ease-[var(--t-ease)]`).
+Change these 2 lines = all DS animation follows.
 
-**Tous ces tokens vivent dans `orbita.css`** (voir §2) — définis une seule fois,
-partagés par les 17 composants. Changer la couleur d'un accent = **une ligne**.
+**All these tokens live in `orbita.css`** (see §2) — defined once,
+shared by the 17 components. Changing an accent color = **one line**.
 
-Un sélecteur d'accent (« Accent : Bleu / Vert / Orange / Violet ») est présent
-dans chaque maquette **à des fins de démonstration uniquement** — ce n'est pas
-un élément de production.
+An accent selector ("Accent: Blue / Green / Orange / Purple") is present
+in each mockup **for demonstration purposes only** — it is not
+a production element.
 
-### Typographie
-- **Schibsted Grotesk** — display / titres
-- **Geist** — texte courant
-- **Cormorant Garamond** *italique 600* — accent serif éditorial
-- **Geist Mono** — étiquettes, eyebrows mono
+### Typography
+- **Schibsted Grotesk** — display / headings
+- **Geist** — body text
+- **Cormorant Garamond** *italic 600* — editorial serif accent
+- **Geist Mono** — labels, mono eyebrows
 
-### Signature visuelle
-Angles vifs (rayon zéro), **split-button** à liseré intérieur (`::before`),
-eyebrows dorés à filets, textures blueprint / points / losanges, sections
-« nuit » avec halos.
+### Visual signature
+Sharp corners (zero radius), **split-button** with inner border (`::before`),
+golden eyebrows with rules, blueprint / dots / diamonds textures,
+"night" sections with halos.
 
-**Séparateur de carte** (`.card-sep`, composants 12 & 14) : deux filets
-`line-2` encadrant un petit losange central **animé** (`@keyframes sepMorph` —
-morphe carré ⇄ cercle et highlight ⇄ primaire en tournant ; coupé par
+**Card separator** (`.card-sep`, components 12 & 14): two
+`line-2` rules framing a small **animated** central diamond (`@keyframes sepMorph` —
+morphs square ⇄ circle and highlight ⇄ primary while rotating; disabled by
 `prefers-reduced-motion`).
 
 ---
 
-## 2. Stack & architecture CSS
+## 2. Stack & CSS architecture
 
-- **HTML + Tailwind**. Les maquettes chargent le **build navigateur**
-  `@tailwindcss/browser@4` (pratique pour la démo).
+- **HTML + Tailwind**. The mockups load the **browser build**
+  `@tailwindcss/browser@4` (handy for the demo).
 
-### `orbita.css` — la fondation partagée (le cœur du DS)
-Un **seul fichier** `orbita/orbita.css`, linké par tous les composants, centralise :
-- **les tokens** : `:root` (constantes + transitions) + les 4 silos `[data-theme]` ;
-- **la signature & les contrôles** : boutons (`.c-btn-split` + `.lbl`/`.arw`/`::before`/`:hover`,
-  `.c-btn-split--ondark`, `.c-btn-solid`, `.c-btn-ghost`), séparateur animé (`.card-sep` + `sepMorph`),
+### `orbita.css` — the shared foundation (the core of the DS)
+A **single file** `orbita/orbita.css`, linked by all components, centralizes:
+- **the tokens**: `:root` (constants + transitions) + the 4 `[data-theme]` silos;
+- **the signature & controls**: buttons (`.c-btn-split` + `.lbl`/`.arw`/`::before`/`:hover`,
+  `.c-btn-split--ondark`, `.c-btn-solid`, `.c-btn-ghost`), animated separator (`.card-sep` + `sepMorph`),
   eyebrow (`.c-head-eyebrow`), textures (`.c-blueprint`/`.c-tex-*`/`.tex-target`),
-  fond dégradé dark (`.c-darkbg`), chrome de header partagé (mega/lang/search/drawer/burger),
-  `.silo-btn`, titre tag-agnostique (`.o-headline`), **et tout le kit de formulaires**
+  dark gradient background (`.c-darkbg`), shared header chrome (mega/lang/search/drawer/burger),
+  `.silo-btn`, tag-agnostic title (`.o-headline`), **and the whole forms kit**
   (`.field-*`, `.selectx-*`, `.opt-*`, `.switch-*`, `.upload-*`, light + dark).
 
-Règle de centralisation : **un sélecteur va dans `orbita.css` s'il est partagé
-(≥2 composants) et identique partout**. Le reste — propre à un composant ou en
-collision — reste **inline** dans son fichier.
+Centralization rule: **a selector goes into `orbita.css` if it is shared
+(≥2 components) and identical everywhere**. The rest — component-specific or
+colliding — stays **inline** in its file.
 
-### Ce qui reste inline (volontairement)
-- CSS spécifique : `.hero-*` (16), `.fwti-*` (13), `.price-*`/`.tier-*` (08/09),
+### What stays inline (on purpose)
+- Specific CSS: `.hero-*` (16), `.fwti-*` (13), `.price-*`/`.tier-*` (08/09),
   `.tab-*` (06), `.faq-*` (11), `.statsbar`/`.stat-*` (04)…
-- **Collisions** : le header transparent du 16 (`.hdr-main` etc.) vs le header
-  standard du 01 ; `.c-blueprint` des prix ; `prefers-reduced-motion` (contenu
-  différent par fichier). Ces valeurs **diffèrent** entre composants — les
-  centraliser casserait l'un des deux.
+- **Collisions**: the transparent header of 16 (`.hdr-main` etc.) vs the
+  standard header of 01; `.c-blueprint` of the prices; `prefers-reduced-motion` (content
+  differs per file). These values **differ** between components —
+  centralizing them would break one of the two.
 
-### Pont vers Tailwind
-- Les **tokens sont exposés à Tailwind** via `@theme inline` (bloc
-  `<style type="text/tailwindcss">`, **inline & incompressible** — c'est de la
-  config Tailwind, pas du CSS standard, donc non déplaçable vers `orbita.css`),
-  ce qui rend utilisables `text-primary`, `bg-night`, `border-line`…
-- **Markup = utilitaires Tailwind** (layout, espacements, breakpoints, valeurs
-  arbitraires). **Aucune classe générée dynamiquement en JS.**
+### Bridge to Tailwind
+- The **tokens are exposed to Tailwind** via `@theme inline` (
+  `<style type="text/tailwindcss">` block, **inline & irreducible** — it is Tailwind
+  config, not standard CSS, so it cannot be moved to `orbita.css`),
+  which makes `text-primary`, `bg-night`, `border-line`… usable.
+- **Markup = Tailwind utilities** (layout, spacing, breakpoints, arbitrary
+  values). **No classes generated dynamically in JS.**
 
-### Convention : titres indépendants de la balise
-Sauf le hero, le style d'un titre dépend **de la classe, jamais de la balise**
-(`.o-headline`, `.fwti-title`, etc.). Le back-office peut donc mettre `h2`,
-`h6`, `p` ou `span` pour le SEO **sans changer l'apparence**. La ligne d'accent
-est un `<span>` en `display:block`.
-→ **Exception : le hero (16)** porte le **`<h1>` unique et fixe** de la page.
+### Convention: tag-independent headings
+Except for the hero, a heading's style depends **on the class, never on the tag**
+(`.o-headline`, `.fwti-title`, etc.). The back-office can therefore use `h2`,
+`h6`, `p` or `span` for SEO **without changing the appearance**. The accent line
+is a `<span>` with `display:block`.
+→ **Exception: the hero (16)** carries the page's **single, fixed `<h1>`**.
 
-### Convention : images
-Deux approches selon le besoin :
-- **`background-image`** pour les panneaux/fonds pleins (mosaïque 14, hero, etc.) —
-  transposable en `<Image fill>` côté Next.js.
-- **`<img>` en `position:absolute`** dans un conteneur `overflow:hidden` quand on
-  doit caler finement le cadrage — cas de l'**effet « image splitée »** du form
-  (17) : une image coupée en deux dont les moitiés se rejoignent derrière la carte
-  (côtés ancrés `left:-100%` / `left:-200%`, largeur `400%`).
+### Convention: images
+Two approaches depending on the need:
+- **`background-image`** for full panels/backgrounds (mosaic 14, hero, etc.) —
+  transposable to `<Image fill>` on the Next.js side.
+- **`<img>` with `position:absolute`** in an `overflow:hidden` container when
+  the framing must be fine-tuned — the case of the form's **"split image" effect**
+  (17): an image cut in two whose halves meet behind the card
+  (sides anchored `left:-100%` / `left:-200%`, width `400%`).
 
-### Convention : espacements responsive
-Conteneur unique sur **tous** les blocs :
-`max-w-[1280px] mx-auto px-5 sm:px-8` → **20px** de marge latérale en mobile,
-**32px** dès 640px. Vertical des sections réduit en mobile :
-`py-14 sm:py-20` (56/80px) et `py-16 sm:py-24` (64/96px). Padding des cartes
-de formulaire `p-5 sm:p-9`, carte split `p-6 sm:p-9 md:p-12`.
+### Convention: responsive spacing
+A single container on **all** blocks:
+`max-w-[1280px] mx-auto px-5 sm:px-8` → **20px** side margin on mobile,
+**32px** from 640px. Section vertical spacing reduced on mobile:
+`py-14 sm:py-20` (56/80px) and `py-16 sm:py-24` (64/96px). Form card
+padding `p-5 sm:p-9`, split card `p-6 sm:p-9 md:p-12`.
 
 ---
 
-## 3. Composants
+## 3. Components
 
-| # | Fichier | Rôle |
+| # | File | Role |
 |---|---------|------|
-| 00 | `00-fondations.html` | Tokens, couleurs, typo, textures |
-| 01 | `01-header.html` | Header complet (strip, mega-menu, sous-menu, recherche, langue, drawer mobile, condensation au scroll) |
-| 02 | `02-topPageText.html` | Hero texte + image (split classique) |
-| 03 | `03-process.html` | Étapes / process |
-| 04 | `04-statsBar.html` | Barre de statistiques (gradient latéral dark) |
-| 05 | `05-compareCards.html` | Cartes avant / après |
-| 06 | `06-tabs.html` | Onglets |
-| 07 | `07-testimonials.html` | Avis (carousel à puces) |
-| 08 | `08-priceList.html` | Prix — 1 carte (light) + 3 cartes (light), séparées par une bande |
-| 09 | `09-priceListDark.html` | Prix — version dark (gradient latéral) |
-| 10 | `10-finalCtaDark.html` | CTA final, section nuit |
-| 11 | `11-faq.html` | FAQ accordéon (light + dark) |
-| 12 | `12-cardBlocks.html` | Cartes en 4 apparences : image / icône / chiffre / titre seul |
-| 13 | `13-fullwidthTextImage.html` | Bandeau image pleine largeur + parallax, texte centré |
-| 14 | `14-mosaic.html` | Mosaïque : cartes (du 12) + panneaux-image, largeurs variables |
-| 15 | `15-sectionHeading.html` | En-tête de section : eyebrow + titre + texte + CTA centré |
-| 16 | `16-heroFullscreen.html` | Hero plein écran (100vh), vidéo + poster, header transparent → opaque |
-| 17 | `17-forms.html` | Formulaires & contrôles (light + dark) : champs à label flottant, états (focus/erreur/succès/désactivé), **select custom** (1 choix / multiple / recherche), radio à disque, checkbox à carré, toggle, upload, formulaire de démo en « image splitée » |
+| 00 | `00-fondations.html` | Tokens, colors, typography, textures |
+| 01 | `01-header.html` | Full header (strip, mega-menu, submenu, search, language, mobile drawer, condensing on scroll) |
+| 02 | `02-topPageText.html` | Text + image hero (classic split) |
+| 03 | `03-process.html` | Steps / process |
+| 04 | `04-statsBar.html` | Statistics bar (dark side gradient) |
+| 05 | `05-compareCards.html` | Before / after cards |
+| 06 | `06-tabs.html` | Tabs |
+| 07 | `07-testimonials.html` | Reviews (dot carousel) |
+| 08 | `08-priceList.html` | Pricing — 1 card (light) + 3 cards (light), separated by a band |
+| 09 | `09-priceListDark.html` | Pricing — dark version (side gradient) |
+| 10 | `10-finalCtaDark.html` | Final CTA, night section |
+| 11 | `11-faq.html` | FAQ accordion (light + dark) |
+| 12 | `12-cardBlocks.html` | Cards in 4 looks: image / icon / number / title only |
+| 13 | `13-fullwidthTextImage.html` | Full-width image banner + parallax, centered text |
+| 14 | `14-mosaic.html` | Mosaic: cards (from 12) + image panels, variable widths |
+| 15 | `15-sectionHeading.html` | Section heading: eyebrow + title + text + centered CTA |
+| 16 | `16-heroFullscreen.html` | Fullscreen hero (100vh), video + poster, transparent → opaque header |
+| 17 | `17-forms.html` | Forms & controls (light + dark): floating-label fields, states (focus/error/success/disabled), **custom select** (single / multiple / search), disc radio, square checkbox, toggle, upload, demo form as a "split image" |
 
-Fichier partagé : **`orbita.css`** (toute la fondation — voir §2). Le composant 00
-(`00-fondations.html`) reste autonome (page de référence du DS).
+Shared file: **`orbita.css`** (the whole foundation — see §2). Component 00
+(`00-fondations.html`) stays standalone (DS reference page).
 
-**Select custom (17)** : `<select>` natif masqué + UI stylée pilotée par JS
-(data-driven via `data-set` / `data-multiple`). Recherche auto au-delà de
-5 options, sélection multiple avec badges removables, navigation clavier,
-événement `change` propagé sur le `<select>` natif (compatible form/React).
-
----
-
-## 4. Notes d'intégration Next.js
-
-1. **Tailwind** : remplacer le build navigateur par le plugin Tailwind
-   (PostCSS/Vite). Les classes utilitaires se transfèrent **1:1** ; `orbita.css`
-   + le `@theme inline` migrent dans `globals.css`.
-2. **Tokens** : ils sont déjà centralisés dans `orbita.css` (`:root` +
-   `[data-theme="…"]`). Le changement de silo se fait via `data-theme` sur un
-   conteneur ; vitesse/courbe d'animation via `--t-dur` / `--t-ease`.
-3. **Header (16)** : le markup et le JS sont **identiques au composant 01**.
-   La transparence sur hero n'ajoute que :
-   - 3 classes-crochets sur des éléments existants : `nav-ink` (logo),
-     `nav-div` (séparateur), `btn-login` (Connexion) ;
-   - un bloc CSS piloté par l'état existant `.hdr.is-scrolled`
-     (voile rgba au repos → `paper` au scroll, bascule du texte).
-   En prod, on peut remplacer les `!important` de ce bloc par une variante
-   **`data-attribute`** (ex. `data-header="transparent"`) — purement cosmétique.
-4. **Médias** : remplacer les URLs Unsplash/Pexels par vos assets ; pour le hero,
-   brancher votre `<video>` (le `poster` sert de repli si la vidéo ne charge pas).
-5. **Sélecteurs d'accent** : ce sont des aides de démo — à retirer à
-   l'intégration (le silo est fixé par la page/marque).
+**Custom select (17)**: hidden native `<select>` + styled UI driven by JS
+(data-driven via `data-set` / `data-multiple`). Automatic search beyond
+5 options, multiple selection with removable badges, keyboard navigation,
+`change` event propagated to the native `<select>` (form/React compatible).
 
 ---
 
-## 5. Détection de scroll robuste (header)
+## 4. Next.js integration notes
 
-Le composant 16 bascule transparent → opaque via **`IntersectionObserver`** sur
-une sentinelle en haut de page, **plus** un fallback sur l'événement `scroll`.
-L'IO est indépendant du conteneur de défilement (plus fiable que `scroll` seul).
+1. **Tailwind**: replace the browser build with the Tailwind plugin
+   (PostCSS/Vite). Utility classes carry over **1:1**; `orbita.css`
+   + the `@theme inline` move into `globals.css`.
+2. **Tokens**: they are already centralized in `orbita.css` (`:root` +
+   `[data-theme="…"]`). Silo switching is done via `data-theme` on a
+   container; animation speed/curve via `--t-dur` / `--t-ease`.
+3. **Header (16)**: the markup and JS are **identical to component 01**.
+   Transparency over the hero only adds:
+   - 3 hook classes on existing elements: `nav-ink` (logo),
+     `nav-div` (separator), `btn-login` (Login);
+   - a CSS block driven by the existing `.hdr.is-scrolled` state
+     (rgba veil at rest → `paper` on scroll, text switch).
+   In production, the `!important` in this block can be replaced by a
+   **`data-attribute`** variant (e.g. `data-header="transparent"`) — purely cosmetic.
+4. **Media**: replace the Unsplash/Pexels URLs with your assets; for the hero,
+   plug in your `<video>` (the `poster` serves as fallback if the video does not load).
+5. **Accent selectors**: these are demo aids — remove them at
+   integration (the silo is set by the page/brand).
+
+---
+
+## 5. Robust scroll detection (header)
+
+Component 16 switches transparent → opaque via **`IntersectionObserver`** on
+a sentinel at the top of the page, **plus** a fallback on the `scroll` event.
+The IO is independent of the scroll container (more reliable than `scroll` alone).

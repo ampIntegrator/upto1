@@ -1,20 +1,20 @@
 /*
- * Select — habillage iso maquette 17-forms (.selectx-*) par-dessus
- * Selector / MultiSelector d'Astryx. Le thème donne bordure, focus, panneau et
- * options ; ce module ajoute ce qu'Astryx ne prévoit pas : label flottant dans
- * le champ, hauteur 58 px, chevron qui pivote, recherche épurée, badges accent.
- * L'état « ouvert » est lu en CSS via aria-expanded du déclencheur (:has).
+ * Select — styling matching mockup 17-forms (.selectx-*) on top of
+ * Astryx Selector / MultiSelector. The theme provides border, focus, panel and
+ * options; this module adds what Astryx doesn't: floating label inside
+ * the field, 58 px height, rotating chevron, pared-down search, accent badges.
+ * The « open » state is read in CSS via the trigger's aria-expanded (:has).
  */
 .wrap {
   position: relative;
 }
 
-/* déclencheur : 58 px (grandit avec les badges), texte calé en bas sous le label */
+/* trigger: 58 px (grows with badges), text pinned to the bottom under the label */
 .wrap :global(.astryx-selector),
 .wrap :global(.astryx-multi-selector) {
   min-height: 58px;
   height: auto;
-  padding: 0 40px 0 0; /* le bouton porte le padding interne (21 / 15 / 6) */
+  padding: 0 40px 0 0; /* the button carries the inner padding (21 / 15 / 6) */
   align-items: stretch;
 }
 .wrap :global(.astryx-selector) > button,
@@ -27,13 +27,13 @@
   line-height: 1.4;
 }
 
-/* placeholder invisible : c'est le label qui joue ce rôle (maquette .selectx-val.placeholder) */
+/* invisible placeholder: the label plays that role (mockup .selectx-val.placeholder) */
 .wrap:not(.hasValue) :global(.astryx-selector) > button > span,
 .wrap:not(.hasValue) :global(.astryx-multi-selector) > button > span {
   color: transparent;
 }
 
-/* chevron : à droite, pivote à l'ouverture */
+/* chevron: on the right, rotates when opening */
 .wrap :global(.astryx-selector-indicator-icon),
 .wrap :global(.astryx-multi-selector-indicator-icon) {
   position: absolute;
@@ -48,7 +48,7 @@
   transform: translateY(-50%) rotate(180deg);
 }
 
-/* label flottant : au repos dans le champ, remonte (11,5 px, accent) si valeur ou ouvert */
+/* floating label: at rest inside the field, moves up (11.5 px, accent) if there is a value or it is open */
 .label {
   position: absolute;
   inset-inline-start: 15px;
@@ -72,19 +72,19 @@
 }
 .wrap.disabled .label { color: var(--color-text-disabled); }
 
-/* panneau : décalé de 6 px du champ (dessous, ou dessus si la place manque).
-   La hauteur se borne sur la liste, pas sur le panneau : Astryx dimensionne la
-   liste lui-même et un max-height sur le panneau la laisserait déborder. */
+/* panel: offset 6 px from the field (below, or above if space is lacking).
+   The height is capped on the list, not on the panel: Astryx sizes the
+   list itself and a max-height on the panel would let it overflow. */
 .wrap :global(.astryx-selector-popup),
 .wrap :global(.astryx-multi-selector-popup) {
-  margin-top: 2px; /* + 4 px d'offset Astryx = 6 px (maquette) */
+  margin-top: 2px; /* + 4 px Astryx offset = 6 px (mockup) */
 }
 .wrap :global(.astryx-selector-popup) [role='listbox'],
 .wrap :global(.astryx-multi-selector-popup) [role='listbox'] {
-  max-height: 232px; /* 280 px de panneau − barre de recherche */
+  max-height: 232px; /* 280 px panel − search bar */
 }
 
-/* recherche : loupe + saisie nue, filet dessous ; ni croix ni divider Astryx */
+/* search: magnifier + bare input, rule below; no Astryx clear button or divider */
 .wrap :global(.astryx-selector-search),
 .wrap :global(.astryx-multi-selector-search) {
   padding: 12px 12px;
@@ -120,8 +120,8 @@
   display: none;
 }
 
-/* options : 11 px 13 px, 14,5 px (maquette .selectx-opt) — on neutralise la
-   hauteur propre de l'item Astryx */
+/* options: 11 px 13 px, 14.5 px (mockup .selectx-opt) — we neutralize the
+   Astryx item's own height */
 .wrap :global(.astryx-selector-option-row),
 .wrap :global(.astryx-multi-selector-option) {
   padding: 0 12px;
@@ -139,8 +139,8 @@
   min-height: 0;
 }
 
-/* multiple : le résumé Astryx est masqué, nos badges (avec croix) sont posés
-   par-dessus le déclencheur, dans la zone sous le label */
+/* multiple: the Astryx summary is hidden, our badges (with clear button) are placed
+   over the trigger, in the area under the label */
 .wrap.multi :global(.astryx-multi-selector) > button > span { visibility: hidden; }
 .badges {
   position: absolute;
@@ -150,13 +150,13 @@
   flex-wrap: wrap;
   gap: 8px;
   z-index: 1;
-  pointer-events: none; /* le clic passe au déclencheur, sauf sur la croix */
+  pointer-events: none; /* clicks go through to the trigger, except on the clear button */
 }
 .badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  height: 28px; /* hauteur paire fixée (le padding seul donnait 29 px) */
+  height: 28px; /* fixed even height (padding alone gave 29 px) */
   padding: 0 4px 0 8px;
   background: light-dark(var(--color-accent-muted), rgba(255, 255, 255, 0.1));
   color: light-dark(var(--color-text-accent), var(--color-highlight));
@@ -185,8 +185,8 @@
   .badgeX:hover { color: light-dark(var(--color-accent-deep), #ffffff); }
 }
 
-/* icône d'état (erreur / succès / avertissement) : Astryx la met à la place du
-   chevron, en haut ; on la centre à droite comme le chevron, un peu plus grande */
+/* status icon (error / success / warning): Astryx puts it in place of the
+   chevron, at the top; we center it on the right like the chevron, slightly larger */
 .wrap :global(.astryx-selector) > :global(.astryx-icon)[data-color='error'],
 .wrap :global(.astryx-selector) > :global(.astryx-icon)[data-color='success'],
 .wrap :global(.astryx-selector) > :global(.astryx-icon)[data-color='warning'],

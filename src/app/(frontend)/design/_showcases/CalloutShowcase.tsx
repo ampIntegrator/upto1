@@ -1,4 +1,4 @@
-/* Composant propre au design system : src/components/Callout (encadré highlight, maquettes 08, 09, 18, 23). */
+/* Design-system-specific component: src/components/Callout (highlight box, mockups 08, 09, 18, 23). */
 'use client';
 
 import {Grid, GridSpan} from '@astryxdesign/core/Grid';

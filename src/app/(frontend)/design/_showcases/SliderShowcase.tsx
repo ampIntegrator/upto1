@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — Slider Astryx, apparence par le thème (maquette 17-forms .c-range) */
+/* Orbita-styled showcase — Astryx Slider, appearance via the theme (mockup 17-forms .c-range) */
 'use client';
 
 import {Card} from '@astryxdesign/core/Card';

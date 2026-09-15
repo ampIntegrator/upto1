@@ -1,16 +1,16 @@
 'use client';
 
 /**
- * Dialog — modale du site, sur le Dialog Astryx.
+ * Dialog — the site modal, built on the Astryx Dialog.
  *
- * Signature Orbita (maquette 20-modal) : en-tête avec eyebrow doré optionnel
- * et titre display en accent, bouton fermer carré (icône Nucleo `close`),
- * corps défilant, pied sur fond teinté surmonté d'un filet dégradé
- * highlight → accent → highlight qui suit le silo. Variante nuit par `tone`.
+ * Orbita signature (mockup 20-modal): header with optional gold eyebrow
+ * and display title in accent, square close button (Nucleo `close` icon),
+ * scrolling body, footer on a tinted background topped by a gradient divider
+ * highlight → accent → highlight that follows the silo. Night variant via `tone`.
  *
- * L'en-tête garde une hauteur constante avec ou sans eyebrow : le bloc
- * eyebrow + titre est centré verticalement dans une zone de hauteur fixe,
- * puisqu'en back-office l'éditeur pourra remplir l'eyebrow ou non.
+ * The header keeps a constant height with or without eyebrow: the
+ * eyebrow + title block is vertically centered in a fixed-height area,
+ * since in the back office the editor may or may not fill in the eyebrow.
  */
 import {Dialog as AstryxDialog} from '@astryxdesign/core/Dialog';
 import {Heading} from '@astryxdesign/core/Heading';
@@ -29,26 +29,26 @@ import styles from './Dialog.module.css';
 export type OrbitaDialogSize = 'sm' | 'md' | 'lg';
 export type DialogTone = 'light' | 'night';
 
-/** Largeurs Orbita : 420 / 620 / 840 px. */
+/** Orbita widths: 420 / 620 / 840 px. */
 const WIDTH: Record<OrbitaDialogSize, number> = {sm: 420, md: 620, lg: 840};
 
-/** Hauteur réservée à l'en-tête (eyebrow + titre + bouton fermer), constante. */
+/** Height reserved for the header (eyebrow + title + close button), constant. */
 const HEADER_MIN_HEIGHT = 92;
 
 export type DialogProps = {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
-  /** Titre (obligatoire : il nomme la modale pour l'accessibilité). */
+  /** Title (required: it names the modal for accessibility). */
   title: string;
-  /** Petite capitale dorée au-dessus du titre. Optionnelle, pilotable depuis Payload. */
+  /** Small gold caps above the title. Optional, controllable from Payload. */
   eyebrow?: string;
-  /** Largeur : sm 420, md 620, lg 840 px. */
+  /** Width: sm 420, md 620, lg 840 px. */
   size?: OrbitaDialogSize;
-  /** Clair (défaut) ou nuit. */
+  /** Light (default) or night. */
   tone?: DialogTone;
-  /** Comportement de fermeture Astryx : info (défaut), form, required. */
+  /** Astryx close behavior: info (default), form, required. */
   purpose?: 'info' | 'form' | 'required';
-  /** Boutons du pied, alignés à droite. Sans `actions`, pas de pied. */
+  /** Footer buttons, right-aligned. Without `actions`, no footer. */
   actions?: React.ReactNode;
   children: React.ReactNode;
 };
@@ -101,7 +101,7 @@ export function Dialog({
 
   const footer = actions ? (
     <VStack gap={0} className={styles.footer}>
-      {/* filet dégradé highlight → accent → highlight, suit le silo */}
+      {/* gradient divider highlight → accent → highlight, follows the silo */}
       <VStack
         aria-hidden="true"
         style={{
@@ -137,7 +137,7 @@ export function Dialog({
     </AstryxDialog>
   );
 
-  // Variante nuit : même silo, mode sombre forcé sur la modale seule.
+  // Night variant: same silo, dark mode forced on the modal only.
   if (tone === 'night' && mode !== 'dark') {
     return (
       <Theme theme={theme} mode="dark">

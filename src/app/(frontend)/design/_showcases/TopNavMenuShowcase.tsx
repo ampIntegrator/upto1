@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — thème : orbita.ts section NAVIGATION (sous-menu simple, maquette 01) */
+/* Orbita-styled showcase — theme: orbita.ts NAVIGATION section (simple submenu, mockup 01) */
 'use client';
 
 import {HStack, VStack} from '@astryxdesign/core/Stack';

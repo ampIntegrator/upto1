@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * Upload — zone de dépôt de fichier du site (maquette 17-forms .upload).
- * FileInput Astryx en mode dropzone, habillé : cadre pointillé, carré icône
- * accent, titre et sous-titre sur une ligne. Le titre laisse place au nom du
- * fichier une fois déposé.
+ * Upload — site file drop zone (mockup 17-forms .upload).
+ * Astryx FileInput in dropzone mode, styled: dashed border, accent icon
+ * square, title and subtitle on one line. The title gives way to the
+ * file name once dropped.
  */
 import {FileInput} from '@astryxdesign/core/FileInput';
 import React from 'react';
@@ -12,9 +12,9 @@ import React from 'react';
 import styles from './Upload.module.css';
 
 export type UploadProps = {
-  /** Libellé accessible et titre de la zone (« Déposez votre cahier des charges »). */
+  /** Accessible label and title of the zone (« Déposez votre cahier des charges »). */
   label: string;
-  /** Sous-titre (« PDF, DOCX — 10 Mo max. »). */
+  /** Subtitle (« PDF, DOCX — 10 Mo max. »). */
   hint?: string;
   value: File | File[] | null;
   onChange: (files: File | File[] | null) => void;

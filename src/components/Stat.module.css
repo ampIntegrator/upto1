@@ -2,7 +2,7 @@
 .stat[data-align='center'] { align-items: center; text-align: center; }
 .value { white-space: nowrap; }
 .stat[data-size='bar'] .value { font-size: 40px; letter-spacing: -0.02em; }
-/* préfixe / suffixe : 62 % du nombre, highlight-deep (highlight en nuit) */
+/* prefix / suffix: 62 % of the number, highlight-deep (highlight in night) */
 .sign {
   color: light-dark(var(--color-highlight-deep), var(--color-highlight));
   font-size: 0.62em;
@@ -12,7 +12,7 @@
 }
 .label {
   margin-top: var(--spacing-2, 8px);
-  font-family: var(--font-family-body); /* maquette .stat-sub : Geist (pas mono), medium, 11,5 → 12 */
+  font-family: var(--font-family-body); /* mockup .stat-sub: Geist (not mono), medium, 11.5 → 12 */
   font-size: 12px;
   font-weight: var(--font-weight-medium);
   color: var(--color-text-disabled);

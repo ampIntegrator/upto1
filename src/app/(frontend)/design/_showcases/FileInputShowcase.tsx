@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/Upload */
+/* Orbita-styled showcase — replaces the original Astryx demo. Component: src/components/Upload */
 'use client';
 
 import {Card} from '@astryxdesign/core/Card';

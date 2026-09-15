@@ -1,8 +1,8 @@
 import type {OrbitaSilo} from '../orbita';
 
-/** Les 6 silos d'accent Orbita (le silo brique a été retiré le 11 sept. 2026) (valeurs : orbita.css `[data-theme]`).
- *  highlight / highlightDeep : complémentaires franches validées le 9 sept. 2026
- *  (le bleu garde la maquette ; les autres s'alignent sur son écart indigo → turquoise). */
+/** The 6 Orbita accent silos (the brick silo was removed on Sept 11, 2026) (values: orbita.css `[data-theme]`).
+ *  highlight / highlightDeep: bold complementaries approved on Sept 9, 2026
+ *  (blue keeps the mockup; the others follow its indigo → turquoise offset). */
 export const SILOS = {
   blue:    {slug: 'blue',    bg: '#F4F6FB', bg2: '#E8ECF6', primary: '#4F46E5', primaryDeep: '#3D34C9', highlight: '#10E0C8', highlightDeep: '#0A9E8E', night: '#1B1A4E'},
   green:   {slug: 'green',   bg: '#F1F6F2', bg2: '#E4EFE7', primary: '#40916C', primaryDeep: '#2F6E51', highlight: '#F5B841', highlightDeep: '#B8800A', night: '#0E2C2E'},
@@ -15,8 +15,8 @@ export const SILOS = {
 export type SiloName = keyof typeof SILOS;
 export const SILO_NAMES = Object.keys(SILOS) as SiloName[];
 
-/** Libellés des silos (admin et catalogue). Ici plutôt que dans theme/index : l'admin Payload les
- *  lit sans charger les thèmes générés par Astryx. */
+/** Silo labels (admin and catalog). Here rather than in theme/index: the Payload admin
+ *  reads them without loading the Astryx-generated themes. */
 export const SILO_LABELS: Record<SiloName, string> = {
   blue: 'Bleu',
   green: 'Vert',

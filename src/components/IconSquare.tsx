@@ -1,8 +1,8 @@
 'use client';
 
 /**
- * IconSquare — carré teinté avec une icône Nucleo au centre (cartes, zone de
- * dépôt, mega-menu). `size` est le côté du carré, `iconSize` celui de l'icône.
+ * IconSquare — tinted square with a Nucleo icon in the center (cards, drop
+ * zone, mega menu). `size` is the square side, `iconSize` the icon's.
  */
 import React from 'react';
 

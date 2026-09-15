@@ -1,29 +1,29 @@
-# Icônes Nucleo — dépôt des SVG sources
+# Nucleo icons — source SVG drop folder
 
-Déposer ici les SVG Nucleo. Ils seront convertis en composants React
-(`src/theme/icons/`) et branchés dans le thème Astryx et dans nos composants.
+Drop the Nucleo SVGs here. They are converted into React components
+(`src/theme/icons/`) and wired into the Astryx theme and our components.
 
-## Format attendu
-- Un fichier par icône, nommé par sa clé : `chevron-down.svg`, `arrow-right.svg`…
-- ViewBox carré 18 × 18 (grille Nucleo 18 px). Les attributs `width` / `height` sont retirés à la conversion.
-- Traits et remplissages en `currentColor` (option d'export Nucleo). Une couleur en dur est corrigée à la conversion, mais autant l'éviter.
-- Une seule épaisseur de trait pour tout le lot (1 ou 1,5), à choisir une fois pour toutes.
-- Pas de `<title>` : l'accessibilité est gérée par le composant Icon.
-- Pas de `<style>`, pas d'identifiants dupliqués, pas de police embarquée.
+## Expected format
+- One file per icon, named by its key: `chevron-down.svg`, `arrow-right.svg`…
+- Square 18 × 18 viewBox (Nucleo 18 px grid). The `width` / `height` attributes are removed during conversion.
+- Strokes and fills in `currentColor` (Nucleo export option). A hardcoded color is fixed during conversion, but better to avoid it.
+- A single stroke width for the whole set (1 or 1.5), chosen once and for all.
+- No `<title>`: accessibility is handled by the Icon component.
+- No `<style>`, no duplicate IDs, no embedded font.
 
-## `astryx/` — le jeu de base (64 icônes)
-Toutes les icônes de socle : les 28 noms sémantiques Astryx (chevrons, croix,
-coche, recherche, calendrier, états…), le chrome du site (flèches, téléphone,
-mail, upload, pin, globe), les réseaux sociaux et les icônes de contenu de
-départ. C'est le jeu livré avec le design system.
+## `astryx/` — the base set (64 icons)
+All the foundation icons: the 28 Astryx semantic names (chevrons, cross,
+check, search, calendar, statuses…), the site chrome (arrows, phone,
+mail, upload, pin, globe), social networks and the initial content
+icons. This is the set shipped with the design system.
 
-## `vidomia/` — les icônes ajoutées au fil du projet
-Icônes propres au site Vidomia, déposées au fur et à mesure des besoins
-(contenu éditorial, pictos métier…). Elles apparaissent automatiquement dans
-le second bloc de la page `/design/fondations/icones` après `pnpm icons:build`.
-Une clé déjà présente dans `astryx/` est ignorée (le jeu de base a priorité).
+## `vidomia/` — icons added over the course of the project
+Icons specific to the Vidomia site, added as needs arise
+(editorial content, business pictograms…). They automatically appear in
+the second block of the `/design/fondations/icones` page after `pnpm icons:build`.
+A key already present in `astryx/` is ignored (the base set takes priority).
 
-## Nommage
-Nommer le fichier par la clé (`chevron-down.svg`, `arrow-right.svg`), sans le
-préfixe de taille Nucleo (`18-`, `32-`). Le code utilise cette clé ; Payload
-la stockera pour les icônes choisies par les éditeurs.
+## Naming
+Name the file by its key (`chevron-down.svg`, `arrow-right.svg`), without the
+Nucleo size prefix (`18-`, `32-`). The code uses this key; Payload
+will store it for icons chosen by editors.

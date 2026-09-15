@@ -1,7 +1,7 @@
 /*
- * Styles globaux du front (hors admin Payload, qui a son propre layout).
- * Astryx : reset + styles de base des composants. Le thème Orbita (tokens
- * compilés) est importé par src/theme/OrbitaThemeProvider.tsx.
+ * Global front-end styles (excluding the Payload admin, which has its own layout).
+ * Astryx: reset + base component styles. The Orbita theme (compiled
+ * tokens) is imported by src/theme/OrbitaThemeProvider.tsx.
  */
 @import '@astryxdesign/core/reset.css';
 @import '@astryxdesign/core/astryx.css';
@@ -15,9 +15,9 @@ body {
 }
 
 
-/* Dimensions de l'en-tête du site — SEULE SOURCE. SiteHeader, Section (réserve sous
-   l'en-tête fixe) et Hero (hauts de page de 500 px) lisent ces variables : changer une
-   valeur ici se propage partout. Sous 1280 px le bandeau disparaît. */
+/* Site header dimensions — SINGLE SOURCE. SiteHeader, Section (space reserved under
+   the fixed header) and Hero (500 px page tops) read these variables: changing a
+   value here propagates everywhere. Below 1280 px the strip disappears. */
 :root {
   --site-header-strip: 38px;
   --site-header-bar: 74px;
@@ -30,14 +30,14 @@ body {
   }
 }
 
-/* Icônes Nucleo : épaisseur de trait globale, sans modifier les SVG.
-   Ne touche que les groupes exportés à 1 (les aplats et les traits à 0 restent). */
+/* Nucleo icons: global stroke width, without modifying the SVGs.
+   Only affects groups exported at 1 (flat fills and 0-width strokes stay). */
 [data-icon='nucleo'] [stroke-width='1'] {
   stroke-width: var(--icon-stroke-width, 1);
 }
 
-/* Contrôles d'option Orbita : libellé en couleur silo quand l'option est cochée,
-   piste de progression du curseur alignée sur la piste (6 px). */
+/* Orbita option controls: label in silo color when the option is checked,
+   slider progress track aligned with the track (6 px). */
 [data-astryx-theme^='orbita'] .astryx-checkbox-input:has(input:checked) .astryx-checkbox-label,
 [data-astryx-theme^='orbita'] .astryx-radio-list-item:has(input:checked) {
   color: light-dark(var(--color-text-accent), var(--color-highlight));
@@ -52,9 +52,9 @@ body {
   border-radius: 3px;
 }
 
-/* Sélecteurs de date : le panneau court bord à bord du champ qui l'ouvre
-   (largeur de l'ancre), 6 px dessous ; la grille du calendrier reste bornée
-   et centrée dedans. */
+/* Date pickers: the panel spans edge to edge of the field that opens it
+   (anchor width), 6 px below; the calendar grid stays capped
+   and centered inside. */
 [data-astryx-theme^='orbita'] :is(.astryx-date-input, .astryx-date-range-input, .astryx-date-time-input) > div[style*='position-anchor'] {
   width: anchor-size(width);
   margin-block-start: var(--spacing-1-5);
@@ -69,8 +69,8 @@ body {
   margin-inline: auto;
 }
 
-/* Listes à cases (CheckboxList) : ligne cochée en silo à 5 % seulement, séparation
-   des lignes en blanc (nuit : fond nuit), sans transparence. */
+/* Checkbox lists (CheckboxList): checked row in silo at only 5 %, row
+   separators in white (night: night background), no transparency. */
 [data-astryx-theme^='orbita'] .astryx-checkbox-list .astryx-list-item {
   border-bottom-color: light-dark(#FFFFFF, var(--color-night));
 }
@@ -78,8 +78,8 @@ body {
   background-color: color-mix(in srgb, var(--color-accent) 5%, transparent);
 }
 
-/* Bouton d'effacement des champs : croix nue, sans le cadre du bouton fantôme
-   (la règle du thème est battue en spécificité par .astryx-button.ghost). */
+/* Field clear button: bare cross, without the ghost button frame
+   (the theme rule loses on specificity to .astryx-button.ghost). */
 [data-astryx-theme^='orbita'] .astryx-button.astryx-input-clear-button,
 [data-astryx-theme^='orbita'] .astryx-button.astryx-input-clear-button:hover {
   border: 0;
@@ -93,7 +93,7 @@ body {
 [data-astryx-theme^='orbita'] .astryx-button.astryx-input-clear-button { color: var(--color-icon-secondary); }
 [data-astryx-theme^='orbita'] .astryx-button.astryx-input-clear-button:hover { color: var(--color-text-accent); }
 
-/* Champs de date et d'heure : icônes calendrier et horloge en couleur du silo. */
+/* Date and time fields: calendar and clock icons in silo color. */
 [data-astryx-theme^='orbita'] :is(
   .astryx-date-input-toggle-icon,
   .astryx-date-range-input-toggle-icon,
@@ -104,9 +104,9 @@ body {
   color: var(--color-text-accent);
 }
 
-/* Date + heure : le calendrier court sur la largeur des deux segments réunis,
-   pas seulement sur le segment date qui l'ancre. Les deux segments sont égaux
-   et séparés de 8 px : largeur = 2 × segment + 8. */
+/* Date + time: the calendar spans the width of both segments combined,
+   not just the date segment that anchors it. The two segments are equal
+   and 8 px apart: width = 2 × segment + 8. */
 [data-astryx-theme^='orbita'] .astryx-field:has(> .astryx-date-time-input) > div[style*='position-anchor'] {
   width: calc(anchor-size(width) * 2 + var(--spacing-2));
   margin-block-start: var(--spacing-1-5);
@@ -121,10 +121,10 @@ body {
   margin-inline: auto;
 }
 
-/* Champ numérique : deux cases carrées empilées, chacune d'une demi-hauteur
-   du champ (48 px → 24 × 24), flèches Nucleo un peu plus grandes. */
+/* Number field: two stacked square boxes, each half the field's height
+   (48 px → 24 × 24), slightly larger Nucleo arrows. */
 [data-astryx-theme^='orbita'] .astryx-number-input {
-  position: relative !important; /* bloc conteneur des cases (StyleX force static) */
+  position: relative !important; /* containing block for the boxes (StyleX forces static) */
   padding-inline-end: 32px !important;
 }
 [data-astryx-theme^='orbita'] .astryx-number-input > div:last-child {
@@ -139,7 +139,7 @@ body {
   border-inline-start: var(--border-width) solid var(--color-border);
 }
 [data-astryx-theme^='orbita'] .astryx-number-input > div:last-child > button {
-  /* !important : les styles StyleX d'Astryx ont une spécificité artificielle très haute */
+  /* !important: Astryx's StyleX styles have an artificially very high specificity */
   width: 24px !important;
   height: 50% !important;
   min-height: 0 !important;
@@ -160,8 +160,8 @@ body {
   height: 16px;
 }
 
-/* Interrupteur Orbita : piste 46 × 26 (StyleX force 40 de large, d'où le curseur
-   qui sortait du cadre une fois coché). */
+/* Orbita switch: 46 × 26 track (StyleX forces 40 wide, hence the thumb
+   sticking out of the frame once checked). */
 [data-astryx-theme^='orbita'] .astryx-switch {
   width: 46px !important;
   min-width: 46px !important;
@@ -173,8 +173,8 @@ body {
   min-width: 46px !important;
 }
 
-/* PowerSearch : codes des champs Orbita — 58 px, label flottant (CSS seul :
-   focus, filtre présent ou saisie), jetons de filtre en badges accent. */
+/* PowerSearch: Orbita field conventions — 58 px, floating label (CSS only:
+   focus, filter present or typed input), filter tokens as accent badges. */
 [data-astryx-theme^='orbita'] .astryx-power-search .astryx-field { position: relative; }
 [data-astryx-theme^='orbita'] .astryx-power-search .astryx-field > .astryx-field-label {
   position: absolute !important;
@@ -220,28 +220,28 @@ body {
   font-weight: var(--font-weight-semibold) !important;
 }
 
-/* Dégradés signature (liserés, séparateurs) : une seule source.
-   edge           : silo aux bords, highlight au centre (pied de Section média)
-   edge-highlight : highlight aux bords, silo au centre (pied des onglets, séparateurs
-                    du bloc étapes) ; -v : le même à la verticale */
+/* Signature gradients (edge lines, separators): single source.
+   edge           : silo at the edges, highlight in the center (media Section footer)
+   edge-highlight : highlight at the edges, silo in the center (tabs footer, steps
+                    block separators); -v: the same, vertical */
 [data-astryx-theme^='orbita'] {
   --gradient-edge: linear-gradient(90deg, var(--color-accent) 0%, var(--color-highlight) 50%, var(--color-accent) 100%);
   --gradient-edge-highlight: linear-gradient(90deg, var(--color-highlight) 0%, var(--color-accent) 50%, var(--color-highlight) 100%);
   --gradient-edge-highlight-v: linear-gradient(180deg, var(--color-highlight) 0%, var(--color-accent) 50%, var(--color-highlight) 100%);
 }
 
-/* Onglets (06-tabs) : compléments au thème orbita.ts (section ONGLETS) pour ce
-   que defineTheme ne cible pas. Séparateur vertical entre onglets ; menu de
-   débordement en couleur silo quand son option est choisie ; libellés sur deux
-   lignes dès 640 px (en dessous : une ligne, la barre défile, reco Astryx) ;
-   calque de survol Astryx neutralisé (sinon il se superpose au fond silo 10 %) ;
-   icône d'onglet à 24 px, toujours en couleur silo ; libellé fixe du menu.
-   Le panneau sous les onglets n'est pas un composant Astryx : .orbita-tab-stack
-   (zone silo 10 %, bordée sur trois côtés, liseré dégradé en pied) et
-   .orbita-tab-panel (carte) habillent le contenu du bloc. Tous les panneaux
-   sont rendus dans la même case de grille (hauteur constante = le plus haut),
-   seul l'actif est visible ; la pile prend toute la hauteur restante du bloc
-   pour que le liseré reste en pied quand la grille de page étire le bloc. */
+/* Tabs (06-tabs): additions to the orbita.ts theme (TABS section) for what
+   defineTheme cannot target. Vertical separator between tabs; overflow
+   menu in silo color when one of its options is selected; labels on two
+   lines from 640 px (below: one line, the bar scrolls, Astryx recommendation);
+   Astryx hover layer neutralized (otherwise it stacks on the 10 % silo background);
+   tab icon at 24 px, always in silo color; fixed menu label.
+   The panel under the tabs is not an Astryx component: .orbita-tab-stack
+   (10 % silo area, bordered on three sides, gradient edge line at the bottom) and
+   .orbita-tab-panel (card) dress the block content. All panels
+   are rendered in the same grid cell (constant height = the tallest),
+   only the active one is visible; the stack takes all the remaining block height
+   so the edge line stays at the bottom when the page grid stretches the block. */
 [data-astryx-theme^='orbita'] .astryx-tab-strip > .astryx-tab + .astryx-tab,
 [data-astryx-theme^='orbita'] .astryx-tab-strip > .astryx-tab + .astryx-tab-menu {
   border-inline-start: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.15));
@@ -263,10 +263,10 @@ body {
   inline-size: 24px !important;
   block-size: 24px !important;
 }
-/* Menu de débordement : libellé fixe — Astryx affiche sinon l'option choisie,
-   ce qui change la largeur de l'onglet. Le texte d'origine est masqué et
-   remplacé par la variable --tab-menu-label posée sur le TabMenu
-   (style={{'--tab-menu-label': '"Plus"'}}) ; « Plus » par défaut. */
+/* Overflow menu: fixed label — otherwise Astryx shows the selected option,
+   which changes the tab width. The original text is hidden and
+   replaced by the --tab-menu-label variable set on the TabMenu
+   (style={{'--tab-menu-label': '"Plus"'}}); « Plus » by default. */
 [data-astryx-theme^='orbita'] .astryx-tab-menu > span:nth-child(2) {
   display: none;
 }
@@ -279,22 +279,22 @@ body {
     white-space: normal;
   }
 }
-/* Trait actif qui glisse (maquette .tab-marker) : un seul trait, dessiné sur la
-   piste et ancré à l'onglet actif (CSS anchor positioning, sans JavaScript).
-   Sa position et sa largeur transitionnent d'un onglet à l'autre. Les traits
-   par onglet d'Astryx sont masqués. Navigateurs sans ancres : on garde le trait
-   Astryx en fondu. */
+/* Sliding active line (mockup .tab-marker): a single line, drawn on the
+   track and anchored to the active tab (CSS anchor positioning, no JavaScript).
+   Its position and width transition from one tab to the next. Astryx's
+   per-tab lines are hidden. Browsers without anchors: keep the Astryx line
+   with a fade. */
 @supports (anchor-name: --orbita) {
-  /* Le débord de focus d'Astryx (--_tab-strip-bleed : marge négative + padding
-     de 4 px pour laisser passer l'anneau de focus) est figé en permanence :
-     sinon la piste change de géométrie au premier focus et le trait saute. */
+  /* Astryx's focus bleed (--_tab-strip-bleed: negative margin + 4 px padding
+     to let the focus ring through) is fixed permanently:
+     otherwise the track changes geometry on first focus and the line jumps. */
   [data-astryx-theme^='orbita'] .astryx-tab-strip {
     position: relative;
     --_tab-strip-bleed: 4px !important;
   }
-  /* L'ancre est le trait Astryx de l'onglet actif (invisible mais en place),
-     pas l'onglet lui-même : au focus, Astryx pose un anchor-name inline sur
-     l'onglet, ce qui débrancherait le glissement. */
+  /* The anchor is the Astryx line of the active tab (invisible but in place),
+     not the tab itself: on focus, Astryx sets an inline anchor-name on
+     the tab, which would break the sliding. */
   [data-astryx-theme^='orbita'] .astryx-tab-indicator {
     opacity: 0;
     transition: none;
@@ -326,8 +326,8 @@ body {
   display: grid;
   flex: 1 1 auto;
   padding: 0;
-  /* base opaque (papier / carte nuit) : la teinte translucide du panneau se pose dessus,
-     pas sur la texture de la section */
+  /* opaque base (paper / night card): the panel's translucent tint sits on top of it,
+     not on the section texture */
   background: light-dark(var(--color-background-surface), var(--color-background-card));
   border-inline: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.15));
 }
@@ -341,14 +341,14 @@ body {
 [data-astryx-theme^='orbita'] .orbita-tab-panel {
   grid-area: 1 / 1;
   padding: 48px 20px;
-  background: var(--color-highlight-light); /* highlight du silo à 5 %, retenu le 10 sept. */
+  background: var(--color-highlight-light); /* silo highlight at 5 %, chosen on Sept 10 */
   transition: opacity var(--duration-medium) var(--ease-standard);
 }
 [data-astryx-theme^='orbita'] .orbita-tab-panel:not([data-active]) {
   opacity: 0;
   visibility: hidden;
 }
-/* contenu d'un onglet : 900 px maximum, centré */
+/* tab content: 900 px maximum, centered */
 [data-astryx-theme^='orbita'] .orbita-tab-panel > * {
   width: 100%;
   max-width: 900px;
@@ -358,12 +358,12 @@ body {
   [data-astryx-theme^='orbita'] .orbita-tab-panel { padding: 32px 24px; }
 }
 
-/* Grille de page : 12 colonnes dans le Container
-   (<Grid columns={12} className="page-grid"> + GridSpan). Sous 768 px, toutes
-   les colonnes passent en pleine largeur, dans l'ordre mobile de la section
-   (--mobile-order, posé par PageSections ; sinon l'ordre desktop ; la ligne de
-   rangée fixée sur desktop est levée), et les colonnes vides disparaissent pour
-   ne pas doubler l'écart entre leurs voisines. */
+/* Page grid: 12 columns inside the Container
+   (<Grid columns={12} className="page-grid"> + GridSpan). Below 768 px, all
+   columns go full width, in the section's mobile order
+   (--mobile-order, set by PageSections; otherwise the desktop order; the grid
+   row fixed on desktop is released), and empty columns disappear so as
+   not to double the gap between their neighbors. */
 @media (max-width: 767px) {
   [data-astryx-theme^='orbita'] .astryx-grid.page-grid {
     grid-template-columns: minmax(0, 1fr) !important;
@@ -378,9 +378,9 @@ body {
   }
 }
 
-/* Grille des sections construites dans l'admin (PageSections) : écarts réglés dans
-   Réglages du site › Mise en page ou par section, posés en variables sur la grille.
-   Sous 768 px, l'écart vertical mobile sépare tous les blocs empilés. */
+/* Grid for sections built in the admin (PageSections): gaps set in
+   Réglages du site › Mise en page or per section, applied as variables on the grid.
+   Below 768 px, the mobile vertical gap separates all stacked blocks. */
 [data-astryx-theme^='orbita'] .astryx-grid.section-grid {
   column-gap: var(--section-gap-x);
   row-gap: var(--section-gap-y);
@@ -391,21 +391,21 @@ body {
   }
 }
 
-/* Texte serif : une autre couleur se passe par style={{'--serif-color': …}} (lue par le thème). */
+/* Serif text: a different color is passed via style={{'--serif-color': …}} (read by the theme). */
 
-/* Liens et boutons : tout survol transitionne en 0,25 s avec la courbe douce du thème
-   (--ease-standard). Les composants Astryx passent par leurs propres transitions
-   sur les mêmes tokens ; cette règle couvre les <a> et <button> hors composant. */
+/* Links and buttons: every hover transitions in 0.25 s with the theme's smooth curve
+   (--ease-standard). Astryx components use their own transitions
+   on the same tokens; this rule covers <a> and <button> outside components. */
 [data-astryx-theme^='orbita'] a,
 [data-astryx-theme^='orbita'] button {
   transition-duration: var(--duration-medium);
   transition-timing-function: var(--ease-standard);
 }
 
-/* Navigation (01-header) : compléments au thème orbita.ts section NAVIGATION.
-   Carte mise en avant du méga-menu : textes blancs sur fond nuit, lien highlight,
-   colonne sans fond, pleine hauteur. Fil d'Ariane : chevrons en couleur silo,
-   page courante en encre secondaire. */
+/* Navigation (01-header): additions to the orbita.ts theme, NAVIGATION section.
+   Mega-menu featured card: white text on night background, highlight link,
+   column without background, full height. Breadcrumb: chevrons in silo color,
+   current page in secondary ink. */
 [data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-featured-card .astryx-text,
 [data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-featured-card .astryx-heading,
 [data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-featured-card span,
@@ -420,8 +420,8 @@ body {
   background: transparent !important;
   padding: 0 !important;
 }
-/* la liste interne (ol) du fil d'Ariane n'est pas une cible du thème : une seule ligne,
-   défilement latéral discret quand le fil est trop long */
+/* the breadcrumb's inner list (ol) is not a theme target: a single line,
+   discreet horizontal scrolling when the trail is too long */
 [data-astryx-theme^='orbita'] .astryx-breadcrumbs > ol {
   flex-wrap: nowrap;
   overflow-x: auto;
@@ -433,8 +433,8 @@ body {
   color: var(--color-text-secondary);
   font-weight: var(--font-weight-medium);
 }
-/* item de méga-menu : icône silo 24 px dans 44 px sans boîte, titre 14,5 semi-gras,
-   description 14 px grise ; survol : tout en blanc */
+/* mega-menu item: 24 px silo icon in 44 px without a box, 14.5 semibold title,
+   14 px gray description; hover: everything white */
 [data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item > div:first-child {
   width: 44px !important;
   height: 44px !important;
@@ -449,5 +449,5 @@ body {
 [data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item:hover > div:first-child,
 [data-astryx-theme^='orbita'] .astryx-top-nav-mega-menu-item:hover span { color: #fff !important; }
 
-/* Fil d'Ariane : maillon à icône seule (VisuallyHidden Astryx pour le nom) aligné. */
+/* Breadcrumb: icon-only link (Astryx VisuallyHidden for the name) aligned. */
 [data-astryx-theme^='orbita'] .astryx-breadcrumb-item a:has(> svg) { display: inline-flex; align-items: center; }

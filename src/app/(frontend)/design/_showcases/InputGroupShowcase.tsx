@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — InputGroup Astryx : préfixe icône euro (Nucleo), préfixe et suffixe texte. */
+/* Orbita-styled showcase — Astryx InputGroup: euro icon prefix (Nucleo), text prefix and suffix. */
 'use client';
 
 import {Icon} from '@astryxdesign/core/Icon';

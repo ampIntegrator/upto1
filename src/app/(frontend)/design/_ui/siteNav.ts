@@ -1,4 +1,4 @@
-/* Données de démonstration de l'en-tête (faux liens et textes, maquette 01-header). */
+/* Header demo data (fake links and text, mockup 01-header). */
 import type {SiteFooterData, SiteHeaderData} from '@/components/site-nav';
 
 export const SITE_HEADER: SiteHeaderData = {
@@ -57,7 +57,7 @@ export const SITE_HEADER: SiteHeaderData = {
   languages: ['FR', 'EN', 'DE', 'ES'],
 };
 
-/* Données de démonstration du pied de page (maquette 21-footer). */
+/* Footer demo data (mockup 21-footer). */
 export const SITE_FOOTER: SiteFooterData = {
   brand: {name: 'Vidomia', href: '/', description: 'La plateforme de chiffrage BTP qui transforme un métré en devis pro, validé par un ingénieur, en moins de 48 h.'},
   newsletter: {

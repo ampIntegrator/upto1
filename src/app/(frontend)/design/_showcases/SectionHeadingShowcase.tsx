@@ -1,4 +1,4 @@
-/* Composant propre au design system : src/components/SectionHeading (en-tête de section, maquette 15). */
+/* Design-system-specific component: src/components/SectionHeading (section heading, mockup 15). */
 'use client';
 
 import {Heading} from '@astryxdesign/core/Heading';

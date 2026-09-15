@@ -1,5 +1,5 @@
-/* Price — prix des tarifs (maquettes 08, 09). */
-.price { width: 100%; align-items: baseline; } /* montant, devise et période sur la même ligne de base */
+/* Price — pricing price (mockups 08, 09). */
+.price { width: 100%; align-items: baseline; } /* amount, currency and period on the same baseline */
 .value {
   font-family: var(--font-family-heading);
   font-weight: 800;

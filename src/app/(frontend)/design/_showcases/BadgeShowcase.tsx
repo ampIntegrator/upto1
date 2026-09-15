@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — Badge Astryx : les chips Orbita ajoutés comme variantes (thème), via Chip. */
+/* Orbita-styled showcase — Astryx Badge: Orbita chips added as variants (theme), via Chip. */
 'use client';
 
 import {Badge} from '@astryxdesign/core/Badge';

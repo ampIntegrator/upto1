@@ -1,4 +1,4 @@
-/* Composant propre au design system : src/components/MediaQuote (image avec phrase centrée). */
+/* Design-system-specific component: src/components/MediaQuote (image with centered sentence). */
 'use client';
 
 import {Grid, GridSpan} from '@astryxdesign/core/Grid';

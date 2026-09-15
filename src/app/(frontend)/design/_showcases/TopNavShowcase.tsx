@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — thème : orbita.ts section NAVIGATION. La barre complète du site est SiteHeader. */
+/* Orbita-styled showcase — theme: orbita.ts NAVIGATION section. The full site bar is SiteHeader. */
 'use client';
 
 import {Button} from '@astryxdesign/core/Button';

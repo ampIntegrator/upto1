@@ -1,18 +1,18 @@
 'use client';
 
 /**
- * Collapsible — l'item d'accordéon de la maquette 11-faq : boîte bordée,
- * question en Geist 600, icône plus/moins dessinée en CSS. Ouvert, la boîte se
- * remplit en couleur silo (texte et icône blancs). Nuit : fond translucide,
- * plus en highlight, ouvert = même remplissage silo.
+ * Collapsible — the accordion item from mockup 11-faq: bordered box,
+ * question in Geist 600, plus/minus icon drawn in CSS. When open, the box
+ * fills with the silo color (white text and icon). Night: translucent background,
+ * plus in highlight, open = same silo fill.
  *
- * Enveloppe le Collapsible Astryx (accessibilité, coordination de groupe,
- * état contrôlé ou non). Le chevron Astryx est masqué, la réponse s'anime en
- * hauteur (grille 0fr → 1fr) comme dans la maquette.
+ * Wraps the Astryx Collapsible (accessibility, group coordination,
+ * controlled or uncontrolled state). The Astryx chevron is hidden, the answer animates
+ * its height (grid 0fr → 1fr) as in the mockup.
  *
- * CollapsibleGroup — plusieurs items reliés : `type="single"` (accordéon
- * strict, une seule ouverte) ou `"multiple"` (libres), empilés ou sur deux
- * colonnes. Deux groupes sur une même page sont indépendants.
+ * CollapsibleGroup — several linked items: `type="single"` (strict
+ * accordion, only one open) or `"multiple"` (independent), stacked or in two
+ * columns. Two groups on the same page are independent.
  */
 import {Collapsible as AstryxCollapsible, CollapsibleGroup as AstryxCollapsibleGroup} from '@astryxdesign/core/Collapsible';
 import {Grid} from '@astryxdesign/core/Grid';
@@ -22,11 +22,11 @@ import React from 'react';
 import styles from './Collapsible.module.css';
 
 export type CollapsibleProps = {
-  /** la question (contenu du déclencheur) */
+  /** the question (trigger content) */
   question: React.ReactNode;
-  /** identifiant dans le groupe (obligatoire dans un CollapsibleGroup) */
+  /** identifier within the group (required inside a CollapsibleGroup) */
   value?: string;
-  /** la réponse */
+  /** the answer */
   children: React.ReactNode;
   defaultIsOpen?: boolean;
   isOpen?: boolean;
@@ -52,13 +52,13 @@ export function Collapsible({question, value, children, defaultIsOpen = false, i
 }
 
 export type CollapsibleGroupProps = {
-  /** accordéon strict (une seule ouverte) ou libre */
+  /** strict accordion (only one open) or free */
   type?: 'single' | 'multiple';
-  /** item(s) ouvert(s) au départ : `value` d'un item, ou tableau en mode multiple */
+  /** item(s) initially open: an item's `value`, or an array in multiple mode */
   defaultValue?: string | string[];
   value?: string | string[];
   onChange?: (value: string | string[]) => void;
-  /** disposition : empilée ou deux colonnes (une seule sous ~900 px) */
+  /** layout: stacked or two columns (a single one below ~900 px) */
   columns?: 1 | 2;
   children: React.ReactNode;
 };

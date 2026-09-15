@@ -1,4 +1,4 @@
-/* CardGrid — grille de cartes réglée sur la largeur de sa colonne (requêtes de conteneur). */
+/* CardGrid — card grid sized to its column width (container queries). */
 .host { width: 100%; container-type: inline-size; }
 .grid {
   display: grid;

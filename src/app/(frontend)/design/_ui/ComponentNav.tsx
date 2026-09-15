@@ -5,7 +5,7 @@ import React from 'react';
 
 import {CATALOG} from './catalog.generated';
 
-/** Précédent / suivant dans la catégorie, sous la démo d'un composant. */
+/** Previous / next within the category, below a component demo. */
 export function ComponentNav({category, current}: {category: string; current: string}) {
   const cat = CATALOG.find((c) => c.slug === category);
   if (!cat) return null;

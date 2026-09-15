@@ -1,17 +1,17 @@
 'use client';
 
 /**
- * TimePicker — choix de l'heure au clic, comme le calendrier.
+ * TimePicker — click-to-pick time, like the calendar.
  *
- * Deux usages :
- *   <TimePicker …>          heure seule, sur TimeInput Astryx
- *   <DateTimePicker …>      date + heure, sur DateTimeInput Astryx
+ * Two uses:
+ *   <TimePicker …>          time only, on Astryx TimeInput
+ *   <DateTimePicker …>      date + time, on Astryx DateTimeInput
  *
- * Le champ Astryx reste dessous (saisie clavier, validation, accessibilité) ;
- * le panneau s'ouvre au clic ou au focus dans le segment heure, sous le champ,
- * à sa largeur : colonne des heures (00–23) et colonne des minutes (pas
- * réglable), valeur choisie en cercle couleur silo, raccourci « Maintenant ».
- * Choisir les minutes ferme le panneau.
+ * The Astryx field stays underneath (keyboard input, validation, accessibility);
+ * the panel opens on click or focus in the hour segment, below the field,
+ * at its width: hours column (00–23) and minutes column (adjustable
+ * step), selected value in a silo-colored circle, « Maintenant » shortcut.
+ * Picking the minutes closes the panel.
  */
 import {DateTimeInput, type ISODateTimeString} from '@astryxdesign/core/DateTimeInput';
 import {TimeInput, type ISOTimeString} from '@astryxdesign/core/TimeInput';
@@ -28,7 +28,7 @@ function parseTime(v: string | undefined): {h: number | null; m: number | null} 
   return m ? {h: Number(m[1]), m: Number(m[2])} : {h: null, m: null};
 }
 
-/* ------------------------------------------------------------------ panneau */
+/* ------------------------------------------------------------------ panel */
 
 function TimePanel({
   id,
@@ -40,7 +40,7 @@ function TimePanel({
   onClose,
 }: {
   id: string;
-  /** nom d'ancre CSS du champ (position-anchor) */
+  /** CSS anchor name of the field (position-anchor) */
   anchor: string;
   hour: number | null;
   minute: number | null;
@@ -53,7 +53,7 @@ function TimePanel({
   const hoursRef = useRef<HTMLDivElement>(null);
   const minutesRef = useRef<HTMLDivElement>(null);
 
-  // À l'ouverture : la valeur (ou l'heure courante) est amenée à la vue.
+  // On open: the value (or the current time) is scrolled into view.
   useEffect(() => {
     const target = (list: HTMLDivElement | null, sel: string) => list?.querySelector<HTMLElement>(sel)?.scrollIntoView({block: 'center'});
     target(hoursRef.current, `[data-h="${hour ?? now.getHours()}"]`);
@@ -62,14 +62,14 @@ function TimePanel({
   }, []);
 
   const pickNow = () => {
-    // arrondi au pas ; 23:58 avec un pas de 5 donne 24:00 → on borne à 23:55
+    // rounded to the step; 23:58 with a step of 5 gives 24:00 → clamp to 23:55
     const m = Math.round(now.getMinutes() / minuteStep) * minuteStep;
     const h = now.getHours() + (m === 60 ? 1 : 0);
     if (h > 23) onPick(23, 60 - minuteStep, true);
     else onPick(h, m === 60 ? 0 : m, true);
   };
 
-  // navigation clavier dans une colonne : flèches, Début / Fin ; une seule option tabulable
+  // keyboard navigation within a column: arrows, Home / End; a single tabbable option
   const onListKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const opts = [...e.currentTarget.querySelectorAll<HTMLButtonElement>('[role="option"]')];
     const i = opts.indexOf(document.activeElement as HTMLButtonElement);
@@ -140,7 +140,7 @@ function TimePanel({
   );
 }
 
-/** Ouverture / fermeture : clic ou focus dans la zone cible, Échap, clic dehors. */
+/** Open / close: click or focus in the target area, Escape, click outside. */
 function usePanel(wrapRef: React.RefObject<HTMLDivElement | null>, isTarget: (el: Element) => boolean) {
   const [open, setOpen] = useState(false);
   useEffect(() => {
@@ -163,9 +163,9 @@ function usePanel(wrapRef: React.RefObject<HTMLDivElement | null>, isTarget: (el
   return {open, setOpen, onFocusCapture, onClickCapture};
 }
 
-/* --------------------------------------------------------------- heure seule */
+/* --------------------------------------------------------------- time only */
 
-/** AAAA-MM-JJ en heure locale (toISOString() donnerait la date UTC, fausse entre minuit et 2 h). */
+/** YYYY-MM-DD in local time (toISOString() would give the UTC date, wrong between midnight and 2 am). */
 const localISODate = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
 export type TimePickerProps = {
@@ -173,7 +173,7 @@ export type TimePickerProps = {
   value: ISOTimeString | undefined;
   onChange: (value: ISOTimeString | undefined) => void;
   placeholder?: string;
-  /** Pas des minutes : 5, 10, 15, 30. */
+  /** Minute step: 5, 10, 15, 30. */
   minuteStep?: number;
   hasClear?: boolean;
   isDisabled?: boolean;
@@ -213,7 +213,7 @@ export function TimePicker({label, value, onChange, placeholder = ' ', minuteSte
   );
 }
 
-/* --------------------------------------------------------------- date + heure */
+/* --------------------------------------------------------------- date + time */
 
 export type DateTimePickerProps = {
   label: string;
@@ -232,7 +232,7 @@ export type DateTimePickerProps = {
 export function DateTimePicker({label, value, onChange, placeholder = 'Date', timePlaceholder = 'Heure', minuteStep = 5, hasClear = true, isDisabled, isRequired, description, style}: DateTimePickerProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const panelId = useId();
-  // Seul le segment heure ouvre notre panneau ; le segment date garde le calendrier Astryx.
+  // Only the hour segment opens our panel; the date segment keeps the Astryx calendar.
   const isTarget = useCallback((el: Element) => !!el.closest('.astryx-date-time-input-time-segment'), []);
   const {open, setOpen, onFocusCapture, onClickCapture} = usePanel(wrapRef, isTarget);
   const [datePart, timePart] = (value ?? '').split('T');
@@ -252,7 +252,7 @@ export function DateTimePicker({label, value, onChange, placeholder = 'Date', ti
           minute={m}
           minuteStep={minuteStep}
           onPick={(hh, mm, done) => {
-            const date = datePart || localISODate(new Date()); // sans date choisie : aujourd'hui (date locale, pas UTC)
+            const date = datePart || localISODate(new Date()); // no date chosen: today (local date, not UTC)
             onChange(`${date}T${pad(hh)}:${pad(mm ?? 0)}` as ISODateTimeString);
             if (done) setOpen(false);
           }}

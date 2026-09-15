@@ -1,15 +1,15 @@
 'use client';
 
 /**
- * CheckList — liste à puces rondes (maquettes 03 process, 05 compareCards, 08 priceList) :
- * pastille de 18 px, coche blanche sur silo (`tone="check"`) ou croix blanche sur danger
- * (`tone="cross"`). Trois densités :
- *   compact  : sans filet, alignée en haut, 14 px (étapes)
- *   divided  : rangées à filet au-dessus, 15 px, pastille centrée (cartes comparatives)
- *   dense    : rangées serrées à filet dessous, 14 px (tarifs) ; `trailingDivider={false}`
- *              retire le filet du dernier item (carte de palier)
- * Chaque item accepte une valeur de fin de ligne `end` (« 97 € », Geist Mono 12 px barré),
- * ce qui suffit aux tarifs sans second composant. Liste HTML (ul / li) via les piles Astryx.
+ * CheckList — round-bullet list (mockups 03 process, 05 compareCards, 08 priceList):
+ * 18 px dot, white check on silo (`tone="check"`) or white cross on danger
+ * (`tone="cross"`). Three densities:
+ *   compact  : no divider, top-aligned, 14 px (steps)
+ *   divided  : rows with divider above, 15 px, centered dot (compare cards)
+ *   dense    : tight rows with divider below, 14 px (pricing); `trailingDivider={false}`
+ *              removes the divider of the last item (pricing tier card)
+ * Each item accepts an end-of-line value `end` (« 97 € », Geist Mono 12 px struck through),
+ * which is enough for pricing without a second component. HTML list (ul / li) via Astryx stacks.
  */
 import {HStack, VStack} from '@astryxdesign/core/Stack';
 import React from 'react';
@@ -19,13 +19,13 @@ import styles from './CheckList.module.css';
 
 export type CheckTone = 'check' | 'cross';
 export type CheckListDensity = 'compact' | 'divided' | 'dense';
-export type CheckListItem = string | {label: string; tone?: CheckTone; /** valeur en fin de ligne, barrée (tarifs) */ end?: string};
+export type CheckListItem = string | {label: string; tone?: CheckTone; /** end-of-line value, struck through (pricing) */ end?: string};
 
 export type CheckListProps = {
   items: CheckListItem[];
   tone?: CheckTone;
   density?: CheckListDensity;
-  /** dense : filet sous le dernier item (défaut : oui) */
+  /** dense: divider below the last item (default: yes) */
   trailingDivider?: boolean;
   className?: string;
 };

@@ -11,7 +11,7 @@ import {Button} from '@/components/Button';
 import {Card} from '@/components/Card';
 import {ORBITA_THEMES, SILO_LABELS, SILO_NAMES, SILOS, type SiloName} from '@/theme';
 
-/** Valeurs de la maquette Orbita (orbita.css), avant l'harmonisation du 9 sept. 2026. */
+/** Values from the Orbita mockup (orbita.css), before the harmonization of Sept. 9, 2026. */
 const BEFORE: Record<SiloName, {highlight: string; highlightDeep: string}> = {
   blue:    {highlight: '#10E0C8', highlightDeep: '#0A9E8E'},
   green:   {highlight: '#90D150', highlightDeep: '#5AA81F'},
@@ -31,7 +31,7 @@ function overrides(h: string, hd: string): React.CSSProperties {
   } as React.CSSProperties;
 }
 
-function Cell({silo, mode, label, h, hd, after}: {silo: SiloName; mode: 'light' | 'dark'; label: string; h: string; hd: string; /** surcharge locale des tokens (valeurs « avant ») ; sinon thème compilé */
+function Cell({silo, mode, label, h, hd, after}: {silo: SiloName; mode: 'light' | 'dark'; label: string; h: string; hd: string; /** local token override (« avant » values); otherwise the compiled theme */
   after?: boolean}) {
   return (
     <Theme theme={ORBITA_THEMES[silo]} mode={mode}>

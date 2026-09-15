@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * TestimonialCard — la carte témoignage (maquette 07-testimonials) : guillemet serif,
- * citation, filet, nom en couleur silo, rôle en capitales, chip résultat. Balisage
- * figure > blockquote + figcaption. Clair sur papier ; nuit sur carte nuit via la
- * Section. Portée par TestimonialCarousel, utilisable seule dans une grille.
+ * TestimonialCard — the testimonial card (mockup 07-testimonials): serif quote mark,
+ * quote, rule, name in silo color, role in capitals, result chip. Markup
+ * figure > blockquote + figcaption. Light on paper; night on a night card via the
+ * Section. Used by TestimonialCarousel, usable alone in a grid.
  */
 import {Blockquote} from '@astryxdesign/core/Blockquote';
 import {HStack, VStack} from '@astryxdesign/core/Stack';
@@ -19,7 +19,7 @@ export type Testimonial = {
   name: string;
   /** « Courtière · Lyon » */
   role?: string;
-  /** résultat chiffré, dans un chip highlight (« + 28 % de closing ») */
+  /** numeric result, in a highlight chip (« + 28 % de closing ») */
   result?: string;
 };
 

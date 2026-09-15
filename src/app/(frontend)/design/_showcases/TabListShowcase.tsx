@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Thème : orbita.ts section ONGLETS (maquette 06-tabs) */
+/* Orbita-styled showcase — replaces the original Astryx demo. Theme: orbita.ts ONGLETS section (mockup 06-tabs) */
 'use client';
 
 import {Heading} from '@astryxdesign/core/Heading';

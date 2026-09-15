@@ -1,4 +1,4 @@
-// Démo d'origine (composant Astryx, pas encore habillé).
+// Original demo (Astryx component, not yet styled).
 
 'use client';
 

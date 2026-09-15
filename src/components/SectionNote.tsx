@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * SectionNote — le pied de bloc « note + appel à l'action » (maquettes 03, 05) :
- * astérisque silo, phrase d'accroche en gras, texte 14 px sur 760 px maximum, et le
- * bouton split à droite ; empilé sous 768 px. Une seule fois pour tous les blocs.
+ * SectionNote — the « note + appel à l'action » block footer (mockups 03, 05):
+ * silo asterisk, bold tagline, 14 px text at 760 px max, and the
+ * split button on the right; stacked below 768 px. Defined once for all blocks.
  */
 import {HStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
@@ -14,10 +14,10 @@ import {Button} from './Button';
 import styles from './SectionNote.module.css';
 
 export type SectionNoteProps = {
-  /** accroche en gras, avant le texte */
+  /** bold tagline, before the text */
   strong?: string;
   text: string;
-  /** astérisque silo devant l'accroche (renvoi depuis un titre) */
+  /** silo asterisk before the tagline (reference from a title) */
   asterisk?: boolean;
   cta?: {label: string; href: string; iconKey?: NucleoIconKey};
 };

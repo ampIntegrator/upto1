@@ -1,4 +1,4 @@
-/* Composant propre au design system : src/components/SectionNote (note + appel à l'action en pied de bloc, maquettes 03 et 05). */
+/* Design-system-specific component: src/components/SectionNote (note + call to action at the bottom of a block, mockups 03 and 05). */
 'use client';
 
 import {Heading} from '@astryxdesign/core/Heading';

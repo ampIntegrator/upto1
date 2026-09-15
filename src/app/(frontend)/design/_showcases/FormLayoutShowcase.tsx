@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — FormLayout Astryx avec les champs Field (label flottant). */
+/* Orbita-styled showcase — Astryx FormLayout with Field inputs (floating label). */
 'use client';
 
 import {FormLayout} from '@astryxdesign/core/FormLayout';

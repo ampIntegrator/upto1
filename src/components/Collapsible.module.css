@@ -1,7 +1,7 @@
 /*
- * Collapsible — item d'accordéon (maquette 11-faq, orbita.css .faq-*).
- * Les classes .astryx-collapsible-* sont celles du Collapsible Astryx ; les
- * !important passent devant ses classes StyleX.
+ * Collapsible — accordion item (mockup 11-faq, orbita.css .faq-*).
+ * The .astryx-collapsible-* classes are those of the Astryx Collapsible; the
+ * !important rules override its StyleX classes.
  */
 .item {
   --faq-border: light-dark(var(--color-border), rgba(255, 255, 255, 0.15));
@@ -22,7 +22,7 @@
   border-color: var(--color-accent);
 }
 
-/* déclencheur Astryx : pleine largeur, padding maquette, pas de chevron */
+/* Astryx trigger: full width, mockup padding, no chevron */
 .item :global(.astryx-collapsible-trigger) {
   width: 100% !important;
   padding: 20px 24px !important;
@@ -54,7 +54,7 @@
 }
 .item:has(:global(.astryx-collapsible-trigger[aria-expanded='true'])) .question { color: var(--faq-open-fg); }
 
-/* icône plus → moins, dessinée en CSS (deux traits) */
+/* plus → minus icon, drawn in CSS (two strokes) */
 .icon { position: relative; flex: 0 0 auto; width: 18px; height: 18px; }
 .icon::before,
 .icon::after {
@@ -71,8 +71,8 @@
 .item:has(:global(.astryx-collapsible-trigger[aria-expanded='true'])) .icon::after { background: var(--faq-open-fg); }
 .item:has(:global(.astryx-collapsible-trigger[aria-expanded='true'])) .icon::after { transform: translateX(-50%) scaleY(0); }
 
-/* réponse : Astryx la masque en display:none ; on la garde dans le flux et on
-   anime la hauteur (grille 0fr → 1fr) comme la maquette */
+/* answer: Astryx hides it with display:none; we keep it in the flow and
+   animate the height (grid 0fr → 1fr) like the mockup */
 .item :global(.astryx-collapsible-content) {
   display: grid !important;
   grid-template-rows: 0fr;

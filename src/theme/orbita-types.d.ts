@@ -1,29 +1,29 @@
 /**
- * Augmentations TypeScript pour les types de texte ajoutés par le thème Orbita
- * (voir `components.text` dans src/theme/orbita.ts). Mécanisme documenté par
- * Astryx (theme/types.d.ts) ; le CLI ne le génère que pour Heading.
+ * TypeScript augmentations for the text types added by the Orbita theme
+ * (see `components.text` in src/theme/orbita.ts). Mechanism documented by
+ * Astryx (theme/types.d.ts); the CLI only generates it for Heading.
  */
 import '@astryxdesign/core/theme';
 
 declare module '@astryxdesign/core/theme' {
   interface CustomTextTypes {
-    /** Petite capitale espacée, or éditorial — au-dessus d'un titre */
+    /** Spaced small caps, editorial gold — above a heading */
     eyebrow: true;
-    /** Eyebrow de tête de section : un tiret de 40 px de chaque côté (maquette .c-head-eyebrow) */
+    /** Section heading eyebrow: a 40 px dash on each side (mockup .c-head-eyebrow) */
     'eyebrow-lines': true;
-    /** Eyebrow en Geist Mono 500, 12 px — modale, pied de page */
+    /** Eyebrow in Geist Mono 500, 12 px — modal, footer */
     'eyebrow-mono': true;
-    /** Cormorant Garamond italique 600, couleur accent — mot « signature » dans un titre */
+    /** Cormorant Garamond italic 600, accent color — « signature » word in a heading */
     serif: true;
-    /** Cormorant Garamond droit 500, couleur silo — numéros d'étape, guillemet des témoignages */
+    /** Cormorant Garamond upright 500, silo color — step numbers, testimonial quote mark */
     'serif-upright': true;
-    /** Étiquette technique espacée (ex-Geist Mono) */
+    /** Spaced technical label (formerly Geist Mono) */
     tag: true;
-    /** Grand nombre de carte, Schibsted 800, couleur silo */
+    /** Large card number, Schibsted 800, silo color */
     number: true;
-    /** Résultat chiffré d'une réalisation */
+    /** Numeric result of a case study */
     result: true;
-    /** Date d'article */
+    /** Article date */
     date: true;
   }
 }

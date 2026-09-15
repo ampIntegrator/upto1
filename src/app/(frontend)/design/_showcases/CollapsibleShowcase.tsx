@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/Collapsible */
+/* Orbita-styled showcase — replaces the original Astryx demo. Component: src/components/Collapsible */
 'use client';
 
 import {Grid} from '@astryxdesign/core/Grid';

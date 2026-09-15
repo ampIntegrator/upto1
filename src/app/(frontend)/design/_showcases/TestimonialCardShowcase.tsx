@@ -1,4 +1,4 @@
-/* Composant propre au design system : src/components/TestimonialCard (carte témoignage, maquette 07). */
+/* Design-system-specific component: src/components/TestimonialCard (testimonial card, mockup 07). */
 'use client';
 
 import {Grid, GridSpan} from '@astryxdesign/core/Grid';

@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — CheckboxInput Astryx, apparence par le thème (maquette 17-forms .opt.check) */
+/* Orbita-styled showcase — Astryx CheckboxInput, appearance via the theme (mockup 17-forms .opt.check) */
 'use client';
 
 import {Card} from '@astryxdesign/core/Card';

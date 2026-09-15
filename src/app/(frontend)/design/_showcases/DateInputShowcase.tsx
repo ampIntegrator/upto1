@@ -1,4 +1,4 @@
-/* Showcase habillé Orbita — remplace la démo Astryx d'origine. Composant : src/components/DateField */
+/* Orbita-styled showcase — replaces the original Astryx demo. Component: src/components/DateField */
 'use client';
 
 import type {ISODateString} from '@astryxdesign/core/Calendar';
