@@ -53,6 +53,9 @@ const spanField: Field = {
   required: true,
   defaultValue: '12',
   options: SPAN_OPTIONS,
+  // plus éditable dans le tiroir : la largeur se choisit par les dispositions de la rangée ;
+  // champ caché pour garder sa valeur et sa vérification
+  admin: {hidden: true},
   validate: (value: unknown, {data, path, siblingData}: {data: unknown; path: (number | string)[]; siblingData: Sibling}) => {
     const errors: string[] = [];
     const columns = getByPath(data, path.slice(0, -2));
@@ -107,7 +110,7 @@ const rowsField: Field = {
             return true;
           },
           blocks: CONTENT_BLOCKS,
-          admin: {description: 'Un seul composant par colonne. Pour en changer, supprimez-le puis choisissez-en un autre. Laissez vide pour une case vide.'},
+          admin: {description: 'Un seul composant par colonne. Pour en changer, videz la colonne puis choisissez-en un autre.'},
         },
       ],
     },

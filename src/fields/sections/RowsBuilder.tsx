@@ -15,7 +15,8 @@
  *     toutes ses colonnes, rangées confondues, avec des flèches haut et bas ; les colonnes de la
  *     rangée cliquée sont mises en évidence (champ caché mobileOrder, voir mobileOrder.ts) ;
  *   - une case résume son composant (un seul par colonne), ou « Vide » ; un clic ouvre un tiroir
- *     Payload avec les champs de cette colonne (largeur, composant). Le formulaire est partagé : ce qui est
+ *     Payload avec le composant de la colonne et, s'il y en a un, un bouton « Vider la colonne »
+ *     (la largeur ne s'y règle plus : elle vient des dispositions). Le formulaire est partagé : ce qui est
  *     saisi dans le tiroir est déjà dans la page, on enregistre la page comme d'habitude.
  *
  * Toute la manipulation passe par l'état de formulaire de Payload (useForm, useFormFields),
@@ -338,6 +339,14 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
     openModal(mobileSlug);
   };
 
+  /** vide la colonne : retire son composant (et son nom) ; définitif à l'enregistrement de la page */
+  const clearColumn = (row: number, col: number) => {
+    const contentsPath = `${path}.${row}.columns.${col}.contents`;
+    const existing = getDataByPath<unknown[]>(contentsPath);
+    for (let k = (Array.isArray(existing) ? existing.length : 0) - 1; k >= 0; k--) removeFieldRow({path: contentsPath, rowIndex: k});
+    setModified(true);
+  };
+
   const openCell = (row: number, col: number) => {
     setSelected(row);
     setOpen({row, col});
@@ -512,6 +521,13 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
         <Drawer slug={drawerSlug} title={open && openCellSnapshot ? `Rangée ${open.row + 1} · colonne ${open.col + 1} · ${openCellSnapshot.span} / 12` : 'Colonne'}>
           {open ? (
             <div style={{paddingBottom: 'var(--base)'}}>
+              {openCellSnapshot && openCellSnapshot.contents.length > 0 && !readOnly ? (
+                <div style={{marginBottom: 'var(--base)'}}>
+                  <Button buttonStyle="secondary" onClick={() => clearColumn(open.row, open.col)}>
+                    Vider la colonne
+                  </Button>
+                </div>
+              ) : null}
               <RenderFields
                 fields={columnsField.fields as ClientField[]}
                 parentIndexPath=""
