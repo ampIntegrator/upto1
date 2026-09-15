@@ -3,6 +3,7 @@ import type {Block, Field} from 'payload';
 import {type ColumnSpan, validateColumn, validateRow} from '@/components/content-specs';
 import {CARD_BLOCKS} from './cardBlocks';
 import {emptyBlock} from './emptyBlock';
+import {mediaBlock} from './mediaBlock';
 import {toContentRefs} from './contentRef';
 import {SECTION_GAP_OPTIONS, SITE_GAP} from './gaps';
 import {SPAN_OPTIONS, toSpan} from './presets';
@@ -19,9 +20,10 @@ type Sibling = Record<string, unknown>;
 const when = (name: string, ...values: string[]) => (_d: unknown, s: Sibling) => values.includes(String(s?.[name] ?? ''));
 const whenChecked = (name: string) => (_d: unknown, s: Sibling) => Boolean(s?.[name]);
 
-/** Contenus de colonne disponibles : la case vide (en tête), un texte simple (provisoire) et les huit cartes. */
+/** Contenus de colonne disponibles : la case vide et l'image (en tête), un texte simple (provisoire) et les huit cartes. */
 export const CONTENT_BLOCKS: Block[] = [
   emptyBlock,
+  mediaBlock,
   {
     slug: 'text',
     labels: {singular: 'Texte', plural: 'Textes'},

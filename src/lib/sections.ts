@@ -5,11 +5,13 @@
  * style de nuit, média) se résolvent en un seul fond du composant Section.
  */
 import type {CardProps} from '@/components/Card';
+import type {MediaProps} from '@/components/Media';
 import type {SectionBackground, SectionTint} from '@/components/Section';
 import type {ColumnSpan} from '@/components/content-specs';
 import {CARD_VARIANTS} from '@/fields/sections/cardBlocks';
 import {EMPTY_SLUG} from '@/fields/sections/emptyBlock';
 import {type Gaps, sectionGaps, siteGaps} from '@/fields/sections/gaps';
+import {MEDIA_SLUG} from '@/fields/sections/mediaBlock';
 import {hasMobileOrder, mobileRanks} from '@/fields/sections/mobileOrder';
 import {toSpan} from '@/fields/sections/presets';
 import type {NucleoIconKey} from '@/theme/icons/nucleo';
@@ -20,10 +22,13 @@ type SectionBlock = Extract<PageSection, {blockType: 'section'}>;
 type SectionSource = Omit<SectionBlock, 'blockType' | 'id' | 'blockName' | 'saveAsShared' | 'sharedTitle'> | SharedSection;
 type ContentBlock = NonNullable<NonNullable<NonNullable<SectionBlock['rows']>[number]['columns']>[number]['contents']>[number];
 
-export type ContentData = {type: 'text'; text: string} | {type: 'card'; card: CardProps};
+export type ContentData = {type: 'text'; text: string} | {type: 'card'; card: CardProps} | {type: 'media'; media: MediaProps};
 
-/** mobileRank : rang sous 768 px quand la section a un ordre mobile ; empty : masquée sur mobile */
-export type ColumnData = {span: ColumnSpan; contents: ContentData[]; empty: boolean; mobileRank?: number};
+/**
+ * mobileRank : rang sous 768 px quand la section a un ordre mobile ; empty : masquée sur mobile ;
+ * stretch : la colonne s'étire à la hauteur de la rangée (elle contient une image)
+ */
+export type ColumnData = {span: ColumnSpan; contents: ContentData[]; empty: boolean; stretch?: boolean; mobileRank?: number};
 
 export type SectionData = {
   key: string;
@@ -79,9 +84,30 @@ function toCard(b: CardBlockData): CardProps {
   };
 }
 
+/** Champs d'un bloc Image. */
+type MediaBlockData = {blockType: string; image?: Media | number | null; minHeight?: string | null; minHeightMobile?: string | null; overlay?: number | null};
+
+const toHeight = (v: string | null | undefined): number | undefined => {
+  const n = Number(v);
+  return v && Number.isFinite(n) && n > 0 ? n : undefined;
+};
+
+function toMedia(b: MediaBlockData): ContentData | null {
+  const src = mediaUrl(b.image);
+  if (!src) return null; // image absente (supprimée de la médiathèque) : colonne vide
+  return {
+    type: 'media',
+    media: {image: {src, alt: mediaAlt(b.image) ?? ''}, minHeight: toHeight(b.minHeight), minHeightMobile: toHeight(b.minHeightMobile), overlay: b.overlay ?? 0},
+  };
+}
+
+/** Largeur affichée d'une colonne selon l'écran, pour que le navigateur télécharge la bonne taille. */
+const columnSizes = (span: number): string => `(max-width: 767px) 100vw, (max-width: 1440px) ${Math.round((span / 12) * 100)}vw, ${Math.round((span / 12) * 1440)}px`;
+
 function toContent(block: ContentBlock): ContentData | null {
   // case vide : aucun contenu, la colonne est traitée comme vide (masquée sur mobile)
   if (block.blockType === EMPTY_SLUG) return null;
+  if (block.blockType === MEDIA_SLUG) return toMedia(block as unknown as MediaBlockData);
   if (block.blockType in CARD_VARIANTS) return {type: 'card', card: toCard(block as unknown as CardBlockData)};
   switch (block.blockType) {
     case 'text':
@@ -110,12 +136,19 @@ function toSection(s: SectionSource, key: string, site: Gaps): SectionData {
 
 /** Rangées d'une section, avec le rang mobile de chaque colonne calculé sur toute la section. */
 function sectionRows(rows: SectionSource['rows']): ColumnData[][] {
-  const built = (rows ?? []).map((r) =>
-    (r.columns ?? []).map((c) => {
+  const built = (rows ?? []).map((r) => {
+    const columns = (r.columns ?? []).map((c) => {
       const contents = (c.contents ?? []).map(toContent).filter((x): x is ContentData => x !== null);
       return {span: toSpan(c.span), contents, empty: contents.length === 0, mobileOrder: c.mobileOrder};
-    }),
-  );
+    });
+    // une image ne fixe sa hauteur desktop que si la rangée n'a aucun autre contenu
+    const otherContent = columns.some((c) => c.contents.some((x) => x.type !== 'media'));
+    return columns.map((c) => {
+      const stretch = c.contents.some((x) => x.type === 'media');
+      const contents = c.contents.map((x): ContentData => (x.type === 'media' ? {...x, media: {...x.media, minHeight: otherContent ? undefined : x.media.minHeight, sizes: columnSizes(c.span)}} : x));
+      return {...c, contents, stretch};
+    });
+  });
   const flat = built.flat();
   const ranks = hasMobileOrder(flat) ? mobileRanks(flat) : null;
   let k = 0;

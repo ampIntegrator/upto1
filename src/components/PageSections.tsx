@@ -7,6 +7,7 @@
  * dans l'ordre --mobile-order et les colonnes vides disparaissent (styles.css). Écarts :
  * variables --section-gap-x, --section-gap-y et --section-gap-y-mobile, en pixels (réglage de
  * la section, sinon Réglages du site › Mise en page), lues par .section-grid (styles.css).
+ * Une colonne qui contient une image s'étire à la hauteur de sa rangée (l'image la remplit).
  */
 import {Grid, GridSpan} from '@astryxdesign/core/Grid';
 import {VStack} from '@astryxdesign/core/Stack';
@@ -16,6 +17,7 @@ import React from 'react';
 import type {ContentData, SectionData} from '@/lib/sections';
 import {Card} from './Card';
 import {Container} from './Container';
+import {Media} from './Media';
 import {Section} from './Section';
 
 function Content({content}: {content: ContentData}) {
@@ -36,6 +38,8 @@ function Content({content}: {content: ContentData}) {
       );
     case 'card':
       return <Card {...content.card} />;
+    case 'media':
+      return <Media {...content.media} />;
     default:
       return null;
   }
@@ -58,9 +62,9 @@ export function PageSections({sections}: {sections: SectionData[]}) {
                     key={`${r}-${i}`}
                     columns={c.span}
                     data-empty={c.empty ? 'true' : undefined}
-                    style={{gridRow: r + 1, ...(c.mobileRank !== undefined ? {'--mobile-order': c.mobileRank} : null)} as React.CSSProperties}>
+                    style={{gridRow: r + 1, ...(c.stretch ? {alignSelf: 'stretch'} : null), ...(c.mobileRank !== undefined ? {'--mobile-order': c.mobileRank} : null)} as React.CSSProperties}>
                     {c.contents.length ? (
-                      <VStack gap={6}>
+                      <VStack gap={6} style={c.stretch ? {height: '100%'} : undefined}>
                         {c.contents.map((content, j) => (
                           <Content key={j} content={content} />
                         ))}
