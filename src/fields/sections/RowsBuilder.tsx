@@ -14,7 +14,8 @@
  *   - le bouton téléphone d'une rangée ouvre la fenêtre d'ordre mobile de toute la section :
  *     toutes ses colonnes, rangées confondues, réordonnées par glisser-déposer (poignée) ; les colonnes de la
  *     rangée cliquée sont mises en évidence (champ caché mobileOrder, voir mobileOrder.ts) ;
- *   - une case résume son composant (un seul par colonne), ou « Vide » ; un clic ouvre un tiroir
+ *   - une case résume son composant (un seul par colonne), ou « Vide » ; un premier clic sélectionne
+ *     la rangée, un clic sur une case de la rangée sélectionnée ouvre un tiroir
  *     Payload avec le composant de la colonne et, s'il y en a un, un bouton « Vider la colonne »
  *     (la largeur ne s'y règle plus : elle vient des dispositions). Le formulaire est partagé : ce qui est
  *     saisi dans le tiroir est déjà dans la page, on enregistre la page comme d'habitude.
@@ -121,7 +122,8 @@ function PresetTiles({current, onReplace, onAdd}: {current: string; onReplace: (
 type DragProps = SortableHandle;
 
 /** Une case de la rangée : poignée pour la glisser à gauche ou à droite, largeur dans un coin, résumé du composant, clic pour ouvrir le tiroir. */
-function Cell({cell, index, onOpen, drag}: {cell: CellSnapshot; index: number; onOpen: () => void; drag?: DragProps}) {
+/** rowSelected : la rangée de la case est sélectionnée ; sinon un clic ne fait que la sélectionner */
+function Cell({cell, index, rowSelected, onOpen, drag}: {cell: CellSnapshot; index: number; rowSelected: boolean; onOpen: () => void; drag?: DragProps}) {
   const empty = !cell.filled;
   const onHandleKeyDown = drag?.listeners.onKeyDown;
   return (
@@ -141,7 +143,7 @@ function Cell({cell, index, onOpen, drag}: {cell: CellSnapshot; index: number; o
         }
       }}
       aria-label={`Colonne ${index + 1}, ${cell.span} sur 12, ${empty ? 'vide' : cell.contents.join(', ')}`}
-      title={empty ? 'Vide, cliquer pour remplir' : cell.contents.join(', ')}
+      title={rowSelected ? (empty ? 'Vide, cliquer pour remplir' : `${cell.contents.join(', ')} · cliquer pour modifier`) : 'Cliquer pour sélectionner la rangée, puis cliquer la colonne pour la modifier'}
       style={{
         position: 'relative',
         display: 'flex',
@@ -421,7 +423,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
         <div style={{marginBottom: 12}}>
           <PresetTiles current={selectedSpans} onReplace={replaceRow} onAdd={addRow} />
           <p style={{...text14, ...dim, margin: '8px 0 0'}}>
-            {selected === null ? 'Double clic sur une disposition : ajoute une rangée. Clic sur une rangée : la sélectionne ; un clic sur une disposition la remplace alors.' : `Rangée ${selected + 1} sélectionnée. Clic : remplace sa disposition (même nombre de colonnes, seules les largeurs changent ; sinon recréée vide). Double clic : ajoute une rangée dessous.`}
+            {selected === null ? 'Double clic sur une disposition : ajoute une rangée. Clic sur une rangée : la sélectionne ; ensuite, un clic sur une de ses colonnes l’ouvre, un clic sur une disposition la remplace.' : `Rangée ${selected + 1} sélectionnée. Clic sur une de ses colonnes : l’ouvre. Clic sur une disposition : la remplace (après confirmation). Double clic : ajoute une rangée dessous.`}
           </p>
         </div>
       ) : null}
@@ -467,7 +469,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
                         <SortableList ids={colIds} axis="x" onMove={(from, to) => moveColumn(i, from, to)} className="rows-builder__cells">
                           {snap.columns.map((cell, j) => (
                             <SortableItem key={colIds[j]} id={colIds[j]} disabled={readOnly}>
-                              {(handle) => <Cell cell={cell} index={j} onOpen={() => openCell(i, j)} drag={readOnly ? undefined : handle} />}
+                              {(handle) => <Cell cell={cell} index={j} rowSelected={isSelected} onOpen={() => (isSelected ? openCell(i, j) : setSelected(i))} drag={readOnly ? undefined : handle} />}
                             </SortableItem>
                           ))}
                         </SortableList>
