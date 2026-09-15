@@ -5,8 +5,8 @@
  * accordéons imbriqués de Payload.
  *
  *   - un seul bandeau de dispositions en vignettes (un rectangle découpé aux proportions des
- *     colonnes) : un clic remplace la disposition de la rangée sélectionnée, un double clic ajoute
- *     une rangée sous la sélection ;
+ *     colonnes) : un clic remplace la disposition de la rangée sélectionnée, après confirmation,
+ *     un double clic ajoute une rangée sous la sélection ;
  *   - les rangées empilées dessous, réordonnées par glisser-déposer (poignée) ; sur le côté, en
  *     deux lignes de deux : déplacer et dupliquer, ordre mobile et supprimer ; dans chaque case,
  *     une poignée ⋮⋮ fait glisser la colonne à gauche ou à droite dans sa rangée (souris,
@@ -23,7 +23,7 @@
  * exactement comme son propre champ tableau ; le rendu des champs du tiroir est celui de
  * Payload (RenderFields), avec les chemins et permissions qu'il attend.
  */
-import {Button, Drawer, Modal, RenderFields, useDrawerSlug, useField, useForm, useFormFields, useModal} from '@payloadcms/ui';
+import {Button, ConfirmationModal, Drawer, Modal, RenderFields, useDrawerSlug, useField, useForm, useFormFields, useModal} from '@payloadcms/ui';
 import type {ArrayFieldClient, ArrayFieldClientProps, ClientField, SanitizedFieldPermissions, SanitizedFieldsPermissions} from 'payload';
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 
@@ -211,6 +211,9 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
   // rangée d'où la fenêtre « ordre mobile » a été ouverte (mise en évidence dans la liste)
   const [mobileRow, setMobileRow] = useState<number | null>(null);
   const mobileSlug = `rows-mobile-${path}`;
+  // action destructive en attente de confirmation : remplacer la disposition ou supprimer une rangée
+  const [pending, setPending] = useState<{kind: 'replace'; row: number; spans: readonly number[]} | {kind: 'remove'; row: number} | null>(null);
+  const confirmSlug = `rows-confirm-${path}`;
 
   // instantané des rangées : largeurs et contenus, pour dessiner les bandes sans déplier
   const snapshotJson = useFormFields(([fields]) => {
@@ -290,10 +293,14 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
   /** clic : remplace la disposition de la rangée sélectionnée ; sans sélection, ajoute une rangée */
   const replaceRow = useCallback(
     (spans: readonly number[]) => {
-      if (selected !== null && selected < rows.length) setSpans(selected, spans);
-      else addRow(spans);
+      if (selected !== null && selected < rows.length) {
+        const current = (snapshot[selected]?.columns ?? []).map((c) => c.span);
+        if (current.join('|') === spans.join('|')) return; // déjà cette disposition : rien à faire
+        setPending({kind: 'replace', row: selected, spans});
+        openModal(confirmSlug);
+      } else addRow(spans);
     },
-    [addRow, rows.length, selected, setSpans],
+    [addRow, confirmSlug, openModal, rows.length, selected, snapshot],
   );
 
   const move = (from: number, to: number) => {
@@ -312,6 +319,40 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
   const remove = (i: number) => {
     removeFieldRow({path, rowIndex: i});
     setSelected(null);
+  };
+  const askRemove = (i: number) => {
+    setPending({kind: 'remove', row: i});
+    openModal(confirmSlug);
+  };
+
+  /** texte de la confirmation : ce qui va être perdu */
+  const confirmText = (() => {
+    if (!pending) return {heading: '', body: '', label: ''};
+    const columns = snapshot[pending.row]?.columns ?? [];
+    const filled = columns.filter((c) => c.contents.length > 0).length;
+    const composants = `${filled} composant${filled > 1 ? 's' : ''}`;
+    if (pending.kind === 'remove') {
+      const sujet = columns.length === 1 ? 'Sa colonne' : `Ses ${columns.length} colonnes`;
+      // accord : féminin pour les seules colonnes, masculin dès qu'il y a des composants
+      const verbe = filled ? 'seront supprimés' : columns.length === 1 ? 'sera supprimée' : 'seront supprimées';
+      return {
+        heading: `Supprimer la rangée ${pending.row + 1} ?`,
+        body: `${sujet}${filled ? ` et ${composants}` : ''} ${verbe}. Définitif à l’enregistrement de la page.`,
+        label: 'Supprimer',
+      };
+    }
+    const from = presetLabel(columns.map((c) => c.span));
+    const to = presetLabel(pending.spans);
+    const body =
+      columns.length === pending.spans.length
+        ? `Les largeurs passent de ${from} à ${to}. Les composants restent dans leurs colonnes.`
+        : `La rangée passe de ${from} à ${to} : ses colonnes sont recréées vides${filled ? `, ${composants} ${filled > 1 ? 'seront supprimés' : 'sera supprimé'}` : ''}. Définitif à l’enregistrement de la page.`;
+    return {heading: `Remplacer la disposition de la rangée ${pending.row + 1} ?`, body, label: 'Remplacer'};
+  })();
+  const onConfirm = () => {
+    if (pending?.kind === 'replace') setSpans(pending.row, pending.spans);
+    if (pending?.kind === 'remove') remove(pending.row);
+    setPending(null);
   };
 
   /** colonnes de la section à plat, rangée par rangée, pour l'ordre mobile */
@@ -446,7 +487,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
                       <Button size="small" buttonStyle="pill" onClick={() => openMobile(i)} aria-label={`Ordre mobile de la section (depuis la rangée ${i + 1})`} tooltip="Ordre mobile de la section">
                         <PhoneGlyph />
                       </Button>
-                      <Button size="small" buttonStyle="pill" onClick={() => remove(i)} aria-label={`Supprimer la rangée ${i + 1}`} tooltip="Supprimer">
+                      <Button size="small" buttonStyle="pill" onClick={() => askRemove(i)} aria-label={`Supprimer la rangée ${i + 1}`} tooltip="Supprimer">
                         ✕
                       </Button>
                     </div>
@@ -458,6 +499,16 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
         })}
       </SortableList>
 
+
+      <ConfirmationModal
+        modalSlug={confirmSlug}
+        heading={confirmText.heading}
+        body={confirmText.body}
+        confirmLabel={confirmText.label}
+        cancelLabel="Annuler"
+        onConfirm={onConfirm}
+        onCancel={() => setPending(null)}
+      />
 
       <Modal slug={mobileSlug} className="confirmation-modal rows-mobile">
         {mobileRow !== null
