@@ -14,3 +14,14 @@ export const SILOS = {
 
 export type SiloName = keyof typeof SILOS;
 export const SILO_NAMES = Object.keys(SILOS) as SiloName[];
+
+/** Libellés des silos (admin et catalogue). Ici plutôt que dans theme/index : l'admin Payload les
+ *  lit sans charger les thèmes générés par Astryx. */
+export const SILO_LABELS: Record<SiloName, string> = {
+  blue: 'Bleu',
+  green: 'Vert',
+  orange: 'Orange',
+  violet: 'Violet',
+  magenta: 'Magenta',
+  ambre: 'Ambre',
+};

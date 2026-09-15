@@ -11,9 +11,9 @@ import {orbitaGreenTheme} from './built/orbita-green';
 import {orbitaMagentaTheme} from './built/orbita-magenta';
 import {orbitaOrangeTheme} from './built/orbita-orange';
 import {orbitaVioletTheme} from './built/orbita-violet';
-import {SILO_NAMES, SILOS, type SiloName} from './silos/palettes';
+import {SILO_LABELS, SILO_NAMES, SILOS, type SiloName} from './silos/palettes';
 
-export {SILO_NAMES, SILOS, type SiloName};
+export {SILO_LABELS, SILO_NAMES, SILOS, type SiloName};
 
 export const ORBITA_THEMES: Record<SiloName, DefinedTheme> = {
   blue: orbitaBlueTheme,
@@ -22,15 +22,6 @@ export const ORBITA_THEMES: Record<SiloName, DefinedTheme> = {
   violet: orbitaVioletTheme,
   magenta: orbitaMagentaTheme,
   ambre: orbitaAmbreTheme,
-};
-
-export const SILO_LABELS: Record<SiloName, string> = {
-  blue: 'Bleu',
-  green: 'Vert',
-  orange: 'Orange',
-  violet: 'Violet',
-  magenta: 'Magenta',
-  ambre: 'Ambre',
 };
 
 export const DEFAULT_SILO: SiloName = 'blue';
