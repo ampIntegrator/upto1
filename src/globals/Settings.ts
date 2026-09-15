@@ -88,16 +88,6 @@ export const Settings: GlobalConfig = {
             },
           ],
         },
-        {
-          label: settingsText.tabs.languages,
-          fields: [
-            {
-              name: 'languages', type: 'select', hasMany: true, label: settingsText.languages.label, defaultValue: ['fr'],
-              options: [{label: 'Français', value: 'fr'}, {label: 'English', value: 'en'}, {label: 'Deutsch', value: 'de'}, {label: 'Español', value: 'es'}],
-              admin: {description: settingsText.languages.description},
-            },
-          ],
-        },
       ],
     },
   ],

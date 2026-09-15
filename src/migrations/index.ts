@@ -11,6 +11,8 @@ import * as migration_20260915_090426_section_gaps from './20260915_090426_secti
 import * as migration_20260915_094635_empty_block from './20260915_094635_empty_block';
 import * as migration_20260915_102142_media_block from './20260915_102142_media_block';
 import * as migration_20260915_105105_media_quote_block from './20260915_105105_media_quote_block';
+import * as migration_20260915_155338_languages_global from './20260915_155338_languages_global';
+import * as migration_20260915_155407_drop_settings_languages from './20260915_155407_drop_settings_languages';
 
 export const migrations = [
   {
@@ -76,6 +78,16 @@ export const migrations = [
   {
     up: migration_20260915_105105_media_quote_block.up,
     down: migration_20260915_105105_media_quote_block.down,
-    name: '20260915_105105_media_quote_block'
+    name: '20260915_105105_media_quote_block',
+  },
+  {
+    up: migration_20260915_155338_languages_global.up,
+    down: migration_20260915_155338_languages_global.down,
+    name: '20260915_155338_languages_global',
+  },
+  {
+    up: migration_20260915_155407_drop_settings_languages.up,
+    down: migration_20260915_155407_drop_settings_languages.down,
+    name: '20260915_155407_drop_settings_languages'
   },
 ];

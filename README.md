@@ -97,7 +97,8 @@ src/
   app/(frontend)/        Site routes, catalog (/design), block previews (/apercu)
   app/(payload)/         Payload admin routes and admin styles (custom.scss)
   collections/           Pages, Sections (shared sections), Posts, Categories, Media, Users
-  globals/               Settings, Header, Footer
+  globals/               Settings, Languages (site switcher), Header, Footer
+  locales.ts             Content languages (fr, en, de, es, it)
   i18n/admin/            Admin interface languages: dictionaries and header selector
   fields/                Custom fields and admin components
   fields/sections/       Section builder (see docs/section-builder.md)

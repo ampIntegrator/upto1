@@ -95,18 +95,24 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale:
-    ('false' | 'none' | 'null') | false | null | ('fr' | 'en' | 'de' | 'es') | ('fr' | 'en' | 'de' | 'es')[];
+    | ('false' | 'none' | 'null')
+    | false
+    | null
+    | ('fr' | 'en' | 'de' | 'es' | 'it')
+    | ('fr' | 'en' | 'de' | 'es' | 'it')[];
   globals: {
     settings: Setting;
+    languages: Language;
     header: Header;
     footer: Footer;
   };
   globalsSelect: {
     settings: SettingsSelect<false> | SettingsSelect<true>;
+    languages: LanguagesSelect<false> | LanguagesSelect<true>;
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
   };
-  locale: 'fr' | 'en' | 'de' | 'es';
+  locale: 'fr' | 'en' | 'de' | 'es' | 'it';
   widgets: {
     collections: CollectionsWidget;
   };
@@ -1365,10 +1371,19 @@ export interface Setting {
      */
     gapYMobile: '0' | '10' | '20' | '30' | '40' | '50' | '60';
   };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "languages".
+ */
+export interface Language {
+  id: number;
   /**
-   * Content is translatable field by field (language tab at the top of each admin page). An untranslated language shows French.
+   * Content is translatable field by field (“Content language” selector at the top of each admin page). An untranslated language shows French.
    */
-  languages?: ('fr' | 'en' | 'de' | 'es')[] | null;
+  languages?: ('fr' | 'en' | 'de' | 'es' | 'it')[] | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1524,6 +1539,15 @@ export interface SettingsSelect<T extends boolean = true> {
         gapY?: T;
         gapYMobile?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "languages_select".
+ */
+export interface LanguagesSelect<T extends boolean = true> {
   languages?: T;
   updatedAt?: T;
   createdAt?: T;

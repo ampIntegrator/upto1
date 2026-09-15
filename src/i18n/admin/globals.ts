@@ -10,7 +10,6 @@ export const settingsText = texts({
     networks: {fr: 'Réseaux', en: 'Networks'},
     navigation: {fr: 'Navigation', en: 'Navigation'},
     layout: {fr: 'Mise en page', en: 'Layout'},
-    languages: {fr: 'Langues', en: 'Languages'},
   },
   identity: {
     silo: {fr: "Silo d'accent du site", en: 'Site accent silo'},
@@ -49,10 +48,6 @@ export const settingsText = texts({
     gapY: {fr: 'Écart entre rangées', en: 'Row gap'},
     gapYMobile: {fr: 'Écart vertical mobile', en: 'Mobile vertical gap'},
     gapYMobileDescription: {fr: 'Sous 768 px, entre tous les blocs empilés.', en: 'Below 768 px, between all stacked blocks.'},
-  },
-  languages: {
-    label: {fr: 'Langues proposées dans le sélecteur', en: 'Languages offered in the switcher'},
-    description: {fr: 'Les contenus sont traduisibles champ par champ (onglet de langue en haut de chaque page d\'admin). Une langue non traduite affiche le français.', en: 'Content is translatable field by field (language tab at the top of each admin page). An untranslated language shows French.'},
   },
 });
 
@@ -138,5 +133,14 @@ export const footerText = texts({
     copyright: {fr: 'Copyright', en: 'Copyright'},
     legalLine: {fr: 'Ligne légale (SIRET…)', en: 'Legal line (company ID…)'},
     legalLinks: {fr: 'Liens légaux', en: 'Legal links'},
+  },
+});
+
+/** Admin texts of the Languages global. */
+export const languagesText = texts({
+  label: {fr: 'Langues', en: 'Languages'},
+  languages: {
+    label: {fr: 'Langues proposées dans le sélecteur du site', en: 'Languages offered in the site switcher'},
+    description: {fr: 'Les contenus sont traduisibles champ par champ (sélecteur « Langue du contenu » en haut de chaque page d\'admin). Une langue non traduite affiche le français.', en: 'Content is translatable field by field (“Content language” selector at the top of each admin page). An untranslated language shows French.'},
   },
 });

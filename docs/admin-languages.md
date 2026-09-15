@@ -7,7 +7,7 @@ Two languages must not be confused:
 | Selector | What it changes | Configured in |
 |---|---|---|
 | **Interface** | Buttons, menus, field labels, help texts, validation messages | `src/i18n/admin/` |
-| **Langue du contenu** / **Content language** | Which translation of a page is edited (fr, en, de, es) | `localization` in `src/payload.config.ts` |
+| **Langue du contenu** / **Content language** | Which translation of a page is edited (fr, en, de, es, it) | `LOCALES` in `src/locales.ts` and `localization` in `src/payload.config.ts` |
 
 They are independent: an editor can edit the German version of a page with the admin in English.
 
@@ -19,6 +19,8 @@ They are independent: an editor can edit the German version of a page with the a
 - Dictionaries live next to it, one file per area: `collections.ts`, `fields.ts`, `globals.ts`, `blocks.ts`, `sections.ts`. They are declared with `texts()`, which checks that every entry has every language.
 - `src/i18n/admin/payload.ts` gives Payload its own translations for each language (buttons, list views, account) and renames its content selector.
 - `src/i18n/admin/LanguageSwitcher.tsx` is the header selector.
+
+The **Langues** / **Languages** entry of the admin menu chooses which content languages the public site switcher offers. It does not add a language: content languages are code, in `src/locales.ts`.
 
 ## Writing admin texts
 

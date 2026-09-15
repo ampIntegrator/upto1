@@ -66,10 +66,11 @@ async function main() {
         {label: 'X', href: 'https://x.com/', iconKey: 'x-twitter'},
         {label: 'YouTube', href: 'https://www.youtube.com/', iconKey: 'youtube'},
       ],
-      languages: ['fr', 'en', 'de', 'es'],
       breadcrumb: {enabled: true, homeStyle: 'icon', homeLabel: 'Accueil'},
     },
   });
+
+  await payload.updateGlobal({slug: 'languages', data: {languages: ['fr', 'en', 'de', 'es', 'it']}});
 
   // 4 · header
   await payload.updateGlobal({

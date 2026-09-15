@@ -4,7 +4,9 @@
  * types (SiteHeaderData, SiteFooterData, HeroProps): the design system does not know
  * Payload, and Payload does not know the design system.
  */
-import config, {LOCALES, type Locale} from '@payload-config';
+import config from '@payload-config';
+
+import {LOCALES, type Locale} from '@/locales';
 import {cookies} from 'next/headers';
 import {getPayload} from 'payload';
 
@@ -12,7 +14,7 @@ import type {HeroProps} from '@/components/Hero';
 import type {SiteFooterData, SiteHeaderData, SiteNavEntry, SiteStrip} from '@/components/site-nav';
 import type {NucleoIconKey} from '@/theme/icons/nucleo';
 import type {SiloName} from '@/theme/index';
-import type {Footer, Header, Media, Page, Post, Setting as Settings} from '@/payload-types';
+import type {Footer, Header, Language, Media, Page, Post, Setting as Settings} from '@/payload-types';
 
 export const LOCALE_COOKIE = 'locale';
 
@@ -29,13 +31,14 @@ const icon = (k?: string | null): NucleoIconKey | undefined => (k ? (k as Nucleo
 
 export async function getSite(locale: Locale) {
   const payload = await getPayload({config});
-  const [settings, header, footer, posts] = await Promise.all([
+  const [settings, languages, header, footer, posts] = await Promise.all([
     payload.findGlobal({slug: 'settings', locale, depth: 1}),
+    payload.findGlobal({slug: 'languages', depth: 0}),
     payload.findGlobal({slug: 'header', locale, depth: 2}),
     payload.findGlobal({slug: 'footer', locale, depth: 1}),
     payload.find({collection: 'posts', locale, depth: 1, limit: 3, sort: '-publishedAt'}),
   ]);
-  return {settings, header, footer, posts: posts.docs};
+  return {settings, languages, header, footer, posts: posts.docs};
 }
 
 export function toStrip(s: Settings): SiteStrip {
@@ -48,7 +51,7 @@ export function toStrip(s: Settings): SiteStrip {
   };
 }
 
-export function toHeader(s: Settings, h: Header): SiteHeaderData {
+export function toHeader(s: Settings, h: Header, l: Language): SiteHeaderData {
   const nav: SiteNavEntry[] = (h.nav ?? []).map((b): SiteNavEntry => {
     if (b.blockType === 'link') return {kind: 'link', label: b.label, href: b.href};
     if (b.blockType === 'menu') return {kind: 'menu', label: b.label, items: (b.items ?? []).map((it) => ({title: it.title, description: it.description ?? undefined, iconKey: icon(it.iconKey), href: it.href}))};
@@ -68,7 +71,7 @@ export function toHeader(s: Settings, h: Header): SiteHeaderData {
       login: h.login?.label && h.login?.href ? {label: h.login.label, href: h.login.href} : undefined,
       cta: h.cta?.label && h.cta?.href ? {label: h.cta.label, href: h.cta.href} : undefined,
     },
-    languages: (s.languages ?? ['fr']).map((l) => l.toUpperCase()),
+    languages: (l.languages ?? ['fr']).map((code) => code.toUpperCase()),
   };
 }
 

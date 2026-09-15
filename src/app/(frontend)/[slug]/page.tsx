@@ -35,7 +35,7 @@ export default async function Page({params}: {params: Promise<{slug: string}>}) 
   const bandBreadcrumb = hero.variant !== 'page' && showBreadcrumb(page, site.settings);
   const tone = hero.variant === 'media' || hero.background === 'night-halo' || hero.background === 'image' ? 'dark' : 'light';
   return (
-    <SitePage silo={pageSilo(page, site.settings)} header={toHeader(site.settings, site.header)} footer={toFooter(site.settings, site.footer, site.posts, locale)} tone={tone} currentHref={`/${slug}`}>
+    <SitePage silo={pageSilo(page, site.settings)} header={toHeader(site.settings, site.header, site.languages)} footer={toFooter(site.settings, site.footer, site.posts, locale)} tone={tone} currentHref={`/${slug}`}>
       <Hero {...hero} />
       {bandBreadcrumb ? <BreadcrumbBand {...breadcrumbProps(page, site.settings)} /> : null}
       <PageSections sections={toSections(page.sections, site.settings)} />

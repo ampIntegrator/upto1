@@ -15,14 +15,13 @@ import { Users } from './collections/Users'
 import { adminI18n } from './i18n/admin/payload'
 import { Footer } from './globals/Footer'
 import { Header } from './globals/Header'
+import { Languages } from './globals/Languages'
 import { Settings } from './globals/Settings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-/** Content languages: French is the reference, the others fall back to it until translated. */
-export const LOCALES = ['fr', 'en', 'de', 'es'] as const
-export type Locale = (typeof LOCALES)[number]
+export { LOCALES, type Locale } from './locales'
 
 export default buildConfig({
   admin: {
@@ -43,12 +42,13 @@ export default buildConfig({
       {label: 'English', code: 'en'},
       {label: 'Deutsch', code: 'de'},
       {label: 'Español', code: 'es'},
+      {label: 'Italiano', code: 'it'},
     ],
     defaultLocale: 'fr',
     fallback: true,
   },
   collections: [Pages, Sections, Posts, Categories, Media, Users],
-  globals: [Settings, Header, Footer],
+  globals: [Settings, Languages, Header, Footer],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
