@@ -241,6 +241,15 @@ export const CATALOG: CatalogCategory[] = [
         "doc": null
       },
       {
+        "name": "Media",
+        "label": "Media",
+        "slug": "media",
+        "href": "/design/composants/media",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
         "name": "Avatar",
         "label": "Avatar",
         "slug": "avatar",

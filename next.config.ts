@@ -13,6 +13,14 @@ const nextConfig: NextConfig = {
         pathname: '/api/media/file/**',
       },
     ],
+    // photos de démonstration du catalogue (composant Media) : paramètres de recadrage autorisés
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
+      },
+    ],
   },
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
