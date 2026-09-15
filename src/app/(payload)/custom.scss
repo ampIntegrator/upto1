@@ -23,8 +23,8 @@
   }
 }
 
-/* Constructeur de rangées : boutons latéraux en deux lignes de deux, carrés de 32 px, calés en
-   haut ; leur hauteur (2 × 32 + 4) reste sous celle d'une rangée. */
+/* Constructeur de rangées : boutons latéraux en deux lignes de deux, carrés de 32 px, centrés
+   verticalement sur la rangée ; leur hauteur (2 × 32 + 4) reste sous celle d'une rangée. */
 .rows-builder__actions {
   display: grid;
   grid-template-columns: repeat(2, 32px);

@@ -354,7 +354,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
           return (
             <DraggableSortableItem key={row.id} id={row.id} disabled={readOnly}>
               {({attributes, listeners, setNodeRef, transform, transition, isDragging}) => (
-                <div ref={setNodeRef} style={{display: 'flex', gap: 8, alignItems: 'flex-start', transform, transition, zIndex: isDragging ? 1 : undefined, position: 'relative'}}>
+                <div ref={setNodeRef} style={{display: 'flex', gap: 8, alignItems: 'center', transform, transition, zIndex: isDragging ? 1 : undefined, position: 'relative'}}>
                   <div
                     role="button"
                     tabIndex={0}
