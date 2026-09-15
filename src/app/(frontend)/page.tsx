@@ -32,7 +32,7 @@ export default async function Page() {
   return (
     <SitePage silo={pageSilo(page, site.settings)} header={toHeader(site.settings, site.header)} footer={toFooter(site.settings, site.footer, site.posts, locale)} tone={tone} currentHref="/">
       <Hero {...hero} />
-      <PageSections sections={toSections(page.sections)} />
+      <PageSections sections={toSections(page.sections, site.settings)} />
     </SitePage>
   );
 }

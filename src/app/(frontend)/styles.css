@@ -378,6 +378,19 @@ body {
   }
 }
 
+/* Grille des sections construites dans l'admin (PageSections) : écarts réglés dans
+   Réglages du site › Mise en page ou par section, posés en variables sur la grille.
+   Sous 768 px, l'écart vertical mobile sépare tous les blocs empilés. */
+[data-astryx-theme^='orbita'] .astryx-grid.section-grid {
+  column-gap: var(--section-gap-x);
+  row-gap: var(--section-gap-y);
+}
+@media (max-width: 767px) {
+  [data-astryx-theme^='orbita'] .astryx-grid.section-grid {
+    row-gap: var(--section-gap-y-mobile);
+  }
+}
+
 /* Texte serif : une autre couleur se passe par style={{'--serif-color': …}} (lue par le thème). */
 
 /* Liens et boutons : tout survol transitionne en 0,25 s avec la courbe douce du thème

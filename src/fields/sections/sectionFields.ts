@@ -3,6 +3,7 @@ import type {Block, Field} from 'payload';
 import {type ColumnSpan, validateColumn, validateRow} from '@/components/content-specs';
 import {CARD_BLOCKS} from './cardBlocks';
 import {toContentRefs} from './contentRef';
+import {SECTION_GAP_OPTIONS, SITE_GAP} from './gaps';
 import {SPAN_OPTIONS, toSpan} from './presets';
 
 /**
@@ -128,7 +129,9 @@ export function sectionFields({shareable}: {shareable: boolean}): Field[] {
             {label: 'Fond de page', value: 'body'},
             {label: 'Highlight clair du silo', value: 'highlight'},
           ],
-          admin: {width: '50%'},
+          // condition répétée sur le champ (et pas seulement sur la ligne) : sans elle, Payload rend
+          // la colonne obligatoire en base, et une section en nuit ou en média ne s'enregistrerait plus
+          admin: {width: '50%', condition: when('mode', 'light')},
         },
         {
           name: 'texture',
@@ -193,6 +196,16 @@ export function sectionFields({shareable}: {shareable: boolean}): Field[] {
           admin: {width: '33%', description: 'Identifiant pour un lien #ancre : minuscules, chiffres, tirets.'},
           validate: (value: unknown) => !value || (typeof value === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)) || 'Minuscules, chiffres et tirets uniquement.',
         },
+      ],
+    },
+    // 3b. écarts de la grille : hérités des Réglages du site › Mise en page, sauf surcharge
+    {
+      type: 'row',
+      admin: {condition: modeChosen},
+      fields: [
+        {name: 'gapX', type: 'select', label: 'Écart entre colonnes', defaultValue: SITE_GAP, options: SECTION_GAP_OPTIONS, admin: {width: '33%'}},
+        {name: 'gapY', type: 'select', label: 'Écart entre rangées', defaultValue: SITE_GAP, options: SECTION_GAP_OPTIONS, admin: {width: '33%'}},
+        {name: 'gapYMobile', type: 'select', label: 'Écart vertical mobile', defaultValue: SITE_GAP, options: SECTION_GAP_OPTIONS, admin: {width: '33%', description: 'Sous 768 px, entre tous les blocs empilés.'}},
       ],
     },
     // 4. les rangées

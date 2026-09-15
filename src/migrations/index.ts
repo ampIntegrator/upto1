@@ -7,6 +7,7 @@ import * as migration_20260914_092235_section_questions from './20260914_092235_
 import * as migration_20260914_093340_seo from './20260914_093340_seo';
 import * as migration_20260914_094621_card_blocks from './20260914_094621_card_blocks';
 import * as migration_20260915_080833_mobile_order from './20260915_080833_mobile_order';
+import * as migration_20260915_090426_section_gaps from './20260915_090426_section_gaps';
 
 export const migrations = [
   {
@@ -52,6 +53,11 @@ export const migrations = [
   {
     up: migration_20260915_080833_mobile_order.up,
     down: migration_20260915_080833_mobile_order.down,
-    name: '20260915_080833_mobile_order'
+    name: '20260915_080833_mobile_order',
+  },
+  {
+    up: migration_20260915_090426_section_gaps.up,
+    down: migration_20260915_090426_section_gaps.down,
+    name: '20260915_090426_section_gaps'
   },
 ];

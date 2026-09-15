@@ -1,9 +1,10 @@
 import type {GlobalConfig} from 'payload';
 
 import {iconField} from '@/fields/iconField';
+import {DEFAULT_GAPS, GAP_OPTIONS} from '@/fields/sections/gaps';
 import {siloField} from '@/fields/siloField';
 
-/** Réglages du site : silo par défaut, marque et logo, coordonnées, réseaux, langues. */
+/** Réglages du site : silo par défaut, marque et logo, coordonnées, réseaux, mise en page, langues. */
 export const Settings: GlobalConfig = {
   slug: 'settings',
   label: 'Réglages du site',
@@ -63,6 +64,25 @@ export const Settings: GlobalConfig = {
                   admin: {layout: 'horizontal', condition: (_d, s) => s?.enabled !== false},
                 },
                 {name: 'homeLabel', type: 'text', label: 'Libellé de l\'accueil (affiché en texte, sinon lu par les lecteurs d\'écran)', localized: true, defaultValue: 'Accueil', admin: {condition: (_d, s) => s?.enabled !== false}},
+              ],
+            },
+          ],
+        },
+        {
+          label: 'Mise en page',
+          fields: [
+            {
+              name: 'sectionGrid', type: 'group', label: 'Grille des sections',
+              admin: {description: "Écarts par défaut des sections construites dans l'onglet Contenu des pages. Chaque section peut les surcharger."},
+              fields: [
+                {
+                  type: 'row',
+                  fields: [
+                    {name: 'gapX', type: 'select', label: 'Écart entre colonnes', required: true, defaultValue: String(DEFAULT_GAPS.gapX), options: GAP_OPTIONS, admin: {width: '33%'}},
+                    {name: 'gapY', type: 'select', label: 'Écart entre rangées', required: true, defaultValue: String(DEFAULT_GAPS.gapY), options: GAP_OPTIONS, admin: {width: '33%'}},
+                    {name: 'gapYMobile', type: 'select', label: 'Écart vertical mobile', required: true, defaultValue: String(DEFAULT_GAPS.gapYMobile), options: GAP_OPTIONS, admin: {width: '33%', description: 'Sous 768 px, entre tous les blocs empilés.'}},
+                  ],
+                },
               ],
             },
           ],

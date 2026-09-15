@@ -38,7 +38,7 @@ export default async function Page({params}: {params: Promise<{slug: string}>}) 
     <SitePage silo={pageSilo(page, site.settings)} header={toHeader(site.settings, site.header)} footer={toFooter(site.settings, site.footer, site.posts, locale)} tone={tone} currentHref={`/${slug}`}>
       <Hero {...hero} />
       {bandBreadcrumb ? <BreadcrumbBand {...breadcrumbProps(page, site.settings)} /> : null}
-      <PageSections sections={toSections(page.sections)} />
+      <PageSections sections={toSections(page.sections, site.settings)} />
     </SitePage>
   );
 }
