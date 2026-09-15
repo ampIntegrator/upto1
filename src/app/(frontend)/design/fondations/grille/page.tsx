@@ -14,7 +14,7 @@ export const metadata = {title: 'Grille & emprises — Design system Vidomia'};
 const SAMPLES: ContentRef[] = [
   {type: 'text'}, {type: 'image'}, {type: 'stat'}, {type: 'checkList'}, {type: 'callout'}, {type: 'card'}, {type: 'testimonialCard'}, {type: 'compareCard'},
   {type: 'cardGrid', columns: 2}, {type: 'cardGrid', columns: 3}, {type: 'cardGrid', columns: 4},
-  {type: 'sectionHeading'}, {type: 'sectionNote'}, {type: 'tabs'}, {type: 'collapsibleGroup'}, {type: 'testimonialCarousel'},
+  {type: 'sectionHeading'}, {type: 'sectionNote'}, {type: 'tabs'}, {type: 'collapsibleGroup'}, {type: 'testimonialCarousel'}, {type: 'mediaQuote'},
   {type: 'processSteps', steps: 2}, {type: 'processSteps', steps: 3}, {type: 'processSteps', steps: 4},
   {type: 'priceList', variant: 'single'}, {type: 'priceList', variant: 'columns', plans: 2}, {type: 'priceList', variant: 'columns', plans: 3},
   {type: 'statsBar'},

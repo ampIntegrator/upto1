@@ -9,6 +9,7 @@
  *   overlay         : calque noir entre 0 et 1 (0 par défaut, aucun calque)
  *   sizes           : largeur affichée selon l'écran, pour que le navigateur télécharge la
  *                     bonne taille (défaut : pleine largeur sur mobile, moitié au-delà)
+ *   children        : contenu optionnel posé sur l'image, centré en X et en Y (MediaQuote)
  *
  * Image via next/image en mode fill : tailles adaptées à l'écran, chargement différé,
  * texte alternatif. Angles droits. Le conteneur doit avoir une hauteur (rangée étirée ou
@@ -26,11 +27,12 @@ export type MediaProps = {
   minHeightMobile?: number;
   overlay?: number;
   sizes?: string;
+  children?: React.ReactNode;
 };
 
 const DEFAULT_SIZES = '(max-width: 767px) 100vw, 50vw';
 
-export function Media({image, minHeight, minHeightMobile, overlay = 0, sizes = DEFAULT_SIZES}: MediaProps) {
+export function Media({image, minHeight, minHeightMobile, overlay = 0, sizes = DEFAULT_SIZES, children}: MediaProps) {
   const vars = {
     ...(minHeight != null ? {'--media-min-height': `${minHeight}px`} : null),
     ...(minHeightMobile != null ? {'--media-min-height-mobile': `${minHeightMobile}px`} : null),
@@ -40,6 +42,11 @@ export function Media({image, minHeight, minHeightMobile, overlay = 0, sizes = D
     <VStack className={styles.root} style={vars}>
       <Image src={image.src} alt={image.alt ?? ''} fill sizes={sizes} className={styles.image} />
       {opacity > 0 ? <i className={styles.overlay} style={{opacity}} aria-hidden="true" /> : null}
+      {children != null ? (
+        <VStack hAlign="center" vAlign="center" className={styles.content}>
+          {children}
+        </VStack>
+      ) : null}
     </VStack>
   );
 }

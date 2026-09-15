@@ -27,3 +27,17 @@
   pointer-events: none;
   background: rgb(0, 0, 0);
 }
+/* contenu posé sur l'image (MediaQuote) : centré, au-dessus du calque, marge intérieure.
+   Dans le flux (pas en absolu) : il remplit la hauteur minimale et agrandit le bloc si le
+   texte est plus haut, au lieu d'être coupé. */
+.content {
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  padding: var(--spacing-10);
+}
+@media (max-width: 767px) {
+  .content {
+    padding: var(--spacing-6);
+  }
+}

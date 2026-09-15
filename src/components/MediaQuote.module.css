@@ -1,0 +1,40 @@
+/*
+ * MediaQuote — phrase centrée sur l'image. La taille visuelle (data-size) est indépendante
+ * de la balise : mêmes variables que les styles display et titres du thème. Sélecteur
+ * renforcé (balise + classe + attribut) pour primer sur le style propre de Heading et Text.
+ */
+:is(h2, h3, h4, h5, h6, p, span).quote {
+  margin: 0;
+  max-width: 100%;
+  text-align: center;
+  overflow-wrap: break-word;
+  color: var(--color-text-primary);
+}
+:is(h2, h3, h4, h5, h6, p, span).quote[data-size='display-1'] {
+  font-size: var(--text-display-1-size);
+  line-height: var(--text-display-1-leading);
+  font-weight: var(--text-display-1-weight);
+  letter-spacing: -0.025em;
+}
+:is(h2, h3, h4, h5, h6, p, span).quote[data-size='display-2'] {
+  font-size: var(--text-display-2-size);
+  line-height: var(--text-display-2-leading);
+  font-weight: var(--text-display-2-weight);
+  letter-spacing: -0.025em;
+}
+:is(h2, h3, h4, h5, h6, p, span).quote[data-size='display-3'] {
+  font-size: var(--text-display-3-size);
+  line-height: var(--text-display-3-leading);
+  font-weight: var(--text-display-3-weight);
+  letter-spacing: -0.02em;
+}
+:is(h2, h3, h4, h5, h6, p, span).quote[data-size='heading-1'] {
+  font-size: var(--text-heading-1-size);
+  line-height: var(--text-heading-1-leading);
+  font-weight: var(--text-heading-1-weight);
+}
+:is(h2, h3, h4, h5, h6, p, span).quote[data-size='heading-2'] {
+  font-size: var(--text-heading-2-size);
+  line-height: var(--text-heading-2-leading);
+  font-weight: var(--text-heading-2-weight);
+}
