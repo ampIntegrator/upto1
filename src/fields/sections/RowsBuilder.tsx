@@ -29,7 +29,7 @@ import {minSpan, validateRow, type ColumnSpan} from '@/components/content-specs'
 import {contentLabel, toContentRef} from './contentRef';
 import {EMPTY_SLUG} from './emptyBlock';
 import {hasMobileOrder, mobileSequence} from './mobileOrder';
-import {presetLabel, ROW_PRESETS, toSpan} from './presets';
+import {presetLabel, ROW_PRESETS, spansKey, toSpan} from './presets';
 
 /** filled : la colonne a un vrai composant (une case vide ne compte pas) */
 /** narrow : largeur minimale exigée par le composant quand la colonne est trop étroite, sinon null */
@@ -90,9 +90,10 @@ function PresetTiles({current, onReplace, onAdd}: {current: string; onReplace: (
     onAdd(spans);
   };
   return (
-    <div role="radiogroup" aria-label="Disposition" style={{display: 'grid', gridTemplateColumns: 'repeat(8, minmax(0, 1fr))', gap: 8}}>
+    <div role="radiogroup" aria-label="Disposition" style={{display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gap: 8}}>
       {ROW_PRESETS.map((spans) => {
-        const active = spans.join('|') === current;
+        // active dès que les largeurs sont les mêmes, dans n'importe quel ordre
+        const active = spansKey(spans) === current;
         const label = presetLabel(spans);
         return (
           <button
@@ -335,7 +336,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
   const openCellSnapshot = open ? snapshot[open.row]?.columns[open.col] : undefined;
   const label = typeof field.label === 'string' ? field.label : 'Rangées';
   const description = typeof field.admin?.description === 'string' ? field.admin.description : undefined;
-  const selectedSpans = selected !== null ? (snapshot[selected]?.columns ?? []).map((c) => c.span).join('|') : '';
+  const selectedSpans = selected !== null ? spansKey((snapshot[selected]?.columns ?? []).map((c) => c.span)) : '';
 
   return (
     <div className="field-type" style={{marginBottom: 'var(--base)'}}>

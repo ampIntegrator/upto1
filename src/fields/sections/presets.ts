@@ -1,28 +1,31 @@
 import {COLUMN_SPANS, type ColumnSpan} from '@/components/content-specs';
 
 /**
- * Préréglages de rangée : des raccourcis qui remplissent les colonnes d'un coup.
+ * Préréglages de rangée : des raccourcis qui remplissent les colonnes d'un coup (14, la colonne
+ * la plus large en premier ; pas de miroirs, les colonnes se réordonnent dans la case).
  * Les largeurs restent libres ensuite (chaque colonne porte la sienne), la seule règle
  * étant que la rangée fasse 12. Partagé par le bouton de l'admin et les libellés.
  */
 export const ROW_PRESETS: readonly ColumnSpan[][] = [
+  // une seule version par combinaison de largeurs : les flèches de la case réordonnent les colonnes
   [12],
   [6, 6],
-  [4, 4, 4],
-  [3, 3, 3, 3],
-  [2, 2, 2, 2, 2, 2],
   [8, 4],
-  [4, 8],
   [7, 5],
-  [5, 7],
-  [3, 6, 3],
   [9, 3],
-  [3, 9],
+  [4, 4, 4],
   [6, 3, 3],
-  [3, 3, 6],
+  [6, 4, 2],
+  [3, 3, 3, 3],
   [6, 2, 2, 2],
-  [2, 2, 2, 6],
+  [4, 4, 2, 2],
+  [4, 2, 2, 2, 2],
+  [3, 3, 2, 2, 2],
+  [2, 2, 2, 2, 2, 2],
 ];
+
+/** Clé d'une combinaison de largeurs, indépendante de l'ordre (vignette active d'une rangée). */
+export const spansKey = (spans: readonly number[]): string => [...spans].sort((a, b) => b - a).join('|');
 
 export const presetLabel = (spans: readonly number[]): string => spans.join(' | ');
 
