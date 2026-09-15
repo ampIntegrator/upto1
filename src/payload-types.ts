@@ -218,7 +218,7 @@ export interface Page {
                         span: '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '12';
                         mobileOrder?: number | null;
                         /**
-                         * Un seul composant par colonne. Pour en changer, supprimez-le puis choisissez-en un autre. Laissez vide pour une case vide.
+                         * Un seul composant par colonne. Pour en changer, videz la colonne puis choisissez-en un autre.
                          */
                         contents?:
                           | (
@@ -464,7 +464,7 @@ export interface Section {
               span: '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '12';
               mobileOrder?: number | null;
               /**
-               * Un seul composant par colonne. Pour en changer, supprimez-le puis choisissez-en un autre. Laissez vide pour une case vide.
+               * Un seul composant par colonne. Pour en changer, videz la colonne puis choisissez-en un autre.
                */
               contents?:
                 | (

@@ -9,19 +9,21 @@
  *     une rangée sous la sélection ;
  *   - les rangées empilées dessous, réordonnées par glisser-déposer (poignée) ; sur le côté, en
  *     deux lignes de deux : déplacer et dupliquer, ordre mobile et supprimer ; dans chaque case,
- *     deux flèches décalent la colonne ;
+ *     une poignée ⋮⋮ fait glisser la colonne à gauche ou à droite dans sa rangée (souris,
+ *     tactile ou clavier) ; rangées et colonnes triées par le même module (sortable.tsx, dnd-kit) ;
  *   - le bouton téléphone d'une rangée ouvre la fenêtre d'ordre mobile de toute la section :
- *     toutes ses colonnes, rangées confondues, avec des flèches haut et bas ; les colonnes de la
+ *     toutes ses colonnes, rangées confondues, réordonnées par glisser-déposer (poignée) ; les colonnes de la
  *     rangée cliquée sont mises en évidence (champ caché mobileOrder, voir mobileOrder.ts) ;
  *   - une case résume son composant (un seul par colonne), ou « Vide » ; un clic ouvre un tiroir
- *     Payload avec les champs de cette colonne (largeur, composant). Le formulaire est partagé : ce qui est
+ *     Payload avec le composant de la colonne et, s'il y en a un, un bouton « Vider la colonne »
+ *     (la largeur ne s'y règle plus : elle vient des dispositions). Le formulaire est partagé : ce qui est
  *     saisi dans le tiroir est déjà dans la page, on enregistre la page comme d'habitude.
  *
  * Toute la manipulation passe par l'état de formulaire de Payload (useForm, useFormFields),
  * exactement comme son propre champ tableau ; le rendu des champs du tiroir est celui de
  * Payload (RenderFields), avec les chemins et permissions qu'il attend.
  */
-import {Button, DraggableSortable, DraggableSortableItem, Drawer, Modal, RenderFields, useDrawerSlug, useField, useForm, useFormFields, useModal} from '@payloadcms/ui';
+import {Button, Drawer, Modal, RenderFields, useDrawerSlug, useField, useForm, useFormFields, useModal} from '@payloadcms/ui';
 import type {ArrayFieldClient, ArrayFieldClientProps, ClientField, SanitizedFieldPermissions, SanitizedFieldsPermissions} from 'payload';
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 
@@ -30,11 +32,12 @@ import {contentLabel, toContentRef} from './contentRef';
 import {EMPTY_SLUG} from './emptyBlock';
 import {hasMobileOrder, mobileSequence} from './mobileOrder';
 import {presetLabel, ROW_PRESETS, spansKey, toSpan} from './presets';
+import {type SortableHandle, SortableItem, SortableList} from './sortable';
 
 /** filled : la colonne a un vrai composant (une case vide ne compte pas) */
 /** narrow : largeur minimale exigée par le composant quand la colonne est trop étroite, sinon null */
-type CellSnapshot = {span: ColumnSpan; contents: string[]; types?: string[]; filled: boolean; narrow: number | null; mobileOrder: number | null};
-type RowSnapshot = {columns: CellSnapshot[]};
+type CellSnapshot = {span: ColumnSpan; contents: string[]; types?: string[]; names?: string[]; filled: boolean; narrow: number | null; mobileOrder: number | null};
+type RowSnapshot = {ids?: string[]; columns: CellSnapshot[]};
 
 const TILE_H = 40;
 const text14: React.CSSProperties = {fontSize: 14, lineHeight: 1.4};
@@ -114,25 +117,16 @@ function PresetTiles({current, onReplace, onAdd}: {current: string; onReplace: (
   );
 }
 
-/** Une case de la rangée : largeur dans un coin, flèches pour la décaler, résumé des contenus, clic pour ouvrir le tiroir. */
-function Cell({cell, index, count, onOpen, onMove}: {cell: CellSnapshot; index: number; count: number; onOpen: () => void; onMove?: (to: number) => void}) {
+/** Ce que reçoit une case triable (module sortable.tsx). */
+type DragProps = SortableHandle;
+
+/** Une case de la rangée : poignée pour la glisser à gauche ou à droite, largeur dans un coin, résumé du composant, clic pour ouvrir le tiroir. */
+function Cell({cell, index, onOpen, drag}: {cell: CellSnapshot; index: number; onOpen: () => void; drag?: DragProps}) {
   const empty = !cell.filled;
-  const arrow = (dir: -1 | 1, glyph: string, label: string) => (
-    <button
-      type="button"
-      aria-label={label}
-      title={label}
-      disabled={dir === -1 ? index === 0 : index === count - 1}
-      onClick={(e) => {
-        e.stopPropagation();
-        onMove?.(index + dir);
-      }}
-      style={{border: 0, background: 'transparent', padding: '0 4px', cursor: 'pointer', color: 'inherit', ...text14}}>
-      {glyph}
-    </button>
-  );
+  const onHandleKeyDown = drag?.listeners.onKeyDown;
   return (
     <div
+      ref={drag?.setNodeRef}
       role="button"
       tabIndex={0}
       onClick={(e) => {
@@ -152,31 +146,46 @@ function Cell({cell, index, count, onOpen, onMove}: {cell: CellSnapshot; index: 
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'stretch',
+        alignItems: 'center',
+        justifyContent: 'center',
         gap: 2,
         minWidth: 0,
         minHeight: 72,
         padding: '26px 8px 8px',
-        textAlign: 'left',
+        textAlign: 'center',
         cursor: 'pointer',
         borderRadius: 4,
         border: cell.narrow ? '2px solid var(--theme-error-500)' : `1px ${empty ? 'dashed' : 'solid'} var(--theme-elevation-${empty ? '300' : '400'})`,
-        background: empty ? 'transparent' : 'var(--theme-elevation-0)',
+        background: empty ? 'var(--theme-elevation-50)' : 'var(--theme-elevation-0)',
         color: 'var(--theme-elevation-1000)',
+        transform: drag?.transform,
+        transition: drag?.transition,
+        zIndex: drag?.isDragging ? 2 : undefined,
+        boxShadow: drag?.isDragging ? '0 6px 20px rgba(0, 0, 0, 0.35)' : undefined,
         ...text14,
       }}>
-      {onMove ? (
-        <span style={{position: 'absolute', top: 2, left: 2, display: 'flex', ...dim}}>
-          {arrow(-1, '◀', `Décaler la colonne ${index + 1} vers la gauche`)}
-          {arrow(1, '▶', `Décaler la colonne ${index + 1} vers la droite`)}
-        </span>
+      {drag ? (
+        <button
+          type="button"
+          {...drag.attributes}
+          {...drag.listeners}
+          className="rows-builder__handle rows-builder__handle--cell"
+          aria-label={`Déplacer la colonne ${index + 1}`}
+          title="Glisser pour déplacer la colonne"
+          onClick={(e) => e.stopPropagation()}
+          onKeyDown={(e) => {
+            onHandleKeyDown?.(e);
+            e.stopPropagation();
+          }}>
+          ⋮⋮
+        </button>
       ) : null}
       <span style={{position: 'absolute', top: 4, right: 8, ...dim}}>{cell.span}/12</span>
       {empty ? (
-        <span style={{...dim, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>{cell.contents.length ? 'Case vide' : 'Vide'}</span>
+        <span style={{...dim, maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>{cell.contents.length ? cell.contents.join(', ') : 'Vide'}</span>
       ) : (
         cell.contents.map((label, k) => (
-          <span key={k} style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
+          <span key={k} style={{maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
             {label}
           </span>
         ))
@@ -214,6 +223,10 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
       if (!Number.isInteger(i)) continue;
       out[i] ??= {columns: []};
       if (parts[1] !== 'columns') continue;
+      if (parts.length === 2) {
+        out[i].ids = (fields[key]?.rows ?? []).map((row) => row.id);
+        continue;
+      }
       const j = Number(parts[2]);
       if (!Number.isInteger(j)) continue;
       out[i].columns[j] ??= {span: 12, contents: [], types: [], filled: false, narrow: null, mobileOrder: null};
@@ -229,15 +242,19 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
         (out[i].columns[j].types ??= [])[k] = blockType;
         if (blockType && blockType !== EMPTY_SLUG) out[i].columns[j].filled = true;
       }
+      // nom affiché choisi dans le tiroir (blockName natif)
+      if (parts[3] === 'contents' && parts[5] === 'blockName' && parts.length === 6) {
+        (out[i].columns[j].names ??= [])[Number(parts[4])] = String(fields[key]?.value ?? '');
+      }
     }
-    return JSON.stringify(out.map((r) => ({columns: (r?.columns ?? []).map((c) => {
+    return JSON.stringify(out.map((r) => ({ids: r?.ids ?? [], columns: (r?.columns ?? []).map((c) => {
       const span = c?.span ?? 12;
       // largeur exigée par le composant de la colonne (registre des emprises)
       const need = (c?.types ?? []).reduce((m, t) => {
         const ref = t ? toContentRef({blockType: t}) : null;
         return ref ? Math.max(m, minSpan(ref)) : m;
       }, 0);
-      return {span, contents: (c?.contents ?? []).filter(Boolean), filled: Boolean(c?.filled), narrow: need > span ? need : null, mobileOrder: c?.mobileOrder ?? null};
+      return {span, contents: (c?.contents ?? []).map((label, k) => c?.names?.[k]?.trim() || label).filter(Boolean), filled: Boolean(c?.filled), narrow: need > span ? need : null, mobileOrder: c?.mobileOrder ?? null};
     })})));
   });
   const snapshot = useMemo<RowSnapshot[]>(() => JSON.parse(snapshotJson) as RowSnapshot[], [snapshotJson]);
@@ -322,6 +339,14 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
     openModal(mobileSlug);
   };
 
+  /** vide la colonne : retire son composant (et son nom) ; définitif à l'enregistrement de la page */
+  const clearColumn = (row: number, col: number) => {
+    const contentsPath = `${path}.${row}.columns.${col}.contents`;
+    const existing = getDataByPath<unknown[]>(contentsPath);
+    for (let k = (Array.isArray(existing) ? existing.length : 0) - 1; k >= 0; k--) removeFieldRow({path: contentsPath, rowIndex: k});
+    setModified(true);
+  };
+
   const openCell = (row: number, col: number) => {
     setSelected(row);
     setOpen({row, col});
@@ -361,14 +386,15 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
       ) : null}
       {showError && errorPaths?.length ? <p style={{...text14, color: 'var(--theme-error-500)', margin: '0 0 12px'}}>Une rangée contient une erreur : ouvrez ses colonnes.</p> : null}
 
-      <DraggableSortable ids={rows.map((r) => r.id)} onDragEnd={({moveFromIndex, moveToIndex}) => move(moveFromIndex, moveToIndex)} className="rows-builder__rows">
+      <SortableList ids={rows.map((r) => r.id)} axis="y" onMove={move} className="rows-builder__rows">
         {rows.map((row, i) => {
           const snap = snapshot[i] ?? {columns: []};
           const spans = snap.columns.map((c) => c.span);
           const rowError = row.isLoading ? null : validateRow(spans);
           const isSelected = selected === i;
+          const colIds = snap.ids?.length === snap.columns.length ? (snap.ids as string[]) : snap.columns.map((_, j) => `${row.id}-${j}`);
           return (
-            <DraggableSortableItem key={row.id} id={row.id} disabled={readOnly}>
+            <SortableItem key={row.id} id={row.id} disabled={readOnly}>
               {({attributes, listeners, setNodeRef, transform, transition, isDragging}) => (
                 <div ref={setNodeRef} style={{display: 'flex', gap: 8, alignItems: 'center', transform, transition, zIndex: isDragging ? 1 : undefined, position: 'relative'}}>
                   <div
@@ -396,17 +422,14 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
                     {row.isLoading ? (
                       <p style={{...text14, ...dim, margin: 0}}>Chargement…</p>
                     ) : snap.columns.length ? (
-                      <div style={{display: 'grid', gridTemplateColumns: spans.map((s) => `${s}fr`).join(' '), gap: 8}}>
-                        {snap.columns.map((cell, j) => (
-                          <Cell
-                            key={j}
-                            cell={cell}
-                            index={j}
-                            count={snap.columns.length}
-                            onOpen={() => openCell(i, j)}
-                            onMove={readOnly ? undefined : (to) => moveColumn(i, j, to)}
-                          />
-                        ))}
+                      <div style={{'--rows-builder-cells': spans.map((s) => `${s}fr`).join(' ')} as React.CSSProperties}>
+                        <SortableList ids={colIds} axis="x" onMove={(from, to) => moveColumn(i, from, to)} className="rows-builder__cells">
+                          {snap.columns.map((cell, j) => (
+                            <SortableItem key={colIds[j]} id={colIds[j]} disabled={readOnly}>
+                              {(handle) => <Cell cell={cell} index={j} onOpen={() => openCell(i, j)} drag={readOnly ? undefined : handle} />}
+                            </SortableItem>
+                          ))}
+                        </SortableList>
                       </div>
                     ) : (
                       <p style={{...text14, ...dim, margin: 0}}>Sélectionnez cette rangée puis une disposition.</p>
@@ -430,10 +453,10 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
                   ) : null}
                 </div>
               )}
-            </DraggableSortableItem>
+            </SortableItem>
           );
         })}
-      </DraggableSortable>
+      </SortableList>
 
 
       <Modal slug={mobileSlug} className="confirmation-modal rows-mobile">
@@ -446,28 +469,35 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
                 <div className="confirmation-modal__wrapper rows-mobile__wrapper">
                   <div className="confirmation-modal__content">
                     <h2 style={{margin: 0}}>Ordre mobile de la section</h2>
-                    <p style={{...text14, ...dim}}>Sous 768 px, toutes les colonnes de la section s’empilent dans cet ordre, rangées confondues. Les colonnes vides sont masquées. En évidence : la rangée {mobileRow + 1}.</p>
+                    <p style={{...text14, ...dim}}>Sous 768 px, toutes les colonnes de la section s’empilent dans cet ordre, rangées confondues : glissez une ligne par sa poignée pour la déplacer. Les colonnes vides sont masquées. En évidence : la rangée {mobileRow + 1}.</p>
                   </div>
-                  <ol className="rows-mobile__list">
+                  <SortableList ids={sequence.map((k) => `${flatColumns[k].row}-${flatColumns[k].col}`)} axis="y" onMove={moveMobile} className="rows-mobile__list" role="list">
                     {sequence.map((k, pos) => {
                       const c = flatColumns[k];
+                      const id = `${c.row}-${c.col}`;
                       return (
-                        <li key={`${c.row}-${c.col}`} className="rows-mobile__item" data-current={c.row === mobileRow ? 'true' : undefined}>
-                          <span style={{...text14, ...dim}}>{pos + 1}</span>
-                          <span style={{...text14, flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
-                            {c.contents.join(', ')}
-                            <span style={dim}> · {where(c)}</span>
-                          </span>
-                          <Button size="small" buttonStyle="pill" disabled={pos === 0} onClick={() => moveMobile(pos, pos - 1)} aria-label={`Monter sur mobile : ${where(c)}`}>
-                            ↑
-                          </Button>
-                          <Button size="small" buttonStyle="pill" disabled={pos === sequence.length - 1} onClick={() => moveMobile(pos, pos + 1)} aria-label={`Descendre sur mobile : ${where(c)}`}>
-                            ↓
-                          </Button>
-                        </li>
+                        <SortableItem key={id} id={id}>
+                          {(h) => (
+                            <div
+                              ref={h.setNodeRef}
+                              role="listitem"
+                              className="rows-mobile__item"
+                              data-current={c.row === mobileRow ? 'true' : undefined}
+                              style={{position: 'relative', transform: h.transform, transition: h.transition, zIndex: h.isDragging ? 2 : undefined, background: h.isDragging ? 'var(--theme-bg)' : undefined}}>
+                              <button type="button" {...h.attributes} {...h.listeners} className="rows-builder__handle rows-builder__handle--mobile" aria-label={`Déplacer sur mobile : ${where(c)}`} title="Glisser pour changer l’ordre mobile">
+                                ⋮⋮
+                              </button>
+                              <span style={{...text14, ...dim}}>{pos + 1}</span>
+                              <span style={{...text14, flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
+                                {c.contents.join(', ')}
+                                <span style={dim}> · {where(c)}</span>
+                              </span>
+                            </div>
+                          )}
+                        </SortableItem>
                       );
                     })}
-                  </ol>
+                  </SortableList>
                   {!sequence.length ? <p style={{...text14, ...dim, margin: 0}}>Aucune colonne remplie : rien ne s’affiche sur mobile.</p> : null}
                   {empties.length ? (
                     <ul className="rows-mobile__list">
@@ -498,6 +528,13 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
         <Drawer slug={drawerSlug} title={open && openCellSnapshot ? `Rangée ${open.row + 1} · colonne ${open.col + 1} · ${openCellSnapshot.span} / 12` : 'Colonne'}>
           {open ? (
             <div style={{paddingBottom: 'var(--base)'}}>
+              {openCellSnapshot && openCellSnapshot.contents.length > 0 && !readOnly ? (
+                <div style={{marginBottom: 'var(--base)'}}>
+                  <Button buttonStyle="secondary" onClick={() => clearColumn(open.row, open.col)}>
+                    Vider la colonne
+                  </Button>
+                </div>
+              ) : null}
               <RenderFields
                 fields={columnsField.fields as ClientField[]}
                 parentIndexPath=""

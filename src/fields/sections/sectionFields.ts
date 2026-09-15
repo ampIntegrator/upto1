@@ -1,6 +1,7 @@
 import type {Block, Field} from 'payload';
 
 import {type ColumnSpan, minSpan, validateColumn, validateRow} from '@/components/content-specs';
+import {BLOCK_NAME_MAX} from './blockName';
 import {CARD_BLOCKS} from './cardBlocks';
 import {emptyBlock} from './emptyBlock';
 import {mediaBlock} from './mediaBlock';
@@ -52,6 +53,9 @@ const spanField: Field = {
   required: true,
   defaultValue: '12',
   options: SPAN_OPTIONS,
+  // plus éditable dans le tiroir : la largeur se choisit par les dispositions de la rangée ;
+  // champ caché pour garder sa valeur et sa vérification
+  admin: {hidden: true},
   validate: (value: unknown, {data, path, siblingData}: {data: unknown; path: (number | string)[]; siblingData: Sibling}) => {
     const errors: string[] = [];
     const columns = getByPath(data, path.slice(0, -2));
@@ -87,6 +91,8 @@ const rowsField: Field = {
         spanField,
         // position de la colonne sur mobile, réglée par la fenêtre « ordre mobile » du constructeur
         {name: 'mobileOrder', type: 'number', admin: {hidden: true}},
+        // nom affiché du composant (blockName natif), au-dessus du composant dans le tiroir
+        {name: 'blockNameUi', type: 'ui', admin: {components: {Field: '@/fields/sections/BlockNameField#BlockNameField'}}},
         // un seul composant par colonne : un composant qui empile titre, texte et boutons reste un composant
         {
           name: 'contents',
@@ -97,9 +103,14 @@ const rowsField: Field = {
           // le sélecteur ne propose que les composants qui tiennent dans la largeur de la colonne
           filterOptions: ({siblingData}) => blocksForSpan(toSpan((siblingData as Sibling | undefined)?.span)),
           // message explicite plutôt que celui, générique, de maxRows
-          validate: (value: unknown) => (Array.isArray(value) && value.length > 1 ? 'Un seul composant par colonne.' : true),
+          validate: (value: unknown) => {
+            if (Array.isArray(value) && value.length > 1) return 'Un seul composant par colonne.';
+            const name = Array.isArray(value) ? (value[0] as {blockName?: unknown} | undefined)?.blockName : undefined;
+            if (typeof name === 'string' && name.length > BLOCK_NAME_MAX) return `Nom affiché trop long : ${BLOCK_NAME_MAX} caractères au plus.`;
+            return true;
+          },
           blocks: CONTENT_BLOCKS,
-          admin: {description: 'Un seul composant par colonne. Pour en changer, supprimez-le puis choisissez-en un autre. Laissez vide pour une case vide.'},
+          admin: {description: 'Un seul composant par colonne. Pour en changer, videz la colonne puis choisissez-en un autre.'},
         },
       ],
     },
