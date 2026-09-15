@@ -8,7 +8,9 @@
  *     colonnes) : un clic remplace la disposition de la rangée sélectionnée, un double clic ajoute
  *     une rangée sous la sélection ;
  *   - les rangées empilées dessous, réordonnées par glisser-déposer (poignée) ; sur le côté,
- *     dupliquer et supprimer ; dans chaque case, deux flèches décalent la colonne ;
+ *     dupliquer, ordre mobile et supprimer ; dans chaque case, deux flèches décalent la colonne ;
+ *   - le bouton téléphone ouvre une fenêtre : la rangée en colonne, dans son ordre mobile, avec
+ *     des flèches haut et bas (champ caché mobileOrder de chaque colonne, voir mobileOrder.ts) ;
  *   - une case résume ses contenus, ou « Vide » ; un clic ouvre un tiroir Payload avec les
  *     champs de cette colonne (largeur, contenus). Le formulaire est partagé : ce qui est
  *     saisi dans le tiroir est déjà dans la page, on enregistre la page comme d'habitude.
@@ -17,20 +19,31 @@
  * exactement comme son propre champ tableau ; le rendu des champs du tiroir est celui de
  * Payload (RenderFields), avec les chemins et permissions qu'il attend.
  */
-import {Button, DraggableSortable, DraggableSortableItem, Drawer, RenderFields, useDrawerSlug, useField, useForm, useFormFields, useModal} from '@payloadcms/ui';
+import {Button, DraggableSortable, DraggableSortableItem, Drawer, Modal, RenderFields, useDrawerSlug, useField, useForm, useFormFields, useModal} from '@payloadcms/ui';
 import type {ArrayFieldClient, ArrayFieldClientProps, ClientField, SanitizedFieldPermissions, SanitizedFieldsPermissions} from 'payload';
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 
 import {validateRow, type ColumnSpan} from '@/components/content-specs';
 import {contentLabel} from './contentRef';
+import {hasMobileOrder, mobileSequence} from './mobileOrder';
 import {presetLabel, ROW_PRESETS, toSpan} from './presets';
 
-type CellSnapshot = {span: ColumnSpan; contents: string[]};
+type CellSnapshot = {span: ColumnSpan; contents: string[]; mobileOrder: number | null};
 type RowSnapshot = {columns: CellSnapshot[]};
 
 const TILE_H = 40;
 const text14: React.CSSProperties = {fontSize: 14, lineHeight: 1.4};
 const dim: React.CSSProperties = {color: 'var(--theme-elevation-600)'};
+
+/** Pictogramme téléphone (trait, couleur du texte). */
+function PhoneGlyph() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="6" y="2" width="12" height="20" rx="2" />
+      <path d="M11 18h2" />
+    </svg>
+  );
+}
 
 /** Vignette d'une disposition : un rectangle par colonne, clair sur fond sombre, aux proportions des largeurs. */
 function Tile({spans, active}: {spans: readonly number[]; active: boolean}) {
@@ -179,6 +192,9 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
   const [open, setOpen] = useState<{row: number; col: number} | null>(null);
   // rangée sélectionnée : les vignettes agissent sur elle ; sans sélection, elles ajoutent une rangée
   const [selected, setSelected] = useState<number | null>(null);
+  // rangée dont la fenêtre « ordre mobile » est ouverte
+  const [mobileRow, setMobileRow] = useState<number | null>(null);
+  const mobileSlug = `rows-mobile-${path}`;
 
   // instantané des rangées : largeurs et contenus, pour dessiner les bandes sans déplier
   const snapshotJson = useFormFields(([fields]) => {
@@ -193,14 +209,18 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
       if (parts[1] !== 'columns') continue;
       const j = Number(parts[2]);
       if (!Number.isInteger(j)) continue;
-      out[i].columns[j] ??= {span: 12, contents: []};
+      out[i].columns[j] ??= {span: 12, contents: [], mobileOrder: null};
       if (parts[3] === 'span' && parts.length === 4) out[i].columns[j].span = toSpan(fields[key]?.value);
+      if (parts[3] === 'mobileOrder' && parts.length === 4) {
+        const v = fields[key]?.value;
+        out[i].columns[j].mobileOrder = typeof v === 'number' && Number.isFinite(v) ? v : null;
+      }
       if (parts[3] === 'contents' && parts[5] === 'blockType' && parts.length === 6) {
         const k = Number(parts[4]);
         out[i].columns[j].contents[k] = contentLabel({blockType: String(fields[key]?.value ?? '')});
       }
     }
-    return JSON.stringify(out.map((r) => ({columns: (r?.columns ?? []).map((c) => ({span: c?.span ?? 12, contents: (c?.contents ?? []).filter(Boolean)}))})));
+    return JSON.stringify(out.map((r) => ({columns: (r?.columns ?? []).map((c) => ({span: c?.span ?? 12, contents: (c?.contents ?? []).filter(Boolean), mobileOrder: c?.mobileOrder ?? null}))})));
   });
   const snapshot = useMemo<RowSnapshot[]>(() => JSON.parse(snapshotJson) as RowSnapshot[], [snapshotJson]);
 
@@ -257,6 +277,28 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
   const remove = (i: number) => {
     removeFieldRow({path, rowIndex: i});
     setSelected(null);
+  };
+
+  /** écrit l'ordre mobile d'une rangée : position pour les colonnes listées, vide pour les autres */
+  const writeMobileOrder = (row: number, sequence: number[] | null) => {
+    const columns = snapshot[row]?.columns ?? [];
+    columns.forEach((_, j) => {
+      const pos = sequence ? sequence.indexOf(j) : -1;
+      dispatchFields({type: 'UPDATE', path: `${path}.${row}.columns.${j}.mobileOrder`, value: pos >= 0 ? pos : null, valid: true});
+    });
+    setModified(true);
+  };
+  const moveMobile = (row: number, from: number, to: number) => {
+    const columns = snapshot[row]?.columns ?? [];
+    const sequence = mobileSequence(columns.map((c) => ({mobileOrder: c.mobileOrder, empty: c.contents.length === 0})));
+    if (to < 0 || to >= sequence.length) return;
+    const [moved] = sequence.splice(from, 1);
+    sequence.splice(to, 0, moved);
+    writeMobileOrder(row, sequence);
+  };
+  const openMobile = (row: number) => {
+    setMobileRow(row);
+    openModal(mobileSlug);
   };
 
   const openCell = (row: number, col: number) => {
@@ -363,6 +405,9 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
                       <Button size="small" buttonStyle="pill" onClick={() => duplicate(i)} aria-label={`Dupliquer la rangée ${i + 1}`} tooltip="Dupliquer">
                         ⧉
                       </Button>
+                      <Button size="small" buttonStyle="pill" onClick={() => openMobile(i)} aria-label={`Ordre mobile de la rangée ${i + 1}`} tooltip="Ordre mobile">
+                        <PhoneGlyph />
+                      </Button>
                       <Button size="small" buttonStyle="pill" onClick={() => remove(i)} aria-label={`Supprimer la rangée ${i + 1}`} tooltip="Supprimer">
                         ✕
                       </Button>
@@ -374,6 +419,66 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
           );
         })}
       </DraggableSortable>
+
+
+      <Modal slug={mobileSlug} className="confirmation-modal rows-mobile">
+        {mobileRow !== null && snapshot[mobileRow]
+          ? (() => {
+              const columns = snapshot[mobileRow].columns;
+              const mobileColumns = columns.map((c) => ({mobileOrder: c.mobileOrder, empty: c.contents.length === 0}));
+              const sequence = mobileSequence(mobileColumns);
+              const empties = columns.map((c, j) => ({c, j})).filter(({c}) => c.contents.length === 0);
+              return (
+                <div className="confirmation-modal__wrapper rows-mobile__wrapper">
+                  <div className="confirmation-modal__content">
+                    <h2 style={{margin: 0}}>Ordre mobile · rangée {mobileRow + 1}</h2>
+                    <p style={{...text14, ...dim}}>Sous 768 px, les colonnes s’empilent dans cet ordre. Les colonnes vides sont masquées.</p>
+                  </div>
+                  <ol className="rows-mobile__list">
+                    {sequence.map((j, pos) => {
+                      const c = columns[j];
+                      return (
+                        <li key={j} className="rows-mobile__item">
+                          <span style={{...text14, ...dim}}>{pos + 1}</span>
+                          <span style={{...text14, flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
+                            {c.contents.join(', ')}
+                            <span style={dim}> · colonne {j + 1} · {c.span}/12</span>
+                          </span>
+                          <Button size="small" buttonStyle="pill" disabled={pos === 0} onClick={() => moveMobile(mobileRow, pos, pos - 1)} aria-label={`Monter la colonne ${j + 1} sur mobile`}>
+                            ↑
+                          </Button>
+                          <Button size="small" buttonStyle="pill" disabled={pos === sequence.length - 1} onClick={() => moveMobile(mobileRow, pos, pos + 1)} aria-label={`Descendre la colonne ${j + 1} sur mobile`}>
+                            ↓
+                          </Button>
+                        </li>
+                      );
+                    })}
+                  </ol>
+                  {!sequence.length ? <p style={{...text14, ...dim, margin: 0}}>Aucune colonne remplie : rien ne s’affiche sur mobile.</p> : null}
+                  {empties.length ? (
+                    <ul className="rows-mobile__list">
+                      {empties.map(({c, j}) => (
+                        <li key={j} className="rows-mobile__item" style={dim}>
+                          <span style={{...text14, flex: 1}}>
+                            Colonne {j + 1} · {c.span}/12 · vide, masquée sur mobile
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                  <div className="confirmation-modal__controls">
+                    <Button size="small" buttonStyle="secondary" disabled={!hasMobileOrder(mobileColumns)} onClick={() => writeMobileOrder(mobileRow, null)}>
+                      Reprendre l’ordre desktop
+                    </Button>
+                    <Button size="small" buttonStyle="primary" onClick={() => closeModal(mobileSlug)}>
+                      Fermer
+                    </Button>
+                  </div>
+                </div>
+              );
+            })()
+          : null}
+      </Modal>
 
       {columnsField ? (
         <Drawer slug={drawerSlug} title={open && openCellSnapshot ? `Rangée ${open.row + 1} · colonne ${open.col + 1} · ${openCellSnapshot.span} / 12` : 'Colonne'}>

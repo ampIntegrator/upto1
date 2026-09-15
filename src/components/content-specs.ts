@@ -9,7 +9,8 @@
  *     étapes, carrousel…).
  *   - Chaque contenu déclare ici son emprise minimale en colonnes de page ; elle peut
  *     dépendre de ses réglages (une grille de cartes à 3 colonnes internes demande 9).
- *   - Sous 768 px, toutes les colonnes passent en pleine largeur (styles.css, .page-grid).
+ *   - Sous 768 px, toutes les colonnes passent en pleine largeur, dans l'ordre mobile de la
+ *     rangée, colonnes vides masquées (styles.css, .page-grid ; fields/sections/mobileOrder.ts).
  *
  * Ce fichier est consommé par le front (page Fondations « Grille ») et par la config Payload
  * (src/fields/sections) : `validateColumn` et `validateRow` sont les validations de la largeur

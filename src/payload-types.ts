@@ -203,13 +203,14 @@ export interface Page {
              */
             anchor?: string | null;
             /**
-             * Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre.
+             * Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre mobile de la rangée (bouton téléphone) ; les colonnes vides y sont masquées.
              */
             rows?:
               | {
                   columns?:
                     | {
                         span: '2' | '3' | '4' | '6' | '8' | '9' | '12';
+                        mobileOrder?: number | null;
                         /**
                          * Empilés de haut en bas. Laissez vide pour une case vide.
                          */
@@ -392,13 +393,14 @@ export interface Section {
    */
   anchor?: string | null;
   /**
-   * Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre.
+   * Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre mobile de la rangée (bouton téléphone) ; les colonnes vides y sont masquées.
    */
   rows?:
     | {
         columns?:
           | {
               span: '2' | '3' | '4' | '6' | '8' | '9' | '12';
+              mobileOrder?: number | null;
               /**
                * Empilés de haut en bas. Laissez vide pour une case vide.
                */
@@ -751,6 +753,7 @@ export interface PagesSelect<T extends boolean = true> {
                       | T
                       | {
                           span?: T;
+                          mobileOrder?: T;
                           contents?:
                             | T
                             | {
@@ -914,6 +917,7 @@ export interface SectionsSelect<T extends boolean = true> {
           | T
           | {
               span?: T;
+              mobileOrder?: T;
               contents?:
                 | T
                 | {

@@ -8,6 +8,7 @@ import type {CardProps} from '@/components/Card';
 import type {SectionBackground, SectionTint} from '@/components/Section';
 import type {ColumnSpan} from '@/components/content-specs';
 import {CARD_VARIANTS} from '@/fields/sections/cardBlocks';
+import {hasMobileOrder, mobileRanks} from '@/fields/sections/mobileOrder';
 import {toSpan} from '@/fields/sections/presets';
 import type {NucleoIconKey} from '@/theme/icons/nucleo';
 import type {Media, Page, Section as SharedSection} from '@/payload-types';
@@ -19,7 +20,8 @@ type ContentBlock = NonNullable<NonNullable<NonNullable<SectionBlock['rows']>[nu
 
 export type ContentData = {type: 'text'; text: string} | {type: 'card'; card: CardProps};
 
-export type ColumnData = {span: ColumnSpan; contents: ContentData[]};
+/** mobileRank : rang sous 768 px quand la rangée a un ordre mobile ; empty : masquée sur mobile */
+export type ColumnData = {span: ColumnSpan; contents: ContentData[]; empty: boolean; mobileRank?: number};
 
 export type SectionData = {
   key: string;
@@ -95,12 +97,14 @@ function toSection(s: SectionSource, key: string): SectionData {
     overlay: isMedia ? (s.overlay ?? 0.3) : 0,
     spacingTop: Number(s.spacingTop ?? 80),
     spacingBottom: Number(s.spacingBottom ?? 80),
-    rows: (s.rows ?? []).map((r) =>
-      (r.columns ?? []).map((c) => ({
-        span: toSpan(c.span),
-        contents: (c.contents ?? []).map(toContent).filter((x): x is ContentData => x !== null),
-      })),
-    ),
+    rows: (s.rows ?? []).map((r) => {
+      const columns = (r.columns ?? []).map((c) => {
+        const contents = (c.contents ?? []).map(toContent).filter((x): x is ContentData => x !== null);
+        return {span: toSpan(c.span), contents, empty: contents.length === 0, mobileOrder: c.mobileOrder};
+      });
+      const ranks = hasMobileOrder(columns) ? mobileRanks(columns) : null;
+      return columns.map(({mobileOrder: _m, ...c}, i) => ({...c, mobileRank: ranks?.[i] ?? undefined}));
+    }),
   };
 }
 

@@ -2,7 +2,8 @@
  * PageSections — les sections d'une page, empilées sous le haut de page.
  * Chaque section : Section (fond, paddings) > Container > une Grid de 12 colonnes par
  * rangée (classe page-grid : pleine largeur sous 768 px) > GridSpan par colonne, à sa
- * largeur > contenus empilés. Une colonne vide garde sa place dans la grille.
+ * largeur > contenus empilés. Une colonne vide garde sa place sur desktop et disparaît sous
+ * 768 px ; l'ordre mobile de la rangée passe par la variable --mobile-order (styles.css).
  */
 import {Grid, GridSpan} from '@astryxdesign/core/Grid';
 import {VStack} from '@astryxdesign/core/Stack';
@@ -46,7 +47,11 @@ export function PageSections({sections}: {sections: SectionData[]}) {
             {s.rows.map((columns, r) => (
               <Grid key={r} columns={12} gap={8} className="page-grid" align="start">
                 {columns.map((c, i) => (
-                  <GridSpan key={i} columns={c.span}>
+                  <GridSpan
+                    key={i}
+                    columns={c.span}
+                    data-empty={c.empty ? 'true' : undefined}
+                    style={c.mobileRank !== undefined ? ({'--mobile-order': c.mobileRank} as React.CSSProperties) : undefined}>
                     {c.contents.length ? (
                       <VStack gap={6}>
                         {c.contents.map((content, j) => (

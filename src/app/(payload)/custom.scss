@@ -33,3 +33,31 @@
   flex-direction: column;
   gap: 10px;
 }
+
+/* Fenêtre « ordre mobile » d'une rangée (sur la base de la fenêtre de confirmation Payload). */
+.rows-mobile__wrapper {
+  width: min(520px, calc(100vw - 32px));
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: 4px;
+  background: var(--theme-bg);
+}
+.rows-mobile__list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rows-mobile__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: 4px;
+
+  .btn {
+    margin: 0;
+  }
+}
