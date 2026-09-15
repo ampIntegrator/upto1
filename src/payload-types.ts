@@ -209,6 +209,11 @@ export interface Page {
              */
             gapYMobile?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
             /**
+             * À l’enregistrement, la section est copiée dans « Sections partagées » et la page y fait référence.
+             */
+            saveAsShared?: boolean | null;
+            sharedTitle?: string | null;
+            /**
              * Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre mobile de la section (bouton téléphone) ; les colonnes vides y sont masquées.
              */
             rows?:
@@ -371,11 +376,6 @@ export interface Page {
                   id?: string | null;
                 }[]
               | null;
-            /**
-             * À l’enregistrement, la section est copiée dans « Sections partagées » et la page y fait référence.
-             */
-            saveAsShared?: boolean | null;
-            sharedTitle?: string | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'section';
@@ -861,6 +861,8 @@ export interface PagesSelect<T extends boolean = true> {
               gapX?: T;
               gapY?: T;
               gapYMobile?: T;
+              saveAsShared?: T;
+              sharedTitle?: T;
               rows?:
                 | T
                 | {
@@ -1011,8 +1013,6 @@ export interface PagesSelect<T extends boolean = true> {
                         };
                     id?: T;
                   };
-              saveAsShared?: T;
-              sharedTitle?: T;
               id?: T;
               blockName?: T;
             };

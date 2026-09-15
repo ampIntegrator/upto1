@@ -123,12 +123,13 @@ const SPACING_OPTIONS = ['0', '20', '40', '60', '80', '100', '120', '140', '160'
 const modeChosen = (_d: unknown, s: Sibling) => ['light', 'dark', 'media'].includes(String(s?.mode ?? ''));
 
 /**
- * Les champs d'une section, posés comme des questions successives : le fond d'abord, puis
- * les réglages propres au fond choisi, puis espacements, ancre et rangées.
+ * Les champs d'une section, en deux blocs encadrés : « Réglages de la section » (questions
+ * successives : le fond d'abord, puis les réglages propres au fond choisi, espacements, ancre,
+ * écarts et partage), puis les rangées.
  * `shareable` ajoute la case « enregistrer dans les sections partagées » (bloc de page).
  */
 export function sectionFields({shareable}: {shareable: boolean}): Field[] {
-  const fields: Field[] = [
+  const settings: Field[] = [
     // 1. le fond : clair, nuit ou média (pas de valeur par défaut : la question doit être posée)
     {
       name: 'mode',
@@ -234,11 +235,9 @@ export function sectionFields({shareable}: {shareable: boolean}): Field[] {
         {name: 'gapYMobile', type: 'select', label: 'Écart vertical mobile', defaultValue: SITE_GAP, options: SECTION_GAP_OPTIONS, admin: {width: '33%', description: 'Sous 768 px, entre tous les blocs empilés.'}},
       ],
     },
-    // 4. les rangées
-    rowsField,
   ];
   if (shareable) {
-    fields.push({
+    settings.push({
       type: 'row',
       admin: {condition: modeChosen},
       fields: [
@@ -247,7 +246,12 @@ export function sectionFields({shareable}: {shareable: boolean}): Field[] {
       ],
     });
   }
-  return fields;
+  return [
+    // réglages de la section, encadrés et repliables (présentation seulement : aucune donnée en plus)
+    {type: 'collapsible', label: 'Réglages de la section', admin: {initCollapsed: false}, fields: settings},
+    // 4. les rangées, dans leur propre encadré (RowsBuilder)
+    rowsField,
+  ];
 }
 
 /** Bloc de page : une section construite sur place. */

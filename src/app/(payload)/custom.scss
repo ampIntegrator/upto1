@@ -83,6 +83,13 @@
   user-select: none;
   touch-action: none;
 }
+/* Bloc « Rangées » d'une section : encadré comme le bloc repliable « Réglages de la section »
+   (même bordure, même arrondi) pour séparer nettement les deux parties. */
+.rows-builder {
+  padding: calc(var(--base) * 0.8) var(--base) var(--base);
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: var(--style-radius-m);
+}
 .rows-builder__rows {
   display: flex;
   flex-direction: column;

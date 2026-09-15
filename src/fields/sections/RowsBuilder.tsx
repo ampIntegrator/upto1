@@ -407,16 +407,11 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
   const selectedSpans = selected !== null ? spansKey((snapshot[selected]?.columns ?? []).map((c) => c.span)) : '';
 
   return (
-    <div className="field-type" style={{marginBottom: 'var(--base)'}}>
+    <div className="field-type rows-builder" style={{marginBottom: 'var(--base)'}}>
       <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12, marginBottom: 8}}>
         <span style={{...text14, fontWeight: 600}}>
           {label} <span style={dim}>({rows.length})</span>
         </span>
-        {selected !== null && !readOnly ? (
-          <Button size="small" buttonStyle="pill" onClick={() => setSelected(null)}>
-            Désélectionner la rangée {selected + 1}
-          </Button>
-        ) : null}
       </div>
       {description ? <p style={{...text14, ...dim, margin: '0 0 12px'}}>{description}</p> : null}
       {!readOnly ? (
