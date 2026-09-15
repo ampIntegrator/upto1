@@ -1,6 +1,6 @@
 /**
  * Flag — small SVG flag (18 × 12) for the language switcher. Drawn in SVG, not
- * as emoji: Windows does not display flag emoji. Known codes: FR, EN, DE, ES;
+ * as emoji: Windows does not display flag emoji. Known codes: FR, EN, DE, ES, IT;
  * an unknown code renders nothing.
  */
 import React from 'react';
@@ -33,6 +33,14 @@ function paint(code: string): React.ReactNode {
         <>
           <rect width={W} height={H} fill="#AA151B" />
           <rect y={3} width={W} height={6} fill="#F1BF00" />
+        </>
+      );
+    case 'IT':
+      return (
+        <>
+          <rect width={6} height={H} fill="#009246" />
+          <rect x={6} width={6} height={H} fill="#FFFFFF" />
+          <rect x={12} width={6} height={H} fill="#CE2B37" />
         </>
       );
     case 'EN':
