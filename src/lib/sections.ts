@@ -1,8 +1,8 @@
 /**
- * Les sections d'une page Payload → données prêtes pour le composant PageSections.
- * Une section partagée (bloc « sharedSection ») est dépliée comme une section construite
- * sur place : même forme, mêmes règles. Les réglages d'admin (mode, couleur, texture,
- * style de nuit, média) se résolvent en un seul fond du composant Section.
+ * The sections of a Payload page → data ready for the PageSections component.
+ * A shared section (« sharedSection » block) is expanded like a section built
+ * in place: same shape, same rules. Admin settings (mode, colour, texture,
+ * night style, media) resolve into a single Section component background.
  */
 import type {CardProps} from '@/components/Card';
 import type {MediaProps} from '@/components/Media';
@@ -27,8 +27,8 @@ type ContentBlock = NonNullable<NonNullable<NonNullable<SectionBlock['rows']>[nu
 export type ContentData = {type: 'text'; text: string} | {type: 'card'; card: CardProps} | {type: 'media'; media: MediaProps} | {type: 'mediaQuote'; mediaQuote: MediaQuoteProps};
 
 /**
- * mobileRank : rang sous 768 px quand la section a un ordre mobile ; empty : masquée sur mobile ;
- * stretch : la colonne s'étire à la hauteur de la rangée (elle contient une image)
+ * mobileRank: rank below 768 px when the section has a mobile order; empty: hidden on mobile;
+ * stretch: the column stretches to the row's height (it contains an image)
  */
 export type ColumnData = {span: ColumnSpan; contents: ContentData[]; empty: boolean; stretch?: boolean; mobileRank?: number};
 
@@ -42,7 +42,7 @@ export type SectionData = {
   overlay: number;
   spacingTop: number;
   spacingBottom: number;
-  /** écarts de la grille, en pixels (section, sinon réglage du site) */
+  /** grid gaps, in pixels (section, otherwise site setting) */
   gaps: Gaps;
   rows: ColumnData[][];
 };
@@ -56,7 +56,7 @@ function background(s: SectionSource): SectionBackground {
   return s.texture && s.texture !== 'none' ? s.texture : 'light';
 }
 
-/** Champs possibles d'un bloc Carte (les huit variantes partagent titre et texte). */
+/** Possible fields of a Card block (the eight variants share title and text). */
 type CardBlockData = {
   blockType: string;
   title: string;
@@ -86,7 +86,7 @@ function toCard(b: CardBlockData): CardProps {
   };
 }
 
-/** Champs d'un bloc Image. */
+/** Fields of an Image block. */
 type MediaBlockData = {blockType: string; image?: Media | number | null; minHeight?: string | null; minHeightMobile?: string | null; overlay?: number | null};
 
 const toHeight = (v: string | null | undefined): number | undefined => {
@@ -96,14 +96,14 @@ const toHeight = (v: string | null | undefined): number | undefined => {
 
 function toMedia(b: MediaBlockData): ContentData | null {
   const src = mediaUrl(b.image);
-  if (!src) return null; // image absente (supprimée de la médiathèque) : colonne vide
+  if (!src) return null; // missing image (deleted from the media library): empty column
   return {
     type: 'media',
     media: {image: {src, alt: mediaAlt(b.image) ?? ''}, minHeight: toHeight(b.minHeight), minHeightMobile: toHeight(b.minHeightMobile), overlay: b.overlay ?? 0},
   };
 }
 
-/** Champs d'un bloc Image avec citation. */
+/** Fields of an Image with quote block. */
 type MediaQuoteBlockData = MediaBlockData & {text?: string | null; tag?: string | null; size?: string | null};
 
 function toMediaQuote(b: MediaQuoteBlockData): ContentData | null {
@@ -112,11 +112,11 @@ function toMediaQuote(b: MediaQuoteBlockData): ContentData | null {
   return {type: 'mediaQuote', mediaQuote: {...image.media, text: b.text, tag: (b.tag ?? 'h2') as MediaQuoteTag, size: (b.size ?? 'display-3') as MediaQuoteSize}};
 }
 
-/** Largeur affichée d'une colonne selon l'écran, pour que le navigateur télécharge la bonne taille. */
+/** Displayed width of a column depending on the screen, so the browser downloads the right size. */
 const columnSizes = (span: number): string => `(max-width: 767px) 100vw, (max-width: 1440px) ${Math.round((span / 12) * 100)}vw, ${Math.round((span / 12) * 1440)}px`;
 
 function toContent(block: ContentBlock): ContentData | null {
-  // case vide : aucun contenu, la colonne est traitée comme vide (masquée sur mobile)
+  // empty cell: no content, the column is treated as empty (hidden on mobile)
   if (block.blockType === EMPTY_SLUG) return null;
   if (block.blockType === MEDIA_SLUG) return toMedia(block as unknown as MediaBlockData);
   if (block.blockType === MEDIA_QUOTE_SLUG) return toMediaQuote(block as unknown as MediaQuoteBlockData);
@@ -146,14 +146,14 @@ function toSection(s: SectionSource, key: string, site: Gaps): SectionData {
   };
 }
 
-/** Rangées d'une section, avec le rang mobile de chaque colonne calculé sur toute la section. */
+/** Rows of a section, with each column's mobile rank computed across the whole section. */
 function sectionRows(rows: SectionSource['rows']): ColumnData[][] {
   const built = (rows ?? []).map((r) => {
     const columns = (r.columns ?? []).map((c) => {
       const contents = (c.contents ?? []).map(toContent).filter((x): x is ContentData => x !== null);
       return {span: toSpan(c.span), contents, empty: contents.length === 0, mobileOrder: c.mobileOrder};
     });
-    // une image (avec ou sans citation) ne fixe sa hauteur desktop que si la rangée n'a aucun autre contenu
+    // an image (with or without quote) only sets its desktop height if the row has no other content
     const isImage = (x: ContentData) => x.type === 'media' || x.type === 'mediaQuote';
     const otherContent = columns.some((c) => c.contents.some((x) => !isImage(x)));
     return columns.map((c) => {
@@ -170,8 +170,8 @@ function sectionRows(rows: SectionSource['rows']): ColumnData[][] {
 }
 
 /**
- * Les blocs « sections » d'une page (chargée avec depth ≥ 2 pour les médias des sections partagées).
- * `settings` : Réglages du site, pour les écarts par défaut de la grille (Mise en page).
+ * The « sections » blocks of a page (loaded with depth ≥ 2 for shared section media).
+ * `settings`: site settings, for the grid's default gaps (Mise en page).
  */
 export function toSections(blocks: Page['sections'], settings?: Pick<Setting, 'sectionGrid'> | null): SectionData[] {
   const site = siteGaps(settings?.sectionGrid);

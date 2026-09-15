@@ -1,8 +1,8 @@
 /**
- * Lecture des données Payload pour le site (côté serveur) : réglages, en-tête, pied de page,
- * articles en bref, pages. Les données Payload sont converties ici vers les types des
- * composants (SiteHeaderData, SiteFooterData, HeroProps) : le design system ne connaît pas
- * Payload, et Payload ne connaît pas le design system.
+ * Payload data reading for the site (server side): settings, header, footer,
+ * short posts, pages. Payload data is converted here to the component
+ * types (SiteHeaderData, SiteFooterData, HeroProps): the design system does not know
+ * Payload, and Payload does not know the design system.
  */
 import config, {LOCALES, type Locale} from '@payload-config';
 import {cookies} from 'next/headers';
@@ -16,7 +16,7 @@ import type {Footer, Header, Media, Page, Post, Setting as Settings} from '@/pay
 
 export const LOCALE_COOKIE = 'locale';
 
-/** Langue de lecture : cookie posé par le sélecteur de langue, sinon le français. */
+/** Reading language: cookie set by the language switcher, otherwise French. */
 export async function getLocale(): Promise<Locale> {
   const jar = await cookies();
   const v = jar.get(LOCALE_COOKIE)?.value;
@@ -89,7 +89,7 @@ export function toFooter(s: Settings, f: Footer, posts: Post[], locale: Locale):
   };
 }
 
-/** Fil d'Ariane affiché ? réglage du site, surchargé par la page ; jamais sur l'accueil. */
+/** Breadcrumb shown? site setting, overridden by the page; never on the home page. */
 export function showBreadcrumb(page: Page, s: Settings): boolean {
   if (page.slug === 'accueil') return false;
   const mode = page.hero?.breadcrumbMode ?? 'inherit';
@@ -98,12 +98,12 @@ export function showBreadcrumb(page: Page, s: Settings): boolean {
   return s.breadcrumb?.enabled !== false;
 }
 
-/** Props du fil d'Ariane d'une page : accueil en icône ou en texte selon le réglage. */
+/** Breadcrumb props for a page: home as icon or text depending on the setting. */
 export function breadcrumbProps(page: Page, s: Settings) {
   return {items: [], current: page.title, homeLabel: s.breadcrumb?.homeLabel ?? 'Accueil', homeStyle: (s.breadcrumb?.homeStyle ?? 'icon') as 'icon' | 'text'};
 }
 
-/** Le haut de page d'une page Payload → props du composant Hero. */
+/** A Payload page's page top → Hero component props. */
 export function toHero(page: Page, s: Settings): HeroProps {
   const h = page.hero;
   const action = (a?: {label?: string | null; href?: string | null; iconKey?: string | null} | null) => (a?.label && a?.href ? {label: a.label, href: a.href, iconKey: icon(a.iconKey)} : undefined);
@@ -124,7 +124,7 @@ export function toHero(page: Page, s: Settings): HeroProps {
   }
 }
 
-/** Silo effectif d'une page : le sien, sinon celui des réglages (pages anciennes sans valeur ou « inherit »). */
+/** Effective silo of a page: its own, otherwise the settings one (older pages with no value or « inherit »). */
 export function pageSilo(page: Page | null, s: Settings): SiloName {
   const raw = (page?.silo ?? null) as string | null;
   const own = raw && raw !== 'inherit' ? (raw as SiloName) : null;

@@ -3,12 +3,12 @@ import type { Field, GroupField } from 'payload'
 import { linkGroup, titleField } from './shared'
 
 /**
- * Le haut de page d'une page : un choix parmi cinq (composant Hero), et les champs qui
- * apparaissent selon ce choix. Aucun champ visuel : fonds, hauteurs et couleurs sont ceux
- * du composant.
- *   media-image · media-video  → Hero variant="media" (maquette 16)
- *   split                      → Hero variant="split" (maquette 02)
- *   page-image · page-glow · page-night → Hero variant="page" (maquette 25 A/B/C)
+ * A page's page top: one choice out of five (Hero component), and the fields that
+ * appear depending on that choice. No visual field: backgrounds, heights and colours are those
+ * of the component.
+ *   media-image · media-video  → Hero variant="media" (mockup 16)
+ *   split                      → Hero variant="split" (mockup 02)
+ *   page-image · page-glow · page-night → Hero variant="page" (mockup 25 A/B/C)
  */
 export type HeroVariant =
   'media-image' | 'media-video' | 'split' | 'page-image' | 'page-glow' | 'page-night'
@@ -48,7 +48,7 @@ export const heroField: GroupField = {
         linkGroup('secondary', 'Bouton secondaire', { icon: true }),
       ],
     },
-    // média plein écran et haut de page image : image de fond + calque
+    // full-screen media and image page top: background image + overlay
     {
       name: 'image',
       type: 'upload',
@@ -86,7 +86,7 @@ export const heroField: GroupField = {
       localized: true,
       admin: { condition: is('media-image', 'media-video') },
     },
-    // texte et image : réassurance, image de droite et ses étiquettes
+    // text and image: reassurance, right-hand image and its labels
     {
       name: 'reassurance',
       type: 'array',
@@ -122,9 +122,9 @@ export const heroField: GroupField = {
         },
       ],
     },
-    // ancien réglage (case à cocher), conservé caché pour ne pas toucher la colonne ; remplacé par breadcrumbMode
+    // old setting (checkbox), kept hidden so the column is left untouched; replaced by breadcrumbMode
     {name: 'breadcrumb', type: 'checkbox', admin: {hidden: true}},
-    // fil d'Ariane sous le haut de page : réglage du site, ou surcharge pour cette page
+    // breadcrumb below the page top: site setting, or override for this page
     {
       name: 'breadcrumbMode',
       type: 'select',

@@ -3,10 +3,10 @@ import type {SelectField} from 'payload';
 import {SILO_LABELS, SILO_NAMES} from '@/theme/silos/palettes';
 
 /**
- * Champ « silo d'accent » : l'un des six silos, présenté en pastilles colorées (SiloPicker).
- * `fromSettings` (pages) : la valeur par défaut est le silo des Réglages du site au moment de
- * la création ; une page enregistrée sans valeur (ancienne valeur « inherit ») suit le réglage
- * du site et le SiloPicker montre cette pastille. Sans, défaut « bleu » (Réglages du site).
+ * « silo d'accent » field: one of the six silos, shown as coloured swatches (SiloPicker).
+ * `fromSettings` (pages): the default value is the silo from site settings at
+ * creation time; a page saved without a value (old value « inherit ») follows the site
+ * setting and SiloPicker shows that swatch. Without it, default « bleu » (site settings).
  */
 export function siloField(overrides: Partial<SelectField> & {name: string; fromSettings?: boolean}): SelectField {
   const {fromSettings, admin, ...rest} = overrides;

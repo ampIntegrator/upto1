@@ -1,8 +1,8 @@
 /**
- * Captures des blocs de contenu pour le sélecteur de blocs de l'admin (pnpm previews:build).
- * Photographie, en headless, la route /apercu/<slug> du site (silo bleu, données de démo) et
- * écrit public/apercus/<slug>.png en 2x. Le serveur de dev doit tourner (pnpm dev).
- *   PREVIEW_BASE : adresse du serveur (défaut http://localhost:3000)
+ * Screenshots of content blocks for the admin block picker (pnpm previews:build).
+ * Captures, headless, the site route /apercu/<slug> (blue silo, demo data) and
+ * writes public/apercus/<slug>.png at 2x. The dev server must be running (pnpm dev).
+ *   PREVIEW_BASE: server address (default http://localhost:3000)
  */
 import {chromium} from '@playwright/test';
 import {mkdir} from 'node:fs/promises';

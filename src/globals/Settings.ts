@@ -4,7 +4,7 @@ import {iconField} from '@/fields/iconField';
 import {DEFAULT_GAPS, GAP_OPTIONS} from '@/fields/sections/gaps';
 import {siloField} from '@/fields/siloField';
 
-/** Réglages du site : silo par défaut, marque et logo, coordonnées, réseaux, mise en page, langues. */
+/** Site settings: default silo, brand and logo, contact details, networks, layout, languages. */
 export const Settings: GlobalConfig = {
   slug: 'settings',
   label: 'Réglages du site',

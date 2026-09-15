@@ -1,23 +1,23 @@
 /**
- * Écarts de la grille des sections construites dans l'admin (15 sept. 2026) :
- *   - gapX : entre les colonnes d'une rangée ;
- *   - gapY : entre les rangées ;
- *   - gapYMobile : sous 768 px, entre tous les blocs empilés (remplace les deux autres).
- * Réglage global dans Réglages du site › Mise en page, surchargeable par section
- * (« site » = hériter). Valeurs en pixels, de 0 à 60 par pas de 10, posées en variables CSS
- * sur la grille de la section (styles.css, .section-grid), comme les espaces haut et bas.
+ * Grid gaps of sections built in the admin (15 Sept. 2026):
+ *   - gapX: between the columns of a row;
+ *   - gapY: between rows;
+ *   - gapYMobile: below 768 px, between all stacked blocks (replaces the other two).
+ * Global setting in Réglages du site › Mise en page, overridable per section
+ * (« site » = inherit). Values in pixels, 0 to 60 in steps of 10, set as CSS variables
+ * on the section grid (styles.css, .section-grid), like the top and bottom spacing.
  */
 export const GAP_VALUES = ['0', '10', '20', '30', '40', '50', '60'] as const;
 export type GapValue = (typeof GAP_VALUES)[number];
 
 export type Gaps = {gapX: number; gapY: number; gapYMobile: number};
 
-/** Valeurs par défaut : 30 entre colonnes, 40 entre rangées et sur mobile. */
+/** Default values: 30 between columns, 40 between rows and on mobile. */
 export const DEFAULT_GAPS: Gaps = {gapX: 30, gapY: 40, gapYMobile: 40};
 
 export const GAP_OPTIONS = GAP_VALUES.map((v) => ({label: `${v} px`, value: v}));
 
-/** Option « Réglage du site » en tête, pour les sections. */
+/** « Réglage du site » option first, for sections. */
 export const SITE_GAP = 'site';
 export const SECTION_GAP_OPTIONS = [{label: 'Réglage du site', value: SITE_GAP}, ...GAP_OPTIONS];
 
@@ -26,7 +26,7 @@ const toGap = (v: unknown): number | undefined => {
   return (GAP_VALUES as readonly string[]).includes(String(v)) && Number.isFinite(n) ? n : undefined;
 };
 
-/** Écarts du site : le réglage global, sinon les valeurs par défaut. */
+/** Site gaps: the global setting, otherwise the default values. */
 export function siteGaps(global: {gapX?: unknown; gapY?: unknown; gapYMobile?: unknown} | null | undefined): Gaps {
   return {
     gapX: toGap(global?.gapX) ?? DEFAULT_GAPS.gapX,
@@ -35,7 +35,7 @@ export function siteGaps(global: {gapX?: unknown; gapY?: unknown; gapYMobile?: u
   };
 }
 
-/** Écarts d'une section : sa surcharge quand elle en a une, sinon ceux du site. */
+/** Gaps of a section: its override when it has one, otherwise the site's. */
 export function sectionGaps(section: {gapX?: unknown; gapY?: unknown; gapYMobile?: unknown}, site: Gaps): Gaps {
   return {
     gapX: toGap(section.gapX) ?? site.gapX,

@@ -14,9 +14,9 @@ export function generateStaticParams() {
 }
 
 /**
- * Aperçu d'un bloc de contenu, silo bleu, données de démo : la page que photographie
- * `pnpm previews:build` pour illustrer le sélecteur de blocs de l'admin (public/apercus).
- * Hors catalogue, hors site.
+ * Preview of a content block, blue silo, demo data: the page captured by
+ * `pnpm previews:build` to illustrate the admin block picker (public/apercus).
+ * Outside the catalogue, outside the site.
  */
 export default async function Page({params}: {params: Promise<{slug: string}>}) {
   const {slug} = await params;

@@ -3,7 +3,7 @@ import type {Block, GlobalConfig} from 'payload';
 import {iconField} from '@/fields/iconField';
 import {linkGroup} from '@/fields/shared';
 
-/** Entrée de menu (menu déroulant et méga-menu) : titre, description, icône, adresse. */
+/** Menu entry (dropdown and mega menu): title, description, icon, address. */
 const leafFields = [
   {type: 'row' as const, fields: [
     {name: 'title', type: 'text' as const, label: 'Titre', required: true, localized: true, admin: {width: '50%'}},

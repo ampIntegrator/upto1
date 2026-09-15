@@ -1,8 +1,8 @@
 /**
- * Peuplement de la base (pnpm seed) : premier utilisateur, réglages, en-tête, pied de page,
- * quatre catégories et quatre articles, page d'accueil. Reprend les contenus de démonstration
- * du catalogue. Idempotent : ne recrée pas ce qui existe déjà (slug, e-mail).
- *   Identifiants créés : admin@vidomia.fr / vidomia-2026 (à changer dans l'admin).
+ * Database seeding (pnpm seed): first user, settings, header, footer,
+ * four categories and four posts, home page. Reuses the catalogue demo
+ * content. Idempotent: does not recreate what already exists (slug, email).
+ *   Credentials created: admin@vidomia.fr / vidomia-2026 (change them in the admin).
  */
 import config from '@payload-config';
 import {getPayload} from 'payload';
@@ -27,14 +27,14 @@ async function main() {
   const payload = await getPayload({config});
   const log = (m: string) => payload.logger.info(m);
 
-  // 1 · utilisateur
+  // 1 · user
   const users = await payload.count({collection: 'users'});
   if (users.totalDocs === 0) {
     await payload.create({collection: 'users', data: {...ADMIN, name: 'Admin Vidomia'}});
     log(`Utilisateur créé : ${ADMIN.email}`);
   }
 
-  // 2 · catégories et articles
+  // 2 · categories and posts
   const categoryIds: Record<string, number> = {};
   for (const c of CATEGORIES) {
     const found = await payload.find({collection: 'categories', where: {slug: {equals: c.slug}}, limit: 1});
@@ -49,7 +49,7 @@ async function main() {
   }
   log(`${CATEGORIES.length} catégories, ${POSTS.length} articles`);
 
-  // 3 · réglages
+  // 3 · settings
   await payload.updateGlobal({
     slug: 'settings',
     data: {
@@ -71,7 +71,7 @@ async function main() {
     },
   });
 
-  // 4 · en-tête
+  // 4 · header
   await payload.updateGlobal({
     slug: 'header',
     data: {
@@ -111,7 +111,7 @@ async function main() {
     },
   });
 
-  // 5 · pied de page
+  // 5 · footer
   await payload.updateGlobal({
     slug: 'footer',
     data: {
@@ -138,7 +138,7 @@ async function main() {
     },
   });
 
-  // 6 · page d'accueil
+  // 6 · home page
   const home = await payload.find({collection: 'pages', where: {slug: {equals: 'accueil'}}, limit: 1});
   if (!home.docs.length) {
     await payload.create({
@@ -161,7 +161,7 @@ async function main() {
     log('Page « accueil » créée');
   }
 
-  // 7 · une page intérieure, pour le fil d'Ariane et le silo par page
+  // 7 · an inner page, for the breadcrumb and per-page silo
   const tarifs = await payload.find({collection: 'pages', where: {slug: {equals: 'tarifs'}}, limit: 1});
   if (!tarifs.docs.length) {
     await payload.create({

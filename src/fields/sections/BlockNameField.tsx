@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * BlockNameField — champ « Nom affiché » au-dessus du composant, dans le tiroir d'une colonne.
- * Écrit le blockName natif du composant (contents.0.blockName) : pas de colonne en plus en base,
- * et le même nom que l'en-tête du composant. 60 caractères au plus, espaces compris ; visible
- * seulement quand la colonne a un composant.
+ * BlockNameField — « Nom affiché » field above the component, in a column's drawer.
+ * Writes the component's native blockName (contents.0.blockName): no extra database column,
+ * and the same name as the component header. 60 characters at most, spaces included; visible
+ * only when the column has a component.
  */
 import {TextInput, useField, useFormFields} from '@payloadcms/ui';
 import type {UIFieldClientProps} from 'payload';

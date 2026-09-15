@@ -6,7 +6,7 @@ import {sectionsField} from '@/fields/sections/sectionFields';
 import {siloField} from '@/fields/siloField';
 import {slugField} from '@/fields/shared';
 
-/** Pages du site : titre, slug, silo (barre latérale), haut de page, puis les sections de contenu empilées. */
+/** Site pages: title, slug, silo (sidebar), page top, then the stacked content sections. */
 export const Pages: CollectionConfig = {
   slug: 'pages',
   labels: {singular: 'Page', plural: 'Pages'},
@@ -14,7 +14,7 @@ export const Pages: CollectionConfig = {
     useAsTitle: 'title',
     group: 'Site',
     defaultColumns: ['title', 'slug', 'silo', 'updatedAt'],
-    // bouton « Aperçu » : ouvre la page du site dans un nouvel onglet
+    // « Aperçu » button: opens the site page in a new tab
     preview: (doc, {req}) => {
       const slug = typeof doc.slug === 'string' ? doc.slug : '';
       const path = slug === 'accueil' || !slug ? '/' : `/${slug}`;
@@ -23,8 +23,8 @@ export const Pages: CollectionConfig = {
   },
   access: {read: () => true},
   hooks: {beforeChange: [shareSections]},
-  // les onglets en premier : le plugin SEO ajoute son onglet à la suite (sinon il englobe tout
-  // dans un onglet « Page » et la barre latérale disparaît) ; slug et silo restent en barre latérale
+  // tabs first: the SEO plugin appends its tab after them (otherwise it wraps everything
+  // in a « Page » tab and the sidebar disappears); slug and silo stay in the sidebar
   fields: [
     {
       type: 'tabs',

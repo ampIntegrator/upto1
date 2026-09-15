@@ -1,19 +1,19 @@
 import type {Block} from 'payload';
 
 /**
- * Bloc « Image » d'une colonne : le composant Media (image qui remplit la colonne).
- * La vidéo viendra ensuite dans le même bloc.
+ * « Image » block of a column: the Media component (image that fills the column).
+ * Video will come later in the same block.
  *
- * Règle de hauteur (appliquée par la conversion, lib/sections.ts) :
- *   - desktop, rangée avec d'autres contenus : l'image prend la hauteur de la rangée,
- *     sa hauteur minimale desktop est ignorée ;
- *   - desktop, rangée sans autre contenu : la hauteur minimale s'applique (la plus grande
- *     l'emporte entre deux images) ;
- *   - mobile (colonnes empilées) : toujours la hauteur minimale mobile.
+ * Height rule (applied by the conversion, lib/sections.ts):
+ *   - desktop, row with other contents: the image takes the row's height,
+ *     its desktop minimum height is ignored;
+ *   - desktop, row with no other content: the minimum height applies (the larger
+ *     wins between two images);
+ *   - mobile (stacked columns): always the mobile minimum height.
  */
 export const MEDIA_SLUG = 'media';
 
-/** Hauteurs minimales proposées, en px (valeurs paires). */
+/** Offered minimum heights, in px (even values). */
 export const MEDIA_HEIGHTS = ['160', '240', '320', '400', '480', '560', '640'] as const;
 export const HEIGHT_OPTIONS = MEDIA_HEIGHTS.map((v) => ({label: `${v} px`, value: v}));
 

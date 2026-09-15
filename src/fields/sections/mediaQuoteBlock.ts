@@ -3,16 +3,16 @@ import type {Block} from 'payload';
 import {HEIGHT_OPTIONS} from './mediaBlock';
 
 /**
- * Bloc « Image avec citation » d'une colonne : le composant MediaQuote (image qui remplit la
- * colonne, phrase centrée). Au moins 6 colonnes sur 12 : le sélecteur ne le propose pas dans
- * une colonne plus étroite (registre des emprises, content-specs.ts).
- * Hauteurs : mêmes règles que le bloc Image ; le bloc grandit si la phrase est plus haute.
+ * « Image avec citation » block of a column: the MediaQuote component (image that fills the
+ * column, centred sentence). At least 6 columns out of 12: the picker does not offer it in
+ * a narrower column (span registry, content-specs.ts).
+ * Heights: same rules as the Image block; the block grows if the sentence is taller.
  */
 export const MEDIA_QUOTE_SLUG = 'mediaQuote';
 
 const TAG_OPTIONS = (['h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span'] as const).map((t) => ({label: t, value: t}));
 
-/** Tailles du thème, toutes paires (display-1 à 3, titres 1 et 2). */
+/** Theme sizes, all even (display-1 to 3, headings 1 and 2). */
 const SIZE_OPTIONS = [
   {label: 'Très grande (display-1)', value: 'display-1'},
   {label: 'Grande (display-2)', value: 'display-2'},

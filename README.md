@@ -1,86 +1,120 @@
-# upto1 — Next.js + Payload CMS
+# upto1
 
-Projet Next.js 16 + Payload CMS 3 (template blank), base de données SQLite (aucun serveur de BDD requis).
+Marketing website for **Vidomia**, built with **Next.js 16**, **Payload CMS 3** (SQLite) and the **Astryx** design system (React, pre-compiled, with a custom theme).
 
-## Installation locale (ex. `/Applications/MAMP/htdocs/upto1`)
+- Front end: http://localhost:3000
+- Admin (Payload): http://localhost:3000/admin
+- Design-system catalog: http://localhost:3000/design
+
+The admin and all site content are in French. Code, comments, documentation and commit messages are in English.
+
+## Requirements
+
+- Node.js 20.9 or later (developed on Node 22)
+- pnpm 9, 10 or 11
+- No database server: Payload uses a local SQLite file (`upto1.db`).
+
+The app runs on its own Node server (port 3000). The project happens to live in MAMP's `htdocs` folder, but it does not use Apache or MySQL.
+
+## Getting started
 
 ```bash
 cd /Applications/MAMP/htdocs
-git clone -b claude/next-payload-setup-obtkjk https://github.com/ampintegrator/upto1.git upto1
+git clone https://github.com/ampIntegrator/upto1.git upto1
 cd upto1
-cp .env.example .env   # puis remplacer PAYLOAD_SECRET par une chaîne aléatoire
-pnpm install           # ou npm install
-pnpm dev               # ou npm run dev
+cp .env.example .env      # set PAYLOAD_SECRET to a long random string
+pnpm install
+pnpm migrate              # create or update the SQLite schema
+pnpm seed                 # optional: demo content and a first admin user
+pnpm dev
 ```
 
-Ouvrir ensuite http://localhost:3000 (front) et http://localhost:3000/admin (admin Payload — créer le premier utilisateur au premier lancement).
+`pnpm seed` creates an admin user (`admin@vidomia.fr` / `vidomia-2026`). Change the password in the admin right away.
 
-> Note : l'app tourne sur son propre serveur Node (port 3000), indépendamment d'Apache/MySQL de MAMP — le dossier htdocs sert juste d'emplacement de projet.
+### Environment variables
 
----
+| Variable | Purpose |
+|---|---|
+| `DATABASE_URL` | SQLite connection string, for example `file:./upto1.db` |
+| `PAYLOAD_SECRET` | Secret used by Payload to sign tokens |
 
-This template comes configured with the bare minimum to get started on anything you need.
+## Scripts
 
-## Quick start
+| Command | What it does |
+|---|---|
+| `pnpm dev` | Start the development server on port 3000 |
+| `pnpm devsafe` | Delete `.next` then start the development server |
+| `pnpm build` / `pnpm start` | Production build and server |
+| `pnpm lint` | ESLint |
+| `pnpm test` | Integration (Vitest) and end-to-end (Playwright) tests |
+| `pnpm generate:types` | Regenerate `src/payload-types.ts` from the Payload config |
+| `pnpm generate:importmap` | Regenerate the admin import map after adding a custom admin component |
+| `pnpm db:backup` | Copy `upto1.db` to `backups/` with a timestamp |
+| `pnpm migrate:create <name>` | Generate a migration from schema changes |
+| `pnpm migrate` / `pnpm migrate:status` | Apply migrations / list their status |
+| `pnpm seed` | Load demo content (idempotent) |
+| `pnpm theme:build` | Compile the Astryx themes (one per silo) into `src/theme/built/` |
+| `pnpm icons:build` | Convert the SVGs in `icons/astryx` and `icons/vidomia` into React components |
+| `pnpm catalog:build` | Generate the catalog pages under `/design/composants` |
+| `pnpm previews:build` | Screenshot content blocks for the admin block picker (`public/apercus/`, needs `pnpm dev`) |
 
-This template can be deployed directly from our Cloud hosting and it will setup MongoDB and cloud S3 object storage for media.
+## Database changes
 
-## Quick Start - local setup
+The schema is managed by explicit migrations only (`push: false` in `src/payload.config.ts`). After any change to a collection, global or block field:
 
-To spin up this template locally, follow these steps:
+```bash
+pnpm db:backup
+pnpm migrate:create <short_name>
+# read the generated file in src/migrations/ before applying it
+pnpm migrate
+pnpm generate:types
+```
 
-### Clone
+Review every migration. When SQLite has to rebuild a table, the generated copy statement can be wrong, and a field that becomes required can add a `NOT NULL` constraint that rejects existing rows. Presentational field wrappers (`row`, `collapsible`, `ui`) never need a migration.
 
-After you click the `Deploy` button above, you'll want to have standalone copy of this repo on your machine. If you've already cloned this repo, skip to [Development](#development).
+## Branches
 
-### Development
+| Branch | Used for |
+|---|---|
+| `main` | Reference branch; receives the other two |
+| `astryx` | Design system: components, theme, icons, catalog |
+| `payload` | Back office: collections, globals, admin components, section builder |
 
-1. First [clone the repo](#clone) if you have not done so already
-2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `MONGODB_URL` from your Cloud project to your `.env` if you want to use S3 storage and the MongoDB database that was created for you.
+Work on the branch that matches the change, then merge it into `main` and bring the other branch up to date. From the project terminal:
 
-3. `pnpm install && pnpm dev` to install dependencies and start the dev server
-4. open `http://localhost:3000` to open the app in your browser
+```bash
+git checkout main
+git pull
+git merge payload        # or astryx
+git push origin main
+git checkout payload
+```
 
-That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
+## Project structure
 
-#### Docker (Optional)
+```
+src/
+  app/(frontend)/        Site routes, catalog (/design), block previews (/apercu)
+  app/(payload)/         Payload admin routes and admin styles (custom.scss)
+  collections/           Pages, Sections (shared sections), Posts, Categories, Media, Users
+  globals/               Settings, Header, Footer
+  fields/                Custom fields and admin components
+  fields/sections/       Section builder (see docs/section-builder.md)
+  components/            Design-system components built on Astryx
+  lib/                   Payload data → component props (site.ts, sections.ts)
+  theme/                 Astryx theme source, silo palettes, compiled themes, icons
+  migrations/            Database migrations
+icons/                   Source SVG icons (astryx, vidomia)
+Orbita/                  Original design mockup (reference)
+docs/                    Project documentation
+```
 
-If you prefer to use Docker for local development instead of a local MongoDB instance, the provided docker-compose.yml file can be used.
+## Design system
 
-To do so, follow these steps:
+Components live in `src/components/` and are built from Astryx components, never by editing Astryx itself. Styling goes through the theme (`src/theme/orbita.ts`) first; CSS modules and `src/app/(frontend)/styles.css` only cover what the theme cannot express. Each project component has a catalog page, generated by `pnpm catalog:build` from its showcase in `src/app/(frontend)/design/_showcases/`.
 
-- Modify the `MONGODB_URL` in your `.env` file to `mongodb://127.0.0.1/<dbname>`
-- Modify the `docker-compose.yml` file's `MONGODB_URL` to match the above `<dbname>`
-- Run `docker-compose up` to start the database, optionally pass `-d` to run in the background.
+Six accent colours ("silos") are defined in `src/theme/silos/palettes.ts`. The site default is set in the admin (Settings), and each page can override it.
 
-## How it works
+## Documentation
 
-The Payload config is tailored specifically to the needs of most websites. It is pre-configured in the following ways:
-
-### Collections
-
-See the [Collections](https://payloadcms.com/docs/configuration/collections) docs for details on how to extend this functionality.
-
-- #### Users (Authentication)
-
-  Users are auth-enabled collections that have access to the admin panel.
-
-  For additional help, see the official [Auth Example](https://github.com/payloadcms/payload/tree/3.x/examples/auth) or the [Authentication](https://payloadcms.com/docs/authentication/overview#authentication-overview) docs.
-
-- #### Media
-
-  This is the uploads enabled collection. It features pre-configured sizes, focal point and manual resizing to help you manage your pictures.
-
-### Docker
-
-Alternatively, you can use [Docker](https://www.docker.com) to spin up this template locally. To do so, follow these steps:
-
-1. Follow [steps 1 and 2 from above](#development), the docker-compose file will automatically use the `.env` file in your project root
-1. Next run `docker-compose up`
-1. Follow [steps 4 and 5 from above](#development) to login and create your first admin user
-
-That's it! The Docker instance will help you get up and running quickly while also standardizing the development environment across your teams.
-
-## Questions
-
-If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
+- [Section builder](docs/section-builder.md): how pages are composed in the admin (sections, rows, columns, content blocks, mobile order, drag and drop).

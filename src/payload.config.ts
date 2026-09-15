@@ -20,7 +20,7 @@ import { Settings } from './globals/Settings'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-/** Langues de contenu : le français est la référence, les autres retombent dessus tant qu'elles ne sont pas traduites. */
+/** Content languages: French is the reference, the others fall back to it until translated. */
 export const LOCALES = ['fr', 'en', 'de', 'es'] as const
 export type Locale = (typeof LOCALES)[number]
 
@@ -50,9 +50,9 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  // Schéma piloté par migrations explicites, jamais par « push » automatique : un changement de
-  // champ ne touche pas aux données. Procédure : pnpm db:backup → pnpm migrate:create <nom> →
-  // relire la migration → pnpm migrate.
+  // Schema driven by explicit migrations, never by automatic « push »: a field
+  // change does not touch the data. Procedure: pnpm db:backup → pnpm migrate:create <name> →
+  // review the migration → pnpm migrate.
   db: sqliteAdapter({
     client: {
       url: process.env.DATABASE_URL || '',
@@ -62,12 +62,12 @@ export default buildConfig({
   }),
   sharp,
   plugins: [
-    // SEO de base (titre, description, image de partage, aperçu) : onglet « SEO » des pages et des articles.
+    // Basic SEO (title, description, share image, preview): « SEO » tab of pages and posts.
     seoPlugin({
       collections: ['pages', 'posts'],
       uploadsCollection: 'media',
       tabbedUI: true,
-      // titre et description traduisibles, comme le reste du contenu
+      // translatable title and description, like the rest of the content
       fields: ({ defaultFields }) =>
         defaultFields.map((f) => ('name' in f && (f.name === 'title' || f.name === 'description') ? { ...f, localized: true } : f)),
       generateTitle: ({ doc }) => (doc?.title ? `${doc.title} · Vidomia` : 'Vidomia'),

@@ -3,9 +3,9 @@ import type {CollectionConfig} from 'payload';
 import {sectionFields} from '@/fields/sections/sectionFields';
 
 /**
- * Sections partagées : une section modifiée à un seul endroit pour toutes les pages qui
- * l'insèrent (bloc « Section partagée »). Créées ici, ou depuis une page par la case
- * « Enregistrer dans les sections partagées ».
+ * Shared sections: a section edited in one place for every page that
+ * inserts it (« Section partagée » block). Created here, or from a page via the
+ * « Enregistrer dans les sections partagées » checkbox.
  */
 export const Sections: CollectionConfig = {
   slug: 'sections',

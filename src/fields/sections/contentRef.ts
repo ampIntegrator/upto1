@@ -6,13 +6,13 @@ import {MEDIA_SLUG} from './mediaBlock';
 import {MEDIA_QUOTE_SLUG} from './mediaQuoteBlock';
 
 /**
- * Passerelle entre les blocs Payload d'une colonne et le registre des emprises
- * (content-specs.ts). Un bloc = un contenu ; ses réglages déterminants sont relevés ici.
- * Partagé par la validation serveur (largeur de colonne) et les libellés de l'admin.
+ * Bridge between a column's Payload blocks and the span registry
+ * (content-specs.ts). One block = one content; its deciding settings are read here.
+ * Shared by server validation (column width) and admin labels.
  */
 export type ContentBlockData = {blockType?: string; [key: string]: unknown};
 
-/** Le bloc → sa référence dans le registre ; null si le bloc n'y est pas (jamais en principe). */
+/** The block → its reference in the registry; null if the block is not in it (should never happen). */
 export function toContentRef(block: ContentBlockData | null | undefined): ContentRef | null {
   const slug = block?.blockType ?? '';
   if (slug in CARD_VARIANTS) return {type: 'card'};
@@ -33,7 +33,7 @@ export function toContentRefs(blocks: unknown): ContentRef[] {
   return blocks.map((b) => toContentRef(b as ContentBlockData)).filter((c): c is ContentRef => c !== null);
 }
 
-/** Libellé court d'un bloc, pour les libellés de rangée et de colonne. */
+/** Short label of a block, for row and column labels. */
 export function contentLabel(block: ContentBlockData | null | undefined): string {
   if (block?.blockType === EMPTY_SLUG) return 'Case vide';
   const variant = CARD_VARIANTS[block?.blockType ?? ''];

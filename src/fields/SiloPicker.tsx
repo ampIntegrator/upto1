@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * SiloPicker — composant d'admin du champ « silo » : pastilles colorées (même principe que
- * le sélecteur du catalogue), la pastille choisie devient une pilule. Sans valeur explicite
- * (page ancienne), la pastille du silo des Réglages du site est montrée comme choisie.
+ * SiloPicker — admin component for the « silo » field: coloured swatches (same principle as
+ * the catalogue picker), the chosen swatch becomes a pill. Without an explicit value
+ * (older page), the silo swatch from site settings is shown as chosen.
  */
 import {FieldLabel, useField} from '@payloadcms/ui';
 import type {SelectFieldClientProps} from 'payload';

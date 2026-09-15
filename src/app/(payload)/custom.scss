@@ -1,17 +1,17 @@
-/* Ajustements de l'admin Payload (chargé après le CSS de Payload, hors de ses @layer). */
+/* Payload admin adjustments (loaded after Payload's CSS, outside its @layer). */
 
-/* Menu de gauche : 220 px au lieu des 275 px de Payload. */
+/* Left menu: 220 px instead of Payload's 275 px. */
 :root {
   --nav-width: 220px;
 }
 
-/* Barre latérale d'un document : un tiers de la largeur, mais 400 px au plus.
-   (Payload la met à 33,33 % sans plafond ; on garde son cas « barre vide » à 0.) */
+/* Document sidebar: a third of the width, but at most 400 px.
+   (Payload sets it to 33.33 % with no cap; we keep its "empty sidebar" case at 0.) */
 .document-fields__sidebar-wrap:not(:has(.document-fields__sidebar-fields > .render-fields:empty)) {
   --sidebar-wrap-width: min(33.33%, 400px);
 }
 
-/* Sélecteur de silo : deux rangées de trois pastilles, une seule rangée de six au-delà de 1400 px. */
+/* Silo picker: two rows of three swatches, a single row of six above 1400 px. */
 .silo-picker {
   display: grid;
   grid-template-columns: repeat(3, 48px);
@@ -23,8 +23,8 @@
   }
 }
 
-/* Constructeur de rangées : boutons latéraux en deux lignes de deux, carrés de 32 px, centrés
-   verticalement sur la rangée ; leur hauteur (2 × 32 + 4) reste sous celle d'une rangée. */
+/* Row builder: side buttons in two lines of two, 32 px squares, vertically centred
+   on the row; their height (2 × 32 + 4) stays below a row's height. */
 .rows-builder__actions {
   display: grid;
   grid-template-columns: repeat(2, 32px);
@@ -58,15 +58,15 @@
   cursor: grab;
 }
 
-/* Cases d'une rangée : grille aux proportions des colonnes (variable posée par la rangée),
-   triables à gauche ou à droite par leur poignée. */
+/* Cells of a row: grid with the column proportions (variable set by the row),
+   sortable left or right by their handle. */
 .rows-builder__cells {
   display: grid;
   grid-template-columns: var(--rows-builder-cells);
   gap: 8px;
 }
 .rows-builder__handle--cell {
-  /* pas de sélection de texte au démarrage du glisser ; le tactile glisse au lieu de défiler */
+  /* no text selection when a drag starts; touch drags instead of scrolling */
   user-select: none;
   touch-action: none;
   position: absolute;
@@ -75,7 +75,7 @@
   width: 24px;
   height: 20px;
 }
-/* poignée d'une ligne dans la fenêtre d'ordre mobile */
+/* handle of a line in the mobile order dialog */
 .rows-builder__handle--mobile {
   flex-shrink: 0;
   width: 28px;
@@ -89,7 +89,7 @@
   gap: 10px;
 }
 
-/* Fenêtre « ordre mobile » d'une section (sur la base de la fenêtre de confirmation Payload). */
+/* "Mobile order" dialog of a section (based on Payload's confirmation modal). */
 .rows-mobile__wrapper {
   width: min(520px, calc(100vw - 32px));
   border: 1px solid var(--theme-elevation-150);

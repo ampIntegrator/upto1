@@ -31,7 +31,7 @@ export default async function Page({params}: {params: Promise<{slug: string}>}) 
   const [page, site] = await Promise.all([loadPage(slug, locale), getSite(locale)]);
   if (!page) notFound();
   const hero = toHero(page, site.settings);
-  // plein écran : le fil d'Ariane est une bande sous le hero ; haut de page : il est dans le Hero
+  // full screen: the breadcrumb is a strip below the hero; page top: it is inside the Hero
   const bandBreadcrumb = hero.variant !== 'page' && showBreadcrumb(page, site.settings);
   const tone = hero.variant === 'media' || hero.background === 'night-halo' || hero.background === 'image' ? 'dark' : 'light';
   return (

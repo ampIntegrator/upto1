@@ -1,28 +1,28 @@
 'use client';
 
 /**
- * RowsBuilder — la vue « constructeur » du champ Rangées d'une section, à la place des
- * accordéons imbriqués de Payload.
+ * RowsBuilder — the "builder" view of a section's Rows field, replacing
+ * Payload's nested accordions.
  *
- *   - un seul bandeau de dispositions en vignettes (un rectangle découpé aux proportions des
- *     colonnes) : un clic remplace la disposition de la rangée sélectionnée, après confirmation,
- *     un double clic ajoute une rangée sous la sélection ;
- *   - les rangées empilées dessous, réordonnées par glisser-déposer (poignée) ; sur le côté, en
- *     deux lignes de deux : déplacer et dupliquer, ordre mobile et supprimer ; dans chaque case,
- *     une poignée ⋮⋮ fait glisser la colonne à gauche ou à droite dans sa rangée (souris,
- *     tactile ou clavier) ; rangées et colonnes triées par le même module (sortable.tsx, dnd-kit) ;
- *   - le bouton téléphone d'une rangée ouvre la fenêtre d'ordre mobile de toute la section :
- *     toutes ses colonnes, rangées confondues, réordonnées par glisser-déposer (poignée) ; les colonnes de la
- *     rangée cliquée sont mises en évidence (champ caché mobileOrder, voir mobileOrder.ts) ;
- *   - une case résume son composant (un seul par colonne), ou « Vide » ; un premier clic sélectionne
- *     la rangée, un clic sur une case de la rangée sélectionnée ouvre un tiroir
- *     Payload avec le composant de la colonne et, s'il y en a un, un bouton « Vider la colonne »
- *     (la largeur ne s'y règle plus : elle vient des dispositions). Le formulaire est partagé : ce qui est
- *     saisi dans le tiroir est déjà dans la page, on enregistre la page comme d'habitude.
+ *   - a single strip of layout thumbnails (a rectangle split in the column
+ *     proportions): a click replaces the selected row's layout, after confirmation,
+ *     a double click adds a row below the selection;
+ *   - the rows stacked below, reordered by drag and drop (handle); on the side, in
+ *     two lines of two: move and duplicate, mobile order and delete; in each cell,
+ *     a ⋮⋮ handle drags the column left or right within its row (mouse,
+ *     touch or keyboard); rows and columns sorted by the same module (sortable.tsx, dnd-kit);
+ *   - a row's phone button opens the mobile order dialog for the whole section:
+ *     all its columns, across rows, reordered by drag and drop (handle); the columns of the
+ *     clicked row are highlighted (hidden field mobileOrder, see mobileOrder.ts);
+ *   - a cell summarises its component (one per column), or « Vide »; a first click selects
+ *     the row, a click on a cell of the selected row opens a Payload
+ *     drawer with the column's component and, if there is one, a « Vider la colonne » button
+ *     (width is no longer set there: it comes from the layouts). The form is shared: what is
+ *     entered in the drawer is already in the page, the page is saved as usual.
  *
- * Toute la manipulation passe par l'état de formulaire de Payload (useForm, useFormFields),
- * exactement comme son propre champ tableau ; le rendu des champs du tiroir est celui de
- * Payload (RenderFields), avec les chemins et permissions qu'il attend.
+ * All manipulation goes through Payload's form state (useForm, useFormFields),
+ * exactly like its own array field; drawer fields are rendered by
+ * Payload (RenderFields), with the paths and permissions it expects.
  */
 import {Button, ConfirmationModal, Drawer, Modal, RenderFields, useDrawerSlug, useField, useForm, useFormFields, useModal} from '@payloadcms/ui';
 import type {ArrayFieldClient, ArrayFieldClientProps, ClientField, SanitizedFieldPermissions, SanitizedFieldsPermissions} from 'payload';
@@ -35,8 +35,8 @@ import {hasMobileOrder, mobileSequence} from './mobileOrder';
 import {presetLabel, ROW_PRESETS, spansKey, toSpan} from './presets';
 import {type SortableHandle, SortableItem, SortableList} from './sortable';
 
-/** filled : la colonne a un vrai composant (une case vide ne compte pas) */
-/** narrow : largeur minimale exigée par le composant quand la colonne est trop étroite, sinon null */
+/** filled: the column has a real component (an empty cell does not count) */
+/** narrow: minimum width required by the component when the column is too narrow, otherwise null */
 type CellSnapshot = {span: ColumnSpan; contents: string[]; types?: string[]; names?: string[]; filled: boolean; narrow: number | null; mobileOrder: number | null};
 type RowSnapshot = {ids?: string[]; columns: CellSnapshot[]};
 
@@ -44,7 +44,7 @@ const TILE_H = 40;
 const text14: React.CSSProperties = {fontSize: 14, lineHeight: 1.4};
 const dim: React.CSSProperties = {color: 'var(--theme-elevation-600)'};
 
-/** Pictogramme téléphone (trait, couleur du texte). */
+/** Phone icon (stroke, text colour). */
 function PhoneGlyph() {
   return (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -54,7 +54,7 @@ function PhoneGlyph() {
   );
 }
 
-/** Vignette d'une disposition : un rectangle par colonne, clair sur fond sombre, aux proportions des largeurs. */
+/** Layout thumbnail: one rectangle per column, light on dark, in the width proportions. */
 function Tile({spans, active}: {spans: readonly number[]; active: boolean}) {
   return (
     <span
@@ -78,7 +78,7 @@ function Tile({spans, active}: {spans: readonly number[]; active: boolean}) {
   );
 }
 
-/** Vignettes : un clic remplace la disposition de la rangée sélectionnée, un double clic ajoute une rangée. */
+/** Thumbnails: a click replaces the selected row's layout, a double click adds a row. */
 function PresetTiles({current, onReplace, onAdd}: {current: string; onReplace: (spans: readonly number[]) => void; onAdd: (spans: readonly number[]) => void}) {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const click = (spans: readonly number[]) => {
@@ -96,7 +96,7 @@ function PresetTiles({current, onReplace, onAdd}: {current: string; onReplace: (
   return (
     <div role="radiogroup" aria-label="Disposition" style={{display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gap: 8}}>
       {ROW_PRESETS.map((spans) => {
-        // active dès que les largeurs sont les mêmes, dans n'importe quel ordre
+        // active as soon as the widths match, in any order
         const active = spansKey(spans) === current;
         const label = presetLabel(spans);
         return (
@@ -118,11 +118,11 @@ function PresetTiles({current, onReplace, onAdd}: {current: string; onReplace: (
   );
 }
 
-/** Ce que reçoit une case triable (module sortable.tsx). */
+/** What a sortable cell receives (sortable.tsx module). */
 type DragProps = SortableHandle;
 
-/** Une case de la rangée : poignée pour la glisser à gauche ou à droite, largeur dans un coin, résumé du composant, clic pour ouvrir le tiroir. */
-/** rowSelected : la rangée de la case est sélectionnée ; sinon un clic ne fait que la sélectionner */
+/** A row cell: handle to drag it left or right, width in a corner, component summary, click to open the drawer. */
+/** rowSelected: the cell's row is selected; otherwise a click only selects it */
 function Cell({cell, index, rowSelected, onOpen, drag}: {cell: CellSnapshot; index: number; rowSelected: boolean; onOpen: () => void; drag?: DragProps}) {
   const empty = !cell.filled;
   const onHandleKeyDown = drag?.listeners.onKeyDown;
@@ -208,16 +208,16 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
   const {openModal, closeModal} = useModal();
   const drawerSlug = useDrawerSlug(`rows-builder-${path}`);
   const [open, setOpen] = useState<{row: number; col: number} | null>(null);
-  // rangée sélectionnée : les vignettes agissent sur elle ; sans sélection, elles ajoutent une rangée
+  // selected row: thumbnails act on it; with no selection, they add a row
   const [selected, setSelected] = useState<number | null>(null);
-  // rangée d'où la fenêtre « ordre mobile » a été ouverte (mise en évidence dans la liste)
+  // row from which the "mobile order" dialog was opened (highlighted in the list)
   const [mobileRow, setMobileRow] = useState<number | null>(null);
   const mobileSlug = `rows-mobile-${path}`;
-  // action destructive en attente de confirmation : remplacer la disposition ou supprimer une rangée
+  // destructive action awaiting confirmation: replace the layout or delete a row
   const [pending, setPending] = useState<{kind: 'replace'; row: number; spans: readonly number[]} | {kind: 'remove'; row: number} | null>(null);
   const confirmSlug = `rows-confirm-${path}`;
 
-  // instantané des rangées : largeurs et contenus, pour dessiner les bandes sans déplier
+  // snapshot of the rows: widths and contents, to draw the strips without expanding
   const snapshotJson = useFormFields(([fields]) => {
     const prefix = `${path}.`;
     const out: RowSnapshot[] = [];
@@ -247,14 +247,14 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
         (out[i].columns[j].types ??= [])[k] = blockType;
         if (blockType && blockType !== EMPTY_SLUG) out[i].columns[j].filled = true;
       }
-      // nom affiché choisi dans le tiroir (blockName natif)
+      // display name chosen in the drawer (native blockName)
       if (parts[3] === 'contents' && parts[5] === 'blockName' && parts.length === 6) {
         (out[i].columns[j].names ??= [])[Number(parts[4])] = String(fields[key]?.value ?? '');
       }
     }
     return JSON.stringify(out.map((r) => ({ids: r?.ids ?? [], columns: (r?.columns ?? []).map((c) => {
       const span = c?.span ?? 12;
-      // largeur exigée par le composant de la colonne (registre des emprises)
+      // width required by the column's component (span registry)
       const need = (c?.types ?? []).reduce((m, t) => {
         const ref = t ? toContentRef({blockType: t}) : null;
         return ref ? Math.max(m, minSpan(ref)) : m;
@@ -280,7 +280,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
     [addFieldRow, columnsSchemaPath, dispatchFields, getDataByPath, path, removeFieldRow, setModified],
   );
 
-  /** double clic : ajoute une rangée sous la rangée sélectionnée (sinon en bas), qui devient sélectionnée */
+  /** double click: adds a row below the selected row (otherwise at the bottom), which becomes selected */
   const addRow = useCallback(
     (spans: readonly number[]) => {
       const index = selected !== null && selected < rows.length ? selected + 1 : rows.length;
@@ -292,12 +292,12 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
     [addFieldRow, columnsSchemaPath, path, rows.length, schemaPath, selected, setModified],
   );
 
-  /** clic : remplace la disposition de la rangée sélectionnée ; sans sélection, ajoute une rangée */
+  /** click: replaces the selected row's layout; with no selection, adds a row */
   const replaceRow = useCallback(
     (spans: readonly number[]) => {
       if (selected !== null && selected < rows.length) {
         const current = (snapshot[selected]?.columns ?? []).map((c) => c.span);
-        if (current.join('|') === spans.join('|')) return; // déjà cette disposition : rien à faire
+        if (current.join('|') === spans.join('|')) return; // already this layout: nothing to do
         setPending({kind: 'replace', row: selected, spans});
         openModal(confirmSlug);
       } else addRow(spans);
@@ -327,7 +327,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
     openModal(confirmSlug);
   };
 
-  /** texte de la confirmation : ce qui va être perdu */
+  /** confirmation text: what will be lost */
   const confirmText = (() => {
     if (!pending) return {heading: '', body: '', label: ''};
     const columns = snapshot[pending.row]?.columns ?? [];
@@ -335,7 +335,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
     const composants = `${filled} composant${filled > 1 ? 's' : ''}`;
     if (pending.kind === 'remove') {
       const sujet = columns.length === 1 ? 'Sa colonne' : `Ses ${columns.length} colonnes`;
-      // accord : féminin pour les seules colonnes, masculin dès qu'il y a des composants
+      // agreement: feminine for columns alone, masculine as soon as there are components
       const verbe = filled ? 'seront supprimés' : columns.length === 1 ? 'sera supprimée' : 'seront supprimées';
       return {
         heading: `Supprimer la rangée ${pending.row + 1} ?`,
@@ -357,12 +357,12 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
     setPending(null);
   };
 
-  /** colonnes de la section à plat, rangée par rangée, pour l'ordre mobile */
+  /** the section's columns flattened, row by row, for the mobile order */
   const flatColumns = useMemo(
     () => snapshot.flatMap((r, row) => r.columns.map((c, col) => ({row, col, span: c.span, contents: c.contents, mobileOrder: c.mobileOrder, empty: !c.filled}))),
     [snapshot],
   );
-  /** écrit l'ordre mobile de la section : position pour les colonnes listées, vide pour les autres */
+  /** writes the section's mobile order: position for listed columns, empty for the others */
   const writeMobileOrder = (sequence: number[] | null) => {
     flatColumns.forEach((c, k) => {
       const pos = sequence ? sequence.indexOf(k) : -1;
@@ -382,7 +382,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
     openModal(mobileSlug);
   };
 
-  /** vide la colonne : retire son composant (et son nom) ; définitif à l'enregistrement de la page */
+  /** empties the column: removes its component (and its name); final once the page is saved */
   const clearColumn = (row: number, col: number) => {
     const contentsPath = `${path}.${row}.columns.${col}.contents`;
     const existing = getDataByPath<unknown[]>(contentsPath);
@@ -396,7 +396,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
     openModal(drawerSlug);
   };
 
-  // permissions du tiroir : celles des sous-champs d'une colonne (même règle que le tableau Payload)
+  // drawer permissions: those of a column's subfields (same rule as Payload's array)
   const rowFieldsPerm: SanitizedFieldsPermissions | undefined = permissions === true ? true : permissions?.fields;
   const columnsPerm: SanitizedFieldPermissions | undefined = rowFieldsPerm === true ? true : rowFieldsPerm?.columns;
   const cellPerms = (columnsPerm === true ? true : columnsPerm?.fields) as SanitizedFieldsPermissions;

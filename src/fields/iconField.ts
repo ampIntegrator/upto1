@@ -3,9 +3,9 @@ import type {TextField} from 'payload';
 import {NUCLEO_KEYS} from '@/theme/icons/keys';
 
 /**
- * Champ « icône » : une clé du jeu Nucleo (icons/astryx + icons/vidomia), choisie dans un
- * tiroir à grille de six icônes de large avec recherche (IconPicker). Stocke la clé (texte),
- * jamais le SVG : le front rend l'icône compilée par `pnpm icons:build`.
+ * « icône » field: a key from the Nucleo set (icons/astryx + icons/vidomia), chosen in a
+ * drawer with a grid six icons wide and search (IconPicker). Stores the key (text),
+ * never the SVG: the front end renders the icon compiled by `pnpm icons:build`.
  */
 export function iconField(overrides: Partial<TextField> & {name: string}): TextField {
   const {admin, ...rest} = overrides;

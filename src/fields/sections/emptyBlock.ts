@@ -1,10 +1,10 @@
 import type {Block} from 'payload';
 
 /**
- * Case vide : un bloc sans champ qui réserve l'emplacement d'une colonne sans rien afficher.
- * Ce n'est pas un composant : sur le site, la colonne se comporte comme une colonne sans
- * contenu (place gardée sur desktop, masquée sous 768 px, grisée dans l'ordre mobile).
- * Premier du sélecteur, dans le groupe « Structure ».
+ * Empty cell: a block with no field that reserves a column's slot without displaying anything.
+ * It is not a component: on the site, the column behaves like a column with no
+ * content (space kept on desktop, hidden below 768 px, greyed out in the mobile order).
+ * First in the picker, in the « Structure » group.
  */
 export const EMPTY_SLUG = 'empty';
 

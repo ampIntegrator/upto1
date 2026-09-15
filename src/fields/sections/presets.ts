@@ -1,13 +1,13 @@
 import {COLUMN_SPANS, type ColumnSpan} from '@/components/content-specs';
 
 /**
- * Préréglages de rangée : des raccourcis qui remplissent les colonnes d'un coup (14, la colonne
- * la plus large en premier ; pas de miroirs, les colonnes se réordonnent dans la case).
- * Les largeurs restent libres ensuite (chaque colonne porte la sienne), la seule règle
- * étant que la rangée fasse 12. Partagé par le bouton de l'admin et les libellés.
+ * Row presets: shortcuts that fill the columns in one go (14, the widest column
+ * first; no mirrors, columns are reordered in the cell).
+ * Widths stay free afterwards (each column carries its own), the only rule
+ * being that the row adds up to 12. Shared by the admin button and the labels.
  */
 export const ROW_PRESETS: readonly ColumnSpan[][] = [
-  // une seule version par combinaison de largeurs : les flèches de la case réordonnent les colonnes
+  // a single version per width combination: the cell arrows reorder the columns
   [12],
   [6, 6],
   [8, 4],
@@ -24,12 +24,12 @@ export const ROW_PRESETS: readonly ColumnSpan[][] = [
   [2, 2, 2, 2, 2, 2],
 ];
 
-/** Clé d'une combinaison de largeurs, indépendante de l'ordre (vignette active d'une rangée). */
+/** Key of a width combination, independent of order (active thumbnail of a row). */
 export const spansKey = (spans: readonly number[]): string => [...spans].sort((a, b) => b - a).join('|');
 
 export const presetLabel = (spans: readonly number[]): string => spans.join(' | ');
 
-/** Options du sélecteur de largeur (valeurs en chaîne : champ select Payload). */
+/** Width selector options (string values: Payload select field). */
 export const SPAN_OPTIONS = COLUMN_SPANS.map((s) => ({label: `${s} / 12`, value: String(s)}));
 
 export const toSpan = (v: unknown): ColumnSpan => {

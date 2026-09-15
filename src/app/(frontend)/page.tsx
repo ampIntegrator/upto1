@@ -19,7 +19,7 @@ export async function generateMetadata() {
   return {title: page.meta?.title || `${page.title} · Vidomia`, description: page.meta?.description || undefined};
 }
 
-/** Racine du site : la page Payload « accueil » ; sans elle, le catalogue. */
+/** Site root: the Payload page « accueil »; without it, the catalogue. */
 export default async function Page() {
   const locale = await getLocale();
   const payload = await getPayload({config});

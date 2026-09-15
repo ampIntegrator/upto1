@@ -2,7 +2,7 @@ import type { Field, GroupField, TextareaField } from 'payload'
 
 import { iconField } from './iconField'
 
-/** Titre saisi en textarea au format TitleText : retour à la ligne = saut de ligne, <span> = accent serif. */
+/** Title entered in a textarea in TitleText format: line break = line break, <span> = serif accent. */
 export function titleField(overrides: Partial<TextareaField> & { name: string }): TextareaField {
   return {
     type: 'textarea',
@@ -18,7 +18,7 @@ export function titleField(overrides: Partial<TextareaField> & { name: string })
   } as TextareaField
 }
 
-/** Lien : libellé (traduisible) + adresse, avec icône Nucleo optionnelle. */
+/** Link: label (translatable) + address, with optional Nucleo icon. */
 export function linkGroup(
   name: string,
   label: string,
@@ -32,7 +32,7 @@ export function linkGroup(
   return { name, type: 'group', label, fields }
 }
 
-/** Slug : identifiant d'URL, minuscules, tirets. */
+/** Slug: URL identifier, lowercase, hyphens. */
 export const slugField: Field = {
   name: 'slug',
   type: 'text',

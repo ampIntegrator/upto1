@@ -11,18 +11,18 @@ import {SECTION_GAP_OPTIONS, SITE_GAP} from './gaps';
 import {SPAN_OPTIONS, toSpan} from './presets';
 
 /**
- * Une Section de page (modèle « Grille & emprises », 11 sept. 2026) :
- *   Section (fond, padding) > rangées > colonnes (largeurs sur 12) > contenus (blocs).
- * Ces champs servent deux fois : dans le bloc « Section » des pages, et au premier niveau
- * de la collection « Sections partagées ». Aucune valeur visuelle ici : fonds, textures et
- * espacements sont ceux du composant Section.
+ * A page Section (« Grille & emprises » model, 11 Sept. 2026):
+ *   Section (background, padding) > rows > columns (widths out of 12) > contents (blocks).
+ * These fields are used twice: in the pages' « Section » block, and at the top level
+ * of the « Sections partagées » collection. No visual value here: backgrounds, textures and
+ * spacing are those of the Section component.
  */
 
 type Sibling = Record<string, unknown>;
 const when = (name: string, ...values: string[]) => (_d: unknown, s: Sibling) => values.includes(String(s?.[name] ?? ''));
 const whenChecked = (name: string) => (_d: unknown, s: Sibling) => Boolean(s?.[name]);
 
-/** Contenus de colonne disponibles : la case vide et l'image (en tête), un texte simple (provisoire) et les huit cartes. */
+/** Available column contents: the empty cell and the image (first), a plain text (temporary) and the eight cards. */
 export const CONTENT_BLOCKS: Block[] = [
   emptyBlock,
   mediaBlock,
@@ -36,7 +36,7 @@ export const CONTENT_BLOCKS: Block[] = [
   ...CARD_BLOCKS,
 ];
 
-/** Blocs proposés dans une colonne : ceux dont l'emprise minimale (registre) tient dans sa largeur. */
+/** Blocks offered in a column: those whose minimum span (registry) fits in its width. */
 const blocksForSpan = (span: ColumnSpan): string[] =>
   CONTENT_BLOCKS.filter((b) => {
     const ref = toContentRef({blockType: b.slug});
@@ -45,7 +45,7 @@ const blocksForSpan = (span: ColumnSpan): string[] =>
 
 const getByPath = (data: unknown, path: (number | string)[]): unknown => path.reduce<unknown>((o, k) => (o && typeof o === 'object' ? (o as Record<string, unknown>)[String(k)] : undefined), data);
 
-/** Largeur d'une colonne : la rangée doit faire 12, et chaque contenu doit tenir dans la colonne. */
+/** Column width: the row must add up to 12, and each content must fit in the column. */
 const spanField: Field = {
   name: 'span',
   type: 'select',
@@ -53,8 +53,8 @@ const spanField: Field = {
   required: true,
   defaultValue: '12',
   options: SPAN_OPTIONS,
-  // plus éditable dans le tiroir : la largeur se choisit par les dispositions de la rangée ;
-  // champ caché pour garder sa valeur et sa vérification
+  // no longer editable in the drawer: the width is chosen through the row's layouts;
+  // hidden field to keep its value and its validation
   admin: {hidden: true},
   validate: (value: unknown, {data, path, siblingData}: {data: unknown; path: (number | string)[]; siblingData: Sibling}) => {
     const errors: string[] = [];
@@ -76,7 +76,7 @@ const rowsField: Field = {
   admin: {
     condition: (_d, s: Record<string, unknown>) => ['light', 'dark', 'media'].includes(String(s?.mode ?? '')),
     description: 'Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre mobile de la section (bouton téléphone) ; les colonnes vides y sont masquées.',
-    // vue constructeur : bandes, cases proportionnelles, tiroir par colonne
+    // builder view: strips, proportional cells, one drawer per column
     components: {Field: '@/fields/sections/RowsBuilder#RowsBuilder'},
   },
   fields: [
@@ -89,20 +89,20 @@ const rowsField: Field = {
       maxRows: 6,
       fields: [
         spanField,
-        // position de la colonne sur mobile, réglée par la fenêtre « ordre mobile » du constructeur
+        // column position on mobile, set by the builder's "mobile order" dialog
         {name: 'mobileOrder', type: 'number', admin: {hidden: true}},
-        // nom affiché du composant (blockName natif), au-dessus du composant dans le tiroir
+        // component display name (native blockName), above the component in the drawer
         {name: 'blockNameUi', type: 'ui', admin: {components: {Field: '@/fields/sections/BlockNameField#BlockNameField'}}},
-        // un seul composant par colonne : un composant qui empile titre, texte et boutons reste un composant
+        // a single component per column: a component that stacks title, text and buttons is still one component
         {
           name: 'contents',
           type: 'blocks',
           label: 'Contenu',
           labels: {singular: 'Composant', plural: 'Composants'},
           maxRows: 1,
-          // le sélecteur ne propose que les composants qui tiennent dans la largeur de la colonne
+          // the picker only offers components that fit in the column width
           filterOptions: ({siblingData}) => blocksForSpan(toSpan((siblingData as Sibling | undefined)?.span)),
-          // message explicite plutôt que celui, générique, de maxRows
+          // explicit message rather than maxRows' generic one
           validate: (value: unknown) => {
             if (Array.isArray(value) && value.length > 1) return 'Un seul composant par colonne.';
             const name = Array.isArray(value) ? (value[0] as {blockName?: unknown} | undefined)?.blockName : undefined;
@@ -117,20 +117,20 @@ const rowsField: Field = {
   ],
 };
 
-/** Espace en haut et en bas d'une section, en pixels (divisés par deux sous 640 px). */
+/** Space at the top and bottom of a section, in pixels (halved below 640 px). */
 const SPACING_OPTIONS = ['0', '20', '40', '60', '80', '100', '120', '140', '160'].map((v) => ({label: `${v} px`, value: v}));
 
 const modeChosen = (_d: unknown, s: Sibling) => ['light', 'dark', 'media'].includes(String(s?.mode ?? ''));
 
 /**
- * Les champs d'une section, en deux blocs encadrés : « Réglages de la section » (questions
- * successives : le fond d'abord, puis les réglages propres au fond choisi, espacements, ancre,
- * écarts et partage), puis les rangées.
- * `shareable` ajoute la case « enregistrer dans les sections partagées » (bloc de page).
+ * A section's fields, in two framed blocks: « Réglages de la section » (successive
+ * questions: the background first, then the settings specific to the chosen background, spacing, anchor,
+ * gaps and sharing), then the rows.
+ * `shareable` adds the « enregistrer dans les sections partagées » checkbox (page block).
  */
 export function sectionFields({shareable}: {shareable: boolean}): Field[] {
   const settings: Field[] = [
-    // 1. le fond : clair, nuit ou média (pas de valeur par défaut : la question doit être posée)
+    // 1. the background: light, night or media (no default value: the question must be asked)
     {
       name: 'mode',
       type: 'radio',
@@ -142,7 +142,7 @@ export function sectionFields({shareable}: {shareable: boolean}): Field[] {
         {label: 'Média (image ou vidéo)', value: 'media'},
       ],
     },
-    // 2a. clair : nuance et texture, côte à côte
+    // 2a. light: tint and texture, side by side
     {
       type: 'row',
       admin: {condition: when('mode', 'light')},
@@ -156,8 +156,8 @@ export function sectionFields({shareable}: {shareable: boolean}): Field[] {
             {label: 'Fond de page', value: 'body'},
             {label: 'Highlight clair du silo', value: 'highlight'},
           ],
-          // condition répétée sur le champ (et pas seulement sur la ligne) : sans elle, Payload rend
-          // la colonne obligatoire en base, et une section en nuit ou en média ne s'enregistrerait plus
+          // condition repeated on the field (not only on the row): without it, Payload makes
+          // the column required in the database, and a night or media section could no longer be saved
           admin: {width: '50%', condition: when('mode', 'light')},
         },
         {
@@ -175,7 +175,7 @@ export function sectionFields({shareable}: {shareable: boolean}): Field[] {
         },
       ],
     },
-    // 2b. nuit : la couleur, sans texture
+    // 2b. night: the colour, no texture
     {
       name: 'darkStyle',
       type: 'radio',
@@ -187,7 +187,7 @@ export function sectionFields({shareable}: {shareable: boolean}): Field[] {
       ],
       admin: {condition: when('mode', 'dark')},
     },
-    // 2c. média : le type, puis les fichiers et le calque
+    // 2c. media: the type, then the files and the overlay
     {
       name: 'mediaType',
       type: 'radio',
@@ -209,7 +209,7 @@ export function sectionFields({shareable}: {shareable: boolean}): Field[] {
       ],
     },
     {name: 'overlay', type: 'number', label: 'Calque noir sur le média (0 à 1)', min: 0, max: 1, defaultValue: 0.3, admin: {step: 0.05, condition: (_d, s: Sibling) => s?.mode === 'media' && ['image', 'video'].includes(String(s?.mediaType ?? ''))}},
-    // 3. espacements et ancre, une fois le fond choisi
+    // 3. spacing and anchor, once the background is chosen
     {
       type: 'row',
       admin: {condition: modeChosen},
@@ -225,7 +225,7 @@ export function sectionFields({shareable}: {shareable: boolean}): Field[] {
         },
       ],
     },
-    // 3b. écarts de la grille : hérités des Réglages du site › Mise en page, sauf surcharge
+    // 3b. grid gaps: inherited from Réglages du site › Mise en page, unless overridden
     {
       type: 'row',
       admin: {condition: modeChosen},
@@ -247,28 +247,28 @@ export function sectionFields({shareable}: {shareable: boolean}): Field[] {
     });
   }
   return [
-    // réglages de la section, encadrés et repliables (présentation seulement : aucune donnée en plus)
+    // section settings, framed and collapsible (presentation only: no extra data)
     {type: 'collapsible', label: 'Réglages de la section', admin: {initCollapsed: false}, fields: settings},
-    // 4. les rangées, dans leur propre bloc repliable (constructeur RowsBuilder)
+    // 4. the rows, in their own collapsible block (RowsBuilder builder)
     {type: 'collapsible', label: 'Rangées', admin: {initCollapsed: false, condition: modeChosen}, fields: [rowsField]},
   ];
 }
 
-/** Bloc de page : une section construite sur place. */
+/** Page block: a section built in place. */
 export const sectionBlock: Block = {
   slug: 'section',
   labels: {singular: 'Section', plural: 'Sections'},
   fields: sectionFields({shareable: true}),
 };
 
-/** Bloc de page : une section partagée, modifiée à un seul endroit pour toutes les pages. */
+/** Page block: a shared section, edited in one place for every page. */
 export const sharedSectionBlock: Block = {
   slug: 'sharedSection',
   labels: {singular: 'Section partagée', plural: 'Sections partagées'},
   fields: [{name: 'section', type: 'relationship', relationTo: 'sections', label: 'Section', required: true}],
 };
 
-/** Le champ « sections » d'une page. */
+/** A page's « sections » field. */
 export const sectionsField: Field = {
   name: 'sections',
   type: 'blocks',

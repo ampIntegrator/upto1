@@ -1,6 +1,6 @@
 /**
- * Nom d'un composant de colonne dans le constructeur : le blockName natif de Payload (déjà en
- * base pour chaque bloc, aussi éditable dans l'en-tête du composant). Il remplace le libellé du
- * type (« Carte · image »…) dans la case et dans la fenêtre d'ordre mobile. Admin seulement.
+ * Name of a column component in the builder: Payload's native blockName (already in the
+ * database for each block, also editable in the component header). It replaces the type
+ * label (« Carte · image »…) in the cell and in the mobile order dialog. Admin only.
  */
 export const BLOCK_NAME_MAX = 60;

@@ -1,17 +1,17 @@
 'use client';
 
 /**
- * Tri par glisser-déposer du constructeur de sections, sur dnd-kit, en un seul endroit :
- * mêmes capteurs, mêmes animations et mêmes contraintes pour les rangées (axe vertical), les
- * colonnes d'une rangée (axe horizontal) et l'ordre mobile de la section (axe vertical).
+ * Drag-and-drop sorting for the section builder, on dnd-kit, in a single place:
+ * same sensors, same animations and same constraints for rows (vertical axis),
+ * a row's columns (horizontal axis) and the section's mobile order (vertical axis).
  *
- *   - souris : démarre après 5 px de mouvement (un clic reste un clic) ;
- *   - tactile : appui de 200 ms ; clavier : Espace pour saisir, flèches, Espace pour poser ;
- *   - stratégie de tri propre à l'axe, qui tient compte des tailles différentes des éléments ;
- *   - déplacement bloqué sur l'axe et à l'intérieur du conteneur.
+ *   - mouse: starts after 5 px of movement (a click stays a click);
+ *   - touch: 200 ms press; keyboard: Space to pick up, arrows, Space to drop;
+ *   - sorting strategy specific to the axis, which accounts for items of different sizes;
+ *   - movement locked to the axis and inside the container.
  *
- * On n'utilise pas le DraggableSortable de Payload : il est prévu pour des éléments de même
- * taille et ne permet ni de choisir la stratégie ni de contraindre le déplacement.
+ * Payload's DraggableSortable is not used: it is designed for items of the same
+ * size and allows neither choosing the strategy nor constraining movement.
  */
 import {closestCenter, DndContext, type DragEndEvent, KeyboardSensor, MouseSensor, TouchSensor, useSensor, useSensors} from '@dnd-kit/core';
 import {restrictToHorizontalAxis, restrictToParentElement, restrictToVerticalAxis} from '@dnd-kit/modifiers';
@@ -19,7 +19,7 @@ import {horizontalListSortingStrategy, SortableContext, sortableKeyboardCoordina
 import {CSS} from '@dnd-kit/utilities';
 import React from 'react';
 
-/** Ce qu'un élément triable reçoit : à poser sur la poignée (attributes, listeners) et sur l'élément (setNodeRef, transform, transition). */
+/** What a sortable item receives: to set on the handle (attributes, listeners) and on the item (setNodeRef, transform, transition). */
 export type SortableHandle = {
   attributes: React.HTMLAttributes<HTMLElement>;
   listeners: React.DOMAttributes<HTMLElement>;

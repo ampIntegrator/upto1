@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * IconPicker — composant d'admin du champ « icône » : aperçu de l'icône choisie, bouton qui
- * ouvre un tiroir Payload avec une grille de six icônes de large (tout le jeu Nucleo, deux
- * dossiers), une recherche par nom, un clic pour choisir. Interface d'admin : hors design
- * system du site, styles inline sur les variables Payload.
+ * IconPicker — admin component for the « icône » field: preview of the chosen icon, a button that
+ * opens a Payload drawer with a grid six icons wide (the whole Nucleo set, two
+ * folders), search by name, one click to choose. Admin UI: outside the site design
+ * system, inline styles on Payload variables.
  */
 import {Button, Drawer, FieldLabel, useDrawerSlug, useField, useModal} from '@payloadcms/ui';
 import type {TextFieldClientProps} from 'payload';

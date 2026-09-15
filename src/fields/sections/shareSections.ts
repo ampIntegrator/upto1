@@ -1,10 +1,10 @@
 import type {CollectionBeforeChangeHook, RequiredDataFromCollectionSlug} from 'payload';
 
 /**
- * Case « Enregistrer dans les sections partagées » d'un bloc Section : à l'enregistrement de
- * la page, la section est copiée dans la collection « sections » et le bloc devient un bloc
- * « Section partagée » qui la référence. Les identifiants internes des rangées, colonnes et
- * contenus sont retirés de la copie (nouvelles tables, nouveaux identifiants).
+ * « Enregistrer dans les sections partagées » checkbox of a Section block: when the page
+ * is saved, the section is copied into the « sections » collection and the block becomes a
+ * « Section partagée » block referencing it. Internal ids of rows, columns and
+ * contents are stripped from the copy (new tables, new ids).
  */
 type Block = {blockType?: string; blockName?: string | null; id?: string; [key: string]: unknown};
 

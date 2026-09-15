@@ -16,7 +16,7 @@ import {OrbitaThemeProvider} from '@/theme/OrbitaThemeProvider';
 const IMG = 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80';
 const TEXT = 'Une phrase de présentation courte, deux lignes au plus, pour situer le contenu de la carte.';
 
-/** Données de démo d'une variante de carte. */
+/** Demo data for a card variant. */
 function demoCard(slug: string): CardProps {
   const v = CARD_VARIANTS[slug];
   const media: CardProps['media'] =
@@ -34,7 +34,7 @@ function demoCard(slug: string): CardProps {
   };
 }
 
-/** Le bloc, seul, dans une boîte de largeur fixe sur le fond de page ; data-apercu cible la capture. */
+/** The block alone, in a fixed-width box on the page background; data-apercu targets the capture. */
 export function Apercu({slug}: {slug: string}) {
   return (
     <OrbitaThemeProvider fixedSilo="blue" initialMode="light">
@@ -44,7 +44,7 @@ export function Apercu({slug}: {slug: string}) {
         ) : slug === MEDIA_SLUG ? (
           <Media image={{src: IMG, alt: ''}} minHeight={240} sizes="360px" />
         ) : slug === EMPTY_SLUG ? (
-          // case vide : un emplacement en pointillés, à la hauteur d'une carte
+          // empty cell: a dashed placeholder, the height of a card
           <VStack hAlign="center" vAlign="center" style={{minHeight: 'calc(var(--spacing-12) * 6)', border: 'var(--border-width) dashed var(--color-border-emphasized)'}}>
             <Text type="label" color="secondary">Case vide</Text>
           </VStack>

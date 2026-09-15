@@ -8,7 +8,7 @@ export const Posts: CollectionConfig = {
   admin: {useAsTitle: 'title', group: 'Blog', defaultColumns: ['title', 'category', 'publishedAt']},
   access: {read: () => true},
   defaultSort: '-publishedAt',
-  // les onglets en premier : le plugin SEO ajoute son onglet à la suite ; slug, catégorie et date en barre latérale
+  // tabs first: the SEO plugin appends its tab after them; slug, category and date in the sidebar
   fields: [
     {
       type: 'tabs',
