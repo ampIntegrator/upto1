@@ -90,7 +90,7 @@ function PresetTiles({current, onReplace, onAdd}: {current: string; onReplace: (
     onAdd(spans);
   };
   return (
-    <div role="radiogroup" aria-label="Disposition" style={{display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gap: 8}}>
+    <div role="radiogroup" aria-label="Disposition" style={{display: 'grid', gridTemplateColumns: 'repeat(8, minmax(0, 1fr))', gap: 8}}>
       {ROW_PRESETS.map((spans) => {
         const active = spans.join('|') === current;
         const label = presetLabel(spans);

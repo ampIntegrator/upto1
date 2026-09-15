@@ -215,7 +215,7 @@ export interface Page {
               | {
                   columns?:
                     | {
-                        span: '2' | '3' | '4' | '6' | '8' | '9' | '12';
+                        span: '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '12';
                         mobileOrder?: number | null;
                         /**
                          * Un seul composant par colonne. Pour en changer, supprimez-le puis choisissez-en un autre. Laissez vide pour une case vide.
@@ -461,7 +461,7 @@ export interface Section {
     | {
         columns?:
           | {
-              span: '2' | '3' | '4' | '6' | '8' | '9' | '12';
+              span: '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '12';
               mobileOrder?: number | null;
               /**
                * Un seul composant par colonne. Pour en changer, supprimez-le puis choisissez-en un autre. Laissez vide pour une case vide.

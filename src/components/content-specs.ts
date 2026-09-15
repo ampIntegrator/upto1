@@ -19,7 +19,7 @@
  */
 
 /** Largeurs de colonne autorisées (sur 12). */
-export const COLUMN_SPANS = [2, 3, 4, 6, 8, 9, 12] as const;
+export const COLUMN_SPANS = [2, 3, 4, 5, 6, 7, 8, 9, 12] as const;
 export type ColumnSpan = (typeof COLUMN_SPANS)[number];
 
 /** Un contenu placé dans une colonne, avec les seuls réglages qui changent son emprise. */

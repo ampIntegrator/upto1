@@ -13,6 +13,8 @@ export const ROW_PRESETS: readonly ColumnSpan[][] = [
   [2, 2, 2, 2, 2, 2],
   [8, 4],
   [4, 8],
+  [7, 5],
+  [5, 7],
   [3, 6, 3],
   [9, 3],
   [3, 9],
