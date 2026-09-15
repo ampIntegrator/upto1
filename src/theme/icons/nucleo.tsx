@@ -472,6 +472,643 @@ export const YoutubeIcon = (p: P) => (
   </svg>
 );
 
+/** vidomia/arrow-rotate-anticlockwise-check */
+export const ArrowRotateAnticlockwiseCheckIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="m1.8534,10.2272c.583,3.4196,3.5608,6.0228,7.1466,6.0228,4.0041,0,7.25-3.246,7.25-7.25S13.0041,1.75,9,1.75c-3.0164,0-5.6025,1.8421-6.6948,4.4627" /><polyline points="1.88 3.305 2.288 6.25 5.232 5.843" /><polyline points="6.125 9.227 7.952 11.25 11.875 6.25" /></g>
+  </svg>
+);
+
+/** vidomia/award-plaque */
+export const AwardPlaqueIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M14.75 14.5C13.928 14.5 13.206 14.098 12.75 13.486V17.5C12.75 17.702 12.872 17.885 13.059 17.962C13.246 18.041 13.46 17.997 13.604 17.854L14.75 16.708L15.896 17.854C15.992 17.95 16.12 18 16.25 18C16.314 18 16.38 17.988 16.441 17.962C16.628 17.885 16.75 17.702 16.75 17.5V13.486C16.294 14.098 15.572 14.5 14.75 14.5Z" fill="currentColor" stroke="none" /> <path d="M5.75 7.25H11" /> <path d="M5.75 10.25H8.25" /> <path d="M14.75 14.5C16.131 14.5 17.25 13.3807 17.25 12C17.25 10.6193 16.131 9.5 14.75 9.5C13.369 9.5 12.25 10.6193 12.25 12C12.25 13.3807 13.369 14.5 14.75 14.5Z" /> <path d="M16.25 6.7134V5.25C16.25 4.145 15.355 3.25 14.25 3.25H3.75C2.645 3.25 1.75 4.145 1.75 5.25V12.25C1.75 13.355 2.645 14.25 3.75 14.25H9.7533" /></g>
+  </svg>
+);
+
+/** vidomia/battery-charging */
+export const BatteryChargingIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M4.7921 13.75H3.75C2.645 13.75 1.75 12.855 1.75 11.75V6.25C1.75 5.145 2.645 4.25 3.75 4.25H6.1767" /> <path d="M13.2078 4.25H13.7499C14.8549 4.25 15.7499 5.145 15.7499 6.25V11.75C15.7499 12.855 14.8549 13.75 13.7499 13.75H11.8232" /> <path d="M17.25 7.75H15.75V10.25H17.25V7.75Z" fill="currentColor" /> <path d="M7.75 14.25L11.75 8.75H8.75L10.25 3.75L6.25 9.25H9.25L7.75 14.25Z" fill="currentColor" /></g>
+  </svg>
+);
+
+/** vidomia/bell-dot */
+export const BellDotIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="m10.5,15.3843c-.2995.5175-.8591.8657-1.5.8657s-1.2005-.3482-1.5-.8657" /><path d="m9,1.75c-2.623,0-4.75,2.127-4.75,4.75v4.25c0,1.105-.895,2-2,2h13.5c-1.105,0-2-.895-2-2v-3.6421" /><circle cx="12.75" cy="3.25" r="1" fill="currentColor" /></g>
+  </svg>
+);
+
+/** vidomia/bolt-lightning */
+export const BoltLightningIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M7.25,16.25l2-7H4.466c-.348,0-.589-.346-.469-.672L6.38,2.078c.072-.197,.26-.328,.469-.328h4.17c.352,0,.593,.353,.466,.681l-1.485,3.819h3.75c.412,0,.647,.47,.4,.8l-6.9,9.2Z" /></g>
+  </svg>
+);
+
+/** vidomia/book-settings */
+export const BookSettingsIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M15.25 12.75C14.609 13.594 14.516 15.297 15.25 16.25H4.5C3.534 16.25 2.75 15.467 2.75 14.5" /> <path d="M15.25 12.75H4.5C3.534 12.75 2.75 13.533 2.75 14.5V3.75C2.75 2.645 3.645 1.75 4.75 1.75H15.25V12.75Z" /> <path d="M9 4V5" /> <path d="M11.2981 4.9519L10.591 5.659" /> <path d="M12.25 7.25H11.25" /> <path d="M11.2981 9.5481L10.591 8.841" /> <path d="M9 10.5V9.5" /> <path d="M6.7019 9.5481L7.409 8.841" /> <path d="M5.75 7.25H6.75" /> <path d="M6.7019 4.9519L7.409 5.659" /> <path d="M9 9.25C10.1046 9.25 11 8.35457 11 7.25C11 6.14543 10.1046 5.25 9 5.25C7.89543 5.25 7 6.14543 7 7.25C7 8.35457 7.89543 9.25 9 9.25Z" /></g>
+  </svg>
+);
+
+/** vidomia/brackets-curly */
+export const BracketsCurlyIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M6.25,15.25h-1c-1.105,0-2-.895-2-2v-2.625c0-.897-.728-1.625-1.625-1.625,.897,0,1.625-.728,1.625-1.625v-2.625c0-1.105,.895-2,2-2h1" /><path d="M11.75,15.25h1c1.105,0,2-.895,2-2v-2.625c0-.897,.728-1.625,1.625-1.625-.897,0-1.625-.728-1.625-1.625v-2.625c0-1.105-.895-2-2-2h-1" /></g>
+  </svg>
+);
+
+/** vidomia/bricks */
+export const BricksIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><rect x="1.75" y="1.75" width="6" height="3.5" rx="1" ry="1" /><rect x="10.25" y="5.25" width="6" height="3.5" rx="1" ry="1" /><rect x="1.75" y="8.75" width="6" height="3.5" rx="1" ry="1" /><rect x="10.25" y="12.25" width="6" height="3.5" rx="1" ry="1" /><rect x="7.75" y="1.75" width="6" height="3.5" rx="1" ry="1" /><rect x="4.25" y="5.25" width="6" height="3.5" rx="1" ry="1" /><rect x="7.75" y="8.75" width="6" height="3.5" rx="1" ry="1" /><rect x="4.25" y="12.25" width="6" height="3.5" rx="1" ry="1" /></g>
+  </svg>
+);
+
+/** vidomia/brightness-increase */
+export const BrightnessIncreaseIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><line x1="9" y1=".75" x2="9" y2="2.25" /><line x1="14.834" y1="3.166" x2="13.773" y2="4.227" /><line x1="17.25" y1="9" x2="15.75" y2="9" /><line x1="14.834" y1="14.834" x2="13.773" y2="13.773" /><line x1="9" y1="17.25" x2="9" y2="15.75" /><line x1="3.166" y1="14.834" x2="4.227" y2="13.773" /><line x1=".75" y1="9" x2="2.25" y2="9" /><line x1="3.166" y1="3.166" x2="4.227" y2="4.227" /><circle cx="9" cy="9" r="4.25" /></g>
+  </svg>
+);
+
+/** vidomia/bug */
+export const BugIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g fill="currentColor"><line x1="9" y1="15.25" x2="9" y2="10.75" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" /><path d="m6.75,5.75v-1.25c0-1.243,1.007-2.25,2.25-2.25h0c1.243,0,2.25,1.007,2.25,2.25v1.25" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" /><line x1="4.75" y1="9.75" x2="1.75" y2="9.75" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" /><path d="m4.75,7.25c-1.519,0-2.75-1.231-2.75-2.75" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" /><path d="m4.75,12.25c-1.519,0-2.75,1.231-2.75,2.75" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" /><line x1="13.25" y1="9.75" x2="16.25" y2="9.75" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" /><path d="m13.25,7.25c1.519,0,2.75-1.231,2.75-2.75" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" /><path d="m13.25,12.25c1.519,0,2.75,1.231,2.75,2.75" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" /><path d="m6.75,5.75h4.5c1.104,0,2,.896,2,2v3.25c0,2.346-1.904,4.25-4.25,4.25h0c-2.346,0-4.25-1.904-4.25-4.25v-3.25c0-1.104.896-2,2-2Z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" /></g>
+  </svg>
+);
+
+/** vidomia/candle */
+export const CandleIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><line x1="9.25" y1="7.75" x2="9.25" y2="11.25" /><path d="M9,5.25c.967,0,1.75-.766,1.75-1.712,0-1.301-1.75-2.788-1.75-2.788,0,0-1.75,1.487-1.75,2.788,0,.946,.783,1.712,1.75,1.712Z" /><path d="M6.25,15.75v-7c0-.552,.448-1,1-1h3.5c.552,0,1,.448,1,1v7" /><line x1="15" y1="15.75" x2="3" y2="15.75" /></g>
+  </svg>
+);
+
+/** vidomia/chart-bar-trend-up */
+export const ChartBarTrendUpIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><rect x="13.25" y="2.75" width="2.5" height="12.5" rx="1" ry="1" /><rect x="7.75" y="7.75" width="2.5" height="7.5" rx="1" ry="1" /><rect x="2.25" y="11.75" width="2.5" height="3.5" rx="1" ry="1" /><polyline points="6.25 2.75 8.75 2.75 8.75 5.25" /><line x1="8.5" y1="3" x2="2.75" y2="8.75" /></g>
+  </svg>
+);
+
+/** vidomia/chart-pyramid */
+export const ChartPyramidIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><line x1="5.759" y1="6.25" x2="12.241" y2="6.25" /><line x1="3.449" y1="10.25" x2="14.551" y2="10.25" /><path d="M7.638,2.995L2.213,12.391c-.605,1.048,.151,2.359,1.362,2.359H14.425c1.211,0,1.967-1.31,1.362-2.359L10.362,2.995c-.605-1.048-2.119-1.048-2.724,0Z" /></g>
+  </svg>
+);
+
+/** vidomia/chess-queen */
+export const ChessQueenIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><line x1="9" y1=".75" x2="9" y2="7.7524" /><line x1="11" y1="2.75" x2="7" y2="2.75" /><path d="m4.6703,13.25l-1.4434-1.4998c-1.3518-1.4226-1.2932-3.6719.1294-5.0228,1.4226-1.3518,3.6719-1.2932,5.0228.1294.2514.2644.4609.567.6201.8956.9999-2.0594,3.7259-2.7186,5.5926-1.0818.4981.4366.8649,1.025,1.0334,1.6665.338,1.2876-.0317,2.5491-.8528,3.4131l-1.4434,1.4998" /><path d="m3.5633,14.6221l1.107-1.3721h8.6587l1.1072,1.372c.5278.6541.0623,1.628-.7782,1.628H4.3416c-.8404,0-1.306-.9738-.7783-1.6279Z" /></g>
+  </svg>
+);
+
+/** vidomia/child */
+export const ChildIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><circle cx="9" cy="2.75" r="1.5" /><path d="m6.75,6.7127c.7182.0437,1.4691.0683,2.25.0683" /><path d="m3.4971,4.3394c.9088,1.0078,1.9938,1.7874,3.2528,2.3733" /><path d="m9,6.781c.7809,0,1.5318-.0247,2.25-.0683" /><path d="m11.25,6.7126c1.259-.5859,2.3441-1.3655,3.2528-2.3733" /><path d="m11.25,6.75v3.25c0,1.2426-1.0074,2.25-2.25,2.25h0c-1.2426,0-2.25-1.0074-2.25-2.25v-3.25" /><path d="m7.1651,11.302l-1.3363,1.7641c-.2049.2706-.2587.6266-.1427.9456l.814,2.2384" /><path d="m10.8349,11.302l1.3363,1.7641c.2049.2706.2587.6266.1427.9456l-.814,2.2384" /></g>
+  </svg>
+);
+
+/** vidomia/cloud-download-2 */
+export const CloudDownload2Icon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M12,12.25h.5c2.071,0,3.75-1.679,3.75-3.75,0-1.736-1.185-3.182-2.786-3.609-.186-2.314-2.102-4.141-4.464-4.141-2.485,0-4.5,2.015-4.5,4.5,0,.35,.049,.686,.124,1.013-1.597,.067-2.874,1.374-2.874,2.987,0,1.657,1.343,3,3,3h1.25" /><polyline points="11.25 15 9 17.25 6.75 15" /><line x1="9" y1="17.25" x2="9" y2="8.75" /></g>
+  </svg>
+);
+
+/** vidomia/cloud-upload */
+export const CloudUploadIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M6.75 10.5L9 8.25L11.25 10.5" /> <path d="M9 8.25V14.25" /> <path d="M12 14.25H12.5C14.571 14.25 16.25 12.571 16.25 10.5C16.25 8.7639 15.065 7.31791 13.464 6.89111C13.278 4.57711 11.362 2.75 9 2.75C6.515 2.75 4.5 4.7651 4.5 7.25C4.5 7.6001 4.54899 7.93598 4.62399 8.26288C3.02699 8.32998 1.75 9.6369 1.75 11.25C1.75 12.907 3.093 14.25 4.75 14.25H6" /></g>
+  </svg>
+);
+
+/** vidomia/clover */
+export const CloverIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M9,9c-2.009-2.412-3.19-4.254-3.19-5.902,0-.622,.3-1.222,.976-1.329,.805-.128,1.66,.421,2.214,1.081,.555-.66,1.409-1.208,2.214-1.081,.676,.107,.976,.707,.976,1.329,0,1.649-1.181,3.491-3.19,5.902" /><path d="M9,9c2.009,2.412,3.19,4.254,3.19,5.902,0,.622-.3,1.222-.976,1.329-.805,.128-1.66-.421-2.214-1.081-.555,.66-1.409,1.208-2.214,1.081-.676-.107-.976-.707-.976-1.329,0-1.649,1.181-3.491,3.19-5.902" /><path d="M9,9c2.412-2.009,4.254-3.19,5.902-3.19,.622,0,1.222,.3,1.329,.976,.128,.805-.421,1.66-1.081,2.214,.66,.555,1.208,1.409,1.081,2.214-.107,.676-.707,.976-1.329,.976-1.649,0-3.491-1.181-5.902-3.19" /><path d="M9,9c-2.412,2.009-4.254,3.19-5.902,3.19-.622,0-1.222-.3-1.329-.976-.128-.805,.421-1.66,1.081-2.214-.66-.555-1.208-1.409-1.081-2.214,.107-.676,.707-.976,1.329-.976,1.649,0,3.491,1.181,5.902,3.19" /></g>
+  </svg>
+);
+
+/** vidomia/code-compare */
+export const CodeCompareIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M14.25,12.25V5.75c0-1.105-.895-2-2-2h-3.5" /><polyline points="11 6 8.75 3.75 11 1.5" /><path d="M3.75,5.75v6.5c0,1.105,.895,2,2,2h3.5" /><polyline points="7 12 9.25 14.25 7 16.5" /><circle cx="14.25" cy="14.25" r="2" /><circle cx="3.75" cy="3.75" r="2" /></g>
+  </svg>
+);
+
+/** vidomia/collision */
+export const CollisionIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><polygon points="6 1 9.344 5.781 14 2 12.083 7.625 16.25 8.25 12.542 10.458 15.75 16.25 10 12.25 8 16.25 7 12 2 13 6 9 1.75 5.75 6.458 6.583 6 1" /></g>
+  </svg>
+);
+
+/** vidomia/compass-2 */
+export const Compass2Icon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M12.286 5.71399L10.415 10.413L5.716 12.284L7.58701 7.58499L12.286 5.71399Z" /> <path d="M9 3.75V1.75" /> <path d="M14.25 9H16.25" /> <path d="M9 14.25V16.25" /> <path d="M3.75 9H1.75" /> <path d="M9 16.25C13.004 16.25 16.25 13.0041 16.25 9C16.25 4.9959 13.004 1.75 9 1.75C4.996 1.75 1.75 4.9959 1.75 9C1.75 13.0041 4.996 16.25 9 16.25Z" /></g>
+  </svg>
+);
+
+/** vidomia/construction-crane */
+export const ConstructionCraneIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M15.25 10.75H12.25C11.974 10.75 11.75 10.9739 11.75 11.25V12.75C11.75 13.0261 11.974 13.25 12.25 13.25H15.25C15.526 13.25 15.75 13.0261 15.75 12.75V11.25C15.75 10.9739 15.526 10.75 15.25 10.75Z" /> <path d="M13.75 10.75V6.75" /> <path d="M10 16.25H3" /> <path d="M4.75 16.25V2.25C4.75 1.974 4.974 1.75 5.25 1.75H7.75C8.026 1.75 8.25 1.974 8.25 2.25V16.25" /> <path d="M11.25 6.75H15.5549C15.8961 6.75 16.1371 6.4158 16.0293 6.092L15.3634 4.092C15.2954 3.8877 15.1043 3.75 14.889 3.75H8.25" /> <path d="M4.75 3.75H2.25C1.974 3.75 1.75 3.974 1.75 4.25V6.25C1.75 6.526 1.974 6.75 2.25 6.75H8.25" /> <path d="M4.75 9.75H8.25" /> <path d="M4.75 12.75H8.25" /></g>
+  </svg>
+);
+
+/** vidomia/crown-2 */
+export const Crown2Icon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="m14.7898,13.5947l1.4602-8.3447-4,3-3.25-5.5-3.25,5.5L1.75,5.25l1.4602,8.3447c.1675.957.9985,1.6553,1.9701,1.6553h7.6395c.9716,0,1.8026-.6982,1.9701-1.6553Z" /></g>
+  </svg>
+);
+
+/** vidomia/cyborg */
+export const CyborgIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M5.75,16.25v-3.332c-2.166-1.257-3.483-3.81-2.832-6.607,.527-2.265,2.263-3.95,4.539-4.426,3.879-.81,7.293,2.129,7.293,5.865v1.75l1.75,2.5-1.754,.851-.283,1.652c-.123,.72-.748,1.247-1.479,1.247h-2.235c-1.105,0-2-.895-2-2v-4" /><circle cx="8.75" cy="7.75" r="2" /></g>
+  </svg>
+);
+
+/** vidomia/earth */
+export const EarthIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g fill="currentColor"><path d="M5.75421 9.8474C6.90811 9.6041 8.3363 9.1472 9.9917 10.7675C12.1745 12.904 12.6914 7.9875 15.8171 11.2571" stroke="currentColor" strokeWidth="1" strokeLinecap="round" fill="none" /> <path d="M13.0008 2.9807L11.4893 2.9094C10.4948 2.8625 9.73549 3.7861 9.97369 4.7527L10.2457 5.8562C10.3051 6.0973 10.2086 6.3499 10.0036 6.4899C9.838 6.603 9.62659 6.6251 9.44119 6.5487L8.5141 6.1666C7.7892 5.8678 6.96159 5.9623 6.32269 6.4169C5.75689 6.8194 5.40529 7.4578 5.36749 8.1511L5.29651 9.4532" stroke="currentColor" strokeWidth="1" strokeLinecap="round" fill="none" /> <path d="M2.59167 5.7457C3.02027 6.8697 3.97028 8.6883 5.49658 9.6832C5.92248 9.9178 6.90028 10.6811 6.83228 11.8894C6.73908 13.5436 7.35876 13.633 8.15756 14.2274C8.56766 14.5326 8.67218 15.4704 8.61218 16.2104" stroke="currentColor" strokeWidth="1" strokeLinecap="round" fill="none" /> <path d="M9 16.25C13.004 16.25 16.25 13.0041 16.25 9C16.25 4.9959 13.004 1.75 9 1.75C4.996 1.75 1.75 4.9959 1.75 9C1.75 13.0041 4.996 16.25 9 16.25Z" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" fill="none" /></g>
+  </svg>
+);
+
+/** vidomia/eraser */
+export const EraserIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><line x1="8.75" y1="15.25" x2="16" y2="15.25" /><path d="M5.876,15.25l-3.402-3.402c-.586-.586-.586-1.536,0-2.121L9.692,2.51c.586-.586,1.536-.586,2.121,0l3.712,3.712c.586,.586,.586,1.536,0,2.121l-6.906,6.907h-2.744Z" /><line x1="6.083" y1="6.118" x2="11.917" y2="11.952" /></g>
+  </svg>
+);
+
+/** vidomia/face-nerd-smile */
+export const FaceNerdSmileIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M11.25,12.258c-.472,.746-1.304,1.242-2.25,1.242s-1.778-.496-2.25-1.242" /><circle cx="9" cy="9" r="7.25" /><circle cx="5.5" cy="7.75" r="2.5" /><line x1="3" y1="7.75" x2=".75" y2="7.75" /><circle cx="12.5" cy="7.75" r="2.5" /><line x1="15" y1="7.75" x2="17.25" y2="7.75" /><path d="M8,7.75c.195-.37,.581-.603,1-.603s.805,.233,1,.603" /></g>
+  </svg>
+);
+
+/** vidomia/flag-5 */
+export const Flag5Icon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M3.75,10.239c.783-.172,1.975-.337,3.375-.114,1.313,.209,1.823,.604,2.91,.784,.943,.156,2.349,.156,4.215-.67V3.25c-1.79,.962-3.136,1.009-4.031,.875-1.165-.174-1.681-.669-3.094-.938-1.393-.265-2.594-.106-3.375,.062" /><line x1="3.75" y1="1.75" x2="3.75" y2="16.25" /></g>
+  </svg>
+);
+
+/** vidomia/flame */
+export const FlameIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M9,16.25c1.519,0,2.75-1.235,2.75-2.759,0-2.096-2.75-4.491-2.75-4.491,0,0-2.75,2.396-2.75,4.491,0,1.524,1.231,2.759,2.75,2.759Z" /><path d="M9,16.25c3.038,0,5.5-2.47,5.5-5.517,0-4.191-5.5-8.983-5.5-8.983,0,0-5.5,4.792-5.5,8.983,0,3.047,2.462,5.517,5.5,5.517Z" /></g>
+  </svg>
+);
+
+/** vidomia/flashlight */
+export const FlashlightIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><line x1="6.0359" y1="5.11" x2="12.6577" y2="11.7318" /><line x1="11.75" y1="1.25" x2="11.75" y2="2.25" /><line x1="16" y1="2" x2="14.5784" y2="3.4216" /><line x1="16.75" y1="6.25" x2="15.75" y2="6.25" /><path d="m5.1929,5.1939h7.7617c.5519,0,1,.4481,1,1v1.584c0,2.6938-2.187,4.8808-4.8808,4.8808h0c-2.6938,0-4.8808-2.187-4.8808-4.8808v-1.584c0-.5519.4481-1,1-1Z" transform="translate(8.9695 -3.8016) rotate(45)" /><line x1="8.6172" y1="12.8828" x2="5.25" y2="16.25" /><line x1="1.75" y1="12.75" x2="5.1172" y2="9.3828" /><line x1="4.5" y1="13.5" x2="4.25" y2="13.75" /></g>
+  </svg>
+);
+
+/** vidomia/footsteps */
+export const FootstepsIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M3.654,1.768c1.185-.181,2.415,.981,3.196,3.153s.006,3.758,.351,4.94c.365,1.25,1.222,3.252-.432,3.776-1.6,.507-2.104-.741-2.567-2.885-.217-1.006-2.21-2.575-2.403-4.567s.123-4.153,1.854-4.417Z" /><line x1="4.202" y1="10.753" x2="7.201" y2="9.862" /><path d="M14.346,4.268c-1.185-.181-2.415,.981-3.196,3.153s-.006,3.758-.351,4.94c-.365,1.25-1.222,3.252,.432,3.776,1.6,.507,2.104-.741,2.567-2.885,.217-1.006,2.21-2.575,2.403-4.567s-.123-4.153-1.854-4.417Z" /><line x1="13.798" y1="13.253" x2="10.799" y2="12.362" /></g>
+  </svg>
+);
+
+/** vidomia/forklift */
+export const ForkliftIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g fill="currentColor"><path d="M11.25,13.5v-4.464c0-.19-.027-.378-.08-.56l-1.46-5.006c-.124-.427-.516-.72-.96-.72h-3c-.552,0-1,.448-1,1v5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" /><line x1="4.231" y1="13.25" x2="7.75" y2="13.25" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" /><path d="M11.176,8.75H2.75c-1.105,0-2,.895-2,2v2.75" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" /><path d="M17.25,15.25h-2.5c-.552,0-1-.448-1-1V1.75" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" /><circle cx="2.5" cy="13.5" r="1.75" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" /><circle cx="9.5" cy="13.5" r="1.75" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" /></g>
+  </svg>
+);
+
+/** vidomia/gear-3 */
+export const Gear3Icon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M9 11.2495C10.2426 11.2495 11.25 10.2422 11.25 8.99951C11.25 7.75687 10.2426 6.74951 9 6.74951C7.75736 6.74951 6.75 7.75687 6.75 8.99951C6.75 10.2422 7.75736 11.2495 9 11.2495Z" /> <path d="M15.175 7.27802L14.246 6.95001C14.144 6.68901 14.027 6.42999 13.883 6.17999C13.739 5.92999 13.573 5.69999 13.398 5.48099L13.578 4.513C13.703 3.842 13.391 3.164 12.8 2.823L12.449 2.62C11.857 2.278 11.115 2.34699 10.596 2.79099L9.851 3.42801C9.291 3.34201 8.718 3.34201 8.148 3.42801L7.403 2.79001C6.884 2.34601 6.141 2.27699 5.55 2.61899L5.199 2.82199C4.607 3.16299 4.296 3.84099 4.421 4.51199L4.601 5.47699C4.241 5.92599 3.955 6.42299 3.749 6.95099L2.825 7.27701C2.181 7.50401 1.75 8.11299 1.75 8.79599V9.20099C1.75 9.88399 2.181 10.493 2.825 10.72L3.754 11.048C3.856 11.309 3.972 11.567 4.117 11.817C4.262 12.067 4.427 12.297 4.602 12.517L4.421 13.485C4.296 14.156 4.608 14.834 5.199 15.175L5.55 15.378C6.142 15.72 6.884 15.651 7.403 15.207L8.148 14.569C8.707 14.655 9.28 14.655 9.849 14.569L10.595 15.208C11.114 15.652 11.857 15.721 12.448 15.379L12.799 15.176C13.391 14.834 13.702 14.157 13.577 13.486L13.397 12.52C13.756 12.071 14.043 11.575 14.248 11.047L15.173 10.721C15.817 10.494 16.248 9.885 16.248 9.202V8.797C16.248 8.114 15.817 7.50502 15.173 7.27802H15.175Z" /></g>
+  </svg>
+);
+
+/** vidomia/glasses-2 */
+export const Glasses2Icon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><line x1="7.75" y1="10.25" x2="10.25" y2="10.25" /><path d="M6.399,4.115c-1.08-.76-2.588-.283-3.034,.961l-1.503,4.328c-.073,.211-.111,.433-.111,.656v.14" /><path d="M11.601,4.115c1.08-.76,2.588-.283,3.034,.961l1.503,4.328c.073,.211,.111,.433,.111,.656v.14" /><path d="M12.889,14.25h.79c1.337,0,2.437-1.051,2.497-2.386l.07-1.545c.039-.854-.643-1.568-1.498-1.568h-2.929c-.855,0-1.537,.714-1.498,1.568l.07,1.545c.061,1.335,1.161,2.386,2.497,2.386Z" /><path d="M5.111,14.25h-.79c-1.337,0-2.437-1.051-2.497-2.386l-.07-1.545c-.039-.854,.643-1.568,1.498-1.568h2.929c.855,0,1.537,.714,1.498,1.568l-.07,1.545c-.061,1.335-1.161,2.386-2.497,2.386Z" /></g>
+  </svg>
+);
+
+/** vidomia/grid-sparkle */
+export const GridSparkleIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><rect x="2.75" y="2.75" width="4.5" height="4.5" rx="1" ry="1" /><rect x="10.75" y="2.75" width="4.5" height="4.5" rx="1" ry="1" /><rect x="2.75" y="10.75" width="4.5" height="4.5" rx="1" ry="1" /><path d="m15.589,12.4055l-1.515-.5096-.505-1.5258c-.164-.4935-.975-.4935-1.139,0l-.505,1.5258-1.515.5096c-.245.0816-.41.3132-.41.5731s.165.4915.41.5731l1.515.5096.505,1.5258c.082.2467.312.4129.57.4129s.487-.1662.57-.4129l.505-1.5258,1.515-.5096c.245-.0816.41-.3132.41-.5731s-.166-.4905-.411-.5731Z" fill="currentColor" strokeWidth="0" /></g>
+  </svg>
+);
+
+/** vidomia/hand-cube */
+export const HandCubeIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M11.478,.945l-2.21,1.282c-.321,.186-.518,.529-.518,.9v2.572c0,.371,.197,.714,.518,.9l2.21,1.282c.323,.187,.721,.187,1.044,0l2.21-1.282c.321-.186,.518-.529,.518-.9V3.127c0-.371-.197-.714-.518-.9l-2.21-1.282c-.323-.187-.721-.187-1.044,0Z" /><polyline points="15.111 2.608 12 4.413 8.889 2.608" /><line x1="12" y1="8.02" x2="12" y2="4.413" /><path d="M10.437,12.965l4.817-2.174c.712-.321,1.549-.005,1.871,.707h0c.321,.712,.005,1.549-.707,1.871l-6.791,3.065c-.676,.305-1.441,.349-2.148,.123l-4.478-1.432" /><path d="M7.245,12.098l1.971,.894c.711,.323,1.549,.008,1.872-.703h0c.323-.711,.008-1.549-.703-1.872l-2.777-1.268c-2.296-1.023-4.233,.539-4.608,2.352" /><path d="M.75,9.75h1.25c.552,0,1,.448,1,1v5c0,.552-.448,1-1,1H.75" /></g>
+  </svg>
+);
+
+/** vidomia/hand-holding-heart */
+export const HandHoldingHeartIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M10.437,12.965l4.817-2.174c.712-.321,1.549-.005,1.871,.707h0c.321,.712,.005,1.549-.707,1.871l-6.791,3.065c-.676,.305-1.441,.349-2.148,.123l-4.478-1.432" /><path d="M7.245,12.098l1.971,.894c.711,.323,1.549,.008,1.872-.703h0c.323-.711,.008-1.549-.703-1.872l-2.777-1.268c-2.296-1.023-4.233,.539-4.608,2.352" /><path d="M.75,9.75h1.25c.552,0,1,.448,1,1v5c0,.552-.448,1-1,1H.75" /><path d="M10.781,6.447c.138,.071,.299,.071,.437,0,.729-.374,3.031-1.73,3.031-3.934,.004-.968-.791-1.757-1.777-1.763-.593,.007-1.144,.301-1.473,.786-.329-.484-.881-.778-1.473-.786-.985,.006-1.78,.794-1.777,1.763,0,2.205,2.303,3.56,3.031,3.934Z" /></g>
+  </svg>
+);
+
+/** vidomia/hand-holding-key */
+export const HandHoldingKeyIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><circle cx="7.25" cy="3.75" r="2" /><line x1="9.25" y1="3.75" x2="16.25" y2="3.75" /><line x1="15" y1="3.75" x2="15" y2="5.75" /><line x1="12.75" y1="3.75" x2="12.75" y2="5.75" /><path d="M10.437,12.465l4.817-2.174c.712-.321,1.549-.005,1.871,.707h0c.321,.712,.005,1.549-.707,1.871l-6.791,3.065c-.676,.305-1.441,.349-2.148,.123l-4.478-1.432" /><path d="M7.245,11.598l1.971,.894c.711,.323,1.549,.008,1.872-.703h0c.323-.711,.008-1.549-.703-1.872l-2.777-1.268c-2.296-1.023-4.233,.539-4.608,2.352" /><path d="M.75,9.25h1.25c.552,0,1,.448,1,1v5c0,.552-.448,1-1,1H.75" /></g>
+  </svg>
+);
+
+/** vidomia/handshake-2 */
+export const Handshake2Icon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><line x1="9" y1="13.5909" x2="11.25" y2="16.25" /><line x1="16.25" y1="13" x2="14.1911" y2="11.1911" /><path d="m9.2788,3.4149l1.2035-1.2035c.6153-.6152,1.6128-.6153,2.2281,0,.4744.4744.519,1.4099.3235,1.8882.3072.0576.8494.2408,1.2442.723.4101.5009.4454,1.095.3634,1.7213.3585.0443.9826.3409,1.2722.7659.4726.6936.4565,1.6839-.1031,2.2435l-2.234,2.2592c-.7514.7599-1.7756,1.1875-2.8443,1.1875h-1.2324l-2.75,3.25" /><line x1="1.75" y1="13" x2="4.3003" y2="10.6997" /><rect x="2.3536" y="6.2426" width="3" height="4.7071" rx="1.5" ry="1.5" transform="translate(-4.9498 5.2427) rotate(-45.0001)" /><rect x="4.3499" y="3.1124" width="3" height="6.4749" rx="1.5" ry="1.5" transform="translate(-2.7767 5.9963) rotate(-45.0001)" /><rect x="6.2212" y="1.4482" width="3" height="5.0607" rx="1.5" ry="1.5" transform="translate(-.5518 6.625) rotate(-45)" /></g>
+  </svg>
+);
+
+/** vidomia/head-front-vr-headset */
+export const HeadFrontVrHeadsetIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M14.094,5.745c-.571-2.257-2.637-3.995-5.094-3.995-2.454,0-4.519,1.735-5.092,3.989" /><path d="M4.142,11.155c.057,.522,.096,.876,.096,.876,.292,2.408,2.261,4.219,4.761,4.219h0c2.5,0,4.47-1.811,4.761-4.219,0,0,.04-.354,.096-.875" /><path d="M2.75,7.558c0-1.038,.787-1.907,1.821-1.995,1.372-.117,2.853-.188,4.429-.188,1.353,0,2.828,.053,4.407,.186,1.038,.088,1.843,.956,1.843,1.998v1.691c0,1.105-.895,2-2,2h-2.25c-.315,0-.611-.148-.8-.4l-.4-.533c-.4-.533-1.2-.533-1.6,0l-.4,.533c-.189,.252-.485,.4-.8,.4h-2.25c-1.105,0-2-.895-2-2v-1.692Z" /><line x1="9" y1="5.375" x2="9" y2="1.75" /><path d="M10.375,13.159c-.029-.017-.715-.409-1.375-.409s-1.346,.392-1.375,.409c-.077,.044-.125,.127-.125,.216s.048,.172,.125,.216c.029,.017,.715,.409,1.375,.409s1.346-.392,1.375-.409c.077-.044,.125-.127,.125-.216s-.048-.172-.125-.216Z" fill="currentColor" stroke="none" /><polyline points="2.75 9.5 1.75 9.5 1.75 7.25 2.75 7.25" /><polyline points="15.25 9.5 16.25 9.5 16.25 7.25 15.25 7.25" /></g>
+  </svg>
+);
+
+/** vidomia/headset */
+export const HeadsetIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M13,13.25l-.342,1.447c-.208,.909-1.017,1.553-1.949,1.553h-1.959" /><path d="M3.75,7.353l-1.123,.567c-.813,.411-1.246,1.319-1.053,2.209l.335,1.545c.199,.92,1.013,1.576,1.955,1.576h1.137s-1.084-5-1.084-5c-.099-.403-.166-.817-.166-1.25,0-2.899,2.351-5.25,5.25-5.25s5.25,2.351,5.25,5.25c0,.433-.067,.847-.166,1.25l-1.084,5h1.137c.941,0,1.755-.656,1.955-1.576l.335-1.545c.193-.89-.24-1.799-1.053-2.209l-1.123-.567" /></g>
+  </svg>
+);
+
+/** vidomia/hexagon-image */
+export const HexagonImageIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M4.687,14.064l5.149-5.15c.781-.781,2.047-.781,2.828,0l2.301,2.301" /><path d="M6.527,15.25h4.946c.713,0,1.372-.38,1.73-.997l2.465-4.25c.36-.621,.36-1.386,0-2.007l-2.465-4.25c-.358-.617-1.017-.997-1.73-.997H6.527c-.713,0-1.372,.38-1.73,.997L2.332,7.997c-.36,.621-.36,1.386,0,2.007l2.465,4.25c.358,.617,1.017,.997,1.73,.997Z" /><circle cx="6.75" cy="7.25" r="1.25" fill="currentColor" stroke="none" /></g>
+  </svg>
+);
+
+/** vidomia/hot-drink */
+export const HotDrinkIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g fill="currentColor"><path d="M8.75,.75c-.022,.631-.166,1.383-.672,2-.347,.424-.636,.504-.969,.922-.122,.153-.239,.338-.338,.564" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" /><path d="M11.5,2.75c-.015,.379-.111,.83-.448,1.2-.127,.14-.242,.217-.357,.3" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" /><path d="M3.75,6.75H14.25v3.5c0,2.76-2.24,5-5,5h-.5c-2.76,0-5-2.24-5-5v-3.5h0Z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" /><line x1="15.25" y1="15.25" x2="2.75" y2="15.25" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" /><path d="M14.25,6.75h1c1.105,0,2,.891,2,2s-.895,2-2,2h-1" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" /></g>
+  </svg>
+);
+
+/** vidomia/industry */
+export const IndustryIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g fill="currentColor"><path d="M3.43101 4.75H4.06901C4.59401 4.75 5.02901 5.15499 5.06601 5.67899L5.673 14.179C5.714 14.758 5.25601 15.25 4.67601 15.25H2.824C2.244 15.25 1.78501 14.758 1.82701 14.179L2.434 5.67899C2.471 5.15599 2.90701 4.75 3.43101 4.75Z" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" fill="none" /> <path d="M4 2.59799C4.306 2.08999 4.863 1.75 5.5 1.75H7.25C7.946 1.75 8.548 1.343 8.829 0.753998" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" fill="none" /> <path d="M8.26029 8.29431L11.25 5.75V10L16.25 5.75V14.25C16.25 14.802 15.802 15.25 15.25 15.25H4.67599" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" fill="none" /> <path d="M12.75 12H13.25" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" fill="none" /> <path d="M8.75 12H9.25" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" fill="none" /></g>
+  </svg>
+);
+
+/** vidomia/itinerary */
+export const ItineraryIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><rect x="2.75" y="2.25" width="4" height="4" rx="1" ry="1" /><rect x="11.25" y="11.75" width="4" height="4" rx="1" ry="1" /><path d="M9.5,4.25h3.375c1.312,0,2.375,1.063,2.375,2.375h0c0,1.312-1.063,2.375-2.375,2.375H5.125c-1.312,0-2.375,1.063-2.375,2.375h0c0,1.312,1.063,2.375,2.375,2.375h3.375" /></g>
+  </svg>
+);
+
+/** vidomia/key-4 */
+export const Key4Icon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M9 5.75C9.552 5.75 10 5.3023 10 4.75C10 4.1977 9.552 3.75 9 3.75C8.448 3.75 8 4.1977 8 4.75C8 5.3023 8.448 5.75 9 5.75Z" fill="currentColor" stroke="none" /> <path d="M9.5 11.5L11 10V8.4121C12.301 7.5872 13.0671 5.9955 12.6235 4.2629C12.29 2.9603 11.2208 1.9159 9.91199 1.6075C7.44539 1.0262 5.25 2.8817 5.25 5.25C5.25 6.5837 5.9512 7.7471 7 8.4121V14.0759C7 14.1886 7.0384 14.2979 7.1088 14.3859L8.61249 16.2656C8.81119 16.5139 9.1889 16.5139 9.3876 16.2656L10.8913 14.3859C10.9617 14.2979 11.0001 14.1886 11.0001 14.0759V13L9.5 11.5Z" /></g>
+  </svg>
+);
+
+/** vidomia/leaf */
+export const LeafIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="m9.8997,15.1642c4.9614-.879,6.1773-8.293,3.3653-13.4142-1.709,3.571-5.652,3.034-7.858,5.754-.654.806-1.158,1.901-1.158,3.082,0,1.577.779,2.972,1.972,3.816" /><path d="m2.75,16.25s4.598-1.265,7.5-6.5" /></g>
+  </svg>
+);
+
+/** vidomia/light-spark-2 */
+export const LightSpark2Icon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><line x1="9" y1="12.75" x2="9" y2="16.25" /><line x1="9" y1="1.75" x2="9" y2="5.25" /><line x1="5.25" y1="9" x2="1.75" y2="9" /><line x1="16.25" y1="9" x2="12.75" y2="9" /><line x1="6.3484" y1="11.6516" x2="3.8735" y2="14.1265" /><line x1="14.1265" y1="3.8735" x2="11.6516" y2="6.3484" /><line x1="6.3484" y1="6.3484" x2="3.8735" y2="3.8735" /><line x1="14.1265" y1="14.1265" x2="11.6516" y2="11.6516" /><circle cx="9" cy="9" r=".75" fill="currentColor" /></g>
+  </svg>
+);
+
+/** vidomia/list-favs-2 */
+export const ListFavs2Icon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><line x1="8.25" y1="9" x2="15.75" y2="9" /><line x1="8.25" y1="3.75" x2="15.75" y2="3.75" /><line x1="8.25" y1="14.25" x2="15.75" y2="14.25" /><path d="M5.804,7.93l-1.187-.172-.531-1.076c-.125-.256-.547-.256-.672,0l-.531,1.076-1.187,.172c-.142,.021-.259,.12-.303,.255s-.008,.285,.095,.384l.858,.837-.202,1.182c-.024,.141,.033,.283,.148,.367,.115,.084,.269,.096,.396,.029l1.062-.558,1.062,.558c.056,.029,.115,.043,.175,.043,.078,0,.155-.024,.221-.072,.115-.084,.173-.226,.148-.367l-.202-1.182,.858-.837c.103-.1,.139-.249,.095-.384s-.161-.235-.303-.255Z" fill="currentColor" stroke="none" /><path d="M2.347,4.157l-.202,1.182c-.024,.141,.033,.283,.148,.367s.269,.096,.396,.029l1.062-.558,1.062,.558c.056,.029,.115,.043,.175,.043,.078,0,.155-.024,.221-.072,.115-.084,.173-.226,.148-.367l-.202-1.182,.858-.837c.103-.1,.139-.249,.095-.384s-.161-.235-.303-.255l-1.187-.172-.531-1.076c-.125-.256-.547-.256-.672,0l-.531,1.076-1.187,.172c-.142,.021-.259,.12-.303,.255s-.008,.285,.095,.384l.858,.837Z" fill="currentColor" stroke="none" /><path d="M5.804,13.18l-1.187-.172-.531-1.076c-.125-.256-.547-.256-.672,0l-.531,1.076-1.187,.172c-.142,.021-.259,.12-.303,.255s-.008,.285,.095,.384l.858,.837-.202,1.182c-.024,.141,.033,.283,.148,.367,.115,.084,.269,.095,.396,.029l1.062-.558,1.062,.558c.056,.029,.115,.043,.175,.043,.078,0,.155-.024,.221-.072,.115-.084,.173-.226,.148-.367l-.202-1.182,.858-.837c.103-.1,.139-.249,.095-.384s-.161-.235-.303-.255Z" fill="currentColor" stroke="none" /></g>
+  </svg>
+);
+
+/** vidomia/location-2 */
+export const Location2Icon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g fill="currentColor"><circle cx="9" cy="5" r="3.25" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" /><line x1="9" y1="13.25" x2="9" y2="8.25" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" /><path d="M12,12.429c2.507,.315,4.25,1.012,4.25,1.821,0,1.105-3.246,2-7.25,2s-7.25-.895-7.25-2c0-.809,1.743-1.507,4.25-1.821" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" /></g>
+  </svg>
+);
+
+/** vidomia/lock-open */
+export const LockOpenIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M5.75,8.25v-3.25c0-1.795,1.455-3.25,3.25-3.25h0c1.795,0,3.25,1.455,3.25,3.25" /><line x1="9" y1="11.75" x2="9" y2="12.75" /><rect x="3.25" y="8.25" width="11.5" height="8" rx="2" ry="2" /></g>
+  </svg>
+);
+
+/** vidomia/lock */
+export const LockIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M5.75,8.25v-3.25c0-1.795,1.455-3.25,3.25-3.25h0c1.795,0,3.25,1.455,3.25,3.25v3.25" /><line x1="9" y1="11.75" x2="9" y2="12.75" /><rect x="3.25" y="8.25" width="11.5" height="8" rx="2" ry="2" /></g>
+  </svg>
+);
+
+/** vidomia/map-pin */
+export const MapPinIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M14.5 14.25C14.9142 14.25 15.25 13.914 15.25 13.5C15.25 13.086 14.9142 12.75 14.5 12.75C14.0858 12.75 13.75 13.086 13.75 13.5C13.75 13.914 14.0858 14.25 14.5 14.25Z" fill="currentColor" stroke="none" /> <path d="M16.25 8.0244V4.9971C16.25 4.357 15.658 3.8821 15.033 4.021L12.035 4.687C11.849 4.728 11.655 4.71609 11.476 4.65089L6.524 2.8501C6.345 2.7849 6.151 2.77199 5.965 2.81399L2.533 3.5769C2.075 3.679 1.75 4.08499 1.75 4.55299V13.003C1.75 13.6431 2.342 14.118 2.967 13.9791L5.965 13.3131C6.151 13.2721 6.345 13.284 6.524 13.3492L8.7912 14.1732" /> <path d="M14.5 17.25C14.5 17.25 11.75 15.741 11.75 13.5C11.75 11.981 12.981 10.75 14.5 10.75C16.019 10.75 17.25 11.981 17.25 13.5C17.25 15.741 14.5 17.25 14.5 17.25Z" /></g>
+  </svg>
+);
+
+/** vidomia/measure */
+export const MeasureIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><line x1="13.25" y1="11.75" x2="13.25" y2="14.25" /><line x1="9.75" y1="11.75" x2="9.75" y2="14.25" /><line x1="6.25" y1="11.75" x2="6.25" y2="14.25" /><ellipse cx="5.5" cy="5.75" rx="3.75" ry="2" /><line x1="9.25" y1="5.75" x2="9.25" y2="7.75" /><path d="M5.5,7.75H15.25c.552,0,1,.448,1,1v4.5c0,.552-.448,1-1,1H5.5c-2.071,0-3.75-.895-3.75-2V5.75" /></g>
+  </svg>
+);
+
+/** vidomia/megaphone */
+export const MegaphoneIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M3.75,11.457v2.704c0,.41,.25,.778,.631,.929l1.945,.773c.4,.159,.856,.044,1.134-.284l1.666-1.979" /><ellipse cx="13.5" cy="9" rx="2.75" ry="6.25" /><path d="M12.954,15.125L2.61,11.002c-.256-.099-.457-.296-.564-.549-.148-.35-.296-.847-.296-1.453,0-.271,.03-.817,.289-1.436,.108-.257,.313-.466,.573-.566,3.638-1.409,6.704-2.715,10.342-4.124" /><path d="M14.5,9c0-.828-.672-1.5-1.5-1.5-.053,0-.103,.01-.155,.016-.058,.452-.095,.945-.095,1.484s.037,1.032,.095,1.484c.052,.005,.102,.016,.155,.016,.828,0,1.5-.672,1.5-1.5Z" fill="currentColor" stroke="none" /></g>
+  </svg>
+);
+
+/** vidomia/mobile-wave-2 */
+export const MobileWave2Icon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M14.25 11.75V14.25C14.25 15.355 13.355 16.25 12.25 16.25H5.75C4.645 16.25 3.75 15.355 3.75 14.25V12.25" /> <path d="M3.75 6.25V3.75C3.75 2.645 4.645 1.75 5.75 1.75H12.25C13.355 1.75 14.25 2.645 14.25 3.75V5.75" /> <path d="M1.75 9.25H5.51C5.95 9.25 6.338 8.963 6.466 8.542L7.465 5.272C7.514 5.111 7.741 5.109 7.793 5.269L10.207 12.729C10.259 12.889 10.486 12.887 10.535 12.726L11.534 9.456C11.662 9.035 12.051 8.748 12.49 8.748H16.25" /></g>
+  </svg>
+);
+
+/** vidomia/msg-heart */
+export const MsgHeartIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M16.2289 8.58279C16.0116 4.77399 12.8631 1.75 9 1.75C4.996 1.75 1.75 4.9961 1.75 9C1.75 10.3188 2.108 11.552 2.723 12.6169C3.153 13.4228 2.67 15.3291 1.75 16.25C3 16.3179 4.647 15.7529 5.383 15.2769C5.872 15.5591 6.647 15.9331 7.662 16.125C7.9422 16.178 8.2302 16.2083 8.5212 16.2275" /> <path d="M13.781 17.197C13.919 17.268 14.08 17.268 14.218 17.197C14.947 16.823 17.249 15.467 17.249 13.263C17.253 12.295 16.458 11.506 15.472 11.5C14.879 11.507 14.328 11.801 13.999 12.286C13.67 11.802 13.118 11.508 12.526 11.5C11.541 11.506 10.746 12.294 10.749 13.263C10.749 15.468 13.053 16.823 13.781 17.197Z" /></g>
+  </svg>
+);
+
+/** vidomia/msgs-2 */
+export const Msgs2Icon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="m11.5598,4.7546c-.8373-1.4424-2.3575-2.4387-4.1301-2.5015-2.8675-.1013-5.1796,2.3672-5.1796,5.2366v4.2603c0,.2761.2239.5.5.5h2.0253" /><path d="m15.75,11.9676v3.2824c0,.2761-.22.5-.4961.5h-3.0176c-2.5925,0-4.5949-1.8811-4.4814-4.1988.1004-2.0509,1.7454-3.6959,3.7963-3.7963,2.3178-.1135,4.1989,1.8922,4.1989,4.2127Z" /></g>
+  </svg>
+);
+
+/** vidomia/obj-size-increase */
+export const ObjSizeIncreaseIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><polyline points="6.75 3.75 9 1.5 11.25 3.75" /><polyline points="6.75 14.25 9 16.5 11.25 14.25" /><polyline points="14.25 6.75 16.5 9 14.25 11.25" /><polyline points="3.75 6.75 1.5 9 3.75 11.25" /><rect x="6.75" y="6.75" width="4.5" height="4.5" rx="1" ry="1" /></g>
+  </svg>
+);
+
+/** vidomia/palette-2 */
+export const Palette2Icon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="m8.3034,16.217c-3.7776-.3601-6.7098-3.619-6.5469-7.5271.157-3.7659,3.3501-6.8755,7.1188-6.9388,4.0612-.0683,7.3747,3.2034,7.3747,7.2489h0c0,1.5188-1.2312,2.75-2.75,2.75h-2.963c-1.0336,0-1.6928,1.1036-1.2027,2.0137l.2374.4409c.2597.4823.2062,1.0732-.1361,1.501h0c-.2736.342-.6962.553-1.1322.5115Z" /><circle cx="9" cy="5" r="1" fill="currentColor" strokeWidth="0" /><circle cx="6.1716" cy="6.1716" r="1" fill="currentColor" strokeWidth="0" /><circle cx="11.8284" cy="6.1716" r="1" fill="currentColor" strokeWidth="0" /><circle cx="5" cy="9" r="1" fill="currentColor" strokeWidth="0" /></g>
+  </svg>
+);
+
+/** vidomia/paperclip-2 */
+export const Paperclip2Icon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M10.985,5.422l-4.773,4.773c-.586,.586-.586,1.536,0,2.121h0c.586,.586,1.536,.586,2.121,0l4.95-4.95c1.172-1.172,1.172-3.071,0-4.243h0c-1.172-1.172-3.071-1.172-4.243,0l-4.95,4.95c-1.757,1.757-1.757,4.607,0,6.364h0c1.757,1.757,4.607,1.757,6.364,0l4.773-4.773" /></g>
+  </svg>
+);
+
+/** vidomia/pencil-2 */
+export const Pencil2Icon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M8.99998 1.75L11.1757 5.25H6.82428L8.99998 1.75Z" fill="currentColor" stroke="none" /> <path d="M6.82428 5.25H11.1757" /> <path d="M6.25 13.75V16.25" /> <path d="M11.75 13.75V16.25" /> <path d="M6.25 13.75C6.25 12.231 7.481 11 9 11C10.519 11 11.75 12.231 11.75 13.75" /> <path d="M3.25 11.011C3.332 11.004 3.416 11 3.5 11C5.019 11 6.25 12.231 6.25 13.75" /> <path d="M14.75 11.011C14.668 11.004 14.584 11 14.5 11C12.981 11 11.75 12.231 11.75 13.75" /> <path d="M3.25 16.25V11L9 1.75L14.75 11V16.25" /></g>
+  </svg>
+);
+
+/** vidomia/percentage */
+export const PercentageIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><circle cx="5" cy="5" r="2.25" /><circle cx="13" cy="13" r="2.25" /><line x1="4.75" y1="15.25" x2="13.25" y2="2.75" /></g>
+  </svg>
+);
+
+/** vidomia/phone-msg */
+export const PhoneMsgIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M5.83182 12.1683C7.98742 14.3238 10.8263 15.7957 14.0055 16.2408C14.4976 16.3097 14.9585 15.9785 15.0832 15.4975L15.7127 13.0707C15.8355 12.5972 15.5977 12.1043 15.1506 11.9057L12.2815 10.6314C11.8602 10.4443 11.3656 10.5694 11.084 10.9343L10.205 12.0731C9.32142 11.554 8.51162 10.9262 7.79282 10.2073C7.07382 9.4885 6.44602 8.6787 5.92702 7.7951L7.06581 6.9161C7.43071 6.6344 7.55581 6.1399 7.36871 5.7186L6.09442 2.84951C5.89582 2.40241 5.40291 2.1646 4.92941 2.2874L2.50261 2.9169C2.02171 3.0417 1.69041 3.5025 1.75931 3.9946C2.20441 7.1737 3.67622 10.0127 5.83182 12.1683Z" /> <path d="M12.0796 7.4961C12.2549 7.5824 12.4523 7.6498 12.6965 7.696C12.8758 7.7298 13.061 7.7478 13.25 7.7478C14.9067 7.7478 16.25 6.4046 16.25 4.7478C16.25 3.091 14.9067 1.7478 13.25 1.7478C11.5933 1.7478 10.25 3.091 10.25 4.7478C10.25 5.1573 10.3255 5.555 10.5012 5.9177C10.7562 6.3965 10.47 7.5273 9.9234 8.0739C10.6658 8.1137 11.6428 7.7791 12.0796 7.4961Z" /></g>
+  </svg>
+);
+
+/** vidomia/pickaxe */
+export const PickaxeIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M11.431 3.819C9.25 2.2656 7.3594 1.75 5.75 1.75L4.96201 2.366C6.58201 3.585 8.01499 4.80599 9.27399 5.97699" /> <path d="M12.023 8.72601C13.194 9.98501 14.415 11.418 15.634 13.038L16.25 12.25C16.25 10.6406 15.7344 8.75 14.181 6.569" /> <path d="M11.182 8.81799L4.414 15.586C3.862 16.138 2.966 16.138 2.414 15.586C1.862 15.034 1.862 14.138 2.414 13.586L9.18201 6.81799" /> <path d="M11.7047 3.54636L9.16193 6.0891C8.96667 6.28437 8.96667 6.60095 9.16193 6.79621L11.2048 8.83905C11.4 9.03431 11.7166 9.03431 11.9119 8.83905L14.4546 6.29631C14.6499 6.10105 14.6499 5.78446 14.4546 5.5892L12.4118 3.54636C12.2165 3.3511 11.8999 3.3511 11.7047 3.54636Z" /></g>
+  </svg>
+);
+
+/** vidomia/piggy-bank */
+export const PiggyBankIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M6.25 8C5.836 8 5.5 7.664 5.5 7.25C5.5 6.836 5.836 6.5 6.25 6.5C6.664 6.5 7 6.836 7 7.25C7 7.664 6.664 8 6.25 8Z" fill="currentColor" stroke="none" /> <path d="M12.75 7.25C14.407 7.25 15.75 5.907 15.75 4.25C15.75 2.593 14.407 1.25 12.75 1.25C11.093 1.25 9.75 2.593 9.75 4.25C9.75 5.907 11.093 7.25 12.75 7.25Z" /> <path d="M12.75 3.5V5" /> <path d="M7.00879 3.42279C6.75799 3.13359 6.4349 2.8517 6.0209 2.625C4.8839 2.002 3.78591 2.193 3.48691 2.255L4.8649 4.642C4.1679 5.229 3.6109 5.94601 3.2449 6.75101L1.24991 7.00101V11.001L3.2449 11.251C3.6669 12.177 4.33891 12.99 5.18991 13.618L5.49991 16.251H7.74991L7.8349 14.809C8.3689 14.93 8.92391 15.001 9.49991 15.001C10.0759 15.001 10.6319 14.93 11.1649 14.809L11.2499 16.251H13.4999L13.8099 13.618C15.2589 12.548 16.1969 10.949 16.2479 9.15399" /></g>
+  </svg>
+);
+
+/** vidomia/podcast */
+export const PodcastIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><circle cx="9" cy="8.5" r="1.75" /><path d="M12.789,11.365c.603-.796,.961-1.789,.961-2.865,0-2.623-2.127-4.75-4.75-4.75-2.623,0-4.75,2.127-4.75,4.75,0,1.076,.358,2.069,.961,2.865" /><path d="M4,14.421c-1.682-1.422-2.75-3.547-2.75-5.921C1.25,4.22,4.72,.75,9,.75s7.75,3.47,7.75,7.75c0,2.375-1.068,4.5-2.75,5.921" /><path d="M8.176,12.75h1.648c.894,0,1.59,.777,1.491,1.666l-.216,1.945c-.056,.506-.484,.89-.994,.89h-2.21c-.51,0-.938-.383-.994-.89l-.216-1.945c-.099-.889,.597-1.666,1.491-1.666Z" /></g>
+  </svg>
+);
+
+/** vidomia/print-2 */
+export const Print2Icon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M5.25,5.25V2.75c0-.552,.448-1,1-1h5.5c.552,0,1,.448,1,1v2.5" /><path d="M5.25,13.25h-1c-1.105,0-2-.895-2-2V7.25c0-1.105,.895-2,2-2H13.75c1.105,0,2,.895,2,2v4c0,1.105-.895,2-2,2h-1" /><path d="M12.75,8.75v6.5c0,.552-.448,1-1,1H6.25c-.552,0-1-.448-1-1v-6.5h7.5Z" /><line x1="7.75" y1="13.75" x2="10.25" y2="13.75" /><line x1="7.75" y1="11.25" x2="10.25" y2="11.25" /></g>
+  </svg>
+);
+
+/** vidomia/refresh */
+export const RefreshIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M5.25 9.5L3 7.25L0.75 9.5" /> <path d="M13.495 13.345C12.3587 14.5226 10.7641 15.25 9 15.25C5.548 15.25 2.75 12.45 2.75 9C2.75 8.4 2.834 7.83003 2.99 7.28003" /> <path d="M12.75 8.5L15 10.75L17.25 8.5" /> <path d="M4.50629 4.65564C5.64249 3.48544 7.23658 2.75 8.99998 2.75C12.452 2.75 15.25 5.55 15.25 9C15.25 9.58 15.171 10.14 15.024 10.67" /></g>
+  </svg>
+);
+
+/** vidomia/road */
+export const RoadIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><line x1="16.25" y1="15.25" x2="12.25" y2="2.75" /><line x1="5.75" y1="2.75" x2="1.75" y2="15.25" /><line x1="9" y1="4.75" x2="9" y2="5.75" /><line x1="9" y1="8.5" x2="9" y2="9.5" /><line x1="9" y1="12.25" x2="9" y2="13.25" /></g>
+  </svg>
+);
+
+/** vidomia/scroll-text */
+export const ScrollTextIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M14.75,15.75c.828,0,1.5-.672,1.5-1.5v-1c0-.276-.224-.5-.5-.5h-7.5c-.276,0-.5,.224-.5,.5v1c0,.828-.672,1.5-1.5,1.5h0c-.828,0-1.5-.672-1.5-1.5V3.75c0-.828-.672-1.5-1.5-1.5h0c-.828,0-1.5,.672-1.5,1.5v2c0,.552,.448,1,1,1h2" /><line x1="14.75" y1="15.75" x2="6.25" y2="15.75" /><path d="M3.25,2.25H12.75c.828,0,1.5,.672,1.5,1.5v6.5" /><line x1="7.5" y1="5.75" x2="11.5" y2="5.75" /><line x1="7.5" y1="8.75" x2="11.5" y2="8.75" /></g>
+  </svg>
+);
+
+/** vidomia/side-profile-heart */
+export const SideProfileHeartIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M11.25,16.25v-2.5h1.639c1.049,0,1.919-.81,1.995-1.856l.112-1.543,1.504-.601-1.5-2c0-3.736-3.415-6.675-7.293-5.865-2.266,.473-4.097,2.305-4.571,4.57-.595,2.846,.84,5.418,3.114,6.6v3.195" /><path d="M8.798,10.387c.127,.067,.276,.067,.403,0,.673-.354,2.798-1.636,2.798-3.721,.003-.916-.73-1.661-1.64-1.667-.547,.007-1.056,.285-1.36,.743-.304-.458-.813-.736-1.36-.743-.91,.006-1.643,.751-1.64,1.667,0,2.085,2.125,3.367,2.798,3.721Z" fill="currentColor" stroke="none" /></g>
+  </svg>
+);
+
+/** vidomia/signature */
+export const SignatureIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M2.75,5.25H7.75c.552,0,1,.448,1,1v3.75" /><path d="M7.995,16.25c1.914-3.398,2.933-4.274,3.491-4.099,.895,.279,.635,3.275,1.583,3.45,.699,.129,1.318-1.41,2.07-1.218,.607,.155,.57,1.249,1.258,1.461,.276,.085,.574,0,.853-.156" /><path d="M6.25,12.5c0,2-1.75,3.75-1.75,3.75,0,0-1.75-1.75-1.75-3.75V3.5c0-.966,.784-1.75,1.75-1.75h0c.966,0,1.75,.784,1.75,1.75V12.5Z" /></g>
+  </svg>
+);
+
+/** vidomia/sitemap-4 */
+export const Sitemap4Icon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M13.25,11.75v-1c0-1.105-.895-2-2-2h-2.25s-2.25,0-2.25,0c-1.105,0-2,.895-2,2v1" /><line x1="9" y1="6.25" x2="9" y2="8.75" /><rect x="6.75" y="1.75" width="4.5" height="4.5" rx="1" ry="1" /><rect x="2.5" y="11.75" width="4.5" height="4.5" rx="1" ry="1" /><rect x="11" y="11.75" width="4.5" height="4.5" rx="1" ry="1" /></g>
+  </svg>
+);
+
+/** vidomia/sliders-3-vertical */
+export const Sliders3VerticalIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><line x1="9" y1="14.75" x2="9" y2="15.75" /><line x1="9" y1="2.25" x2="9" y2="11.75" /><line x1="11" y1="11.75" x2="7" y2="11.75" /><line x1="13.75" y1="9.25" x2="13.75" y2="15.75" /><line x1="13.75" y1="2.25" x2="13.75" y2="6.25" /><line x1="15.75" y1="6.25" x2="11.75" y2="6.25" /><line x1="4.25" y1="9.25" x2="4.25" y2="15.75" /><line x1="4.25" y1="2.25" x2="4.25" y2="6.25" /><line x1="6.25" y1="6.25" x2="2.25" y2="6.25" /></g>
+  </svg>
+);
+
+/** vidomia/solar-panel */
+export const SolarPanelIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><line x1="12.25" y1="15.25" x2="5.75" y2="15.25" /><line x1="9" y1="15.25" x2="9" y2="11.25" /><path d="M4.978,2.75H13.022c.434,0,.818,.28,.951,.692l2.103,6.5c.209,.646-.273,1.308-.951,1.308H2.875c-.679,0-1.16-.662-.951-1.308L4.026,3.442c.133-.413,.518-.692,.951-.692Z" /><line x1="7.25" y1="2.75" x2="6.5" y2="11.25" /><line x1="10.75" y1="2.75" x2="11.5" y2="11.25" /><line x1="2.956" y1="6.75" x2="15" y2="6.75" /></g>
+  </svg>
+);
+
+/** vidomia/spaceship */
+export const SpaceshipIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M5.071,10.556l-1.233,.746c-.664,.401-1.036,1.149-.956,1.92l.368,3.528,3.151-2" /><path d="M12.929,10.556l1.233,.746c.664,.401,1.036,1.149,.956,1.92l-.368,3.528-3.151-2" /><path d="M9,14.75h2.599c.371-.672,2.328-4.368,.866-8.651-.892-2.612-2.625-4.183-3.465-4.849-.839,.666-2.573,2.237-3.465,4.849-1.462,4.283,.495,7.979,.866,8.651,0,0,2.599,0,2.599,0Z" /><line x1="9" y1="16.75" x2="9" y2="11.25" /><circle cx="9" cy="7.75" r="1.25" fill="currentColor" stroke="none" /></g>
+  </svg>
+);
+
+/** vidomia/stopwatch-bolt */
+export const StopwatchBoltIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><line x1="6.75" y1="1.25" x2="11.25" y2="1.25" /><line x1="9" y1="1.25" x2="9" y2="3.75" /><circle cx="9" cy="10" r="6.25" /><line x1="14.25" y1="2.75" x2="16.25" y2="4.75" /><polygon points="9.6667 10.25 7 10.25 9.25 6.75 8.3333 9.75 11 9.75 8.75 13.25 9.6667 10.25" fill="currentColor" /></g>
+  </svg>
+);
+
+/** vidomia/suitcase */
+export const SuitcaseIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M6.25,4.75V2.25c0-.552,.448-1,1-1h3.5c.552,0,1,.448,1,1v2.5" /><rect x="1.75" y="4.75" width="14.5" height="10.5" rx="2" ry="2" /></g>
+  </svg>
+);
+
+/** vidomia/tag */
+export const TagIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M3.25,2.25h4.922c.53,0,1.039,.211,1.414,.586l5.75,5.75c.781,.781,.781,2.047,0,2.828l-3.922,3.922c-.781,.781-2.047,.781-2.828,0L2.836,9.586c-.375-.375-.586-.884-.586-1.414V3.25c0-.552,.448-1,1-1Z" /><circle cx="6.25" cy="6.25" r="1.25" fill="currentColor" stroke="none" /></g>
+  </svg>
+);
+
+/** vidomia/telescope */
+export const TelescopeIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><line x1="3.3635" y1="12.7081" x2="1.4524" y2="8.2638" /><rect x="11.7563" y="1.8838" width="3.4262" height="7.662" rx="1" ry="1" transform="translate(-1.162 5.786) rotate(-23.2694)" /><line x1="6.7539" y1="10.6149" x2="3.0412" y2="11.9585" /><line x1="12.7748" y1="8.4359" x2="9.9147" y2="9.4709" /><line x1="1.769" y1="9" x2="11.0166" y2="4.3472" /><line x1="7.6392" y1="12.023" x2="5.25" y2="16.25" /><line x1="9.3608" y1="12.023" x2="11.75" y2="16.25" /><circle cx="8.5" cy="10.5" r="1.75" /></g>
+  </svg>
+);
+
+/** vidomia/text-highlight-3 */
+export const TextHighlight3Icon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="m5.3813,15.1196l-2-2c-.1953-.1953-.5117-.1953-.707,0l-1.5269,1.5269c-.123.123-.1733.3018-.1323.4712.041.1689.167.3052.333.3584l3.0269.9731c.0498.0161.1016.0239.1528.0239.1304,0,.2583-.0513.3535-.1465l.5-.5c.1953-.1953.1953-.5117,0-.707Z" fill="currentColor" strokeWidth="0" /><path d="m14.56,3.941l-4.118,4.118" /><path d="m11.1408,2.6519l-4.2955,4.2957c-.3075.3075-.5064.7069-.5665,1.1376l-.1508,1.0799-1.4708,1.4708c-.1952.1952-.1953.5118,0,.707l2.5012,2.5022c.1953.1953.5119.1954.7072,0l1.4648-1.4649,1.09-.1558c.4284-.0612.8254-.2597,1.1313-.5657l4.2975-4.2978c.5857-.5857.5857-1.5353.0001-2.1211l-2.5873-2.588c-.5857-.5859-1.5354-.5859-2.1212-.0001Z" /></g>
+  </svg>
+);
+
+/** vidomia/trash-2 */
+export const Trash2Icon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M2.75 4.75H15.25" /> <path d="M6.75 4.75V2.75C6.75 2.2 7.198 1.75 7.75 1.75H10.25C10.802 1.75 11.25 2.2 11.25 2.75V4.75" /> <path d="M7.375 8.75L7.59219 13.25" /> <path d="M10.625 8.75L10.4078 13.25" /> <path d="M13.6977 7.75L13.35 14.35C13.294 15.4201 12.416 16.25 11.353 16.25H6.64804C5.58404 16.25 4.70703 15.42 4.65103 14.35L4.30334 7.75" /></g>
+  </svg>
+);
+
+/** vidomia/treasure-chest */
+export const TreasureChestIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><line x1="16.25" y1="8.25" x2="1.75" y2="8.25" /><line x1="9" y1="8.25" x2="9" y2="10.25" /><path d="m12.25,3.25h-6.5c-2.2091,0-4,1.7909-4,4v5.5c0,1.1046.8954,2,2,2h10.5c1.1046,0,2-.8954,2-2v-5.5c0-2.2091-1.7909-4-4-4Z" /><path d="m12.75,14.75V6.25c0-1.6569-1.3431-3-3-3h-1.5c-1.6569,0-3,1.3431-3,3v8.5" /></g>
+  </svg>
+);
+
+/** vidomia/tree-3 */
+export const Tree3Icon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><line x1="9" y1="16.25" x2="9" y2="5.75" /><line x1="9" y1="9" x2="11.25" y2="6.75" /><line x1="9" y1="10.75" x2="6.75" y2="8.5" /><path d="M11.5,12.145c1.78-.911,3-2.759,3-4.895,0-3.038-2.462-5.5-5.5-5.5S3.5,4.212,3.5,7.25c0,2.136,1.22,3.984,3,4.895" /></g>
+  </svg>
+);
+
+/** vidomia/truck */
+export const TruckIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><line x1="10.519" y1="13.75" x2="6.25" y2="13.75" /><path d="M2.768,13.75h-.018c-1.105,0-2-.895-2-2V4.75c0-1.105,.895-2,2-2h7.5c1.105,0,2,.895,2,2v7.5" /><path d="M12.25,5.75h2.204c.34,0,.657,.173,.841,.459l1.796,2.794c.104,.161,.159,.349,.159,.541v2.206c0,1.105-.895,2-2,2h-1.25" /><line x1="12.25" y1="9.25" x2="17.153" y2="9.25" /><circle cx="4.5" cy="14" r="1.75" /><circle cx="12.25" cy="14" r="1.75" /></g>
+  </svg>
+);
+
+/** vidomia/unicorn-head */
+export const UnicornHeadIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><polygon points="6.1565 5.9218 2.75 1.7514 7.3726 4.8893 6.1565 5.9218" fill="currentColor" strokeWidth="0" /><polygon points="6.1565 5.9218 2.75 1.7514 7.3726 4.8893 6.1565 5.9218" /><circle cx="8.5" cy="7.5" r="1" fill="currentColor" strokeWidth="0" /><path d="m12.0394,10.2311s-.5866,1.7484-2.5082,1.9849c-2.0312.25-3.3194-.9744-4.6944-.5369l-1.1427.4073c-.6721.2182-1.397-.131-1.6452-.7927l-.2098-.5592c-.1954-.5209-.0436-1.1084.3797-1.4694l5.7812-4.9084-.4375-2.6052c2.6562.0923,5.9823,1.0079,7.7344,4.2486,2.0781,3.8438.1523,9-.2969,10.25" /><path d="m9.1639,12.2453c-.7264,2.0023-1.8305,2.0023-2.4139,4.0047" /></g>
+  </svg>
+);
+
+/** vidomia/user-crown */
+export const UserCrownIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M5.25,5.75v.75c0,2.071,1.679,3.75,3.75,3.75s3.75-1.679,3.75-3.75v-.75" /><path d="M2.953,16c1.298-1.958,3.522-3.25,6.047-3.25s4.749,1.291,6.047,3.25" /><path d="M13,1l-1.341,1.174c-.377,.33-.94,.33-1.317,0l-1.341-1.174-1.341,1.174c-.377,.33-.94,.33-1.317,0l-1.341-1.174,.25,4.75c.754-.314,2.067-.75,3.75-.75,.817,0,2.196,.103,3.75,.75l.25-4.75Z" /></g>
+  </svg>
+);
+
+/** vidomia/watch-3 */
+export const Watch3Icon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M5.775,4.858l.167-2.67c.033-.527,.47-.938,.998-.938h4.121c.528,0,.965,.411,.998,.938l.167,2.67" /><path d="M5.775,13.142l.167,2.67c.033,.527,.47,.938,.998,.938h4.121c.528,0,.965-.411,.998-.938l.167-2.67" /><polyline points="9 6.75 9 9 11.25 10.5" /><circle cx="9" cy="9" r="5.25" /></g>
+  </svg>
+);
+
+/** vidomia/watch */
+export const WatchIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g fill="currentColor"><path d="M6 4.75L6.36099 2.586C6.44099 2.104 6.859 1.75 7.347 1.75H10.653C11.142 1.75 11.559 2.103 11.639 2.586L12 4.75" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" fill="none" /> <path d="M6 13.25L6.36099 15.414C6.44099 15.896 6.859 16.25 7.347 16.25H10.653C11.142 16.25 11.559 15.897 11.639 15.414L12 13.25" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" fill="none" /> <path d="M9 7V9L11 10.25" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" fill="none" /> <path d="M11.75 4.75H6.25C5.145 4.75 4.25 5.645 4.25 6.75V11.25C4.25 12.355 5.145 13.25 6.25 13.25H11.75C12.855 13.25 13.75 12.355 13.75 11.25V6.75C13.75 5.645 12.855 4.75 11.75 4.75Z" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" fill="none" /></g>
+  </svg>
+);
+
+/** vidomia/yoga-mat */
+export const YogaMatIcon = (p: P) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
+    <g strokeLinecap="round" strokeWidth="1" fill="none" stroke="currentColor" strokeLinejoin="round"><path d="M2.25 12.25C2.25 13.631 3.369 14.75 4.75 14.75H14.75C15.302 14.75 15.75 14.302 15.75 13.75V5.25C15.75 4.698 15.302 4.25 14.75 4.25H10" /> <path d="M7.25 4.75V12.25C7.25 10.869 6.131 9.75 4.75 9.75C3.369 9.75 2.25 10.869 2.25 12.25V4.75C2.25 3.369 3.369 2.25 4.75 2.25C6.131 2.25 7.25 3.369 7.25 4.75Z" /></g>
+  </svg>
+);
+
 /** vidomia/bed-empty */
 export const BedEmptyIcon = (p: P) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" data-icon="nucleo" aria-hidden="true" {...p}>
@@ -1094,6 +1731,97 @@ export const NUCLEO_ICONS = {
   'wrench': WrenchIcon,
   'x-twitter': XTwitterIcon,
   'youtube': YoutubeIcon,
+  'arrow-rotate-anticlockwise-check': ArrowRotateAnticlockwiseCheckIcon,
+  'award-plaque': AwardPlaqueIcon,
+  'battery-charging': BatteryChargingIcon,
+  'bell-dot': BellDotIcon,
+  'bolt-lightning': BoltLightningIcon,
+  'book-settings': BookSettingsIcon,
+  'brackets-curly': BracketsCurlyIcon,
+  'bricks': BricksIcon,
+  'brightness-increase': BrightnessIncreaseIcon,
+  'bug': BugIcon,
+  'candle': CandleIcon,
+  'chart-bar-trend-up': ChartBarTrendUpIcon,
+  'chart-pyramid': ChartPyramidIcon,
+  'chess-queen': ChessQueenIcon,
+  'child': ChildIcon,
+  'cloud-download-2': CloudDownload2Icon,
+  'cloud-upload': CloudUploadIcon,
+  'clover': CloverIcon,
+  'code-compare': CodeCompareIcon,
+  'collision': CollisionIcon,
+  'compass-2': Compass2Icon,
+  'construction-crane': ConstructionCraneIcon,
+  'crown-2': Crown2Icon,
+  'cyborg': CyborgIcon,
+  'earth': EarthIcon,
+  'eraser': EraserIcon,
+  'face-nerd-smile': FaceNerdSmileIcon,
+  'flag-5': Flag5Icon,
+  'flame': FlameIcon,
+  'flashlight': FlashlightIcon,
+  'footsteps': FootstepsIcon,
+  'forklift': ForkliftIcon,
+  'gear-3': Gear3Icon,
+  'glasses-2': Glasses2Icon,
+  'grid-sparkle': GridSparkleIcon,
+  'hand-cube': HandCubeIcon,
+  'hand-holding-heart': HandHoldingHeartIcon,
+  'hand-holding-key': HandHoldingKeyIcon,
+  'handshake-2': Handshake2Icon,
+  'head-front-vr-headset': HeadFrontVrHeadsetIcon,
+  'headset': HeadsetIcon,
+  'hexagon-image': HexagonImageIcon,
+  'hot-drink': HotDrinkIcon,
+  'industry': IndustryIcon,
+  'itinerary': ItineraryIcon,
+  'key-4': Key4Icon,
+  'leaf': LeafIcon,
+  'light-spark-2': LightSpark2Icon,
+  'list-favs-2': ListFavs2Icon,
+  'location-2': Location2Icon,
+  'lock-open': LockOpenIcon,
+  'lock': LockIcon,
+  'map-pin': MapPinIcon,
+  'measure': MeasureIcon,
+  'megaphone': MegaphoneIcon,
+  'mobile-wave-2': MobileWave2Icon,
+  'msg-heart': MsgHeartIcon,
+  'msgs-2': Msgs2Icon,
+  'obj-size-increase': ObjSizeIncreaseIcon,
+  'palette-2': Palette2Icon,
+  'paperclip-2': Paperclip2Icon,
+  'pencil-2': Pencil2Icon,
+  'percentage': PercentageIcon,
+  'phone-msg': PhoneMsgIcon,
+  'pickaxe': PickaxeIcon,
+  'piggy-bank': PiggyBankIcon,
+  'podcast': PodcastIcon,
+  'print-2': Print2Icon,
+  'refresh': RefreshIcon,
+  'road': RoadIcon,
+  'scroll-text': ScrollTextIcon,
+  'side-profile-heart': SideProfileHeartIcon,
+  'signature': SignatureIcon,
+  'sitemap-4': Sitemap4Icon,
+  'sliders-3-vertical': Sliders3VerticalIcon,
+  'solar-panel': SolarPanelIcon,
+  'spaceship': SpaceshipIcon,
+  'stopwatch-bolt': StopwatchBoltIcon,
+  'suitcase': SuitcaseIcon,
+  'tag': TagIcon,
+  'telescope': TelescopeIcon,
+  'text-highlight-3': TextHighlight3Icon,
+  'trash-2': Trash2Icon,
+  'treasure-chest': TreasureChestIcon,
+  'tree-3': Tree3Icon,
+  'truck': TruckIcon,
+  'unicorn-head': UnicornHeadIcon,
+  'user-crown': UserCrownIcon,
+  'watch-3': Watch3Icon,
+  'watch': WatchIcon,
+  'yoga-mat': YogaMatIcon,
   'bed-empty': BedEmptyIcon,
   'birdhouse': BirdhouseIcon,
   'box-2': Box2Icon,
