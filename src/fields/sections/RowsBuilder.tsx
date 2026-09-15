@@ -402,17 +402,11 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
   const cellPerms = (columnsPerm === true ? true : columnsPerm?.fields) as SanitizedFieldsPermissions;
 
   const openCellSnapshot = open ? snapshot[open.row]?.columns[open.col] : undefined;
-  const label = typeof field.label === 'string' ? field.label : 'Rangées';
   const description = typeof field.admin?.description === 'string' ? field.admin.description : undefined;
   const selectedSpans = selected !== null ? spansKey((snapshot[selected]?.columns ?? []).map((c) => c.span)) : '';
 
   return (
     <div className="field-type rows-builder" style={{marginBottom: 'var(--base)'}}>
-      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12, marginBottom: 8}}>
-        <span style={{...text14, fontWeight: 600}}>
-          {label} <span style={dim}>({rows.length})</span>
-        </span>
-      </div>
       {description ? <p style={{...text14, ...dim, margin: '0 0 12px'}}>{description}</p> : null}
       {!readOnly ? (
         <div style={{marginBottom: 12}}>

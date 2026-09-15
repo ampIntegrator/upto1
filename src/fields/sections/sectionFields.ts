@@ -249,8 +249,8 @@ export function sectionFields({shareable}: {shareable: boolean}): Field[] {
   return [
     // réglages de la section, encadrés et repliables (présentation seulement : aucune donnée en plus)
     {type: 'collapsible', label: 'Réglages de la section', admin: {initCollapsed: false}, fields: settings},
-    // 4. les rangées, dans leur propre encadré (RowsBuilder)
-    rowsField,
+    // 4. les rangées, dans leur propre bloc repliable (constructeur RowsBuilder)
+    {type: 'collapsible', label: 'Rangées', admin: {initCollapsed: false, condition: modeChosen}, fields: [rowsField]},
   ];
 }
 
