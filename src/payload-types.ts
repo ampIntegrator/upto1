@@ -188,7 +188,7 @@ export interface Page {
     | (
         | {
             mode: 'light' | 'dark' | 'media';
-            tint?: ('body' | 'highlight') | null;
+            tint: 'body' | 'highlight';
             texture?: ('none' | 'grid' | 'dots' | 'losange') | null;
             darkStyle?: ('night' | 'night-halo') | null;
             mediaType?: ('image' | 'video') | null;
@@ -212,7 +212,7 @@ export interface Page {
                         span: '2' | '3' | '4' | '6' | '8' | '9' | '12';
                         mobileOrder?: number | null;
                         /**
-                         * Empilés de haut en bas. Laissez vide pour une case vide.
+                         * Un seul composant par colonne. Pour en changer, supprimez-le puis choisissez-en un autre. Laissez vide pour une case vide.
                          */
                         contents?:
                           | (
@@ -378,7 +378,7 @@ export interface Section {
   id: number;
   title: string;
   mode: 'light' | 'dark' | 'media';
-  tint?: ('body' | 'highlight') | null;
+  tint: 'body' | 'highlight';
   texture?: ('none' | 'grid' | 'dots' | 'losange') | null;
   darkStyle?: ('night' | 'night-halo') | null;
   mediaType?: ('image' | 'video') | null;
@@ -402,7 +402,7 @@ export interface Section {
               span: '2' | '3' | '4' | '6' | '8' | '9' | '12';
               mobileOrder?: number | null;
               /**
-               * Empilés de haut en bas. Laissez vide pour une case vide.
+               * Un seul composant par colonne. Pour en changer, supprimez-le puis choisissez-en un autre. Laissez vide pour une case vide.
                */
               contents?:
                 | (

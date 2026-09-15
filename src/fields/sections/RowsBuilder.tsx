@@ -7,12 +7,13 @@
  *   - un seul bandeau de dispositions en vignettes (un rectangle découpé aux proportions des
  *     colonnes) : un clic remplace la disposition de la rangée sélectionnée, un double clic ajoute
  *     une rangée sous la sélection ;
- *   - les rangées empilées dessous, réordonnées par glisser-déposer (poignée) ; sur le côté,
- *     dupliquer, ordre mobile et supprimer ; dans chaque case, deux flèches décalent la colonne ;
+ *   - les rangées empilées dessous, réordonnées par glisser-déposer (poignée) ; sur le côté, en
+ *     deux lignes de deux : déplacer et dupliquer, ordre mobile et supprimer ; dans chaque case,
+ *     deux flèches décalent la colonne ;
  *   - le bouton téléphone ouvre une fenêtre : la rangée en colonne, dans son ordre mobile, avec
  *     des flèches haut et bas (champ caché mobileOrder de chaque colonne, voir mobileOrder.ts) ;
- *   - une case résume ses contenus, ou « Vide » ; un clic ouvre un tiroir Payload avec les
- *     champs de cette colonne (largeur, contenus). Le formulaire est partagé : ce qui est
+ *   - une case résume son composant (un seul par colonne), ou « Vide » ; un clic ouvre un tiroir
+ *     Payload avec les champs de cette colonne (largeur, composant). Le formulaire est partagé : ce qui est
  *     saisi dans le tiroir est déjà dans la page, on enregistre la page comme d'habitude.
  *
  * Toute la manipulation passe par l'état de formulaire de Payload (useForm, useFormFields),
@@ -392,14 +393,8 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
                     )}
                   </div>
                   {!readOnly ? (
-                    <div className="rows-builder__actions" style={{display: 'flex', flexDirection: 'column', gap: 4}}>
-                      <button
-                        type="button"
-                        {...attributes}
-                        {...listeners}
-                        aria-label={`Déplacer la rangée ${i + 1}`}
-                        title="Glisser pour déplacer"
-                        style={{...text14, width: 28, height: 26, border: '1px solid var(--theme-elevation-200)', borderRadius: 4, background: 'var(--theme-elevation-100)', color: 'var(--theme-elevation-800)', cursor: 'grab', padding: 0}}>
+                    <div className="rows-builder__actions">
+                      <button type="button" {...attributes} {...listeners} className="rows-builder__handle" aria-label={`Déplacer la rangée ${i + 1}`} title="Glisser pour déplacer">
                         ⋮⋮
                       </button>
                       <Button size="small" buttonStyle="pill" onClick={() => duplicate(i)} aria-label={`Dupliquer la rangée ${i + 1}`} tooltip="Dupliquer">

@@ -73,13 +73,17 @@ const rowsField: Field = {
         spanField,
         // position de la colonne sur mobile, réglée par la fenêtre « ordre mobile » du constructeur
         {name: 'mobileOrder', type: 'number', admin: {hidden: true}},
+        // un seul composant par colonne : un composant qui empile titre, texte et boutons reste un composant
         {
           name: 'contents',
           type: 'blocks',
-          label: 'Contenus',
-          labels: {singular: 'Contenu', plural: 'Contenus'},
+          label: 'Contenu',
+          labels: {singular: 'Composant', plural: 'Composants'},
+          maxRows: 1,
+          // message explicite plutôt que celui, générique, de maxRows
+          validate: (value: unknown) => (Array.isArray(value) && value.length > 1 ? 'Un seul composant par colonne.' : true),
           blocks: CONTENT_BLOCKS,
-          admin: {description: 'Empilés de haut en bas. Laissez vide pour une case vide.'},
+          admin: {description: 'Un seul composant par colonne. Pour en changer, supprimez-le puis choisissez-en un autre. Laissez vide pour une case vide.'},
         },
       ],
     },
@@ -110,36 +114,42 @@ export function sectionFields({shareable}: {shareable: boolean}): Field[] {
         {label: 'Média (image ou vidéo)', value: 'media'},
       ],
     },
-    // 2a. clair : couleur, puis texture
+    // 2a. clair : nuance et texture, côte à côte
     {
-      name: 'tint',
-      type: 'radio',
-      label: 'Couleur',
-      required: true,
-      options: [
-        {label: 'Fond de page', value: 'body'},
-        {label: 'Highlight clair du silo', value: 'highlight'},
-      ],
+      type: 'row',
       admin: {condition: when('mode', 'light')},
-    },
-    {
-      name: 'texture',
-      type: 'radio',
-      label: 'Texture',
-      defaultValue: 'none',
-      options: [
-        {label: 'Aucune', value: 'none'},
-        {label: 'Trame', value: 'grid'},
-        {label: 'Points', value: 'dots'},
-        {label: 'Losanges', value: 'losange'},
+      fields: [
+        {
+          name: 'tint',
+          type: 'radio',
+          label: 'Nuance',
+          required: true,
+          options: [
+            {label: 'Fond de page', value: 'body'},
+            {label: 'Highlight clair du silo', value: 'highlight'},
+          ],
+          admin: {width: '50%'},
+        },
+        {
+          name: 'texture',
+          type: 'radio',
+          label: 'Texture',
+          defaultValue: 'none',
+          options: [
+            {label: 'Aucune', value: 'none'},
+            {label: 'Trame', value: 'grid'},
+            {label: 'Points', value: 'dots'},
+            {label: 'Losanges', value: 'losange'},
+          ],
+          admin: {width: '50%'},
+        },
       ],
-      admin: {condition: (_d, s: Sibling) => s?.mode === 'light' && ['body', 'highlight'].includes(String(s?.tint ?? ''))},
     },
     // 2b. nuit : la couleur, sans texture
     {
       name: 'darkStyle',
       type: 'radio',
-      label: 'Couleur',
+      label: 'Nuance',
       required: true,
       options: [
         {label: 'Nuit', value: 'night'},
