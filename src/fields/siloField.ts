@@ -1,6 +1,6 @@
 import type {SelectField} from 'payload';
 
-import {SILO_LABELS, SILO_NAMES} from '@/theme/index';
+import {SILO_LABELS, SILO_NAMES} from '@/theme/silos/palettes';
 
 /**
  * Champ « silo d'accent » : l'un des six silos, présenté en pastilles colorées (SiloPicker).

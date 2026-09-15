@@ -9,7 +9,7 @@ import {FieldLabel, useField} from '@payloadcms/ui';
 import type {SelectFieldClientProps} from 'payload';
 import React, {useEffect, useState} from 'react';
 
-import {SILOS, type SiloName} from '@/theme/index';
+import {SILOS, type SiloName} from '@/theme/silos/palettes';
 
 export function SiloPicker(props: SelectFieldClientProps) {
   const {path, field} = props;

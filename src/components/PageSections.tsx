@@ -1,8 +1,12 @@
 /**
  * PageSections — les sections d'une page, empilées sous le haut de page.
- * Chaque section : Section (fond, paddings) > Container > une Grid de 12 colonnes par
- * rangée (classe page-grid : pleine largeur sous 768 px) > GridSpan par colonne, à sa
- * largeur > contenus empilés. Une colonne vide garde sa place dans la grille.
+ * Chaque section : Section (fond, paddings) > Container > une seule Grid de 12 colonnes pour
+ * toutes ses rangées (classe page-grid) > GridSpan par colonne, à sa largeur et sur la ligne
+ * de sa rangée > contenus empilés. Une seule grille, pour que l'ordre mobile puisse mêler les
+ * colonnes de plusieurs rangées : sous 768 px, toutes les colonnes de la section s'empilent
+ * dans l'ordre --mobile-order et les colonnes vides disparaissent (styles.css). Écarts :
+ * variables --section-gap-x, --section-gap-y et --section-gap-y-mobile, en pixels (réglage de
+ * la section, sinon Réglages du site › Mise en page), lues par .section-grid (styles.css).
  */
 import {Grid, GridSpan} from '@astryxdesign/core/Grid';
 import {VStack} from '@astryxdesign/core/Stack';
@@ -42,11 +46,19 @@ export function PageSections({sections}: {sections: SectionData[]}) {
     <>
       {sections.map((s) => (
         <Section key={s.key} id={s.id} background={s.background} tint={s.tint} image={s.image} video={s.video} overlay={s.overlay} spacingTop={s.spacingTop} spacingBottom={s.spacingBottom}>
-          <Container gap={10}>
-            {s.rows.map((columns, r) => (
-              <Grid key={r} columns={12} gap={8} className="page-grid" align="start">
-                {columns.map((c, i) => (
-                  <GridSpan key={i} columns={c.span}>
+          <Container>
+            <Grid
+              columns={12}
+              className="page-grid section-grid"
+              align="start"
+              style={{'--section-gap-x': `${s.gaps.gapX}px`, '--section-gap-y': `${s.gaps.gapY}px`, '--section-gap-y-mobile': `${s.gaps.gapYMobile}px`} as React.CSSProperties}>
+              {s.rows.flatMap((columns, r) =>
+                columns.map((c, i) => (
+                  <GridSpan
+                    key={`${r}-${i}`}
+                    columns={c.span}
+                    data-empty={c.empty ? 'true' : undefined}
+                    style={{gridRow: r + 1, ...(c.mobileRank !== undefined ? {'--mobile-order': c.mobileRank} : null)} as React.CSSProperties}>
                     {c.contents.length ? (
                       <VStack gap={6}>
                         {c.contents.map((content, j) => (
@@ -55,9 +67,9 @@ export function PageSections({sections}: {sections: SectionData[]}) {
                       </VStack>
                     ) : null}
                   </GridSpan>
-                ))}
-              </Grid>
-            ))}
+                )),
+              )}
+            </Grid>
           </Container>
         </Section>
       ))}

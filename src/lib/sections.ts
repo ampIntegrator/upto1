@@ -8,9 +8,11 @@ import type {CardProps} from '@/components/Card';
 import type {SectionBackground, SectionTint} from '@/components/Section';
 import type {ColumnSpan} from '@/components/content-specs';
 import {CARD_VARIANTS} from '@/fields/sections/cardBlocks';
+import {type Gaps, sectionGaps, siteGaps} from '@/fields/sections/gaps';
+import {hasMobileOrder, mobileRanks} from '@/fields/sections/mobileOrder';
 import {toSpan} from '@/fields/sections/presets';
 import type {NucleoIconKey} from '@/theme/icons/nucleo';
-import type {Media, Page, Section as SharedSection} from '@/payload-types';
+import type {Media, Page, Section as SharedSection, Setting} from '@/payload-types';
 
 type PageSection = NonNullable<Page['sections']>[number];
 type SectionBlock = Extract<PageSection, {blockType: 'section'}>;
@@ -19,7 +21,8 @@ type ContentBlock = NonNullable<NonNullable<NonNullable<SectionBlock['rows']>[nu
 
 export type ContentData = {type: 'text'; text: string} | {type: 'card'; card: CardProps};
 
-export type ColumnData = {span: ColumnSpan; contents: ContentData[]};
+/** mobileRank : rang sous 768 px quand la section a un ordre mobile ; empty : masquée sur mobile */
+export type ColumnData = {span: ColumnSpan; contents: ContentData[]; empty: boolean; mobileRank?: number};
 
 export type SectionData = {
   key: string;
@@ -31,6 +34,8 @@ export type SectionData = {
   overlay: number;
   spacingTop: number;
   spacingBottom: number;
+  /** écarts de la grille, en pixels (section, sinon réglage du site) */
+  gaps: Gaps;
   rows: ColumnData[][];
 };
 
@@ -83,7 +88,7 @@ function toContent(block: ContentBlock): ContentData | null {
   }
 }
 
-function toSection(s: SectionSource, key: string): SectionData {
+function toSection(s: SectionSource, key: string, site: Gaps): SectionData {
   const isMedia = s.mode === 'media';
   return {
     key,
@@ -95,22 +100,36 @@ function toSection(s: SectionSource, key: string): SectionData {
     overlay: isMedia ? (s.overlay ?? 0.3) : 0,
     spacingTop: Number(s.spacingTop ?? 80),
     spacingBottom: Number(s.spacingBottom ?? 80),
-    rows: (s.rows ?? []).map((r) =>
-      (r.columns ?? []).map((c) => ({
-        span: toSpan(c.span),
-        contents: (c.contents ?? []).map(toContent).filter((x): x is ContentData => x !== null),
-      })),
-    ),
+    gaps: sectionGaps(s, site),
+    rows: sectionRows(s.rows),
   };
 }
 
-/** Les blocs « sections » d'une page (chargée avec depth ≥ 2 pour les médias des sections partagées). */
-export function toSections(blocks: Page['sections']): SectionData[] {
+/** Rangées d'une section, avec le rang mobile de chaque colonne calculé sur toute la section. */
+function sectionRows(rows: SectionSource['rows']): ColumnData[][] {
+  const built = (rows ?? []).map((r) =>
+    (r.columns ?? []).map((c) => {
+      const contents = (c.contents ?? []).map(toContent).filter((x): x is ContentData => x !== null);
+      return {span: toSpan(c.span), contents, empty: contents.length === 0, mobileOrder: c.mobileOrder};
+    }),
+  );
+  const flat = built.flat();
+  const ranks = hasMobileOrder(flat) ? mobileRanks(flat) : null;
+  let k = 0;
+  return built.map((columns) => columns.map(({mobileOrder: _m, ...c}) => ({...c, mobileRank: ranks?.[k++] ?? undefined})));
+}
+
+/**
+ * Les blocs « sections » d'une page (chargée avec depth ≥ 2 pour les médias des sections partagées).
+ * `settings` : Réglages du site, pour les écarts par défaut de la grille (Mise en page).
+ */
+export function toSections(blocks: Page['sections'], settings?: Pick<Setting, 'sectionGrid'> | null): SectionData[] {
+  const site = siteGaps(settings?.sectionGrid);
   const out: SectionData[] = [];
   (blocks ?? []).forEach((b, i) => {
     const key = b.id ?? String(i);
-    if (b.blockType === 'section') out.push(toSection(b, key));
-    else if (b.blockType === 'sharedSection' && b.section && typeof b.section === 'object') out.push(toSection(b.section, key));
+    if (b.blockType === 'section') out.push(toSection(b, key, site));
+    else if (b.blockType === 'sharedSection' && b.section && typeof b.section === 'object') out.push(toSection(b.section, key, site));
   });
   return out;
 }

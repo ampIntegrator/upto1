@@ -360,13 +360,34 @@ body {
 
 /* Grille de page : 12 colonnes dans le Container
    (<Grid columns={12} className="page-grid"> + GridSpan). Sous 768 px, toutes
-   les colonnes passent en pleine largeur, dans l'ordre. */
+   les colonnes passent en pleine largeur, dans l'ordre mobile de la section
+   (--mobile-order, posé par PageSections ; sinon l'ordre desktop ; la ligne de
+   rangée fixée sur desktop est levée), et les colonnes vides disparaissent pour
+   ne pas doubler l'écart entre leurs voisines. */
 @media (max-width: 767px) {
   [data-astryx-theme^='orbita'] .astryx-grid.page-grid {
     grid-template-columns: minmax(0, 1fr) !important;
   }
   [data-astryx-theme^='orbita'] .astryx-grid.page-grid > * {
     grid-column: 1 / -1 !important;
+    grid-row: auto !important;
+    order: var(--mobile-order, 0);
+  }
+  [data-astryx-theme^='orbita'] .astryx-grid.page-grid > [data-empty] {
+    display: none;
+  }
+}
+
+/* Grille des sections construites dans l'admin (PageSections) : écarts réglés dans
+   Réglages du site › Mise en page ou par section, posés en variables sur la grille.
+   Sous 768 px, l'écart vertical mobile sépare tous les blocs empilés. */
+[data-astryx-theme^='orbita'] .astryx-grid.section-grid {
+  column-gap: var(--section-gap-x);
+  row-gap: var(--section-gap-y);
+}
+@media (max-width: 767px) {
+  [data-astryx-theme^='orbita'] .astryx-grid.section-grid {
+    row-gap: var(--section-gap-y-mobile);
   }
 }
 

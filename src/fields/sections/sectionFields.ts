@@ -3,6 +3,7 @@ import type {Block, Field} from 'payload';
 import {type ColumnSpan, validateColumn, validateRow} from '@/components/content-specs';
 import {CARD_BLOCKS} from './cardBlocks';
 import {toContentRefs} from './contentRef';
+import {SECTION_GAP_OPTIONS, SITE_GAP} from './gaps';
 import {SPAN_OPTIONS, toSpan} from './presets';
 
 /**
@@ -57,7 +58,7 @@ const rowsField: Field = {
   labels: {singular: 'Rangée', plural: 'Rangées'},
   admin: {
     condition: (_d, s: Record<string, unknown>) => ['light', 'dark', 'media'].includes(String(s?.mode ?? '')),
-    description: 'Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre.',
+    description: 'Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre mobile de la section (bouton téléphone) ; les colonnes vides y sont masquées.',
     // vue constructeur : bandes, cases proportionnelles, tiroir par colonne
     components: {Field: '@/fields/sections/RowsBuilder#RowsBuilder'},
   },
@@ -71,13 +72,19 @@ const rowsField: Field = {
       maxRows: 6,
       fields: [
         spanField,
+        // position de la colonne sur mobile, réglée par la fenêtre « ordre mobile » du constructeur
+        {name: 'mobileOrder', type: 'number', admin: {hidden: true}},
+        // un seul composant par colonne : un composant qui empile titre, texte et boutons reste un composant
         {
           name: 'contents',
           type: 'blocks',
-          label: 'Contenus',
-          labels: {singular: 'Contenu', plural: 'Contenus'},
+          label: 'Contenu',
+          labels: {singular: 'Composant', plural: 'Composants'},
+          maxRows: 1,
+          // message explicite plutôt que celui, générique, de maxRows
+          validate: (value: unknown) => (Array.isArray(value) && value.length > 1 ? 'Un seul composant par colonne.' : true),
           blocks: CONTENT_BLOCKS,
-          admin: {description: 'Empilés de haut en bas. Laissez vide pour une case vide.'},
+          admin: {description: 'Un seul composant par colonne. Pour en changer, supprimez-le puis choisissez-en un autre. Laissez vide pour une case vide.'},
         },
       ],
     },
@@ -108,36 +115,44 @@ export function sectionFields({shareable}: {shareable: boolean}): Field[] {
         {label: 'Média (image ou vidéo)', value: 'media'},
       ],
     },
-    // 2a. clair : couleur, puis texture
+    // 2a. clair : nuance et texture, côte à côte
     {
-      name: 'tint',
-      type: 'radio',
-      label: 'Couleur',
-      required: true,
-      options: [
-        {label: 'Fond de page', value: 'body'},
-        {label: 'Highlight clair du silo', value: 'highlight'},
-      ],
+      type: 'row',
       admin: {condition: when('mode', 'light')},
-    },
-    {
-      name: 'texture',
-      type: 'radio',
-      label: 'Texture',
-      defaultValue: 'none',
-      options: [
-        {label: 'Aucune', value: 'none'},
-        {label: 'Trame', value: 'grid'},
-        {label: 'Points', value: 'dots'},
-        {label: 'Losanges', value: 'losange'},
+      fields: [
+        {
+          name: 'tint',
+          type: 'radio',
+          label: 'Nuance',
+          required: true,
+          options: [
+            {label: 'Fond de page', value: 'body'},
+            {label: 'Highlight clair du silo', value: 'highlight'},
+          ],
+          // condition répétée sur le champ (et pas seulement sur la ligne) : sans elle, Payload rend
+          // la colonne obligatoire en base, et une section en nuit ou en média ne s'enregistrerait plus
+          admin: {width: '50%', condition: when('mode', 'light')},
+        },
+        {
+          name: 'texture',
+          type: 'radio',
+          label: 'Texture',
+          defaultValue: 'none',
+          options: [
+            {label: 'Aucune', value: 'none'},
+            {label: 'Trame', value: 'grid'},
+            {label: 'Points', value: 'dots'},
+            {label: 'Losanges', value: 'losange'},
+          ],
+          admin: {width: '50%'},
+        },
       ],
-      admin: {condition: (_d, s: Sibling) => s?.mode === 'light' && ['body', 'highlight'].includes(String(s?.tint ?? ''))},
     },
     // 2b. nuit : la couleur, sans texture
     {
       name: 'darkStyle',
       type: 'radio',
-      label: 'Couleur',
+      label: 'Nuance',
       required: true,
       options: [
         {label: 'Nuit', value: 'night'},
@@ -181,6 +196,16 @@ export function sectionFields({shareable}: {shareable: boolean}): Field[] {
           admin: {width: '33%', description: 'Identifiant pour un lien #ancre : minuscules, chiffres, tirets.'},
           validate: (value: unknown) => !value || (typeof value === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)) || 'Minuscules, chiffres et tirets uniquement.',
         },
+      ],
+    },
+    // 3b. écarts de la grille : hérités des Réglages du site › Mise en page, sauf surcharge
+    {
+      type: 'row',
+      admin: {condition: modeChosen},
+      fields: [
+        {name: 'gapX', type: 'select', label: 'Écart entre colonnes', defaultValue: SITE_GAP, options: SECTION_GAP_OPTIONS, admin: {width: '33%'}},
+        {name: 'gapY', type: 'select', label: 'Écart entre rangées', defaultValue: SITE_GAP, options: SECTION_GAP_OPTIONS, admin: {width: '33%'}},
+        {name: 'gapYMobile', type: 'select', label: 'Écart vertical mobile', defaultValue: SITE_GAP, options: SECTION_GAP_OPTIONS, admin: {width: '33%', description: 'Sous 768 px, entre tous les blocs empilés.'}},
       ],
     },
     // 4. les rangées

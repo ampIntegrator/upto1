@@ -1,5 +1,10 @@
 /* Ajustements de l'admin Payload (chargé après le CSS de Payload, hors de ses @layer). */
 
+/* Menu de gauche : 220 px au lieu des 275 px de Payload. */
+:root {
+  --nav-width: 220px;
+}
+
 /* Barre latérale d'un document : un tiers de la largeur, mais 400 px au plus.
    (Payload la met à 33,33 % sans plafond ; on garde son cas « barre vide » à 0.) */
 .document-fields__sidebar-wrap:not(:has(.document-fields__sidebar-fields > .render-fields:empty)) {
@@ -16,4 +21,77 @@
   .silo-picker {
     grid-template-columns: repeat(6, 48px);
   }
+}
+
+/* Constructeur de rangées : boutons latéraux en deux lignes de deux, carrés de 32 px, centrés
+   verticalement sur la rangée ; leur hauteur (2 × 32 + 4) reste sous celle d'une rangée. */
+.rows-builder__actions {
+  display: grid;
+  grid-template-columns: repeat(2, 32px);
+  grid-auto-rows: 32px;
+  gap: 4px;
+  flex-shrink: 0;
+
+  > *,
+  .btn {
+    width: 32px;
+    height: 32px;
+    margin: 0;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+}
+.rows-builder__handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 14px;
+  border: 1px solid var(--theme-elevation-200);
+  border-radius: 4px;
+  background: var(--theme-elevation-100);
+  color: var(--theme-elevation-800);
+  cursor: grab;
+}
+
+.rows-builder__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Fenêtre « ordre mobile » d'une section (sur la base de la fenêtre de confirmation Payload). */
+.rows-mobile__wrapper {
+  width: min(520px, calc(100vw - 32px));
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: 4px;
+  background: var(--theme-bg);
+}
+.rows-mobile__list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rows-mobile__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: 4px;
+
+  .btn {
+    margin: 0;
+  }
+}
+.rows-mobile__item[data-current] {
+  border-color: var(--theme-elevation-600);
+  background: var(--theme-elevation-100);
 }

@@ -202,16 +202,23 @@ export interface Page {
              * Identifiant pour un lien #ancre : minuscules, chiffres, tirets.
              */
             anchor?: string | null;
+            gapX?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
+            gapY?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
             /**
-             * Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre.
+             * Sous 768 px, entre tous les blocs empilés.
+             */
+            gapYMobile?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
+            /**
+             * Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre mobile de la section (bouton téléphone) ; les colonnes vides y sont masquées.
              */
             rows?:
               | {
                   columns?:
                     | {
                         span: '2' | '3' | '4' | '6' | '8' | '9' | '12';
+                        mobileOrder?: number | null;
                         /**
-                         * Empilés de haut en bas. Laissez vide pour une case vide.
+                         * Un seul composant par colonne. Pour en changer, supprimez-le puis choisissez-en un autre. Laissez vide pour une case vide.
                          */
                         contents?:
                           | (
@@ -391,16 +398,23 @@ export interface Section {
    * Identifiant pour un lien #ancre : minuscules, chiffres, tirets.
    */
   anchor?: string | null;
+  gapX?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
+  gapY?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
   /**
-   * Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre.
+   * Sous 768 px, entre tous les blocs empilés.
+   */
+  gapYMobile?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
+  /**
+   * Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre mobile de la section (bouton téléphone) ; les colonnes vides y sont masquées.
    */
   rows?:
     | {
         columns?:
           | {
               span: '2' | '3' | '4' | '6' | '8' | '9' | '12';
+              mobileOrder?: number | null;
               /**
-               * Empilés de haut en bas. Laissez vide pour une case vide.
+               * Un seul composant par colonne. Pour en changer, supprimez-le puis choisissez-en un autre. Laissez vide pour une case vide.
                */
               contents?:
                 | (
@@ -744,6 +758,9 @@ export interface PagesSelect<T extends boolean = true> {
               spacingTop?: T;
               spacingBottom?: T;
               anchor?: T;
+              gapX?: T;
+              gapY?: T;
+              gapYMobile?: T;
               rows?:
                 | T
                 | {
@@ -751,6 +768,7 @@ export interface PagesSelect<T extends boolean = true> {
                       | T
                       | {
                           span?: T;
+                          mobileOrder?: T;
                           contents?:
                             | T
                             | {
@@ -907,6 +925,9 @@ export interface SectionsSelect<T extends boolean = true> {
   spacingTop?: T;
   spacingBottom?: T;
   anchor?: T;
+  gapX?: T;
+  gapY?: T;
+  gapYMobile?: T;
   rows?:
     | T
     | {
@@ -914,6 +935,7 @@ export interface SectionsSelect<T extends boolean = true> {
           | T
           | {
               span?: T;
+              mobileOrder?: T;
               contents?:
                 | T
                 | {
@@ -1175,6 +1197,17 @@ export interface Setting {
     homeLabel?: string | null;
   };
   /**
+   * Écarts par défaut des sections construites dans l'onglet Contenu des pages. Chaque section peut les surcharger.
+   */
+  sectionGrid: {
+    gapX: '0' | '10' | '20' | '30' | '40' | '50' | '60';
+    gapY: '0' | '10' | '20' | '30' | '40' | '50' | '60';
+    /**
+     * Sous 768 px, entre tous les blocs empilés.
+     */
+    gapYMobile: '0' | '10' | '20' | '30' | '40' | '50' | '60';
+  };
+  /**
    * Les contenus sont traduisibles champ par champ (onglet de langue en haut de chaque page d'admin). Une langue non traduite affiche le français.
    */
   languages?: ('fr' | 'en' | 'de' | 'es')[] | null;
@@ -1325,6 +1358,13 @@ export interface SettingsSelect<T extends boolean = true> {
         enabled?: T;
         homeStyle?: T;
         homeLabel?: T;
+      };
+  sectionGrid?:
+    | T
+    | {
+        gapX?: T;
+        gapY?: T;
+        gapYMobile?: T;
       };
   languages?: T;
   updatedAt?: T;
