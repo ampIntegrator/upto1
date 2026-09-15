@@ -25,14 +25,15 @@ import {Button, DraggableSortable, DraggableSortableItem, Drawer, Modal, RenderF
 import type {ArrayFieldClient, ArrayFieldClientProps, ClientField, SanitizedFieldPermissions, SanitizedFieldsPermissions} from 'payload';
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 
-import {validateRow, type ColumnSpan} from '@/components/content-specs';
-import {contentLabel} from './contentRef';
+import {minSpan, validateRow, type ColumnSpan} from '@/components/content-specs';
+import {contentLabel, toContentRef} from './contentRef';
 import {EMPTY_SLUG} from './emptyBlock';
 import {hasMobileOrder, mobileSequence} from './mobileOrder';
 import {presetLabel, ROW_PRESETS, toSpan} from './presets';
 
 /** filled : la colonne a un vrai composant (une case vide ne compte pas) */
-type CellSnapshot = {span: ColumnSpan; contents: string[]; filled: boolean; mobileOrder: number | null};
+/** narrow : largeur minimale exigée par le composant quand la colonne est trop étroite, sinon null */
+type CellSnapshot = {span: ColumnSpan; contents: string[]; types?: string[]; filled: boolean; narrow: number | null; mobileOrder: number | null};
 type RowSnapshot = {columns: CellSnapshot[]};
 
 const TILE_H = 40;
@@ -158,7 +159,7 @@ function Cell({cell, index, count, onOpen, onMove}: {cell: CellSnapshot; index: 
         textAlign: 'left',
         cursor: 'pointer',
         borderRadius: 4,
-        border: `1px ${empty ? 'dashed' : 'solid'} var(--theme-elevation-${empty ? '300' : '400'})`,
+        border: cell.narrow ? '2px solid var(--theme-error-500)' : `1px ${empty ? 'dashed' : 'solid'} var(--theme-elevation-${empty ? '300' : '400'})`,
         background: empty ? 'transparent' : 'var(--theme-elevation-0)',
         color: 'var(--theme-elevation-1000)',
         ...text14,
@@ -179,6 +180,7 @@ function Cell({cell, index, count, onOpen, onMove}: {cell: CellSnapshot; index: 
           </span>
         ))
       )}
+      {cell.narrow ? <span style={{color: 'var(--theme-error-500)'}}>Trop étroit : {cell.narrow} colonnes min.</span> : null}
     </div>
   );
 }
@@ -213,7 +215,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
       if (parts[1] !== 'columns') continue;
       const j = Number(parts[2]);
       if (!Number.isInteger(j)) continue;
-      out[i].columns[j] ??= {span: 12, contents: [], filled: false, mobileOrder: null};
+      out[i].columns[j] ??= {span: 12, contents: [], types: [], filled: false, narrow: null, mobileOrder: null};
       if (parts[3] === 'span' && parts.length === 4) out[i].columns[j].span = toSpan(fields[key]?.value);
       if (parts[3] === 'mobileOrder' && parts.length === 4) {
         const v = fields[key]?.value;
@@ -223,10 +225,19 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
         const k = Number(parts[4]);
         const blockType = String(fields[key]?.value ?? '');
         out[i].columns[j].contents[k] = contentLabel({blockType});
+        (out[i].columns[j].types ??= [])[k] = blockType;
         if (blockType && blockType !== EMPTY_SLUG) out[i].columns[j].filled = true;
       }
     }
-    return JSON.stringify(out.map((r) => ({columns: (r?.columns ?? []).map((c) => ({span: c?.span ?? 12, contents: (c?.contents ?? []).filter(Boolean), filled: Boolean(c?.filled), mobileOrder: c?.mobileOrder ?? null}))})));
+    return JSON.stringify(out.map((r) => ({columns: (r?.columns ?? []).map((c) => {
+      const span = c?.span ?? 12;
+      // largeur exigée par le composant de la colonne (registre des emprises)
+      const need = (c?.types ?? []).reduce((m, t) => {
+        const ref = t ? toContentRef({blockType: t}) : null;
+        return ref ? Math.max(m, minSpan(ref)) : m;
+      }, 0);
+      return {span, contents: (c?.contents ?? []).filter(Boolean), filled: Boolean(c?.filled), narrow: need > span ? need : null, mobileOrder: c?.mobileOrder ?? null};
+    })})));
   });
   const snapshot = useMemo<RowSnapshot[]>(() => JSON.parse(snapshotJson) as RowSnapshot[], [snapshotJson]);
 

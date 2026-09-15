@@ -10,6 +10,7 @@ import * as migration_20260915_080833_mobile_order from './20260915_080833_mobil
 import * as migration_20260915_090426_section_gaps from './20260915_090426_section_gaps';
 import * as migration_20260915_094635_empty_block from './20260915_094635_empty_block';
 import * as migration_20260915_102142_media_block from './20260915_102142_media_block';
+import * as migration_20260915_105105_media_quote_block from './20260915_105105_media_quote_block';
 
 export const migrations = [
   {
@@ -70,6 +71,11 @@ export const migrations = [
   {
     up: migration_20260915_102142_media_block.up,
     down: migration_20260915_102142_media_block.down,
-    name: '20260915_102142_media_block'
+    name: '20260915_102142_media_block',
+  },
+  {
+    up: migration_20260915_105105_media_quote_block.up,
+    down: migration_20260915_105105_media_quote_block.down,
+    name: '20260915_105105_media_quote_block'
   },
 ];

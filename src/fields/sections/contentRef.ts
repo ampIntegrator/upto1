@@ -3,6 +3,7 @@ import {CONTENT_SPECS, type ContentRef} from '@/components/content-specs';
 import {CARD_VARIANTS} from './cardBlocks';
 import {EMPTY_SLUG} from './emptyBlock';
 import {MEDIA_SLUG} from './mediaBlock';
+import {MEDIA_QUOTE_SLUG} from './mediaQuoteBlock';
 
 /**
  * Passerelle entre les blocs Payload d'une colonne et le registre des emprises
@@ -18,6 +19,8 @@ export function toContentRef(block: ContentBlockData | null | undefined): Conten
   switch (slug) {
     case MEDIA_SLUG:
       return {type: 'image'};
+    case MEDIA_QUOTE_SLUG:
+      return {type: 'mediaQuote'};
     case 'text':
       return {type: 'text'};
     default:

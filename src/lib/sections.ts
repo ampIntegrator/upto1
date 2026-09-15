@@ -6,12 +6,14 @@
  */
 import type {CardProps} from '@/components/Card';
 import type {MediaProps} from '@/components/Media';
+import type {MediaQuoteProps, MediaQuoteSize, MediaQuoteTag} from '@/components/MediaQuote';
 import type {SectionBackground, SectionTint} from '@/components/Section';
 import type {ColumnSpan} from '@/components/content-specs';
 import {CARD_VARIANTS} from '@/fields/sections/cardBlocks';
 import {EMPTY_SLUG} from '@/fields/sections/emptyBlock';
 import {type Gaps, sectionGaps, siteGaps} from '@/fields/sections/gaps';
 import {MEDIA_SLUG} from '@/fields/sections/mediaBlock';
+import {MEDIA_QUOTE_SLUG} from '@/fields/sections/mediaQuoteBlock';
 import {hasMobileOrder, mobileRanks} from '@/fields/sections/mobileOrder';
 import {toSpan} from '@/fields/sections/presets';
 import type {NucleoIconKey} from '@/theme/icons/nucleo';
@@ -22,7 +24,7 @@ type SectionBlock = Extract<PageSection, {blockType: 'section'}>;
 type SectionSource = Omit<SectionBlock, 'blockType' | 'id' | 'blockName' | 'saveAsShared' | 'sharedTitle'> | SharedSection;
 type ContentBlock = NonNullable<NonNullable<NonNullable<SectionBlock['rows']>[number]['columns']>[number]['contents']>[number];
 
-export type ContentData = {type: 'text'; text: string} | {type: 'card'; card: CardProps} | {type: 'media'; media: MediaProps};
+export type ContentData = {type: 'text'; text: string} | {type: 'card'; card: CardProps} | {type: 'media'; media: MediaProps} | {type: 'mediaQuote'; mediaQuote: MediaQuoteProps};
 
 /**
  * mobileRank : rang sous 768 px quand la section a un ordre mobile ; empty : masquée sur mobile ;
@@ -101,6 +103,15 @@ function toMedia(b: MediaBlockData): ContentData | null {
   };
 }
 
+/** Champs d'un bloc Image avec citation. */
+type MediaQuoteBlockData = MediaBlockData & {text?: string | null; tag?: string | null; size?: string | null};
+
+function toMediaQuote(b: MediaQuoteBlockData): ContentData | null {
+  const image = toMedia(b);
+  if (!image || image.type !== 'media' || !b.text) return null;
+  return {type: 'mediaQuote', mediaQuote: {...image.media, text: b.text, tag: (b.tag ?? 'h2') as MediaQuoteTag, size: (b.size ?? 'display-3') as MediaQuoteSize}};
+}
+
 /** Largeur affichée d'une colonne selon l'écran, pour que le navigateur télécharge la bonne taille. */
 const columnSizes = (span: number): string => `(max-width: 767px) 100vw, (max-width: 1440px) ${Math.round((span / 12) * 100)}vw, ${Math.round((span / 12) * 1440)}px`;
 
@@ -108,6 +119,7 @@ function toContent(block: ContentBlock): ContentData | null {
   // case vide : aucun contenu, la colonne est traitée comme vide (masquée sur mobile)
   if (block.blockType === EMPTY_SLUG) return null;
   if (block.blockType === MEDIA_SLUG) return toMedia(block as unknown as MediaBlockData);
+  if (block.blockType === MEDIA_QUOTE_SLUG) return toMediaQuote(block as unknown as MediaQuoteBlockData);
   if (block.blockType in CARD_VARIANTS) return {type: 'card', card: toCard(block as unknown as CardBlockData)};
   switch (block.blockType) {
     case 'text':
@@ -141,11 +153,13 @@ function sectionRows(rows: SectionSource['rows']): ColumnData[][] {
       const contents = (c.contents ?? []).map(toContent).filter((x): x is ContentData => x !== null);
       return {span: toSpan(c.span), contents, empty: contents.length === 0, mobileOrder: c.mobileOrder};
     });
-    // une image ne fixe sa hauteur desktop que si la rangée n'a aucun autre contenu
-    const otherContent = columns.some((c) => c.contents.some((x) => x.type !== 'media'));
+    // une image (avec ou sans citation) ne fixe sa hauteur desktop que si la rangée n'a aucun autre contenu
+    const isImage = (x: ContentData) => x.type === 'media' || x.type === 'mediaQuote';
+    const otherContent = columns.some((c) => c.contents.some((x) => !isImage(x)));
     return columns.map((c) => {
-      const stretch = c.contents.some((x) => x.type === 'media');
-      const contents = c.contents.map((x): ContentData => (x.type === 'media' ? {...x, media: {...x.media, minHeight: otherContent ? undefined : x.media.minHeight, sizes: columnSizes(c.span)}} : x));
+      const stretch = c.contents.some(isImage);
+      const fit = <T extends {minHeight?: number; sizes?: string}>(p: T): T => ({...p, minHeight: otherContent ? undefined : p.minHeight, sizes: columnSizes(c.span)});
+      const contents = c.contents.map((x): ContentData => (x.type === 'media' ? {...x, media: fit(x.media)} : x.type === 'mediaQuote' ? {...x, mediaQuote: fit(x.mediaQuote)} : x));
       return {...c, contents, stretch};
     });
   });
