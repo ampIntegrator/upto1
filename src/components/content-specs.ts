@@ -26,6 +26,7 @@ export type ColumnSpan = (typeof COLUMN_SPANS)[number];
 export type ContentRef =
   | {type: 'text'}
   | {type: 'image'}
+  | {type: 'mediaQuote'}
   | {type: 'stat'}
   | {type: 'checkList'}
   | {type: 'callout'}
@@ -54,6 +55,8 @@ function snapUp(n: number): ColumnSpan {
 export const CONTENT_SPECS: {[T in ContentType]: {label: string; minSpan: (c: Extract<ContentRef, {type: T}>) => ColumnSpan}} = {
   text: {label: 'Texte', minSpan: () => 2},
   image: {label: 'Image', minSpan: () => 2},
+  // image avec phrase centrée : au moins la moitié de la largeur
+  mediaQuote: {label: 'Image avec citation', minSpan: () => 6},
   stat: {label: 'Chiffre clé', minSpan: () => 2},
   checkList: {label: 'Liste à pastilles', minSpan: () => 2},
   callout: {label: 'Encadré', minSpan: () => 3},

@@ -1,0 +1,20 @@
+/* Page générée par scripts/gen-catalog.mjs (pnpm catalog:build). */
+import {VStack} from '@astryxdesign/core/Stack';
+import React from 'react';
+
+import MediaQuoteShowcase from '../../_showcases/MediaQuoteShowcase';
+import {ComponentNav} from '../../_ui/ComponentNav';
+import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
+
+export const metadata = {title: 'Media Quote — Design system Vidomia'};
+
+export default function Page() {
+  return (
+    <VStack gap={8}>
+      <ShowcaseBlock name="MediaQuote" id="media-quote" doc={null} dressed category="Contenu">
+        <MediaQuoteShowcase />
+      </ShowcaseBlock>
+      <ComponentNav category="contenu" current="media-quote" />
+    </VStack>
+  );
+}
