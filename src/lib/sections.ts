@@ -20,7 +20,7 @@ type ContentBlock = NonNullable<NonNullable<NonNullable<SectionBlock['rows']>[nu
 
 export type ContentData = {type: 'text'; text: string} | {type: 'card'; card: CardProps};
 
-/** mobileRank : rang sous 768 px quand la rangée a un ordre mobile ; empty : masquée sur mobile */
+/** mobileRank : rang sous 768 px quand la section a un ordre mobile ; empty : masquée sur mobile */
 export type ColumnData = {span: ColumnSpan; contents: ContentData[]; empty: boolean; mobileRank?: number};
 
 export type SectionData = {
@@ -97,15 +97,22 @@ function toSection(s: SectionSource, key: string): SectionData {
     overlay: isMedia ? (s.overlay ?? 0.3) : 0,
     spacingTop: Number(s.spacingTop ?? 80),
     spacingBottom: Number(s.spacingBottom ?? 80),
-    rows: (s.rows ?? []).map((r) => {
-      const columns = (r.columns ?? []).map((c) => {
-        const contents = (c.contents ?? []).map(toContent).filter((x): x is ContentData => x !== null);
-        return {span: toSpan(c.span), contents, empty: contents.length === 0, mobileOrder: c.mobileOrder};
-      });
-      const ranks = hasMobileOrder(columns) ? mobileRanks(columns) : null;
-      return columns.map(({mobileOrder: _m, ...c}, i) => ({...c, mobileRank: ranks?.[i] ?? undefined}));
-    }),
+    rows: sectionRows(s.rows),
   };
+}
+
+/** Rangées d'une section, avec le rang mobile de chaque colonne calculé sur toute la section. */
+function sectionRows(rows: SectionSource['rows']): ColumnData[][] {
+  const built = (rows ?? []).map((r) =>
+    (r.columns ?? []).map((c) => {
+      const contents = (c.contents ?? []).map(toContent).filter((x): x is ContentData => x !== null);
+      return {span: toSpan(c.span), contents, empty: contents.length === 0, mobileOrder: c.mobileOrder};
+    }),
+  );
+  const flat = built.flat();
+  const ranks = hasMobileOrder(flat) ? mobileRanks(flat) : null;
+  let k = 0;
+  return built.map((columns) => columns.map(({mobileOrder: _m, ...c}) => ({...c, mobileRank: ranks?.[k++] ?? undefined})));
 }
 
 /** Les blocs « sections » d'une page (chargée avec depth ≥ 2 pour les médias des sections partagées). */

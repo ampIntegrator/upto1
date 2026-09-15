@@ -10,8 +10,9 @@
  *   - les rangées empilées dessous, réordonnées par glisser-déposer (poignée) ; sur le côté, en
  *     deux lignes de deux : déplacer et dupliquer, ordre mobile et supprimer ; dans chaque case,
  *     deux flèches décalent la colonne ;
- *   - le bouton téléphone ouvre une fenêtre : la rangée en colonne, dans son ordre mobile, avec
- *     des flèches haut et bas (champ caché mobileOrder de chaque colonne, voir mobileOrder.ts) ;
+ *   - le bouton téléphone d'une rangée ouvre la fenêtre d'ordre mobile de toute la section :
+ *     toutes ses colonnes, rangées confondues, avec des flèches haut et bas ; les colonnes de la
+ *     rangée cliquée sont mises en évidence (champ caché mobileOrder, voir mobileOrder.ts) ;
  *   - une case résume son composant (un seul par colonne), ou « Vide » ; un clic ouvre un tiroir
  *     Payload avec les champs de cette colonne (largeur, composant). Le formulaire est partagé : ce qui est
  *     saisi dans le tiroir est déjà dans la page, on enregistre la page comme d'habitude.
@@ -193,7 +194,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
   const [open, setOpen] = useState<{row: number; col: number} | null>(null);
   // rangée sélectionnée : les vignettes agissent sur elle ; sans sélection, elles ajoutent une rangée
   const [selected, setSelected] = useState<number | null>(null);
-  // rangée dont la fenêtre « ordre mobile » est ouverte
+  // rangée d'où la fenêtre « ordre mobile » a été ouverte (mise en évidence dans la liste)
   const [mobileRow, setMobileRow] = useState<number | null>(null);
   const mobileSlug = `rows-mobile-${path}`;
 
@@ -280,22 +281,25 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
     setSelected(null);
   };
 
-  /** écrit l'ordre mobile d'une rangée : position pour les colonnes listées, vide pour les autres */
-  const writeMobileOrder = (row: number, sequence: number[] | null) => {
-    const columns = snapshot[row]?.columns ?? [];
-    columns.forEach((_, j) => {
-      const pos = sequence ? sequence.indexOf(j) : -1;
-      dispatchFields({type: 'UPDATE', path: `${path}.${row}.columns.${j}.mobileOrder`, value: pos >= 0 ? pos : null, valid: true});
+  /** colonnes de la section à plat, rangée par rangée, pour l'ordre mobile */
+  const flatColumns = useMemo(
+    () => snapshot.flatMap((r, row) => r.columns.map((c, col) => ({row, col, span: c.span, contents: c.contents, mobileOrder: c.mobileOrder, empty: c.contents.length === 0}))),
+    [snapshot],
+  );
+  /** écrit l'ordre mobile de la section : position pour les colonnes listées, vide pour les autres */
+  const writeMobileOrder = (sequence: number[] | null) => {
+    flatColumns.forEach((c, k) => {
+      const pos = sequence ? sequence.indexOf(k) : -1;
+      dispatchFields({type: 'UPDATE', path: `${path}.${c.row}.columns.${c.col}.mobileOrder`, value: pos >= 0 ? pos : null, valid: true});
     });
     setModified(true);
   };
-  const moveMobile = (row: number, from: number, to: number) => {
-    const columns = snapshot[row]?.columns ?? [];
-    const sequence = mobileSequence(columns.map((c) => ({mobileOrder: c.mobileOrder, empty: c.contents.length === 0})));
+  const moveMobile = (from: number, to: number) => {
+    const sequence = mobileSequence(flatColumns);
     if (to < 0 || to >= sequence.length) return;
     const [moved] = sequence.splice(from, 1);
     sequence.splice(to, 0, moved);
-    writeMobileOrder(row, sequence);
+    writeMobileOrder(sequence);
   };
   const openMobile = (row: number) => {
     setMobileRow(row);
@@ -400,7 +404,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
                       <Button size="small" buttonStyle="pill" onClick={() => duplicate(i)} aria-label={`Dupliquer la rangée ${i + 1}`} tooltip="Dupliquer">
                         ⧉
                       </Button>
-                      <Button size="small" buttonStyle="pill" onClick={() => openMobile(i)} aria-label={`Ordre mobile de la rangée ${i + 1}`} tooltip="Ordre mobile">
+                      <Button size="small" buttonStyle="pill" onClick={() => openMobile(i)} aria-label={`Ordre mobile de la section (depuis la rangée ${i + 1})`} tooltip="Ordre mobile de la section">
                         <PhoneGlyph />
                       </Button>
                       <Button size="small" buttonStyle="pill" onClick={() => remove(i)} aria-label={`Supprimer la rangée ${i + 1}`} tooltip="Supprimer">
@@ -417,32 +421,31 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
 
 
       <Modal slug={mobileSlug} className="confirmation-modal rows-mobile">
-        {mobileRow !== null && snapshot[mobileRow]
+        {mobileRow !== null
           ? (() => {
-              const columns = snapshot[mobileRow].columns;
-              const mobileColumns = columns.map((c) => ({mobileOrder: c.mobileOrder, empty: c.contents.length === 0}));
-              const sequence = mobileSequence(mobileColumns);
-              const empties = columns.map((c, j) => ({c, j})).filter(({c}) => c.contents.length === 0);
+              const sequence = mobileSequence(flatColumns);
+              const empties = flatColumns.filter((c) => c.empty);
+              const where = (c: {row: number; col: number; span: number}) => `rangée ${c.row + 1} · colonne ${c.col + 1} · ${c.span}/12`;
               return (
                 <div className="confirmation-modal__wrapper rows-mobile__wrapper">
                   <div className="confirmation-modal__content">
-                    <h2 style={{margin: 0}}>Ordre mobile · rangée {mobileRow + 1}</h2>
-                    <p style={{...text14, ...dim}}>Sous 768 px, les colonnes s’empilent dans cet ordre. Les colonnes vides sont masquées.</p>
+                    <h2 style={{margin: 0}}>Ordre mobile de la section</h2>
+                    <p style={{...text14, ...dim}}>Sous 768 px, toutes les colonnes de la section s’empilent dans cet ordre, rangées confondues. Les colonnes vides sont masquées. En évidence : la rangée {mobileRow + 1}.</p>
                   </div>
                   <ol className="rows-mobile__list">
-                    {sequence.map((j, pos) => {
-                      const c = columns[j];
+                    {sequence.map((k, pos) => {
+                      const c = flatColumns[k];
                       return (
-                        <li key={j} className="rows-mobile__item">
+                        <li key={`${c.row}-${c.col}`} className="rows-mobile__item" data-current={c.row === mobileRow ? 'true' : undefined}>
                           <span style={{...text14, ...dim}}>{pos + 1}</span>
                           <span style={{...text14, flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
                             {c.contents.join(', ')}
-                            <span style={dim}> · colonne {j + 1} · {c.span}/12</span>
+                            <span style={dim}> · {where(c)}</span>
                           </span>
-                          <Button size="small" buttonStyle="pill" disabled={pos === 0} onClick={() => moveMobile(mobileRow, pos, pos - 1)} aria-label={`Monter la colonne ${j + 1} sur mobile`}>
+                          <Button size="small" buttonStyle="pill" disabled={pos === 0} onClick={() => moveMobile(pos, pos - 1)} aria-label={`Monter sur mobile : ${where(c)}`}>
                             ↑
                           </Button>
-                          <Button size="small" buttonStyle="pill" disabled={pos === sequence.length - 1} onClick={() => moveMobile(mobileRow, pos, pos + 1)} aria-label={`Descendre la colonne ${j + 1} sur mobile`}>
+                          <Button size="small" buttonStyle="pill" disabled={pos === sequence.length - 1} onClick={() => moveMobile(pos, pos + 1)} aria-label={`Descendre sur mobile : ${where(c)}`}>
                             ↓
                           </Button>
                         </li>
@@ -452,17 +455,17 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
                   {!sequence.length ? <p style={{...text14, ...dim, margin: 0}}>Aucune colonne remplie : rien ne s’affiche sur mobile.</p> : null}
                   {empties.length ? (
                     <ul className="rows-mobile__list">
-                      {empties.map(({c, j}) => (
-                        <li key={j} className="rows-mobile__item" style={dim}>
+                      {empties.map((c) => (
+                        <li key={`${c.row}-${c.col}`} className="rows-mobile__item" style={dim}>
                           <span style={{...text14, flex: 1}}>
-                            Colonne {j + 1} · {c.span}/12 · vide, masquée sur mobile
+                            {where(c)} · vide, masquée sur mobile
                           </span>
                         </li>
                       ))}
                     </ul>
                   ) : null}
                   <div className="confirmation-modal__controls">
-                    <Button size="small" buttonStyle="secondary" disabled={!hasMobileOrder(mobileColumns)} onClick={() => writeMobileOrder(mobileRow, null)}>
+                    <Button size="small" buttonStyle="secondary" disabled={!hasMobileOrder(flatColumns)} onClick={() => writeMobileOrder(null)}>
                       Reprendre l’ordre desktop
                     </Button>
                     <Button size="small" buttonStyle="primary" onClick={() => closeModal(mobileSlug)}>

@@ -57,7 +57,7 @@ const rowsField: Field = {
   labels: {singular: 'Rangée', plural: 'Rangées'},
   admin: {
     condition: (_d, s: Record<string, unknown>) => ['light', 'dark', 'media'].includes(String(s?.mode ?? '')),
-    description: 'Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre mobile de la rangée (bouton téléphone) ; les colonnes vides y sont masquées.',
+    description: 'Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre mobile de la section (bouton téléphone) ; les colonnes vides y sont masquées.',
     // vue constructeur : bandes, cases proportionnelles, tiroir par colonne
     components: {Field: '@/fields/sections/RowsBuilder#RowsBuilder'},
   },

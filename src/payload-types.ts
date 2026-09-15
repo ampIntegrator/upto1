@@ -203,7 +203,7 @@ export interface Page {
              */
             anchor?: string | null;
             /**
-             * Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre mobile de la rangée (bouton téléphone) ; les colonnes vides y sont masquées.
+             * Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre mobile de la section (bouton téléphone) ; les colonnes vides y sont masquées.
              */
             rows?:
               | {
@@ -393,7 +393,7 @@ export interface Section {
    */
   anchor?: string | null;
   /**
-   * Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre mobile de la rangée (bouton téléphone) ; les colonnes vides y sont masquées.
+   * Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre mobile de la section (bouton téléphone) ; les colonnes vides y sont masquées.
    */
   rows?:
     | {

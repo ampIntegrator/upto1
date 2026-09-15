@@ -1,10 +1,13 @@
 /**
- * Ordre mobile des colonnes d'une rangée (sous 768 px, colonnes en pleine largeur).
+ * Ordre mobile des colonnes d'une section, toutes rangées confondues (sous 768 px, colonnes
+ * en pleine largeur). Les fonctions reçoivent la liste à plat des colonnes de la section,
+ * rangée par rangée.
  * Partagé par le constructeur de l'admin et le rendu front, pour qu'ils calculent le même ordre.
  *
  *   - chaque colonne porte un champ caché `mobileOrder` (position, ou vide) ;
  *   - les colonnes vides sont masquées sur mobile : elles n'ont pas de position ;
- *   - sans aucune position enregistrée, l'ordre mobile est l'ordre desktop ;
+ *   - `mobileOrder` est une position dans la section ; sans aucune position, l'ordre mobile
+ *     est l'ordre desktop ;
  *   - une colonne sans position (ajoutée après coup) passe après celles qui en ont une.
  */
 export type MobileColumn = {mobileOrder?: number | null; empty: boolean};
