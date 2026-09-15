@@ -1,7 +1,6 @@
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { fr } from '@payloadcms/translations/languages/fr'
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
@@ -13,6 +12,7 @@ import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Sections } from './collections/Sections'
 import { Users } from './collections/Users'
+import { adminI18n } from './i18n/admin/payload'
 import { Footer } from './globals/Footer'
 import { Header } from './globals/Header'
 import { Settings } from './globals/Settings'
@@ -31,8 +31,12 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     meta: {titleSuffix: ' · Vidomia'},
+    components: {
+      // interface language selector, next to the content language selector
+      actions: ['@/i18n/admin/LanguageSwitcher#LanguageSwitcher'],
+    },
   },
-  i18n: {supportedLanguages: {fr}, fallbackLanguage: 'fr'},
+  i18n: adminI18n,
   localization: {
     locales: [
       {label: 'Français', code: 'fr'},

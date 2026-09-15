@@ -24,12 +24,17 @@
  * exactly like its own array field; drawer fields are rendered by
  * Payload (RenderFields), with the paths and permissions it expects.
  */
-import {Button, ConfirmationModal, Drawer, Modal, RenderFields, useDrawerSlug, useField, useForm, useFormFields, useModal} from '@payloadcms/ui';
+import {Button, ConfirmationModal, Drawer, Modal, RenderFields, useDrawerSlug, useField, useForm, useFormFields, useModal, useTranslation} from '@payloadcms/ui';
 import type {ArrayFieldClient, ArrayFieldClientProps, ClientField, SanitizedFieldPermissions, SanitizedFieldsPermissions} from 'payload';
+import {getTranslation} from '@payloadcms/translations';
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 
-import {minSpan, validateRow, type ColumnSpan} from '@/components/content-specs';
-import {contentLabel, toContentRef} from './contentRef';
+import {minSpan, type ColumnSpan} from '@/components/content-specs';
+import {tr} from '@/i18n/admin/languages';
+import {sectionsText as T} from '@/i18n/admin/sections';
+import {useAdminText} from '@/i18n/admin/useAdminText';
+
+import {contentLabel, rowWidthError, toContentRef} from './contentRef';
 import {EMPTY_SLUG} from './emptyBlock';
 import {hasMobileOrder, mobileSequence} from './mobileOrder';
 import {presetLabel, ROW_PRESETS, spansKey, toSpan} from './presets';
@@ -80,6 +85,7 @@ function Tile({spans, active}: {spans: readonly number[]; active: boolean}) {
 
 /** Thumbnails: a click replaces the selected row's layout, a double click adds a row. */
 function PresetTiles({current, onReplace, onAdd}: {current: string; onReplace: (spans: readonly number[]) => void; onAdd: (spans: readonly number[]) => void}) {
+  const {t} = useAdminText();
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const click = (spans: readonly number[]) => {
     if (timer.current) clearTimeout(timer.current);
@@ -94,7 +100,7 @@ function PresetTiles({current, onReplace, onAdd}: {current: string; onReplace: (
     onAdd(spans);
   };
   return (
-    <div role="radiogroup" aria-label="Disposition" style={{display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gap: 8}}>
+    <div role="radiogroup" aria-label={t(T.builder.layout)} style={{display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gap: 8}}>
       {ROW_PRESETS.map((spans) => {
         // active as soon as the widths match, in any order
         const active = spansKey(spans) === current;
@@ -106,7 +112,7 @@ function PresetTiles({current, onReplace, onAdd}: {current: string; onReplace: (
             role="radio"
             aria-checked={active}
             aria-label={label}
-            title={`${label} · clic : remplacer la rangée sélectionnée · double clic : ajouter une rangée`}
+            title={t(T.builder.tileTitle, {label})}
             onClick={() => click(spans)}
             onDoubleClick={() => dblClick(spans)}
             style={{display: 'block', width: '100%', padding: 0, border: 0, background: 'transparent', cursor: 'pointer'}}>
@@ -124,6 +130,7 @@ type DragProps = SortableHandle;
 /** A row cell: handle to drag it left or right, width in a corner, component summary, click to open the drawer. */
 /** rowSelected: the cell's row is selected; otherwise a click only selects it */
 function Cell({cell, index, rowSelected, onOpen, drag}: {cell: CellSnapshot; index: number; rowSelected: boolean; onOpen: () => void; drag?: DragProps}) {
+  const {t} = useAdminText();
   const empty = !cell.filled;
   const onHandleKeyDown = drag?.listeners.onKeyDown;
   return (
@@ -142,8 +149,8 @@ function Cell({cell, index, rowSelected, onOpen, drag}: {cell: CellSnapshot; ind
           onOpen();
         }
       }}
-      aria-label={`Colonne ${index + 1}, ${cell.span} sur 12, ${empty ? 'vide' : cell.contents.join(', ')}`}
-      title={rowSelected ? (empty ? 'Vide, cliquer pour remplir' : `${cell.contents.join(', ')} · cliquer pour modifier`) : 'Cliquer pour sélectionner la rangée, puis cliquer la colonne pour la modifier'}
+      aria-label={t(T.builder.cellAria, {n: index + 1, span: cell.span, contents: empty ? null : cell.contents.join(', ')})}
+      title={rowSelected ? (empty ? t(T.builder.cellEmptyTitle) : t(T.builder.cellEditTitle, {contents: cell.contents.join(', ')})) : t(T.builder.cellSelectTitle)}
       style={{
         position: 'relative',
         display: 'flex',
@@ -172,8 +179,8 @@ function Cell({cell, index, rowSelected, onOpen, drag}: {cell: CellSnapshot; ind
           {...drag.attributes}
           {...drag.listeners}
           className="rows-builder__handle rows-builder__handle--cell"
-          aria-label={`Déplacer la colonne ${index + 1}`}
-          title="Glisser pour déplacer la colonne"
+          aria-label={t(T.builder.moveColumnAria, {n: index + 1})}
+          title={t(T.builder.moveColumnTitle)}
           onClick={(e) => e.stopPropagation()}
           onKeyDown={(e) => {
             onHandleKeyDown?.(e);
@@ -184,7 +191,7 @@ function Cell({cell, index, rowSelected, onOpen, drag}: {cell: CellSnapshot; ind
       ) : null}
       <span style={{position: 'absolute', top: 4, right: 8, ...dim}}>{cell.span}/12</span>
       {empty ? (
-        <span style={{...dim, maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>{cell.contents.length ? cell.contents.join(', ') : 'Vide'}</span>
+        <span style={{...dim, maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>{cell.contents.length ? cell.contents.join(', ') : t(T.builder.empty)}</span>
       ) : (
         cell.contents.map((label, k) => (
           <span key={k} style={{maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
@@ -192,7 +199,7 @@ function Cell({cell, index, rowSelected, onOpen, drag}: {cell: CellSnapshot; ind
           </span>
         ))
       )}
-      {cell.narrow ? <span style={{color: 'var(--theme-error-500)'}}>Trop étroit : {cell.narrow} colonnes min.</span> : null}
+      {cell.narrow ? <span style={{color: 'var(--theme-error-500)'}}>{t(T.builder.narrow, {min: cell.narrow})}</span> : null}
     </div>
   );
 }
@@ -200,6 +207,8 @@ function Cell({cell, index, rowSelected, onOpen, drag}: {cell: CellSnapshot; ind
 export function RowsBuilder(props: ArrayFieldClientProps) {
   const {field, path, permissions, readOnly, schemaPath: schemaPathFromProps} = props;
   const schemaPath = schemaPathFromProps ?? field.name;
+  const {t, language} = useAdminText();
+  const {i18n} = useTranslation();
   const columnsField = field.fields.find((f): f is ArrayFieldClient => f.type === 'array' && 'name' in f && f.name === 'columns');
   const columnsSchemaPath = `${schemaPath}.columns`;
 
@@ -243,7 +252,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
       if (parts[3] === 'contents' && parts[5] === 'blockType' && parts.length === 6) {
         const k = Number(parts[4]);
         const blockType = String(fields[key]?.value ?? '');
-        out[i].columns[j].contents[k] = contentLabel({blockType});
+        out[i].columns[j].contents[k] = tr(contentLabel({blockType}), language);
         (out[i].columns[j].types ??= [])[k] = blockType;
         if (blockType && blockType !== EMPTY_SLUG) out[i].columns[j].filled = true;
       }
@@ -332,24 +341,14 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
     if (!pending) return {heading: '', body: '', label: ''};
     const columns = snapshot[pending.row]?.columns ?? [];
     const filled = columns.filter((c) => c.contents.length > 0).length;
-    const composants = `${filled} composant${filled > 1 ? 's' : ''}`;
     if (pending.kind === 'remove') {
-      const sujet = columns.length === 1 ? 'Sa colonne' : `Ses ${columns.length} colonnes`;
-      // agreement: feminine for columns alone, masculine as soon as there are components
-      const verbe = filled ? 'seront supprimés' : columns.length === 1 ? 'sera supprimée' : 'seront supprimées';
-      return {
-        heading: `Supprimer la rangée ${pending.row + 1} ?`,
-        body: `${sujet}${filled ? ` et ${composants}` : ''} ${verbe}. Définitif à l’enregistrement de la page.`,
-        label: 'Supprimer',
-      };
+      // agreement rules (French feminine/masculine, singular/plural) live in the dictionary
+      return {heading: t(T.confirm.removeHeading, {n: pending.row + 1}), body: t(T.confirm.removeBody, {columns: columns.length, filled}), label: t(T.confirm.remove)};
     }
     const from = presetLabel(columns.map((c) => c.span));
     const to = presetLabel(pending.spans);
-    const body =
-      columns.length === pending.spans.length
-        ? `Les largeurs passent de ${from} à ${to}. Les composants restent dans leurs colonnes.`
-        : `La rangée passe de ${from} à ${to} : ses colonnes sont recréées vides${filled ? `, ${composants} ${filled > 1 ? 'seront supprimés' : 'sera supprimé'}` : ''}. Définitif à l’enregistrement de la page.`;
-    return {heading: `Remplacer la disposition de la rangée ${pending.row + 1} ?`, body, label: 'Remplacer'};
+    const body = columns.length === pending.spans.length ? t(T.confirm.replaceWidthsBody, {from, to}) : t(T.confirm.replaceColumnsBody, {from, to, filled});
+    return {heading: t(T.confirm.replaceHeading, {n: pending.row + 1}), body, label: t(T.confirm.replace)};
   })();
   const onConfirm = () => {
     if (pending?.kind === 'replace') setSpans(pending.row, pending.spans);
@@ -402,7 +401,9 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
   const cellPerms = (columnsPerm === true ? true : columnsPerm?.fields) as SanitizedFieldsPermissions;
 
   const openCellSnapshot = open ? snapshot[open.row]?.columns[open.col] : undefined;
-  const description = typeof field.admin?.description === 'string' ? field.admin.description : undefined;
+  const rawDescription = field.admin?.description;
+  // static description from the config: a string or a Text object (function descriptions are not rendered here)
+  const description = typeof rawDescription === 'string' || (rawDescription && typeof rawDescription === 'object') ? getTranslation(rawDescription as Record<string, string> | string, i18n) : undefined;
   const selectedSpans = selected !== null ? spansKey((snapshot[selected]?.columns ?? []).map((c) => c.span)) : '';
 
   return (
@@ -412,17 +413,17 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
         <div style={{marginBottom: 12}}>
           <PresetTiles current={selectedSpans} onReplace={replaceRow} onAdd={addRow} />
           <p style={{...text14, ...dim, margin: '8px 0 0'}}>
-            {selected === null ? 'Double clic sur une disposition : ajoute une rangée. Clic sur une rangée : la sélectionne ; ensuite, un clic sur une de ses colonnes l’ouvre, un clic sur une disposition la remplace.' : `Rangée ${selected + 1} sélectionnée. Clic sur une de ses colonnes : l’ouvre. Clic sur une disposition : la remplace (après confirmation). Double clic : ajoute une rangée dessous.`}
+            {selected === null ? t(T.builder.helpNoSelection) : t(T.builder.helpSelected, {n: selected + 1})}
           </p>
         </div>
       ) : null}
-      {showError && errorPaths?.length ? <p style={{...text14, color: 'var(--theme-error-500)', margin: '0 0 12px'}}>Une rangée contient une erreur : ouvrez ses colonnes.</p> : null}
+      {showError && errorPaths?.length ? <p style={{...text14, color: 'var(--theme-error-500)', margin: '0 0 12px'}}>{t(T.builder.rowHasError)}</p> : null}
 
       <SortableList ids={rows.map((r) => r.id)} axis="y" onMove={move} className="rows-builder__rows">
         {rows.map((row, i) => {
           const snap = snapshot[i] ?? {columns: []};
           const spans = snap.columns.map((c) => c.span);
-          const rowError = row.isLoading ? null : validateRow(spans);
+          const rowError = row.isLoading ? null : rowWidthError(spans, language);
           const isSelected = selected === i;
           const colIds = snap.ids?.length === snap.columns.length ? (snap.ids as string[]) : snap.columns.map((_, j) => `${row.id}-${j}`);
           return (
@@ -432,7 +433,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
                   <div
                     role="button"
                     tabIndex={0}
-                    aria-label={`Rangée ${i + 1}${isSelected ? ', sélectionnée' : ''}`}
+                    aria-label={t(T.builder.rowAria, {n: i + 1, selected: isSelected})}
                     aria-pressed={isSelected}
                     onClick={() => setSelected(isSelected ? null : i)}
                     onKeyDown={(e) => {
@@ -452,7 +453,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
                     }}>
                     {rowError ? <p style={{...text14, color: 'var(--theme-error-500)', margin: '0 0 8px'}}>{rowError}</p> : null}
                     {row.isLoading ? (
-                      <p style={{...text14, ...dim, margin: 0}}>Chargement…</p>
+                      <p style={{...text14, ...dim, margin: 0}}>{t(T.builder.loading)}</p>
                     ) : snap.columns.length ? (
                       <div style={{'--rows-builder-cells': spans.map((s) => `${s}fr`).join(' ')} as React.CSSProperties}>
                         <SortableList ids={colIds} axis="x" onMove={(from, to) => moveColumn(i, from, to)} className="rows-builder__cells">
@@ -464,21 +465,21 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
                         </SortableList>
                       </div>
                     ) : (
-                      <p style={{...text14, ...dim, margin: 0}}>Sélectionnez cette rangée puis une disposition.</p>
+                      <p style={{...text14, ...dim, margin: 0}}>{t(T.builder.emptyRow)}</p>
                     )}
                   </div>
                   {!readOnly ? (
                     <div className="rows-builder__actions">
-                      <button type="button" {...attributes} {...listeners} className="rows-builder__handle" aria-label={`Déplacer la rangée ${i + 1}`} title="Glisser pour déplacer">
+                      <button type="button" {...attributes} {...listeners} className="rows-builder__handle" aria-label={t(T.builder.moveRowAria, {n: i + 1})} title={t(T.builder.moveRowTitle)}>
                         ⋮⋮
                       </button>
-                      <Button size="small" buttonStyle="pill" onClick={() => duplicate(i)} aria-label={`Dupliquer la rangée ${i + 1}`} tooltip="Dupliquer">
+                      <Button size="small" buttonStyle="pill" onClick={() => duplicate(i)} aria-label={t(T.builder.duplicateAria, {n: i + 1})} tooltip={t(T.builder.duplicate)}>
                         ⧉
                       </Button>
-                      <Button size="small" buttonStyle="pill" onClick={() => openMobile(i)} aria-label={`Ordre mobile de la section (depuis la rangée ${i + 1})`} tooltip="Ordre mobile de la section">
+                      <Button size="small" buttonStyle="pill" onClick={() => openMobile(i)} aria-label={t(T.builder.mobileOrderAria, {n: i + 1})} tooltip={t(T.builder.mobileOrder)}>
                         <PhoneGlyph />
                       </Button>
-                      <Button size="small" buttonStyle="pill" onClick={() => askRemove(i)} aria-label={`Supprimer la rangée ${i + 1}`} tooltip="Supprimer">
+                      <Button size="small" buttonStyle="pill" onClick={() => askRemove(i)} aria-label={t(T.builder.removeAria, {n: i + 1})} tooltip={t(T.builder.remove)}>
                         ✕
                       </Button>
                     </div>
@@ -496,7 +497,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
         heading={confirmText.heading}
         body={confirmText.body}
         confirmLabel={confirmText.label}
-        cancelLabel="Annuler"
+        cancelLabel={t(T.confirm.cancel)}
         onConfirm={onConfirm}
         onCancel={() => setPending(null)}
       />
@@ -506,12 +507,12 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
           ? (() => {
               const sequence = mobileSequence(flatColumns);
               const empties = flatColumns.filter((c) => c.empty);
-              const where = (c: {row: number; col: number; span: number}) => `rangée ${c.row + 1} · colonne ${c.col + 1} · ${c.span}/12`;
+              const where = (c: {row: number; col: number; span: number}) => t(T.mobileOrder.where, {row: c.row + 1, col: c.col + 1, span: c.span});
               return (
                 <div className="confirmation-modal__wrapper rows-mobile__wrapper">
                   <div className="confirmation-modal__content">
-                    <h2 style={{margin: 0}}>Ordre mobile de la section</h2>
-                    <p style={{...text14, ...dim}}>Sous 768 px, toutes les colonnes de la section s’empilent dans cet ordre, rangées confondues : glissez une ligne par sa poignée pour la déplacer. Les colonnes vides sont masquées. En évidence : la rangée {mobileRow + 1}.</p>
+                    <h2 style={{margin: 0}}>{t(T.mobileOrder.heading)}</h2>
+                    <p style={{...text14, ...dim}}>{t(T.mobileOrder.intro, {n: mobileRow + 1})}</p>
                   </div>
                   <SortableList ids={sequence.map((k) => `${flatColumns[k].row}-${flatColumns[k].col}`)} axis="y" onMove={moveMobile} className="rows-mobile__list" role="list">
                     {sequence.map((k, pos) => {
@@ -526,7 +527,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
                               className="rows-mobile__item"
                               data-current={c.row === mobileRow ? 'true' : undefined}
                               style={{position: 'relative', transform: h.transform, transition: h.transition, zIndex: h.isDragging ? 2 : undefined, background: h.isDragging ? 'var(--theme-bg)' : undefined}}>
-                              <button type="button" {...h.attributes} {...h.listeners} className="rows-builder__handle rows-builder__handle--mobile" aria-label={`Déplacer sur mobile : ${where(c)}`} title="Glisser pour changer l’ordre mobile">
+                              <button type="button" {...h.attributes} {...h.listeners} className="rows-builder__handle rows-builder__handle--mobile" aria-label={t(T.mobileOrder.moveAria, {where: where(c)})} title={t(T.mobileOrder.moveTitle)}>
                                 ⋮⋮
                               </button>
                               <span style={{...text14, ...dim}}>{pos + 1}</span>
@@ -540,13 +541,13 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
                       );
                     })}
                   </SortableList>
-                  {!sequence.length ? <p style={{...text14, ...dim, margin: 0}}>Aucune colonne remplie : rien ne s’affiche sur mobile.</p> : null}
+                  {!sequence.length ? <p style={{...text14, ...dim, margin: 0}}>{t(T.mobileOrder.nothing)}</p> : null}
                   {empties.length ? (
                     <ul className="rows-mobile__list">
                       {empties.map((c) => (
                         <li key={`${c.row}-${c.col}`} className="rows-mobile__item" style={dim}>
                           <span style={{...text14, flex: 1}}>
-                            {where(c)} · {c.contents.length ? 'case vide' : 'vide'}, masquée sur mobile
+                            {where(c)} · {t(T.mobileOrder.hidden, {emptyCell: c.contents.length > 0})}
                           </span>
                         </li>
                       ))}
@@ -554,10 +555,10 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
                   ) : null}
                   <div className="confirmation-modal__controls">
                     <Button size="small" buttonStyle="secondary" disabled={!hasMobileOrder(flatColumns)} onClick={() => writeMobileOrder(null)}>
-                      Reprendre l’ordre desktop
+                      {t(T.mobileOrder.reset)}
                     </Button>
                     <Button size="small" buttonStyle="primary" onClick={() => closeModal(mobileSlug)}>
-                      Fermer
+                      {t(T.mobileOrder.close)}
                     </Button>
                   </div>
                 </div>
@@ -567,13 +568,13 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
       </Modal>
 
       {columnsField ? (
-        <Drawer slug={drawerSlug} title={open && openCellSnapshot ? `Rangée ${open.row + 1} · colonne ${open.col + 1} · ${openCellSnapshot.span} / 12` : 'Colonne'}>
+        <Drawer slug={drawerSlug} title={open && openCellSnapshot ? t(T.drawer.title, {row: open.row + 1, col: open.col + 1, span: openCellSnapshot.span}) : t(T.drawer.fallbackTitle)}>
           {open ? (
             <div style={{paddingBottom: 'var(--base)'}}>
               {openCellSnapshot && openCellSnapshot.contents.length > 0 && !readOnly ? (
                 <div style={{marginBottom: 'var(--base)'}}>
                   <Button buttonStyle="secondary" onClick={() => clearColumn(open.row, open.col)}>
-                    Vider la colonne
+                    {t(T.drawer.clear)}
                   </Button>
                 </div>
               ) : null}
@@ -586,7 +587,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
                 readOnly={readOnly}
               />
               <Button buttonStyle="primary" onClick={() => closeModal(drawerSlug)}>
-                Fermer
+                {t(T.drawer.close)}
               </Button>
             </div>
           ) : null}

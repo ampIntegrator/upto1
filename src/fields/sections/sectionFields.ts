@@ -1,12 +1,14 @@
 import type {Block, Field} from 'payload';
 
-import {type ColumnSpan, minSpan, validateColumn, validateRow} from '@/components/content-specs';
+import {type ColumnSpan, minSpan} from '@/components/content-specs';
+import {tr} from '@/i18n/admin/languages';
+import {sectionsText as T} from '@/i18n/admin/sections';
 import {BLOCK_NAME_MAX} from './blockName';
 import {CARD_BLOCKS} from './cardBlocks';
 import {emptyBlock} from './emptyBlock';
 import {mediaBlock} from './mediaBlock';
 import {mediaQuoteBlock} from './mediaQuoteBlock';
-import {toContentRef, toContentRefs} from './contentRef';
+import {type ContentBlockData, contentLabel, rowWidthError, toContentRef} from './contentRef';
 import {SECTION_GAP_OPTIONS, SITE_GAP} from './gaps';
 import {SPAN_OPTIONS, toSpan} from './presets';
 
@@ -29,9 +31,9 @@ export const CONTENT_BLOCKS: Block[] = [
   mediaQuoteBlock,
   {
     slug: 'text',
-    labels: {singular: 'Texte', plural: 'Textes'},
-    admin: {group: 'Texte'},
-    fields: [{name: 'text', type: 'textarea', label: 'Texte', localized: true, required: true, admin: {rows: 4, description: 'Une ligne vide sépare deux paragraphes.'}}],
+    labels: {singular: T.blocks.text.name, plural: T.blocks.text.plural},
+    admin: {group: T.blocks.text.group},
+    fields: [{name: 'text', type: 'textarea', label: T.blocks.text.field, localized: true, required: true, admin: {rows: 4, description: T.blocks.text.description}}],
   },
   ...CARD_BLOCKS,
 ];
@@ -49,21 +51,28 @@ const getByPath = (data: unknown, path: (number | string)[]): unknown => path.re
 const spanField: Field = {
   name: 'span',
   type: 'select',
-  label: 'Largeur',
+  label: T.rows.width,
   required: true,
   defaultValue: '12',
   options: SPAN_OPTIONS,
   // no longer editable in the drawer: the width is chosen through the row's layouts;
   // hidden field to keep its value and its validation
   admin: {hidden: true},
-  validate: (value: unknown, {data, path, siblingData}: {data: unknown; path: (number | string)[]; siblingData: Sibling}) => {
+  validate: (value: unknown, {data, path, siblingData, req}: {data: unknown; path: (number | string)[]; siblingData: Sibling; req: {i18n?: {language?: string}}}) => {
+    const language = req?.i18n?.language;
     const errors: string[] = [];
     const columns = getByPath(data, path.slice(0, -2));
     if (Array.isArray(columns)) {
-      const e = validateRow(columns.map((c: {span?: unknown}) => toSpan(c?.span)) as ColumnSpan[]);
+      const e = rowWidthError(columns.map((c: {span?: unknown}) => toSpan(c?.span)), language);
       if (e) errors.push(e);
     }
-    errors.push(...validateColumn(toSpan(value), toContentRefs(siblingData?.contents)));
+    // each content too wide for the column (minimum spans from the content-specs registry)
+    const span = toSpan(value);
+    for (const block of Array.isArray(siblingData?.contents) ? (siblingData.contents as ContentBlockData[]) : []) {
+      const ref = toContentRef(block);
+      const min = ref ? minSpan(ref) : 0;
+      if (min > span) errors.push(tr(T.validation.tooNarrow, language, {block: tr(contentLabel(block), language), min, span}));
+    }
     return errors.length ? errors.join(' ') : true;
   },
 };
@@ -71,11 +80,11 @@ const spanField: Field = {
 const rowsField: Field = {
   name: 'rows',
   type: 'array',
-  label: 'Rangées',
-  labels: {singular: 'Rangée', plural: 'Rangées'},
+  label: T.rows.label,
+  labels: {singular: T.rows.singular, plural: T.rows.plural},
   admin: {
     condition: (_d, s: Record<string, unknown>) => ['light', 'dark', 'media'].includes(String(s?.mode ?? '')),
-    description: 'Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre mobile de la section (bouton téléphone) ; les colonnes vides y sont masquées.',
+    description: T.rows.description,
     // builder view: strips, proportional cells, one drawer per column
     components: {Field: '@/fields/sections/RowsBuilder#RowsBuilder'},
   },
@@ -83,8 +92,8 @@ const rowsField: Field = {
     {
       name: 'columns',
       type: 'array',
-      label: 'Colonnes',
-      labels: {singular: 'Colonne', plural: 'Colonnes'},
+      label: T.rows.columns,
+      labels: {singular: T.rows.column, plural: T.rows.columns},
       minRows: 1,
       maxRows: 6,
       fields: [
@@ -97,20 +106,20 @@ const rowsField: Field = {
         {
           name: 'contents',
           type: 'blocks',
-          label: 'Contenu',
-          labels: {singular: 'Composant', plural: 'Composants'},
+          label: T.rows.contents,
+          labels: {singular: T.rows.component, plural: T.rows.components},
           maxRows: 1,
           // the picker only offers components that fit in the column width
           filterOptions: ({siblingData}) => blocksForSpan(toSpan((siblingData as Sibling | undefined)?.span)),
           // explicit message rather than maxRows' generic one
-          validate: (value: unknown) => {
-            if (Array.isArray(value) && value.length > 1) return 'Un seul composant par colonne.';
+          validate: (value: unknown, {req}: {req: {i18n?: {language?: string}}}) => {
+            if (Array.isArray(value) && value.length > 1) return tr(T.validation.oneComponent, req?.i18n?.language);
             const name = Array.isArray(value) ? (value[0] as {blockName?: unknown} | undefined)?.blockName : undefined;
-            if (typeof name === 'string' && name.length > BLOCK_NAME_MAX) return `Nom affiché trop long : ${BLOCK_NAME_MAX} caractères au plus.`;
+            if (typeof name === 'string' && name.length > BLOCK_NAME_MAX) return tr(T.validation.nameTooLong, req?.i18n?.language, {max: BLOCK_NAME_MAX});
             return true;
           },
           blocks: CONTENT_BLOCKS,
-          admin: {description: 'Un seul composant par colonne. Pour en changer, videz la colonne puis choisissez-en un autre.'},
+          admin: {description: T.rows.contentsDescription},
         },
       ],
     },
@@ -134,12 +143,12 @@ export function sectionFields({shareable}: {shareable: boolean}): Field[] {
     {
       name: 'mode',
       type: 'radio',
-      label: 'Fond',
+      label: T.settings.background,
       required: true,
       options: [
-        {label: 'Clair', value: 'light'},
-        {label: 'Nuit', value: 'dark'},
-        {label: 'Média (image ou vidéo)', value: 'media'},
+        {label: T.settings.backgroundLight, value: 'light'},
+        {label: T.settings.backgroundDark, value: 'dark'},
+        {label: T.settings.backgroundMedia, value: 'media'},
       ],
     },
     // 2a. light: tint and texture, side by side
@@ -150,11 +159,11 @@ export function sectionFields({shareable}: {shareable: boolean}): Field[] {
         {
           name: 'tint',
           type: 'radio',
-          label: 'Nuance',
+          label: T.settings.tint,
           required: true,
           options: [
-            {label: 'Fond de page', value: 'body'},
-            {label: 'Highlight clair du silo', value: 'highlight'},
+            {label: T.settings.tintBody, value: 'body'},
+            {label: T.settings.tintHighlight, value: 'highlight'},
           ],
           // condition repeated on the field (not only on the row): without it, Payload makes
           // the column required in the database, and a night or media section could no longer be saved
@@ -163,13 +172,13 @@ export function sectionFields({shareable}: {shareable: boolean}): Field[] {
         {
           name: 'texture',
           type: 'radio',
-          label: 'Texture',
+          label: T.settings.texture,
           defaultValue: 'none',
           options: [
-            {label: 'Aucune', value: 'none'},
-            {label: 'Trame', value: 'grid'},
-            {label: 'Points', value: 'dots'},
-            {label: 'Losanges', value: 'losange'},
+            {label: T.settings.textureNone, value: 'none'},
+            {label: T.settings.textureGrid, value: 'grid'},
+            {label: T.settings.textureDots, value: 'dots'},
+            {label: T.settings.textureLosange, value: 'losange'},
           ],
           admin: {width: '50%'},
         },
@@ -179,11 +188,11 @@ export function sectionFields({shareable}: {shareable: boolean}): Field[] {
     {
       name: 'darkStyle',
       type: 'radio',
-      label: 'Nuance',
+      label: T.settings.tint,
       required: true,
       options: [
-        {label: 'Nuit', value: 'night'},
-        {label: 'Nuit avec halo', value: 'night-halo'},
+        {label: T.settings.darkNight, value: 'night'},
+        {label: T.settings.darkNightHalo, value: 'night-halo'},
       ],
       admin: {condition: when('mode', 'dark')},
     },
@@ -191,37 +200,37 @@ export function sectionFields({shareable}: {shareable: boolean}): Field[] {
     {
       name: 'mediaType',
       type: 'radio',
-      label: 'Type de média',
+      label: T.settings.mediaType,
       required: true,
       options: [
-        {label: 'Image', value: 'image'},
-        {label: 'Vidéo', value: 'video'},
+        {label: T.settings.mediaImage, value: 'image'},
+        {label: T.settings.mediaVideo, value: 'video'},
       ],
       admin: {condition: when('mode', 'media')},
     },
-    {name: 'image', type: 'upload', relationTo: 'media', label: 'Image de fond', admin: {condition: (_d, s: Sibling) => s?.mode === 'media' && s?.mediaType === 'image'}},
+    {name: 'image', type: 'upload', relationTo: 'media', label: T.settings.image, admin: {condition: (_d, s: Sibling) => s?.mode === 'media' && s?.mediaType === 'image'}},
     {
       type: 'row',
       admin: {condition: (_d, s: Sibling) => s?.mode === 'media' && s?.mediaType === 'video'},
       fields: [
-        {name: 'video', type: 'upload', relationTo: 'media', label: 'Vidéo de fond (mp4)'},
-        {name: 'poster', type: 'upload', relationTo: 'media', label: "Image d'attente de la vidéo"},
+        {name: 'video', type: 'upload', relationTo: 'media', label: T.settings.video},
+        {name: 'poster', type: 'upload', relationTo: 'media', label: T.settings.poster},
       ],
     },
-    {name: 'overlay', type: 'number', label: 'Calque noir sur le média (0 à 1)', min: 0, max: 1, defaultValue: 0.3, admin: {step: 0.05, condition: (_d, s: Sibling) => s?.mode === 'media' && ['image', 'video'].includes(String(s?.mediaType ?? ''))}},
+    {name: 'overlay', type: 'number', label: T.settings.overlay, min: 0, max: 1, defaultValue: 0.3, admin: {step: 0.05, condition: (_d, s: Sibling) => s?.mode === 'media' && ['image', 'video'].includes(String(s?.mediaType ?? ''))}},
     // 3. spacing and anchor, once the background is chosen
     {
       type: 'row',
       admin: {condition: modeChosen},
       fields: [
-        {name: 'spacingTop', type: 'select', label: 'Espace en haut', defaultValue: '80', options: SPACING_OPTIONS, admin: {width: '33%'}},
-        {name: 'spacingBottom', type: 'select', label: 'Espace en bas', defaultValue: '80', options: SPACING_OPTIONS, admin: {width: '33%'}},
+        {name: 'spacingTop', type: 'select', label: T.settings.spacingTop, defaultValue: '80', options: SPACING_OPTIONS, admin: {width: '33%'}},
+        {name: 'spacingBottom', type: 'select', label: T.settings.spacingBottom, defaultValue: '80', options: SPACING_OPTIONS, admin: {width: '33%'}},
         {
           name: 'anchor',
           type: 'text',
-          label: 'Ancre (optionnelle)',
-          admin: {width: '33%', description: 'Identifiant pour un lien #ancre : minuscules, chiffres, tirets.'},
-          validate: (value: unknown) => !value || (typeof value === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)) || 'Minuscules, chiffres et tirets uniquement.',
+          label: T.settings.anchor,
+          admin: {width: '33%', description: T.settings.anchorDescription},
+          validate: (value: unknown, {req}: {req: {i18n?: {language?: string}}}) => !value || (typeof value === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)) || tr(T.validation.anchor, req?.i18n?.language),
         },
       ],
     },
@@ -230,9 +239,9 @@ export function sectionFields({shareable}: {shareable: boolean}): Field[] {
       type: 'row',
       admin: {condition: modeChosen},
       fields: [
-        {name: 'gapX', type: 'select', label: 'Écart entre colonnes', defaultValue: SITE_GAP, options: SECTION_GAP_OPTIONS, admin: {width: '33%'}},
-        {name: 'gapY', type: 'select', label: 'Écart entre rangées', defaultValue: SITE_GAP, options: SECTION_GAP_OPTIONS, admin: {width: '33%'}},
-        {name: 'gapYMobile', type: 'select', label: 'Écart vertical mobile', defaultValue: SITE_GAP, options: SECTION_GAP_OPTIONS, admin: {width: '33%', description: 'Sous 768 px, entre tous les blocs empilés.'}},
+        {name: 'gapX', type: 'select', label: T.settings.gapX, defaultValue: SITE_GAP, options: SECTION_GAP_OPTIONS, admin: {width: '33%'}},
+        {name: 'gapY', type: 'select', label: T.settings.gapY, defaultValue: SITE_GAP, options: SECTION_GAP_OPTIONS, admin: {width: '33%'}},
+        {name: 'gapYMobile', type: 'select', label: T.settings.gapYMobile, defaultValue: SITE_GAP, options: SECTION_GAP_OPTIONS, admin: {width: '33%', description: T.settings.gapYMobileDescription}},
       ],
     },
   ];
@@ -241,39 +250,39 @@ export function sectionFields({shareable}: {shareable: boolean}): Field[] {
       type: 'row',
       admin: {condition: modeChosen},
       fields: [
-        {name: 'saveAsShared', type: 'checkbox', label: 'Enregistrer dans les sections partagées', defaultValue: false, admin: {width: '50%', description: 'À l’enregistrement, la section est copiée dans « Sections partagées » et la page y fait référence.'}},
-        {name: 'sharedTitle', type: 'text', label: 'Nom de la section partagée', admin: {width: '50%', condition: whenChecked('saveAsShared')}},
+        {name: 'saveAsShared', type: 'checkbox', label: T.settings.saveAsShared, defaultValue: false, admin: {width: '50%', description: T.settings.saveAsSharedDescription}},
+        {name: 'sharedTitle', type: 'text', label: T.settings.sharedTitle, admin: {width: '50%', condition: whenChecked('saveAsShared')}},
       ],
     });
   }
   return [
     // section settings, framed and collapsible (presentation only: no extra data)
-    {type: 'collapsible', label: 'Réglages de la section', admin: {initCollapsed: false}, fields: settings},
+    {type: 'collapsible', label: T.settings.collapsible, admin: {initCollapsed: false}, fields: settings},
     // 4. the rows, in their own collapsible block (RowsBuilder builder)
-    {type: 'collapsible', label: 'Rangées', admin: {initCollapsed: false, condition: modeChosen}, fields: [rowsField]},
+    {type: 'collapsible', label: T.rows.collapsible, admin: {initCollapsed: false, condition: modeChosen}, fields: [rowsField]},
   ];
 }
 
 /** Page block: a section built in place. */
 export const sectionBlock: Block = {
   slug: 'section',
-  labels: {singular: 'Section', plural: 'Sections'},
+  labels: {singular: T.blocks.section.singular, plural: T.blocks.section.plural},
   fields: sectionFields({shareable: true}),
 };
 
 /** Page block: a shared section, edited in one place for every page. */
 export const sharedSectionBlock: Block = {
   slug: 'sharedSection',
-  labels: {singular: 'Section partagée', plural: 'Sections partagées'},
-  fields: [{name: 'section', type: 'relationship', relationTo: 'sections', label: 'Section', required: true}],
+  labels: {singular: T.blocks.sharedSection.singular, plural: T.blocks.sharedSection.plural},
+  fields: [{name: 'section', type: 'relationship', relationTo: 'sections', label: T.blocks.sectionField, required: true}],
 };
 
 /** A page's « sections » field. */
 export const sectionsField: Field = {
   name: 'sections',
   type: 'blocks',
-  label: 'Sections',
-  labels: {singular: 'Section', plural: 'Sections'},
+  label: T.blocks.sectionsField,
+  labels: {singular: T.blocks.section.singular, plural: T.blocks.section.plural},
   blocks: [sectionBlock, sharedSectionBlock],
-  admin: {description: 'Les sections s’empilent de haut en bas sous le haut de page.'},
+  admin: {description: T.blocks.sectionsDescription},
 };

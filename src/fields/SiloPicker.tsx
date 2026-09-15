@@ -5,17 +5,22 @@
  * the catalogue picker), the chosen swatch becomes a pill. Without an explicit value
  * (older page), the silo swatch from site settings is shown as chosen.
  */
-import {FieldLabel, useField} from '@payloadcms/ui';
+import {getTranslation} from '@payloadcms/translations';
+import {FieldLabel, useField, useTranslation} from '@payloadcms/ui';
 import type {SelectFieldClientProps} from 'payload';
 import React, {useEffect, useState} from 'react';
 
+import {fieldsText} from '@/i18n/admin/fields';
+import {useAdminText} from '@/i18n/admin/useAdminText';
 import {SILOS, type SiloName} from '@/theme/silos/palettes';
 
 export function SiloPicker(props: SelectFieldClientProps) {
   const {path, field} = props;
   const {value, setValue} = useField<string>({path});
+  const {i18n} = useTranslation();
+  const {t} = useAdminText();
   const options = (field.options ?? []).map((o) => (typeof o === 'string' ? {label: o, value: o} : o));
-  const label = typeof field.label === 'string' ? field.label : "Silo d'accent";
+  const label = field.label ? getTranslation(field.label, i18n) : t(fieldsText.silo.label);
   const explicit = options.some((o) => o.value === value);
   const [siteSilo, setSiteSilo] = useState<string | null>(null);
   useEffect(() => {
@@ -36,7 +41,8 @@ export function SiloPicker(props: SelectFieldClientProps) {
           const silo = o.value as SiloName;
           const selected = shown === o.value;
           const color = SILOS[silo]?.primary;
-          const text = typeof o.label === 'string' ? o.label : String(o.value);
+          const translated = o.label ? getTranslation(o.label, i18n) : null;
+          const text = typeof translated === 'string' ? translated : String(o.value);
           return (
             <button key={String(o.value)} type="button" role="radio" aria-checked={selected} title={text} onClick={() => setValue(o.value)}
               style={{
@@ -52,8 +58,8 @@ export function SiloPicker(props: SelectFieldClientProps) {
         })}
       </div>
       <p style={{margin: '8px 0 0', fontSize: 14, color: 'var(--theme-elevation-500)'}}>
-        {current ? (typeof current.label === 'string' ? current.label : String(current.value)) : '…'}
-        {!explicit && current ? ' (silo du site)' : ''}
+        {current ? (current.label ? getTranslation(current.label, i18n) : String(current.value)) : '…'}
+        {!explicit && current ? t(fieldsText.silo.siteSilo) : ''}
       </p>
     </div>
   );

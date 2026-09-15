@@ -31,6 +31,7 @@ import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997e
 import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { SocialRowLabel as SocialRowLabel_68d35ead5fc0bb4a6089201e765040fa } from '@/fields/RowLabels'
+import { LanguageSwitcher as LanguageSwitcher_f86abc942e585c438aeb7fe1174268e3 } from '@/i18n/admin/LanguageSwitcher'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -68,5 +69,6 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#BoldFeatureClient": BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@/fields/RowLabels#SocialRowLabel": SocialRowLabel_68d35ead5fc0bb4a6089201e765040fa,
+  "@/i18n/admin/LanguageSwitcher#LanguageSwitcher": LanguageSwitcher_f86abc942e585c438aeb7fe1174268e3,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

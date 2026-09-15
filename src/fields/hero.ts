@@ -1,5 +1,7 @@
 import type { Field, GroupField } from 'payload'
 
+import { heroText as t } from '../i18n/admin/blocks'
+
 import { linkGroup, titleField } from './shared'
 
 /**
@@ -21,31 +23,31 @@ const is =
 export const heroField: GroupField = {
   name: 'hero',
   type: 'group',
-  label: 'Haut de page',
+  label: t.label,
   fields: [
     {
       name: 'variant',
       type: 'select',
-      label: 'Modèle',
+      label: t.fields.variant,
       required: true,
       defaultValue: 'page-image',
       options: [
-        { label: 'Plein écran · image', value: 'media-image' },
-        { label: 'Plein écran · vidéo', value: 'media-video' },
-        { label: 'Plein écran · texte et image', value: 'split' },
-        { label: 'Haut de page · image', value: 'page-image' },
-        { label: 'Haut de page · clair', value: 'page-glow' },
-        { label: 'Haut de page · nuit', value: 'page-night' },
+        { label: t.variants.mediaImage, value: 'media-image' },
+        { label: t.variants.mediaVideo, value: 'media-video' },
+        { label: t.variants.split, value: 'split' },
+        { label: t.variants.pageImage, value: 'page-image' },
+        { label: t.variants.pageGlow, value: 'page-glow' },
+        { label: t.variants.pageNight, value: 'page-night' },
       ],
     },
-    { name: 'eyebrow', type: 'text', label: 'Surtitre (chip ou tirets)', localized: true },
+    { name: 'eyebrow', type: 'text', label: t.fields.eyebrow, localized: true },
     titleField({ name: 'title', required: true }),
-    { name: 'lead', type: 'textarea', label: 'Chapô', localized: true, admin: { rows: 3 } },
+    { name: 'lead', type: 'textarea', label: t.fields.lead, localized: true, admin: { rows: 3 } },
     {
       type: 'row',
       fields: [
-        linkGroup('primary', 'Bouton principal', { icon: true }),
-        linkGroup('secondary', 'Bouton secondaire', { icon: true }),
+        linkGroup('primary', t.fields.primary, { icon: true }),
+        linkGroup('secondary', t.fields.secondary, { icon: true }),
       ],
     },
     // full-screen media and image page top: background image + overlay
@@ -53,27 +55,27 @@ export const heroField: GroupField = {
       name: 'image',
       type: 'upload',
       relationTo: 'media',
-      label: 'Image de fond',
+      label: t.fields.image,
       admin: { condition: is('media-image', 'page-image') },
     },
     {
       name: 'video',
       type: 'upload',
       relationTo: 'media',
-      label: 'Vidéo de fond (mp4)',
+      label: t.fields.video,
       admin: { condition: is('media-video') },
     },
     {
       name: 'poster',
       type: 'upload',
       relationTo: 'media',
-      label: "Image d'attente de la vidéo",
+      label: t.fields.poster,
       admin: { condition: is('media-video') },
     },
     {
       name: 'overlay',
       type: 'number',
-      label: 'Calque noir sur le média (0 à 1)',
+      label: t.fields.overlay,
       min: 0,
       max: 1,
       defaultValue: 0.3,
@@ -82,7 +84,7 @@ export const heroField: GroupField = {
     {
       name: 'scrollHint',
       type: 'text',
-      label: 'Invitation à défiler (vide = aucune)',
+      label: t.fields.scrollHint,
       localized: true,
       admin: { condition: is('media-image', 'media-video') },
     },
@@ -90,34 +92,34 @@ export const heroField: GroupField = {
     {
       name: 'reassurance',
       type: 'array',
-      label: 'Ligne de réassurance',
+      label: t.fields.reassurance,
       maxRows: 4,
       admin: { condition: is('split') },
-      fields: [{ name: 'text', type: 'text', label: 'Texte', localized: true, required: true }],
+      fields: [{ name: 'text', type: 'text', label: t.fields.text, localized: true, required: true }],
     },
     {
       name: 'media',
       type: 'upload',
       relationTo: 'media',
-      label: 'Image de droite',
+      label: t.fields.media,
       admin: { condition: is('split') },
     },
     {
       name: 'badges',
       type: 'array',
-      label: "Étiquettes sur l'image",
+      label: t.fields.badges,
       maxRows: 2,
       admin: { condition: is('split') },
       fields: [
-        { name: 'label', type: 'text', label: 'Texte', localized: true, required: true },
+        { name: 'label', type: 'text', label: t.fields.text, localized: true, required: true },
         {
           name: 'tone',
           type: 'select',
-          label: 'Ton',
+          label: t.fields.tone,
           defaultValue: 'accent',
           options: [
-            { label: 'Silo', value: 'accent' },
-            { label: 'Nuit', value: 'night' },
+            { label: t.tones.accent, value: 'accent' },
+            { label: t.tones.night, value: 'night' },
           ],
         },
       ],
@@ -128,12 +130,12 @@ export const heroField: GroupField = {
     {
       name: 'breadcrumbMode',
       type: 'select',
-      label: "Fil d'Ariane",
+      label: t.fields.breadcrumbMode,
       defaultValue: 'inherit',
       options: [
-        { label: 'Selon le réglage du site', value: 'inherit' },
-        { label: 'Afficher', value: 'show' },
-        { label: 'Masquer', value: 'hide' },
+        { label: t.breadcrumbModes.inherit, value: 'inherit' },
+        { label: t.breadcrumbModes.show, value: 'show' },
+        { label: t.breadcrumbModes.hide, value: 'hide' },
       ],
     },
   ] satisfies Field[],

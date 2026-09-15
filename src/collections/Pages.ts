@@ -5,14 +5,15 @@ import {shareSections} from '@/fields/sections/shareSections';
 import {sectionsField} from '@/fields/sections/sectionFields';
 import {siloField} from '@/fields/siloField';
 import {slugField} from '@/fields/shared';
+import {collectionsText as ct} from '@/i18n/admin/collections';
 
 /** Site pages: title, slug, silo (sidebar), page top, then the stacked content sections. */
 export const Pages: CollectionConfig = {
   slug: 'pages',
-  labels: {singular: 'Page', plural: 'Pages'},
+  labels: {singular: ct.pages.singular, plural: ct.pages.plural},
   admin: {
     useAsTitle: 'title',
-    group: 'Site',
+    group: ct.groups.site,
     defaultColumns: ['title', 'slug', 'silo', 'updatedAt'],
     // « Aperçu » button: opens the site page in a new tab
     preview: (doc, {req}) => {
@@ -29,15 +30,15 @@ export const Pages: CollectionConfig = {
     {
       type: 'tabs',
       tabs: [
-        {label: 'Haut de page', fields: [{name: 'title', type: 'text', label: 'Titre de la page', required: true, localized: true}, heroField]},
+        {label: ct.pages.tabs.pageTop, fields: [{name: 'title', type: 'text', label: ct.pages.fields.title, required: true, localized: true}, heroField]},
         {
-          label: 'Contenu',
-          description: 'Une page est une pile de sections ; chaque section, des rangées de colonnes remplies de contenus (Fondations « Grille & emprises » du catalogue).',
+          label: ct.pages.tabs.content,
+          description: ct.pages.tabs.contentDescription,
           fields: [sectionsField],
         },
       ],
     },
     slugField,
-    siloField({name: 'silo', fromSettings: true, admin: {position: 'sidebar', description: 'Présélectionné sur le silo du site ; changez-le pour cette page seulement.'}}),
+    siloField({name: 'silo', fromSettings: true, admin: {position: 'sidebar', description: ct.pages.fields.siloDescription}}),
   ],
 };

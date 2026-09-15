@@ -1,5 +1,7 @@
 import type {Block, Field} from 'payload';
 
+import {cardBlockText as t} from '../../i18n/admin/blocks';
+import {ADMIN_LANGUAGE_CODES, type Text} from '../../i18n/admin/languages';
 import {iconField} from '../iconField';
 import {linkGroup} from '../shared';
 
@@ -13,48 +15,53 @@ import {linkGroup} from '../shared';
  */
 export type CardMediaKind = 'image' | 'icon' | 'number' | 'title';
 
-const MEDIA: {kind: CardMediaKind; slug: string; label: string; fields: Field[]}[] = [
-  {kind: 'image', slug: 'Image', label: 'image', fields: [{name: 'image', type: 'upload', relationTo: 'media', label: 'Image', required: true}]},
-  {kind: 'icon', slug: 'Icon', label: 'icône', fields: [iconField({name: 'iconKey', label: 'Icône', required: true})]},
+const MEDIA: {kind: CardMediaKind; slug: string; label: Text; fields: Field[]}[] = [
+  {kind: 'image', slug: 'Image', label: t.media.image, fields: [{name: 'image', type: 'upload', relationTo: 'media', label: t.fields.image, required: true}]},
+  {kind: 'icon', slug: 'Icon', label: t.media.icon, fields: [iconField({name: 'iconKey', label: t.fields.icon, required: true})]},
   {
     kind: 'number',
     slug: 'Number',
-    label: 'nombre',
+    label: t.media.number,
     fields: [
       {
         type: 'row',
         fields: [
-          {name: 'prefix', type: 'text', label: 'Préfixe', localized: true, admin: {width: '25%'}},
-          {name: 'value', type: 'text', label: 'Nombre', required: true, admin: {width: '50%'}},
-          {name: 'suffix', type: 'text', label: 'Suffixe', localized: true, admin: {width: '25%'}},
+          {name: 'prefix', type: 'text', label: t.fields.prefix, localized: true, admin: {width: '25%'}},
+          {name: 'value', type: 'text', label: t.fields.value, required: true, admin: {width: '50%'}},
+          {name: 'suffix', type: 'text', label: t.fields.suffix, localized: true, admin: {width: '25%'}},
         ],
       },
     ],
   },
-  {kind: 'title', slug: 'Title', label: 'titre seul', fields: []},
+  {kind: 'title', slug: 'Title', label: t.media.title, fields: []},
 ];
 
 const COMMON: Field[] = [
-  {name: 'title', type: 'text', label: 'Titre', required: true, localized: true},
-  {name: 'text', type: 'textarea', label: 'Texte', localized: true, admin: {rows: 3}},
+  {name: 'title', type: 'text', label: t.fields.title, required: true, localized: true},
+  {name: 'text', type: 'textarea', label: t.fields.text, localized: true, admin: {rows: 3}},
 ];
+
+/** Builds a Text by computing each admin language's value. */
+const mapText = (build: (lang: keyof Text) => string): Text =>
+  Object.fromEntries(ADMIN_LANGUAGE_CODES.map((lang) => [lang, build(lang)])) as Text;
 
 export const CARD_BLOCKS: Block[] = [];
 /** block slug → variant (media, clickable) and short label for the admin */
-export const CARD_VARIANTS: Record<string, {media: CardMediaKind; clickable: boolean; label: string}> = {};
+export const CARD_VARIANTS: Record<string, {media: CardMediaKind; clickable: boolean; label: Text}> = {};
 
 for (const clickable of [false, true]) {
   for (const m of MEDIA) {
     const slug = `card${m.slug}${clickable ? 'Link' : ''}`;
-    const label = `Carte${clickable ? ' cliquable' : ''} · ${m.label}`;
+    const name = clickable ? t.names.clickableCard : t.names.card;
+    const label = mapText((lang) => `${name[lang]} · ${m.label[lang]}`);
     CARD_VARIANTS[slug] = {media: m.kind, clickable, label};
     CARD_BLOCKS.push({
       slug,
-      labels: {singular: label, plural: `${label} (pl.)`},
+      labels: {singular: label, plural: mapText((lang) => `${label[lang]}${t.pluralSuffix[lang]}`)},
       imageURL: `/apercus/${slug}.png`,
-      imageAltText: label,
-      admin: {group: clickable ? 'Cartes cliquables' : 'Cartes'},
-      fields: [...m.fields, ...COMMON, ...(clickable ? [linkGroup('cta', "Bouton d'action", {required: true})] : [])],
+      imageAltText: label.fr, // Payload only accepts a plain string here
+      admin: {group: clickable ? t.groups.clickableCards : t.groups.cards},
+      fields: [...m.fields, ...COMMON, ...(clickable ? [linkGroup('cta', t.fields.cta, {required: true})] : [])],
     });
   }
 }

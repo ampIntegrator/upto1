@@ -1,4 +1,7 @@
-import {CONTENT_SPECS, type ContentRef} from '@/components/content-specs';
+import {type ColumnSpan, type ContentRef} from '@/components/content-specs';
+import {emptyBlockText, mediaBlockText, mediaQuoteBlockText} from '@/i18n/admin/blocks';
+import {type Text, tr} from '@/i18n/admin/languages';
+import {sectionsText} from '@/i18n/admin/sections';
 
 import {CARD_VARIANTS} from './cardBlocks';
 import {EMPTY_SLUG} from './emptyBlock';
@@ -33,11 +36,29 @@ export function toContentRefs(blocks: unknown): ContentRef[] {
   return blocks.map((b) => toContentRef(b as ContentBlockData)).filter((c): c is ContentRef => c !== null);
 }
 
-/** Short label of a block, for row and column labels. */
-export function contentLabel(block: ContentBlockData | null | undefined): string {
-  if (block?.blockType === EMPTY_SLUG) return 'Case vide';
-  const variant = CARD_VARIANTS[block?.blockType ?? ''];
+/** Short label of a block, in every admin language, for row and column labels. */
+export function contentLabel(block: ContentBlockData | null | undefined): Text {
+  const slug = block?.blockType ?? '';
+  if (slug === EMPTY_SLUG) return emptyBlockText.name;
+  const variant = CARD_VARIANTS[slug];
   if (variant) return variant.label;
-  const ref = toContentRef(block);
-  return ref ? CONTENT_SPECS[ref.type].label : String(block?.blockType ?? '?');
+  switch (slug) {
+    case MEDIA_SLUG:
+      return mediaBlockText.name;
+    case MEDIA_QUOTE_SLUG:
+      return mediaQuoteBlockText.name;
+    case 'text':
+      return sectionsText.blocks.text.name;
+    default: {
+      const raw = String(block?.blockType ?? '?');
+      return {fr: raw, en: raw};
+    }
+  }
+}
+
+/** Error of a row in an admin language: the widths must add up to 12 (same rule as content-specs' validateRow). */
+export function rowWidthError(spans: readonly ColumnSpan[], language: unknown): string | null {
+  if (!spans.length) return tr(sectionsText.validation.rowEmpty, language);
+  const total = spans.reduce<number>((sum, n) => sum + n, 0);
+  return total === 12 ? null : tr(sectionsText.validation.rowTotal, language, {total});
 }

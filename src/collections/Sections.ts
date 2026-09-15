@@ -1,6 +1,7 @@
 import type {CollectionConfig} from 'payload';
 
 import {sectionFields} from '@/fields/sections/sectionFields';
+import {collectionsText as ct} from '@/i18n/admin/collections';
 
 /**
  * Shared sections: a section edited in one place for every page that
@@ -9,11 +10,11 @@ import {sectionFields} from '@/fields/sections/sectionFields';
  */
 export const Sections: CollectionConfig = {
   slug: 'sections',
-  labels: {singular: 'Section partagée', plural: 'Sections partagées'},
-  admin: {useAsTitle: 'title', group: 'Site', defaultColumns: ['title', 'updatedAt']},
+  labels: {singular: ct.sections.singular, plural: ct.sections.plural},
+  admin: {useAsTitle: 'title', group: ct.groups.site, defaultColumns: ['title', 'updatedAt']},
   access: {read: () => true},
   fields: [
-    {name: 'title', type: 'text', label: 'Nom (admin seulement)', required: true},
+    {name: 'title', type: 'text', label: ct.sections.fields.title, required: true},
     ...sectionFields({shareable: false}),
   ],
 };

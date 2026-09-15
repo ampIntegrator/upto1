@@ -145,7 +145,7 @@ export interface Page {
     variant: 'media-image' | 'media-video' | 'split' | 'page-image' | 'page-glow' | 'page-night';
     eyebrow?: string | null;
     /**
-     * Un retour à la ligne = une nouvelle ligne du titre. Entourez la partie à mettre en serif de la balise <span>…</span>.
+     * A line break = a new title line. Wrap the part to set in serif with a <span>…</span> tag.
      */
     title: string;
     lead?: string | null;
@@ -182,7 +182,7 @@ export interface Page {
     breadcrumbMode?: ('inherit' | 'show' | 'hide') | null;
   };
   /**
-   * Les sections s’empilent de haut en bas sous le haut de page.
+   * Sections stack from top to bottom below the page header.
    */
   sections?:
     | (
@@ -199,22 +199,22 @@ export interface Page {
             spacingTop?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
             spacingBottom?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
             /**
-             * Identifiant pour un lien #ancre : minuscules, chiffres, tirets.
+             * Identifier for an #anchor link: lowercase letters, digits, hyphens.
              */
             anchor?: string | null;
             gapX?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
             gapY?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
             /**
-             * Sous 768 px, entre tous les blocs empilés.
+             * Below 768 px, between all stacked blocks.
              */
             gapYMobile?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
             /**
-             * À l’enregistrement, la section est copiée dans « Sections partagées » et la page y fait référence.
+             * On save, the section is copied to “Shared sections” and the page references it.
              */
             saveAsShared?: boolean | null;
             sharedTitle?: string | null;
             /**
-             * Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre mobile de la section (bouton téléphone) ; les colonnes vides y sont masquées.
+             * Each row splits the width into columns whose widths add up to 12. A column can stay empty. Below 768 px, columns go full width, in the section’s mobile order (phone button); empty columns are hidden there.
              */
             rows?:
               | {
@@ -223,7 +223,7 @@ export interface Page {
                         span: '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '12';
                         mobileOrder?: number | null;
                         /**
-                         * Un seul composant par colonne. Pour en changer, videz la colonne puis choisissez-en un autre.
+                         * One component per column. To change it, empty the column and then pick another one.
                          */
                         contents?:
                           | (
@@ -234,15 +234,15 @@ export interface Page {
                                 }
                               | {
                                   /**
-                                   * Le texte alternatif se règle dans la médiathèque. Vide : image décorative.
+                                   * Alt text is set in the media library. Empty: decorative image.
                                    */
                                   image: number | Media;
                                   /**
-                                   * Seulement si la rangée n'a pas d'autre contenu ; sinon l'image prend la hauteur de la rangée.
+                                   * Only if the row has no other content; otherwise the image takes the row height.
                                    */
                                   minHeight?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
                                   /**
-                                   * Sous 768 px, colonnes empilées.
+                                   * Below 768 px, stacked columns.
                                    */
                                   minHeightMobile?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
                                   overlay?: number | null;
@@ -252,25 +252,25 @@ export interface Page {
                                 }
                               | {
                                   /**
-                                   * Le texte alternatif se règle dans la médiathèque. Vide : image décorative.
+                                   * Alt text is set in the media library. Empty: decorative image.
                                    */
                                   image: number | Media;
                                   text: string;
                                   /**
-                                   * Pour la structure et le référencement ; ne change pas la taille.
+                                   * For structure and SEO; does not change the size.
                                    */
                                   tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   size?: ('display-1' | 'display-2' | 'display-3' | 'heading-1' | 'heading-2') | null;
                                   /**
-                                   * Seulement si la rangée n'a pas d'autre contenu ; sinon l'image prend la hauteur de la rangée.
+                                   * Only if the row has no other content; otherwise the image takes the row height.
                                    */
                                   minHeight?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
                                   /**
-                                   * Sous 768 px, colonnes empilées.
+                                   * Below 768 px, stacked columns.
                                    */
                                   minHeightMobile?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
                                   /**
-                                   * À ajuster selon l’image, pour que la phrase reste lisible.
+                                   * Adjust to the image so the sentence stays readable.
                                    */
                                   overlay?: number | null;
                                   id?: string | null;
@@ -279,7 +279,7 @@ export interface Page {
                                 }
                               | {
                                   /**
-                                   * Une ligne vide sépare deux paragraphes.
+                                   * A blank line separates two paragraphs.
                                    */
                                   text: string;
                                   id?: string | null;
@@ -397,11 +397,11 @@ export interface Page {
     image?: (number | null) | Media;
   };
   /**
-   * Minuscules, chiffres et tirets. « accueil » = page d'accueil.
+   * Lowercase letters, digits and hyphens. “accueil” = home page.
    */
   slug: string;
   /**
-   * Présélectionné sur le silo du site ; changez-le pour cette page seulement.
+   * Preset to the site silo; change it for this page only.
    */
   silo?: ('blue' | 'green' | 'orange' | 'violet' | 'magenta' | 'ambre') | null;
   updatedAt: string;
@@ -445,17 +445,17 @@ export interface Section {
   spacingTop?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
   spacingBottom?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
   /**
-   * Identifiant pour un lien #ancre : minuscules, chiffres, tirets.
+   * Identifier for an #anchor link: lowercase letters, digits, hyphens.
    */
   anchor?: string | null;
   gapX?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
   gapY?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
   /**
-   * Sous 768 px, entre tous les blocs empilés.
+   * Below 768 px, between all stacked blocks.
    */
   gapYMobile?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
   /**
-   * Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre mobile de la section (bouton téléphone) ; les colonnes vides y sont masquées.
+   * Each row splits the width into columns whose widths add up to 12. A column can stay empty. Below 768 px, columns go full width, in the section’s mobile order (phone button); empty columns are hidden there.
    */
   rows?:
     | {
@@ -464,7 +464,7 @@ export interface Section {
               span: '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '12';
               mobileOrder?: number | null;
               /**
-               * Un seul composant par colonne. Pour en changer, videz la colonne puis choisissez-en un autre.
+               * One component per column. To change it, empty the column and then pick another one.
                */
               contents?:
                 | (
@@ -475,15 +475,15 @@ export interface Section {
                       }
                     | {
                         /**
-                         * Le texte alternatif se règle dans la médiathèque. Vide : image décorative.
+                         * Alt text is set in the media library. Empty: decorative image.
                          */
                         image: number | Media;
                         /**
-                         * Seulement si la rangée n'a pas d'autre contenu ; sinon l'image prend la hauteur de la rangée.
+                         * Only if the row has no other content; otherwise the image takes the row height.
                          */
                         minHeight?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
                         /**
-                         * Sous 768 px, colonnes empilées.
+                         * Below 768 px, stacked columns.
                          */
                         minHeightMobile?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
                         overlay?: number | null;
@@ -493,25 +493,25 @@ export interface Section {
                       }
                     | {
                         /**
-                         * Le texte alternatif se règle dans la médiathèque. Vide : image décorative.
+                         * Alt text is set in the media library. Empty: decorative image.
                          */
                         image: number | Media;
                         text: string;
                         /**
-                         * Pour la structure et le référencement ; ne change pas la taille.
+                         * For structure and SEO; does not change the size.
                          */
                         tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                         size?: ('display-1' | 'display-2' | 'display-3' | 'heading-1' | 'heading-2') | null;
                         /**
-                         * Seulement si la rangée n'a pas d'autre contenu ; sinon l'image prend la hauteur de la rangée.
+                         * Only if the row has no other content; otherwise the image takes the row height.
                          */
                         minHeight?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
                         /**
-                         * Sous 768 px, colonnes empilées.
+                         * Below 768 px, stacked columns.
                          */
                         minHeightMobile?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
                         /**
-                         * À ajuster selon l’image, pour que la phrase reste lisible.
+                         * Adjust to the image so the sentence stays readable.
                          */
                         overlay?: number | null;
                         id?: string | null;
@@ -520,7 +520,7 @@ export interface Section {
                       }
                     | {
                         /**
-                         * Une ligne vide sépare deux paragraphes.
+                         * A blank line separates two paragraphs.
                          */
                         text: string;
                         id?: string | null;
@@ -653,7 +653,7 @@ export interface Post {
     image?: (number | null) | Media;
   };
   /**
-   * Minuscules, chiffres et tirets. « accueil » = page d'accueil.
+   * Lowercase letters, digits and hyphens. “accueil” = home page.
    */
   slug: string;
   category: number | Category;
@@ -669,7 +669,7 @@ export interface Category {
   id: number;
   title: string;
   /**
-   * Minuscules, chiffres et tirets. « accueil » = page d'accueil.
+   * Lowercase letters, digits and hyphens. “accueil” = home page.
    */
   slug: string;
   updatedAt: string;
@@ -1330,7 +1330,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface Setting {
   id: number;
   /**
-   * Couleur de référence de tout le site. Une page peut la surcharger.
+   * Reference color for the whole site. A page can override it.
    */
   silo: 'blue' | 'green' | 'orange' | 'violet' | 'magenta' | 'ambre';
   brandName: string;
@@ -1355,25 +1355,25 @@ export interface Setting {
     homeLabel?: string | null;
   };
   /**
-   * Écarts par défaut des sections construites dans l'onglet Contenu des pages. Chaque section peut les surcharger.
+   * Default gaps for sections built in the Content tab of pages. Each section can override them.
    */
   sectionGrid: {
     gapX: '0' | '10' | '20' | '30' | '40' | '50' | '60';
     gapY: '0' | '10' | '20' | '30' | '40' | '50' | '60';
     /**
-     * Sous 768 px, entre tous les blocs empilés.
+     * Below 768 px, between all stacked blocks.
      */
     gapYMobile: '0' | '10' | '20' | '30' | '40' | '50' | '60';
   };
   /**
-   * Les contenus sont traduisibles champ par champ (onglet de langue en haut de chaque page d'admin). Une langue non traduite affiche le français.
+   * Content is translatable field by field (language tab at the top of each admin page). An untranslated language shows French.
    */
   languages?: ('fr' | 'en' | 'de' | 'es')[] | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
 /**
- * Coordonnées et réseaux du bandeau viennent des Réglages du site.
+ * Contact details and networks in the top bar come from Site settings.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header".
@@ -1416,7 +1416,7 @@ export interface Header {
               id?: string | null;
             }[];
             /**
-             * Image, titre, extrait et lien viennent de l'article.
+             * Image, title, excerpt and link come from the post.
              */
             featured?: (number | null) | Post;
             featuredLinkLabel?: string | null;
@@ -1438,7 +1438,7 @@ export interface Header {
   createdAt?: string | null;
 }
 /**
- * Marque, coordonnées et réseaux viennent des Réglages du site ; les articles en bref sont les trois derniers publiés.
+ * Brand, contact details and networks come from Site settings; the news items are the three latest published posts.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer".
@@ -1449,7 +1449,7 @@ export interface Footer {
   newsletter?: {
     eyebrow?: string | null;
     /**
-     * Un retour à la ligne = une nouvelle ligne du titre. Entourez la partie à mettre en serif de la balise <span>…</span>.
+     * A line break = a new title line. Wrap the part to set in serif with a <span>…</span> tag.
      */
     title?: string | null;
     text?: string | null;

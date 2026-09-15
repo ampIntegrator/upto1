@@ -2,62 +2,63 @@ import type {Block, GlobalConfig} from 'payload';
 
 import {iconField} from '@/fields/iconField';
 import {linkGroup} from '@/fields/shared';
+import {headerText, settingsText} from '@/i18n/admin/globals';
 
 /** Menu entry (dropdown and mega menu): title, description, icon, address. */
 const leafFields = [
   {type: 'row' as const, fields: [
-    {name: 'title', type: 'text' as const, label: 'Titre', required: true, localized: true, admin: {width: '50%'}},
-    {name: 'href', type: 'text' as const, label: 'Adresse', required: true, admin: {width: '50%'}},
+    {name: 'title', type: 'text' as const, label: headerText.fields.title, required: true, localized: true, admin: {width: '50%'}},
+    {name: 'href', type: 'text' as const, label: headerText.fields.href, required: true, admin: {width: '50%'}},
   ]},
-  {name: 'description', type: 'text' as const, label: 'Description (une ligne)', localized: true},
-  iconField({name: 'iconKey', label: 'Icône'}),
+  {name: 'description', type: 'text' as const, label: headerText.fields.description, localized: true},
+  iconField({name: 'iconKey', label: headerText.fields.icon}),
 ];
 
 const LinkBlock: Block = {
-  slug: 'link', labels: {singular: 'Lien simple', plural: 'Liens simples'},
+  slug: 'link', labels: {singular: headerText.linkBlock.singular, plural: headerText.linkBlock.plural},
   fields: [{type: 'row', fields: [
-    {name: 'label', type: 'text', label: 'Libellé', required: true, localized: true, admin: {width: '50%'}},
-    {name: 'href', type: 'text', label: 'Adresse', required: true, admin: {width: '50%'}},
+    {name: 'label', type: 'text', label: headerText.fields.label, required: true, localized: true, admin: {width: '50%'}},
+    {name: 'href', type: 'text', label: headerText.fields.href, required: true, admin: {width: '50%'}},
   ]}],
 };
 
 const MenuBlock: Block = {
-  slug: 'menu', labels: {singular: 'Menu déroulant', plural: 'Menus déroulants'},
+  slug: 'menu', labels: {singular: headerText.menuBlock.singular, plural: headerText.menuBlock.plural},
   fields: [
-    {name: 'label', type: 'text', label: 'Libellé', required: true, localized: true},
-    {name: 'items', type: 'array', label: 'Entrées (4 au plus)', maxRows: 4, minRows: 1, required: true, labels: {singular: 'Entrée', plural: 'Entrées'}, fields: leafFields},
+    {name: 'label', type: 'text', label: headerText.fields.label, required: true, localized: true},
+    {name: 'items', type: 'array', label: headerText.menuBlock.items, maxRows: 4, minRows: 1, required: true, labels: {singular: headerText.menuBlock.itemSingular, plural: headerText.menuBlock.itemPlural}, fields: leafFields},
   ],
 };
 
 const MegaBlock: Block = {
-  slug: 'mega', labels: {singular: 'Méga-menu', plural: 'Méga-menus'},
+  slug: 'mega', labels: {singular: headerText.megaBlock.singular, plural: headerText.megaBlock.plural},
   fields: [
-    {name: 'label', type: 'text', label: 'Libellé', required: true, localized: true},
+    {name: 'label', type: 'text', label: headerText.fields.label, required: true, localized: true},
     {
-      name: 'groups', type: 'array', label: 'Piles de liens (2 au plus)', maxRows: 2, minRows: 1, required: true, labels: {singular: 'Pile', plural: 'Piles'},
+      name: 'groups', type: 'array', label: headerText.megaBlock.groups, maxRows: 2, minRows: 1, required: true, labels: {singular: headerText.megaBlock.groupSingular, plural: headerText.megaBlock.groupPlural},
       fields: [
-        {name: 'title', type: 'text', label: 'Titre de la pile', required: true, localized: true},
-        {name: 'items', type: 'array', label: 'Liens (4 au plus)', maxRows: 4, minRows: 1, required: true, labels: {singular: 'Lien', plural: 'Liens'}, fields: leafFields},
+        {name: 'title', type: 'text', label: headerText.megaBlock.groupTitle, required: true, localized: true},
+        {name: 'items', type: 'array', label: headerText.megaBlock.items, maxRows: 4, minRows: 1, required: true, labels: {singular: headerText.megaBlock.itemSingular, plural: headerText.megaBlock.itemPlural}, fields: leafFields},
       ],
     },
     {
-      name: 'featured', type: 'relationship', relationTo: 'posts', label: 'Article mis en avant (zone de droite)',
-      admin: {description: 'Image, titre, extrait et lien viennent de l\'article.'},
+      name: 'featured', type: 'relationship', relationTo: 'posts', label: headerText.megaBlock.featured,
+      admin: {description: headerText.megaBlock.featuredDescription},
     },
-    {name: 'featuredLinkLabel', type: 'text', label: 'Libellé du lien de l\'article', localized: true, defaultValue: "Lire l'article"},
+    {name: 'featuredLinkLabel', type: 'text', label: headerText.megaBlock.featuredLinkLabel, localized: true, defaultValue: "Lire l'article"},
   ],
 };
 
 export const Header: GlobalConfig = {
   slug: 'header',
-  label: 'En-tête',
-  admin: {group: 'Site', description: 'Coordonnées et réseaux du bandeau viennent des Réglages du site.'},
+  label: headerText.label,
+  admin: {group: settingsText.group, description: headerText.description},
   access: {read: () => true},
   fields: [
-    {name: 'nav', type: 'blocks', label: 'Navigation principale', blocks: [LinkBlock, MenuBlock, MegaBlock], maxRows: 6},
+    {name: 'nav', type: 'blocks', label: headerText.nav, blocks: [LinkBlock, MenuBlock, MegaBlock], maxRows: 6},
     {type: 'row', fields: [
-      linkGroup('login', 'Bouton « Connexion »'),
-      linkGroup('cta', 'Bouton principal'),
+      linkGroup('login', headerText.login),
+      linkGroup('cta', headerText.cta),
     ]},
   ],
 };

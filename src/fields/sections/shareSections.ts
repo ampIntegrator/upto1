@@ -1,5 +1,8 @@
 import type {CollectionBeforeChangeHook, RequiredDataFromCollectionSlug} from 'payload';
 
+import {tr} from '@/i18n/admin/languages';
+import {sectionsText} from '@/i18n/admin/sections';
+
 /**
  * « Enregistrer dans les sections partagées » checkbox of a Section block: when the page
  * is saved, the section is copied into the « sections » collection and the block becomes a
@@ -33,7 +36,7 @@ export const shareSections: CollectionBeforeChangeHook = async ({data, req}) => 
       continue;
     }
     const {saveAsShared: _s, sharedTitle, id: _id, blockName, blockType: _t, ...fields} = block;
-    const title = typeof sharedTitle === 'string' && sharedTitle.trim() ? sharedTitle.trim() : `${typeof data.title === 'string' ? data.title : 'Page'} · section ${n}`;
+    const title = typeof sharedTitle === 'string' && sharedTitle.trim() ? sharedTitle.trim() : tr(sectionsText.settings.sharedDefaultTitle, req.i18n?.language, {page: typeof data.title === 'string' ? data.title : null, n});
     const doc = await req.payload.create({collection: 'sections', data: {...stripIds(fields), title} as RequiredDataFromCollectionSlug<'sections'>, req, locale: req.locale === 'all' ? undefined : req.locale});
     out.push({blockType: 'sharedSection', blockName: blockName ?? title, section: doc.id});
   }

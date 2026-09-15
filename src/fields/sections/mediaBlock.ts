@@ -1,5 +1,7 @@
 import type {Block} from 'payload';
 
+import {mediaBlockText as t} from '../../i18n/admin/blocks';
+
 /**
  * « Image » block of a column: the Media component (image that fills the column).
  * Video will come later in the same block.
@@ -19,18 +21,18 @@ export const HEIGHT_OPTIONS = MEDIA_HEIGHTS.map((v) => ({label: `${v} px`, value
 
 export const mediaBlock: Block = {
   slug: MEDIA_SLUG,
-  labels: {singular: 'Image', plural: 'Images'},
+  labels: {singular: t.name, plural: t.plural},
   imageURL: `/apercus/${MEDIA_SLUG}.png`,
-  imageAltText: 'Image',
-  admin: {group: 'Média'},
+  imageAltText: t.name.fr, // Payload only accepts a plain string here
+  admin: {group: t.group},
   fields: [
     {
       name: 'image',
       type: 'upload',
       relationTo: 'media',
-      label: 'Image',
+      label: t.image,
       required: true,
-      admin: {description: 'Le texte alternatif se règle dans la médiathèque. Vide : image décorative.'},
+      admin: {description: t.imageDescription},
     },
     {
       type: 'row',
@@ -38,13 +40,13 @@ export const mediaBlock: Block = {
         {
           name: 'minHeight',
           type: 'select',
-          label: 'Hauteur minimale desktop',
+          label: t.minHeight,
           defaultValue: '320',
           options: HEIGHT_OPTIONS,
-          admin: {width: '33%', description: "Seulement si la rangée n'a pas d'autre contenu ; sinon l'image prend la hauteur de la rangée."},
+          admin: {width: '33%', description: t.minHeightDescription},
         },
-        {name: 'minHeightMobile', type: 'select', label: 'Hauteur minimale mobile', defaultValue: '240', options: HEIGHT_OPTIONS, admin: {width: '33%', description: 'Sous 768 px, colonnes empilées.'}},
-        {name: 'overlay', type: 'number', label: 'Calque noir (0 à 1)', min: 0, max: 1, defaultValue: 0, admin: {step: 0.05, width: '33%'}},
+        {name: 'minHeightMobile', type: 'select', label: t.minHeightMobile, defaultValue: '240', options: HEIGHT_OPTIONS, admin: {width: '33%', description: t.minHeightMobileDescription}},
+        {name: 'overlay', type: 'number', label: t.overlay, min: 0, max: 1, defaultValue: 0, admin: {step: 0.05, width: '33%'}},
       ],
     },
   ],

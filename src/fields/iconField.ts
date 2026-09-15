@@ -1,5 +1,7 @@
 import type {TextField} from 'payload';
 
+import {fieldsText} from '@/i18n/admin/fields';
+import {tr} from '@/i18n/admin/languages';
 import {NUCLEO_KEYS} from '@/theme/icons/keys';
 
 /**
@@ -11,10 +13,10 @@ export function iconField(overrides: Partial<TextField> & {name: string}): TextF
   const {admin, ...rest} = overrides;
   return {
     type: 'text',
-    label: 'Icône',
-    validate: (value: unknown) => {
+    label: fieldsText.icon.label,
+    validate: (value: unknown, {req}: {req?: {i18n?: {language?: string}}}) => {
       if (!value) return true;
-      return (NUCLEO_KEYS as string[]).includes(String(value)) || `Icône inconnue : ${String(value)}`;
+      return (NUCLEO_KEYS as string[]).includes(String(value)) || tr(fieldsText.icon.unknown, req?.i18n?.language, {key: String(value)});
     },
     ...rest,
     admin: {

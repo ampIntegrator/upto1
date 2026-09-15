@@ -1,9 +1,11 @@
 import type { CollectionConfig } from 'payload'
 
+import {collectionsText as ct} from '@/i18n/admin/collections';
+
 export const Media: CollectionConfig = {
   slug: 'media',
-  labels: {singular: 'Média', plural: 'Médias'},
-  admin: {group: 'Site'},
+  labels: {singular: ct.media.singular, plural: ct.media.plural},
+  admin: {group: ct.groups.site},
   access: {
     read: () => true,
   },
@@ -11,7 +13,7 @@ export const Media: CollectionConfig = {
     {
       name: 'alt',
       type: 'text',
-      label: 'Texte alternatif',
+      label: ct.media.fields.alt,
       required: true,
       localized: true,
     },

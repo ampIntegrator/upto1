@@ -1,3 +1,5 @@
+import {sectionsText} from '@/i18n/admin/sections';
+
 /**
  * Grid gaps of sections built in the admin (15 Sept. 2026):
  *   - gapX: between the columns of a row;
@@ -19,7 +21,7 @@ export const GAP_OPTIONS = GAP_VALUES.map((v) => ({label: `${v} px`, value: v}))
 
 /** « Réglage du site » option first, for sections. */
 export const SITE_GAP = 'site';
-export const SECTION_GAP_OPTIONS = [{label: 'Réglage du site', value: SITE_GAP}, ...GAP_OPTIONS];
+export const SECTION_GAP_OPTIONS = [{label: sectionsText.settings.siteGap, value: SITE_GAP}, ...GAP_OPTIONS];
 
 const toGap = (v: unknown): number | undefined => {
   const n = Number(v);

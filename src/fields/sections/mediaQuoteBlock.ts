@@ -1,5 +1,6 @@
 import type {Block} from 'payload';
 
+import {mediaQuoteBlockText as t} from '../../i18n/admin/blocks';
 import {HEIGHT_OPTIONS} from './mediaBlock';
 
 /**
@@ -14,34 +15,34 @@ const TAG_OPTIONS = (['h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span'] as const).map((
 
 /** Theme sizes, all even (display-1 to 3, headings 1 and 2). */
 const SIZE_OPTIONS = [
-  {label: 'Très grande (display-1)', value: 'display-1'},
-  {label: 'Grande (display-2)', value: 'display-2'},
-  {label: 'Moyenne (display-3)', value: 'display-3'},
-  {label: 'Normale (titre 1, 26 px)', value: 'heading-1'},
-  {label: 'Petite (titre 2, 22 px)', value: 'heading-2'},
+  {label: t.sizes.display1, value: 'display-1'},
+  {label: t.sizes.display2, value: 'display-2'},
+  {label: t.sizes.display3, value: 'display-3'},
+  {label: t.sizes.heading1, value: 'heading-1'},
+  {label: t.sizes.heading2, value: 'heading-2'},
 ];
 
 export const mediaQuoteBlock: Block = {
   slug: MEDIA_QUOTE_SLUG,
-  labels: {singular: 'Image avec citation', plural: 'Images avec citation'},
+  labels: {singular: t.name, plural: t.plural},
   imageURL: `/apercus/${MEDIA_QUOTE_SLUG}.png`,
-  imageAltText: 'Image avec citation',
-  admin: {group: 'Média'},
+  imageAltText: t.name.fr, // Payload only accepts a plain string here
+  admin: {group: t.group},
   fields: [
     {
       name: 'image',
       type: 'upload',
       relationTo: 'media',
-      label: 'Image',
+      label: t.image,
       required: true,
-      admin: {description: 'Le texte alternatif se règle dans la médiathèque. Vide : image décorative.'},
+      admin: {description: t.imageDescription},
     },
-    {name: 'text', type: 'text', label: 'Phrase', required: true, localized: true},
+    {name: 'text', type: 'text', label: t.text, required: true, localized: true},
     {
       type: 'row',
       fields: [
-        {name: 'tag', type: 'select', label: 'Balise', defaultValue: 'h2', options: TAG_OPTIONS, admin: {width: '50%', description: 'Pour la structure et le référencement ; ne change pas la taille.'}},
-        {name: 'size', type: 'select', label: 'Taille', defaultValue: 'display-3', options: SIZE_OPTIONS, admin: {width: '50%'}},
+        {name: 'tag', type: 'select', label: t.tag, defaultValue: 'h2', options: TAG_OPTIONS, admin: {width: '50%', description: t.tagDescription}},
+        {name: 'size', type: 'select', label: t.size, defaultValue: 'display-3', options: SIZE_OPTIONS, admin: {width: '50%'}},
       ],
     },
     {
@@ -50,13 +51,13 @@ export const mediaQuoteBlock: Block = {
         {
           name: 'minHeight',
           type: 'select',
-          label: 'Hauteur minimale desktop',
+          label: t.minHeight,
           defaultValue: '320',
           options: HEIGHT_OPTIONS,
-          admin: {width: '33%', description: "Seulement si la rangée n'a pas d'autre contenu ; sinon l'image prend la hauteur de la rangée."},
+          admin: {width: '33%', description: t.minHeightDescription},
         },
-        {name: 'minHeightMobile', type: 'select', label: 'Hauteur minimale mobile', defaultValue: '240', options: HEIGHT_OPTIONS, admin: {width: '33%', description: 'Sous 768 px, colonnes empilées.'}},
-        {name: 'overlay', type: 'number', label: 'Calque noir (0 à 1)', min: 0, max: 1, defaultValue: 0.4, admin: {step: 0.05, width: '33%', description: 'À ajuster selon l’image, pour que la phrase reste lisible.'}},
+        {name: 'minHeightMobile', type: 'select', label: t.minHeightMobile, defaultValue: '240', options: HEIGHT_OPTIONS, admin: {width: '33%', description: t.minHeightMobileDescription}},
+        {name: 'overlay', type: 'number', label: t.overlay, min: 0, max: 1, defaultValue: 0.4, admin: {step: 0.05, width: '33%', description: t.overlayDescription}},
       ],
     },
   ],

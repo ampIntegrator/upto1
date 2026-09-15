@@ -6,7 +6,7 @@ Marketing website for **Vidomia**, built with **Next.js 16**, **Payload CMS 3** 
 - Admin (Payload): http://localhost:3000/admin
 - Design-system catalog: http://localhost:3000/design
 
-The admin and all site content are in French. Code, comments, documentation and commit messages are in English.
+The admin interface is available in French and English; site content is edited in French first, then translated. Code, comments, documentation and commit messages are in English.
 
 ## Requirements
 
@@ -98,6 +98,7 @@ src/
   app/(payload)/         Payload admin routes and admin styles (custom.scss)
   collections/           Pages, Sections (shared sections), Posts, Categories, Media, Users
   globals/               Settings, Header, Footer
+  i18n/admin/            Admin interface languages: dictionaries and header selector
   fields/                Custom fields and admin components
   fields/sections/       Section builder (see docs/section-builder.md)
   components/            Design-system components built on Astryx
@@ -118,3 +119,4 @@ Six accent colours ("silos") are defined in `src/theme/silos/palettes.ts`. The s
 ## Documentation
 
 - [Section builder](docs/section-builder.md): how pages are composed in the admin (sections, rows, columns, content blocks, mobile order, drag and drop).
+- [Admin languages](docs/admin-languages.md): the French and English admin interface, dictionaries, and how to add a language.

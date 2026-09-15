@@ -1,17 +1,19 @@
 import type { Field, GroupField, TextareaField } from 'payload'
 
+import { fieldsText } from '@/i18n/admin/fields'
+import { type Text, tr } from '@/i18n/admin/languages'
+
 import { iconField } from './iconField'
 
 /** Title entered in a textarea in TitleText format: line break = line break, <span> = serif accent. */
 export function titleField(overrides: Partial<TextareaField> & { name: string }): TextareaField {
   return {
     type: 'textarea',
-    label: 'Titre',
+    label: fieldsText.title.label,
     localized: true,
     admin: {
       rows: 3,
-      description:
-        'Un retour à la ligne = une nouvelle ligne du titre. Entourez la partie à mettre en serif de la balise <span>…</span>.',
+      description: fieldsText.title.description,
       ...overrides.admin,
     },
     ...overrides,
@@ -21,14 +23,14 @@ export function titleField(overrides: Partial<TextareaField> & { name: string })
 /** Link: label (translatable) + address, with optional Nucleo icon. */
 export function linkGroup(
   name: string,
-  label: string,
+  label: string | Text,
   opts: { icon?: boolean; required?: boolean } = {},
 ): GroupField {
   const fields: Field[] = [
-    { name: 'label', type: 'text', label: 'Libellé', localized: true, required: opts.required },
-    { name: 'href', type: 'text', label: 'Adresse (URL ou ancre)', required: opts.required },
+    { name: 'label', type: 'text', label: fieldsText.link.label, localized: true, required: opts.required },
+    { name: 'href', type: 'text', label: fieldsText.link.href, required: opts.required },
   ]
-  if (opts.icon) fields.push(iconField({ name: 'iconKey', label: 'Icône (optionnelle)' }))
+  if (opts.icon) fields.push(iconField({ name: 'iconKey', label: fieldsText.link.icon }))
   return { name, type: 'group', label, fields }
 }
 
@@ -36,15 +38,15 @@ export function linkGroup(
 export const slugField: Field = {
   name: 'slug',
   type: 'text',
-  label: 'Slug (adresse)',
+  label: fieldsText.slug.label,
   required: true,
   unique: true,
   index: true,
   admin: {
     position: 'sidebar',
-    description: "Minuscules, chiffres et tirets. « accueil » = page d'accueil.",
+    description: fieldsText.slug.description,
   },
-  validate: (value: unknown) =>
+  validate: (value: unknown, { req }: { req?: { i18n?: { language?: string } } }) =>
     (typeof value === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)) ||
-    'Minuscules, chiffres et tirets uniquement.',
+    tr(fieldsText.slug.invalid, req?.i18n?.language),
 }

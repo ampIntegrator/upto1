@@ -1,6 +1,7 @@
 import type {SelectField} from 'payload';
 
-import {SILO_LABELS, SILO_NAMES} from '@/theme/silos/palettes';
+import {fieldsText} from '@/i18n/admin/fields';
+import {SILO_NAMES} from '@/theme/silos/palettes';
 
 /**
  * « silo d'accent » field: one of the six silos, shown as coloured swatches (SiloPicker).
@@ -12,8 +13,8 @@ export function siloField(overrides: Partial<SelectField> & {name: string; fromS
   const {fromSettings, admin, ...rest} = overrides;
   return {
     type: 'select',
-    label: "Silo d'accent",
-    options: SILO_NAMES.map((s) => ({label: SILO_LABELS[s], value: s})),
+    label: fieldsText.silo.label,
+    options: SILO_NAMES.map((s) => ({label: fieldsText.silo.names[s], value: s})),
     defaultValue: fromSettings
       ? async ({req}) => {
           const settings = await req.payload.findGlobal({slug: 'settings', depth: 0});
