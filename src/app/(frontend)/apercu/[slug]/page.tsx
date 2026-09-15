@@ -3,12 +3,13 @@ import React from 'react';
 
 import {CARD_VARIANTS} from '@/fields/sections/cardBlocks';
 import {EMPTY_SLUG} from '@/fields/sections/emptyBlock';
+import {MEDIA_SLUG} from '@/fields/sections/mediaBlock';
 import {Apercu} from './Apercu';
 
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return [EMPTY_SLUG, ...Object.keys(CARD_VARIANTS)].map((slug) => ({slug}));
+  return [EMPTY_SLUG, MEDIA_SLUG, ...Object.keys(CARD_VARIANTS)].map((slug) => ({slug}));
 }
 
 /**
@@ -18,6 +19,6 @@ export function generateStaticParams() {
  */
 export default async function Page({params}: {params: Promise<{slug: string}>}) {
   const {slug} = await params;
-  if (slug !== EMPTY_SLUG && !(slug in CARD_VARIANTS)) notFound();
+  if (slug !== EMPTY_SLUG && slug !== MEDIA_SLUG && !(slug in CARD_VARIANTS)) notFound();
   return <Apercu slug={slug} />;
 }

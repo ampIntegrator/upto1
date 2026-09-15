@@ -229,6 +229,24 @@ export interface Page {
                                 }
                               | {
                                   /**
+                                   * Le texte alternatif se règle dans la médiathèque. Vide : image décorative.
+                                   */
+                                  image: number | Media;
+                                  /**
+                                   * Seulement si la rangée n'a pas d'autre contenu ; sinon l'image prend la hauteur de la rangée.
+                                   */
+                                  minHeight?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
+                                  /**
+                                   * Sous 768 px, colonnes empilées.
+                                   */
+                                  minHeightMobile?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
+                                  overlay?: number | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'media';
+                                }
+                              | {
+                                  /**
                                    * Une ligne vide sépare deux paragraphes.
                                    */
                                   text: string;
@@ -427,6 +445,24 @@ export interface Section {
                         id?: string | null;
                         blockName?: string | null;
                         blockType: 'empty';
+                      }
+                    | {
+                        /**
+                         * Le texte alternatif se règle dans la médiathèque. Vide : image décorative.
+                         */
+                        image: number | Media;
+                        /**
+                         * Seulement si la rangée n'a pas d'autre contenu ; sinon l'image prend la hauteur de la rangée.
+                         */
+                        minHeight?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
+                        /**
+                         * Sous 768 px, colonnes empilées.
+                         */
+                        minHeightMobile?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
+                        overlay?: number | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'media';
                       }
                     | {
                         /**
@@ -788,6 +824,16 @@ export interface PagesSelect<T extends boolean = true> {
                                       id?: T;
                                       blockName?: T;
                                     };
+                                media?:
+                                  | T
+                                  | {
+                                      image?: T;
+                                      minHeight?: T;
+                                      minHeightMobile?: T;
+                                      overlay?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
                                 text?:
                                   | T
                                   | {
@@ -958,6 +1004,16 @@ export interface SectionsSelect<T extends boolean = true> {
                     empty?:
                       | T
                       | {
+                          id?: T;
+                          blockName?: T;
+                        };
+                    media?:
+                      | T
+                      | {
+                          image?: T;
+                          minHeight?: T;
+                          minHeightMobile?: T;
+                          overlay?: T;
                           id?: T;
                           blockName?: T;
                         };
