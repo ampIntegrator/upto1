@@ -9,6 +9,7 @@ import {mkdir} from 'node:fs/promises';
 import path from 'node:path';
 
 import {CARD_SLUGS} from '../src/fields/sections/cardBlocks';
+import {EMPTY_SLUG} from '../src/fields/sections/emptyBlock';
 
 const BASE = process.env.PREVIEW_BASE ?? 'http://localhost:3000';
 const OUT = path.resolve('public/apercus');
@@ -17,7 +18,7 @@ await mkdir(OUT, {recursive: true});
 const browser = await chromium.launch();
 const page = await browser.newPage({viewport: {width: 800, height: 900}, deviceScaleFactor: 2});
 let done = 0;
-for (const slug of CARD_SLUGS) {
+for (const slug of [EMPTY_SLUG, ...CARD_SLUGS]) {
   await page.goto(`${BASE}/apercu/${slug}`, {waitUntil: 'networkidle'});
   const box = page.locator('[data-apercu]');
   await box.waitFor({timeout: 60000});

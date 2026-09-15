@@ -1,10 +1,12 @@
 'use client';
 
 import {VStack} from '@astryxdesign/core/Stack';
+import {Text} from '@astryxdesign/core/Text';
 import React from 'react';
 
 import {Card, type CardProps} from '@/components/Card';
 import {CARD_VARIANTS} from '@/fields/sections/cardBlocks';
+import {EMPTY_SLUG} from '@/fields/sections/emptyBlock';
 import {OrbitaThemeProvider} from '@/theme/OrbitaThemeProvider';
 
 const IMG = 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80';
@@ -33,7 +35,14 @@ export function Apercu({slug}: {slug: string}) {
   return (
     <OrbitaThemeProvider fixedSilo="blue" initialMode="light">
       <VStack data-apercu style={{width: 'var(--apercu-width, 360px)', padding: 'var(--spacing-6)', background: 'var(--color-background-body)'}}>
-        <Card {...demoCard(slug)} />
+        {slug === EMPTY_SLUG ? (
+          // case vide : un emplacement en pointillés, à la hauteur d'une carte
+          <VStack hAlign="center" vAlign="center" style={{minHeight: 'calc(var(--spacing-12) * 6)', border: 'var(--border-width) dashed var(--color-border-emphasized)'}}>
+            <Text type="label" color="secondary">Case vide</Text>
+          </VStack>
+        ) : (
+          <Card {...demoCard(slug)} />
+        )}
       </VStack>
     </OrbitaThemeProvider>
   );

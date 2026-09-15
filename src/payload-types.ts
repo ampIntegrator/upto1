@@ -223,6 +223,11 @@ export interface Page {
                         contents?:
                           | (
                               | {
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'empty';
+                                }
+                              | {
                                   /**
                                    * Une ligne vide sépare deux paragraphes.
                                    */
@@ -418,6 +423,11 @@ export interface Section {
                */
               contents?:
                 | (
+                    | {
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'empty';
+                      }
                     | {
                         /**
                          * Une ligne vide sépare deux paragraphes.
@@ -772,6 +782,12 @@ export interface PagesSelect<T extends boolean = true> {
                           contents?:
                             | T
                             | {
+                                empty?:
+                                  | T
+                                  | {
+                                      id?: T;
+                                      blockName?: T;
+                                    };
                                 text?:
                                   | T
                                   | {
@@ -939,6 +955,12 @@ export interface SectionsSelect<T extends boolean = true> {
               contents?:
                 | T
                 | {
+                    empty?:
+                      | T
+                      | {
+                          id?: T;
+                          blockName?: T;
+                        };
                     text?:
                       | T
                       | {
