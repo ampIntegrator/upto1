@@ -12,7 +12,7 @@
  *     une poignée ⋮⋮ fait glisser la colonne à gauche ou à droite dans sa rangée (souris,
  *     tactile ou clavier) ; rangées et colonnes triées par le même module (sortable.tsx, dnd-kit) ;
  *   - le bouton téléphone d'une rangée ouvre la fenêtre d'ordre mobile de toute la section :
- *     toutes ses colonnes, rangées confondues, avec des flèches haut et bas ; les colonnes de la
+ *     toutes ses colonnes, rangées confondues, réordonnées par glisser-déposer (poignée) ; les colonnes de la
  *     rangée cliquée sont mises en évidence (champ caché mobileOrder, voir mobileOrder.ts) ;
  *   - une case résume son composant (un seul par colonne), ou « Vide » ; un clic ouvre un tiroir
  *     Payload avec le composant de la colonne et, s'il y en a un, un bouton « Vider la colonne »
@@ -469,28 +469,35 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
                 <div className="confirmation-modal__wrapper rows-mobile__wrapper">
                   <div className="confirmation-modal__content">
                     <h2 style={{margin: 0}}>Ordre mobile de la section</h2>
-                    <p style={{...text14, ...dim}}>Sous 768 px, toutes les colonnes de la section s’empilent dans cet ordre, rangées confondues. Les colonnes vides sont masquées. En évidence : la rangée {mobileRow + 1}.</p>
+                    <p style={{...text14, ...dim}}>Sous 768 px, toutes les colonnes de la section s’empilent dans cet ordre, rangées confondues : glissez une ligne par sa poignée pour la déplacer. Les colonnes vides sont masquées. En évidence : la rangée {mobileRow + 1}.</p>
                   </div>
-                  <ol className="rows-mobile__list">
+                  <SortableList ids={sequence.map((k) => `${flatColumns[k].row}-${flatColumns[k].col}`)} axis="y" onMove={moveMobile} className="rows-mobile__list" role="list">
                     {sequence.map((k, pos) => {
                       const c = flatColumns[k];
+                      const id = `${c.row}-${c.col}`;
                       return (
-                        <li key={`${c.row}-${c.col}`} className="rows-mobile__item" data-current={c.row === mobileRow ? 'true' : undefined}>
-                          <span style={{...text14, ...dim}}>{pos + 1}</span>
-                          <span style={{...text14, flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
-                            {c.contents.join(', ')}
-                            <span style={dim}> · {where(c)}</span>
-                          </span>
-                          <Button size="small" buttonStyle="pill" disabled={pos === 0} onClick={() => moveMobile(pos, pos - 1)} aria-label={`Monter sur mobile : ${where(c)}`}>
-                            ↑
-                          </Button>
-                          <Button size="small" buttonStyle="pill" disabled={pos === sequence.length - 1} onClick={() => moveMobile(pos, pos + 1)} aria-label={`Descendre sur mobile : ${where(c)}`}>
-                            ↓
-                          </Button>
-                        </li>
+                        <SortableItem key={id} id={id}>
+                          {(h) => (
+                            <div
+                              ref={h.setNodeRef}
+                              role="listitem"
+                              className="rows-mobile__item"
+                              data-current={c.row === mobileRow ? 'true' : undefined}
+                              style={{position: 'relative', transform: h.transform, transition: h.transition, zIndex: h.isDragging ? 2 : undefined, background: h.isDragging ? 'var(--theme-bg)' : undefined}}>
+                              <button type="button" {...h.attributes} {...h.listeners} className="rows-builder__handle rows-builder__handle--mobile" aria-label={`Déplacer sur mobile : ${where(c)}`} title="Glisser pour changer l’ordre mobile">
+                                ⋮⋮
+                              </button>
+                              <span style={{...text14, ...dim}}>{pos + 1}</span>
+                              <span style={{...text14, flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
+                                {c.contents.join(', ')}
+                                <span style={dim}> · {where(c)}</span>
+                              </span>
+                            </div>
+                          )}
+                        </SortableItem>
                       );
                     })}
-                  </ol>
+                  </SortableList>
                   {!sequence.length ? <p style={{...text14, ...dim, margin: 0}}>Aucune colonne remplie : rien ne s’affiche sur mobile.</p> : null}
                   {empties.length ? (
                     <ul className="rows-mobile__list">

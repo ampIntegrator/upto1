@@ -75,6 +75,14 @@
   width: 24px;
   height: 20px;
 }
+/* poignée d'une ligne dans la fenêtre d'ordre mobile */
+.rows-builder__handle--mobile {
+  flex-shrink: 0;
+  width: 28px;
+  height: 26px;
+  user-select: none;
+  touch-action: none;
+}
 .rows-builder__rows {
   display: flex;
   flex-direction: column;

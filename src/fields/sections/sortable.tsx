@@ -2,8 +2,8 @@
 
 /**
  * Tri par glisser-déposer du constructeur de sections, sur dnd-kit, en un seul endroit :
- * mêmes capteurs, mêmes animations et mêmes contraintes pour les rangées (axe vertical) et les
- * colonnes d'une rangée (axe horizontal).
+ * mêmes capteurs, mêmes animations et mêmes contraintes pour les rangées (axe vertical), les
+ * colonnes d'une rangée (axe horizontal) et l'ordre mobile de la section (axe vertical).
  *
  *   - souris : démarre après 5 px de mouvement (un clic reste un clic) ;
  *   - tactile : appui de 200 ms ; clavier : Espace pour saisir, flèches, Espace pour poser ;
@@ -31,7 +31,7 @@ export type SortableHandle = {
 
 const TRANSITION = {duration: 250, easing: 'cubic-bezier(0, 0.2, 0.2, 1)'};
 
-export function SortableList({ids, axis, onMove, className, children}: {ids: string[]; axis: 'x' | 'y'; onMove: (from: number, to: number) => void; className?: string; children: React.ReactNode}) {
+export function SortableList({ids, axis, onMove, className, role, children}: {ids: string[]; axis: 'x' | 'y'; onMove: (from: number, to: number) => void; className?: string; role?: string; children: React.ReactNode}) {
   const sensors = useSensors(
     useSensor(MouseSensor, {activationConstraint: {distance: 5}}),
     useSensor(TouchSensor, {activationConstraint: {delay: 200, tolerance: 5}}),
@@ -51,7 +51,9 @@ export function SortableList({ids, axis, onMove, className, children}: {ids: str
       modifiers={[axis === 'x' ? restrictToHorizontalAxis : restrictToVerticalAxis, restrictToParentElement]}
       onDragEnd={onDragEnd}>
       <SortableContext items={ids} strategy={axis === 'x' ? horizontalListSortingStrategy : verticalListSortingStrategy}>
-        <div className={className}>{children}</div>
+        <div className={className} role={role}>
+          {children}
+        </div>
       </SortableContext>
     </DndContext>
   );
