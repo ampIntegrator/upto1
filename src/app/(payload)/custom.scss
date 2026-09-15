@@ -58,6 +58,23 @@
   cursor: grab;
 }
 
+/* Cases d'une rangée : grille aux proportions des colonnes (variable posée par la rangée),
+   triables à gauche ou à droite par leur poignée. */
+.rows-builder__cells {
+  display: grid;
+  grid-template-columns: var(--rows-builder-cells);
+  gap: 8px;
+}
+.rows-builder__handle--cell {
+  /* pas de sélection de texte au démarrage du glisser ; le tactile glisse au lieu de défiler */
+  user-select: none;
+  touch-action: none;
+  position: absolute;
+  top: 4px;
+  left: 6px;
+  width: 24px;
+  height: 20px;
+}
 .rows-builder__rows {
   display: flex;
   flex-direction: column;
