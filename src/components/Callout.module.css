@@ -7,5 +7,6 @@
 }
 .root[data-size='sm'] { padding: 14px; }
 .eyebrow { color: light-dark(var(--color-highlight-deep), var(--color-highlight)); }
-.title { font-size: 14px; font-weight: var(--font-weight-bold); color: light-dark(var(--color-highlight-deep), var(--color-highlight)); }
+/* complete typography: the look must not depend on the tag chosen */
+.title { margin: 0; font-family: var(--font-family-body); font-size: 14px; font-weight: var(--font-weight-bold); line-height: 1.4; letter-spacing: 0; color: light-dark(var(--color-highlight-deep), var(--color-highlight)); }
 .text { font-size: 12px; line-height: 1.5; color: light-dark(var(--color-text-secondary), rgba(255, 255, 255, 0.72)); }

@@ -17,7 +17,8 @@
 .foot { padding: 24px 32px; background: light-dark(var(--color-background-muted), rgba(255, 255, 255, 0.04)); }
 .foot { border-top: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.12)); }
 .body { flex: 1 1 auto; padding: 24px 32px; }
-.name { font-family: var(--font-family-heading); font-size: 22px; font-weight: var(--font-weight-bold); letter-spacing: -0.01em; color: var(--color-text-primary); }
+/* complete typography: the look must not depend on the tag chosen */
+.name { margin: 0; font-family: var(--font-family-heading); font-size: 22px; font-weight: var(--font-weight-bold); line-height: 1.25; letter-spacing: -0.01em; color: var(--color-text-primary); }
 .tagline { font-size: 14px; color: var(--color-text-disabled); }
 .mention { font-size: 12px; text-align: center; color: var(--color-text-disabled); }
 /* solid button for non-featured tiers: centered label */
