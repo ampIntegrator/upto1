@@ -2,6 +2,10 @@ import {texts} from './languages';
 
 /** Admin texts of the shared fields (title, link, slug, silo, icon) and their pickers. */
 export const fieldsText = texts({
+  tag: {
+    label: {fr: 'Balise du titre', en: 'Title tag'},
+    description: {fr: 'Structure et référencement seulement : l’aspect ne change pas.', en: 'Structure and SEO only: the look does not change.'},
+  },
   title: {
     label: {fr: 'Titre', en: 'Title'},
     description: {

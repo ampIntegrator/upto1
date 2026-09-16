@@ -5,18 +5,18 @@
  * from the heading level: a heading renders the Astryx Heading with that type, a
  * p or span renders the same element with the theme's heading classes.
  * Used by every component whose title tag is set in the admin (Card, ProcessSteps,
- * PlanCard, Callout, SectionHeading); `TITLE_TAGS` feeds the shared Payload field.
+ * PlanCard, Callout, SectionHeading). The tag lists live in title-tags.ts (no CSS), which
+ * the Payload field and the conversion import.
  */
 import {Heading} from '@astryxdesign/core/Heading';
 import React from 'react';
 
 import styles from './TitleTag.module.css';
 
-export const TITLE_TAGS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span'] as const;
-export type TitleTag = (typeof TITLE_TAGS)[number];
-/** The tags offered in the admin: never h1 (the page title). */
-export const CONTENT_TITLE_TAGS = ['h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span'] as const;
-export type ContentTitleTag = (typeof CONTENT_TITLE_TAGS)[number];
+import {TITLE_TAGS, type TitleTag} from './title-tags';
+
+export {CONTENT_TITLE_TAGS, TITLE_TAGS, toTitleTag} from './title-tags';
+export type {ContentTitleTag, TitleTag} from './title-tags';
 
 type HeadingProps = React.ComponentProps<typeof Heading>;
 
@@ -31,9 +31,6 @@ export type TitleProps = {
 } & Pick<React.HTMLAttributes<HTMLElement>, 'style'>;
 
 const LEVELS: Record<string, 1 | 2 | 3 | 4 | 5 | 6> = {h1: 1, h2: 2, h3: 3, h4: 4, h5: 5, h6: 6};
-
-/** Any stored value → a title tag (fallback given by the component). */
-export const toTitleTag = (v: unknown, fallback: TitleTag): TitleTag => ((TITLE_TAGS as readonly string[]).includes(String(v)) ? (v as TitleTag) : fallback);
 
 export function Title({tag = 'h3', type, color, className, id, style, children}: TitleProps) {
   const level = LEVELS[tag];

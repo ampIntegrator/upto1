@@ -3,6 +3,7 @@ import type {Block} from 'payload';
 import {maxSpan, minSpan} from '@/components/content-specs';
 import type {ContentBlock} from '@/fields/sections/contentBlock';
 import {planBlockText as t} from '../../i18n/admin/blocks';
+import {tagField} from '../tagField';
 import {ctaField, featuresField, guaranteeGroup, mentionField, priceGroup} from './pricing';
 
 /** « Price tier » block of a column: the PlanCard component, one tier per column, three or four side by side. */
@@ -16,8 +17,9 @@ const block: Block = {
     {
       type: 'row',
       fields: [
-        {name: 'name', type: 'text', label: t.planName, localized: true, required: true, admin: {width: '40%'}},
-        {name: 'tagline', type: 'text', label: t.tagline, localized: true, admin: {width: '60%'}},
+        {name: 'name', type: 'text', label: t.planName, localized: true, required: true, admin: {width: '35%'}},
+        tagField({name: 'nameTag', defaultValue: 'p', width: '20%'}),
+        {name: 'tagline', type: 'text', label: t.tagline, localized: true, admin: {width: '45%'}},
       ],
     },
     priceGroup,

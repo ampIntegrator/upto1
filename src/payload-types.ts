@@ -295,6 +295,10 @@ export interface Page {
                               | {
                                   image: number | Media;
                                   title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
                                   id?: string | null;
                                   blockName?: string | null;
@@ -303,6 +307,10 @@ export interface Page {
                               | {
                                   iconKey: string;
                                   title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
                                   id?: string | null;
                                   blockName?: string | null;
@@ -313,6 +321,10 @@ export interface Page {
                                   value: string;
                                   suffix?: string | null;
                                   title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
                                   id?: string | null;
                                   blockName?: string | null;
@@ -320,6 +332,10 @@ export interface Page {
                                 }
                               | {
                                   title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
                                   id?: string | null;
                                   blockName?: string | null;
@@ -328,6 +344,10 @@ export interface Page {
                               | {
                                   image: number | Media;
                                   title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
                                   cta: {
                                     label: string;
@@ -340,6 +360,10 @@ export interface Page {
                               | {
                                   iconKey: string;
                                   title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
                                   cta: {
                                     label: string;
@@ -354,6 +378,10 @@ export interface Page {
                                   value: string;
                                   suffix?: string | null;
                                   title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
                                   cta: {
                                     label: string;
@@ -365,6 +393,10 @@ export interface Page {
                                 }
                               | {
                                   title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
                                   cta: {
                                     label: string;
@@ -398,6 +430,10 @@ export interface Page {
                                   mention?: string | null;
                                   guarantee?: {
                                     title?: string | null;
+                                    /**
+                                     * Structure and SEO only: the look does not change.
+                                     */
+                                    titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                     text?: string | null;
                                   };
                                   id?: string | null;
@@ -406,6 +442,10 @@ export interface Page {
                                 }
                               | {
                                   name: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  nameTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   tagline?: string | null;
                                   price: {
                                     value: string;
@@ -433,6 +473,10 @@ export interface Page {
                                   mention?: string | null;
                                   guarantee?: {
                                     title?: string | null;
+                                    /**
+                                     * Structure and SEO only: the look does not change.
+                                     */
+                                    titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                     text?: string | null;
                                   };
                                   id?: string | null;
@@ -446,7 +490,7 @@ export interface Page {
                                   /**
                                    * For structure and SEO; does not change the look.
                                    */
-                                  tag?: ('h2' | 'h3' | 'h4' | 'p' | 'span') | null;
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   items?:
                                     | {
                                         question: string;
@@ -488,6 +532,10 @@ export interface Page {
                                   blockType: 'compareCard';
                                 }
                               | {
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   /**
                                    * Capacity by column width: 1 step on 4 or 5 columns, 2 on 6 or 7, 3 on 8 or 9, 4 on 12.
                                    */
@@ -537,6 +585,10 @@ export interface Page {
                                         | {
                                             image: number | Media;
                                             title: string;
+                                            /**
+                                             * Structure and SEO only: the look does not change.
+                                             */
+                                            tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                             text?: string | null;
                                             id?: string | null;
                                             blockName?: string | null;
@@ -545,6 +597,10 @@ export interface Page {
                                         | {
                                             iconKey: string;
                                             title: string;
+                                            /**
+                                             * Structure and SEO only: the look does not change.
+                                             */
+                                            tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                             text?: string | null;
                                             id?: string | null;
                                             blockName?: string | null;
@@ -555,6 +611,10 @@ export interface Page {
                                             value: string;
                                             suffix?: string | null;
                                             title: string;
+                                            /**
+                                             * Structure and SEO only: the look does not change.
+                                             */
+                                            tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                             text?: string | null;
                                             id?: string | null;
                                             blockName?: string | null;
@@ -562,6 +622,10 @@ export interface Page {
                                           }
                                         | {
                                             title: string;
+                                            /**
+                                             * Structure and SEO only: the look does not change.
+                                             */
+                                            tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                             text?: string | null;
                                             id?: string | null;
                                             blockName?: string | null;
@@ -570,6 +634,10 @@ export interface Page {
                                         | {
                                             image: number | Media;
                                             title: string;
+                                            /**
+                                             * Structure and SEO only: the look does not change.
+                                             */
+                                            tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                             text?: string | null;
                                             cta: {
                                               label: string;
@@ -582,6 +650,10 @@ export interface Page {
                                         | {
                                             iconKey: string;
                                             title: string;
+                                            /**
+                                             * Structure and SEO only: the look does not change.
+                                             */
+                                            tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                             text?: string | null;
                                             cta: {
                                               label: string;
@@ -596,6 +668,10 @@ export interface Page {
                                             value: string;
                                             suffix?: string | null;
                                             title: string;
+                                            /**
+                                             * Structure and SEO only: the look does not change.
+                                             */
+                                            tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                             text?: string | null;
                                             cta: {
                                               label: string;
@@ -607,6 +683,10 @@ export interface Page {
                                           }
                                         | {
                                             title: string;
+                                            /**
+                                             * Structure and SEO only: the look does not change.
+                                             */
+                                            tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                             text?: string | null;
                                             cta: {
                                               label: string;
@@ -635,6 +715,10 @@ export interface Page {
                                           }
                                         | {
                                             name: string;
+                                            /**
+                                             * Structure and SEO only: the look does not change.
+                                             */
+                                            nameTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                             tagline?: string | null;
                                             price: {
                                               value: string;
@@ -662,6 +746,10 @@ export interface Page {
                                             mention?: string | null;
                                             guarantee?: {
                                               title?: string | null;
+                                              /**
+                                               * Structure and SEO only: the look does not change.
+                                               */
+                                              titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                               text?: string | null;
                                             };
                                             id?: string | null;
@@ -853,6 +941,10 @@ export interface Section {
                     | {
                         image: number | Media;
                         title: string;
+                        /**
+                         * Structure and SEO only: the look does not change.
+                         */
+                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                         text?: string | null;
                         id?: string | null;
                         blockName?: string | null;
@@ -861,6 +953,10 @@ export interface Section {
                     | {
                         iconKey: string;
                         title: string;
+                        /**
+                         * Structure and SEO only: the look does not change.
+                         */
+                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                         text?: string | null;
                         id?: string | null;
                         blockName?: string | null;
@@ -871,6 +967,10 @@ export interface Section {
                         value: string;
                         suffix?: string | null;
                         title: string;
+                        /**
+                         * Structure and SEO only: the look does not change.
+                         */
+                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                         text?: string | null;
                         id?: string | null;
                         blockName?: string | null;
@@ -878,6 +978,10 @@ export interface Section {
                       }
                     | {
                         title: string;
+                        /**
+                         * Structure and SEO only: the look does not change.
+                         */
+                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                         text?: string | null;
                         id?: string | null;
                         blockName?: string | null;
@@ -886,6 +990,10 @@ export interface Section {
                     | {
                         image: number | Media;
                         title: string;
+                        /**
+                         * Structure and SEO only: the look does not change.
+                         */
+                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                         text?: string | null;
                         cta: {
                           label: string;
@@ -898,6 +1006,10 @@ export interface Section {
                     | {
                         iconKey: string;
                         title: string;
+                        /**
+                         * Structure and SEO only: the look does not change.
+                         */
+                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                         text?: string | null;
                         cta: {
                           label: string;
@@ -912,6 +1024,10 @@ export interface Section {
                         value: string;
                         suffix?: string | null;
                         title: string;
+                        /**
+                         * Structure and SEO only: the look does not change.
+                         */
+                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                         text?: string | null;
                         cta: {
                           label: string;
@@ -923,6 +1039,10 @@ export interface Section {
                       }
                     | {
                         title: string;
+                        /**
+                         * Structure and SEO only: the look does not change.
+                         */
+                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                         text?: string | null;
                         cta: {
                           label: string;
@@ -956,6 +1076,10 @@ export interface Section {
                         mention?: string | null;
                         guarantee?: {
                           title?: string | null;
+                          /**
+                           * Structure and SEO only: the look does not change.
+                           */
+                          titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                           text?: string | null;
                         };
                         id?: string | null;
@@ -964,6 +1088,10 @@ export interface Section {
                       }
                     | {
                         name: string;
+                        /**
+                         * Structure and SEO only: the look does not change.
+                         */
+                        nameTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                         tagline?: string | null;
                         price: {
                           value: string;
@@ -991,6 +1119,10 @@ export interface Section {
                         mention?: string | null;
                         guarantee?: {
                           title?: string | null;
+                          /**
+                           * Structure and SEO only: the look does not change.
+                           */
+                          titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                           text?: string | null;
                         };
                         id?: string | null;
@@ -1004,7 +1136,7 @@ export interface Section {
                         /**
                          * For structure and SEO; does not change the look.
                          */
-                        tag?: ('h2' | 'h3' | 'h4' | 'p' | 'span') | null;
+                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                         items?:
                           | {
                               question: string;
@@ -1046,6 +1178,10 @@ export interface Section {
                         blockType: 'compareCard';
                       }
                     | {
+                        /**
+                         * Structure and SEO only: the look does not change.
+                         */
+                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                         /**
                          * Capacity by column width: 1 step on 4 or 5 columns, 2 on 6 or 7, 3 on 8 or 9, 4 on 12.
                          */
@@ -1095,6 +1231,10 @@ export interface Section {
                               | {
                                   image: number | Media;
                                   title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
                                   id?: string | null;
                                   blockName?: string | null;
@@ -1103,6 +1243,10 @@ export interface Section {
                               | {
                                   iconKey: string;
                                   title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
                                   id?: string | null;
                                   blockName?: string | null;
@@ -1113,6 +1257,10 @@ export interface Section {
                                   value: string;
                                   suffix?: string | null;
                                   title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
                                   id?: string | null;
                                   blockName?: string | null;
@@ -1120,6 +1268,10 @@ export interface Section {
                                 }
                               | {
                                   title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
                                   id?: string | null;
                                   blockName?: string | null;
@@ -1128,6 +1280,10 @@ export interface Section {
                               | {
                                   image: number | Media;
                                   title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
                                   cta: {
                                     label: string;
@@ -1140,6 +1296,10 @@ export interface Section {
                               | {
                                   iconKey: string;
                                   title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
                                   cta: {
                                     label: string;
@@ -1154,6 +1314,10 @@ export interface Section {
                                   value: string;
                                   suffix?: string | null;
                                   title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
                                   cta: {
                                     label: string;
@@ -1165,6 +1329,10 @@ export interface Section {
                                 }
                               | {
                                   title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
                                   cta: {
                                     label: string;
@@ -1193,6 +1361,10 @@ export interface Section {
                                 }
                               | {
                                   name: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  nameTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   tagline?: string | null;
                                   price: {
                                     value: string;
@@ -1220,6 +1392,10 @@ export interface Section {
                                   mention?: string | null;
                                   guarantee?: {
                                     title?: string | null;
+                                    /**
+                                     * Structure and SEO only: the look does not change.
+                                     */
+                                    titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                     text?: string | null;
                                   };
                                   id?: string | null;
@@ -1527,6 +1703,7 @@ export interface PagesSelect<T extends boolean = true> {
                                   | {
                                       image?: T;
                                       title?: T;
+                                      tag?: T;
                                       text?: T;
                                       id?: T;
                                       blockName?: T;
@@ -1536,6 +1713,7 @@ export interface PagesSelect<T extends boolean = true> {
                                   | {
                                       iconKey?: T;
                                       title?: T;
+                                      tag?: T;
                                       text?: T;
                                       id?: T;
                                       blockName?: T;
@@ -1547,6 +1725,7 @@ export interface PagesSelect<T extends boolean = true> {
                                       value?: T;
                                       suffix?: T;
                                       title?: T;
+                                      tag?: T;
                                       text?: T;
                                       id?: T;
                                       blockName?: T;
@@ -1555,6 +1734,7 @@ export interface PagesSelect<T extends boolean = true> {
                                   | T
                                   | {
                                       title?: T;
+                                      tag?: T;
                                       text?: T;
                                       id?: T;
                                       blockName?: T;
@@ -1564,6 +1744,7 @@ export interface PagesSelect<T extends boolean = true> {
                                   | {
                                       image?: T;
                                       title?: T;
+                                      tag?: T;
                                       text?: T;
                                       cta?:
                                         | T
@@ -1579,6 +1760,7 @@ export interface PagesSelect<T extends boolean = true> {
                                   | {
                                       iconKey?: T;
                                       title?: T;
+                                      tag?: T;
                                       text?: T;
                                       cta?:
                                         | T
@@ -1596,6 +1778,7 @@ export interface PagesSelect<T extends boolean = true> {
                                       value?: T;
                                       suffix?: T;
                                       title?: T;
+                                      tag?: T;
                                       text?: T;
                                       cta?:
                                         | T
@@ -1610,6 +1793,7 @@ export interface PagesSelect<T extends boolean = true> {
                                   | T
                                   | {
                                       title?: T;
+                                      tag?: T;
                                       text?: T;
                                       cta?:
                                         | T
@@ -1652,6 +1836,7 @@ export interface PagesSelect<T extends boolean = true> {
                                         | T
                                         | {
                                             title?: T;
+                                            titleTag?: T;
                                             text?: T;
                                           };
                                       id?: T;
@@ -1661,6 +1846,7 @@ export interface PagesSelect<T extends boolean = true> {
                                   | T
                                   | {
                                       name?: T;
+                                      nameTag?: T;
                                       tagline?: T;
                                       price?:
                                         | T
@@ -1691,6 +1877,7 @@ export interface PagesSelect<T extends boolean = true> {
                                         | T
                                         | {
                                             title?: T;
+                                            titleTag?: T;
                                             text?: T;
                                           };
                                       id?: T;
@@ -1744,6 +1931,7 @@ export interface PagesSelect<T extends boolean = true> {
                                 processSteps?:
                                   | T
                                   | {
+                                      tag?: T;
                                       steps?:
                                         | T
                                         | {
@@ -1789,6 +1977,7 @@ export interface PagesSelect<T extends boolean = true> {
                                               | {
                                                   image?: T;
                                                   title?: T;
+                                                  tag?: T;
                                                   text?: T;
                                                   id?: T;
                                                   blockName?: T;
@@ -1798,6 +1987,7 @@ export interface PagesSelect<T extends boolean = true> {
                                               | {
                                                   iconKey?: T;
                                                   title?: T;
+                                                  tag?: T;
                                                   text?: T;
                                                   id?: T;
                                                   blockName?: T;
@@ -1809,6 +1999,7 @@ export interface PagesSelect<T extends boolean = true> {
                                                   value?: T;
                                                   suffix?: T;
                                                   title?: T;
+                                                  tag?: T;
                                                   text?: T;
                                                   id?: T;
                                                   blockName?: T;
@@ -1817,6 +2008,7 @@ export interface PagesSelect<T extends boolean = true> {
                                               | T
                                               | {
                                                   title?: T;
+                                                  tag?: T;
                                                   text?: T;
                                                   id?: T;
                                                   blockName?: T;
@@ -1826,6 +2018,7 @@ export interface PagesSelect<T extends boolean = true> {
                                               | {
                                                   image?: T;
                                                   title?: T;
+                                                  tag?: T;
                                                   text?: T;
                                                   cta?:
                                                     | T
@@ -1841,6 +2034,7 @@ export interface PagesSelect<T extends boolean = true> {
                                               | {
                                                   iconKey?: T;
                                                   title?: T;
+                                                  tag?: T;
                                                   text?: T;
                                                   cta?:
                                                     | T
@@ -1858,6 +2052,7 @@ export interface PagesSelect<T extends boolean = true> {
                                                   value?: T;
                                                   suffix?: T;
                                                   title?: T;
+                                                  tag?: T;
                                                   text?: T;
                                                   cta?:
                                                     | T
@@ -1872,6 +2067,7 @@ export interface PagesSelect<T extends boolean = true> {
                                               | T
                                               | {
                                                   title?: T;
+                                                  tag?: T;
                                                   text?: T;
                                                   cta?:
                                                     | T
@@ -1904,6 +2100,7 @@ export interface PagesSelect<T extends boolean = true> {
                                               | T
                                               | {
                                                   name?: T;
+                                                  nameTag?: T;
                                                   tagline?: T;
                                                   price?:
                                                     | T
@@ -1934,6 +2131,7 @@ export interface PagesSelect<T extends boolean = true> {
                                                     | T
                                                     | {
                                                         title?: T;
+                                                        titleTag?: T;
                                                         text?: T;
                                                       };
                                                   id?: T;
@@ -2047,6 +2245,7 @@ export interface SectionsSelect<T extends boolean = true> {
                       | {
                           image?: T;
                           title?: T;
+                          tag?: T;
                           text?: T;
                           id?: T;
                           blockName?: T;
@@ -2056,6 +2255,7 @@ export interface SectionsSelect<T extends boolean = true> {
                       | {
                           iconKey?: T;
                           title?: T;
+                          tag?: T;
                           text?: T;
                           id?: T;
                           blockName?: T;
@@ -2067,6 +2267,7 @@ export interface SectionsSelect<T extends boolean = true> {
                           value?: T;
                           suffix?: T;
                           title?: T;
+                          tag?: T;
                           text?: T;
                           id?: T;
                           blockName?: T;
@@ -2075,6 +2276,7 @@ export interface SectionsSelect<T extends boolean = true> {
                       | T
                       | {
                           title?: T;
+                          tag?: T;
                           text?: T;
                           id?: T;
                           blockName?: T;
@@ -2084,6 +2286,7 @@ export interface SectionsSelect<T extends boolean = true> {
                       | {
                           image?: T;
                           title?: T;
+                          tag?: T;
                           text?: T;
                           cta?:
                             | T
@@ -2099,6 +2302,7 @@ export interface SectionsSelect<T extends boolean = true> {
                       | {
                           iconKey?: T;
                           title?: T;
+                          tag?: T;
                           text?: T;
                           cta?:
                             | T
@@ -2116,6 +2320,7 @@ export interface SectionsSelect<T extends boolean = true> {
                           value?: T;
                           suffix?: T;
                           title?: T;
+                          tag?: T;
                           text?: T;
                           cta?:
                             | T
@@ -2130,6 +2335,7 @@ export interface SectionsSelect<T extends boolean = true> {
                       | T
                       | {
                           title?: T;
+                          tag?: T;
                           text?: T;
                           cta?:
                             | T
@@ -2172,6 +2378,7 @@ export interface SectionsSelect<T extends boolean = true> {
                             | T
                             | {
                                 title?: T;
+                                titleTag?: T;
                                 text?: T;
                               };
                           id?: T;
@@ -2181,6 +2388,7 @@ export interface SectionsSelect<T extends boolean = true> {
                       | T
                       | {
                           name?: T;
+                          nameTag?: T;
                           tagline?: T;
                           price?:
                             | T
@@ -2211,6 +2419,7 @@ export interface SectionsSelect<T extends boolean = true> {
                             | T
                             | {
                                 title?: T;
+                                titleTag?: T;
                                 text?: T;
                               };
                           id?: T;
@@ -2264,6 +2473,7 @@ export interface SectionsSelect<T extends boolean = true> {
                     processSteps?:
                       | T
                       | {
+                          tag?: T;
                           steps?:
                             | T
                             | {
@@ -2309,6 +2519,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                   | {
                                       image?: T;
                                       title?: T;
+                                      tag?: T;
                                       text?: T;
                                       id?: T;
                                       blockName?: T;
@@ -2318,6 +2529,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                   | {
                                       iconKey?: T;
                                       title?: T;
+                                      tag?: T;
                                       text?: T;
                                       id?: T;
                                       blockName?: T;
@@ -2329,6 +2541,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                       value?: T;
                                       suffix?: T;
                                       title?: T;
+                                      tag?: T;
                                       text?: T;
                                       id?: T;
                                       blockName?: T;
@@ -2337,6 +2550,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                   | T
                                   | {
                                       title?: T;
+                                      tag?: T;
                                       text?: T;
                                       id?: T;
                                       blockName?: T;
@@ -2346,6 +2560,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                   | {
                                       image?: T;
                                       title?: T;
+                                      tag?: T;
                                       text?: T;
                                       cta?:
                                         | T
@@ -2361,6 +2576,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                   | {
                                       iconKey?: T;
                                       title?: T;
+                                      tag?: T;
                                       text?: T;
                                       cta?:
                                         | T
@@ -2378,6 +2594,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                       value?: T;
                                       suffix?: T;
                                       title?: T;
+                                      tag?: T;
                                       text?: T;
                                       cta?:
                                         | T
@@ -2392,6 +2609,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                   | T
                                   | {
                                       title?: T;
+                                      tag?: T;
                                       text?: T;
                                       cta?:
                                         | T
@@ -2424,6 +2642,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                   | T
                                   | {
                                       name?: T;
+                                      nameTag?: T;
                                       tagline?: T;
                                       price?:
                                         | T
@@ -2454,6 +2673,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                         | T
                                         | {
                                             title?: T;
+                                            titleTag?: T;
                                             text?: T;
                                           };
                                       id?: T;

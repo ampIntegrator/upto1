@@ -4,6 +4,7 @@ import {minSpan, stepsCapacity} from '@/components/content-specs';
 import {columnSpanAt, type ContentBlock} from '@/fields/sections/contentBlock';
 import {tr} from '@/i18n/admin/languages';
 import {processStepsBlockText as t} from '../../i18n/admin/blocks';
+import {tagField} from '../tagField';
 
 /**
  * « Steps » block of a column: the ProcessSteps panel, 1 to 4 steps side by side.
@@ -18,6 +19,7 @@ const block: Block = {
   labels: {singular: t.name, plural: t.plural},
   imageURL: `/apercus/${PROCESS_STEPS_SLUG}.png`,
   fields: [
+    tagField({defaultValue: 'h3'}),
     {
       name: 'steps',
       type: 'array',
