@@ -82,8 +82,9 @@ Columns are reordered left or right with their handle (⋮⋮). A tile turns red
 | Témoignage | `TestimonialCard` | 3 | 4 | yes |
 | Carte comparative | `CompareCard` | 3 | 6 | yes |
 | Étapes | `ProcessSteps` | 4 | 12 | |
+| Collection (contenus identiques) | `Collection` | 8 | 12 | yes |
 
-Widths decided on 16 September 2026. The steps panel holds 1 step on 4 or 5 columns, 2 on 6 or 7, 3 on 8 or 9, 4 on 12 (`stepsCapacity` in the registry); the block checks its `steps` field against its column width (`columnSpanAt`) with an explicit message.
+Widths decided on 16 September 2026. The collection holds identical items (testimonials, cards, compare cards, tiers, or the latest blog posts as article cards) side by side: 3 per view at most on 8 or 9 columns, 4 on 12 (`collectionCapacity`), checked on its `perView` field; layout « swipe » (peek of the next item, dots below 640 px) or « carousel » (arrows, segments / dots / numbers, page or item step). Blog-fed collections are loaded by `toSections`, which is asynchronous and receives the locale and a posts loader from the page. The steps panel holds 1 step on 4 or 5 columns, 2 on 6 or 7, 3 on 8 or 9, 4 on 12 (`stepsCapacity` in the registry); the block checks its `steps` field against its column width (`columnSpanAt`) with an explicit message.
 
 The block picker only offers blocks whose width range contains the column's (`filterOptions`), and the server rejects a block that is too narrow or too wide (the builder's cell shows « Trop étroit » or « Trop large »). Each block declares `ContentBlock = {block, minSpan, maxSpan?, fill?}` (`src/fields/sections/contentBlock.ts`); `fill` stretches the column to the row's height so cards side by side share it. The site's blocks take their widths from the catalogue's span registry, `src/components/content-specs.ts`.
 

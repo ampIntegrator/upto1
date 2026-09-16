@@ -17,6 +17,7 @@ import React from 'react';
 import type {ContentData, FaqData, SectionData} from '@/lib/sections';
 import {Card} from './Card';
 import {Collapsible, CollapsibleGroup} from './Collapsible';
+import {Collection} from './Collection';
 import {CompareCard} from './CompareCard';
 import {Container} from './Container';
 import {Media} from './Media';
@@ -62,6 +63,14 @@ function Content({content, id}: {content: ContentData; id: string}) {
   switch (content.type) {
     case 'text':
       return <Paragraphs text={content.text} />;
+    case 'collection':
+      return (
+        <Collection layout={content.collection.layout} perView={content.collection.perView} step={content.collection.step} arrows={content.collection.arrows} indicator={content.collection.indicator}>
+          {content.collection.items.map((item, k) => (
+            <Content key={k} content={item} id={`${id}-${k}`} />
+          ))}
+        </Collection>
+      );
     case 'priceSingle':
       return <PriceCard {...content.price} />;
     case 'plan':

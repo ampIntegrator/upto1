@@ -7,7 +7,7 @@ import {Hero} from '@/components/Hero';
 import {PageSections} from '@/components/PageSections';
 import {SitePage} from '@/components/SitePage';
 import {toSections} from '@/lib/sections';
-import {getLocale, getSite, pageSilo, toFooter, toHeader, toHero} from '@/lib/site';
+import {getLocale, getSite, loadPosts, pageSilo, toFooter, toHeader, toHero} from '@/lib/site';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,7 +32,7 @@ export default async function Page() {
   return (
     <SitePage silo={pageSilo(page, site.settings)} header={toHeader(site.settings, site.header, site.languages)} footer={toFooter(site.settings, site.footer, site.posts, locale)} tone={tone} currentHref="/">
       <Hero {...hero} />
-      <PageSections sections={toSections(page.sections, site.settings)} />
+      <PageSections sections={await toSections(page.sections, site.settings, {locale, posts: (q) => loadPosts(locale, q)})} />
     </SitePage>
   );
 }

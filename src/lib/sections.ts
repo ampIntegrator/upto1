@@ -16,6 +16,7 @@ import type {ChipTone} from '@/components/Chip';
 import type {MediaQuoteProps, MediaQuoteSize, MediaQuoteTag} from '@/components/MediaQuote';
 import type {SectionBackground, SectionTint} from '@/components/Section';
 import {CARD_VARIANTS} from '@/fields/blocks/cardBlocks';
+import {COLLECTION_SLUG} from '@/fields/blocks/collectionBlock';
 import {COMPARE_CARD_SLUG} from '@/fields/blocks/compareCardBlock';
 import {FAQ_SLUG} from '@/fields/blocks/faqBlock';
 import {PLAN_SLUG} from '@/fields/blocks/planBlock';
@@ -31,7 +32,7 @@ import {sections as siteSections} from '@/sections.config';
 import {hasMobileOrder, mobileRanks} from '@/fields/sections/mobileOrder';
 import {type ColumnSpan, toSpan} from '@/fields/sections/grid';
 import type {NucleoIconKey} from '@/theme/icons/nucleo';
-import type {Media, Page, Section as SharedSection, Setting} from '@/payload-types';
+import type {Media, Page, Post, Section as SharedSection, Setting} from '@/payload-types';
 
 type PageSection = NonNullable<Page['sections']>[number];
 type SectionBlock = Extract<PageSection, {blockType: 'section'}>;
@@ -41,8 +42,12 @@ type ContentBlock = NonNullable<NonNullable<NonNullable<SectionBlock['rows']>[nu
 /** A FAQ block: mode, columns, whether the first question starts open, and the questions. */
 export type FaqData = {mode: 'single' | 'multiple'; columns: 1 | 2; firstOpen: boolean; items: {question: string; answer: string}[]};
 
+/** A collection: identical items side by side, swipe or carousel. */
+export type CollectionData = {layout: 'swipe' | 'carousel'; perView: 2 | 3 | 4; step: 'page' | 'item'; arrows: boolean; indicator: 'segments' | 'dots' | 'numbers' | 'none'; items: ContentData[]};
+
 export type ContentData =
   | {type: 'text'; text: string}
+  | {type: 'collection'; collection: CollectionData}
   | {type: 'card'; card: CardProps}
   | {type: 'media'; media: MediaProps}
   | {type: 'mediaQuote'; mediaQuote: MediaQuoteProps}
@@ -227,6 +232,69 @@ function toSteps(b: StepsData): ContentData | null {
   return steps.length ? {type: 'processSteps', steps} : null;
 }
 
+type CollectionBlockData = {id?: string | null; layout?: string | null; perView?: string | null; step?: string | null; arrows?: boolean | null; indicator?: string | null; source?: string | null; items?: ContentBlock[] | null; postsLimit?: number | null; postsCategory?: number | {id: number} | null; postsCta?: string | null};
+
+/** Loads posts for a collection with the « latest posts » source (the page gives it, with the locale). */
+export type PostsLoader = (q: {limit: number; category?: number}) => Promise<Post[]>;
+export type SectionsContext = {locale?: string; posts?: PostsLoader};
+
+/** A blog post as an article card. */
+function postCard(p: Post, locale: string, ctaLabel: string): ContentData {
+  const fmt = new Intl.DateTimeFormat(locale, {day: 'numeric', month: 'long', year: 'numeric'});
+  const cover = mediaUrl(p.cover);
+  return {
+    type: 'card',
+    card: {
+      preset: 'article',
+      media: cover ? {type: 'image', src: cover, alt: mediaAlt(p.cover)} : {type: 'none'},
+      chip: typeof p.category === 'object' && p.category ? {label: p.category.title} : undefined,
+      date: fmt.format(new Date(p.publishedAt)),
+      title: p.title,
+      cta: {label: ctaLabel, href: `/blog/${p.slug}`},
+    },
+  };
+}
+
+/** Items of the collections fed by the blog, keyed by block id, loaded before the (synchronous) conversion. */
+type PostItems = Map<string, ContentData[]>;
+
+function toCollection(b: CollectionBlockData, posts: PostItems): ContentData | null {
+  const items = b.source === 'posts' ? (posts.get(b.id ?? '') ?? []) : (b.items ?? []).map(toContent).filter((x): x is ContentData => x !== null);
+  if (items.length < 2) return null;
+  const perView = Math.min(Math.max(Number(b.perView ?? 3), 2), 4) as 2 | 3 | 4;
+  return {
+    type: 'collection',
+    collection: {layout: b.layout === 'carousel' ? 'carousel' : 'swipe', perView, step: b.step === 'item' ? 'item' : 'page', arrows: b.arrows !== false, indicator: (b.indicator ?? 'segments') as CollectionData['indicator'], items},
+  };
+}
+
+/** Posts of every blog-fed collection of the sections, loaded once. */
+async function loadPostItems(sources: SectionSource[], ctx: SectionsContext): Promise<PostItems> {
+  const out: PostItems = new Map();
+  if (!ctx.posts) return out;
+  const jobs: Promise<void>[] = [];
+  for (const s of sources) {
+    for (const r of s.rows ?? []) {
+      for (const c of r.columns ?? []) {
+        for (const block of c.contents ?? []) {
+          if (block.blockType !== COLLECTION_SLUG) continue;
+          const b = block as unknown as CollectionBlockData;
+          if (b.source !== 'posts' || !b.id) continue;
+          const category = typeof b.postsCategory === 'object' && b.postsCategory ? b.postsCategory.id : (b.postsCategory ?? undefined);
+          const id = b.id;
+          jobs.push(ctx.posts({limit: b.postsLimit ?? 6, category: category ?? undefined}).then((docs) => {
+            out.set(id, docs.map((p) => postCard(p, ctx.locale ?? 'fr', b.postsCta || 'Lire')));
+          }));
+        }
+      }
+    }
+  }
+  await Promise.all(jobs);
+  return out;
+}
+
+let postItems: PostItems = new Map();
+
 function toContent(block: ContentBlock): ContentData | null {
   // empty cell: no content, the column is treated as empty (hidden on mobile)
   if (block.blockType === EMPTY_SLUG) return null;
@@ -246,6 +314,8 @@ function toContent(block: ContentBlock): ContentData | null {
       return toCompareCard(block as unknown as CompareCardData);
     case PROCESS_STEPS_SLUG:
       return toSteps(block as unknown as StepsData);
+    case COLLECTION_SLUG:
+      return toCollection(block as unknown as CollectionBlockData, postItems);
     case TEXT_SLUG:
       return {type: 'text', text: block.text};
     default:
@@ -297,14 +367,16 @@ function sectionRows(rows: SectionSource['rows']): ColumnData[][] {
 /**
  * The « sections » blocks of a page (loaded with depth ≥ 2 for shared section media).
  * `settings`: site settings, for the grid's default gaps (Mise en page).
+ * `ctx`: the locale and the posts loader, for collections fed by the blog.
  */
-export function toSections(blocks: Page['sections'], settings?: Pick<Setting, 'sectionGrid'> | null): SectionData[] {
+export async function toSections(blocks: Page['sections'], settings?: Pick<Setting, 'sectionGrid'> | null, ctx: SectionsContext = {}): Promise<SectionData[]> {
   const site = siteGaps(settings?.sectionGrid);
-  const out: SectionData[] = [];
+  const sources: {source: SectionSource; key: string}[] = [];
   (blocks ?? []).forEach((b, i) => {
     const key = b.id ?? String(i);
-    if (b.blockType === 'section') out.push(toSection(b, key, site));
-    else if (b.blockType === 'sharedSection' && b.section && typeof b.section === 'object') out.push(toSection(b.section, key, site));
+    if (b.blockType === 'section') sources.push({source: b, key});
+    else if (b.blockType === 'sharedSection' && b.section && typeof b.section === 'object') sources.push({source: b.section, key});
   });
-  return out;
+  postItems = await loadPostItems(sources.map((s) => s.source), ctx);
+  return sources.map((s) => toSection(s.source, s.key, site));
 }

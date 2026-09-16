@@ -6,6 +6,7 @@ import React from 'react';
 
 import {Card, type CardProps} from '@/components/Card';
 import {Collapsible, CollapsibleGroup} from '@/components/Collapsible';
+import {Collection} from '@/components/Collection';
 import {CompareCard} from '@/components/CompareCard';
 import {Media} from '@/components/Media';
 import {MediaQuote} from '@/components/MediaQuote';
@@ -14,6 +15,7 @@ import {PriceCard} from '@/components/PriceCard';
 import {ProcessSteps} from '@/components/ProcessSteps';
 import {TestimonialCard} from '@/components/TestimonialCard';
 import {CARD_VARIANTS} from '@/fields/blocks/cardBlocks';
+import {COLLECTION_SLUG} from '@/fields/blocks/collectionBlock';
 import {COMPARE_CARD_SLUG} from '@/fields/blocks/compareCardBlock';
 import {FAQ_SLUG} from '@/fields/blocks/faqBlock';
 import {PLAN_SLUG} from '@/fields/blocks/planBlock';
@@ -28,7 +30,7 @@ import {APRES, PLANS, PRICE_SINGLE, PROCESS_STEPS, TESTIMONIALS} from '../../des
 import {FAQ} from '../../design/_showcases/faq.shared';
 
 /** Wider box for the blocks that need several columns (single price, FAQ, steps). */
-const WIDE = new Set([PRICE_SINGLE_SLUG, FAQ_SLUG, PROCESS_STEPS_SLUG]);
+const WIDE = new Set([PRICE_SINGLE_SLUG, FAQ_SLUG, PROCESS_STEPS_SLUG, COLLECTION_SLUG]);
 
 const IMG = 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80';
 const TEXT = 'Une phrase de présentation courte, deux lignes au plus, pour situer le contenu de la carte.';
@@ -56,7 +58,13 @@ export function Apercu({slug}: {slug: string}) {
   return (
     <OrbitaThemeProvider fixedSilo="blue" initialMode="light">
       <VStack data-apercu style={{width: WIDE.has(slug) ? 'var(--apercu-width-wide, 900px)' : 'var(--apercu-width, 360px)', padding: 'var(--spacing-6)', background: 'var(--color-background-body)'}}>
-        {slug === PRICE_SINGLE_SLUG ? (
+        {slug === COLLECTION_SLUG ? (
+          <Collection layout="carousel" perView={3} label="Témoignages">
+            {TESTIMONIALS.slice(0, 5).map((t) => (
+              <TestimonialCard key={t.name} {...t} />
+            ))}
+          </Collection>
+        ) : slug === PRICE_SINGLE_SLUG ? (
           <PriceCard {...PRICE_SINGLE} />
         ) : slug === PLAN_SLUG ? (
           <PlanCard {...PLANS[1]} />
