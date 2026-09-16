@@ -1,0 +1,12 @@
+/* RichText — prose from the editor: paragraphs and lists spaced, links in silo colour. */
+.root { min-width: 0; }
+.paragraph { margin: 0; }
+.list { margin: 0; padding: 0 0 0 22px; list-style-position: outside; font-size: var(--text-body-size); line-height: var(--text-body-leading); color: var(--color-text-secondary); }
+ul.list { list-style-type: disc; }
+ol.list { list-style-type: decimal; }
+.item { display: list-item; margin: 0 0 6px; padding-left: 4px; }
+.item:last-child { margin-bottom: 0; }
+.item::marker { color: light-dark(var(--color-accent), var(--color-highlight)); font-weight: var(--font-weight-semibold); }
+.link { color: light-dark(var(--color-accent), var(--color-highlight)); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.link:hover { text-decoration-thickness: 2px; }
+.root strong { color: var(--color-text-primary); font-weight: var(--font-weight-semibold); }

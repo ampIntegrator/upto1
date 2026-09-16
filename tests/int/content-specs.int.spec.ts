@@ -43,6 +43,12 @@ describe('registre des emprises', () => {
     expect([6, 7, 8, 9, 12].map(collectionCapacity)).toEqual([0, 0, 3, 3, 4]);
   });
 
+  it('encart texte : 3 à 9 colonnes, les tailles display dès 6', () => {
+    expect([minSpan({type: 'textBox', titleSize: 'heading-2'}), maxSpan({type: 'textBox', titleSize: 'heading-2'})]).toEqual([3, 9]);
+    expect(minSpan({type: 'textBox', titleSize: 'display-1'})).toBe(6);
+    expect(minSpan({type: 'textBox', titleSize: 'display-3'})).toBe(3);
+  });
+
   it('prend le contenu le plus large pour une colonne', () => {
     expect(columnMinSpan([{type: 'stat'}, {type: 'card'}, {type: 'sectionNote'}])).toBe(6);
     expect(columnMinSpan([])).toBe(2);

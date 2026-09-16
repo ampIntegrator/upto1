@@ -28,20 +28,20 @@ export type TitleProps = {
   className?: string;
   id?: string;
   children: React.ReactNode;
-} & Pick<React.HTMLAttributes<HTMLElement>, 'style'>;
+} & Pick<React.HTMLAttributes<HTMLElement>, 'style'> & Record<`data-${string}`, string | number | undefined>;
 
 const LEVELS: Record<string, 1 | 2 | 3 | 4 | 5 | 6> = {h1: 1, h2: 2, h3: 3, h4: 4, h5: 5, h6: 6};
 
-export function Title({tag = 'h3', type, color, className, id, style, children}: TitleProps) {
+export function Title({tag = 'h3', type, color, className, id, style, children, ...data}: TitleProps) {
   const level = LEVELS[tag];
   if (level) {
     return (
-      <Heading level={level} type={type} color={color} className={className} id={id} style={style}>
+      <Heading level={level} type={type} color={color} className={className} id={id} style={style} {...data}>
         {children}
       </Heading>
     );
   }
   // p or span: the theme's heading classes (base + type + colour), no level class
   const classes = ['astryx-heading', type, color, styles.plain, className].filter(Boolean).join(' ');
-  return React.createElement(tag, {className: classes, id, style}, children);
+  return React.createElement(tag, {className: classes, id, style, ...data}, children);
 }
