@@ -1,12 +1,14 @@
 'use client';
 
 /**
- * ProcessSteps — the steps panel (mockup 03-process): 2 to 4 steps side by side
+ * ProcessSteps — the steps panel (mockup 03-process): 1 to 4 steps side by side
  * in a shadowed paper frame, separated by the signature gradient (vertical; horizontal
- * when the steps stack, below 1024 px). A step = upright serif number, duration chip
- * with clock, title, text, rule, CheckList. The number of columns follows the
- * number of steps received (Payload: 2, 3 or 4 array rows). The section header
- * and the « note + bouton » footer are placed around it by the block (SectionHeading, SectionNote).
+ * when the steps stack). A step = upright serif number, duration chip with clock,
+ * title, text, rule, CheckList. The number of columns follows the number of steps
+ * received (Payload: 1 to 4 array rows), and the panel follows the width of its page
+ * column, not the screen (container queries): steps stack when each would get less
+ * than about 260 px. Capacity by column width: see content-specs.ts (stepsCapacity).
+ * The section header and the « note + bouton » footer are placed around it by the block.
  */
 import {Divider} from '@astryxdesign/core/Divider';
 import {Heading} from '@astryxdesign/core/Heading';
@@ -29,9 +31,10 @@ export type ProcessStep = {
 };
 
 export function ProcessSteps({steps}: {steps: ProcessStep[]}) {
-  const columns = Math.min(Math.max(steps.length, 2), 4);
+  const columns = Math.min(Math.max(steps.length, 1), 4);
   return (
-    <VStack as="ol" className={styles.panel} style={{'--steps': columns} as React.CSSProperties}>
+    <VStack className={styles.host}>
+    <VStack as="ol" className={styles.panel} data-steps={columns} style={{'--steps': columns} as React.CSSProperties}>
       {steps.map((s, i) => (
         <VStack as="li" key={i} className={styles.step}>
           <HStack justify="between" vAlign="center" className={styles.head}>
@@ -51,6 +54,7 @@ export function ProcessSteps({steps}: {steps: ProcessStep[]}) {
           ) : null}
         </VStack>
       ))}
+    </VStack>
     </VStack>
   );
 }

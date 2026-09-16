@@ -241,6 +241,15 @@ export const CATALOG: CatalogCategory[] = [
         "doc": null
       },
       {
+        "name": "PlanCard",
+        "label": "Plan Card",
+        "slug": "plan-card",
+        "href": "/design/composants/plan-card",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
         "name": "Media",
         "label": "Media",
         "slug": "media",

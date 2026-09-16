@@ -1,12 +1,13 @@
 'use client';
 
 /**
- * (internal building block of PriceList, not in the catalog)
- * PlanCard — the tier card (mockups 08 and 09 « Trois volumes »): head on a muted
+ * PlanCard — the tier card (mockups 08 and 09 « Trois volumes »), one per page column
+ * (3 or 4 columns, three or four tiers side by side in a row): head on a muted
  * background (name, tagline, Price), body (eyebrow « Tout Solo, plus » + dense CheckList),
  * foot on a muted background (full-width button, note, guarantee Callout). `featured`:
  * silo border, tinted shadow, « Populaire » chip straddling the top edge, split button.
- * Equal height in a page Grid; night via the Section.
+ * Equal height in a page Grid (the column stretches to the row); night via the Section.
+ * PriceList's « columns » variant still places several tiers itself (catalogue).
  */
 import {HStack, VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
