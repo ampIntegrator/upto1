@@ -29,3 +29,27 @@ MORE CLI:
   swizzle <Name>     eject component source for deep customization
   upgrade --apply    run after any @astryxdesign/core bump
 <!-- ASTRYX:END -->
+
+## Section builder (rows and columns of the page body)
+
+`src/fields/sections/` is a neutral core, meant to become a Payload plugin: it knows no
+component, no theme, no media collection. Never import `src/components/` from it. Everything
+site-specific goes through `src/sections.config.ts` and `src/fields/blocks/`. Audit and plan:
+`section-builder-audit.md`; full doc: `docs/section-builder.md`.
+
+Adding a column component, in this order:
+1. Branch `astryx`: the component in `src/components/`, its showcase in the `/design` catalogue,
+   its minimum span in `src/components/content-specs.ts`.
+2. Branch `payload`: a `ContentBlock` in `src/fields/blocks/` (Payload block + `minSpan` from the
+   registry) added to the `blocks` list of `src/sections.config.ts`; conversion in
+   `src/lib/sections.ts`, rendering in `src/components/PageSections.tsx`; picker preview
+   (`/apercu`, then `pnpm previews:build`).
+3. Database: backup, `pnpm migrate:create <name>`, review, `pnpm migrate`, regenerate types. A
+   change without new fields must generate nothing with `pnpm payload migrate:create x --skip-empty`.
+4. Tests on a throwaway page created and deleted by the script, never on a real page.
+
+Width rules: one component per column, minimum width declared by the block, a row always adds
+up to 12. A component that subdivides (card grid, price list, steps) carries its own grid and
+will need a data-dependent `minSpan(data)` on the server (not done yet).
+
+`consignes.md` is Nicolas's own scratch file: read it, never write to it.

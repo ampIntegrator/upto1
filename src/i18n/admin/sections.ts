@@ -106,6 +106,10 @@ export const sectionsText = texts({
       fr: ({min}: {min: number}) => `Trop étroit : ${min} colonnes min.`,
       en: ({min}: {min: number}) => `Too narrow: ${min} columns min.`,
     },
+    wide: {
+      fr: ({max}: {max: number}) => `Trop large : ${max} colonnes max.`,
+      en: ({max}: {max: number}) => `Too wide: ${max} columns max.`,
+    },
     helpNoSelection: {
       fr: 'Double clic sur une disposition : ajoute une rangée. Clic sur une rangée : la sélectionne ; ensuite, un clic sur une de ses colonnes l’ouvre, un clic sur une disposition la remplace.',
       en: 'Double click a layout: adds a row. Click a row: selects it; then clicking one of its columns opens it, clicking a layout replaces it.',
@@ -222,6 +226,10 @@ export const sectionsText = texts({
     tooNarrow: {
       fr: ({block, min, span}: {block: string; min: number; span: number}) => `« ${block} » a besoin d'au moins ${min} colonnes ; cette colonne en fait ${span}.`,
       en: ({block, min, span}: {block: string; min: number; span: number}) => `“${block}” needs at least ${min} columns; this column has ${span}.`,
+    },
+    tooWide: {
+      fr: ({block, max, span}: {block: string; max: number; span: number}) => `« ${block} » ne dépasse pas ${max} colonnes ; cette colonne en fait ${span}.`,
+      en: ({block, max, span}: {block: string; max: number; span: number}) => `“${block}” must not exceed ${max} columns; this column has ${span}.`,
     },
     rowTotal: {
       fr: ({total}: {total: number}) => `Les largeurs des colonnes font ${total} ; il en faut 12.`,

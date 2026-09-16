@@ -124,3 +124,119 @@ export const emptyBlockText = texts({
   plural: {fr: 'Cases vides', en: 'Empty cells'},
   group: {fr: 'Structure', en: 'Layout'},
 });
+
+/** Texts shared by the pricing blocks (single price and tier). */
+const pricingShared = texts({
+  group: {fr: 'Tarifs', en: 'Pricing'},
+  featuresLabel: {fr: 'Titre de la liste', en: 'List title'},
+  features: {fr: 'Ce que comprend l’offre', en: 'What the offer includes'},
+  feature: {fr: 'Élément', en: 'Item'},
+  featureLabel: {fr: 'Libellé', en: 'Label'},
+  featureEnd: {fr: 'Valeur barrée en fin de ligne', en: 'Struck-through value at the end of the line'},
+  price: {fr: 'Prix', en: 'Price'},
+  priceValue: {fr: 'Montant (tel qu’affiché : « 79 », « 1 490 »)', en: 'Amount as displayed (« 79 », « 1,490 »)'},
+  priceCurrency: {fr: 'Devise', en: 'Currency'},
+  pricePeriod: {fr: 'Période (« / mois », « par mois · soit 2,60 € / jour »)', en: 'Period (« / month », « per month · 2.60 € / day »)'},
+  cta: {fr: 'Bouton', en: 'Button'},
+  mention: {fr: 'Mention sous le bouton', en: 'Note below the button'},
+  guarantee: {fr: 'Garantie', en: 'Guarantee'},
+  guaranteeTitle: {fr: 'Titre', en: 'Title'},
+  guaranteeText: {fr: 'Texte', en: 'Text'},
+});
+
+export const priceSingleBlockText = texts({
+  name: {fr: 'Prix unique', en: 'Single price'},
+  plural: {fr: 'Prix uniques', en: 'Single prices'},
+  ...pricingShared,
+  totalLabel: {fr: 'Libellé de la valeur totale', en: 'Total value label'},
+  totalValue: {fr: 'Valeur totale (barrée)', en: 'Total value (struck through)'},
+  priceLabel: {fr: 'Titre au-dessus du prix', en: 'Title above the price'},
+});
+
+export const planBlockText = texts({
+  name: {fr: 'Palier de prix', en: 'Price tier'},
+  plural: {fr: 'Paliers de prix', en: 'Price tiers'},
+  ...pricingShared,
+  planName: {fr: 'Nom du palier', en: 'Tier name'},
+  tagline: {fr: 'Accroche', en: 'Tagline'},
+  featured: {fr: 'Palier mis en avant (cadre silo, chip)', en: 'Featured tier (silo frame, chip)'},
+  badge: {fr: 'Texte du chip', en: 'Chip text'},
+  inherits: {fr: 'Nom du palier précédent (« Tout Solo, plus »)', en: 'Previous tier name (« Everything in Solo, plus »)'},
+  inheritsDescription: {fr: 'Vide : la liste porte le titre ci-dessus.', en: 'Empty: the list uses the title above.'},
+});
+
+export const faqBlockText = texts({
+  name: {fr: 'FAQ (dépliants)', en: 'FAQ (collapsibles)'},
+  plural: {fr: 'FAQ', en: 'FAQs'},
+  group: {fr: 'FAQ', en: 'FAQ'},
+  mode: {fr: 'Ouverture', en: 'Opening'},
+  modeSingle: {fr: 'Une seule question ouverte à la fois', en: 'One question open at a time'},
+  modeMultiple: {fr: 'Plusieurs questions ouvertes', en: 'Several questions open'},
+  columns: {fr: 'Colonnes', en: 'Columns'},
+  columnsOne: {fr: 'Empilé', en: 'Stacked'},
+  columnsTwo: {fr: 'Deux colonnes (une seule sous ~900 px)', en: 'Two columns (one below ~900 px)'},
+  firstOpen: {fr: 'Première question ouverte au chargement', en: 'First question open on load'},
+  items: {fr: 'Questions', en: 'Questions'},
+  item: {fr: 'Question', en: 'Question'},
+  question: {fr: 'Question', en: 'Question'},
+  answer: {fr: 'Réponse', en: 'Answer'},
+  answerDescription: {fr: 'Une ligne vide sépare deux paragraphes.', en: 'A blank line separates two paragraphs.'},
+});
+
+export const testimonialBlockText = texts({
+  name: {fr: 'Témoignage', en: 'Testimonial'},
+  plural: {fr: 'Témoignages', en: 'Testimonials'},
+  group: {fr: 'Témoignages', en: 'Testimonials'},
+  quote: {fr: 'Citation', en: 'Quote'},
+  personName: {fr: 'Nom', en: 'Name'},
+  role: {fr: 'Rôle et lieu (« Courtière · Lyon »)', en: 'Role and place (« Broker · Lyon »)'},
+  result: {fr: 'Résultat chiffré (chip)', en: 'Numeric result (chip)'},
+});
+
+export const compareCardBlockText = texts({
+  name: {fr: 'Carte comparative', en: 'Compare card'},
+  plural: {fr: 'Cartes comparatives', en: 'Compare cards'},
+  group: {fr: 'Comparatif', en: 'Comparison'},
+  chip: {fr: 'Chip', en: 'Chip'},
+  chipLabel: {fr: 'Texte (« AVANT », « APRÈS »)', en: 'Text (« BEFORE », « AFTER »)'},
+  chipTone: {fr: 'Couleur', en: 'Colour'},
+  tones: {
+    accent: {fr: 'Silo', en: 'Silo'},
+    high: {fr: 'Highlight', en: 'Highlight'},
+    danger: {fr: 'Rouge', en: 'Red'},
+    cat: {fr: 'Or', en: 'Gold'},
+    line: {fr: 'Filet', en: 'Outline'},
+  },
+  meta: {fr: 'Repère à droite du chip', en: 'Marker to the right of the chip'},
+  quote: {fr: 'Citation', en: 'Quote'},
+  items: {fr: 'Liste', en: 'List'},
+  item: {fr: 'Ligne', en: 'Line'},
+  itemLabel: {fr: 'Texte', en: 'Text'},
+  tone: {fr: 'Pastilles', en: 'Bullets'},
+  toneCheck: {fr: 'Coches silo', en: 'Silo checks'},
+  toneCross: {fr: 'Croix rouges', en: 'Red crosses'},
+  featured: {fr: 'Carte mise en avant (cadre silo, repère or)', en: 'Featured card (silo frame, gold marker)'},
+});
+
+export const processStepsBlockText = texts({
+  name: {fr: 'Étapes', en: 'Steps'},
+  plural: {fr: 'Panneaux d’étapes', en: 'Steps panels'},
+  group: {fr: 'Étapes', en: 'Steps'},
+  steps: {fr: 'Étapes', en: 'Steps'},
+  step: {fr: 'Étape', en: 'Step'},
+  stepsDescription: {
+    fr: 'Capacité selon la largeur de la colonne : 1 étape sur 4 ou 5 colonnes, 2 sur 6 ou 7, 3 sur 8 ou 9, 4 sur 12.',
+    en: 'Capacity by column width: 1 step on 4 or 5 columns, 2 on 6 or 7, 3 on 8 or 9, 4 on 12.',
+  },
+  title: {fr: 'Titre', en: 'Title'},
+  text: {fr: 'Texte', en: 'Text'},
+  duration: {fr: 'Durée (chip : « 5 min », « 48 h »)', en: 'Duration (chip: « 5 min », « 48 h »)'},
+  checks: {fr: 'Liste à pastilles', en: 'Check list'},
+  check: {fr: 'Ligne', en: 'Line'},
+  checkLabel: {fr: 'Texte', en: 'Text'},
+  asterisk: {fr: 'Astérisque après le titre (renvoi à la note)', en: 'Asterisk after the title (refers to the note)'},
+  tooMany: {
+    fr: ({count, capacity, span}: {count: number; capacity: number; span: number}) => `${count} étape${count > 1 ? 's' : ''} pour une colonne de ${span} qui en accepte ${capacity}. Élargissez la colonne ou retirez des étapes.`,
+    en: ({count, capacity, span}: {count: number; capacity: number; span: number}) => `${count} step${count > 1 ? 's' : ''} in a column of ${span} that holds ${capacity}. Widen the column or remove steps.`,
+  },
+});

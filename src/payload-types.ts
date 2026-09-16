@@ -374,6 +374,138 @@ export interface Page {
                                   blockName?: string | null;
                                   blockType: 'cardTitleLink';
                                 }
+                              | {
+                                  featuresLabel?: string | null;
+                                  features?:
+                                    | {
+                                        label: string;
+                                        end?: string | null;
+                                        id?: string | null;
+                                      }[]
+                                    | null;
+                                  totalLabel?: string | null;
+                                  totalValue?: string | null;
+                                  priceLabel?: string | null;
+                                  price: {
+                                    value: string;
+                                    currency?: string | null;
+                                    period?: string | null;
+                                  };
+                                  cta: {
+                                    label: string;
+                                    href: string;
+                                  };
+                                  mention?: string | null;
+                                  guarantee?: {
+                                    title?: string | null;
+                                    text?: string | null;
+                                  };
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'priceSingle';
+                                }
+                              | {
+                                  name: string;
+                                  tagline?: string | null;
+                                  price: {
+                                    value: string;
+                                    currency?: string | null;
+                                    period?: string | null;
+                                  };
+                                  featured?: boolean | null;
+                                  badge?: string | null;
+                                  /**
+                                   * Empty: the list uses the title above.
+                                   */
+                                  inherits?: string | null;
+                                  featuresLabel?: string | null;
+                                  features?:
+                                    | {
+                                        label: string;
+                                        end?: string | null;
+                                        id?: string | null;
+                                      }[]
+                                    | null;
+                                  cta: {
+                                    label: string;
+                                    href: string;
+                                  };
+                                  mention?: string | null;
+                                  guarantee?: {
+                                    title?: string | null;
+                                    text?: string | null;
+                                  };
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'plan';
+                                }
+                              | {
+                                  mode?: ('single' | 'multiple') | null;
+                                  columns?: ('1' | '2') | null;
+                                  firstOpen?: boolean | null;
+                                  items?:
+                                    | {
+                                        question: string;
+                                        /**
+                                         * A blank line separates two paragraphs.
+                                         */
+                                        answer: string;
+                                        id?: string | null;
+                                      }[]
+                                    | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'faq';
+                                }
+                              | {
+                                  quote: string;
+                                  name: string;
+                                  role?: string | null;
+                                  result?: string | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'testimonial';
+                                }
+                              | {
+                                  chipLabel: string;
+                                  chipTone?: ('accent' | 'high' | 'danger' | 'cat' | 'line') | null;
+                                  meta?: string | null;
+                                  quote: string;
+                                  items?:
+                                    | {
+                                        label: string;
+                                        id?: string | null;
+                                      }[]
+                                    | null;
+                                  tone?: ('check' | 'cross') | null;
+                                  featured?: boolean | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'compareCard';
+                                }
+                              | {
+                                  /**
+                                   * Capacity by column width: 1 step on 4 or 5 columns, 2 on 6 or 7, 3 on 8 or 9, 4 on 12.
+                                   */
+                                  steps?:
+                                    | {
+                                        title: string;
+                                        duration?: string | null;
+                                        text: string;
+                                        checks?:
+                                          | {
+                                              label: string;
+                                              id?: string | null;
+                                            }[]
+                                          | null;
+                                        asterisk?: boolean | null;
+                                        id?: string | null;
+                                      }[]
+                                    | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'processSteps';
+                                }
                             )[]
                           | null;
                         id?: string | null;
@@ -614,6 +746,138 @@ export interface Section {
                         id?: string | null;
                         blockName?: string | null;
                         blockType: 'cardTitleLink';
+                      }
+                    | {
+                        featuresLabel?: string | null;
+                        features?:
+                          | {
+                              label: string;
+                              end?: string | null;
+                              id?: string | null;
+                            }[]
+                          | null;
+                        totalLabel?: string | null;
+                        totalValue?: string | null;
+                        priceLabel?: string | null;
+                        price: {
+                          value: string;
+                          currency?: string | null;
+                          period?: string | null;
+                        };
+                        cta: {
+                          label: string;
+                          href: string;
+                        };
+                        mention?: string | null;
+                        guarantee?: {
+                          title?: string | null;
+                          text?: string | null;
+                        };
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'priceSingle';
+                      }
+                    | {
+                        name: string;
+                        tagline?: string | null;
+                        price: {
+                          value: string;
+                          currency?: string | null;
+                          period?: string | null;
+                        };
+                        featured?: boolean | null;
+                        badge?: string | null;
+                        /**
+                         * Empty: the list uses the title above.
+                         */
+                        inherits?: string | null;
+                        featuresLabel?: string | null;
+                        features?:
+                          | {
+                              label: string;
+                              end?: string | null;
+                              id?: string | null;
+                            }[]
+                          | null;
+                        cta: {
+                          label: string;
+                          href: string;
+                        };
+                        mention?: string | null;
+                        guarantee?: {
+                          title?: string | null;
+                          text?: string | null;
+                        };
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'plan';
+                      }
+                    | {
+                        mode?: ('single' | 'multiple') | null;
+                        columns?: ('1' | '2') | null;
+                        firstOpen?: boolean | null;
+                        items?:
+                          | {
+                              question: string;
+                              /**
+                               * A blank line separates two paragraphs.
+                               */
+                              answer: string;
+                              id?: string | null;
+                            }[]
+                          | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'faq';
+                      }
+                    | {
+                        quote: string;
+                        name: string;
+                        role?: string | null;
+                        result?: string | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'testimonial';
+                      }
+                    | {
+                        chipLabel: string;
+                        chipTone?: ('accent' | 'high' | 'danger' | 'cat' | 'line') | null;
+                        meta?: string | null;
+                        quote: string;
+                        items?:
+                          | {
+                              label: string;
+                              id?: string | null;
+                            }[]
+                          | null;
+                        tone?: ('check' | 'cross') | null;
+                        featured?: boolean | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'compareCard';
+                      }
+                    | {
+                        /**
+                         * Capacity by column width: 1 step on 4 or 5 columns, 2 on 6 or 7, 3 on 8 or 9, 4 on 12.
+                         */
+                        steps?:
+                          | {
+                              title: string;
+                              duration?: string | null;
+                              text: string;
+                              checks?:
+                                | {
+                                    label: string;
+                                    id?: string | null;
+                                  }[]
+                                | null;
+                              asterisk?: boolean | null;
+                              id?: string | null;
+                            }[]
+                          | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'processSteps';
                       }
                   )[]
                 | null;
@@ -1014,6 +1278,147 @@ export interface PagesSelect<T extends boolean = true> {
                                       id?: T;
                                       blockName?: T;
                                     };
+                                priceSingle?:
+                                  | T
+                                  | {
+                                      featuresLabel?: T;
+                                      features?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            end?: T;
+                                            id?: T;
+                                          };
+                                      totalLabel?: T;
+                                      totalValue?: T;
+                                      priceLabel?: T;
+                                      price?:
+                                        | T
+                                        | {
+                                            value?: T;
+                                            currency?: T;
+                                            period?: T;
+                                          };
+                                      cta?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            href?: T;
+                                          };
+                                      mention?: T;
+                                      guarantee?:
+                                        | T
+                                        | {
+                                            title?: T;
+                                            text?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                plan?:
+                                  | T
+                                  | {
+                                      name?: T;
+                                      tagline?: T;
+                                      price?:
+                                        | T
+                                        | {
+                                            value?: T;
+                                            currency?: T;
+                                            period?: T;
+                                          };
+                                      featured?: T;
+                                      badge?: T;
+                                      inherits?: T;
+                                      featuresLabel?: T;
+                                      features?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            end?: T;
+                                            id?: T;
+                                          };
+                                      cta?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            href?: T;
+                                          };
+                                      mention?: T;
+                                      guarantee?:
+                                        | T
+                                        | {
+                                            title?: T;
+                                            text?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                faq?:
+                                  | T
+                                  | {
+                                      mode?: T;
+                                      columns?: T;
+                                      firstOpen?: T;
+                                      items?:
+                                        | T
+                                        | {
+                                            question?: T;
+                                            answer?: T;
+                                            id?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                testimonial?:
+                                  | T
+                                  | {
+                                      quote?: T;
+                                      name?: T;
+                                      role?: T;
+                                      result?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                compareCard?:
+                                  | T
+                                  | {
+                                      chipLabel?: T;
+                                      chipTone?: T;
+                                      meta?: T;
+                                      quote?: T;
+                                      items?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            id?: T;
+                                          };
+                                      tone?: T;
+                                      featured?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                processSteps?:
+                                  | T
+                                  | {
+                                      steps?:
+                                        | T
+                                        | {
+                                            title?: T;
+                                            duration?: T;
+                                            text?: T;
+                                            checks?:
+                                              | T
+                                              | {
+                                                  label?: T;
+                                                  id?: T;
+                                                };
+                                            asterisk?: T;
+                                            id?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
                               };
                           id?: T;
                         };
@@ -1204,6 +1609,147 @@ export interface SectionsSelect<T extends boolean = true> {
                             | {
                                 label?: T;
                                 href?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    priceSingle?:
+                      | T
+                      | {
+                          featuresLabel?: T;
+                          features?:
+                            | T
+                            | {
+                                label?: T;
+                                end?: T;
+                                id?: T;
+                              };
+                          totalLabel?: T;
+                          totalValue?: T;
+                          priceLabel?: T;
+                          price?:
+                            | T
+                            | {
+                                value?: T;
+                                currency?: T;
+                                period?: T;
+                              };
+                          cta?:
+                            | T
+                            | {
+                                label?: T;
+                                href?: T;
+                              };
+                          mention?: T;
+                          guarantee?:
+                            | T
+                            | {
+                                title?: T;
+                                text?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    plan?:
+                      | T
+                      | {
+                          name?: T;
+                          tagline?: T;
+                          price?:
+                            | T
+                            | {
+                                value?: T;
+                                currency?: T;
+                                period?: T;
+                              };
+                          featured?: T;
+                          badge?: T;
+                          inherits?: T;
+                          featuresLabel?: T;
+                          features?:
+                            | T
+                            | {
+                                label?: T;
+                                end?: T;
+                                id?: T;
+                              };
+                          cta?:
+                            | T
+                            | {
+                                label?: T;
+                                href?: T;
+                              };
+                          mention?: T;
+                          guarantee?:
+                            | T
+                            | {
+                                title?: T;
+                                text?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    faq?:
+                      | T
+                      | {
+                          mode?: T;
+                          columns?: T;
+                          firstOpen?: T;
+                          items?:
+                            | T
+                            | {
+                                question?: T;
+                                answer?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    testimonial?:
+                      | T
+                      | {
+                          quote?: T;
+                          name?: T;
+                          role?: T;
+                          result?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    compareCard?:
+                      | T
+                      | {
+                          chipLabel?: T;
+                          chipTone?: T;
+                          meta?: T;
+                          quote?: T;
+                          items?:
+                            | T
+                            | {
+                                label?: T;
+                                id?: T;
+                              };
+                          tone?: T;
+                          featured?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    processSteps?:
+                      | T
+                      | {
+                          steps?:
+                            | T
+                            | {
+                                title?: T;
+                                duration?: T;
+                                text?: T;
+                                checks?:
+                                  | T
+                                  | {
+                                      label?: T;
+                                      id?: T;
+                                    };
+                                asterisk?: T;
+                                id?: T;
                               };
                           id?: T;
                           blockName?: T;

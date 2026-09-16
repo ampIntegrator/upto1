@@ -26,6 +26,8 @@ export type SectionBuilderOptions = {
 };
 
 export type SectionBuilder = {
+  /** The content blocks, as declared by the host (the site's rendering reads their layout flags). */
+  blocks: ContentBlock[];
   /** The documents' sections field: a stack of « Section » (and « Shared section ») blocks. */
   field: Field;
   /** The fields of the shared sections collection (the collection adds its title). */
@@ -51,6 +53,7 @@ export function createSectionBuilder({blocks, settings = [], fieldName = 'sectio
     });
   }
   return {
+    blocks,
     field: {
       name: fieldName,
       type: 'blocks',

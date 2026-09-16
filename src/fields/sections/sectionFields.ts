@@ -5,11 +5,11 @@ import {tr} from '@/i18n/admin/languages';
 import {sectionsText as T} from '@/i18n/admin/sections';
 
 import {BLOCK_NAME_MAX} from './blockName';
-import {type ContentBlock, labelMap, minSpanMap} from './contentBlock';
+import {type ContentBlock, labelMap, maxSpanMap, minSpanMap} from './contentBlock';
 import {EMPTY_SLUG, emptyBlock} from './emptyBlock';
 import {SECTION_GAP_OPTIONS, SITE_GAP} from './gaps';
 import {DEFAULT_SPACING, SPACING_OPTIONS, SPAN_OPTIONS, toSpan} from './grid';
-import {rowWidthError, tooNarrowError} from './validation';
+import {rowWidthError, tooNarrowError, tooWideError} from './validation';
 
 /**
  * A page Section (« Grille & emprises » model, 11 Sept. 2026):
@@ -46,14 +46,15 @@ const getByPath = (data: unknown, path: (number | string)[]): unknown => path.re
  */
 export function rowsField(blocks: ContentBlock[], condition?: Condition): Field {
   const minSpans = minSpanMap(blocks);
+  const maxSpans = maxSpanMap(blocks);
   const labels = labelMap(blocks);
   const contentBlocks: Block[] = [emptyBlock, ...blocks.map((b) => b.block)];
   const label = (blockType: string, req: PayloadRequest): string => getTranslation(labels[blockType] ?? blockType, req.i18n);
 
-  /** Blocks offered in a column: the empty cell and those whose minimum span fits in its width. */
-  const blocksForSpan = (span: number): string[] => [EMPTY_SLUG, ...blocks.filter((b) => b.minSpan <= span).map((b) => b.block.slug)];
+  /** Blocks offered in a column: the empty cell and those whose width range contains the column's. */
+  const blocksForSpan = (span: number): string[] => [EMPTY_SLUG, ...blocks.filter((b) => b.minSpan <= span && span <= (b.maxSpan ?? 12)).map((b) => b.block.slug)];
 
-  /** Column width: the row must add up to 12, and the content must fit in the column. */
+  /** Column width: the row must add up to 12, and the content must fit in the column, neither too narrow nor too wide. */
   const spanField: Field = {
     name: 'span',
     type: 'select',
@@ -76,7 +77,9 @@ export function rowsField(blocks: ContentBlock[], condition?: Condition): Field 
       for (const block of Array.isArray(siblingData?.contents) ? (siblingData.contents as {blockType?: string}[]) : []) {
         const slug = block?.blockType ?? '';
         const min = minSpans[slug] ?? 0;
+        const max = maxSpans[slug] ?? 12;
         if (min > span) errors.push(tooNarrowError(label(slug, req), min, span, language));
+        else if (span > max) errors.push(tooWideError(label(slug, req), max, span, language));
       }
       return errors.length ? errors.join(' ') : true;
     },
@@ -91,7 +94,7 @@ export function rowsField(blocks: ContentBlock[], condition?: Condition): Field 
       condition,
       description: T.rows.description,
       // builder view: strips, proportional cells, one drawer per column
-      components: {Field: {path: '@/fields/sections/RowsBuilder#RowsBuilder', clientProps: {minSpans}}},
+      components: {Field: {path: '@/fields/sections/RowsBuilder#RowsBuilder', clientProps: {minSpans, maxSpans}}},
     },
     fields: [
       {

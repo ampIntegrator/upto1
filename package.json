@@ -24,7 +24,8 @@
     "migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
     "migrate:create": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:create",
     "migrate:status": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:status",
-    "seed": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/seed.ts"
+    "seed": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/seed.ts",
+    "smoke:sections": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/smoke-sections.ts"
   },
   "dependencies": {
     "@astryxdesign/core": "0.5.4",
