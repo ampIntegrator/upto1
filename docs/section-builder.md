@@ -69,15 +69,23 @@ Columns are reordered left or right with their handle (⋮⋮). A tile turns red
 
 ## Content blocks
 
-| Block | Component | Min. columns |
-|---|---|---|
-| Case vide | none (reserves the slot) | 2 |
-| Image | `Media` | 2 |
-| Image avec citation | `MediaQuote` | 6 |
-| Cartes (8 variants) | `Card` | 3 |
-| Texte (temporary) | plain text | 2 |
+| Block | Component | Min. | Max. | Fills the row height |
+|---|---|---|---|---|
+| Case vide | none (reserves the slot) | 2 | 12 | |
+| Image | `Media` | 2 | 12 | yes |
+| Image avec citation | `MediaQuote` | 6 | 12 | yes |
+| Cartes (8 variants) | `Card` | 3 | 12 | |
+| Texte (temporary) | plain text | 2 | 12 | |
+| Prix unique | `PriceCard` | 6 | 9 | |
+| Palier de prix | `PlanCard` | 3 | 4 | yes |
+| FAQ (dépliants) | `CollapsibleGroup` | 6 | 9 | |
+| Témoignage | `TestimonialCard` | 3 | 4 | yes |
+| Carte comparative | `CompareCard` | 3 | 6 | yes |
+| Étapes | `ProcessSteps` | 4 | 12 | |
 
-The block picker only offers blocks whose minimum width fits the column (`filterOptions`), and the server rejects a block that is too wide. Each block declares its minimum width (`ContentBlock = {block, minSpan}`, `src/fields/sections/contentBlock.ts`); the site's blocks take that value from the catalogue's span registry, `src/components/content-specs.ts`.
+Widths decided on 16 September 2026. The steps panel holds 1 step on 4 or 5 columns, 2 on 6 or 7, 3 on 8 or 9, 4 on 12 (`stepsCapacity` in the registry); the block checks its `steps` field against its column width (`columnSpanAt`) with an explicit message.
+
+The block picker only offers blocks whose width range contains the column's (`filterOptions`), and the server rejects a block that is too narrow or too wide (the builder's cell shows « Trop étroit » or « Trop large »). Each block declares `ContentBlock = {block, minSpan, maxSpan?, fill?}` (`src/fields/sections/contentBlock.ts`); `fill` stretches the column to the row's height so cards side by side share it. The site's blocks take their widths from the catalogue's span registry, `src/components/content-specs.ts`.
 
 ### Image and image with quote
 
@@ -118,4 +126,4 @@ dnd-kit is a direct dependency pinned to the versions Payload already uses (`@dn
    - Add its preview to `/apercu` and run `pnpm previews:build`.
    - Back up the database, create and review the migration, apply it, regenerate types.
 
-Test on a throwaway page created and deleted by the test script, never on a real page.
+Test on a throwaway page created and deleted by the test script, never on a real page: `pnpm smoke:sections` (dev server running) creates a page with every column block, checks the width rules and the site rendering, then deletes it.

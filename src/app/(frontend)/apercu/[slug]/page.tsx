@@ -1,16 +1,13 @@
 import {notFound} from 'next/navigation';
 import React from 'react';
 
-import {CARD_VARIANTS} from '@/fields/blocks/cardBlocks';
-import {EMPTY_SLUG} from '@/fields/sections/emptyBlock';
-import {MEDIA_SLUG} from '@/fields/blocks/mediaBlock';
-import {MEDIA_QUOTE_SLUG} from '@/fields/blocks/mediaQuoteBlock';
+import {PREVIEW_SLUGS} from '@/fields/blocks/previews';
 import {Apercu} from './Apercu';
 
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return [EMPTY_SLUG, MEDIA_SLUG, MEDIA_QUOTE_SLUG, ...Object.keys(CARD_VARIANTS)].map((slug) => ({slug}));
+  return PREVIEW_SLUGS.map((slug) => ({slug}));
 }
 
 /**
@@ -20,6 +17,6 @@ export function generateStaticParams() {
  */
 export default async function Page({params}: {params: Promise<{slug: string}>}) {
   const {slug} = await params;
-  if (slug !== EMPTY_SLUG && slug !== MEDIA_SLUG && slug !== MEDIA_QUOTE_SLUG && !(slug in CARD_VARIANTS)) notFound();
+  if (!PREVIEW_SLUGS.includes(slug)) notFound();
   return <Apercu slug={slug} />;
 }

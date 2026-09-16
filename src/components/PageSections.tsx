@@ -14,29 +14,66 @@ import {VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
 import React from 'react';
 
-import type {ContentData, SectionData} from '@/lib/sections';
+import type {ContentData, FaqData, SectionData} from '@/lib/sections';
 import {Card} from './Card';
+import {Collapsible, CollapsibleGroup} from './Collapsible';
+import {CompareCard} from './CompareCard';
 import {Container} from './Container';
 import {Media} from './Media';
 import {MediaQuote} from './MediaQuote';
+import {PlanCard} from './PlanCard';
+import {PriceCard} from './PriceCard';
+import {ProcessSteps} from './ProcessSteps';
 import {Section} from './Section';
+import {TestimonialCard} from './TestimonialCard';
 
-function Content({content}: {content: ContentData}) {
+/** Paragraphs of a plain text: a blank line separates two paragraphs. */
+function Paragraphs({text}: {text: string}) {
+  return (
+    <VStack gap={3}>
+      {text
+        .split(/\n\s*\n/)
+        .map((p) => p.trim())
+        .filter(Boolean)
+        .map((p, i) => (
+          <Text key={i} type="body" color="secondary">
+            {p}
+          </Text>
+        ))}
+    </VStack>
+  );
+}
+
+/** A FAQ: one group, values indexed, the first question open when asked. */
+function Faq({faq, id}: {faq: FaqData; id: string}) {
+  const first = `${id}-0`;
+  return (
+    <CollapsibleGroup type={faq.mode} columns={faq.columns} defaultValue={faq.firstOpen ? (faq.mode === 'multiple' ? [first] : first) : undefined}>
+      {faq.items.map((q, i) => (
+        <Collapsible key={i} value={`${id}-${i}`} question={q.question}>
+          <Paragraphs text={q.answer} />
+        </Collapsible>
+      ))}
+    </CollapsibleGroup>
+  );
+}
+
+function Content({content, id}: {content: ContentData; id: string}) {
   switch (content.type) {
     case 'text':
-      return (
-        <VStack gap={3}>
-          {content.text
-            .split(/\n\s*\n/)
-            .map((p) => p.trim())
-            .filter(Boolean)
-            .map((p, i) => (
-              <Text key={i} type="body" color="secondary">
-                {p}
-              </Text>
-            ))}
-        </VStack>
-      );
+      return <Paragraphs text={content.text} />;
+    case 'priceSingle':
+      return <PriceCard {...content.price} />;
+    case 'plan':
+      return <PlanCard {...content.plan} />;
+    case 'faq':
+      return <Faq faq={content.faq} id={id} />;
+    case 'testimonial':
+      return <TestimonialCard {...content.testimonial} />;
+    case 'compareCard':
+      return <CompareCard {...content.compareCard} />;
+    case 'processSteps':
+      return <ProcessSteps steps={content.steps} />;
     case 'card':
       return <Card {...content.card} />;
     case 'media':
@@ -69,7 +106,7 @@ export function PageSections({sections}: {sections: SectionData[]}) {
                     {c.contents.length ? (
                       <VStack gap={6} style={c.stretch ? {height: '100%'} : undefined}>
                         {c.contents.map((content, j) => (
-                          <Content key={j} content={content} />
+                          <Content key={j} content={content} id={`${s.key}-${r}-${i}-${j}`} />
                         ))}
                       </VStack>
                     ) : null}

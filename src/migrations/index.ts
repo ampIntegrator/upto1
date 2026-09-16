@@ -13,6 +13,7 @@ import * as migration_20260915_102142_media_block from './20260915_102142_media_
 import * as migration_20260915_105105_media_quote_block from './20260915_105105_media_quote_block';
 import * as migration_20260915_155338_languages_global from './20260915_155338_languages_global';
 import * as migration_20260915_155407_drop_settings_languages from './20260915_155407_drop_settings_languages';
+import * as migration_20260916_093855_add_column_blocks from './20260916_093855_add_column_blocks';
 
 export const migrations = [
   {
@@ -88,6 +89,11 @@ export const migrations = [
   {
     up: migration_20260915_155407_drop_settings_languages.up,
     down: migration_20260915_155407_drop_settings_languages.down,
-    name: '20260915_155407_drop_settings_languages'
+    name: '20260915_155407_drop_settings_languages',
+  },
+  {
+    up: migration_20260916_093855_add_column_blocks.up,
+    down: migration_20260916_093855_add_column_blocks.down,
+    name: '20260916_093855_add_column_blocks'
   },
 ];

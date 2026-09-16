@@ -146,9 +146,9 @@ In the order that pays off first:
    rule. Each becomes an option or a host callback.
 3. **i18n**: decide between Payload's i18n (`translations` in the plugin config) and shipping
    the current `tr()` / `useAdminText` helpers with the package.
-4. **Dynamic minimum spans**: `minSpan` is a number today; a block whose width depends on its
-   settings (card grid, price list) will need `minSpan(data)` on the server and a static floor
-   for the builder's « too narrow » hint.
+4. **Dynamic minimum spans**: `minSpan` and `maxSpan` are numbers. A block whose capacity
+   depends on its settings validates its own field against `columnSpanAt(data, path)` (done
+   for the steps panel on 16 September 2026); a generic `minSpan(data)` is not needed so far.
 5. **Package extraction**: move `src/fields/sections/` to a package, export
    `createSectionBuilder` and a `sectionBuilderPlugin()` wrapper that adds the field and the
    hook to the named collections.
