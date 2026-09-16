@@ -8,14 +8,13 @@ import type {CardProps} from '@/components/Card';
 import type {MediaProps} from '@/components/Media';
 import type {MediaQuoteProps, MediaQuoteSize, MediaQuoteTag} from '@/components/MediaQuote';
 import type {SectionBackground, SectionTint} from '@/components/Section';
-import type {ColumnSpan} from '@/components/content-specs';
 import {CARD_VARIANTS} from '@/fields/sections/cardBlocks';
 import {EMPTY_SLUG} from '@/fields/sections/emptyBlock';
 import {type Gaps, sectionGaps, siteGaps} from '@/fields/sections/gaps';
 import {MEDIA_SLUG} from '@/fields/sections/mediaBlock';
 import {MEDIA_QUOTE_SLUG} from '@/fields/sections/mediaQuoteBlock';
 import {hasMobileOrder, mobileRanks} from '@/fields/sections/mobileOrder';
-import {toSpan} from '@/fields/sections/presets';
+import {type ColumnSpan, toSpan} from '@/fields/sections/grid';
 import type {NucleoIconKey} from '@/theme/icons/nucleo';
 import type {Media, Page, Section as SharedSection, Setting} from '@/payload-types';
 

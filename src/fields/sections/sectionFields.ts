@@ -1,6 +1,6 @@
 import type {Block, Field} from 'payload';
 
-import {type ColumnSpan, minSpan} from '@/components/content-specs';
+import {minSpan} from '@/components/content-specs';
 import {tr} from '@/i18n/admin/languages';
 import {sectionsText as T} from '@/i18n/admin/sections';
 import {BLOCK_NAME_MAX} from './blockName';
@@ -8,9 +8,10 @@ import {CARD_BLOCKS} from './cardBlocks';
 import {emptyBlock} from './emptyBlock';
 import {mediaBlock} from './mediaBlock';
 import {mediaQuoteBlock} from './mediaQuoteBlock';
-import {type ContentBlockData, contentLabel, rowWidthError, toContentRef} from './contentRef';
+import {type ContentBlockData, contentLabel, toContentRef} from './contentRef';
 import {SECTION_GAP_OPTIONS, SITE_GAP} from './gaps';
-import {SPAN_OPTIONS, toSpan} from './presets';
+import {type ColumnSpan, DEFAULT_SPACING, SPACING_OPTIONS, SPAN_OPTIONS, toSpan} from './grid';
+import {rowWidthError} from './validation';
 
 /**
  * A page Section (« Grille & emprises » model, 11 Sept. 2026):
@@ -126,9 +127,6 @@ const rowsField: Field = {
   ],
 };
 
-/** Space at the top and bottom of a section, in pixels (halved below 640 px). */
-const SPACING_OPTIONS = ['0', '20', '40', '60', '80', '100', '120', '140', '160'].map((v) => ({label: `${v} px`, value: v}));
-
 const modeChosen = (_d: unknown, s: Sibling) => ['light', 'dark', 'media'].includes(String(s?.mode ?? ''));
 
 /**
@@ -223,8 +221,8 @@ export function sectionFields({shareable}: {shareable: boolean}): Field[] {
       type: 'row',
       admin: {condition: modeChosen},
       fields: [
-        {name: 'spacingTop', type: 'select', label: T.settings.spacingTop, defaultValue: '80', options: SPACING_OPTIONS, admin: {width: '33%'}},
-        {name: 'spacingBottom', type: 'select', label: T.settings.spacingBottom, defaultValue: '80', options: SPACING_OPTIONS, admin: {width: '33%'}},
+        {name: 'spacingTop', type: 'select', label: T.settings.spacingTop, defaultValue: DEFAULT_SPACING, options: SPACING_OPTIONS, admin: {width: '33%'}},
+        {name: 'spacingBottom', type: 'select', label: T.settings.spacingBottom, defaultValue: DEFAULT_SPACING, options: SPACING_OPTIONS, admin: {width: '33%'}},
         {
           name: 'anchor',
           type: 'text',

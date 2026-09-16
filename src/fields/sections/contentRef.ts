@@ -1,6 +1,6 @@
-import {type ColumnSpan, type ContentRef} from '@/components/content-specs';
+import {type ContentRef} from '@/components/content-specs';
 import {emptyBlockText, mediaBlockText, mediaQuoteBlockText} from '@/i18n/admin/blocks';
-import {type Text, tr} from '@/i18n/admin/languages';
+import {type Text} from '@/i18n/admin/languages';
 import {sectionsText} from '@/i18n/admin/sections';
 
 import {CARD_VARIANTS} from './cardBlocks';
@@ -56,9 +56,3 @@ export function contentLabel(block: ContentBlockData | null | undefined): Text {
   }
 }
 
-/** Error of a row in an admin language: the widths must add up to 12 (same rule as content-specs' validateRow). */
-export function rowWidthError(spans: readonly ColumnSpan[], language: unknown): string | null {
-  if (!spans.length) return tr(sectionsText.validation.rowEmpty, language);
-  const total = spans.reduce<number>((sum, n) => sum + n, 0);
-  return total === 12 ? null : tr(sectionsText.validation.rowTotal, language, {total});
-}
