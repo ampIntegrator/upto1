@@ -181,7 +181,8 @@ export function sectionFields({blocks, settings = [], shareable = false, conditi
   }
   return [
     // section settings, framed and collapsible (presentation only: no extra data)
-    {type: 'collapsible', label: T.settings.collapsible, admin: {initCollapsed: false}, fields: common},
+    // closed by default (Nicolas, 17 Sept. 2026): the rows are what editors open a section for
+    {type: 'collapsible', label: T.settings.collapsible, admin: {initCollapsed: true}, fields: common},
     // the rows, in their own collapsible block (RowsBuilder)
     {type: 'collapsible', label: T.rows.collapsible, admin: {initCollapsed: false, condition}, fields: [rowsField(blocks, condition)]},
   ];

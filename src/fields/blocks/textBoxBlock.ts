@@ -1,4 +1,4 @@
-import {BoldFeature, ItalicFeature, lexicalEditor, LinkFeature, OrderedListFeature, ParagraphFeature, UnorderedListFeature} from '@payloadcms/richtext-lexical';
+import {BoldFeature, FixedToolbarFeature, InlineToolbarFeature, ItalicFeature, lexicalEditor, LinkFeature, OrderedListFeature, ParagraphFeature, UnorderedListFeature} from '@payloadcms/richtext-lexical';
 import type {Block, PayloadRequest} from 'payload';
 
 import {minSpan} from '@/components/content-specs';
@@ -23,7 +23,8 @@ const twoAtMost = (value: unknown, {req}: {req: PayloadRequest}) => (!Array.isAr
 
 /** The editor of the text: only what the site renders (RichText). */
 export const textBoxEditor = lexicalEditor({
-  features: () => [ParagraphFeature(), BoldFeature(), ItalicFeature(), LinkFeature({enabledCollections: ['pages', 'posts']}), UnorderedListFeature(), OrderedListFeature()],
+  // fixed toolbar above the field and inline toolbar on selection: without them bold and links have no button
+  features: () => [ParagraphFeature(), BoldFeature(), ItalicFeature(), LinkFeature({enabledCollections: ['pages', 'posts']}), UnorderedListFeature(), OrderedListFeature(), FixedToolbarFeature(), InlineToolbarFeature()],
 });
 
 const block: Block = {
@@ -79,7 +80,8 @@ const block: Block = {
             {label: t.sizes.heading2, value: 'heading-2'},
           ],
           admin: {width: '30%', description: t.titleSizeDescription},
-          validate: (value: unknown, {data, path, req}: {data: unknown; path: (number | string)[]; req: PayloadRequest}) => {
+          validate: (value: unknown, {data, path, req, siblingData}: {data: unknown; path: (number | string)[]; req: PayloadRequest; siblingData: Sibling}) => {
+            if (!siblingData?.title) return true;
             const size = String(value ?? 'heading-1');
             const span = columnSpanAt(data, path);
             const need = minSpan({type: 'textBox', titleSize: size as 'display-1'});
