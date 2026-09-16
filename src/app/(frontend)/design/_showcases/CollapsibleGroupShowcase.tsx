@@ -16,7 +16,7 @@ function Faq({columns, type = 'single', prefix}: {columns: 1 | 2; type?: 'single
     <CollapsibleGroup type={type} columns={columns} defaultValue={type === 'multiple' ? [`${prefix}-0`] : `${prefix}-0`}>
       {FAQ.map((f, i) => (
         <Collapsible key={f.q} value={`${prefix}-${i}`} question={f.q}>
-          <Text type="body">{f.a}</Text>
+          <Text as="p" type="body">{f.a}</Text>
         </Collapsible>
       ))}
     </CollapsibleGroup>
@@ -38,7 +38,7 @@ export default function CollapsibleGroupShowcase() {
   return (
     <VStack gap={8}>
       <Text type="body" color="secondary">
-        Plusieurs items reliés. Accordéon strict : une seule question ouverte, la première par défaut. La règle traverse les colonnes, chaque colonne pousse indépendamment. Deux groupes sur une même page sont indépendants l'un de l'autre. Mode libre : chaque question s'ouvre et se ferme sans toucher aux autres.
+        Plusieurs items reliés, chaque question dans un titre h3 par défaut (balise au choix : h2 à h4, p ou span), la réponse en paragraphes blancs sur le fond silo. Accordéon strict : une seule question ouverte, la première par défaut. La règle traverse les colonnes, chaque colonne pousse indépendamment. Deux groupes sur une même page sont indépendants l'un de l'autre. Mode libre : chaque question s'ouvre et se ferme sans toucher aux autres.
       </Text>
 
       <Section title="Empilé" note="Une colonne, accordéon strict.">

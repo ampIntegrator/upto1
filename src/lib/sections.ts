@@ -40,7 +40,7 @@ type SectionSource = Omit<SectionBlock, 'blockType' | 'id' | 'blockName' | 'save
 type ContentBlock = NonNullable<NonNullable<NonNullable<SectionBlock['rows']>[number]['columns']>[number]['contents']>[number];
 
 /** A FAQ block: mode, columns, whether the first question starts open, and the questions. */
-export type FaqData = {mode: 'single' | 'multiple'; columns: 1 | 2; firstOpen: boolean; items: {question: string; answer: string}[]};
+export type FaqData = {mode: 'single' | 'multiple'; columns: 1 | 2; firstOpen: boolean; tag: 'h2' | 'h3' | 'h4' | 'p' | 'span'; items: {question: string; answer: string}[]};
 
 /** A collection: identical items side by side, swipe or carousel. */
 export type CollectionData = {layout: 'swipe' | 'carousel'; perView: 2 | 3 | 4; step: 'page' | 'item'; arrows: boolean; indicator: 'segments' | 'dots' | 'numbers' | 'none'; items: ContentData[]};
@@ -160,7 +160,8 @@ type PricingData = {
 };
 type PriceSingleData = PricingData & {featuresLabel?: string | null; totalLabel?: string | null; totalValue?: string | null; priceLabel?: string | null};
 type PlanData = PricingData & {name: string; tagline?: string | null; featured?: boolean | null; badge?: string | null; inherits?: string | null; featuresLabel?: string | null};
-type FaqBlockData = {mode?: string | null; columns?: string | null; firstOpen?: boolean | null; items?: {question: string; answer: string}[] | null};
+type FaqBlockData = {mode?: string | null; columns?: string | null; firstOpen?: boolean | null; tag?: string | null; items?: {question: string; answer: string}[] | null};
+const FAQ_TAGS = ['h2', 'h3', 'h4', 'p', 'span'] as const;
 type TestimonialData = {quote: string; name: string; role?: string | null; result?: string | null};
 type CompareCardData = {chipLabel: string; chipTone?: string | null; meta?: string | null; quote: string; items?: {label: string}[] | null; tone?: string | null; featured?: boolean | null};
 type StepsData = {steps?: {title: string; text: string; duration?: string | null; checks?: {label: string}[] | null; asterisk?: boolean | null}[] | null};
@@ -206,7 +207,8 @@ function toPlan(b: PlanData): ContentData {
 function toFaq(b: FaqBlockData): ContentData | null {
   const items = (b.items ?? []).filter((q) => q.question && q.answer);
   if (!items.length) return null;
-  return {type: 'faq', faq: {mode: b.mode === 'multiple' ? 'multiple' : 'single', columns: b.columns === '2' ? 2 : 1, firstOpen: b.firstOpen !== false, items}};
+  const tag = (FAQ_TAGS as readonly string[]).includes(b.tag ?? '') ? (b.tag as FaqData['tag']) : 'h3';
+  return {type: 'faq', faq: {mode: b.mode === 'multiple' ? 'multiple' : 'single', columns: b.columns === '2' ? 2 : 1, firstOpen: b.firstOpen !== false, tag, items}};
 }
 
 function toTestimonial(b: TestimonialData): ContentData {

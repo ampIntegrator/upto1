@@ -45,14 +45,31 @@ function Paragraphs({text}: {text: string}) {
   );
 }
 
-/** A FAQ: one group, values indexed, the first question open when asked. */
+/** Paragraphs of an answer, as <p>: their colour comes from the collapsible (white on the silo fill). */
+function AnswerParagraphs({text}: {text: string}) {
+  return (
+    <>
+      {text
+        .split(/\n\s*\n/)
+        .map((p) => p.trim())
+        .filter(Boolean)
+        .map((p, i) => (
+          <Text key={i} as="p" type="body">
+            {p}
+          </Text>
+        ))}
+    </>
+  );
+}
+
+/** A FAQ: one group, values indexed, the first question open when asked, questions in the chosen tag. */
 function Faq({faq, id}: {faq: FaqData; id: string}) {
   const first = `${id}-0`;
   return (
     <CollapsibleGroup type={faq.mode} columns={faq.columns} defaultValue={faq.firstOpen ? (faq.mode === 'multiple' ? [first] : first) : undefined}>
       {faq.items.map((q, i) => (
-        <Collapsible key={i} value={`${id}-${i}`} question={q.question}>
-          <Paragraphs text={q.answer} />
+        <Collapsible key={i} value={`${id}-${i}`} question={q.question} tag={faq.tag}>
+          <AnswerParagraphs text={q.answer} />
         </Collapsible>
       ))}
     </CollapsibleGroup>

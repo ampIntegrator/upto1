@@ -41,6 +41,14 @@ const block: Block = {
       ],
     },
     {
+      name: 'tag',
+      type: 'select',
+      label: t.tag,
+      defaultValue: 'h3',
+      options: (['h2', 'h3', 'h4', 'p', 'span'] as const).map((v) => ({label: v, value: v})),
+      admin: {description: t.tagDescription},
+    },
+    {
       name: 'items',
       type: 'array',
       label: t.items,
