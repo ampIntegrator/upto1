@@ -168,6 +168,8 @@ export const faqBlockText = texts({
   columnsOne: {fr: 'Empilé', en: 'Stacked'},
   columnsTwo: {fr: 'Deux colonnes (une seule sous ~900 px)', en: 'Two columns (one below ~900 px)'},
   firstOpen: {fr: 'Première question ouverte au chargement', en: 'First question open on load'},
+  tag: {fr: 'Balise des questions', en: 'Question tag'},
+  tagDescription: {fr: 'Pour la structure et le référencement ; ne change pas l’aspect.', en: 'For structure and SEO; does not change the look.'},
   items: {fr: 'Questions', en: 'Questions'},
   item: {fr: 'Question', en: 'Question'},
   question: {fr: 'Question', en: 'Question'},
@@ -261,5 +263,9 @@ export const collectionBlockText = texts({
     en: ({perView, capacity, span}: {perView: number; capacity: number; span: number}) => `${perView} items per view in a column of ${span} that holds ${capacity}.`,
   },
   mixed: {fr: 'Tous les éléments doivent être du même type.', en: 'All items must be of the same type.'},
+  swipeOverflow: {
+    fr: ({count, perView}: {count: number; perView: number}) => `${count} éléments pour ${perView} visibles : en côte à côte, pas plus d’éléments que de visibles. Au-delà, choisissez le carrousel.`,
+    en: ({count, perView}: {count: number; perView: number}) => `${count} items for ${perView} per view: side by side, no more items than visible ones. Beyond that, choose the carousel.`,
+  },
   tooFew: {fr: 'Deux éléments au moins.', en: 'At least two items.'},
 });

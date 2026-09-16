@@ -443,6 +443,10 @@ export interface Page {
                                   mode?: ('single' | 'multiple') | null;
                                   columns?: ('1' | '2') | null;
                                   firstOpen?: boolean | null;
+                                  /**
+                                   * For structure and SEO; does not change the look.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'p' | 'span') | null;
                                   items?:
                                     | {
                                         question: string;
@@ -997,6 +1001,10 @@ export interface Section {
                         mode?: ('single' | 'multiple') | null;
                         columns?: ('1' | '2') | null;
                         firstOpen?: boolean | null;
+                        /**
+                         * For structure and SEO; does not change the look.
+                         */
+                        tag?: ('h2' | 'h3' | 'h4' | 'p' | 'span') | null;
                         items?:
                           | {
                               question: string;
@@ -1694,6 +1702,7 @@ export interface PagesSelect<T extends boolean = true> {
                                       mode?: T;
                                       columns?: T;
                                       firstOpen?: T;
+                                      tag?: T;
                                       items?:
                                         | T
                                         | {
@@ -2213,6 +2222,7 @@ export interface SectionsSelect<T extends boolean = true> {
                           mode?: T;
                           columns?: T;
                           firstOpen?: T;
+                          tag?: T;
                           items?:
                             | T
                             | {

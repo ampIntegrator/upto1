@@ -11,7 +11,8 @@ import {testimonialBlock} from './testimonialBlock';
 
 /**
  * « Collection » block of a column: identical items side by side (the Collection
- * component), in a column of 8 to 12. The items are the existing column blocks
+ * component), in a column of 8 to 12. Side by side (« swipe ») holds no more items than
+ * visible ones (4 at 25 % at most); beyond that, the carousel. The items are the existing column blocks
  * (testimonial, cards, compare card, tier), all of the same type, or the latest blog
  * posts rendered as article cards. Items per view are checked against the column
  * width (content-specs, collectionCapacity): 3 at most on 8 or 9 columns, 4 on 12.
@@ -112,6 +113,8 @@ const block: Block = {
         const items = Array.isArray(value) ? (value as {blockType?: string}[]) : [];
         if (items.length < 2) return tr(t.tooFew, req.i18n?.language);
         if (new Set(items.map((i) => i.blockType)).size > 1) return tr(t.mixed, req.i18n?.language);
+        const perView = Number(siblingData?.perView ?? 3);
+        if ((siblingData?.layout ?? 'swipe') === 'swipe' && items.length > perView) return tr(t.swipeOverflow, req.i18n?.language, {count: items.length, perView});
         return true;
       },
     },
@@ -119,7 +122,21 @@ const block: Block = {
       type: 'row',
       admin: {condition: whenSource('posts')},
       fields: [
-        {name: 'postsLimit', type: 'number', label: t.postsLimit, defaultValue: 6, min: 2, max: 12, admin: {width: '34%'}},
+        {
+          name: 'postsLimit',
+          type: 'number',
+          label: t.postsLimit,
+          defaultValue: 6,
+          min: 2,
+          max: 12,
+          admin: {width: '34%'},
+          validate: (value: unknown, {siblingData, req}: {siblingData: Sibling; req: PayloadRequest}) => {
+            const count = Number(value ?? 6);
+            const perView = Number(siblingData?.perView ?? 3);
+            if ((siblingData?.source ?? 'manual') === 'posts' && (siblingData?.layout ?? 'swipe') === 'swipe' && count > perView) return tr(t.swipeOverflow, req.i18n?.language, {count, perView});
+            return true;
+          },
+        },
         {name: 'postsCategory', type: 'relationship', relationTo: 'categories', label: t.postsCategory, admin: {width: '33%'}},
         {name: 'postsCta', type: 'text', label: t.postsCta, localized: true, admin: {width: '33%'}},
       ],
