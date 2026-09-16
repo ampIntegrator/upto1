@@ -11,6 +11,7 @@ import type {PlanCardProps} from '@/components/PlanCard';
 import type {PriceCardProps} from '@/components/PriceCard';
 import type {ProcessStep} from '@/components/ProcessSteps';
 import type {Testimonial} from '@/components/TestimonialCard';
+import {type TitleTag, toTitleTag} from '@/components/title-tags';
 import type {CheckListItem} from '@/components/CheckList';
 import type {ChipTone} from '@/components/Chip';
 import type {MediaQuoteProps, MediaQuoteSize, MediaQuoteTag} from '@/components/MediaQuote';
@@ -40,7 +41,7 @@ type SectionSource = Omit<SectionBlock, 'blockType' | 'id' | 'blockName' | 'save
 type ContentBlock = NonNullable<NonNullable<NonNullable<SectionBlock['rows']>[number]['columns']>[number]['contents']>[number];
 
 /** A FAQ block: mode, columns, whether the first question starts open, and the questions. */
-export type FaqData = {mode: 'single' | 'multiple'; columns: 1 | 2; firstOpen: boolean; tag: 'h2' | 'h3' | 'h4' | 'p' | 'span'; items: {question: string; answer: string}[]};
+export type FaqData = {mode: 'single' | 'multiple'; columns: 1 | 2; firstOpen: boolean; tag: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span'; items: {question: string; answer: string}[]};
 
 /** A collection: identical items side by side, swipe or carousel. */
 export type CollectionData = {layout: 'swipe' | 'carousel'; perView: 2 | 3 | 4; step: 'page' | 'item'; arrows: boolean; indicator: 'segments' | 'dots' | 'numbers' | 'none'; items: ContentData[]};
@@ -56,7 +57,7 @@ export type ContentData =
   | {type: 'faq'; faq: FaqData}
   | {type: 'testimonial'; testimonial: Testimonial}
   | {type: 'compareCard'; compareCard: CompareCardProps}
-  | {type: 'processSteps'; steps: ProcessStep[]};
+  | {type: 'processSteps'; steps: ProcessStep[]; tag: TitleTag};
 
 /**
  * mobileRank: rank below 768 px when the section has a mobile order; empty: hidden on mobile;
@@ -92,6 +93,7 @@ function background(s: SectionSource): SectionBackground {
 type CardBlockData = {
   blockType: string;
   title: string;
+  tag?: string | null;
   text?: string | null;
   image?: Media | number | null;
   iconKey?: string | null;
@@ -113,6 +115,7 @@ function toCard(b: CardBlockData): CardProps {
     media,
     accentTitle: v.media === 'title',
     title: b.title,
+    tag: toTitleTag(b.tag, 'h3'),
     text: b.text ?? undefined,
     cta: v.clickable && b.cta?.label && b.cta?.href ? {label: b.cta.label, href: b.cta.href} : undefined,
   };
@@ -156,19 +159,19 @@ type PricingData = {
   price?: {value?: string | null; currency?: string | null; period?: string | null} | null;
   cta?: {label?: string | null; href?: string | null} | null;
   mention?: string | null;
-  guarantee?: {title?: string | null; text?: string | null} | null;
+  guarantee?: {title?: string | null; titleTag?: string | null; text?: string | null} | null;
 };
 type PriceSingleData = PricingData & {featuresLabel?: string | null; totalLabel?: string | null; totalValue?: string | null; priceLabel?: string | null};
-type PlanData = PricingData & {name: string; tagline?: string | null; featured?: boolean | null; badge?: string | null; inherits?: string | null; featuresLabel?: string | null};
+type PlanData = PricingData & {name: string; nameTag?: string | null; tagline?: string | null; featured?: boolean | null; badge?: string | null; inherits?: string | null; featuresLabel?: string | null};
 type FaqBlockData = {mode?: string | null; columns?: string | null; firstOpen?: boolean | null; tag?: string | null; items?: {question: string; answer: string}[] | null};
-const FAQ_TAGS = ['h2', 'h3', 'h4', 'p', 'span'] as const;
+const FAQ_TAGS = ['h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span'] as const;
 type TestimonialData = {quote: string; name: string; role?: string | null; result?: string | null};
 type CompareCardData = {chipLabel: string; chipTone?: string | null; meta?: string | null; quote: string; items?: {label: string}[] | null; tone?: string | null; featured?: boolean | null};
-type StepsData = {steps?: {title: string; text: string; duration?: string | null; checks?: {label: string}[] | null; asterisk?: boolean | null}[] | null};
+type StepsData = {tag?: string | null; steps?: {title: string; text: string; duration?: string | null; checks?: {label: string}[] | null; asterisk?: boolean | null}[] | null};
 
 const orUndefined = (v: string | null | undefined): string | undefined => (v ? v : undefined);
 const toFeatures = (items: PricingData['features']): CheckListItem[] => (items ?? []).filter((f) => f.label).map((f) => (f.end ? {label: f.label as string, end: f.end} : (f.label as string)));
-const toGuarantee = (g: PricingData['guarantee']): PriceCardProps['guarantee'] => (g?.text ? {title: orUndefined(g.title), text: g.text} : undefined);
+const toGuarantee = (g: PricingData['guarantee']): PriceCardProps['guarantee'] => (g?.text ? {title: orUndefined(g.title), titleTag: toTitleTag(g.titleTag, 'p'), text: g.text} : undefined);
 const toPricing = (b: PricingData) => ({
   features: toFeatures(b.features),
   price: {value: b.price?.value ?? '', currency: orUndefined(b.price?.currency), period: orUndefined(b.price?.period)},
@@ -195,6 +198,7 @@ function toPlan(b: PlanData): ContentData {
     plan: {
       ...toPricing(b),
       name: b.name,
+      nameTag: toTitleTag(b.nameTag, 'p'),
       tagline: orUndefined(b.tagline),
       featured: Boolean(b.featured),
       badge: orUndefined(b.badge),
@@ -231,7 +235,7 @@ function toCompareCard(b: CompareCardData): ContentData {
 
 function toSteps(b: StepsData): ContentData | null {
   const steps = (b.steps ?? []).slice(0, 4).map((s) => ({title: s.title, text: s.text, duration: orUndefined(s.duration), checks: (s.checks ?? []).map((c) => c.label), asterisk: Boolean(s.asterisk)}));
-  return steps.length ? {type: 'processSteps', steps} : null;
+  return steps.length ? {type: 'processSteps', steps, tag: toTitleTag(b.tag, 'h3')} : null;
 }
 
 type CollectionBlockData = {id?: string | null; layout?: string | null; perView?: string | null; step?: string | null; arrows?: boolean | null; indicator?: string | null; source?: string | null; items?: ContentBlock[] | null; postsLimit?: number | null; postsCategory?: number | {id: number} | null; postsCta?: string | null};

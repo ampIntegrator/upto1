@@ -5,6 +5,7 @@ import type {ContentBlock} from '@/fields/sections/contentBlock';
 import {cardBlockText as t} from '../../i18n/admin/blocks';
 import {ADMIN_LANGUAGE_CODES, type Text} from '../../i18n/admin/languages';
 import {iconField} from '../iconField';
+import {tagField} from '../tagField';
 import {linkGroup} from '../shared';
 
 /**
@@ -39,7 +40,13 @@ const MEDIA: {kind: CardMediaKind; slug: string; label: Text; fields: Field[]}[]
 ];
 
 const COMMON: Field[] = [
-  {name: 'title', type: 'text', label: t.fields.title, required: true, localized: true},
+  {
+    type: 'row',
+    fields: [
+      {name: 'title', type: 'text', label: t.fields.title, required: true, localized: true, admin: {width: '70%'}},
+      tagField({defaultValue: 'h3', width: '30%'}),
+    ],
+  },
   {name: 'text', type: 'textarea', label: t.fields.text, localized: true, admin: {rows: 3}},
 ];
 

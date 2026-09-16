@@ -99,7 +99,7 @@ function Content({content, id}: {content: ContentData; id: string}) {
     case 'compareCard':
       return <CompareCard {...content.compareCard} />;
     case 'processSteps':
-      return <ProcessSteps steps={content.steps} />;
+      return <ProcessSteps steps={content.steps} tag={content.tag} />;
     case 'card':
       return <Card {...content.card} />;
     case 'media':

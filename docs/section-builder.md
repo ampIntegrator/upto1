@@ -100,6 +100,10 @@ The block picker only offers blocks whose width range contains the column's (`fi
 
 Each block has a thumbnail in the picker (`imageURL`). They are screenshots of `/apercu/<slug>` (blue silo, demo data) made by `pnpm previews:build` while `pnpm dev` is running.
 
+## Title tags
+
+Every title field of a block comes with the shared `tag` select (`src/fields/tagField.ts`): h2 to h6, p or span, for structure and SEO only. The look never changes: the component renders the title through `Title` (`src/components/TitleTag.tsx`), a heading of an Astryx type or a p / span with the theme's heading classes. Today: card titles (h3), step titles (h3, one tag per panel), tier names (p), guarantee titles (p), FAQ questions (h3), image-with-quote sentences. Rule for the next blocks: a title field, a tag field, a component that takes `tag`.
+
 ## Mobile order
 
 The phone button of any row opens the section's mobile order. Below 768 px, every column of the section, all rows together, is stacked in that order. Lines are reordered by dragging their handle. Empty columns are listed but hidden on mobile.

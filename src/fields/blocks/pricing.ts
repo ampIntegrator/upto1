@@ -1,6 +1,7 @@
 import type {Field} from 'payload';
 
 import {linkGroup} from '../shared';
+import {tagField} from '../tagField';
 import {priceSingleBlockText as t} from '../../i18n/admin/blocks';
 
 /** Fields shared by the single price and the tier: the price, the feature list, the guarantee. */
@@ -47,7 +48,13 @@ export const guaranteeGroup: Field = {
   type: 'group',
   label: t.guarantee,
   fields: [
-    {name: 'title', type: 'text', label: t.guaranteeTitle, localized: true},
+    {
+      type: 'row',
+      fields: [
+        {name: 'title', type: 'text', label: t.guaranteeTitle, localized: true, admin: {width: '70%'}},
+        tagField({name: 'titleTag', defaultValue: 'p', width: '30%'}),
+      ],
+    },
     {name: 'text', type: 'textarea', label: t.guaranteeText, localized: true, admin: {rows: 2}},
   ],
 };

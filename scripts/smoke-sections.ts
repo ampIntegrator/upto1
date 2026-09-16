@@ -57,11 +57,11 @@ async function main() {
             column(6, {blockType: 'faq', mode: 'single', columns: '1', firstOpen: true, tag: 'h2', items: [{question: 'Question smoke ?', answer: 'Réponse smoke.'}]}),
           ],
           [
-            column(4, {blockType: 'plan', name: 'Palier smoke', tagline: 'Accroche', price: {value: '49'}, featured: true, badge: 'Populaire', features: [{label: 'Un avantage'}], cta: {label: 'Choisir', href: '#'}}),
+            column(4, {blockType: 'plan', name: 'Palier smoke', nameTag: 'h3', tagline: 'Accroche', price: {value: '49'}, featured: true, badge: 'Populaire', features: [{label: 'Un avantage'}], cta: {label: 'Choisir', href: '#'}}),
             column(4, {blockType: 'testimonial', quote: 'Citation smoke.', name: 'Témoin Smoke', role: 'Courtier · Lyon', result: '+ 28 %'}),
             column(4, {blockType: 'compareCard', chipLabel: 'APRÈS SMOKE', chipTone: 'high', quote: 'Voici le détail.', items: [{label: 'Le mandat est signé'}], tone: 'check', featured: true}),
           ],
-          [column(8, {blockType: 'processSteps', steps: steps(2)}), column(4)],
+          [column(8, {blockType: 'processSteps', tag: 'h4', steps: steps(2)}), column(4, {blockType: 'cardTitle', title: 'Carte smoke', tag: 'span'})],
           [column(12, {blockType: 'collection', layout: 'carousel', perView: '3', step: 'page', indicator: 'dots', arrows: true, source: 'manual', items: [1, 2, 3, 4].map((i) => ({blockType: 'testimonial', quote: `Citation collection ${i}.`, name: `Témoin collection ${i}`}))})],
           [column(9, {blockType: 'collection', layout: 'swipe', perView: '3', source: 'posts', postsLimit: 3, postsCta: 'Lire l’article'}), column(3)],
         ]),
@@ -71,7 +71,7 @@ async function main() {
   log(`page created: ${page.id} (${slug})`);
   try {
     const html = await (await fetch(`${BASE}/${slug}`)).text();
-    for (const marker of ['Valeur totale', 'Question smoke', 'Palier smoke', 'Témoin Smoke', 'APRÈS SMOKE', 'Étape 2', 'data-steps="2"', 'Témoin collection 4', 'data-layout="carousel"', 'Lire l’article', '<h2 class="Collapsible']) check(html.includes(marker), `site renders « ${marker} »`);
+    for (const marker of ['Valeur totale', 'Question smoke', 'Palier smoke', 'Témoin Smoke', 'APRÈS SMOKE', 'Étape 2', 'data-steps="2"', 'Témoin collection 4', 'data-layout="carousel"', 'Lire l’article', '<h2 class="Collapsible', '<h3 class="astryx-heading', '<h4 class="astryx-heading', '<span class="astryx-heading card']) check(html.includes(marker), `site renders « ${marker} »`);
     check(!/Unhandled Runtime Error|Build Error/.test(html), 'site page without runtime error');
   } finally {
     await payload.delete({collection: 'pages', id: page.id});

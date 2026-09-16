@@ -16,6 +16,7 @@ import * as migration_20260915_155407_drop_settings_languages from './20260915_1
 import * as migration_20260916_093855_add_column_blocks from './20260916_093855_add_column_blocks';
 import * as migration_20260916_103955_add_collection_block from './20260916_103955_add_collection_block';
 import * as migration_20260916_112754_add_faq_tag from './20260916_112754_add_faq_tag';
+import * as migration_20260916_115032_add_title_tags from './20260916_115032_add_title_tags';
 
 export const migrations = [
   {
@@ -106,6 +107,11 @@ export const migrations = [
   {
     up: migration_20260916_112754_add_faq_tag.up,
     down: migration_20260916_112754_add_faq_tag.down,
-    name: '20260916_112754_add_faq_tag'
+    name: '20260916_112754_add_faq_tag',
+  },
+  {
+    up: migration_20260916_115032_add_title_tags.up,
+    down: migration_20260916_115032_add_title_tags.down,
+    name: '20260916_115032_add_title_tags'
   },
 ];
