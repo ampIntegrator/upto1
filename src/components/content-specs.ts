@@ -43,12 +43,30 @@ export type ContentRef =
   | {type: 'processSteps'; steps: number}
   | {type: 'priceList'; variant: 'single'}
   | {type: 'priceList'; variant: 'columns'; plans: number}
+  | {type: 'plan'}
   | {type: 'statsBar'};
 
 export type ContentType = ContentRef['type'];
 
-/** Label (admin, catalog) and minimum span of each content. */
-export const CONTENT_SPECS: {[T in ContentType]: {label: string; minSpan: (c: Extract<ContentRef, {type: T}>) => ColumnSpan}} = {
+/**
+ * Steps panel: how many steps a column can hold, by width (decided 16 Sept. 2026):
+ * 4 and 5 columns → 1 step, 6 and 7 → 2, 8 and 9 → 3, 12 → 4; narrower than 4 → none.
+ */
+export const STEPS_MIN_SPAN: Record<1 | 2 | 3 | 4, ColumnSpan> = {1: 4, 2: 6, 3: 8, 4: 12};
+export function stepsCapacity(span: number): 0 | 1 | 2 | 3 | 4 {
+  if (span >= 12) return 4;
+  if (span >= 8) return 3;
+  if (span >= 6) return 2;
+  if (span >= 4) return 1;
+  return 0;
+}
+const stepsMinSpan = (steps: number): ColumnSpan => STEPS_MIN_SPAN[Math.min(Math.max(Math.round(steps), 1), 4) as 1 | 2 | 3 | 4];
+
+/**
+ * Label (admin, catalog), minimum span and, for contents that must not spread out,
+ * maximum span of each content (widths decided on 16 Sept. 2026).
+ */
+export const CONTENT_SPECS: {[T in ContentType]: {label: string; minSpan: (c: Extract<ContentRef, {type: T}>) => ColumnSpan; maxSpan?: ColumnSpan}} = {
   text: {label: 'Texte', minSpan: () => 2},
   image: {label: 'Image', minSpan: () => 2},
   // image with centered sentence: at least half the width
@@ -57,19 +75,24 @@ export const CONTENT_SPECS: {[T in ContentType]: {label: string; minSpan: (c: Ex
   checkList: {label: 'Liste à pastilles', minSpan: () => 2},
   callout: {label: 'Encadré', minSpan: () => 3},
   card: {label: 'Carte', minSpan: () => 3},
-  testimonialCard: {label: 'Carte témoignage', minSpan: () => 3},
-  compareCard: {label: 'Carte comparative', minSpan: () => 4},
+  // one testimonial per column, three or four side by side
+  testimonialCard: {label: 'Carte témoignage', minSpan: () => 3, maxSpan: 4},
+  // two cards before / after on 6, three trades on 4
+  compareCard: {label: 'Carte comparative', minSpan: () => 3, maxSpan: 6},
   // card grid: 3 page columns per inner column (2 → 6, 3 → 9, 4 → 12)
   cardGrid: {label: 'Grille de cartes', minSpan: (c) => snapUp(c.columns * 3)},
   sectionHeading: {label: 'En-tête de section', minSpan: () => 6},
   sectionNote: {label: 'Note et bouton', minSpan: () => 6},
   tabs: {label: 'Onglets', minSpan: () => 6},
-  collapsibleGroup: {label: 'Dépliants (FAQ)', minSpan: () => 6},
+  // FAQ: readable between 6 and 9, never full width
+  collapsibleGroup: {label: 'Dépliants (FAQ)', minSpan: () => 6, maxSpan: 9},
   testimonialCarousel: {label: 'Carrousel de témoignages', minSpan: () => 8},
-  // steps: 4 page columns per step (2 → 8, 3 and 4 → 12)
-  processSteps: {label: 'Étapes', minSpan: (c) => snapUp(c.steps * 4)},
-  // price list: single price 8; columns, 4 per tier (2 → 8, 3 and 4 → 12)
-  priceList: {label: 'Liste de prix', minSpan: (c) => (c.variant === 'single' ? 8 : snapUp(c.plans * 4))},
+  // steps panel: capacity table (STEPS_MIN_SPAN), the panel adapts to its column
+  processSteps: {label: 'Étapes', minSpan: (c) => stepsMinSpan(c.steps)},
+  // price list: single price between 6 and 9; « columns » variant (catalogue only), 4 per tier
+  priceList: {label: 'Liste de prix', minSpan: (c) => (c.variant === 'single' ? 6 : snapUp(c.plans * 4)), maxSpan: 9},
+  // one tier per column, three or four side by side
+  plan: {label: 'Palier de prix', minSpan: () => 3, maxSpan: 4},
   statsBar: {label: 'Barre de chiffres', minSpan: () => 12},
 };
 
@@ -77,6 +100,11 @@ export const CONTENT_SPECS: {[T in ContentType]: {label: string; minSpan: (c: Ex
 export function minSpan(content: ContentRef): ColumnSpan {
   const spec = CONTENT_SPECS[content.type] as {minSpan: (c: ContentRef) => ColumnSpan};
   return spec.minSpan(content);
+}
+
+/** Maximum span of a content (full width when it has none). */
+export function maxSpan(content: ContentRef): ColumnSpan {
+  return CONTENT_SPECS[content.type].maxSpan ?? 12;
 }
 
 /** Minimum span of a column: that of its widest content. */
@@ -93,7 +121,7 @@ export function describeContent(content: ContentRef): string {
     case 'processSteps':
       return `${label} (${content.steps})`;
     case 'priceList':
-      return content.variant === 'single' ? `${label}, prix unique` : `${label} en ${content.plans} colonnes`;
+      return content.variant === 'single' ? `${label}, prix unique` : `${label} en ${content.plans} colonnes (catalogue)`;
     default:
       return label;
   }

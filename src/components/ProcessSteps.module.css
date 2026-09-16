@@ -1,4 +1,5 @@
-/* ProcessSteps — steps panel (mockup 03). */
+/* ProcessSteps — steps panel (mockup 03), sized to its column width (container queries). */
+.host { width: 100%; container-type: inline-size; }
 .panel {
   display: grid;
   grid-template-columns: repeat(var(--steps, 3), minmax(0, 1fr));
@@ -26,8 +27,13 @@
 .asterisk { font-style: normal; color: light-dark(var(--color-text-accent), var(--color-highlight)); }
 .text { font-size: 15px; line-height: 1.6; margin-bottom: 24px; }
 .rule { margin-bottom: 24px; }
-@media (max-width: 1023px) {
-  .panel { grid-template-columns: minmax(0, 1fr); }
-  .step + .step::before { right: 0; bottom: auto; width: auto; height: 3px; background: var(--gradient-edge-highlight); }
-}
-@media (max-width: 639px) { .step { padding: 24px; } }
+
+/* stacked steps: about 260 px per step at least, otherwise one below the other,
+   horizontal separator */
+@container (max-width: 1039px) { .panel[data-steps='4'] { grid-template-columns: minmax(0, 1fr); } }
+@container (max-width: 779px) { .panel[data-steps='3'] { grid-template-columns: minmax(0, 1fr); } }
+@container (max-width: 519px) { .panel[data-steps='2'] { grid-template-columns: minmax(0, 1fr); } }
+@container (max-width: 1039px) { .panel[data-steps='4'] .step + .step::before { right: 0; bottom: auto; width: auto; height: 3px; background: var(--gradient-edge-highlight); } }
+@container (max-width: 779px) { .panel[data-steps='3'] .step + .step::before { right: 0; bottom: auto; width: auto; height: 3px; background: var(--gradient-edge-highlight); } }
+@container (max-width: 519px) { .panel[data-steps='2'] .step + .step::before { right: 0; bottom: auto; width: auto; height: 3px; background: var(--gradient-edge-highlight); } }
+@container (max-width: 639px) { .step { padding: 24px; } }

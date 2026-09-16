@@ -5,7 +5,7 @@ import {Table} from '@astryxdesign/core/Table';
 import {Text} from '@astryxdesign/core/Text';
 import React from 'react';
 
-import {CONTENT_SPECS, type ContentRef, describeContent, minSpan} from '@/components/content-specs';
+import {CONTENT_SPECS, type ContentRef, describeContent, maxSpan, minSpan} from '@/components/content-specs';
 import {COLUMN_SPANS} from '@/fields/sections/grid';
 import {PageIntro} from '../../_ui/PageIntro';
 
@@ -16,8 +16,8 @@ const SAMPLES: ContentRef[] = [
   {type: 'text'}, {type: 'image'}, {type: 'stat'}, {type: 'checkList'}, {type: 'callout'}, {type: 'card'}, {type: 'testimonialCard'}, {type: 'compareCard'},
   {type: 'cardGrid', columns: 2}, {type: 'cardGrid', columns: 3}, {type: 'cardGrid', columns: 4},
   {type: 'sectionHeading'}, {type: 'sectionNote'}, {type: 'tabs'}, {type: 'collapsibleGroup'}, {type: 'testimonialCarousel'}, {type: 'mediaQuote'},
-  {type: 'processSteps', steps: 2}, {type: 'processSteps', steps: 3}, {type: 'processSteps', steps: 4},
-  {type: 'priceList', variant: 'single'}, {type: 'priceList', variant: 'columns', plans: 2}, {type: 'priceList', variant: 'columns', plans: 3},
+  {type: 'processSteps', steps: 1}, {type: 'processSteps', steps: 2}, {type: 'processSteps', steps: 3}, {type: 'processSteps', steps: 4},
+  {type: 'priceList', variant: 'single'}, {type: 'plan'},
   {type: 'statsBar'},
 ];
 
@@ -26,9 +26,10 @@ interface Row extends Record<string, unknown> {
   contenu: string;
   type: string;
   min: string;
+  max: string;
 }
 
-const ROWS: Row[] = SAMPLES.map((c, i) => ({id: String(i), contenu: describeContent(c), type: CONTENT_SPECS[c.type].label, min: `${minSpan(c)} / 12`}));
+const ROWS: Row[] = SAMPLES.map((c, i) => ({id: String(i), contenu: describeContent(c), type: CONTENT_SPECS[c.type].label, min: `${minSpan(c)} / 12`, max: `${maxSpan(c)} / 12`}));
 
 export default function Page() {
   return (
@@ -36,7 +37,7 @@ export default function Page() {
       <PageIntro
         eyebrow="Fondations"
         title="Grille & emprises"
-        lead="Une page est une pile de Sections. Une Section contient des rangées ; une rangée, des colonnes dont les largeurs font 12 ; une colonne, des contenus empilés. Un seul niveau de colonnes : ce qui doit se subdiviser est un contenu qui porte sa propre grille. Chaque contenu déclare l'emprise minimale qu'il lui faut ; Payload refusera une colonne trop étroite avec le message correspondant."
+        lead="Une page est une pile de Sections. Une Section contient des rangées ; une rangée, des colonnes dont les largeurs font 12 ; une colonne, un contenu. Un seul niveau de colonnes : les cartes, paliers et témoignages se posent un par colonne, la rangée fait la mise côte à côte. Chaque contenu déclare l'emprise minimale qu'il lui faut et, pour ceux qui ne doivent pas s'étaler, une emprise maximale ; Payload refuse une colonne trop étroite ou trop large avec le message correspondant."
       />
 
       <VStack gap={3}>
@@ -60,6 +61,7 @@ export default function Page() {
             {key: 'contenu', header: 'Contenu'},
             {key: 'type', header: 'Famille'},
             {key: 'min', header: 'Emprise minimale', align: 'end'},
+            {key: 'max', header: 'Emprise maximale', align: 'end'},
           ]}
         />
       </VStack>
@@ -69,7 +71,8 @@ export default function Page() {
         <Card padding={5}>
           <VStack gap={2}>
             <Text type="body" color="secondary">1. Les largeurs d'une rangée font exactement 12.</Text>
-            <Text type="body" color="secondary">2. L'emprise minimale d'une colonne est celle de son contenu le plus large.</Text>
+            <Text type="body" color="secondary">2. Le contenu d'une colonne respecte son emprise minimale et, s'il en a une, son emprise maximale.</Text>
+            <Text type="body" color="secondary">2 bis. Étapes : 1 étape sur 4 ou 5 colonnes, 2 sur 6 ou 7, 3 sur 8 ou 9, 4 sur 12 ; le panneau suit la largeur de sa colonne.</Text>
             <Text type="body" color="secondary">3. Pas d'imbrication de colonnes. Grille de cartes, liste de prix en colonnes, étapes et carrousel gèrent leur intérieur, et suivent la largeur de leur colonne (requêtes de conteneur), pas celle de l'écran.</Text>
             <Text type="body" color="secondary">4. Un contenu ne casse jamais si la règle est contournée : il se replie sur une disposition plus étroite.</Text>
           </VStack>
