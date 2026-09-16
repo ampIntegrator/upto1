@@ -19,6 +19,7 @@ const SAMPLES: ContentRef[] = [
   {type: 'processSteps', steps: 1}, {type: 'processSteps', steps: 2}, {type: 'processSteps', steps: 3}, {type: 'processSteps', steps: 4},
   {type: 'priceList', variant: 'single'}, {type: 'plan'},
   {type: 'collection', perView: 2}, {type: 'collection', perView: 3}, {type: 'collection', perView: 4},
+  {type: 'textBox', titleSize: 'heading-1'}, {type: 'textBox', titleSize: 'display-2'},
   {type: 'statsBar'},
 ];
 

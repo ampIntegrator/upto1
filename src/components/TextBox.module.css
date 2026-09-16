@@ -1,0 +1,45 @@
+/* TextBox — text box, framed or bare, content left or centred, aligned in its row. */
+.root { width: 100%; height: 100%; min-width: 0; }
+.root[data-framed] {
+  padding: 32px;
+  background: light-dark(var(--color-background-surface), var(--color-background-card));
+  border: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.15));
+}
+@container (max-width: 479px) { .root[data-framed] { padding: 24px; } }
+.inner { width: 100%; min-width: 0; }
+.root[data-center] .inner { text-align: center; }
+.root[data-center] .prose { align-items: center; }
+/* centred content: markers inside the line so the list stays centred */
+.root[data-center] .prose ul,
+.root[data-center] .prose ol { padding-left: 0; list-style-position: inside; }
+/* title: the size is independent of the tag (same scale as the image with quote) */
+.title { margin: 0; font-family: var(--font-family-heading); color: var(--color-text-primary); overflow-wrap: break-word; }
+.title[data-size='display-1'] { font-size: var(--text-display-1-size); line-height: var(--text-display-1-leading); font-weight: var(--text-display-1-weight); letter-spacing: -0.025em; }
+.title[data-size='display-2'] { font-size: var(--text-display-2-size); line-height: var(--text-display-2-leading); font-weight: var(--text-display-2-weight); letter-spacing: -0.025em; }
+.title[data-size='display-3'] { font-size: var(--text-display-3-size); line-height: var(--text-display-3-leading); font-weight: var(--text-display-3-weight); letter-spacing: -0.02em; }
+.title[data-size='heading-1'] { font-size: var(--text-heading-1-size); line-height: var(--text-heading-1-leading); font-weight: var(--text-heading-1-weight); letter-spacing: -0.015em; }
+.title[data-size='heading-2'] { font-size: var(--text-heading-2-size); line-height: var(--text-heading-2-leading); font-weight: var(--text-heading-2-weight); letter-spacing: -0.01em; }
+/* the diamond separator of the cards, always centred under the title */
+.head { width: 100%; }
+.ornament { flex-direction: row; align-items: center; justify-content: center; gap: 8px; width: 100%; }
+.ornament::before,
+.ornament::after { content: ''; width: 30px; height: 1px; background: var(--color-border-emphasized); }
+.ornament i {
+  display: block;
+  width: 6px;
+  height: 6px;
+  background: var(--color-highlight);
+  transform: rotate(45deg);
+  animation: textBoxSepMorph 4.8s ease-in-out infinite;
+}
+@keyframes textBoxSepMorph {
+  0%   { transform: rotate(45deg);  border-radius: 0;   background: var(--color-highlight); }
+  20%  { transform: rotate(117deg); border-radius: 3px; background: var(--color-highlight); }
+  40%  { transform: rotate(189deg); border-radius: 0;   background: var(--color-accent); }
+  60%  { transform: rotate(261deg); border-radius: 3px; background: var(--color-accent); }
+  80%  { transform: rotate(333deg); border-radius: 0;   background: var(--color-highlight); }
+  100% { transform: rotate(405deg); border-radius: 0;   background: var(--color-highlight); }
+}
+@media (prefers-reduced-motion: reduce) { .ornament i { animation: none; } }
+.prose { width: 100%; }
+.buttons { padding-top: 4px; }

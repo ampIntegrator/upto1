@@ -45,6 +45,7 @@ export type ContentRef =
   | {type: 'priceList'; variant: 'columns'; plans: number}
   | {type: 'plan'}
   | {type: 'collection'; perView: 2 | 3 | 4}
+  | {type: 'textBox'; titleSize: 'display-1' | 'display-2' | 'display-3' | 'heading-1' | 'heading-2'}
   | {type: 'statsBar'};
 
 export type ContentType = ContentRef['type'];
@@ -106,6 +107,8 @@ export const CONTENT_SPECS: {[T in ContentType]: {label: string; minSpan: (c: Ex
   plan: {label: 'Palier de prix', minSpan: () => 3, maxSpan: 4},
   // identical items side by side, swipe or carousel: from 8 columns, 4 per view needs 12
   collection: {label: 'Collection', minSpan: (c) => (c.perView >= 4 ? 12 : 8)},
+  // text box: 3 to 9 columns; the two display title sizes need 6
+  textBox: {label: 'Encart texte', minSpan: (c) => (c.titleSize === 'display-1' || c.titleSize === 'display-2' ? 6 : 3), maxSpan: 9},
   statsBar: {label: 'Barre de chiffres', minSpan: () => 12},
 };
 
@@ -135,6 +138,8 @@ export function describeContent(content: ContentRef): string {
       return `${label} (${content.steps})`;
     case 'collection':
       return `${label}, ${content.perView} visibles`;
+    case 'textBox':
+      return `${label}, titre ${content.titleSize}`;
     case 'priceList':
       return content.variant === 'single' ? `${label}, prix unique` : `${label} en ${content.plans} colonnes (catalogue)`;
     default:

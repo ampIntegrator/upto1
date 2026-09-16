@@ -232,6 +232,24 @@ export const CATALOG: CatalogCategory[] = [
     "href": "/design/composants#contenu",
     "items": [
       {
+        "name": "TextBox",
+        "label": "Text Box",
+        "slug": "text-box",
+        "href": "/design/composants/text-box",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
+        "name": "RichText",
+        "label": "Rich Text",
+        "slug": "rich-text",
+        "href": "/design/composants/rich-text",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
         "name": "Stat",
         "label": "Stat",
         "slug": "stat",
