@@ -9,7 +9,6 @@
  * comparison and testimonials blocks embed it at the top. (The outlined word behind the title of
  * mockup 07 was removed: mockup point amended on 11 Sept. 2026.)
  */
-import {Heading} from '@astryxdesign/core/Heading';
 import {HStack, VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
 import React from 'react';
@@ -17,12 +16,15 @@ import React from 'react';
 import type {NucleoIconKey} from '@/theme/icons/nucleo';
 import {Button} from './Button';
 import {renderTitle, type TitleText} from './TitleText';
+import {Title, type TitleTag} from './TitleTag';
 import styles from './SectionHeading.module.css';
 
 export type SectionHeadingProps = {
   eyebrow?: string;
   title: TitleText;
-  /** HTML level (h2 by default; h1 for a page without a page header) */
+  /** HTML element (h2 by default; h1 for a page without a page header; p or span possible); the look comes from `size` */
+  tag?: TitleTag;
+  /** @deprecated use `tag` */
   level?: 1 | 2 | 3;
   /** title size: display-2 (64 px max, default) or display-3 */
   size?: 'display-2' | 'display-3';
@@ -31,14 +33,14 @@ export type SectionHeadingProps = {
   align?: 'center' | 'start';
 };
 
-export function SectionHeading({eyebrow, title, level = 2, size = 'display-2', text, cta, align = 'center'}: SectionHeadingProps) {
+export function SectionHeading({eyebrow, title, tag, level, size = 'display-2', text, cta, align = 'center'}: SectionHeadingProps) {
   const center = align === 'center';
   return (
     <VStack gap={6} align={center ? 'center' : 'start'} className={styles.root} data-align={align}>
       {eyebrow ? <Text type="eyebrow-lines">{eyebrow}</Text> : null}
-      <Heading level={level} type={size} className={styles.title}>
+      <Title tag={tag ?? (level ? (`h${level}` as TitleTag) : 'h2')} type={size} className={styles.title}>
         {renderTitle(title)}
-      </Heading>
+      </Title>
       {text ? <Text type="large" color="secondary" className={styles.text}>{text}</Text> : null}
       {cta ? (
         <HStack paddingBlockStart={4}>

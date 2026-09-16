@@ -11,13 +11,13 @@
  * The section header and the « note + bouton » footer are placed around it by the block.
  */
 import {Divider} from '@astryxdesign/core/Divider';
-import {Heading} from '@astryxdesign/core/Heading';
 import {HStack, VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
 import React from 'react';
 
 import {CheckList} from './CheckList';
 import {Chip} from './Chip';
+import {Title, type TitleTag} from './TitleTag';
 import styles from './ProcessSteps.module.css';
 
 export type ProcessStep = {
@@ -30,7 +30,8 @@ export type ProcessStep = {
   asterisk?: boolean;
 };
 
-export function ProcessSteps({steps}: {steps: ProcessStep[]}) {
+/** tag: HTML element of the step titles (h3 by default); their look is fixed by the panel */
+export function ProcessSteps({steps, tag = 'h3'}: {steps: ProcessStep[]; tag?: TitleTag}) {
   const columns = Math.min(Math.max(steps.length, 1), 4);
   return (
     <VStack className={styles.host}>
@@ -41,10 +42,10 @@ export function ProcessSteps({steps}: {steps: ProcessStep[]}) {
             <Text type="serif-upright" className={styles.num}>{String(i + 1).padStart(2, '0')}</Text>
             {s.duration ? <Chip label={s.duration} tone="high" iconKey="clock" /> : null}
           </HStack>
-          <Heading level={3} className={styles.title}>
+          <Title tag={tag} className={styles.title}>
             {s.title}
             {s.asterisk ? <i className={styles.asterisk} aria-hidden="true">*</i> : null}
-          </Heading>
+          </Title>
           <Text type="body" color="secondary" className={styles.text}>{s.text}</Text>
           {s.checks?.length ? (
             <>

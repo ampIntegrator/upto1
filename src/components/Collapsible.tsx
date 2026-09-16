@@ -22,7 +22,7 @@ import React, {createContext, useCallback, useContext, useId, useMemo, useState}
 
 import styles from './Collapsible.module.css';
 
-export type CollapsibleTag = 'h2' | 'h3' | 'h4' | 'p' | 'span';
+export type CollapsibleTag = 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span';
 
 export type CollapsibleProps = {
   /** the question (trigger content) */

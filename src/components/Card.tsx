@@ -11,13 +11,12 @@
  *   preset="brief"       no image or frame: chip, title (2 lines), date — the brief
  *                        article in the footer (mockup 21)
  *
- * The title is an Astryx Heading of type `card`: its style does not depend on
- * the level (h3 by default, h4 possible in the admin). The diamond ornament is
+ * The title is a heading of type `card` (Title): its style does not depend on the
+ * tag chosen in the admin (h2 to h6, p or span; h3 by default). The diamond ornament is
  * part of the title (bloc preset). With `cta`, the whole card is clickable and
  * hovering it fills the action bar; without `cta`, no bar and no link.
  * Night: place the card inside a <Theme mode="dark">.
  */
-import {Heading} from '@astryxdesign/core/Heading';
 import {Text} from '@astryxdesign/core/Text';
 import NextLink from 'next/link';
 import React from 'react';
@@ -26,6 +25,7 @@ import {ArrowRightIcon, PinIcon, type NucleoIconKey} from '@/theme/icons/nucleo'
 import {IconSquare} from './IconSquare';
 import {Chip, type ChipTone} from './Chip';
 import {Stat} from './Stat';
+import {Title, type TitleTag} from './TitleTag';
 import styles from './Card.module.css';
 
 export type CardMedia =
@@ -38,7 +38,9 @@ export type CardProps = {
   preset?: 'bloc' | 'article' | 'realisation' | 'brief';
   media?: CardMedia;
   title: string;
-  /** HTML level of the title (SEO); appearance does not change */
+  /** HTML element of the title (SEO); appearance does not change */
+  tag?: TitleTag;
+  /** @deprecated use `tag` */
   level?: 3 | 4;
   /** bloc: title in silo color (« titre seul » case) */
   accentTitle?: boolean;
@@ -56,7 +58,7 @@ export type CardProps = {
   style?: React.CSSProperties;
 };
 
-export function Card({preset = 'bloc', media = {type: 'none'}, title, level = 3, accentTitle, text, chip, date, result, client, cta, style}: CardProps) {
+export function Card({preset = 'bloc', media = {type: 'none'}, title, tag, level, accentTitle, text, chip, date, result, client, cta, style}: CardProps) {
   const editorial = preset !== 'bloc';
   // brief: the link goes through the title only, no action bar
   const showBar = Boolean(cta) && preset !== 'brief';
@@ -106,9 +108,9 @@ export function Card({preset = 'bloc', media = {type: 'none'}, title, level = 3,
               {preset === 'realisation' && result ? <Text type="result">{result}</Text> : null}
             </div>
           ) : null}
-          <Heading level={level} type="card" color={accentTitle && !editorial ? 'accent' : 'primary'} className={styles.title}>
+          <Title tag={tag ?? (level === 4 ? 'h4' : 'h3')} type="card" color={accentTitle && !editorial ? 'accent' : 'primary'} className={styles.title}>
             {titleNode}
-          </Heading>
+          </Title>
           {!editorial ? (
             <div className={styles.ornament} aria-hidden="true">
               <i />

@@ -18,10 +18,13 @@ import {Callout, type CalloutProps} from './Callout';
 import {CheckList, type CheckListItem} from './CheckList';
 import {Chip} from './Chip';
 import {Price} from './Price';
+import {Title, type TitleTag} from './TitleTag';
 import styles from './PlanCard.module.css';
 
 export type PlanCardProps = {
   name: string;
+  /** HTML element of the name (p by default; a heading for SEO); the look does not change */
+  nameTag?: TitleTag;
   tagline?: string;
   price: {value: string; currency?: string; period?: string};
   cta: {label: string; href: string};
@@ -35,15 +38,15 @@ export type PlanCardProps = {
   features: CheckListItem[];
   /** below the button (« Sans CB · Sans engagement ») */
   mention?: string;
-  guarantee?: Pick<CalloutProps, 'title' | 'text'>;
+  guarantee?: Pick<CalloutProps, 'title' | 'text' | 'titleTag'>;
 };
 
-export function PlanCard({name, tagline, price, cta, featured, badge = 'Populaire', inherits, featuresLabel = 'Ce que vous obtenez', features, mention, guarantee}: PlanCardProps) {
+export function PlanCard({name, nameTag = 'p', tagline, price, cta, featured, badge = 'Populaire', inherits, featuresLabel = 'Ce que vous obtenez', features, mention, guarantee}: PlanCardProps) {
   return (
     <VStack as="article" className={styles.card} data-featured={featured || undefined}>
       {featured && badge ? <HStack className={styles.badge}><Chip label={badge} tone="cat" /></HStack> : null}
       <VStack gap={1} className={styles.head}>
-        <Text className={styles.name}>{name}</Text>
+        <Title tag={nameTag} className={styles.name}>{name}</Title>
         {tagline ? <Text className={styles.tagline}>{tagline}</Text> : null}
         <HStack paddingBlockStart={3}>
           <Price value={price.value} currency={price.currency} period={price.period ?? '/ mois'} size="plan" />
@@ -56,7 +59,7 @@ export function PlanCard({name, tagline, price, cta, featured, badge = 'Populair
       <VStack gap={3} className={styles.foot}>
         <Button variant="primary" size="lg" block arrow={featured} label={cta.label} href={cta.href} className={featured ? undefined : styles.solid} />
         {mention ? <Text className={styles.mention}>{mention}</Text> : null}
-        {guarantee ? <Callout size="sm" title={guarantee.title} text={guarantee.text} /> : null}
+        {guarantee ? <Callout size="sm" title={guarantee.title} titleTag={guarantee.titleTag} text={guarantee.text} /> : null}
       </VStack>
     </VStack>
   );

@@ -27,7 +27,7 @@ export type PriceCardProps = {
   price: {value: string; currency?: string; period?: string};
   cta: {label: string; href: string};
   mention?: string;
-  guarantee?: Pick<CalloutProps, 'title' | 'text'>;
+  guarantee?: Pick<CalloutProps, 'title' | 'text' | 'titleTag'>;
 };
 
 export function PriceCard({featuresLabel = 'Ce que vous obtenez', features, total, priceLabel = 'Votre prix', price, cta, mention, guarantee}: PriceCardProps) {
@@ -53,7 +53,7 @@ export function PriceCard({featuresLabel = 'Ce que vous obtenez', features, tota
         <VStack gap={3} paddingBlockStart={4}>
           <Button variant="primary" size="lg" block arrow label={cta.label} href={cta.href} />
           {mention ? <Text className={styles.mention}>{mention}</Text> : null}
-          {guarantee ? <Callout title={guarantee.title} text={guarantee.text} /> : null}
+          {guarantee ? <Callout title={guarantee.title} titleTag={guarantee.titleTag} text={guarantee.text} /> : null}
         </VStack>
       </VStack>
     </VStack>
