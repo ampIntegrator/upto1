@@ -1,0 +1,49 @@
+/* CarouselControls — indicator on the left, square arrows on the right (mockup 07). */
+.ui { width: 100%; }
+/* below 640 px you swipe: the arrows go, the indicator stays */
+@media (max-width: 639px) { .arrows { display: none !important; } }
+/* page segments: square bars, the current page lengthens in silo colour */
+.seg {
+  width: 34px;
+  height: 4px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  cursor: pointer;
+  background: light-dark(var(--color-border-emphasized), rgba(255, 255, 255, 0.2));
+  transition: background-color var(--duration-medium) var(--ease-standard), width var(--duration-medium) var(--ease-standard);
+}
+.seg:hover { background: light-dark(var(--color-text-disabled), rgba(255, 255, 255, 0.4)); }
+.seg[aria-selected='true'] { width: 44px; background: light-dark(var(--color-accent), var(--color-highlight)); }
+/* dots: 8 px discs, the current one in silo colour */
+.dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  background: light-dark(var(--color-border-emphasized), rgba(255, 255, 255, 0.2));
+  transition: background-color var(--duration-medium) var(--ease-standard), transform var(--duration-medium) var(--ease-standard);
+}
+.dot:hover { background: light-dark(var(--color-text-disabled), rgba(255, 255, 255, 0.4)); }
+.dot[aria-selected='true'] { background: light-dark(var(--color-accent), var(--color-highlight)); transform: scale(1.25); }
+.numbers { color: light-dark(var(--color-text-secondary), rgba(255, 255, 255, 0.7)); font-variant-numeric: tabular-nums; }
+/* 46 px square arrows, border, silo on hover; night: white veil, highlight on hover */
+.arrow {
+  width: 46px;
+  height: 46px;
+  border-radius: 0;
+  border: var(--border-width) solid light-dark(var(--color-border-emphasized), rgba(255, 255, 255, 0.42));
+  background: light-dark(var(--color-background-surface), rgba(255, 255, 255, 0.09));
+  color: light-dark(var(--color-text-secondary), #ffffff);
+  transition: border-color var(--duration-medium) var(--ease-standard), color var(--duration-medium) var(--ease-standard), background-color var(--duration-medium) var(--ease-standard);
+}
+.arrow:hover {
+  border-color: light-dark(var(--color-accent), var(--color-highlight));
+  color: light-dark(var(--color-accent), var(--color-night));
+  background: light-dark(var(--color-background-surface), var(--color-highlight));
+}
+.arrow[aria-disabled='true'],
+.arrow:disabled { opacity: 0.32; pointer-events: none; }
+.arrow svg { width: 18px; height: 18px; }
