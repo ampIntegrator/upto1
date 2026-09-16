@@ -8,11 +8,12 @@ import type {CardProps} from '@/components/Card';
 import type {MediaProps} from '@/components/Media';
 import type {MediaQuoteProps, MediaQuoteSize, MediaQuoteTag} from '@/components/MediaQuote';
 import type {SectionBackground, SectionTint} from '@/components/Section';
-import {CARD_VARIANTS} from '@/fields/sections/cardBlocks';
+import {CARD_VARIANTS} from '@/fields/blocks/cardBlocks';
 import {EMPTY_SLUG} from '@/fields/sections/emptyBlock';
 import {type Gaps, sectionGaps, siteGaps} from '@/fields/sections/gaps';
-import {MEDIA_SLUG} from '@/fields/sections/mediaBlock';
-import {MEDIA_QUOTE_SLUG} from '@/fields/sections/mediaQuoteBlock';
+import {MEDIA_SLUG} from '@/fields/blocks/mediaBlock';
+import {MEDIA_QUOTE_SLUG} from '@/fields/blocks/mediaQuoteBlock';
+import {TEXT_SLUG} from '@/fields/blocks/textBlock';
 import {hasMobileOrder, mobileRanks} from '@/fields/sections/mobileOrder';
 import {type ColumnSpan, toSpan} from '@/fields/sections/grid';
 import type {NucleoIconKey} from '@/theme/icons/nucleo';
@@ -121,7 +122,7 @@ function toContent(block: ContentBlock): ContentData | null {
   if (block.blockType === MEDIA_QUOTE_SLUG) return toMediaQuote(block as unknown as MediaQuoteBlockData);
   if (block.blockType in CARD_VARIANTS) return {type: 'card', card: toCard(block as unknown as CardBlockData)};
   switch (block.blockType) {
-    case 'text':
+    case TEXT_SLUG:
       return {type: 'text', text: block.text};
     default:
       return null;

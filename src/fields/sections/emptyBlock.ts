@@ -14,7 +14,6 @@ export const emptyBlock: Block = {
   slug: EMPTY_SLUG,
   labels: {singular: t.name, plural: t.plural},
   imageURL: `/apercus/${EMPTY_SLUG}.png`,
-  imageAltText: t.name.fr, // Payload only accepts a plain string here
   admin: {group: t.group},
   fields: [],
 };

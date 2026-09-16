@@ -1,0 +1,100 @@
+/* Section builder (RowsBuilder): rows, cells, handles and the mobile order dialog.
+   Loaded by the component itself; Payload theme variables only. */
+
+/* Row builder: side buttons in two lines of two, 32 px squares, vertically centred
+   on the row; their height (2 × 32 + 4) stays below a row's height. */
+.rows-builder__actions {
+  display: grid;
+  grid-template-columns: repeat(2, 32px);
+  grid-auto-rows: 32px;
+  gap: 4px;
+  flex-shrink: 0;
+
+  > *,
+  .btn {
+    width: 32px;
+    height: 32px;
+    margin: 0;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+}
+.rows-builder__handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 14px;
+  border: 1px solid var(--theme-elevation-200);
+  border-radius: 4px;
+  background: var(--theme-elevation-100);
+  color: var(--theme-elevation-800);
+  cursor: grab;
+}
+
+/* Cells of a row: grid with the column proportions (variable set by the row),
+   sortable left or right by their handle. */
+.rows-builder__cells {
+  display: grid;
+  grid-template-columns: var(--rows-builder-cells);
+  gap: 8px;
+}
+.rows-builder__handle--cell {
+  /* no text selection when a drag starts; touch drags instead of scrolling */
+  user-select: none;
+  touch-action: none;
+  position: absolute;
+  top: 4px;
+  left: 6px;
+  width: 24px;
+  height: 20px;
+}
+/* handle of a line in the mobile order dialog */
+.rows-builder__handle--mobile {
+  flex-shrink: 0;
+  width: 28px;
+  height: 26px;
+  user-select: none;
+  touch-action: none;
+}
+.rows-builder__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* "Mobile order" dialog of a section (based on Payload's confirmation modal). */
+.rows-mobile__wrapper {
+  width: min(520px, calc(100vw - 32px));
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: 4px;
+  background: var(--theme-bg);
+}
+.rows-mobile__list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rows-mobile__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: 4px;
+
+  .btn {
+    margin: 0;
+  }
+}
+.rows-mobile__item[data-current] {
+  border-color: var(--theme-elevation-600);
+  background: var(--theme-elevation-100);
+}

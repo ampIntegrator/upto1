@@ -1,11 +1,10 @@
 import type {CollectionConfig} from 'payload';
 
 import {heroField} from '@/fields/hero';
-import {shareSections} from '@/fields/sections/shareSections';
-import {sectionsField} from '@/fields/sections/sectionFields';
 import {siloField} from '@/fields/siloField';
 import {slugField} from '@/fields/shared';
 import {collectionsText as ct} from '@/i18n/admin/collections';
+import {sections} from '@/sections.config';
 
 /** Site pages: title, slug, silo (sidebar), page top, then the stacked content sections. */
 export const Pages: CollectionConfig = {
@@ -23,7 +22,7 @@ export const Pages: CollectionConfig = {
     },
   },
   access: {read: () => true},
-  hooks: {beforeChange: [shareSections]},
+  hooks: {beforeChange: sections.beforeChange},
   // tabs first: the SEO plugin appends its tab after them (otherwise it wraps everything
   // in a « Page » tab and the sidebar disappears); slug and silo stay in the sidebar
   fields: [
@@ -34,7 +33,7 @@ export const Pages: CollectionConfig = {
         {
           label: ct.pages.tabs.content,
           description: ct.pages.tabs.contentDescription,
-          fields: [sectionsField],
+          fields: [sections.field],
         },
       ],
     },

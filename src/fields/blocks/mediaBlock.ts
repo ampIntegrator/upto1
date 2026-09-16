@@ -1,5 +1,7 @@
 import type {Block} from 'payload';
 
+import {minSpan} from '@/components/content-specs';
+import type {ContentBlock} from '@/fields/sections/contentBlock';
 import {mediaBlockText as t} from '../../i18n/admin/blocks';
 
 /**
@@ -19,11 +21,10 @@ export const MEDIA_SLUG = 'media';
 export const MEDIA_HEIGHTS = ['160', '240', '320', '400', '480', '560', '640'] as const;
 export const HEIGHT_OPTIONS = MEDIA_HEIGHTS.map((v) => ({label: `${v} px`, value: v}));
 
-export const mediaBlock: Block = {
+const block: Block = {
   slug: MEDIA_SLUG,
   labels: {singular: t.name, plural: t.plural},
   imageURL: `/apercus/${MEDIA_SLUG}.png`,
-  imageAltText: t.name.fr, // Payload only accepts a plain string here
   admin: {group: t.group},
   fields: [
     {
@@ -51,3 +52,6 @@ export const mediaBlock: Block = {
     },
   ],
 };
+
+/** The block as the section builder sees it: fills the column from 2 columns wide. */
+export const mediaBlock: ContentBlock = {block, minSpan: minSpan({type: 'image'})};

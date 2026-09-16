@@ -1,5 +1,7 @@
 import type {Block} from 'payload';
 
+import {minSpan} from '@/components/content-specs';
+import type {ContentBlock} from '@/fields/sections/contentBlock';
 import {mediaQuoteBlockText as t} from '../../i18n/admin/blocks';
 import {HEIGHT_OPTIONS} from './mediaBlock';
 
@@ -22,11 +24,10 @@ const SIZE_OPTIONS = [
   {label: t.sizes.heading2, value: 'heading-2'},
 ];
 
-export const mediaQuoteBlock: Block = {
+const block: Block = {
   slug: MEDIA_QUOTE_SLUG,
   labels: {singular: t.name, plural: t.plural},
   imageURL: `/apercus/${MEDIA_QUOTE_SLUG}.png`,
-  imageAltText: t.name.fr, // Payload only accepts a plain string here
   admin: {group: t.group},
   fields: [
     {
@@ -62,3 +63,6 @@ export const mediaQuoteBlock: Block = {
     },
   ],
 };
+
+/** The block as the section builder sees it: at least half the width. */
+export const mediaQuoteBlock: ContentBlock = {block, minSpan: minSpan({type: 'mediaQuote'})};

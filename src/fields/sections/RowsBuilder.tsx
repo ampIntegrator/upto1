@@ -25,21 +25,20 @@
  * Payload (RenderFields), with the paths and permissions it expects.
  */
 import {Button, ConfirmationModal, Drawer, Modal, RenderFields, useDrawerSlug, useField, useForm, useFormFields, useModal, useTranslation} from '@payloadcms/ui';
-import type {ArrayFieldClient, ArrayFieldClientProps, ClientField, SanitizedFieldPermissions, SanitizedFieldsPermissions} from 'payload';
+import type {ArrayFieldClient, ArrayFieldClientProps, BlocksFieldClient, ClientBlock, ClientField, SanitizedFieldPermissions, SanitizedFieldsPermissions} from 'payload';
 import {getTranslation} from '@payloadcms/translations';
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 
-import {minSpan} from '@/components/content-specs';
-import {tr} from '@/i18n/admin/languages';
 import {sectionsText as T} from '@/i18n/admin/sections';
 import {useAdminText} from '@/i18n/admin/useAdminText';
 
-import {contentLabel, toContentRef} from './contentRef';
 import {EMPTY_SLUG} from './emptyBlock';
 import {hasMobileOrder, mobileSequence} from './mobileOrder';
 import {type ColumnSpan, presetLabel, ROW_PRESETS, spansKey, toSpan} from './grid';
 import {type SortableHandle, SortableItem, SortableList} from './sortable';
 import {rowWidthError} from './validation';
+
+import './RowsBuilder.scss';
 
 /** filled: the column has a real component (an empty cell does not count) */
 /** narrow: minimum width required by the component when the column is too narrow, otherwise null */
@@ -205,13 +204,28 @@ function Cell({cell, index, rowSelected, onOpen, drag}: {cell: CellSnapshot; ind
   );
 }
 
-export function RowsBuilder(props: ArrayFieldClientProps) {
-  const {field, path, permissions, readOnly, schemaPath: schemaPathFromProps} = props;
+/** minSpans: block slug → minimum column width, passed by the field config (clientProps). */
+export type RowsBuilderProps = ArrayFieldClientProps & {minSpans?: Record<string, number>};
+
+export function RowsBuilder(props: RowsBuilderProps) {
+  const {field, path, permissions, readOnly, schemaPath: schemaPathFromProps, minSpans = {}} = props;
   const schemaPath = schemaPathFromProps ?? field.name;
   const {t, language} = useAdminText();
   const {i18n} = useTranslation();
   const columnsField = field.fields.find((f): f is ArrayFieldClient => f.type === 'array' && 'name' in f && f.name === 'columns');
   const columnsSchemaPath = `${schemaPath}.columns`;
+  // the content blocks, as Payload gives them to the client: their labels name the cells
+  const contentsField = columnsField?.fields.find((f): f is BlocksFieldClient => f.type === 'blocks' && 'name' in f && f.name === 'contents');
+  const blockLabels = useMemo(() => {
+    const out: Record<string, string> = {};
+    for (const b of [...(contentsField?.blocks ?? []), ...(contentsField?.blockReferences ?? [])]) {
+      if (typeof b === 'string') continue;
+      const block = b as ClientBlock;
+      out[block.slug] = getTranslation(block.labels?.singular ?? block.slug, i18n);
+    }
+    return out;
+  }, [contentsField, i18n]);
+  const labelOf = useCallback((blockType: string) => blockLabels[blockType] ?? blockType, [blockLabels]);
 
   const {addFieldRow, dispatchFields, getDataByPath, moveFieldRow, removeFieldRow, setModified} = useForm();
   const {rows = [], errorPaths, showError} = useField<unknown[]>({path});
@@ -253,7 +267,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
       if (parts[3] === 'contents' && parts[5] === 'blockType' && parts.length === 6) {
         const k = Number(parts[4]);
         const blockType = String(fields[key]?.value ?? '');
-        out[i].columns[j].contents[k] = tr(contentLabel({blockType}), language);
+        out[i].columns[j].contents[k] = labelOf(blockType);
         (out[i].columns[j].types ??= [])[k] = blockType;
         if (blockType && blockType !== EMPTY_SLUG) out[i].columns[j].filled = true;
       }
@@ -265,10 +279,7 @@ export function RowsBuilder(props: ArrayFieldClientProps) {
     return JSON.stringify(out.map((r) => ({ids: r?.ids ?? [], columns: (r?.columns ?? []).map((c) => {
       const span = c?.span ?? 12;
       // width required by the column's component (span registry)
-      const need = (c?.types ?? []).reduce((m, t) => {
-        const ref = t ? toContentRef({blockType: t}) : null;
-        return ref ? Math.max(m, minSpan(ref)) : m;
-      }, 0);
+      const need = (c?.types ?? []).reduce((m, t) => Math.max(m, minSpans[t] ?? 0), 0);
       return {span, contents: (c?.contents ?? []).map((label, k) => c?.names?.[k]?.trim() || label).filter(Boolean), filled: Boolean(c?.filled), narrow: need > span ? need : null, mobileOrder: c?.mobileOrder ?? null};
     })})));
   });

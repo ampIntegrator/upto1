@@ -6,7 +6,8 @@
  * and the same name as the component header. 60 characters at most, spaces included; visible
  * only when the column has a component.
  */
-import {TextInput, useField, useFormFields} from '@payloadcms/ui';
+import {getTranslation} from '@payloadcms/translations';
+import {TextInput, useField, useFormFields, useTranslation} from '@payloadcms/ui';
 import type {UIFieldClientProps} from 'payload';
 import React from 'react';
 
@@ -14,17 +15,20 @@ import {sectionsText} from '@/i18n/admin/sections';
 import {useAdminText} from '@/i18n/admin/useAdminText';
 
 import {BLOCK_NAME_MAX} from './blockName';
-import {contentLabel} from './contentRef';
 
-export function BlockNameField({path, readOnly}: UIFieldClientProps) {
+/** labels: block slug → singular label, passed by the field config (clientProps). */
+export type BlockNameFieldProps = UIFieldClientProps & {labels?: Record<string, string | Record<string, string>>};
+
+export function BlockNameField({path, readOnly, labels = {}}: BlockNameFieldProps) {
   const contentsPath = path.replace(/\.blockNameUi$/, '.contents');
   const namePath = `${contentsPath}.0.blockName`;
   const blockType = useFormFields(([fields]) => fields[`${contentsPath}.0.blockType`]?.value as string | undefined);
   const {value, setValue} = useField<string>({path: namePath});
   const {t} = useAdminText();
+  const {i18n} = useTranslation();
   if (!blockType) return null;
   const name = typeof value === 'string' ? value : '';
-  const label = t(contentLabel({blockType}));
+  const label = getTranslation(labels[blockType] ?? blockType, i18n);
   return (
     <div className="field-type" style={{marginBottom: 'var(--base)'}}>
       <TextInput
