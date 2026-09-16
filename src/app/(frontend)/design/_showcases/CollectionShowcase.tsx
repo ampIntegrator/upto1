@@ -22,7 +22,7 @@ export default function CollectionShowcase() {
   return (
     <VStack gap={8}>
       <Text type="body" color="secondary">
-        La collection : des contenus identiques côte à côte dans une colonne de 8 à 12, 2 à 4 visibles (3 au plus sur 8 ou 9 colonnes, 4 sur 12). Deux mises en page sur le Carousel Astryx : « swipe », sans contrôle, l'élément suivant dépasse du bord droit et des points apparaissent sous 640 px ; « carrousel », flèches et indicateur (segments, points ou numéros), flèches masquées sous 640 px. Défilement par page ou par élément ; jamais automatique, jamais en boucle. Les éléments suivent la largeur de la colonne : 2 entre 640 et 960 px, 1 avec aperçu en dessous.
+        La collection : des contenus identiques côte à côte dans une colonne de 8 à 12, 2 à 4 visibles (3 au plus sur 8 ou 9 colonnes, 4 sur 12). Deux mises en page sur le Carousel Astryx : « swipe », sans contrôle, l'élément suivant dépasse du bord droit et des points apparaissent sous 640 px ; « carrousel », flèches et indicateur (segments, points ou numéros), flèches masquées sous 640 px. Défilement par page ou par élément ; jamais automatique, jamais en boucle. Les éléments suivent la largeur de la colonne : 2 entre 520 et 800 px, 1 avec aperçu en dessous.
       </Text>
       <VStack gap={3}>
         <Heading level={3}>Carrousel, 3 témoignages visibles, segments (maquette 07)</Heading>

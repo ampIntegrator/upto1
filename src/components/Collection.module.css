@@ -6,10 +6,10 @@
 .slide > * { flex: 1 1 auto; }
 /* one item with a peek of the next (the swipe cue) */
 .slide { flex: 0 0 86cqw; }
-/* two side by side from 640 px, whatever perView */
-@container (min-width: 640px) { .slide { flex-basis: calc((100cqw - 24px) / 2); } }
-/* perView from 960 px */
-@container (min-width: 960px) {
+/* two side by side from 520 px, whatever perView */
+@container (min-width: 520px) { .slide { flex-basis: calc((100cqw - 24px) / 2); } }
+/* perView from 800 px (a column of 8 is about 880 px wide in the 1440 px container) */
+@container (min-width: 800px) {
   .root[data-per-view='2'] .slide { flex-basis: calc((100cqw - 24px) / 2); }
   .root[data-per-view='3'] .slide { flex-basis: calc((100cqw - 48px) / 3); }
   .root[data-per-view='4'] .slide { flex-basis: calc((100cqw - 72px) / 4); }

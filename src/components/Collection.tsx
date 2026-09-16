@@ -11,8 +11,8 @@
  *                      hidden below 640 px, where you swipe. `step`: a page (the visible items)
  *                      or one item at a time.
  *
- * Items per view follow the column width (container queries): `perView` from 960 px,
- * 2 between 640 and 960 px, 1 with a peek below. Equal-height items. No auto-advance,
+ * Items per view follow the column width (container queries): `perView` from 800 px
+ * (a column of 8 is about 880 px wide), 2 between 520 and 800 px, 1 with a peek below. Equal-height items. No auto-advance,
  * no loop (Astryx rules).
  */
 import {Carousel, type CarouselHandle} from '@astryxdesign/core/Carousel';
@@ -39,8 +39,8 @@ export type CollectionProps = {
 /** items really side by side now: the column's width decides (same thresholds as the CSS) */
 function perViewNow(el: HTMLElement | null, perView: number): number {
   const w = el?.getBoundingClientRect().width ?? 1440;
-  if (w < 640) return 1;
-  if (w < 960) return Math.min(2, perView);
+  if (w < 520) return 1;
+  if (w < 800) return Math.min(2, perView);
   return perView;
 }
 
