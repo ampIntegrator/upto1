@@ -9,7 +9,11 @@ Page
         └── Column     one content block (or none)
 ```
 
-Code: `src/fields/sections/` (admin), `src/lib/sections.ts` (Payload data → props), `src/components/PageSections.tsx` (rendering).
+Code, in three layers:
+
+- `src/fields/sections/`: the builder itself, neutral (grid, rows, columns, mobile order, drag and drop, validation). It knows no component, no media collection, no theme. Entry point: `createSectionBuilder()` in `builder.ts`. This is the folder that will become a Payload plugin (see `section-builder-audit.md`).
+- `src/sections.config.ts` and `src/fields/blocks/`: the site's choices. The config declares the Orbita section settings (background, tint, texture, media) and the list of content blocks; each block file declares its Payload block and its minimum column width.
+- `src/lib/sections.ts` (Payload data → props) and `src/components/PageSections.tsx` (rendering with Astryx).
 
 ## Section settings
 
@@ -30,7 +34,7 @@ Then, for every background:
 - **Grid gaps**: column gap, row gap and mobile vertical gap (0 to 60 px in steps of 10). "Réglage du site" inherits the defaults from Settings › Mise en page.
 - **Share**: saving with "Enregistrer dans les sections partagées" copies the section into the shared collection and replaces it on the page with a reference.
 
-The light tint field keeps its own `admin.condition`. Without it, Payload marks the column `NOT NULL` and dark or media sections can no longer be saved.
+The light tint field keeps its own `admin.condition`. Without it, Payload marks the column `NOT NULL` and dark or media sections can no longer be saved. For the same reason the builder's `condition` option (« once a background is chosen ») is set on the `rows` array field itself: Payload's database adapter reads conditions on array, block and group fields to make their required columns nullable, so adding or removing it changes the schema.
 
 ## Rows and layouts
 
@@ -38,7 +42,7 @@ The **Rangées** panel shows 14 layouts as thumbnails, widest column first, with
 
 `12` · `6 6` · `8 4` · `7 5` · `9 3` · `4 4 4` · `6 3 3` · `6 4 2` · `3 3 3 3` · `6 2 2 2` · `4 4 2 2` · `4 2 2 2 2` · `3 3 2 2 2` · `2 2 2 2 2 2`
 
-Allowed column widths are 2, 3, 4, 5, 6, 7, 8, 9 and 12 (`COLUMN_SPANS` in `src/components/content-specs.ts`).
+Allowed column widths are 2, 3, 4, 5, 6, 7, 8, 9 and 12 (`COLUMN_SPANS` in `src/fields/sections/grid.ts`, which also owns the layouts and the spacing scale).
 
 | Action | Result |
 |---|---|
@@ -73,7 +77,7 @@ Columns are reordered left or right with their handle (⋮⋮). A tile turns red
 | Cartes (8 variants) | `Card` | 3 |
 | Texte (temporary) | plain text | 2 |
 
-The block picker only offers blocks whose minimum width fits the column (`filterOptions`), and the server rejects a block that is too wide. Minimum widths come from the span registry, `src/components/content-specs.ts`, which is the single source of truth.
+The block picker only offers blocks whose minimum width fits the column (`filterOptions`), and the server rejects a block that is too wide. Each block declares its minimum width (`ContentBlock = {block, minSpan}`, `src/fields/sections/contentBlock.ts`); the site's blocks take that value from the catalogue's span registry, `src/components/content-specs.ts`.
 
 ### Image and image with quote
 
@@ -109,8 +113,7 @@ dnd-kit is a direct dependency pinned to the versions Payload already uses (`@dn
 
 1. **Branch `astryx`**: build the component in `src/components/`, add its showcase to the catalog, and add its minimum width to `src/components/content-specs.ts`.
 2. **Branch `payload`**:
-   - Define the block in `src/fields/sections/` and add it to `CONTENT_BLOCKS`.
-   - Map it to the registry in `contentRef.ts`.
+   - Define the block in `src/fields/blocks/` as a `ContentBlock` (Payload block + `minSpan` from the registry) and add it to the `blocks` list of `src/sections.config.ts`.
    - Convert its data in `src/lib/sections.ts` and render it in `PageSections.tsx`.
    - Add its preview to `/apercu` and run `pnpm previews:build`.
    - Back up the database, create and review the migration, apply it, regenerate types.

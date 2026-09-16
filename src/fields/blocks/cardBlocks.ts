@@ -1,5 +1,7 @@
 import type {Block, Field} from 'payload';
 
+import {minSpan} from '@/components/content-specs';
+import type {ContentBlock} from '@/fields/sections/contentBlock';
 import {cardBlockText as t} from '../../i18n/admin/blocks';
 import {ADMIN_LANGUAGE_CODES, type Text} from '../../i18n/admin/languages';
 import {iconField} from '../iconField';
@@ -45,7 +47,9 @@ const COMMON: Field[] = [
 const mapText = (build: (lang: keyof Text) => string): Text =>
   Object.fromEntries(ADMIN_LANGUAGE_CODES.map((lang) => [lang, build(lang)])) as Text;
 
-export const CARD_BLOCKS: Block[] = [];
+export const CARD_BLOCKS: ContentBlock[] = [];
+/** Minimum column width of a card (span registry of the catalogue). */
+const CARD_MIN_SPAN = minSpan({type: 'card'});
 /** block slug → variant (media, clickable) and short label for the admin */
 export const CARD_VARIANTS: Record<string, {media: CardMediaKind; clickable: boolean; label: Text}> = {};
 
@@ -55,14 +59,14 @@ for (const clickable of [false, true]) {
     const name = clickable ? t.names.clickableCard : t.names.card;
     const label = mapText((lang) => `${name[lang]} · ${m.label[lang]}`);
     CARD_VARIANTS[slug] = {media: m.kind, clickable, label};
-    CARD_BLOCKS.push({
+    const block: Block = {
       slug,
       labels: {singular: label, plural: mapText((lang) => `${label[lang]}${t.pluralSuffix[lang]}`)},
       imageURL: `/apercus/${slug}.png`,
-      imageAltText: label.fr, // Payload only accepts a plain string here
       admin: {group: clickable ? t.groups.clickableCards : t.groups.cards},
       fields: [...m.fields, ...COMMON, ...(clickable ? [linkGroup('cta', t.fields.cta, {required: true})] : [])],
-    });
+    };
+    CARD_BLOCKS.push({block, minSpan: CARD_MIN_SPAN});
   }
 }
 

@@ -1,10 +1,10 @@
 import {notFound} from 'next/navigation';
 import React from 'react';
 
-import {CARD_VARIANTS} from '@/fields/sections/cardBlocks';
+import {CARD_VARIANTS} from '@/fields/blocks/cardBlocks';
 import {EMPTY_SLUG} from '@/fields/sections/emptyBlock';
-import {MEDIA_SLUG} from '@/fields/sections/mediaBlock';
-import {MEDIA_QUOTE_SLUG} from '@/fields/sections/mediaQuoteBlock';
+import {MEDIA_SLUG} from '@/fields/blocks/mediaBlock';
+import {MEDIA_QUOTE_SLUG} from '@/fields/blocks/mediaQuoteBlock';
 import {Apercu} from './Apercu';
 
 export const dynamicParams = false;

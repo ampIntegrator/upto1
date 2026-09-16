@@ -1,7 +1,7 @@
 import type {CollectionConfig} from 'payload';
 
-import {sectionFields} from '@/fields/sections/sectionFields';
 import {collectionsText as ct} from '@/i18n/admin/collections';
+import {sections} from '@/sections.config';
 
 /**
  * Shared sections: a section edited in one place for every page that
@@ -15,6 +15,6 @@ export const Sections: CollectionConfig = {
   access: {read: () => true},
   fields: [
     {name: 'title', type: 'text', label: ct.sections.fields.title, required: true},
-    ...sectionFields({shareable: false}),
+    ...sections.sharedFields,
   ],
 };

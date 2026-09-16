@@ -7,10 +7,10 @@ import React from 'react';
 import {Card, type CardProps} from '@/components/Card';
 import {Media} from '@/components/Media';
 import {MediaQuote} from '@/components/MediaQuote';
-import {CARD_VARIANTS} from '@/fields/sections/cardBlocks';
+import {CARD_VARIANTS} from '@/fields/blocks/cardBlocks';
 import {EMPTY_SLUG} from '@/fields/sections/emptyBlock';
-import {MEDIA_SLUG} from '@/fields/sections/mediaBlock';
-import {MEDIA_QUOTE_SLUG} from '@/fields/sections/mediaQuoteBlock';
+import {MEDIA_SLUG} from '@/fields/blocks/mediaBlock';
+import {MEDIA_QUOTE_SLUG} from '@/fields/blocks/mediaQuoteBlock';
 import {OrbitaThemeProvider} from '@/theme/OrbitaThemeProvider';
 
 const IMG = 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80';

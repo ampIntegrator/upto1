@@ -8,10 +8,10 @@ import {chromium} from '@playwright/test';
 import {mkdir} from 'node:fs/promises';
 import path from 'node:path';
 
-import {CARD_SLUGS} from '../src/fields/sections/cardBlocks';
+import {CARD_SLUGS} from '../src/fields/blocks/cardBlocks';
 import {EMPTY_SLUG} from '../src/fields/sections/emptyBlock';
-import {MEDIA_SLUG} from '../src/fields/sections/mediaBlock';
-import {MEDIA_QUOTE_SLUG} from '../src/fields/sections/mediaQuoteBlock';
+import {MEDIA_SLUG} from '../src/fields/blocks/mediaBlock';
+import {MEDIA_QUOTE_SLUG} from '../src/fields/blocks/mediaQuoteBlock';
 
 const BASE = process.env.PREVIEW_BASE ?? 'http://localhost:3000';
 const OUT = path.resolve('public/apercus');
