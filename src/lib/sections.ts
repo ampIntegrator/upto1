@@ -11,6 +11,8 @@ import type {PlanCardProps} from '@/components/PlanCard';
 import type {PriceCardProps} from '@/components/PriceCard';
 import type {ProcessStep} from '@/components/ProcessSteps';
 import type {Testimonial} from '@/components/TestimonialCard';
+import type {TextBoxProps} from '@/components/TextBox';
+import type {RichTextDocument} from '@/components/RichText';
 import {type TitleTag, toTitleTag} from '@/components/title-tags';
 import type {CheckListItem} from '@/components/CheckList';
 import type {ChipTone} from '@/components/Chip';
@@ -28,7 +30,7 @@ import {EMPTY_SLUG} from '@/fields/sections/emptyBlock';
 import {type Gaps, sectionGaps, siteGaps} from '@/fields/sections/gaps';
 import {MEDIA_SLUG} from '@/fields/blocks/mediaBlock';
 import {MEDIA_QUOTE_SLUG} from '@/fields/blocks/mediaQuoteBlock';
-import {TEXT_SLUG} from '@/fields/blocks/textBlock';
+import {TEXT_BOX_SLUG} from '@/fields/blocks/textBoxSlug';
 import {sections as siteSections} from '@/sections.config';
 import {hasMobileOrder, mobileRanks} from '@/fields/sections/mobileOrder';
 import {type ColumnSpan, toSpan} from '@/fields/sections/grid';
@@ -47,7 +49,7 @@ export type FaqData = {mode: 'single' | 'multiple'; columns: 1 | 2; firstOpen: b
 export type CollectionData = {layout: 'swipe' | 'carousel'; perView: 2 | 3 | 4; step: 'page' | 'item'; arrows: boolean; indicator: 'segments' | 'dots' | 'numbers' | 'none'; items: ContentData[]};
 
 export type ContentData =
-  | {type: 'text'; text: string}
+  | {type: 'textBox'; textBox: TextBoxProps}
   | {type: 'collection'; collection: CollectionData}
   | {type: 'card'; card: CardProps}
   | {type: 'media'; media: MediaProps}
@@ -167,6 +169,37 @@ type FaqBlockData = {mode?: string | null; columns?: string | null; firstOpen?: 
 const FAQ_TAGS = ['h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span'] as const;
 type TestimonialData = {quote: string; name: string; role?: string | null; result?: string | null};
 type CompareCardData = {chipLabel: string; chipTone?: string | null; meta?: string | null; quote: string; items?: {label: string}[] | null; tone?: string | null; featured?: boolean | null};
+type TextBoxData = {
+  badges?: {label: string; tone?: string | null}[] | null;
+  title?: string | null;
+  titleTag?: string | null;
+  titleSize?: string | null;
+  content?: RichTextDocument | null;
+  buttons?: {label: string; href: string; shape?: string | null; variant?: string | null; size?: string | null; iconKey?: string | null}[] | null;
+  framed?: boolean | null;
+  center?: boolean | null;
+  vAlign?: string | null;
+};
+
+function toTextBox(b: TextBoxData): ContentData | null {
+  const hasText = Boolean(b.content?.root?.children?.length);
+  if (!b.title && !hasText && !(b.buttons ?? []).length) return null;
+  return {
+    type: 'textBox',
+    textBox: {
+      badges: (b.badges ?? []).slice(0, 2).map((x) => ({label: x.label, tone: (x.tone ?? 'high') as ChipTone})),
+      title: orUndefined(b.title),
+      titleTag: toTitleTag(b.titleTag, 'h2'),
+      titleSize: (b.titleSize ?? 'heading-1') as TextBoxProps['titleSize'],
+      content: hasText ? (b.content as RichTextDocument) : undefined,
+      buttons: (b.buttons ?? []).slice(0, 2).map((x) => ({label: x.label, href: x.href, arrow: x.shape === 'split', variant: (x.variant ?? 'primary') as 'primary', size: x.size === 'lg' ? 'lg' : 'md', iconKey: (x.iconKey || undefined) as NucleoIconKey | undefined})),
+      framed: Boolean(b.framed),
+      center: Boolean(b.center),
+      vAlign: (b.vAlign === 'center' || b.vAlign === 'end' ? b.vAlign : 'start') as TextBoxProps['vAlign'],
+    },
+  };
+}
+
 type StepsData = {tag?: string | null; steps?: {title: string; text: string; duration?: string | null; checks?: {label: string}[] | null; asterisk?: boolean | null}[] | null};
 
 const orUndefined = (v: string | null | undefined): string | undefined => (v ? v : undefined);
@@ -322,8 +355,8 @@ function toContent(block: ContentBlock): ContentData | null {
       return toSteps(block as unknown as StepsData);
     case COLLECTION_SLUG:
       return toCollection(block as unknown as CollectionBlockData, postItems);
-    case TEXT_SLUG:
-      return {type: 'text', text: block.text};
+    case TEXT_BOX_SLUG:
+      return toTextBox(block as unknown as TextBoxData);
     default:
       return null;
   }

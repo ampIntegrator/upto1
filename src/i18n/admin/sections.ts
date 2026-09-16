@@ -14,12 +14,6 @@ export const sectionsText = texts({
     sectionField: {fr: 'Section', en: 'Section'},
     sectionsField: {fr: 'Sections', en: 'Sections'},
     sectionsDescription: {fr: 'Les sections s’empilent de haut en bas sous le haut de page.', en: 'Sections stack from top to bottom below the page header.'},
-    text: {
-      name: {fr: 'Texte', en: 'Text'},
-      plural: {fr: 'Textes', en: 'Texts'},
-      field: {fr: 'Texte', en: 'Text'},
-      description: {fr: 'Une ligne vide sépare deux paragraphes.', en: 'A blank line separates two paragraphs.'},
-    },
   },
   settings: {
     collapsible: {fr: 'Réglages de la section', en: 'Section settings'},

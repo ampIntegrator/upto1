@@ -29,7 +29,9 @@ const light = (rows: Row[], extra: Record<string, unknown> = {}) => ({blockType:
 const dark = (rows: Row[], extra: Record<string, unknown> = {}) => ({blockType: 'section', mode: 'dark', darkStyle: 'night-halo', ...extra, rows});
 const mediaBg = (image: number, rows: Row[]) => ({blockType: 'section', mode: 'media', mediaType: 'image', image, overlay: 0.5, rows});
 
-const text = (t = LOREM_LONG) => ({blockType: 'text', text: t});
+const doc = (...paragraphs: string[]) => ({root: {type: 'root', children: paragraphs.map((p) => ({type: 'paragraph', children: [{type: 'text', text: p, format: 0}]}))}});
+const text = (t = LOREM_LONG) => ({blockType: 'textBox', title: 'Lorem ipsum dolor', titleTag: 'h2', titleSize: 'heading-1', content: doc(...t.split('\n\n')), buttons: [{label: 'En savoir plus', href: '#', shape: 'split', variant: 'primary', size: 'md'}]});
+const textBox = (opts: Record<string, unknown>) => ({blockType: 'textBox', badges: [{label: 'Nouveau', tone: 'high'}, {label: 'Chiffrage', tone: 'line'}], title: 'Le chiffrage juste, en 20 minutes', titleTag: 'h2', titleSize: 'display-3', content: {root: {type: 'root', children: [{type: 'paragraph', children: [{type: 'text', text: `${LOREM} `, format: 0}, {type: 'text', text: 'Consectetur adipiscing elit', format: 1}, {type: 'text', text: '. ', format: 0}, {type: 'link', fields: {url: '#', linkType: 'custom'}, children: [{type: 'text', text: 'Dolore magna aliqua', format: 0}]}, {type: 'text', text: '.', format: 0}]}, {type: 'list', listType: 'bullet', children: ['Chiffrage en 20 min', 'Rapport expert BTP', 'Note de calcul'].map((l) => ({type: 'listitem', children: [{type: 'text', text: l, format: 0}]}))}, {type: 'list', listType: 'number', children: ['Vous décrivez', 'Vous recevez', 'Vous signez'].map((l) => ({type: 'listitem', children: [{type: 'text', text: l, format: 0}]}))}]}}, buttons: [{label: 'Commencer', href: '#', shape: 'split', variant: 'primary', size: 'md'}, {label: 'En savoir plus', href: '#', shape: 'simple', variant: 'ghost', size: 'md'}], ...opts});
 const media = (image: number, minHeight = '320') => ({blockType: 'media', image, minHeight, minHeightMobile: '240', overlay: 0});
 const mediaQuote = (image: number) => ({blockType: 'mediaQuote', image, text: 'Lorem ipsum dolor sit amet.', tag: 'h2', size: 'display-2', minHeight: '400', minHeightMobile: '240', overlay: 0.45});
 const cardTitle = (title: string) => ({blockType: 'cardTitle', title, text: LOREM});
@@ -73,7 +75,7 @@ async function main() {
       slug: 'demo-tarifs',
       title: 'Démo · tarifs',
       sections: [
-        light([row(column(12, text())), row(column(3, plan('Solo', '49')), column(3, plan('Pro', '79', {featured: true, inherits: 'Solo'})), column(3, plan('Agence', '149', {inherits: 'Pro'})), column(3, plan('Réseau', '299', {inherits: 'Agence'})))], {anchor: 'quatre-paliers'}),
+        light([row(column(9, text()), column(3)), row(column(3, plan('Solo', '49')), column(3, plan('Pro', '79', {featured: true, inherits: 'Solo'})), column(3, plan('Agence', '149', {inherits: 'Pro'})), column(3, plan('Réseau', '299', {inherits: 'Agence'})))], {anchor: 'quatre-paliers'}),
         light([row(column(4, plan('Solo', '49')), column(4, plan('Pro', '79', {featured: true, inherits: 'Solo'})), column(4, plan('Agence', '149', {inherits: 'Pro'})))], {tint: 'highlight', texture: 'dots'}),
         light([row(column(6, priceSingle()), column(6, media(bureau, '480'))), row(column(9, priceSingle()), column(3, testimonial('Sophie M.', '+ 28 %'))), row(column(2), column(8, priceSingle()), column(2))]),
         dark([row(column(4, plan('Solo', '49')), column(4, plan('Pro', '79', {featured: true, inherits: 'Solo'})), column(4, plan('Agence', '149', {inherits: 'Pro'}))), row(column(6, priceSingle()), column(6, faq(4)))]),
@@ -103,6 +105,12 @@ async function main() {
         light([row(column(12, steps(4))), row(column(8, steps(3)), column(4, cardImage(chantier, 'Lorem ipsum'))), row(column(6, steps(2)), column(6, steps(2))), row(column(4, steps(1)), column(4, steps(1)), column(4, steps(1))), row(column(7, steps(2)), column(5, steps(1)))]),
         mediaBg(archi, [row(column(6, steps(2)), column(6, media(analyse, '320')))]),
         light([row(column(9, steps(3)), column(3, testimonial('Sophie M.', '+ 28 %'))), row(column(4, media(chantier)), column(4, media(bureau)), column(4, media(immeuble))), row(column(6, mediaQuote(archi)), column(6, text()))], {texture: 'losange'}),
+        light([
+          row(column(6, textBox({framed: true})), column(6, textBox({center: true, titleSize: 'heading-1', titleTag: 'h3'}))),
+          row(column(3, textBox({framed: true, titleSize: 'heading-2', titleTag: 'h4', badges: [], buttons: [{label: 'Voir', href: '#', shape: 'simple', variant: 'secondary', size: 'md'}]})), column(4, media(analyse, '480')), column(5, textBox({vAlign: 'center', titleSize: 'heading-1'}))),
+          row(column(9, textBox({framed: true, center: true, titleSize: 'display-2', buttons: [{label: 'Démarrer', href: '#', shape: 'split', variant: 'high', size: 'lg'}]})), column(3)),
+        ], {anchor: 'encarts'}),
+        dark([row(column(6, textBox({framed: true})), column(6, textBox({center: true, vAlign: 'end', titleSize: 'display-3'})))]),
       ],
     },
   ];

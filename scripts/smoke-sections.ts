@@ -41,6 +41,7 @@ async function main() {
   await expectError('collection with 4 per view on 9 columns', [[column(9, {blockType: 'collection', layout: 'swipe', perView: '4', source: 'manual', items: [{blockType: 'testimonial', quote: 'A', name: 'A'}, {blockType: 'testimonial', quote: 'B', name: 'B'}]}), column(3)]], /accepte 3|holds 3/);
   await expectError('collection with mixed items', [[column(12, {blockType: 'collection', layout: 'swipe', perView: '3', source: 'manual', items: [{blockType: 'testimonial', quote: 'A', name: 'A'}, {blockType: 'cardTitle', title: 'B'}]})]], /même type|same type/);
   await expectError('side-by-side collection with more items than visible', [[column(12, {blockType: 'collection', layout: 'swipe', perView: '3', source: 'manual', items: [1, 2, 3, 4].map((i) => ({blockType: 'testimonial', quote: `${i}`, name: `${i}`}))})]], /pas plus d’éléments|no more items/);
+  await expectError('text box with display-1 on 3 columns', [[column(3, {blockType: 'textBox', title: 'T', titleTag: 'h2', titleSize: 'display-1'}), column(9)]], /demande 6 colonnes|needs 6 columns/);
   await expectError('tier on 6 columns', [[column(6, {blockType: 'plan', name: 'Pro', price: {value: '79'}, cta: {label: 'Go', href: '#'}, features: [{label: 'A'}]}), column(6)]], /ne dépasse pas 4|must not exceed 4/);
 
   // 2 · a valid throwaway page with every block
@@ -62,6 +63,7 @@ async function main() {
             column(4, {blockType: 'compareCard', chipLabel: 'APRÈS SMOKE', chipTone: 'high', quote: 'Voici le détail.', items: [{label: 'Le mandat est signé'}], tone: 'check', featured: true}),
           ],
           [column(8, {blockType: 'processSteps', tag: 'h4', steps: steps(2)}), column(4, {blockType: 'cardTitle', title: 'Carte smoke', tag: 'span'})],
+          [column(4, {blockType: 'textBox', badges: [{label: 'Badge smoke', tone: 'high'}], title: 'Encart smoke', titleTag: 'h3', titleSize: 'heading-2', content: {root: {type: 'root', children: [{type: 'paragraph', children: [{type: 'text', text: 'Paragraphe smoke ', format: 0}, {type: 'text', text: 'gras', format: 1}]}, {type: 'list', listType: 'bullet', children: [{type: 'listitem', children: [{type: 'text', text: 'Puce smoke', format: 0}]}]}]}}, buttons: [{label: 'Bouton smoke', href: '#', shape: 'split', variant: 'high', size: 'lg'}], framed: true, center: true, vAlign: 'center'}), column(8, {blockType: 'faq', mode: 'single', columns: '1', firstOpen: true, tag: 'h3', items: [{question: 'Q2 ?', answer: 'R2.'}]})],
           [column(12, {blockType: 'collection', layout: 'carousel', perView: '3', step: 'page', indicator: 'dots', arrows: true, source: 'manual', items: [1, 2, 3, 4].map((i) => ({blockType: 'testimonial', quote: `Citation collection ${i}.`, name: `Témoin collection ${i}`}))})],
           [column(9, {blockType: 'collection', layout: 'swipe', perView: '3', source: 'posts', postsLimit: 3, postsCta: 'Lire l’article'}), column(3)],
         ]),
@@ -71,7 +73,7 @@ async function main() {
   log(`page created: ${page.id} (${slug})`);
   try {
     const html = await (await fetch(`${BASE}/${slug}`)).text();
-    for (const marker of ['Valeur totale', 'Question smoke', 'Palier smoke', 'Témoin Smoke', 'APRÈS SMOKE', 'Étape 2', 'data-steps="2"', 'Témoin collection 4', 'data-layout="carousel"', 'Lire l’article', '<h2 class="Collapsible', '<h3 class="astryx-heading', '<h4 class="astryx-heading', '<span class="astryx-heading card']) check(html.includes(marker), `site renders « ${marker} »`);
+    for (const marker of ['Valeur totale', 'Question smoke', 'Palier smoke', 'Témoin Smoke', 'APRÈS SMOKE', 'Étape 2', 'data-steps="2"', 'Témoin collection 4', 'data-layout="carousel"', 'Lire l’article', '<h2 class="Collapsible', '<h3 class="astryx-heading', '<h4 class="astryx-heading', '<span class="astryx-heading card', 'Encart smoke', '<strong>gras</strong>', 'Puce smoke', 'Bouton smoke', 'data-framed="true"']) check(html.includes(marker), `site renders « ${marker} »`);
     check(!/Unhandled Runtime Error|Build Error/.test(html), 'site page without runtime error');
   } finally {
     await payload.delete({collection: 'pages', id: page.id});

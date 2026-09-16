@@ -14,6 +14,7 @@ import {PlanCard} from '@/components/PlanCard';
 import {PriceCard} from '@/components/PriceCard';
 import {ProcessSteps} from '@/components/ProcessSteps';
 import {TestimonialCard} from '@/components/TestimonialCard';
+import {TextBox} from '@/components/TextBox';
 import {CARD_VARIANTS} from '@/fields/blocks/cardBlocks';
 import {COLLECTION_SLUG} from '@/fields/blocks/collectionBlock';
 import {COMPARE_CARD_SLUG} from '@/fields/blocks/compareCardBlock';
@@ -22,12 +23,14 @@ import {PLAN_SLUG} from '@/fields/blocks/planBlock';
 import {PRICE_SINGLE_SLUG} from '@/fields/blocks/priceSingleBlock';
 import {PROCESS_STEPS_SLUG} from '@/fields/blocks/processStepsBlock';
 import {TESTIMONIAL_SLUG} from '@/fields/blocks/testimonialBlock';
+import {TEXT_BOX_SLUG} from '@/fields/blocks/textBoxSlug';
 import {EMPTY_SLUG} from '@/fields/sections/emptyBlock';
 import {MEDIA_SLUG} from '@/fields/blocks/mediaBlock';
 import {MEDIA_QUOTE_SLUG} from '@/fields/blocks/mediaQuoteBlock';
 import {OrbitaThemeProvider} from '@/theme/OrbitaThemeProvider';
 import {APRES, PLANS, PRICE_SINGLE, PROCESS_STEPS, TESTIMONIALS} from '../../design/_showcases/blocks.shared';
 import {FAQ} from '../../design/_showcases/faq.shared';
+import {LOREM_DOC} from '../../design/_showcases/textbox.shared';
 
 /** Wider box for the blocks that need several columns (single price, FAQ, steps). */
 const WIDE = new Set([PRICE_SINGLE_SLUG, FAQ_SLUG, PROCESS_STEPS_SLUG, COLLECTION_SLUG]);
@@ -58,7 +61,9 @@ export function Apercu({slug}: {slug: string}) {
   return (
     <OrbitaThemeProvider fixedSilo="blue" initialMode="light">
       <VStack data-apercu style={{width: WIDE.has(slug) ? 'var(--apercu-width-wide, 900px)' : 'var(--apercu-width, 360px)', padding: 'var(--spacing-6)', background: 'var(--color-background-body)'}}>
-        {slug === COLLECTION_SLUG ? (
+        {slug === TEXT_BOX_SLUG ? (
+          <TextBox badges={[{label: 'Nouveau', tone: 'high'}]} title="Le chiffrage juste" titleTag="h2" titleSize="heading-1" content={LOREM_DOC} buttons={[{label: 'Commencer', href: '#', arrow: true}]} framed />
+        ) : slug === COLLECTION_SLUG ? (
           <Collection layout="carousel" perView={3} label="Témoignages">
             {TESTIMONIALS.slice(0, 5).map((t) => (
               <TestimonialCard key={t.name} {...t} />

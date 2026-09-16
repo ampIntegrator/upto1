@@ -239,6 +239,60 @@ export interface Page {
                                   blockType: 'empty';
                                 }
                               | {
+                                  badges?:
+                                    | {
+                                        label: string;
+                                        tone?: ('high' | 'accent' | 'cat' | 'danger' | 'line') | null;
+                                        id?: string | null;
+                                      }[]
+                                    | null;
+                                  title?: string | null;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                                  /**
+                                   * The two display sizes need 6 columns at least.
+                                   */
+                                  titleSize?:
+                                    ('display-1' | 'display-2' | 'display-3' | 'heading-1' | 'heading-2') | null;
+                                  /**
+                                   * Paragraphs, bold, italic, links, bulleted and numbered lists.
+                                   */
+                                  content?: {
+                                    root: {
+                                      type: string;
+                                      children: {
+                                        type: any;
+                                        version: number;
+                                        [k: string]: unknown;
+                                      }[];
+                                      direction: ('ltr' | 'rtl') | null;
+                                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                                      indent: number;
+                                      version: number;
+                                    };
+                                    [k: string]: unknown;
+                                  } | null;
+                                  buttons?:
+                                    | {
+                                        label: string;
+                                        href: string;
+                                        shape?: ('simple' | 'split') | null;
+                                        variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
+                                        size?: ('md' | 'lg') | null;
+                                        iconKey?: string | null;
+                                        id?: string | null;
+                                      }[]
+                                    | null;
+                                  framed?: boolean | null;
+                                  center?: boolean | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'textBox';
+                                }
+                              | {
                                   /**
                                    * Alt text is set in the media library. Empty: decorative image.
                                    */
@@ -282,15 +336,6 @@ export interface Page {
                                   id?: string | null;
                                   blockName?: string | null;
                                   blockType: 'mediaQuote';
-                                }
-                              | {
-                                  /**
-                                   * A blank line separates two paragraphs.
-                                   */
-                                  text: string;
-                                  id?: string | null;
-                                  blockName?: string | null;
-                                  blockType: 'text';
                                 }
                               | {
                                   image: number | Media;
@@ -885,6 +930,59 @@ export interface Section {
                         blockType: 'empty';
                       }
                     | {
+                        badges?:
+                          | {
+                              label: string;
+                              tone?: ('high' | 'accent' | 'cat' | 'danger' | 'line') | null;
+                              id?: string | null;
+                            }[]
+                          | null;
+                        title?: string | null;
+                        /**
+                         * Structure and SEO only: the look does not change.
+                         */
+                        titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                        /**
+                         * The two display sizes need 6 columns at least.
+                         */
+                        titleSize?: ('display-1' | 'display-2' | 'display-3' | 'heading-1' | 'heading-2') | null;
+                        /**
+                         * Paragraphs, bold, italic, links, bulleted and numbered lists.
+                         */
+                        content?: {
+                          root: {
+                            type: string;
+                            children: {
+                              type: any;
+                              version: number;
+                              [k: string]: unknown;
+                            }[];
+                            direction: ('ltr' | 'rtl') | null;
+                            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                            indent: number;
+                            version: number;
+                          };
+                          [k: string]: unknown;
+                        } | null;
+                        buttons?:
+                          | {
+                              label: string;
+                              href: string;
+                              shape?: ('simple' | 'split') | null;
+                              variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
+                              size?: ('md' | 'lg') | null;
+                              iconKey?: string | null;
+                              id?: string | null;
+                            }[]
+                          | null;
+                        framed?: boolean | null;
+                        center?: boolean | null;
+                        vAlign?: ('start' | 'center' | 'end') | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'textBox';
+                      }
+                    | {
                         /**
                          * Alt text is set in the media library. Empty: decorative image.
                          */
@@ -928,15 +1026,6 @@ export interface Section {
                         id?: string | null;
                         blockName?: string | null;
                         blockType: 'mediaQuote';
-                      }
-                    | {
-                        /**
-                         * A blank line separates two paragraphs.
-                         */
-                        text: string;
-                        id?: string | null;
-                        blockName?: string | null;
-                        blockType: 'text';
                       }
                     | {
                         image: number | Media;
@@ -1668,6 +1757,37 @@ export interface PagesSelect<T extends boolean = true> {
                                       id?: T;
                                       blockName?: T;
                                     };
+                                textBox?:
+                                  | T
+                                  | {
+                                      badges?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            tone?: T;
+                                            id?: T;
+                                          };
+                                      title?: T;
+                                      titleTag?: T;
+                                      titleSize?: T;
+                                      content?: T;
+                                      buttons?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            href?: T;
+                                            shape?: T;
+                                            variant?: T;
+                                            size?: T;
+                                            iconKey?: T;
+                                            id?: T;
+                                          };
+                                      framed?: T;
+                                      center?: T;
+                                      vAlign?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
                                 media?:
                                   | T
                                   | {
@@ -1688,13 +1808,6 @@ export interface PagesSelect<T extends boolean = true> {
                                       minHeight?: T;
                                       minHeightMobile?: T;
                                       overlay?: T;
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                text?:
-                                  | T
-                                  | {
-                                      text?: T;
                                       id?: T;
                                       blockName?: T;
                                     };
@@ -2210,6 +2323,37 @@ export interface SectionsSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
+                    textBox?:
+                      | T
+                      | {
+                          badges?:
+                            | T
+                            | {
+                                label?: T;
+                                tone?: T;
+                                id?: T;
+                              };
+                          title?: T;
+                          titleTag?: T;
+                          titleSize?: T;
+                          content?: T;
+                          buttons?:
+                            | T
+                            | {
+                                label?: T;
+                                href?: T;
+                                shape?: T;
+                                variant?: T;
+                                size?: T;
+                                iconKey?: T;
+                                id?: T;
+                              };
+                          framed?: T;
+                          center?: T;
+                          vAlign?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     media?:
                       | T
                       | {
@@ -2230,13 +2374,6 @@ export interface SectionsSelect<T extends boolean = true> {
                           minHeight?: T;
                           minHeightMobile?: T;
                           overlay?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    text?:
-                      | T
-                      | {
-                          text?: T;
                           id?: T;
                           blockName?: T;
                         };

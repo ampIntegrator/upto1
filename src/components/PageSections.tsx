@@ -27,23 +27,7 @@ import {PriceCard} from './PriceCard';
 import {ProcessSteps} from './ProcessSteps';
 import {Section} from './Section';
 import {TestimonialCard} from './TestimonialCard';
-
-/** Paragraphs of a plain text: a blank line separates two paragraphs. */
-function Paragraphs({text}: {text: string}) {
-  return (
-    <VStack gap={3}>
-      {text
-        .split(/\n\s*\n/)
-        .map((p) => p.trim())
-        .filter(Boolean)
-        .map((p, i) => (
-          <Text key={i} type="body" color="secondary">
-            {p}
-          </Text>
-        ))}
-    </VStack>
-  );
-}
+import {TextBox} from './TextBox';
 
 /** Paragraphs of an answer, as <p>: their colour comes from the collapsible (white on the silo fill). */
 function AnswerParagraphs({text}: {text: string}) {
@@ -78,8 +62,8 @@ function Faq({faq, id}: {faq: FaqData; id: string}) {
 
 function Content({content, id}: {content: ContentData; id: string}) {
   switch (content.type) {
-    case 'text':
-      return <Paragraphs text={content.text} />;
+    case 'textBox':
+      return <TextBox {...content.textBox} />;
     case 'collection':
       return (
         <Collection layout={content.collection.layout} perView={content.collection.perView} step={content.collection.step} arrows={content.collection.arrows} indicator={content.collection.indicator}>
