@@ -11,7 +11,6 @@ const block: Block = {
   slug: TESTIMONIAL_SLUG,
   labels: {singular: t.name, plural: t.plural},
   imageURL: `/apercus/${TESTIMONIAL_SLUG}.png`,
-  admin: {group: t.group},
   fields: [
     {name: 'quote', type: 'textarea', label: t.quote, localized: true, required: true, admin: {rows: 3}},
     {

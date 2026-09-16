@@ -28,7 +28,6 @@ const block: Block = {
   slug: MEDIA_QUOTE_SLUG,
   labels: {singular: t.name, plural: t.plural},
   imageURL: `/apercus/${MEDIA_QUOTE_SLUG}.png`,
-  admin: {group: t.group},
   fields: [
     {
       name: 'image',

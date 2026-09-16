@@ -10,7 +10,6 @@ export const TEXT_SLUG = 'text';
 const block: Block = {
   slug: TEXT_SLUG,
   labels: {singular: T.blocks.text.name, plural: T.blocks.text.plural},
-  admin: {group: T.blocks.text.group},
   fields: [{name: 'text', type: 'textarea', label: T.blocks.text.field, localized: true, required: true, admin: {rows: 4, description: T.blocks.text.description}}],
 };
 

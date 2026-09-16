@@ -42,10 +42,6 @@ export const heroText = texts({
 
 /** Admin texts of the eight « Carte » blocks. */
 export const cardBlockText = texts({
-  groups: {
-    cards: {fr: 'Cartes', en: 'Cards'},
-    clickableCards: {fr: 'Cartes cliquables', en: 'Clickable cards'},
-  },
   /** Block name prefix, before « · <media> ». */
   names: {
     card: {fr: 'Carte', en: 'Card'},
@@ -73,7 +69,6 @@ export const cardBlockText = texts({
 
 /** Texts shared by the Image and Image-with-quote blocks. */
 const mediaShared = texts({
-  group: {fr: 'Média', en: 'Media'},
   image: {fr: 'Image', en: 'Image'},
   imageDescription: {
     fr: 'Le texte alternatif se règle dans la médiathèque. Vide : image décorative.',
@@ -122,12 +117,10 @@ export const mediaQuoteBlockText = texts({
 export const emptyBlockText = texts({
   name: {fr: 'Case vide', en: 'Empty cell'},
   plural: {fr: 'Cases vides', en: 'Empty cells'},
-  group: {fr: 'Structure', en: 'Layout'},
 });
 
 /** Texts shared by the pricing blocks (single price and tier). */
 const pricingShared = texts({
-  group: {fr: 'Tarifs', en: 'Pricing'},
   featuresLabel: {fr: 'Titre de la liste', en: 'List title'},
   features: {fr: 'Ce que comprend l’offre', en: 'What the offer includes'},
   feature: {fr: 'Élément', en: 'Item'},
@@ -168,7 +161,6 @@ export const planBlockText = texts({
 export const faqBlockText = texts({
   name: {fr: 'FAQ (dépliants)', en: 'FAQ (collapsibles)'},
   plural: {fr: 'FAQ', en: 'FAQs'},
-  group: {fr: 'FAQ', en: 'FAQ'},
   mode: {fr: 'Ouverture', en: 'Opening'},
   modeSingle: {fr: 'Une seule question ouverte à la fois', en: 'One question open at a time'},
   modeMultiple: {fr: 'Plusieurs questions ouvertes', en: 'Several questions open'},
@@ -186,7 +178,6 @@ export const faqBlockText = texts({
 export const testimonialBlockText = texts({
   name: {fr: 'Témoignage', en: 'Testimonial'},
   plural: {fr: 'Témoignages', en: 'Testimonials'},
-  group: {fr: 'Témoignages', en: 'Testimonials'},
   quote: {fr: 'Citation', en: 'Quote'},
   personName: {fr: 'Nom', en: 'Name'},
   role: {fr: 'Rôle et lieu (« Courtière · Lyon »)', en: 'Role and place (« Broker · Lyon »)'},
@@ -196,7 +187,6 @@ export const testimonialBlockText = texts({
 export const compareCardBlockText = texts({
   name: {fr: 'Carte comparative', en: 'Compare card'},
   plural: {fr: 'Cartes comparatives', en: 'Compare cards'},
-  group: {fr: 'Comparatif', en: 'Comparison'},
   chip: {fr: 'Chip', en: 'Chip'},
   chipLabel: {fr: 'Texte (« AVANT », « APRÈS »)', en: 'Text (« BEFORE », « AFTER »)'},
   chipTone: {fr: 'Couleur', en: 'Colour'},
@@ -221,7 +211,6 @@ export const compareCardBlockText = texts({
 export const processStepsBlockText = texts({
   name: {fr: 'Étapes', en: 'Steps'},
   plural: {fr: 'Panneaux d’étapes', en: 'Steps panels'},
-  group: {fr: 'Étapes', en: 'Steps'},
   steps: {fr: 'Étapes', en: 'Steps'},
   step: {fr: 'Étape', en: 'Step'},
   stepsDescription: {

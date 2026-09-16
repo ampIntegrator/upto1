@@ -17,7 +17,6 @@ export const sectionsText = texts({
     text: {
       name: {fr: 'Texte', en: 'Text'},
       plural: {fr: 'Textes', en: 'Texts'},
-      group: {fr: 'Texte', en: 'Text'},
       field: {fr: 'Texte', en: 'Text'},
       description: {fr: 'Une ligne vide sépare deux paragraphes.', en: 'A blank line separates two paragraphs.'},
     },

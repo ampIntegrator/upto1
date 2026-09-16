@@ -17,7 +17,6 @@ const block: Block = {
   slug: PROCESS_STEPS_SLUG,
   labels: {singular: t.name, plural: t.plural},
   imageURL: `/apercus/${PROCESS_STEPS_SLUG}.png`,
-  admin: {group: t.group},
   fields: [
     {
       name: 'steps',
