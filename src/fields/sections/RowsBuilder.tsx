@@ -41,8 +41,9 @@ import {rowWidthError} from './validation';
 import './RowsBuilder.scss';
 
 /** filled: the column has a real component (an empty cell does not count) */
-/** narrow: minimum width required by the component when the column is too narrow, otherwise null */
-type CellSnapshot = {span: ColumnSpan; contents: string[]; types?: string[]; names?: string[]; filled: boolean; narrow: number | null; mobileOrder: number | null};
+/** narrow: minimum width required by the content when the column is too narrow, otherwise null */
+/** wide: maximum width allowed by the content when the column is too wide, otherwise null */
+type CellSnapshot = {span: ColumnSpan; contents: string[]; types?: string[]; names?: string[]; filled: boolean; narrow: number | null; wide: number | null; mobileOrder: number | null};
 type RowSnapshot = {ids?: string[]; columns: CellSnapshot[]};
 
 const TILE_H = 40;
@@ -164,7 +165,7 @@ function Cell({cell, index, rowSelected, onOpen, drag}: {cell: CellSnapshot; ind
         textAlign: 'center',
         cursor: 'pointer',
         borderRadius: 4,
-        border: cell.narrow ? '2px solid var(--theme-error-500)' : `1px ${empty ? 'dashed' : 'solid'} var(--theme-elevation-${empty ? '300' : '400'})`,
+        border: cell.narrow || cell.wide ? '2px solid var(--theme-error-500)' : `1px ${empty ? 'dashed' : 'solid'} var(--theme-elevation-${empty ? '300' : '400'})`,
         background: empty ? 'var(--theme-elevation-50)' : 'var(--theme-elevation-0)',
         color: 'var(--theme-elevation-1000)',
         transform: drag?.transform,
@@ -200,15 +201,16 @@ function Cell({cell, index, rowSelected, onOpen, drag}: {cell: CellSnapshot; ind
         ))
       )}
       {cell.narrow ? <span style={{color: 'var(--theme-error-500)'}}>{t(T.builder.narrow, {min: cell.narrow})}</span> : null}
+      {cell.wide ? <span style={{color: 'var(--theme-error-500)'}}>{t(T.builder.wide, {max: cell.wide})}</span> : null}
     </div>
   );
 }
 
-/** minSpans: block slug → minimum column width, passed by the field config (clientProps). */
-export type RowsBuilderProps = ArrayFieldClientProps & {minSpans?: Record<string, number>};
+/** minSpans, maxSpans: block slug → minimum and maximum column width, passed by the field config (clientProps). */
+export type RowsBuilderProps = ArrayFieldClientProps & {minSpans?: Record<string, number>; maxSpans?: Record<string, number>};
 
 export function RowsBuilder(props: RowsBuilderProps) {
-  const {field, path, permissions, readOnly, schemaPath: schemaPathFromProps, minSpans = {}} = props;
+  const {field, path, permissions, readOnly, schemaPath: schemaPathFromProps, minSpans = {}, maxSpans = {}} = props;
   const schemaPath = schemaPathFromProps ?? field.name;
   const {t, language} = useAdminText();
   const {i18n} = useTranslation();
@@ -258,7 +260,7 @@ export function RowsBuilder(props: RowsBuilderProps) {
       }
       const j = Number(parts[2]);
       if (!Number.isInteger(j)) continue;
-      out[i].columns[j] ??= {span: 12, contents: [], types: [], filled: false, narrow: null, mobileOrder: null};
+      out[i].columns[j] ??= {span: 12, contents: [], types: [], filled: false, narrow: null, wide: null, mobileOrder: null};
       if (parts[3] === 'span' && parts.length === 4) out[i].columns[j].span = toSpan(fields[key]?.value);
       if (parts[3] === 'mobileOrder' && parts.length === 4) {
         const v = fields[key]?.value;
@@ -280,7 +282,9 @@ export function RowsBuilder(props: RowsBuilderProps) {
       const span = c?.span ?? 12;
       // width required by the column's component (span registry)
       const need = (c?.types ?? []).reduce((m, t) => Math.max(m, minSpans[t] ?? 0), 0);
-      return {span, contents: (c?.contents ?? []).map((label, k) => c?.names?.[k]?.trim() || label).filter(Boolean), filled: Boolean(c?.filled), narrow: need > span ? need : null, mobileOrder: c?.mobileOrder ?? null};
+      // narrowest maximum among the column's contents (12 when none declares one)
+      const cap = (c?.types ?? []).reduce((m, t) => Math.min(m, maxSpans[t] ?? 12), 12);
+      return {span, contents: (c?.contents ?? []).map((label, k) => c?.names?.[k]?.trim() || label).filter(Boolean), filled: Boolean(c?.filled), narrow: need > span ? need : null, wide: need <= span && span > cap ? cap : null, mobileOrder: c?.mobileOrder ?? null};
     })})));
   });
   const snapshot = useMemo<RowSnapshot[]>(() => JSON.parse(snapshotJson) as RowSnapshot[], [snapshotJson]);

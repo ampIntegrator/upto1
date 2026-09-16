@@ -14,3 +14,8 @@ export function rowWidthError(spans: readonly ColumnSpan[], language: unknown): 
 export function tooNarrowError(block: string, min: number, span: number, language: unknown): string {
   return tr(sectionsText.validation.tooNarrow, language, {block, min, span});
 }
+
+/** Error of a content that must not spread beyond its maximum width. */
+export function tooWideError(block: string, max: number, span: number, language: unknown): string {
+  return tr(sectionsText.validation.tooWide, language, {block, max, span});
+}

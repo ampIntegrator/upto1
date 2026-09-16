@@ -1,6 +1,6 @@
 import type {Block} from 'payload';
 
-import type {ColumnSpan} from './grid';
+import {type ColumnSpan, GRID_COLUMNS, toSpan} from './grid';
 
 /**
  * A content block offered in a column, as the host declares it to the section builder:
@@ -11,10 +11,29 @@ export type ContentBlock = {
   block: Block;
   /** Minimum width of the column, out of GRID_COLUMNS. */
   minSpan: ColumnSpan;
+  /** Maximum width of the column (full width when omitted): for contents that must not spread out. */
+  maxSpan?: ColumnSpan;
+  /** The column stretches to its row's height and the content fills it (cards side by side). */
+  fill?: boolean;
 };
 
 /** Block slug → minimum span, for the admin builder (serialisable client props). */
 export const minSpanMap = (blocks: readonly ContentBlock[]): Record<string, ColumnSpan> => Object.fromEntries(blocks.map((b) => [b.block.slug, b.minSpan]));
+
+/** Block slug → maximum span (GRID_COLUMNS when none). */
+export const maxSpanMap = (blocks: readonly ContentBlock[]): Record<string, ColumnSpan> => Object.fromEntries(blocks.map((b) => [b.block.slug, b.maxSpan ?? GRID_COLUMNS]));
+
+/**
+ * Width of the column that holds a block's field, from a field validation:
+ * `path` is the field's path ([…, 'columns', j, 'contents', k, …]) and `data` the document.
+ * Lets a block check its own settings against its column (a steps panel and its capacity).
+ */
+export function columnSpanAt(data: unknown, path: readonly (number | string)[]): ColumnSpan {
+  const at = path.lastIndexOf('contents');
+  if (at < 0) return GRID_COLUMNS;
+  const column = path.slice(0, at).reduce<unknown>((o, k) => (o && typeof o === 'object' ? (o as Record<string, unknown>)[String(k)] : undefined), data);
+  return toSpan((column as {span?: unknown} | undefined)?.span);
+}
 
 /** A block's singular label as it can travel to a client component (functions are not serialisable). */
 export const staticLabel = (block: Block): string | Record<string, string> => {

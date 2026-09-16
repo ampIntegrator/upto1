@@ -14,6 +14,7 @@ import {type Gaps, sectionGaps, siteGaps} from '@/fields/sections/gaps';
 import {MEDIA_SLUG} from '@/fields/blocks/mediaBlock';
 import {MEDIA_QUOTE_SLUG} from '@/fields/blocks/mediaQuoteBlock';
 import {TEXT_SLUG} from '@/fields/blocks/textBlock';
+import {sections as siteSections} from '@/sections.config';
 import {hasMobileOrder, mobileRanks} from '@/fields/sections/mobileOrder';
 import {type ColumnSpan, toSpan} from '@/fields/sections/grid';
 import type {NucleoIconKey} from '@/theme/icons/nucleo';
@@ -112,6 +113,9 @@ function toMediaQuote(b: MediaQuoteBlockData): ContentData | null {
   return {type: 'mediaQuote', mediaQuote: {...image.media, text: b.text, tag: (b.tag ?? 'h2') as MediaQuoteTag, size: (b.size ?? 'display-3') as MediaQuoteSize}};
 }
 
+/** Blocks whose column stretches to the row's height (declared by the site's ContentBlocks). */
+const FILL_SLUGS = new Set(siteSections.blocks.filter((b) => b.fill).map((b) => b.block.slug));
+
 /** Displayed width of a column depending on the screen, so the browser downloads the right size. */
 const columnSizes = (span: number): string => `(max-width: 767px) 100vw, (max-width: 1440px) ${Math.round((span / 12) * 100)}vw, ${Math.round((span / 12) * 1440)}px`;
 
@@ -151,13 +155,14 @@ function sectionRows(rows: SectionSource['rows']): ColumnData[][] {
   const built = (rows ?? []).map((r) => {
     const columns = (r.columns ?? []).map((c) => {
       const contents = (c.contents ?? []).map(toContent).filter((x): x is ContentData => x !== null);
-      return {span: toSpan(c.span), contents, empty: contents.length === 0, mobileOrder: c.mobileOrder};
+      const fill = (c.contents ?? []).some((b) => FILL_SLUGS.has(b.blockType));
+      return {span: toSpan(c.span), contents, empty: contents.length === 0, mobileOrder: c.mobileOrder, fill};
     });
     // an image (with or without quote) only sets its desktop height if the row has no other content
     const isImage = (x: ContentData) => x.type === 'media' || x.type === 'mediaQuote';
     const otherContent = columns.some((c) => c.contents.some((x) => !isImage(x)));
     return columns.map((c) => {
-      const stretch = c.contents.some(isImage);
+      const stretch = c.fill || c.contents.some(isImage);
       const fit = <T extends {minHeight?: number; sizes?: string}>(p: T): T => ({...p, minHeight: otherContent ? undefined : p.minHeight, sizes: columnSizes(c.span)});
       const contents = c.contents.map((x): ContentData => (x.type === 'media' ? {...x, media: fit(x.media)} : x.type === 'mediaQuote' ? {...x, mediaQuote: fit(x.mediaQuote)} : x));
       return {...c, contents, stretch};
@@ -166,7 +171,7 @@ function sectionRows(rows: SectionSource['rows']): ColumnData[][] {
   const flat = built.flat();
   const ranks = hasMobileOrder(flat) ? mobileRanks(flat) : null;
   let k = 0;
-  return built.map((columns) => columns.map(({mobileOrder: _m, ...c}) => ({...c, mobileRank: ranks?.[k++] ?? undefined})));
+  return built.map((columns) => columns.map(({mobileOrder: _m, fill: _f, ...c}) => ({...c, mobileRank: ranks?.[k++] ?? undefined})));
 }
 
 /**

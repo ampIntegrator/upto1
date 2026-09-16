@@ -43,3 +43,20 @@ describe('grille du constructeur de sections', () => {
     expect(tooNarrowError('Price list', 8, 4, 'en')).toMatch(/needs at least 8 columns/);
   });
 });
+
+describe('déclarations des blocs de contenu', async () => {
+  const {columnSpanAt, maxSpanMap} = await import('@/fields/sections/contentBlock');
+  const {tooWideError} = await import('@/fields/sections/validation');
+  it('retrouve la largeur de la colonne depuis le chemin d’un champ de bloc', () => {
+    const data = {sections: [{rows: [{columns: [{span: '8', contents: [{blockType: 'processSteps', steps: []}]}]}]}]};
+    expect(columnSpanAt(data, ['sections', 0, 'rows', 0, 'columns', 0, 'contents', 0, 'steps'])).toBe(8);
+    expect(columnSpanAt(data, ['title'])).toBe(12);
+  });
+  it('donne 12 comme maximum aux blocs qui n’en déclarent pas', () => {
+    expect(maxSpanMap([{block: {slug: 'a', fields: []}, minSpan: 2}, {block: {slug: 'b', fields: []}, minSpan: 3, maxSpan: 4}])).toEqual({a: 12, b: 4});
+  });
+  it('refuse un contenu trop large, dans la langue de l’admin', () => {
+    expect(tooWideError('FAQ', 9, 12, 'fr')).toMatch(/ne dépasse pas 9 colonnes/);
+    expect(tooWideError('FAQ', 9, 12, 'en')).toMatch(/must not exceed 9 columns/);
+  });
+});
