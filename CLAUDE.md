@@ -34,8 +34,8 @@ MORE CLI:
 
 `src/fields/sections/` is a neutral core, meant to become a Payload plugin: it knows no
 component, no theme, no media collection. Never import `src/components/` from it. Everything
-site-specific goes through `src/sections.config.ts` and `src/fields/blocks/`. Audit and plan:
-`section-builder-audit.md`; full doc: `docs/section-builder.md`.
+site-specific goes through `src/sections.config.ts` and `src/fields/blocks/`. Audit, plan and
+full doc: `docs/section-builder.md`.
 
 Adding a column component, in this order:
 1. Branch `astryx`: the component in `src/components/`, its showcase in the `/design` catalogue,
