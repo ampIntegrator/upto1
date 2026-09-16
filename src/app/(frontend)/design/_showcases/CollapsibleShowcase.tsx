@@ -15,8 +15,8 @@ import {FAQ} from './faq.shared';
 function Pair() {
   return (
     <Grid columns={{minWidth: 420, max: 2}} gap={6} align="start">
-      <Collapsible question={FAQ[0].q} defaultIsOpen><Text type="body">{FAQ[0].a}</Text></Collapsible>
-      <Collapsible question={FAQ[1].q}><Text type="body">{FAQ[1].a}</Text></Collapsible>
+      <Collapsible question={FAQ[0].q} defaultIsOpen><Text as="p" type="body">{FAQ[0].a}</Text></Collapsible>
+      <Collapsible question={FAQ[1].q} tag="p"><Text as="p" type="body">{FAQ[1].a}</Text></Collapsible>
     </Grid>
   );
 }

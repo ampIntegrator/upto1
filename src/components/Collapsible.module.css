@@ -1,7 +1,6 @@
 /*
  * Collapsible — accordion item (mockup 11-faq, orbita.css .faq-*).
- * The .astryx-collapsible-* classes are those of the Astryx Collapsible; the
- * !important rules override its StyleX classes.
+ * Own markup: heading > button (trigger), then the answer region.
  */
 .item {
   --faq-border: light-dark(var(--color-border), rgba(255, 255, 255, 0.15));
@@ -17,23 +16,30 @@
     border-color var(--duration-medium) var(--ease-standard);
 }
 .item:hover { border-color: var(--faq-border-hover); }
-.item:has(:global(.astryx-collapsible-trigger[aria-expanded='true'])) {
+.item[data-open] {
   background: var(--color-accent);
   border-color: var(--color-accent);
 }
+.item[data-disabled] { opacity: 0.5; }
 
-/* Astryx trigger: full width, mockup padding, no chevron */
-.item :global(.astryx-collapsible-trigger) {
-  width: 100% !important;
-  padding: 20px 24px !important;
-  background: none !important;
-  border: 0 !important;
-  border-radius: 0 !important;
+/* the question's element (heading, p or span): no own typography, the button carries it */
+.heading { margin: 0; padding: 0; font: inherit; display: block; }
+
+/* trigger: full width, mockup padding */
+.trigger {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 20px 24px;
+  background: none;
+  border: 0;
+  border-radius: 0;
   cursor: pointer;
   text-align: left;
+  color: inherit;
 }
-.item :global(.astryx-collapsible-trigger > .astryx-icon) { display: none !important; }
-.item :global(.astryx-collapsible-trigger:focus-visible) {
+.trigger:disabled { cursor: default; }
+.trigger:focus-visible {
   outline: 2px solid light-dark(var(--color-accent), var(--color-highlight));
   outline-offset: -2px;
 }
@@ -52,7 +58,7 @@
   color: light-dark(var(--color-text-primary), #FFFFFF);
   transition: color var(--duration-medium) var(--ease-standard);
 }
-.item:has(:global(.astryx-collapsible-trigger[aria-expanded='true'])) .question { color: var(--faq-open-fg); }
+.item[data-open] .question { color: var(--faq-open-fg); }
 
 /* plus → minus icon, drawn in CSS (two strokes) */
 .icon { position: relative; flex: 0 0 auto; width: 18px; height: 18px; }
@@ -67,19 +73,18 @@
 }
 .icon::before { left: 0; right: 0; top: 50%; height: 2px; transform: translateY(-50%); }
 .icon::after { top: 0; bottom: 0; left: 50%; width: 2px; transform: translateX(-50%); }
-.item:has(:global(.astryx-collapsible-trigger[aria-expanded='true'])) .icon::before,
-.item:has(:global(.astryx-collapsible-trigger[aria-expanded='true'])) .icon::after { background: var(--faq-open-fg); }
-.item:has(:global(.astryx-collapsible-trigger[aria-expanded='true'])) .icon::after { transform: translateX(-50%) scaleY(0); }
+.item[data-open] .icon::before,
+.item[data-open] .icon::after { background: var(--faq-open-fg); }
+.item[data-open] .icon::after { transform: translateX(-50%) scaleY(0); }
 
-/* answer: Astryx hides it with display:none; we keep it in the flow and
-   animate the height (grid 0fr → 1fr) like the mockup */
-.item :global(.astryx-collapsible-content) {
-  display: grid !important;
+/* answer: kept in the flow, height animated (grid 0fr → 1fr) like the mockup */
+.content {
+  display: grid;
   grid-template-rows: 0fr;
   visibility: hidden;
   transition: grid-template-rows 0.3s var(--ease-standard), visibility 0s linear 0.3s;
 }
-.item :global(.astryx-collapsible-trigger[aria-expanded='true'] + .astryx-collapsible-content) {
+.item[data-open] .content {
   grid-template-rows: 1fr;
   visibility: visible;
   transition: grid-template-rows 0.3s var(--ease-standard), visibility 0s linear 0s;
@@ -87,14 +92,18 @@
 .answer {
   overflow: hidden;
   min-height: 0;
+  padding: 0 24px;
+  gap: 12px;
 }
-.answer > * {
+.item[data-open] .answer { padding-bottom: 24px; }
+/* the answer's paragraphs: white on the silo fill, whatever their own colour */
+.answer > *,
+.answer p {
   margin: 0;
-  padding: 0 24px 24px;
   font-size: 14px;
   line-height: 1.6;
-  color: color-mix(in srgb, var(--faq-open-fg) 86%, transparent);
+  color: var(--faq-open-fg);
 }
 @media (prefers-reduced-motion: reduce) {
-  .item :global(.astryx-collapsible-content), .icon::before, .icon::after { transition: none; }
+  .content, .icon::before, .icon::after { transition: none; }
 }
