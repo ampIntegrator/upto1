@@ -44,6 +44,7 @@ export type ContentRef =
   | {type: 'priceList'; variant: 'single'}
   | {type: 'priceList'; variant: 'columns'; plans: number}
   | {type: 'plan'}
+  | {type: 'collection'; perView: 2 | 3 | 4}
   | {type: 'statsBar'};
 
 export type ContentType = ContentRef['type'];
@@ -60,6 +61,16 @@ export function stepsCapacity(span: number): 0 | 1 | 2 | 3 | 4 {
   if (span >= 4) return 1;
   return 0;
 }
+/**
+ * Collection (identical items side by side): 3 items at most on 8 or 9 columns, 4 on 12;
+ * not offered below 8 (decided 16 Sept. 2026).
+ */
+export function collectionCapacity(span: number): 0 | 3 | 4 {
+  if (span >= 12) return 4;
+  if (span >= 8) return 3;
+  return 0;
+}
+
 const stepsMinSpan = (steps: number): ColumnSpan => STEPS_MIN_SPAN[Math.min(Math.max(Math.round(steps), 1), 4) as 1 | 2 | 3 | 4];
 
 /**
@@ -93,6 +104,8 @@ export const CONTENT_SPECS: {[T in ContentType]: {label: string; minSpan: (c: Ex
   priceList: {label: 'Liste de prix', minSpan: (c) => (c.variant === 'single' ? 6 : snapUp(c.plans * 4)), maxSpan: 9},
   // one tier per column, three or four side by side
   plan: {label: 'Palier de prix', minSpan: () => 3, maxSpan: 4},
+  // identical items side by side, swipe or carousel: from 8 columns, 4 per view needs 12
+  collection: {label: 'Collection', minSpan: (c) => (c.perView >= 4 ? 12 : 8)},
   statsBar: {label: 'Barre de chiffres', minSpan: () => 12},
 };
 
@@ -120,6 +133,8 @@ export function describeContent(content: ContentRef): string {
       return `${label} à ${content.columns} colonnes`;
     case 'processSteps':
       return `${label} (${content.steps})`;
+    case 'collection':
+      return `${label}, ${content.perView} visibles`;
     case 'priceList':
       return content.variant === 'single' ? `${label}, prix unique` : `${label} en ${content.plans} colonnes (catalogue)`;
     default:

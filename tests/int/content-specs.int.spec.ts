@@ -1,6 +1,6 @@
 import {describe, expect, it} from 'vitest';
 
-import {columnMinSpan, maxSpan, minSpan, STEPS_MIN_SPAN, stepsCapacity} from '@/components/content-specs';
+import {collectionCapacity, columnMinSpan, maxSpan, minSpan, STEPS_MIN_SPAN, stepsCapacity} from '@/components/content-specs';
 
 describe('registre des emprises', () => {
   it('donne une emprise fixe aux contenus simples', () => {
@@ -34,6 +34,13 @@ describe('registre des emprises', () => {
     expect(minSpan({type: 'processSteps', steps: 3})).toBe(8);
     expect(minSpan({type: 'processSteps', steps: 4})).toBe(12);
     expect([2, 3, 4, 5, 6, 7, 8, 9, 12].map(stepsCapacity)).toEqual([0, 0, 1, 1, 2, 2, 3, 3, 4]);
+  });
+
+  it('collection : dès 8 colonnes, 3 visibles sur 8 et 9, 4 sur 12', () => {
+    expect(minSpan({type: 'collection', perView: 2})).toBe(8);
+    expect(minSpan({type: 'collection', perView: 3})).toBe(8);
+    expect(minSpan({type: 'collection', perView: 4})).toBe(12);
+    expect([6, 7, 8, 9, 12].map(collectionCapacity)).toEqual([0, 0, 3, 3, 4]);
   });
 
   it('prend le contenu le plus large pour une colonne', () => {

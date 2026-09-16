@@ -143,6 +143,15 @@ export const CATALOG: CatalogCategory[] = [
         "doc": null
       },
       {
+        "name": "Collection",
+        "label": "Collection",
+        "slug": "collection",
+        "href": "/design/composants/collection",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
         "name": "CompareCard",
         "label": "Compare Card",
         "slug": "compare-card",

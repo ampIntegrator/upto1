@@ -41,6 +41,7 @@ const plan = (name: string, value: string, opts: {featured?: boolean; inherits?:
 const faq = (n: number, columns: '1' | '2' = '1') => ({blockType: 'faq', mode: 'single', columns, firstOpen: true, items: Array.from({length: n}, (_, i) => ({question: `Lorem ipsum dolor sit amet ${i + 1} ?`, answer: LOREM_LONG}))});
 const testimonial = (name: string, result?: string) => ({blockType: 'testimonial', quote: `${LOREM} ${LOREM_2}`, name, role: 'Courtier · Lyon', result});
 const compare = (label: string, tone: 'danger' | 'high', check: 'check' | 'cross', featured = false) => ({blockType: 'compareCard', chipLabel: label, chipTone: tone, meta: featured ? '20 min chrono' : '3 semaines', quote: `« ${LOREM} »`, items: Array.from({length: 4}, (_, i) => ({label: `Lorem ipsum ${i + 1} dolor sit amet`})), tone: check, featured});
+const collection = (items: Record<string, unknown>[], opts: Record<string, unknown> = {}) => ({blockType: 'collection', layout: 'carousel', perView: '3', step: 'page', indicator: 'segments', arrows: true, source: 'manual', items, ...opts});
 const steps = (n: number) => ({blockType: 'processSteps', steps: Array.from({length: n}, (_, i) => ({title: `Lorem ${i + 1}`, text: LOREM, duration: `${5 * (i + 1)} min`, checks: [{label: 'Lorem ipsum dolor'}, {label: 'Sit amet consectetur'}], asterisk: i === n - 1}))});
 
 async function main() {
@@ -86,6 +87,12 @@ async function main() {
         light([row(column(4, testimonial('Sophie M.', '+ 28 %')), column(4, testimonial('Karim B.')), column(4, testimonial('Léa D.', '+ 12 000 € / trimestre'))), row(column(3, testimonial('Marc P.')), column(3, testimonial('Inès R.', '× 2')), column(3, testimonial('Paul V.')), column(3, testimonial('Nora K.', '+ 34 %')))], {tint: 'highlight', texture: 'grid'}),
         light([row(column(6, compare('AVANT', 'danger', 'cross')), column(6, compare('APRÈS', 'high', 'check', true))), row(column(4, compare('COURTIER', 'high', 'check')), column(4, compare('AGENT', 'high', 'check', true)), column(4, compare('PROMOTEUR', 'high', 'check'))), row(column(3, compare('A', 'high', 'check')), column(3, compare('B', 'danger', 'cross')), column(3, compare('C', 'high', 'check', true)), column(3, compare('D', 'high', 'check')))]),
         dark([row(column(4, testimonial('Sophie M.', '+ 28 %')), column(4, testimonial('Karim B.')), column(4, testimonial('Léa D.'))), row(column(6, compare('AVANT', 'danger', 'cross')), column(6, compare('APRÈS', 'high', 'check', true)))]),
+        light([
+          row(column(12, collection(['Sophie M.', 'Karim B.', 'Léa D.', 'Marc P.', 'Inès R.', 'Paul V.', 'Nora K.'].map((n, i) => testimonial(n, i % 2 ? undefined : '+ 28 %'))))),
+          row(column(12, collection(Array.from({length: 8}, (_, i) => cardImage([chantier, bureau, immeuble, analyse][i % 4], `Carte ${i + 1}`)), {perView: '4', indicator: 'dots', step: 'item'}))),
+          row(column(8, collection(['COURTIER', 'AGENT', 'PROMOTEUR', 'ARTISAN', 'BANQUE'].map((l, i) => compare(l, 'high', 'check', i === 1)), {layout: 'swipe'})), column(4, text())),
+          row(column(12, collection([], {source: 'posts', postsLimit: 6, postsCta: 'Lire l’article', indicator: 'numbers'}))),
+        ], {anchor: 'collections'}),
         light([row(column(12, mediaQuote(analyse)))]),
       ],
     },

@@ -41,6 +41,13 @@ export async function getSite(locale: Locale) {
   return {settings, languages, header, footer, posts: posts.docs};
 }
 
+/** Latest posts for a collection block fed by the blog (optional category). */
+export async function loadPosts(locale: Locale, q: {limit: number; category?: number}): Promise<Post[]> {
+  const payload = await getPayload({config});
+  const res = await payload.find({collection: 'posts', locale, depth: 1, limit: q.limit, sort: '-publishedAt', where: q.category ? {category: {equals: q.category}} : undefined});
+  return res.docs;
+}
+
 export function toStrip(s: Settings): SiteStrip {
   return {
     phone: s.phone ? {label: s.phone, href: s.phoneHref || `tel:${s.phone.replace(/\s/g, '')}`} : undefined,

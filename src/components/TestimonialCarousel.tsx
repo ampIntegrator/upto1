@@ -3,21 +3,21 @@
 /**
  * TestimonialCarousel — the testimonials carousel (mockup 07): Astryx Carousel
  * (native scrolling, snap, drag) without its buttons or edge fade; below it,
- * the mockup's controls: page segments on the left, square arrows on the right
- * (hidden below 640 px, where you swipe). 1, 2 or 3 cards per view depending on width
- * (640, 1280); the segments count pages, not cards. Light or night via the
+ * the mockup's controls (CarouselControls): page segments on the left, square arrows
+ * on the right, hidden below 640 px where you swipe. 1, 2 or 3 cards per view depending
+ * on width (640, 1280); the segments count pages, not cards. Light or night via the
  * Section (night-halo for mockup 07b).
  */
 import {Carousel, type CarouselHandle} from '@astryxdesign/core/Carousel';
-import {IconButton} from '@astryxdesign/core/IconButton';
-import {HStack, VStack} from '@astryxdesign/core/Stack';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {VStack} from '@astryxdesign/core/Stack';
+import React, {useEffect, useRef, useState} from 'react';
 
-import {ArrowLeftIcon, ArrowRightIcon} from '@/theme/icons/nucleo';
+import {CarouselControls} from './CarouselControls';
 import {TestimonialCard, type Testimonial} from './TestimonialCard';
+import styles from './TestimonialCarousel.module.css';
+import {useCarouselPages} from './useCarouselPages';
 
 export type {Testimonial};
-import styles from './TestimonialCarousel.module.css';
 
 export type TestimonialCarouselProps = {
   items: Testimonial[];
@@ -36,8 +36,6 @@ export function TestimonialCarousel({items, label = 'Témoignages'}: Testimonial
   const handle = useRef<CarouselHandle>(null);
   const root = useRef<HTMLDivElement>(null);
   const [perView, setPerView] = useState(3);
-  const [page, setPage] = useState(0);
-  const pages = Math.max(1, Math.ceil(items.length / perView));
 
   // cards per view: follows the breakpoints
   useEffect(() => {
@@ -48,36 +46,7 @@ export function TestimonialCarousel({items, label = 'Témoignages'}: Testimonial
     return () => queries.forEach((q) => q.removeEventListener('change', update));
   }, []);
 
-  // active page: read from the track's scroll position (the first card of each page)
-  useEffect(() => {
-    const el = root.current;
-    if (!el) return;
-    const track = [...el.querySelectorAll<HTMLElement>('*')].find((n) => /auto|scroll/.test(getComputedStyle(n).overflowX));
-    if (!track) return;
-    let raf = 0;
-    const sync = () => {
-      const slides = [...track.querySelectorAll<HTMLElement>('[data-slide]')];
-      if (!slides.length) return;
-      const x0 = slides[0].offsetLeft;
-      let best = 0;
-      let dist = Infinity;
-      for (let p = 0; p < pages; p++) {
-        const i = Math.min(p * perView, slides.length - 1);
-        const d = Math.abs(slides[i].offsetLeft - x0 - track.scrollLeft);
-        if (d < dist) { dist = d; best = p; }
-      }
-      setPage(best);
-    };
-    const onScroll = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(sync); };
-    track.addEventListener('scroll', onScroll, {passive: true});
-    sync();
-    return () => { track.removeEventListener('scroll', onScroll); cancelAnimationFrame(raf); };
-  }, [pages, perView, items.length]);
-
-  const go = useCallback((p: number) => {
-    const target = Math.max(0, Math.min(p, pages - 1));
-    handle.current?.scrollTo(target * perView);
-  }, [pages, perView]);
+  const {page, pages, go} = useCarouselPages(root, handle, items.length, perView);
 
   return (
     <VStack gap={6} className={styles.root}>
@@ -88,19 +57,7 @@ export function TestimonialCarousel({items, label = 'Témoignages'}: Testimonial
           </VStack>
         ))}
       </Carousel>
-      {pages > 1 ? (
-        <HStack justify="between" vAlign="center" gap={3} className={styles.ui}>
-          <HStack gap={1.5} role="tablist" aria-label="Pages d'avis">
-            {Array.from({length: pages}, (_, p) => (
-              <button key={p} type="button" role="tab" aria-selected={p === page} aria-label={`Page ${p + 1}`} className={styles.seg} onClick={() => go(p)} />
-            ))}
-          </HStack>
-          <HStack gap={1.5}>
-            <IconButton label="Avis précédents" icon={<ArrowLeftIcon />} variant="ghost" isDisabled={page <= 0} onClick={() => go(page - 1)} className={styles.arrow} />
-            <IconButton label="Avis suivants" icon={<ArrowRightIcon />} variant="ghost" isDisabled={page >= pages - 1} onClick={() => go(page + 1)} className={styles.arrow} />
-          </HStack>
-        </HStack>
-      ) : null}
+      <CarouselControls page={page} pages={pages} onChange={go} labels={{pages: "Pages d'avis", prev: 'Avis précédents', next: 'Avis suivants'}} />
     </VStack>
   );
 }

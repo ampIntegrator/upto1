@@ -38,6 +38,8 @@ async function main() {
   };
   await expectError('FAQ on 12 columns', [[column(12, {blockType: 'faq', items: [{question: 'Q ?', answer: 'R.'}]})]], /ne dépasse pas 9|must not exceed 9/);
   await expectError('3 steps on 6 columns', [[column(6, {blockType: 'processSteps', steps: steps(3)}), column(6)]], /accepte 2|holds 2/);
+  await expectError('collection with 4 per view on 9 columns', [[column(9, {blockType: 'collection', layout: 'swipe', perView: '4', source: 'manual', items: [{blockType: 'testimonial', quote: 'A', name: 'A'}, {blockType: 'testimonial', quote: 'B', name: 'B'}]}), column(3)]], /accepte 3|holds 3/);
+  await expectError('collection with mixed items', [[column(12, {blockType: 'collection', layout: 'swipe', perView: '3', source: 'manual', items: [{blockType: 'testimonial', quote: 'A', name: 'A'}, {blockType: 'cardTitle', title: 'B'}]})]], /même type|same type/);
   await expectError('tier on 6 columns', [[column(6, {blockType: 'plan', name: 'Pro', price: {value: '79'}, cta: {label: 'Go', href: '#'}, features: [{label: 'A'}]}), column(6)]], /ne dépasse pas 4|must not exceed 4/);
 
   // 2 · a valid throwaway page with every block
@@ -59,6 +61,8 @@ async function main() {
             column(4, {blockType: 'compareCard', chipLabel: 'APRÈS SMOKE', chipTone: 'high', quote: 'Voici le détail.', items: [{label: 'Le mandat est signé'}], tone: 'check', featured: true}),
           ],
           [column(8, {blockType: 'processSteps', steps: steps(2)}), column(4)],
+          [column(12, {blockType: 'collection', layout: 'carousel', perView: '3', step: 'page', indicator: 'dots', arrows: true, source: 'manual', items: [1, 2, 3, 4].map((i) => ({blockType: 'testimonial', quote: `Citation collection ${i}.`, name: `Témoin collection ${i}`}))})],
+          [column(9, {blockType: 'collection', layout: 'swipe', perView: '3', source: 'posts', postsLimit: 3, postsCta: 'Lire l’article'}), column(3)],
         ]),
       ],
     } as never,
@@ -66,7 +70,7 @@ async function main() {
   log(`page created: ${page.id} (${slug})`);
   try {
     const html = await (await fetch(`${BASE}/${slug}`)).text();
-    for (const marker of ['Valeur totale', 'Question smoke', 'Palier smoke', 'Témoin Smoke', 'APRÈS SMOKE', 'Étape 2', 'data-steps="2"']) check(html.includes(marker), `site renders « ${marker} »`);
+    for (const marker of ['Valeur totale', 'Question smoke', 'Palier smoke', 'Témoin Smoke', 'APRÈS SMOKE', 'Étape 2', 'data-steps="2"', 'Témoin collection 4', 'data-layout="carousel"', 'Lire l’article']) check(html.includes(marker), `site renders « ${marker} »`);
     check(!/Unhandled Runtime Error|Build Error/.test(html), 'site page without runtime error');
   } finally {
     await payload.delete({collection: 'pages', id: page.id});
