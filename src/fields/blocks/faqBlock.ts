@@ -11,7 +11,6 @@ const block: Block = {
   slug: FAQ_SLUG,
   labels: {singular: t.name, plural: t.plural},
   imageURL: `/apercus/${FAQ_SLUG}.png`,
-  admin: {group: t.group},
   fields: [
     {
       type: 'row',

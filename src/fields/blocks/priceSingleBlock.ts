@@ -12,7 +12,6 @@ const block: Block = {
   slug: PRICE_SINGLE_SLUG,
   labels: {singular: t.name, plural: t.plural},
   imageURL: `/apercus/${PRICE_SINGLE_SLUG}.png`,
-  admin: {group: t.group},
   fields: [
     {name: 'featuresLabel', type: 'text', label: t.featuresLabel, localized: true},
     featuresField,

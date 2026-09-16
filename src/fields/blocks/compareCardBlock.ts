@@ -11,7 +11,6 @@ const block: Block = {
   slug: COMPARE_CARD_SLUG,
   labels: {singular: t.name, plural: t.plural},
   imageURL: `/apercus/${COMPARE_CARD_SLUG}.png`,
-  admin: {group: t.group},
   fields: [
     {
       type: 'row',

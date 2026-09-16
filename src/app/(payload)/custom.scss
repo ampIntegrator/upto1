@@ -22,3 +22,29 @@
     grid-template-columns: repeat(6, 48px);
   }
 }
+
+/* Block picker of a column: one dense grid of six, whatever the drawer width
+   (Payload drops to 5, 3 or 2 columns on its own breakpoints), uniform 3/2
+   thumbnails cropped from the top, short labels. */
+.blocks-drawer__blocks {
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  gap: 12px;
+}
+.blocks-drawer__block .thumbnail-card {
+  padding: 6px;
+}
+.blocks-drawer__block .thumbnail-card__thumbnail {
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  img,
+  svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+}
+.blocks-drawer__block .thumbnail-card__label {
+  padding: 8px 4px 2px;
+  font-size: 13px;
+}

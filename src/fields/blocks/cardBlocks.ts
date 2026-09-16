@@ -63,7 +63,6 @@ for (const clickable of [false, true]) {
       slug,
       labels: {singular: label, plural: mapText((lang) => `${label[lang]}${t.pluralSuffix[lang]}`)},
       imageURL: `/apercus/${slug}.png`,
-      admin: {group: clickable ? t.groups.clickableCards : t.groups.cards},
       fields: [...m.fields, ...COMMON, ...(clickable ? [linkGroup('cta', t.fields.cta, {required: true})] : [])],
     };
     CARD_BLOCKS.push({block, minSpan: CARD_MIN_SPAN});
