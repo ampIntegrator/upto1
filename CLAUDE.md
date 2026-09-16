@@ -53,3 +53,5 @@ up to 12. A component that subdivides (card grid, price list, steps) carries its
 will need a data-dependent `minSpan(data)` on the server (not done yet).
 
 `consignes.md` is Nicolas's own scratch file: read it, never write to it.
+
+Current handoff (tabs, button group, row layouts): `docs/handoff-2026-09-17.md`. Read it first.
