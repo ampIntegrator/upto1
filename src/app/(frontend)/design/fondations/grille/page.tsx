@@ -5,7 +5,8 @@ import {Table} from '@astryxdesign/core/Table';
 import {Text} from '@astryxdesign/core/Text';
 import React from 'react';
 
-import {COLUMN_SPANS, CONTENT_SPECS, type ContentRef, describeContent, minSpan} from '@/components/content-specs';
+import {CONTENT_SPECS, type ContentRef, describeContent, minSpan} from '@/components/content-specs';
+import {COLUMN_SPANS} from '@/fields/sections/grid';
 import {PageIntro} from '../../_ui/PageIntro';
 
 export const metadata = {title: 'Grille & emprises — Design system Vidomia'};
@@ -50,7 +51,7 @@ export default function Page() {
 
       <VStack gap={3}>
         <Heading level={2}>Emprise minimale des contenus</Heading>
-        <Text type="body" color="secondary">Registre : src/components/content-specs.ts. Quand un réglage change l'emprise (colonnes internes, nombre d'étapes ou de paliers), la table montre chaque cas.</Text>
+        <Text type="body" color="secondary">Registre : src/components/content-specs.ts ; grille : src/fields/sections/grid.ts. Quand un réglage change l'emprise (colonnes internes, nombre d'étapes ou de paliers), la table montre chaque cas.</Text>
         <Table<Row>
           data={ROWS}
           idKey="id"

@@ -29,16 +29,17 @@ import type {ArrayFieldClient, ArrayFieldClientProps, ClientField, SanitizedFiel
 import {getTranslation} from '@payloadcms/translations';
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 
-import {minSpan, type ColumnSpan} from '@/components/content-specs';
+import {minSpan} from '@/components/content-specs';
 import {tr} from '@/i18n/admin/languages';
 import {sectionsText as T} from '@/i18n/admin/sections';
 import {useAdminText} from '@/i18n/admin/useAdminText';
 
-import {contentLabel, rowWidthError, toContentRef} from './contentRef';
+import {contentLabel, toContentRef} from './contentRef';
 import {EMPTY_SLUG} from './emptyBlock';
 import {hasMobileOrder, mobileSequence} from './mobileOrder';
-import {presetLabel, ROW_PRESETS, spansKey, toSpan} from './presets';
+import {type ColumnSpan, presetLabel, ROW_PRESETS, spansKey, toSpan} from './grid';
 import {type SortableHandle, SortableItem, SortableList} from './sortable';
+import {rowWidthError} from './validation';
 
 /** filled: the column has a real component (an empty cell does not count) */
 /** narrow: minimum width required by the component when the column is too narrow, otherwise null */

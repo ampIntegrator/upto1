@@ -1,6 +1,6 @@
 /**
- * Span registry — the single source of truth on "which content fits in which
- * column". Decided on 11 Sept. 2026:
+ * Span registry of the Astryx catalogue: which content needs how many page columns.
+ * Decided on 11 Sept. 2026:
  *
  *   - A page = Sections; a Section = rows; a row = columns whose
  *     widths (out of 12) add up to 12; a column = contents stacked vertically.
@@ -12,15 +12,16 @@
  *   - Below 768 px, all columns go full width, in the section's mobile
  *     order, empty columns hidden (styles.css, .page-grid; fields/sections/mobileOrder.ts).
  *
- * This file is consumed by the front end (Fondations « Grille » page) and by the Payload config
- * (src/fields/sections): `validateColumn` and `validateRow` are the validations of a column's
- * width, with these messages in French in the admin. No visual values here:
- * only grid widths and rules.
+ * The grid itself (number of columns, allowed widths, row layouts) belongs to the
+ * section builder: src/fields/sections/grid.ts. This file only maps the catalogue's
+ * components to a minimum width, for the Fondations « Grille » page and for the
+ * Payload blocks of the site (src/fields/blocks), which declare their minimum span
+ * from here. No visual values: only grid widths.
  */
 
-/** Allowed column widths (out of 12). */
-export const COLUMN_SPANS = [2, 3, 4, 5, 6, 7, 8, 9, 12] as const;
-export type ColumnSpan = (typeof COLUMN_SPANS)[number];
+import {type ColumnSpan, snapUp} from '@/fields/sections/grid';
+
+export type {ColumnSpan};
 
 /** A content placed in a column, with only the settings that change its span. */
 export type ContentRef =
@@ -45,11 +46,6 @@ export type ContentRef =
   | {type: 'statsBar'};
 
 export type ContentType = ContentRef['type'];
-
-/** Rounds a computed span up to the next allowed column width. */
-function snapUp(n: number): ColumnSpan {
-  return COLUMN_SPANS.find((s) => s >= n) ?? 12;
-}
 
 /** Label (admin, catalog) and minimum span of each content. */
 export const CONTENT_SPECS: {[T in ContentType]: {label: string; minSpan: (c: Extract<ContentRef, {type: T}>) => ColumnSpan}} = {
@@ -103,17 +99,3 @@ export function describeContent(content: ContentRef): string {
   }
 }
 
-/** Errors of a column: each content too wide for the chosen width. */
-export function validateColumn(span: ColumnSpan, contents: ContentRef[]): string[] {
-  return contents.flatMap((c) => {
-    const min = minSpan(c);
-    return min > span ? [`« ${describeContent(c)} » a besoin d'au moins ${min} colonnes ; cette colonne en fait ${span}.`] : [];
-  });
-}
-
-/** Error of a row: the widths must add up to 12. */
-export function validateRow(spans: ColumnSpan[]): string | null {
-  if (!spans.length) return 'Une rangée contient au moins une colonne.';
-  const total = spans.reduce<number>((s, n) => s + n, 0);
-  return total === 12 ? null : `Les largeurs des colonnes font ${total} ; il en faut 12.`;
-}
