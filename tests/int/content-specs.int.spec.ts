@@ -61,6 +61,11 @@ describe('registre des emprises', () => {
     expect(maxSpan({type: 'buttonGroup', count: 2})).toBe(12);
   });
 
+  it('en-tête de section 6 à 12, carte article 3 à 4', () => {
+    expect([minSpan({type: 'sectionHeading'}), maxSpan({type: 'sectionHeading'})]).toEqual([6, 12]);
+    expect([minSpan({type: 'postCard'}), maxSpan({type: 'postCard'})]).toEqual([3, 4]);
+  });
+
   it('prend le contenu le plus large pour une colonne', () => {
     expect(columnMinSpan([{type: 'stat'}, {type: 'card'}, {type: 'sectionNote'}])).toBe(6);
     expect(columnMinSpan([])).toBe(2);

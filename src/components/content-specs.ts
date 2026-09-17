@@ -45,6 +45,7 @@ export type ContentRef =
   | {type: 'priceList'; variant: 'single'}
   | {type: 'priceList'; variant: 'columns'; plans: number}
   | {type: 'plan'}
+  | {type: 'postCard'}
   | {type: 'collection'; perView: 2 | 3 | 4}
   | {type: 'textBox'; titleSize: 'display-1' | 'display-2' | 'display-3' | 'heading-1' | 'heading-2'}
   | {type: 'statsBar'};
@@ -117,7 +118,8 @@ export const CONTENT_SPECS: {[T in ContentType]: {label: string; minSpan: (c: Ex
   compareCard: {label: 'Carte comparative', minSpan: () => 3, maxSpan: 6},
   // card grid: 3 page columns per inner column (2 → 6, 3 → 9, 4 → 12)
   cardGrid: {label: 'Grille de cartes', minSpan: (c) => snapUp(c.columns * 3)},
-  sectionHeading: {label: 'En-tête de section', minSpan: () => 6},
+  // section heading (mockup 19): 6 to 12 columns, centred or left
+  sectionHeading: {label: 'En-tête de section', minSpan: () => 6, maxSpan: 12},
   sectionNote: {label: 'Note et bouton', minSpan: () => 6},
   // button group: capacity table (buttonsCapacity), 6 to 12 columns
   buttonGroup: {label: 'Groupe de boutons', minSpan: (c) => buttonsMinSpan(c.count), maxSpan: 12},
@@ -132,6 +134,8 @@ export const CONTENT_SPECS: {[T in ContentType]: {label: string; minSpan: (c: Ex
   priceList: {label: 'Liste de prix', minSpan: (c) => (c.variant === 'single' ? 6 : snapUp(c.plans * 4)), maxSpan: 9},
   // one tier per column, three or four side by side
   plan: {label: 'Palier de prix', minSpan: () => 3, maxSpan: 4},
+  // a chosen blog post as an article card (mockup 19), three or four side by side
+  postCard: {label: 'Carte article', minSpan: () => 3, maxSpan: 4},
   // identical items side by side, swipe or carousel: from 8 columns, 4 per view needs 12
   collection: {label: 'Collection', minSpan: (c) => (c.perView >= 4 ? 12 : 8)},
   // text box: 3 to 9 columns; the two display title sizes need 6
