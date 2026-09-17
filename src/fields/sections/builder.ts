@@ -3,6 +3,7 @@ import type {Block, CollectionBeforeChangeHook, CollectionSlug, Condition, Field
 import {sectionsText as T} from '@/i18n/admin/sections';
 
 import type {ContentBlock} from './contentBlock';
+import {GRID_COLUMNS, type PresetRow, rowTotal} from './grid';
 import {sectionFields} from './sectionFields';
 import {shareSectionsHook} from './shareSections';
 
@@ -23,6 +24,8 @@ export type SectionBuilderOptions = {
   shared?: {collection: string} | false;
   /** Shows spacing, gaps, sharing and the rows only when it holds (see SectionFieldsOptions). */
   condition?: Condition;
+  /** Extra thumbnails that create a row with blocks already placed (the slugs must be in `blocks`). */
+  presetRows?: PresetRow[];
 };
 
 export type SectionBuilder = {
@@ -36,12 +39,19 @@ export type SectionBuilder = {
   beforeChange: CollectionBeforeChangeHook[];
 };
 
-export function createSectionBuilder({blocks, settings = [], fieldName = 'sections', shared = false, condition}: SectionBuilderOptions): SectionBuilder {
+export function createSectionBuilder({blocks, settings = [], fieldName = 'sections', shared = false, condition, presetRows = []}: SectionBuilderOptions): SectionBuilder {
+  // configuration errors surface at start-up, not in the admin
+  const slugs = new Set(blocks.map((b) => b.block.slug));
+  for (const p of presetRows) {
+    if (rowTotal(p.spans) !== GRID_COLUMNS) throw new Error(`Section builder: preset row « ${p.id} » does not add up to ${GRID_COLUMNS}.`);
+    if (p.blocks.length > p.spans.length) throw new Error(`Section builder: preset row « ${p.id} » has more blocks than columns.`);
+    for (const slug of p.blocks) if (slug && !slugs.has(slug)) throw new Error(`Section builder: preset row « ${p.id} » uses the unknown block « ${slug} ».`);
+  }
   /** A section built in place. */
   const sectionBlock: Block = {
     slug: 'section',
     labels: {singular: T.blocks.section.singular, plural: T.blocks.section.plural},
-    fields: sectionFields({blocks, settings, shareable: Boolean(shared), condition}),
+    fields: sectionFields({blocks, settings, shareable: Boolean(shared), condition, presetRows}),
   };
   const sectionBlocks: Block[] = [sectionBlock];
   if (shared) {
@@ -62,7 +72,7 @@ export function createSectionBuilder({blocks, settings = [], fieldName = 'sectio
       blocks: sectionBlocks,
       admin: {description: T.blocks.sectionsDescription},
     },
-    sharedFields: sectionFields({blocks, settings, shareable: false, condition}),
+    sharedFields: sectionFields({blocks, settings, shareable: false, condition, presetRows}),
     beforeChange: shared ? [shareSectionsHook({fieldName, collection: shared.collection})] : [],
   };
 }

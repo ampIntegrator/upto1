@@ -1,0 +1,6 @@
+/* Tabs — a column content: shadowed block, fills its row, the bar scrolls beyond a minimum tab width. */
+.root { width: 100%; height: 100%; min-width: 0; box-shadow: var(--shadow-med); container-type: inline-size; }
+/* each tab keeps 144 px (4 fit a column of 6 on the site): labels wrap on two lines, then the strip scrolls instead of crushing them */
+.root :global(.astryx-tab) { min-width: 144px; }
+/* narrow column: the panel padding of a phone */
+@container (max-width: 479px) { .root :global(.orbita-tab-panel) { padding: 32px 24px; } }

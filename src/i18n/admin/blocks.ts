@@ -234,6 +234,8 @@ export const processStepsBlockText = texts({
 
 export const collectionBlockText = texts({
   name: {fr: 'Collection (contenus identiques)', en: 'Collection (identical items)'},
+  /** Label of the builder thumbnail that creates a full-width row holding a collection. */
+  rowPreset: {fr: 'Carousel', en: 'Carousel'},
   plural: {fr: 'Collections', en: 'Collections'},
   layout: {fr: 'Mise en page', en: 'Layout'},
   layoutSwipe: {fr: 'Côte à côte, glisser sur mobile', en: 'Side by side, swipe on mobile'},
@@ -254,8 +256,12 @@ export const collectionBlockText = texts({
   sourcePosts: {fr: 'Derniers articles du blog', en: 'Latest blog posts'},
   items: {fr: 'Éléments (tous du même type)', en: 'Items (all of the same type)'},
   item: {fr: 'Élément', en: 'Item'},
-  itemsDescription: {fr: 'Deux éléments au moins, tous du même type : témoignages, cartes, cartes comparatives ou paliers.', en: 'At least two items, all of the same type: testimonials, cards, compare cards or tiers.'},
+  itemsDescription: {
+    fr: 'Deux éléments au moins, tous du même type : témoignages, cartes, cartes comparatives ou paliers. Côte à côte : pas plus d’éléments que de visibles. Carrousel : autant que voulu.',
+    en: 'At least two items, all of the same type: testimonials, cards, compare cards or tiers. Side by side: no more items than visible ones. Carousel: as many as wanted.',
+  },
   postsLimit: {fr: 'Nombre d’articles', en: 'Number of posts'},
+  postsLimitDescription: {fr: 'Côte à côte : pas plus que de visibles. Carrousel : autant que voulu.', en: 'Side by side: no more than visible ones. Carousel: as many as wanted.'},
   postsCategory: {fr: 'Catégorie (vide : toutes)', en: 'Category (empty: all)'},
   postsCta: {fr: 'Libellé du lien des cartes', en: 'Card link label'},
   tooMany: {
@@ -316,4 +322,50 @@ export const textBoxBlockText = texts({
     en: ({size, span}: {size: string; span: number}) => `Size ${size} needs 6 columns; this column has ${span}.`,
   },
   tooMany: {fr: 'Deux au plus.', en: 'Two at most.'},
+});
+
+export const tabsBlockText = texts({
+  name: {fr: 'Onglets', en: 'Tabs'},
+  plural: {fr: 'Blocs d’onglets', en: 'Tab blocks'},
+  items: {fr: 'Onglets', en: 'Tabs'},
+  item: {fr: 'Onglet', en: 'Tab'},
+  itemsDescription: {
+    fr: 'Deux onglets au moins. Capacité selon la largeur de la colonne : 4 sur 6 ou 7 colonnes, 6 sur 8 ou 9, 8 sur 12.',
+    en: 'At least two tabs. Capacity by column width: 4 on 6 or 7 columns, 6 on 8 or 9, 8 on 12.',
+  },
+  label: {fr: 'Libellé de l’onglet', en: 'Tab label'},
+  labelDescription: {fr: '50 caractères au plus.', en: '50 characters at most.'},
+  content: {fr: 'Contenu', en: 'Content'},
+  contentDescription: {fr: 'Paragraphes, gras, italique, liens, listes à puces et numérotées.', en: 'Paragraphs, bold, italic, links, bulleted and numbered lists.'},
+  tooMany: {
+    fr: ({count, capacity, span}: {count: number; capacity: number; span: number}) => `${count} onglets pour une colonne de ${span} qui en accepte ${capacity}. Élargissez la colonne ou retirez des onglets.`,
+    en: ({count, capacity, span}: {count: number; capacity: number; span: number}) => `${count} tabs in a column of ${span} that holds ${capacity}. Widen the column or remove tabs.`,
+  },
+  tooFew: {fr: 'Deux onglets au moins.', en: 'At least two tabs.'},
+});
+
+export const buttonGroupBlockText = texts({
+  name: {fr: 'Groupe de boutons', en: 'Button group'},
+  plural: {fr: 'Groupes de boutons', en: 'Button groups'},
+  mode: {fr: 'Disposition', en: 'Arrangement'},
+  modeAttached: {fr: 'Collés (un seul contrôle)', en: 'Attached (one control)'},
+  modeSpaced: {fr: 'Espacés (une colonne par bouton)', en: 'Spaced (one column per button)'},
+  width: {fr: 'Largeur', en: 'Width'},
+  widthNatural: {fr: 'Naturelle', en: 'Natural'},
+  widthFull: {fr: 'Pleine largeur', en: 'Full width'},
+  align: {fr: 'Alignement', en: 'Alignment'},
+  alignStart: {fr: 'Gauche', en: 'Left'},
+  alignCenter: {fr: 'Centre', en: 'Centre'},
+  alignEnd: {fr: 'Droite', en: 'Right'},
+  alignDescription: {fr: 'En largeur naturelle seulement.', en: 'With natural width only.'},
+  buttons: {fr: 'Boutons', en: 'Buttons'},
+  button: {fr: 'Bouton', en: 'Button'},
+  buttonsDescription: {
+    fr: 'Capacité selon la largeur de la colonne : 2 boutons sur 6 ou 7 colonnes, 3 sur 8 ou 9, 4 sur 12. En espacé, chaque bouton a sa colonne.',
+    en: 'Capacity by column width: 2 buttons on 6 or 7 columns, 3 on 8 or 9, 4 on 12. Spaced: each button gets its column.',
+  },
+  tooMany: {
+    fr: ({count, capacity, span}: {count: number; capacity: number; span: number}) => `${count} boutons pour une colonne de ${span} qui en accepte ${capacity}. Élargissez la colonne ou retirez des boutons.`,
+    en: ({count, capacity, span}: {count: number; capacity: number; span: number}) => `${count} buttons in a column of ${span} that holds ${capacity}. Widen the column or remove buttons.`,
+  },
 });

@@ -2,19 +2,19 @@
 import {VStack} from '@astryxdesign/core/Stack';
 import React from 'react';
 
-import ButtonGroupShowcase from '../../_showcases/ButtonGroupShowcase';
+import TabsShowcase from '../../_showcases/TabsShowcase';
 import {ComponentNav} from '../../_ui/ComponentNav';
 import {ShowcaseBlock} from '../../_ui/ShowcaseBlock';
 
-export const metadata = {title: 'Button Group — Design system Vidomia'};
+export const metadata = {title: 'Tabs — Design system Vidomia'};
 
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="ButtonGroup" id="button-group" doc={null} dressed category="Actions">
-        <ButtonGroupShowcase />
+      <ShowcaseBlock name="Tabs" id="tabs" doc={null} dressed category="Conteneurs">
+        <TabsShowcase />
       </ShowcaseBlock>
-      <ComponentNav category="actions" current="button-group" />
+      <ComponentNav category="conteneurs" current="tabs" />
     </VStack>
   );
 }

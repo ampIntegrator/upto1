@@ -15,6 +15,7 @@ import {Text} from '@astryxdesign/core/Text';
 import React from 'react';
 
 import type {ContentData, FaqData, SectionData} from '@/lib/sections';
+import {ButtonGroup} from './ButtonGroup';
 import {Card} from './Card';
 import {Collapsible, CollapsibleGroup} from './Collapsible';
 import {Collection} from './Collection';
@@ -27,6 +28,7 @@ import {PriceCard} from './PriceCard';
 import {ProcessSteps} from './ProcessSteps';
 import {Section} from './Section';
 import {TestimonialCard} from './TestimonialCard';
+import {Tabs} from './Tabs';
 import {TextBox} from './TextBox';
 
 /** Paragraphs of an answer, as <p>: their colour comes from the collapsible (white on the silo fill). */
@@ -64,6 +66,10 @@ function Content({content, id}: {content: ContentData; id: string}) {
   switch (content.type) {
     case 'textBox':
       return <TextBox {...content.textBox} />;
+    case 'tabs':
+      return <Tabs items={content.items} />;
+    case 'buttonGroup':
+      return <ButtonGroup {...content.buttonGroup} />;
     case 'collection':
       return (
         <Collection layout={content.collection.layout} perView={content.collection.perView} step={content.collection.step} arrows={content.collection.arrows} indicator={content.collection.indicator}>

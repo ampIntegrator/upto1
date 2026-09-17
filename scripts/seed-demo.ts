@@ -44,6 +44,10 @@ const faq = (n: number, columns: '1' | '2' = '1') => ({blockType: 'faq', mode: '
 const testimonial = (name: string, result?: string) => ({blockType: 'testimonial', quote: `${LOREM} ${LOREM_2}`, name, role: 'Courtier · Lyon', result});
 const compare = (label: string, tone: 'danger' | 'high', check: 'check' | 'cross', featured = false) => ({blockType: 'compareCard', chipLabel: label, chipTone: tone, meta: featured ? '20 min chrono' : '3 semaines', quote: `« ${LOREM} »`, items: Array.from({length: 4}, (_, i) => ({label: `Lorem ipsum ${i + 1} dolor sit amet`})), tone: check, featured});
 const collection = (items: Record<string, unknown>[], opts: Record<string, unknown> = {}) => ({blockType: 'collection', layout: 'carousel', perView: '3', step: 'page', indicator: 'segments', arrows: true, source: 'manual', items, ...opts});
+const btn = (label: string, variant: string, extra: Record<string, unknown> = {}) => ({label, href: '#', shape: 'simple', variant, size: 'md', ...extra});
+const buttonGroup = (buttons: Record<string, unknown>[], opts: Record<string, unknown> = {}) => ({blockType: 'buttonGroup', mode: 'spaced', width: 'natural', align: 'start', buttons, ...opts});
+const TAB_LABELS = ['Le standard se perd en route', 'Le reporting est introuvable', 'Les pannes deviennent des incidents', 'La refacturation tourne mal', 'Les délais d’intervention glissent', 'Les devis restent sans réponse', 'Les sites ne se comparent pas', 'Le budget dérive sans alerte'];
+const tabs = (n: number) => ({blockType: 'tabs', items: TAB_LABELS.slice(0, n).map((label, i) => ({label, content: {root: {type: 'root', children: [{type: 'paragraph', children: [{type: 'text', text: `${LOREM} `, format: 0}, {type: 'text', text: `Situation ${i + 1}`, format: 1}, {type: 'text', text: `. ${LOREM_2}`, format: 0}]}, {type: 'list', listType: 'bullet', children: ['Chiffrage en 20 min', 'Rapport expert BTP', 'Note de calcul'].map((l) => ({type: 'listitem', children: [{type: 'text', text: l, format: 0}]}))}]}}}))});
 const steps = (n: number) => ({blockType: 'processSteps', steps: Array.from({length: n}, (_, i) => ({title: `Lorem ${i + 1}`, text: LOREM, duration: `${5 * (i + 1)} min`, checks: [{label: 'Lorem ipsum dolor'}, {label: 'Sit amet consectetur'}], asterisk: i === n - 1}))});
 
 async function main() {
@@ -95,6 +99,18 @@ async function main() {
           row(column(8, collection(['COURTIER', 'AGENT', 'PROMOTEUR'].map((l, i) => compare(l, 'high', 'check', i === 1)), {layout: 'swipe'})), column(4, text())),
           row(column(12, collection([], {source: 'posts', postsLimit: 6, postsCta: 'Lire l’article', indicator: 'numbers'}))),
         ], {anchor: 'collections'}),
+        light([
+          row(column(6, tabs(4)), column(6, media(bureau, '400'))),
+          row(column(8, tabs(6)), column(4, testimonial('Sophie M.', '+ 28 %'))),
+          row(column(12, tabs(8))),
+          row(column(2), column(8, faq(4)), column(2)),
+        ], {anchor: 'onglets', tint: 'highlight'}),
+        light([
+          row(column(12, buttonGroup([btn('Particuliers', 'secondary', {iconKey: 'home'}), btn('Professionnels', 'secondary', {iconKey: 'calculator'}), btn('Collectivités', 'secondary', {iconKey: 'building'}), btn('Nous appeler', 'secondary', {iconKey: 'phone'})], {mode: 'attached', align: 'center'}))),
+          row(column(12, buttonGroup([btn('Commencer', 'primary', {shape: 'split'}), btn('Tarifs', 'high'), btn('Nous appeler', 'ghost', {iconKey: 'phone'}), btn('Documentation', 'secondary', {shape: 'split'})], {width: 'full'}))),
+          row(column(8, buttonGroup([btn('Demander une démo', 'primary', {shape: 'split', size: 'lg'}), btn('Voir les tarifs', 'high', {shape: 'split', size: 'lg'})], {mode: 'attached'})), column(4, textBox({titleSize: 'heading-2', titleTag: 'h3', badges: [], buttons: [], title: 'Deux boutons collés'}))),
+          row(column(6, buttonGroup([btn('Commencer', 'primary', {shape: 'split'}), btn('En savoir plus', 'ghost')], {align: 'center'})), column(6, buttonGroup([btn('Commencer', 'primary', {shape: 'split'}), btn('En savoir plus', 'ghost')], {width: 'full'}))),
+        ], {anchor: 'boutons'}),
         light([row(column(12, mediaQuote(analyse)))]),
       ],
     },

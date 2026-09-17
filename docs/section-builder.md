@@ -38,9 +38,11 @@ The light tint field keeps its own `admin.condition`. Without it, Payload marks 
 
 ## Rows and layouts
 
-The **Rangées** panel shows 14 layouts as thumbnails, widest column first, with no mirrored duplicates (columns can be reordered inside a row):
+The **Rangées** panel shows 15 layouts as thumbnails, widest column first, with no mirrored duplicates (columns can be reordered inside a row, so `8 2 2` also gives `2 8 2`, a centred 66 % column). Each cell of a thumbnail shows its width:
 
-`12` · `6 6` · `8 4` · `7 5` · `9 3` · `4 4 4` · `6 3 3` · `6 4 2` · `3 3 3 3` · `6 2 2 2` · `4 4 2 2` · `4 2 2 2 2` · `3 3 2 2 2` · `2 2 2 2 2 2`
+`12` · `6 6` · `8 4` · `8 2 2` · `7 5` · `9 3` · `4 4 4` · `6 3 3` · `6 4 2` · `3 3 3 3` · `6 2 2 2` · `4 4 2 2` · `4 2 2 2 2` · `3 3 2 2 2` · `2 2 2 2 2 2`
+
+A 16th thumbnail, **Carousel**, adds a full-width row with a Collection block already placed (swipe by default; switch to carousel inside the block). It comes from the builder's `presetRows` option, declared in `src/sections.config.ts`: the core only knows « a row with these widths and these block slugs », checked at start-up. A click or a double click adds the row below the selection; the thumbnail lights up when the selected row matches it. The plain `12` thumbnail stays for image, image with quote, steps and tabs.
 
 Allowed column widths are 2, 3, 4, 5, 6, 7, 8, 9 and 12 (`COLUMN_SPANS` in `src/fields/sections/grid.ts`, which also owns the layouts and the spacing scale).
 
@@ -83,8 +85,10 @@ Columns are reordered left or right with their handle (⋮⋮). A tile turns red
 | Carte comparative | `CompareCard` | 3 | 6 | yes |
 | Étapes | `ProcessSteps` | 4 | 12 | |
 | Collection (contenus identiques) | `Collection` | 8 | 12 | yes |
+| Onglets | `Tabs` (labels of 50 characters, rich text per tab) | 6 | 12 | yes |
+| Groupe de boutons | `ButtonGroup` (attached or spaced, natural or full width) | 6 | 12 | |
 
-Widths decided on 16 September 2026. The collection holds identical items (testimonials, cards, compare cards, tiers, or the latest blog posts as article cards) side by side: 3 per view at most on 8 or 9 columns, 4 on 12 (`collectionCapacity`), checked on its `perView` field; layout « swipe » (no more items than visible ones, 4 at 25 % at most; peek of the next item and dots below 640 px) or « carousel » (arrows, segments / dots / numbers, page or item step). The text box's text is a Lexical field restricted to paragraphs, bold, italic, links and lists (`textBoxEditor`), rendered by `RichText`; its two display title sizes need 6 columns, checked on the size field. Blog-fed collections are loaded by `toSections`, which is asynchronous and receives the locale and a posts loader from the page. The steps panel holds 1 step on 4 or 5 columns, 2 on 6 or 7, 3 on 8 or 9, 4 on 12 (`stepsCapacity` in the registry); the block checks its `steps` field against its column width (`columnSpanAt`) with an explicit message.
+Widths decided on 16 and 17 September 2026. Tabs: 4 on 6 or 7 columns, 6 on 8 or 9, 8 on 12 (`tabsCapacity`), checked on the `items` field; each tab keeps 144 px, so long labels wrap and the strip then scrolls. Button group: 2 buttons on 6 or 7 columns, 3 on 8 or 9, 4 on 12 (`buttonsCapacity`), in both modes; spaced, each button gets an inner column and the section's column gap. The button settings are shared with the text box (`src/fields/blocks/buttonFields.ts`); the icon is offered on simple buttons only. The collection holds identical items (testimonials, cards, compare cards, tiers, or the latest blog posts as article cards) side by side: 3 per view at most on 8 or 9 columns, 4 on 12 (`collectionCapacity`), checked on its `perView` field; layout « swipe » (no more items than visible ones, 4 at 25 % at most; peek of the next item and dots below 640 px) or « carousel » (arrows, segments / dots / numbers, page or item step), which takes as many items (or blog posts) as wanted. The text box's text is a Lexical field restricted to paragraphs, bold, italic, links and lists (`textBoxEditor`), rendered by `RichText`; its two display title sizes need 6 columns, checked on the size field. Blog-fed collections are loaded by `toSections`, which is asynchronous and receives the locale and a posts loader from the page. The steps panel holds 1 step on 4 or 5 columns, 2 on 6 or 7, 3 on 8 or 9, 4 on 12 (`stepsCapacity` in the registry); the block checks its `steps` field against its column width (`columnSpanAt`) with an explicit message.
 
 The block picker only offers blocks whose width range contains the column's (`filterOptions`), and the server rejects a block that is too narrow or too wide (the builder's cell shows « Trop étroit » or « Trop large »). Each block declares `ContentBlock = {block, minSpan, maxSpan?, fill?}` (`src/fields/sections/contentBlock.ts`); `fill` stretches the column to the row's height so cards side by side share it. The site's blocks take their widths from the catalogue's span registry, `src/components/content-specs.ts`.
 

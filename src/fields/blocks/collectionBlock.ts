@@ -12,7 +12,7 @@ import {testimonialBlock} from './testimonialBlock';
 /**
  * « Collection » block of a column: identical items side by side (the Collection
  * component), in a column of 8 to 12. Side by side (« swipe ») holds no more items than
- * visible ones (4 at 25 % at most); beyond that, the carousel. The items are the existing column blocks
+ * visible ones (4 at 25 % at most); the carousel takes as many items as wanted. The items are the existing column blocks
  * (testimonial, cards, compare card, tier), all of the same type, or the latest blog
  * posts rendered as article cards. Items per view are checked against the column
  * width (content-specs, collectionCapacity): 3 at most on 8 or 9 columns, 4 on 12.
@@ -127,9 +127,9 @@ const block: Block = {
           type: 'number',
           label: t.postsLimit,
           defaultValue: 6,
+          // no maximum: a carousel takes as many posts as wanted; side by side, no more than visible ones
           min: 2,
-          max: 12,
-          admin: {width: '34%'},
+          admin: {width: '34%', description: t.postsLimitDescription},
           validate: (value: unknown, {siblingData, req}: {siblingData: Sibling; req: PayloadRequest}) => {
             const count = Number(value ?? 6);
             const perView = Number(siblingData?.perView ?? 3);
