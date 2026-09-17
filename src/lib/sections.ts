@@ -11,6 +11,7 @@ import type {PlanCardProps} from '@/components/PlanCard';
 import type {PriceCardProps} from '@/components/PriceCard';
 import type {ProcessStep} from '@/components/ProcessSteps';
 import type {Testimonial} from '@/components/TestimonialCard';
+import type {TabsItem} from '@/components/Tabs';
 import type {TextBoxProps} from '@/components/TextBox';
 import type {RichTextDocument} from '@/components/RichText';
 import {type TitleTag, toTitleTag} from '@/components/title-tags';
@@ -30,6 +31,7 @@ import {EMPTY_SLUG} from '@/fields/sections/emptyBlock';
 import {type Gaps, sectionGaps, siteGaps} from '@/fields/sections/gaps';
 import {MEDIA_SLUG} from '@/fields/blocks/mediaBlock';
 import {MEDIA_QUOTE_SLUG} from '@/fields/blocks/mediaQuoteBlock';
+import {TABS_SLUG} from '@/fields/blocks/tabsSlug';
 import {TEXT_BOX_SLUG} from '@/fields/blocks/textBoxSlug';
 import {sections as siteSections} from '@/sections.config';
 import {hasMobileOrder, mobileRanks} from '@/fields/sections/mobileOrder';
@@ -50,6 +52,7 @@ export type CollectionData = {layout: 'swipe' | 'carousel'; perView: 2 | 3 | 4; 
 
 export type ContentData =
   | {type: 'textBox'; textBox: TextBoxProps}
+  | {type: 'tabs'; items: TabsItem[]}
   | {type: 'collection'; collection: CollectionData}
   | {type: 'card'; card: CardProps}
   | {type: 'media'; media: MediaProps}
@@ -169,6 +172,14 @@ type FaqBlockData = {mode?: string | null; columns?: string | null; firstOpen?: 
 const FAQ_TAGS = ['h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span'] as const;
 type TestimonialData = {quote: string; name: string; role?: string | null; result?: string | null};
 type CompareCardData = {chipLabel: string; chipTone?: string | null; meta?: string | null; quote: string; items?: {label: string}[] | null; tone?: string | null; featured?: boolean | null};
+type TabsData = {items?: {label?: string | null; content?: RichTextDocument | null}[] | null};
+
+/** Tabs with a label; a tab without text keeps an empty panel. */
+function toTabs(b: TabsData): ContentData | null {
+  const items = (b.items ?? []).filter((i) => i.label).map((i) => ({label: i.label as string, content: i.content?.root?.children?.length ? i.content : null}));
+  return items.length ? {type: 'tabs', items} : null;
+}
+
 type TextBoxData = {
   badges?: {label: string; tone?: string | null}[] | null;
   title?: string | null;
@@ -357,6 +368,8 @@ function toContent(block: ContentBlock): ContentData | null {
       return toCollection(block as unknown as CollectionBlockData, postItems);
     case TEXT_BOX_SLUG:
       return toTextBox(block as unknown as TextBoxData);
+    case TABS_SLUG:
+      return toTabs(block as unknown as TabsData);
     default:
       return null;
   }

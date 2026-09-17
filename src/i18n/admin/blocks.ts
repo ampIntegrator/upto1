@@ -319,3 +319,23 @@ export const textBoxBlockText = texts({
   },
   tooMany: {fr: 'Deux au plus.', en: 'Two at most.'},
 });
+
+export const tabsBlockText = texts({
+  name: {fr: 'Onglets', en: 'Tabs'},
+  plural: {fr: 'Blocs d’onglets', en: 'Tab blocks'},
+  items: {fr: 'Onglets', en: 'Tabs'},
+  item: {fr: 'Onglet', en: 'Tab'},
+  itemsDescription: {
+    fr: 'Deux onglets au moins. Capacité selon la largeur de la colonne : 4 sur 6 ou 7 colonnes, 6 sur 8 ou 9, 8 sur 12.',
+    en: 'At least two tabs. Capacity by column width: 4 on 6 or 7 columns, 6 on 8 or 9, 8 on 12.',
+  },
+  label: {fr: 'Libellé de l’onglet', en: 'Tab label'},
+  labelDescription: {fr: '50 caractères au plus.', en: '50 characters at most.'},
+  content: {fr: 'Contenu', en: 'Content'},
+  contentDescription: {fr: 'Paragraphes, gras, italique, liens, listes à puces et numérotées.', en: 'Paragraphs, bold, italic, links, bulleted and numbered lists.'},
+  tooMany: {
+    fr: ({count, capacity, span}: {count: number; capacity: number; span: number}) => `${count} onglets pour une colonne de ${span} qui en accepte ${capacity}. Élargissez la colonne ou retirez des onglets.`,
+    en: ({count, capacity, span}: {count: number; capacity: number; span: number}) => `${count} tabs in a column of ${span} that holds ${capacity}. Widen the column or remove tabs.`,
+  },
+  tooFew: {fr: 'Deux onglets au moins.', en: 'At least two tabs.'},
+});

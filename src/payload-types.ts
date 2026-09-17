@@ -604,6 +604,41 @@ export interface Page {
                                   blockType: 'processSteps';
                                 }
                               | {
+                                  /**
+                                   * At least two tabs. Capacity by column width: 4 on 6 or 7 columns, 6 on 8 or 9, 8 on 12.
+                                   */
+                                  items?:
+                                    | {
+                                        /**
+                                         * 50 characters at most.
+                                         */
+                                        label: string;
+                                        /**
+                                         * Paragraphs, bold, italic, links, bulleted and numbered lists.
+                                         */
+                                        content?: {
+                                          root: {
+                                            type: string;
+                                            children: {
+                                              type: any;
+                                              version: number;
+                                              [k: string]: unknown;
+                                            }[];
+                                            direction: ('ltr' | 'rtl') | null;
+                                            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                                            indent: number;
+                                            version: number;
+                                          };
+                                          [k: string]: unknown;
+                                        } | null;
+                                        id?: string | null;
+                                      }[]
+                                    | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'tabs';
+                                }
+                              | {
                                   layout?: ('swipe' | 'carousel') | null;
                                   /**
                                    * 3 at most on 8 or 9 columns, 4 on 12. Two lines = two rows.
@@ -1292,6 +1327,41 @@ export interface Section {
                         id?: string | null;
                         blockName?: string | null;
                         blockType: 'processSteps';
+                      }
+                    | {
+                        /**
+                         * At least two tabs. Capacity by column width: 4 on 6 or 7 columns, 6 on 8 or 9, 8 on 12.
+                         */
+                        items?:
+                          | {
+                              /**
+                               * 50 characters at most.
+                               */
+                              label: string;
+                              /**
+                               * Paragraphs, bold, italic, links, bulleted and numbered lists.
+                               */
+                              content?: {
+                                root: {
+                                  type: string;
+                                  children: {
+                                    type: any;
+                                    version: number;
+                                    [k: string]: unknown;
+                                  }[];
+                                  direction: ('ltr' | 'rtl') | null;
+                                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                                  indent: number;
+                                  version: number;
+                                };
+                                [k: string]: unknown;
+                              } | null;
+                              id?: string | null;
+                            }[]
+                          | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'tabs';
                       }
                     | {
                         layout?: ('swipe' | 'carousel') | null;
@@ -2063,6 +2133,19 @@ export interface PagesSelect<T extends boolean = true> {
                                       id?: T;
                                       blockName?: T;
                                     };
+                                tabs?:
+                                  | T
+                                  | {
+                                      items?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            content?: T;
+                                            id?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
                                 collection?:
                                   | T
                                   | {
@@ -2624,6 +2707,19 @@ export interface SectionsSelect<T extends boolean = true> {
                                       id?: T;
                                     };
                                 asterisk?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    tabs?:
+                      | T
+                      | {
+                          items?:
+                            | T
+                            | {
+                                label?: T;
+                                content?: T;
                                 id?: T;
                               };
                           id?: T;

@@ -14,6 +14,7 @@ import {PlanCard} from '@/components/PlanCard';
 import {PriceCard} from '@/components/PriceCard';
 import {ProcessSteps} from '@/components/ProcessSteps';
 import {TestimonialCard} from '@/components/TestimonialCard';
+import {Tabs} from '@/components/Tabs';
 import {TextBox} from '@/components/TextBox';
 import {CARD_VARIANTS} from '@/fields/blocks/cardBlocks';
 import {COLLECTION_SLUG} from '@/fields/blocks/collectionBlock';
@@ -23,6 +24,7 @@ import {PLAN_SLUG} from '@/fields/blocks/planBlock';
 import {PRICE_SINGLE_SLUG} from '@/fields/blocks/priceSingleBlock';
 import {PROCESS_STEPS_SLUG} from '@/fields/blocks/processStepsBlock';
 import {TESTIMONIAL_SLUG} from '@/fields/blocks/testimonialBlock';
+import {TABS_SLUG} from '@/fields/blocks/tabsSlug';
 import {TEXT_BOX_SLUG} from '@/fields/blocks/textBoxSlug';
 import {EMPTY_SLUG} from '@/fields/sections/emptyBlock';
 import {MEDIA_SLUG} from '@/fields/blocks/mediaBlock';
@@ -33,7 +35,7 @@ import {FAQ} from '../../design/_showcases/faq.shared';
 import {LOREM_DOC} from '../../design/_showcases/textbox.shared';
 
 /** Wider box for the blocks that need several columns (single price, FAQ, steps). */
-const WIDE = new Set([PRICE_SINGLE_SLUG, FAQ_SLUG, PROCESS_STEPS_SLUG, COLLECTION_SLUG]);
+const WIDE = new Set([PRICE_SINGLE_SLUG, FAQ_SLUG, PROCESS_STEPS_SLUG, COLLECTION_SLUG, TABS_SLUG]);
 
 const IMG = 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80';
 const TEXT = 'Une phrase de présentation courte, deux lignes au plus, pour situer le contenu de la carte.';
@@ -61,7 +63,9 @@ export function Apercu({slug}: {slug: string}) {
   return (
     <OrbitaThemeProvider fixedSilo="blue" initialMode="light">
       <VStack data-apercu style={{width: WIDE.has(slug) ? 'var(--apercu-width-wide, 900px)' : 'var(--apercu-width, 360px)', padding: 'var(--spacing-6)', background: 'var(--color-background-body)'}}>
-        {slug === TEXT_BOX_SLUG ? (
+        {slug === TABS_SLUG ? (
+          <Tabs items={['Le standard se perd en route', 'Le reporting est introuvable', 'Les pannes deviennent des incidents'].map((label) => ({label, content: LOREM_DOC}))} label="Situations" />
+        ) : slug === TEXT_BOX_SLUG ? (
           <TextBox badges={[{label: 'Nouveau', tone: 'high'}]} title="Le chiffrage juste" titleTag="h2" titleSize="heading-1" content={LOREM_DOC} buttons={[{label: 'Commencer', href: '#', arrow: true}]} framed />
         ) : slug === COLLECTION_SLUG ? (
           <Collection layout="carousel" perView={3} label="Témoignages">

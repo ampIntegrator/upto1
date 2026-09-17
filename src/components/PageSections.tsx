@@ -27,6 +27,7 @@ import {PriceCard} from './PriceCard';
 import {ProcessSteps} from './ProcessSteps';
 import {Section} from './Section';
 import {TestimonialCard} from './TestimonialCard';
+import {Tabs} from './Tabs';
 import {TextBox} from './TextBox';
 
 /** Paragraphs of an answer, as <p>: their colour comes from the collapsible (white on the silo fill). */
@@ -64,6 +65,8 @@ function Content({content, id}: {content: ContentData; id: string}) {
   switch (content.type) {
     case 'textBox':
       return <TextBox {...content.textBox} />;
+    case 'tabs':
+      return <Tabs items={content.items} />;
     case 'collection':
       return (
         <Collection layout={content.collection.layout} perView={content.collection.perView} step={content.collection.step} arrows={content.collection.arrows} indicator={content.collection.indicator}>
