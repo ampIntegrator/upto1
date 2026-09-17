@@ -24,6 +24,7 @@ export async function ListingList({locale, listing, site, page, category}: {loca
     <SitePage silo={pageSilo(null, s)} header={toHeader(s, site.header, site.languages, site.blog)} footer={toFooter(s, site.footer, site.posts, locale, site.blog)} tone={night ? 'dark' : 'light'} currentHref={listingPath(cfg)}>
       <Hero
         variant="page"
+        compact
         background={night ? 'night-halo' : 'glow'}
         eyebrow={category ? cfg.labels.categoryPrefix : cfg.eyebrow}
         title={category ? category.title : cfg.title}

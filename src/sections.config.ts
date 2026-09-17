@@ -52,7 +52,8 @@ export const orbitaSectionSettings: Field[] = [
       {label: T.settings.backgroundDark, value: 'dark'},
       {label: T.settings.backgroundMedia, value: 'media'},
     ],
-    admin: {components: swatches({light: 'body', dark: 'night', media: 'media'})},
+    // in words: the colours (swatches) come next, only for a light or night background
+    admin: {layout: 'horizontal'},
   },
   // 2a. light: tint and texture, side by side
   {
