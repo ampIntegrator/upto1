@@ -12,6 +12,8 @@ import {getPayload} from 'payload';
 
 import type {HeroProps} from '@/components/Hero';
 import type {SiteFooterData, SiteHeaderData, SiteNavEntry, SiteStrip} from '@/components/site-nav';
+import {blogConfig, blogPath, postPath} from '@/lib/blog';
+import type {SectionsContext} from '@/lib/sections';
 import type {NucleoIconKey} from '@/theme/icons/nucleo';
 import type {SiloName} from '@/theme/index';
 import type {Footer, Header, Language, Media, Page, Post, Setting as Settings} from '@/payload-types';
@@ -48,6 +50,20 @@ export async function loadPosts(locale: Locale, q: {limit: number; category?: nu
   return res.docs;
 }
 
+/** Posts chosen by id (post cards), with their cover and category. */
+export async function loadPostsByIds(locale: Locale, ids: number[]): Promise<Post[]> {
+  if (!ids.length) return [];
+  const payload = await getPayload({config});
+  const res = await payload.find({collection: 'posts', locale, depth: 1, limit: ids.length, where: {id: {in: ids}}});
+  return res.docs;
+}
+
+/** What the section conversion needs from the site: locale, post loaders, post URLs under the blog page. */
+export function sectionsContext(locale: Locale, s: Settings): SectionsContext {
+  const blog = blogConfig(s);
+  return {locale, posts: (q) => loadPosts(locale, q), postsByIds: (ids) => loadPostsByIds(locale, ids), postHref: (slug) => postPath(blog, slug), readMore: blog.labels.readMore};
+}
+
 export function toStrip(s: Settings): SiteStrip {
   return {
     phone: s.phone ? {label: s.phone, href: s.phoneHref || `tel:${s.phone.replace(/\s/g, '')}`} : undefined,
@@ -67,7 +83,7 @@ export function toHeader(s: Settings, h: Header, l: Language): SiteHeaderData {
       kind: 'mega',
       label: b.label,
       groups: (b.groups ?? []).map((g) => ({title: g.title, items: (g.items ?? []).map((it) => ({title: it.title, description: it.description ?? undefined, iconKey: icon(it.iconKey), href: it.href}))})),
-      featured: post ? {title: post.title, description: post.excerpt ?? undefined, image: mediaUrl(post.cover), linkLabel: b.featuredLinkLabel || "Lire l'article", linkHref: `/blog/${post.slug}`} : undefined,
+      featured: post ? {title: post.title.replace(/<\/?span>/g, ''), description: post.excerpt ?? undefined, image: mediaUrl(post.cover), linkLabel: b.featuredLinkLabel || "Lire l'article", linkHref: postPath(blogConfig(s), post.slug)} : undefined,
     };
   });
   return {
@@ -91,8 +107,8 @@ export function toFooter(s: Settings, f: Footer, posts: Post[], locale: Locale):
     articles: f.articlesEnabled !== false && posts.length ? {
       eyebrow: f.articles?.eyebrow ?? 'En bref',
       allLabel: f.articles?.allLabel ?? 'Tous les articles',
-      allHref: f.articles?.allHref ?? '/blog',
-      items: posts.map((p) => ({category: typeof p.category === 'object' ? p.category.title : '', title: p.title, date: fmt.format(new Date(p.publishedAt)), href: `/blog/${p.slug}`})),
+      allHref: f.articles?.allHref ?? blogPath(blogConfig(s)),
+      items: posts.map((p) => ({category: typeof p.category === 'object' ? p.category.title : '', title: p.title.replace(/<\/?span>/g, ''), date: fmt.format(new Date(p.publishedAt)), href: postPath(blogConfig(s), p.slug)})),
     } : undefined,
     columns: (f.columns ?? []).map((c) => ({title: c.title, links: (c.links ?? []).map((l) => ({label: l.label, href: l.href}))})),
     legal: {copyright: f.copyright ?? '', line: f.legalLine ?? undefined, links: (f.legalLinks ?? []).map((l) => ({label: l.label, href: l.href}))},

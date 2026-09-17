@@ -50,7 +50,7 @@ export function PostArchive({categories = [], items, page, pages, hrefFor, gaps 
         ) : (
           <VStack className={styles.empty}>{empty}</VStack>
         )}
-        <CarouselControls page={page} pages={pages} hrefFor={hrefFor} />
+        <CarouselControls page={page} pages={pages} hrefs={Array.from({length: pages}, (_, p) => hrefFor(p))} />
       </Container>
     </Section>
   );

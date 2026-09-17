@@ -29,11 +29,11 @@ export const Pages: CollectionConfig = {
     {
       type: 'tabs',
       tabs: [
-        {label: ct.pages.tabs.pageTop, fields: [{name: 'title', type: 'text', label: ct.pages.fields.title, required: true, localized: true}, heroField]},
+        {label: ct.pages.tabs.pageTop, fields: [{name: 'blogNoticeTop', type: 'ui', admin: {components: {Field: '@/fields/BlogPageNotice#BlogPageNotice'}}}, {name: 'title', type: 'text', label: ct.pages.fields.title, required: true, localized: true}, heroField]},
         {
           label: ct.pages.tabs.content,
           description: ct.pages.tabs.contentDescription,
-          fields: [sections.field],
+          fields: [{name: 'blogNoticeContent', type: 'ui', admin: {components: {Field: '@/fields/BlogPageNotice#BlogPageNotice'}}}, sections.field],
         },
       ],
     },

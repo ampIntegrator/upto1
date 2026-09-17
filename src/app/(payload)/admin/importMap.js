@@ -1,3 +1,4 @@
+import { BlogPageNotice as BlogPageNotice_cc18319c324ac9e016b5267e0d123e0f } from '@/fields/BlogPageNotice'
 import { IconPicker as IconPicker_8bfb3e3bce55055cefcbdba58b426cf6 } from '@/fields/IconPicker'
 import { SwatchRadio as SwatchRadio_0db4766985603351e805e768f67fbd0c } from '@/fields/SwatchRadio'
 import { BlockNameField as BlockNameField_4061162db6db9be055e809ce229cfb8b } from '@/fields/sections/BlockNameField'
@@ -31,6 +32,7 @@ import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } f
 
 /** @type import('payload').ImportMap */
 export const importMap = {
+  "@/fields/BlogPageNotice#BlogPageNotice": BlogPageNotice_cc18319c324ac9e016b5267e0d123e0f,
   "@/fields/IconPicker#IconPicker": IconPicker_8bfb3e3bce55055cefcbdba58b426cf6,
   "@/fields/SwatchRadio#SwatchRadio": SwatchRadio_0db4766985603351e805e768f67fbd0c,
   "@/fields/sections/BlockNameField#BlockNameField": BlockNameField_4061162db6db9be055e809ce229cfb8b,

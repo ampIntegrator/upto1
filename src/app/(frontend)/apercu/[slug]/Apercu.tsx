@@ -6,6 +6,7 @@ import React from 'react';
 
 import {ButtonGroup} from '@/components/ButtonGroup';
 import {Card, type CardProps} from '@/components/Card';
+import {SectionHeading} from '@/components/SectionHeading';
 import {Collapsible, CollapsibleGroup} from '@/components/Collapsible';
 import {Collection} from '@/components/Collection';
 import {CompareCard} from '@/components/CompareCard';
@@ -19,6 +20,8 @@ import {Tabs} from '@/components/Tabs';
 import {TextBox} from '@/components/TextBox';
 import {BUTTON_GROUP_SLUG} from '@/fields/blocks/buttonGroupBlock';
 import {CARD_VARIANTS} from '@/fields/blocks/cardBlocks';
+import {POST_CARD_SLUG} from '@/fields/blocks/postCardBlock';
+import {SECTION_HEADING_SLUG} from '@/fields/blocks/sectionHeadingBlock';
 import {COLLECTION_SLUG} from '@/fields/blocks/collectionBlock';
 import {COMPARE_CARD_SLUG} from '@/fields/blocks/compareCardBlock';
 import {FAQ_SLUG} from '@/fields/blocks/faqBlock';
@@ -37,7 +40,7 @@ import {FAQ} from '../../design/_showcases/faq.shared';
 import {LOREM_DOC} from '../../design/_showcases/textbox.shared';
 
 /** Wider box for the blocks that need several columns (single price, FAQ, steps). */
-const WIDE = new Set([PRICE_SINGLE_SLUG, FAQ_SLUG, PROCESS_STEPS_SLUG, COLLECTION_SLUG, TABS_SLUG, BUTTON_GROUP_SLUG]);
+const WIDE = new Set([SECTION_HEADING_SLUG, PRICE_SINGLE_SLUG, FAQ_SLUG, PROCESS_STEPS_SLUG, COLLECTION_SLUG, TABS_SLUG, BUTTON_GROUP_SLUG]);
 
 const IMG = 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80';
 const TEXT = 'Une phrase de présentation courte, deux lignes au plus, pour situer le contenu de la carte.';
@@ -65,7 +68,11 @@ export function Apercu({slug}: {slug: string}) {
   return (
     <OrbitaThemeProvider fixedSilo="blue" initialMode="light">
       <VStack data-apercu style={{width: WIDE.has(slug) ? 'var(--apercu-width-wide, 900px)' : 'var(--apercu-width, 360px)', padding: 'var(--spacing-6)', background: 'var(--color-background-body)'}}>
-        {slug === BUTTON_GROUP_SLUG ? (
+        {slug === SECTION_HEADING_SLUG ? (
+          <SectionHeading eyebrow="Le blog" title="Pour continuer <span>sur le sujet.</span>" size="display-3" text="Chiffrage, chantier, métier : ce que nous apprenons avec nos clients." />
+        ) : slug === POST_CARD_SLUG ? (
+          <Card preset="article" media={{type: 'image', src: IMG, alt: ''}} chip={{label: 'Chiffrage'}} date="12 septembre 2026" title="Du devis à la facturation : industrialiser le cycle commercial" cta={{label: 'Lire l’article', href: '#'}} />
+        ) : slug === BUTTON_GROUP_SLUG ? (
           <VStack gap={6}>
             <ButtonGroup mode="attached" label="Profils" buttons={[{label: 'Particuliers', href: '#', variant: 'secondary', iconKey: 'home'}, {label: 'Professionnels', href: '#', variant: 'secondary', iconKey: 'calculator'}, {label: 'Collectivités', href: '#', variant: 'secondary', iconKey: 'building'}]} />
             <ButtonGroup mode="spaced" width="full" buttons={[{label: 'Demander une démo', href: '#', variant: 'primary', arrow: true}, {label: 'Voir les tarifs', href: '#', variant: 'high', arrow: true}]} />

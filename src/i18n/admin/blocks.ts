@@ -421,3 +421,23 @@ export const proseBlockText = texts({
   tableDescription: {fr: 'Un tableau défile horizontalement dans une colonne étroite : préférez 6 colonnes ou plus.', en: 'A table scrolls horizontally in a narrow column: prefer 6 columns or more.'},
 });
 
+export const sectionHeadingBlockText = texts({
+  name: {fr: 'En-tête de section', en: 'Section heading'},
+  plural: {fr: 'En-têtes de section', en: 'Section headings'},
+  eyebrow: {fr: 'Surtitre', en: 'Eyebrow'},
+  title: {fr: 'Titre', en: 'Title'},
+  titleDescription: {fr: 'Un mot entre <span>…</span> passe en serif accentué ; un retour à la ligne est conservé.', en: 'A word between <span>…</span> is set in accent serif; a line break is kept.'},
+  tag: {fr: 'Balise', en: 'Tag'},
+  tagDescription: {fr: 'La taille ne change pas.', en: 'The size does not change.'},
+  lead: {fr: 'Chapô (facultatif)', en: 'Lead (optional)'},
+  align: {fr: 'Alignement', en: 'Alignment'},
+  alignCenter: {fr: 'Centré', en: 'Centred'},
+  alignStart: {fr: 'À gauche', en: 'Left'},
+});
+
+export const postCardBlockText = texts({
+  name: {fr: 'Carte article', en: 'Post card'},
+  plural: {fr: 'Cartes article', en: 'Post cards'},
+  post: {fr: 'Article', en: 'Post'},
+});
+
