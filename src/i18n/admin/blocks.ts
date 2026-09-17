@@ -256,8 +256,12 @@ export const collectionBlockText = texts({
   sourcePosts: {fr: 'Derniers articles du blog', en: 'Latest blog posts'},
   items: {fr: 'Éléments (tous du même type)', en: 'Items (all of the same type)'},
   item: {fr: 'Élément', en: 'Item'},
-  itemsDescription: {fr: 'Deux éléments au moins, tous du même type : témoignages, cartes, cartes comparatives ou paliers.', en: 'At least two items, all of the same type: testimonials, cards, compare cards or tiers.'},
+  itemsDescription: {
+    fr: 'Deux éléments au moins, tous du même type : témoignages, cartes, cartes comparatives ou paliers. Côte à côte : pas plus d’éléments que de visibles. Carrousel : autant que voulu.',
+    en: 'At least two items, all of the same type: testimonials, cards, compare cards or tiers. Side by side: no more items than visible ones. Carousel: as many as wanted.',
+  },
   postsLimit: {fr: 'Nombre d’articles', en: 'Number of posts'},
+  postsLimitDescription: {fr: 'Côte à côte : pas plus que de visibles. Carrousel : autant que voulu.', en: 'Side by side: no more than visible ones. Carousel: as many as wanted.'},
   postsCategory: {fr: 'Catégorie (vide : toutes)', en: 'Category (empty: all)'},
   postsCta: {fr: 'Libellé du lien des cartes', en: 'Card link label'},
   tooMany: {

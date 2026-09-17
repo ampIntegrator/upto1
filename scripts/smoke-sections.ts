@@ -69,7 +69,7 @@ async function main() {
           [column(12, {blockType: 'buttonGroup', mode: 'attached', width: 'full', buttons: [{label: 'Groupe smoke 1', href: '#', shape: 'split', variant: 'primary'}, {label: 'Groupe smoke 2', href: '#', shape: 'simple', variant: 'ghost', iconKey: 'phone'}, {label: 'Groupe smoke 3', href: '#', shape: 'simple', variant: 'high'}, {label: 'Groupe smoke 4', href: '#', shape: 'split', variant: 'secondary'}]})],
           [column(6, {blockType: 'buttonGroup', mode: 'spaced', align: 'center', buttons: [{label: 'Espacé smoke 1', href: '#'}, {label: 'Espacé smoke 2', href: '#', shape: 'split', variant: 'high'}]}), column(6)],
           [column(8, {blockType: 'tabs', items: [1, 2, 3, 4, 5, 6].map((i) => ({label: `Onglet smoke ${i}`, content: {root: {type: 'root', children: [{type: 'paragraph', children: [{type: 'text', text: `Panneau smoke ${i}`, format: 0}]}]}}}))}), column(4)],
-          [column(12, {blockType: 'collection', layout: 'carousel', perView: '3', step: 'page', indicator: 'dots', arrows: true, source: 'manual', items: [1, 2, 3, 4].map((i) => ({blockType: 'testimonial', quote: `Citation collection ${i}.`, name: `Témoin collection ${i}`}))})],
+          [column(12, {blockType: 'collection', layout: 'carousel', perView: '3', step: 'page', indicator: 'dots', arrows: true, source: 'manual', items: Array.from({length: 14}, (_, k) => k + 1).map((i) => ({blockType: 'testimonial', quote: `Citation collection ${i}.`, name: `Témoin collection ${i}`}))})],
           [column(9, {blockType: 'collection', layout: 'swipe', perView: '3', source: 'posts', postsLimit: 3, postsCta: 'Lire l’article'}), column(3)],
         ]),
       ],
@@ -78,7 +78,7 @@ async function main() {
   log(`page created: ${page.id} (${slug})`);
   try {
     const html = await (await fetch(`${BASE}/${slug}`)).text();
-    for (const marker of ['Valeur totale', 'Question smoke', 'Palier smoke', 'Témoin Smoke', 'APRÈS SMOKE', 'Étape 2', 'data-steps="2"', 'Témoin collection 4', 'data-layout="carousel"', 'Lire l’article', '<h2 class="Collapsible', '<h3 class="astryx-heading', '<h4 class="astryx-heading', '<span class="astryx-heading card', 'Encart smoke', '<strong>gras</strong>', 'Puce smoke', 'Bouton smoke', 'data-framed="true"', 'Sans titre smoke', 'Onglet smoke 6', 'Panneau smoke 6', 'role="tabpanel"', 'Groupe smoke 4', 'Espacé smoke 2', 'data-mode="attached"', 'data-mode="spaced"']) check(html.includes(marker), `site renders « ${marker} »`);
+    for (const marker of ['Valeur totale', 'Question smoke', 'Palier smoke', 'Témoin Smoke', 'APRÈS SMOKE', 'Étape 2', 'data-steps="2"', 'Témoin collection 14', 'data-layout="carousel"', 'Lire l’article', '<h2 class="Collapsible', '<h3 class="astryx-heading', '<h4 class="astryx-heading', '<span class="astryx-heading card', 'Encart smoke', '<strong>gras</strong>', 'Puce smoke', 'Bouton smoke', 'data-framed="true"', 'Sans titre smoke', 'Onglet smoke 6', 'Panneau smoke 6', 'role="tabpanel"', 'Groupe smoke 4', 'Espacé smoke 2', 'data-mode="attached"', 'data-mode="spaced"']) check(html.includes(marker), `site renders « ${marker} »`);
     check(!/Unhandled Runtime Error|Build Error/.test(html), 'site page without runtime error');
   } finally {
     await payload.delete({collection: 'pages', id: page.id});

@@ -674,7 +674,7 @@ export interface Page {
                                   arrows?: boolean | null;
                                   source?: ('manual' | 'posts') | null;
                                   /**
-                                   * At least two items, all of the same type: testimonials, cards, compare cards or tiers.
+                                   * At least two items, all of the same type: testimonials, cards, compare cards or tiers. Side by side: no more items than visible ones. Carousel: as many as wanted.
                                    */
                                   items?:
                                     | (
@@ -863,6 +863,9 @@ export interface Page {
                                           }
                                       )[]
                                     | null;
+                                  /**
+                                   * Side by side: no more than visible ones. Carousel: as many as wanted.
+                                   */
                                   postsLimit?: number | null;
                                   postsCategory?: (number | null) | Category;
                                   postsCta?: string | null;
@@ -1424,7 +1427,7 @@ export interface Section {
                         arrows?: boolean | null;
                         source?: ('manual' | 'posts') | null;
                         /**
-                         * At least two items, all of the same type: testimonials, cards, compare cards or tiers.
+                         * At least two items, all of the same type: testimonials, cards, compare cards or tiers. Side by side: no more items than visible ones. Carousel: as many as wanted.
                          */
                         items?:
                           | (
@@ -1613,6 +1616,9 @@ export interface Section {
                                 }
                             )[]
                           | null;
+                        /**
+                         * Side by side: no more than visible ones. Carousel: as many as wanted.
+                         */
                         postsLimit?: number | null;
                         postsCategory?: (number | null) | Category;
                         postsCta?: string | null;
