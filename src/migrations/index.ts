@@ -21,6 +21,7 @@ import * as migration_20260916_220547_add_text_box from './20260916_220547_add_t
 import * as migration_20260916_220607_drop_text_block from './20260916_220607_drop_text_block';
 import * as migration_20260917_093047_add_tabs_block from './20260917_093047_add_tabs_block';
 import * as migration_20260917_094125_add_button_group_block from './20260917_094125_add_button_group_block';
+import * as migration_20260917_101827_add_user_session_days from './20260917_101827_add_user_session_days';
 
 export const migrations = [
   {
@@ -136,6 +137,11 @@ export const migrations = [
   {
     up: migration_20260917_094125_add_button_group_block.up,
     down: migration_20260917_094125_add_button_group_block.down,
-    name: '20260917_094125_add_button_group_block'
+    name: '20260917_094125_add_button_group_block',
+  },
+  {
+    up: migration_20260917_101827_add_user_session_days.up,
+    down: migration_20260917_101827_add_user_session_days.down,
+    name: '20260917_101827_add_user_session_days'
   },
 ];
