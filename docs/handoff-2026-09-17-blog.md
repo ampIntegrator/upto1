@@ -177,7 +177,7 @@ list design shown on the RichText showcase; `pnpm catalog:build`.
   functions and rendered through the `renderBlock` map.
 - Migrations: one per step (authors, post fields, blog tab of the settings, the two column
   blocks), each reviewed; the `content` editor change itself creates no column.
-- Seed: extend `scripts/seed.ts` or `seed-demo.ts` with an author, tags and a demo post
+- Seed: extend `scripts/seed.ts` or `seed-demo.ts` with an author and a demo post
   using every prose element and every figure block, plus a smoke test (`smoke:sections`
   pattern: create, render `/blog/<slug>`, check markers, delete) — `scripts/smoke-blog.ts`.
 
