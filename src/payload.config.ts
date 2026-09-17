@@ -16,6 +16,7 @@ import { Posts } from './collections/Posts'
 import { Sections } from './collections/Sections'
 import { Users } from './collections/Users'
 import { adminI18n } from './i18n/admin/payload'
+import { livePreview } from './livePreview'
 import { Blog } from './globals/Blog'
 import { Portfolio } from './globals/Portfolio'
 import { Footer } from './globals/Footer'
@@ -35,6 +36,8 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     meta: {titleSuffix: ' · Vidomia'},
+    // « Aperçu en direct » tab: the site page next to the form, refreshed on save (src/livePreview.ts)
+    livePreview,
     components: {
       // interface language selector, next to the content language selector
       actions: ['@/i18n/admin/LanguageSwitcher#LanguageSwitcher'],
