@@ -147,7 +147,7 @@ export const languagesText = texts({
 
 /** Admin texts shared by the listing settings globals (blog, case studies): src/fields/listingSettings.ts. */
 const listingCommonText = {
-  page: {fr: 'Page choisie', en: 'Chosen page'},
+  slug: {fr: 'Adresse', en: 'Address'},
   title: {fr: 'Titre (h1)', en: 'Title (h1)'},
   titleDescription: {fr: 'Un mot entre <span>…</span> passe en serif accentué.', en: 'A word between <span>…</span> is set in accent serif.'},
   eyebrow: {fr: 'Surtitre', en: 'Eyebrow'},
@@ -166,30 +166,30 @@ const listingCommonText = {
 export const blogText = texts({
   ...listingCommonText,
   label: {fr: 'Réglages du blog', en: 'Blog settings'},
+  slugDescription: {fr: 'Minuscules, chiffres et tirets. « actualites » : la liste à nom-du-site.com/actualites, les articles à /actualites/<article>, les archives à /actualites/categorie/<catégorie>.', en: 'Lowercase letters, digits and hyphens. “news”: the list at site-name.com/news, posts at /news/<post>, archives at /news/categorie/<category>.'},
   tabs: {
     page: {fr: 'Page du blog', en: 'Blog page'},
     labels: {fr: 'Libellés', en: 'Labels'},
   },
-  description: {fr: 'La page choisie affiche la liste des articles à la place de son contenu, avec le titre et le chapô ci-dessous. Les articles et les archives de catégorie prennent son adresse : /<page>/<article>, /<page>/categorie/<catégorie>.', en: 'The chosen page shows the list of posts instead of its content, with the title and lead below. Posts and category archives take its address: /<page>/<post>, /<page>/categorie/<category>.'},
+  description: {fr: 'La liste des articles : son adresse, son haut de page, ses libellés et son référencement. Aucune page à créer.', en: 'The list of posts: its address, page top, labels and SEO. No page to create.'},
   perPage: {fr: 'Articles par page', en: 'Posts per page'},
   relatedEyebrow: {fr: 'Surtitre des articles liés', en: 'Related posts eyebrow'},
   relatedTitle: {fr: 'Titre des articles liés', en: 'Related posts title'},
   more: {fr: 'Bouton vers le blog', en: 'Button to the blog'},
   dateLabel: {fr: 'Libellé de la date', en: 'Date label'},
   toc: {fr: 'Titre du sommaire', en: 'Table of contents title'},
-  role: {fr: 'Page du blog', en: 'Blog page'},
-  notice: {fr: 'Cette page est la page du blog (Blog › Réglages du blog) : son haut de page et ses sections ne sont pas affichés, le site montre la liste des articles.', en: 'This page is the blog page (Blog › Blog settings): its page top and sections are not displayed, the site shows the list of posts.'},
 });
 
 /** Admin texts of the Case studies settings global (Réalisations group). */
 export const portfolioText = texts({
   ...listingCommonText,
   label: {fr: 'Réglages des réalisations', en: 'Case studies settings'},
+  slugDescription: {fr: 'Minuscules, chiffres et tirets. « realisations » : la liste à nom-du-site.com/realisations, les réalisations à /realisations/<réalisation>, les archives à /realisations/categorie/<catégorie>.', en: 'Lowercase letters, digits and hyphens. “work”: the list at site-name.com/work, case studies at /work/<case study>, archives at /work/categorie/<category>.'},
   tabs: {
     page: {fr: 'Page des réalisations', en: 'Case studies page'},
     labels: {fr: 'Fiche et libellés', en: 'Fact sheet and labels'},
   },
-  description: {fr: 'La page choisie affiche la liste des réalisations à la place de son contenu, avec le titre et le chapô ci-dessous. Les réalisations et les archives de catégorie prennent son adresse : /<page>/<réalisation>, /<page>/categorie/<catégorie>.', en: 'The chosen page shows the list of case studies instead of its content, with the title and lead below. Case studies and category archives take their address from it: /<page>/<case study>, /<page>/categorie/<category>.'},
+  description: {fr: 'La liste des réalisations : son adresse, son haut de page, les libellés de la fiche et son référencement. Aucune page à créer.', en: 'The list of case studies: its address, page top, fact sheet labels and SEO. No page to create.'},
   perPage: {fr: 'Réalisations par page', en: 'Case studies per page'},
   relatedEyebrow: {fr: 'Surtitre des réalisations liées', en: 'Related case studies eyebrow'},
   relatedTitle: {fr: 'Titre des réalisations liées', en: 'Related case studies title'},
@@ -207,6 +207,4 @@ export const portfolioText = texts({
   ctaDescription: {fr: 'Bouton sous les chiffres de la fiche. Chaque réalisation peut le remplacer.', en: 'Button under the fact sheet figures. Each case study can replace it.'},
   ctaLabel: {fr: 'Texte', en: 'Label'},
   ctaHref: {fr: 'Lien', en: 'Link'},
-  role: {fr: 'Page des réalisations', en: 'Case studies page'},
-  notice: {fr: 'Cette page est la page des réalisations (Réalisations › Réglages des réalisations) : son haut de page et ses sections ne sont pas affichés, le site montre la liste des réalisations.', en: 'This page is the case studies page (Case studies › Case studies settings): its page top and sections are not displayed, the site shows the list of case studies.'},
 });

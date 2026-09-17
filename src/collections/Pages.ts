@@ -2,6 +2,7 @@ import type {CollectionConfig} from 'payload';
 
 import {heroField} from '@/fields/hero';
 import {siloField} from '@/fields/siloField';
+import {pageSlugValidate} from '@/fields/listingSlug';
 import {slugField} from '@/fields/shared';
 import {collectionsText as ct} from '@/i18n/admin/collections';
 import {sections} from '@/sections.config';
@@ -29,15 +30,16 @@ export const Pages: CollectionConfig = {
     {
       type: 'tabs',
       tabs: [
-        {label: ct.pages.tabs.pageTop, fields: [{name: 'listingNoticeTop', type: 'ui', admin: {components: {Field: '@/fields/ListingPageNotice#ListingPageNotice'}}}, {name: 'title', type: 'text', label: ct.pages.fields.title, required: true, localized: true, admin: {components: {Cell: '@/fields/ListingPageNotice#ListingTitleCell'}}}, heroField]},
+        {label: ct.pages.tabs.pageTop, fields: [{name: 'title', type: 'text', label: ct.pages.fields.title, required: true, localized: true}, heroField]},
         {
           label: ct.pages.tabs.content,
           description: ct.pages.tabs.contentDescription,
-          fields: [{name: 'listingNoticeContent', type: 'ui', admin: {components: {Field: '@/fields/ListingPageNotice#ListingPageNotice'}}}, sections.field],
+          fields: [sections.field],
         },
       ],
     },
-    slugField,
+    // a page cannot take the address of a listing (blog, case studies)
+    {...slugField, validate: pageSlugValidate as never},
     siloField({name: 'silo', fromSettings: true, admin: {position: 'sidebar', description: ct.pages.fields.siloDescription}}),
   ],
 };

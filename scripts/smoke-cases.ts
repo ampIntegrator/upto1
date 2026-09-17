@@ -1,7 +1,7 @@
 /**
  * Smoke test of the case studies (pnpm smoke:cases): creates a throwaway case category, two case
- * studies (every fact sheet field, prose and figures) and a page, sets that page as the case
- * studies page for the time of the test, checks the list, a case study (hero, sheet, story,
+ * studies (every fact sheet field, prose and figures), sets a throwaway address for the case
+ * studies for the time of the test, checks the list, a case study (hero, sheet, story,
  * related case studies) and the category archive, then deletes everything and restores the
  * settings. Never touches a real page or case study. The dev server must be running.
  *   SMOKE_SHOTS=<dir>: also saves captures of the list and the case study (1440 and 390 px).
@@ -28,15 +28,14 @@ async function main() {
     if (!ok) failures += 1;
   };
   const settings = await payload.findGlobal({slug: 'portfolio', depth: 0});
-  const previous = {page: settings.page ?? null, title: settings.title, lead: settings.lead ?? null, cta: {label: settings.cta?.label ?? null, href: settings.cta?.href ?? null}};
+  const previous = {slug: settings.slug, title: settings.title, lead: settings.lead ?? null, cta: {label: settings.cta?.label ?? null, href: settings.cta?.href ?? null}};
   const image = (await payload.find({collection: 'media', limit: 1, where: {mimeType: {contains: 'image'}}})).docs[0];
   const created: {collection: 'case-studies' | 'pages' | 'case-categories'; id: number}[] = [];
   try {
     const category = await payload.create({collection: 'case-categories', data: {title: 'Catégorie réalisation smoke', slug: `zz-smoke-case-cat-${stamp}`}});
     created.push({collection: 'case-categories', id: category.id});
-    const page = await payload.create({collection: 'pages', data: {title: 'Réalisations smoke', slug: `zz-smoke-cases-${stamp}`, hero: {variant: 'page-glow', title: 'Réalisations smoke'}} as never});
-    created.push({collection: 'pages', id: page.id});
-    await payload.updateGlobal({slug: 'portfolio', data: {page: page.id, title: 'Réalisations <span>smoke</span>', lead: 'Chapô smoke des réalisations.', cta: {label: 'Bouton global smoke', href: '/contact'}}});
+    const page = {slug: `zz-smoke-cases-${stamp}`};
+    await payload.updateGlobal({slug: 'portfolio', data: {slug: page.slug, title: 'Réalisations <span>smoke</span>', lead: 'Chapô smoke des réalisations.', cta: {label: 'Bouton global smoke', href: '/contact'}}});
 
     const content = {
       root: el('root', [
@@ -64,7 +63,7 @@ async function main() {
       data: {title: 'Autre réalisation smoke', slug: `zz-smoke-case-b-${stamp}`, cover: image?.id, category: category.id, publishedAt: new Date(Date.now() - 86400000).toISOString(), sheet: {client: 'Autre client smoke', location: 'Lyon', results: [{value: '+18 pts', label: 'Marge'}], cta: {label: 'Bouton local smoke', href: '/demo'}}} as never,
     });
     created.push({collection: 'case-studies', id: other.id});
-    log(`created: page ${page.id}, case studies ${main.id} and ${other.id}, category ${category.id}`);
+    log(`created: case studies at /${page.slug}, case studies ${main.id} and ${other.id}, category ${category.id}`);
 
     const get = async (path: string) => {
       const res = await fetch(`${BASE}${path}`);
@@ -114,12 +113,24 @@ async function main() {
 
     const wrong = await get(`/not-the-cases-${stamp}/${main.slug}`);
     check(wrong.status === 404, `a case study under another first segment → ${wrong.status}`);
-    const blog = await payload.findGlobal({slug: 'blog', depth: 1});
-    const blogSlug = blog.page && typeof blog.page === 'object' ? blog.page.slug : null;
-    if (blogSlug) {
-      const underBlog = await get(`/${blogSlug}/${main.slug}`);
-      check(underBlog.status === 404, `a case study under the blog page → ${underBlog.status}`);
-    }
+    const blog = await payload.findGlobal({slug: 'blog', depth: 0});
+    const underBlog = await get(`/${blog.slug}/${main.slug}`);
+    check(underBlog.status === 404, `a case study under the blog address → ${underBlog.status}`);
+
+    // addresses: a listing cannot take a page's or the other listing's, a page cannot take a listing's
+    const aPage = (await payload.find({collection: 'pages', limit: 1, depth: 0})).docs[0];
+    const refused = async (label: string, run: () => Promise<unknown>) => {
+      try {
+        await run();
+        check(false, `${label} is refused`);
+      } catch {
+        check(true, `${label} is refused`);
+      }
+    };
+    if (aPage) await refused('a listing address taken by a page', () => payload.updateGlobal({slug: 'portfolio', data: {slug: aPage.slug}}));
+    await refused('a listing address taken by the other listing', () => payload.updateGlobal({slug: 'portfolio', data: {slug: blog.slug}}));
+    await refused('a reserved listing address', () => payload.updateGlobal({slug: 'portfolio', data: {slug: 'admin'}}));
+    await refused('a page at a listing address', () => payload.create({collection: 'pages', data: {title: 'x', slug: page.slug, hero: {variant: 'page-glow', title: 'x'}} as never}));
   } finally {
     await payload.updateGlobal({slug: 'portfolio', data: previous});
     for (const c of created.reverse()) await payload.delete({collection: c.collection, id: c.id});

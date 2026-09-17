@@ -15,6 +15,9 @@
 > - The hero's category chip uses the `high` chip on night (translucent), not the mockup's opaque
 >   pale chip.
 > - The SEO plugin's URL now follows the page chosen for posts and case studies.
+> - Later the same day (Nicolas's decision): no chosen page any more. Each settings global holds
+>   its address and an SEO tab (migrations add_listing_slug_seo, remove_listing_page); the page
+>   notice and the pages list tag were removed. See `docs/blog.md`.
 
 Analysis by Claude Fable, implementation by Claude Opus. Nicolas's request (consignes.md,
 17 Sept. 14:33): « regarder ce qui a été fait sur le blog et préparer le portfolio réalisations,

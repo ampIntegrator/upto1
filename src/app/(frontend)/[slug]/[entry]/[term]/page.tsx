@@ -24,7 +24,7 @@ type Params = {params: Promise<{slug: string; entry: string; term: string}>};
 export async function generateMetadata({params}: Params) {
   const {slug, entry: segment, term} = await params;
   const data = await load(slug, segment, term);
-  return data ? listingMetadata(data.listing, null, data.category) : {title: 'Vidomia'};
+  return data ? listingMetadata(data.listing, data.category) : {title: 'Vidomia'};
 }
 
 export default async function Page({params, searchParams}: Params & {searchParams: Promise<{page?: string | string[]}>}) {

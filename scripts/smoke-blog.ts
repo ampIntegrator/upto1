@@ -1,7 +1,7 @@
 /**
  * Smoke test of the blog (pnpm smoke:blog): creates a throwaway category, author, post (every
- * prose element and every figure block) and page, sets that page as the blog page for the time
- * of the test, checks the blog page, the post and the category archive, then deletes everything
+ * prose element and every figure block), sets a throwaway address for the blog for the time of
+ * the test, checks the blog page, the post and the category archive, then deletes everything
  * and restores the Blog settings. Never touches a real page or post. The dev server must be running.
  *   SMOKE_SHOTS=<dir>: also saves captures of the blog page and the post (1440 and 390 px).
  */
@@ -28,17 +28,16 @@ async function main() {
     if (!ok) failures += 1;
   };
   const blogSettings = await payload.findGlobal({slug: 'blog', depth: 0});
-  const previous = {page: blogSettings.page ?? null, title: blogSettings.title, lead: blogSettings.lead ?? null};
+  const previous = {slug: blogSettings.slug, title: blogSettings.title, lead: blogSettings.lead ?? null};
   const image = (await payload.find({collection: 'media', limit: 1, where: {mimeType: {contains: 'image'}}})).docs[0];
-  const created: {collection: 'posts' | 'pages' | 'authors' | 'categories'; id: number}[] = [];
+  const created: {collection: 'posts' | 'authors' | 'categories'; id: number}[] = [];
   try {
     const category = await payload.create({collection: 'categories', data: {title: 'Catégorie smoke', slug: `zz-smoke-cat-${stamp}`}});
     created.push({collection: 'categories', id: category.id});
     const author = await payload.create({collection: 'authors', data: {name: 'Auteur Smoke', role: 'Rôle smoke', photo: image?.id}});
     created.push({collection: 'authors', id: author.id});
-    const page = await payload.create({collection: 'pages', data: {title: 'Blog smoke', slug: `zz-smoke-blog-${stamp}`, hero: {variant: 'page-glow', title: 'Blog smoke'}} as never});
-    created.push({collection: 'pages', id: page.id});
-    await payload.updateGlobal({slug: 'blog', data: {page: page.id, title: 'Actualités <span>smoke</span>', lead: 'Chapô smoke du blog.'}});
+    const page = {slug: `zz-smoke-blog-${stamp}`};
+    await payload.updateGlobal({slug: 'blog', data: {slug: page.slug, title: 'Actualités <span>smoke</span>', lead: 'Chapô smoke du blog.'}});
 
     const content = {
       root: el('root', [
@@ -63,7 +62,7 @@ async function main() {
       data: {title: 'Article <span>smoke</span>', slug: `zz-smoke-post-${stamp}`, excerpt: 'Chapô smoke de l’article.', coverCaption: 'Légende couverture smoke', cover: image?.id, author: author.id, category: category.id, publishedAt: new Date().toISOString(), content} as never,
     });
     created.push({collection: 'posts', id: post.id});
-    log(`created: page ${page.id}, post ${post.id}, category ${category.id}, author ${author.id}`);
+    log(`created: blog at /${page.slug}, post ${post.id}, category ${category.id}, author ${author.id}`);
 
     const get = async (path: string) => {
       const res = await fetch(`${BASE}${path}`);

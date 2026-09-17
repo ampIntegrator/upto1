@@ -8,7 +8,7 @@ import {Hero} from '@/components/Hero';
 import {PageSections} from '@/components/PageSections';
 import {SitePage} from '@/components/SitePage';
 import {toSections} from '@/lib/sections';
-import {listingOfPage} from '@/lib/listing-pages';
+import {listingAtBase} from '@/lib/listing-pages';
 import {ListingList, listingMetadata, pageFromQuery} from './ListingList';
 import {breadcrumbProps, getLocale, getSite, sectionsContext, pageSilo, showBreadcrumb, toFooter, toHeader, toHero} from '@/lib/site';
 
@@ -24,10 +24,10 @@ export async function generateMetadata({params}: {params: Promise<{slug: string}
   const {slug} = await params;
   const locale = await getLocale();
   const [page, site] = await Promise.all([loadPage(slug, locale), getSite(locale)]);
+  // a listing address (blog, case studies): the SEO of its settings global
+  const listing = listingAtBase(site, locale, slug);
+  if (listing) return listingMetadata(listing);
   if (!page) return {title: 'Vidomia'};
-  // a listing page (blog, case studies): its settings title when the page has no SEO title
-  const listing = listingOfPage(site, locale, page.id);
-  if (listing) return listingMetadata(listing, page.meta);
   return {title: page.meta?.title || `${page.title} · Vidomia`, description: page.meta?.description || undefined};
 }
 
@@ -35,10 +35,10 @@ export default async function Page({params, searchParams}: {params: Promise<{slu
   const {slug} = await params;
   const locale = await getLocale();
   const [page, site] = await Promise.all([loadPage(slug, locale), getSite(locale)]);
-  if (!page) notFound();
-  // the page chosen as a listing (Blog settings, Case studies settings) shows its entries instead of its content
-  const listing = listingOfPage(site, locale, page.id);
+  // a listing address (Blog settings, Case studies settings): the list of its entries, no page involved
+  const listing = listingAtBase(site, locale, slug);
   if (listing) return <ListingList locale={locale} listing={listing} site={site} page={pageFromQuery((await searchParams).page)} />;
+  if (!page) notFound();
   const hero = toHero(page, site.settings);
   // full screen: the breadcrumb is a strip below the hero; page top: it is inside the Hero
   const bandBreadcrumb = hero.variant !== 'page' && showBreadcrumb(page, site.settings);

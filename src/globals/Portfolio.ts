@@ -16,7 +16,9 @@ export const Portfolio: GlobalConfig = {
   admin: {group: ct.groups.cases, description: t.description},
   access: {read: () => true},
   fields: listingSettingsFields({
+    self: 'portfolio',
     t,
+    slug: 'realisations',
     eyebrow: 'Nos réalisations',
     title: 'Des chantiers <span>chiffrés juste.</span>',
     labelRows: [

@@ -4,11 +4,10 @@
  * library. Re-runnable: the demo pages (slugs demo-*) are deleted and recreated, the
  * images are imported once (by file name). Real pages are never touched.
  * Blog: a demo author (« Marie Lefebvre ») and a demo post using every prose element and figure
- * (slug demo-industrialiser-le-cycle-commercial), recreated too. The blog page itself is chosen in
- * Blog › Réglages du blog: this script never changes the settings.
+ * (slug demo-industrialiser-le-cycle-commercial), recreated too. This script never changes the
+ * settings (the addresses of the blog and the case studies are typed in their settings global).
  * Case studies: the « Vasseur Construction » case study of mockup 23 (slug demo-vasseur-construction)
- * in a « Rénovation » category (created once), recreated too; the case studies page is chosen in
- * Réalisations › Réglages des réalisations.
+ * in a « Rénovation » category (created once), recreated too.
  */
 import config from '@payload-config';
 import {mkdtemp, writeFile} from 'node:fs/promises';
@@ -186,8 +185,7 @@ async function main() {
     data: {title: 'Du devis à la facturation : <span>industrialiser</span> le cycle commercial', slug: postSlug, excerpt: 'Entre l’estimation envoyée et le paiement encaissé, le temps se perd. Méthode en trois leviers, chiffres à l’appui.', cover: analyse, coverCaption: 'Un cycle commercial piloté de bout en bout.', author: author.id, category: category?.id, publishedAt: new Date().toISOString(), content} as never,
   });
   const blogSettings = await payload.findGlobal({slug: 'blog', depth: 1});
-  const blogPage = blogSettings.page && typeof blogSettings.page === 'object' ? blogSettings.page.slug : null;
-  log(blogPage ? `article de démo : http://localhost:3000/${blogPage}/${postSlug}` : 'article de démo créé ; choisissez la page du blog dans Blog › Réglages du blog pour le voir');
+  log(`article de démo : http://localhost:3000/${blogSettings.slug}/${postSlug}`);
 
   // 4 · case studies: the « Vasseur Construction » case study of mockup 23, in a « Rénovation » category
   const renovation = (await payload.find({collection: 'case-categories', where: {slug: {equals: 'renovation'}}, limit: 1})).docs[0] ?? (await payload.create({collection: 'case-categories', data: {title: 'Rénovation', slug: 'renovation'}}));
@@ -236,8 +234,7 @@ async function main() {
     } as never,
   });
   const portfolio = await payload.findGlobal({slug: 'portfolio', depth: 1});
-  const casesPage = portfolio.page && typeof portfolio.page === 'object' ? portfolio.page.slug : null;
-  log(casesPage ? `réalisation de démo : http://localhost:3000/${casesPage}/${caseSlug}` : 'réalisation de démo créée ; choisissez la page des réalisations dans Réalisations › Réglages des réalisations pour la voir');
+  log(`réalisation de démo : http://localhost:3000/${portfolio.slug}/${caseSlug}`);
   process.exit(0);
 }
 

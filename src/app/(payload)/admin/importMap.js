@@ -1,5 +1,3 @@
-import { ListingPageNotice as ListingPageNotice_4126e13b78c2a4c2df89063f1201d7b2 } from '@/fields/ListingPageNotice'
-import { ListingTitleCell as ListingTitleCell_4126e13b78c2a4c2df89063f1201d7b2 } from '@/fields/ListingPageNotice'
 import { IconPicker as IconPicker_8bfb3e3bce55055cefcbdba58b426cf6 } from '@/fields/IconPicker'
 import { SwatchRadio as SwatchRadio_0db4766985603351e805e768f67fbd0c } from '@/fields/SwatchRadio'
 import { BlockNameField as BlockNameField_4061162db6db9be055e809ce229cfb8b } from '@/fields/sections/BlockNameField'
@@ -33,8 +31,6 @@ import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } f
 
 /** @type import('payload').ImportMap */
 export const importMap = {
-  "@/fields/ListingPageNotice#ListingPageNotice": ListingPageNotice_4126e13b78c2a4c2df89063f1201d7b2,
-  "@/fields/ListingPageNotice#ListingTitleCell": ListingTitleCell_4126e13b78c2a4c2df89063f1201d7b2,
   "@/fields/IconPicker#IconPicker": IconPicker_8bfb3e3bce55055cefcbdba58b426cf6,
   "@/fields/SwatchRadio#SwatchRadio": SwatchRadio_0db4766985603351e805e768f67fbd0c,
   "@/fields/sections/BlockNameField#BlockNameField": BlockNameField_4061162db6db9be055e809ce229cfb8b,

@@ -10,9 +10,9 @@ shared listing code described there.
 Group **Réalisations**: Réalisations (`case-studies`), Catégories (`case-categories`, distinct from
 the blog's), Réglages des réalisations (`portfolio` global).
 
-- **Réglages des réalisations**, tab « Page des réalisations »: the chosen page (it then shows the
-  list of case studies instead of its own content, a note says so in its admin), eyebrow, h1 title
-  with an optional `<span>` accent, lead, light or night tone, case studies per page.
+- **Réglages des réalisations**, tab « Page des réalisations »: the address (« realisations » by
+  default; checked like the blog's, see `docs/blog.md`: no page to create), eyebrow, h1 title with
+  an optional `<span>` accent, lead, light or night tone, case studies per page. An SEO tab.
 - Tab « Fiche et libellés »: list labels (« Toutes », « Voir l’étude », « Étude de cas » chip,
   archive eyebrow, « Voir toutes les réalisations », related eyebrow and title, empty list), the
   fact sheet's row labels (client, category, location, deployment, « Modules Orbita », client link
@@ -35,8 +35,7 @@ the blog's), Réglages des réalisations (`portfolio` global).
 | `/<réalisations>/<slug>` | the case study (`CasePage`) |
 | `/<réalisations>/categorie/<category>` | archive, automatic h1, no lead |
 
-A case study under the blog page (or any other address) is a 404. While no page is chosen, links
-fall back to `/realisations/…`.
+A case study under the blog's address (or any other address) is a 404.
 
 The case study page: breadcrumb (listing › category › client), `CaseHero` (full-bleed cover on
 night with a veil, « Étude de cas » and category chips, h1 with accent, lead), `PostLayout` with
@@ -54,9 +53,9 @@ Conversions: `caseHero`, `caseSheet` in `src/lib/cases.ts`, `caseCard` in `src/l
 
 ## Tests and demo
 
-- `pnpm smoke:cases` (dev server running): throwaway category, two case studies and a page set as
-  the case studies page for the test; checks the list, the case study (hero, sheet with a local
-  label, figures, global and local buttons, story, related), the archive and the 404s, then deletes
+- `pnpm smoke:cases` (dev server running): throwaway category, two case studies and a throwaway
+  address for the test; checks the list, the case study (hero, sheet with a local
+  label, figures, global and local buttons, story, related), the archive, the 404s and the address refusals, then deletes
   everything and restores the settings. `SMOKE_SHOTS=<dir>` also saves captures.
 - `pnpm smoke:sections` covers the case card in a column, in a manual collection and the
   « Dernières réalisations » source.

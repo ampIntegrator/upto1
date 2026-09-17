@@ -1,8 +1,8 @@
 /**
- * ListingList — a listing page (the page chosen in Blog › Réglages du blog, or in Réalisations ›
- * Réglages des réalisations) and its category archives: the page top (title, lead, light or
+ * ListingList — a listing page (at the address typed in Blog › Réglages du blog, or in Réalisations
+ * › Réglages des réalisations) and its category archives: the page top (title, lead, light or
  * night; a category archive gets the category as h1 and no lead), the category chips, the cards
- * and the pagination. Rendered in place of the chosen page's own content.
+ * and the pagination.
  */
 import React from 'react';
 
@@ -49,9 +49,9 @@ export async function ListingList({locale, listing, site, page, category}: {loca
 
 export const pageFromQuery = (value: string | string[] | undefined): number => Math.max(0, Math.floor(Number(Array.isArray(value) ? value[0] : (value ?? 1))) - 1 || 0);
 
-/** Metadata of a listing page or archive: the SEO fields of the chosen page win over the listing's title and lead. */
-export function listingMetadata(listing: ListingAdapter, pageMeta?: {title?: string | null; description?: string | null} | null, category?: ListingCategory) {
+/** Metadata of a listing page or archive: the SEO tab of the listing's global wins over its title and lead. */
+export function listingMetadata(listing: ListingAdapter, category?: ListingCategory) {
   const {cfg} = listing;
   if (category) return {title: `${category.title} · ${plainTitle(cfg.title)} · Vidomia`, description: cfg.lead};
-  return {title: pageMeta?.title || `${plainTitle(cfg.title)} · Vidomia`, description: pageMeta?.description || cfg.lead || undefined};
+  return {title: cfg.meta?.title || `${plainTitle(cfg.title)} · Vidomia`, description: cfg.meta?.description || cfg.lead || undefined};
 }

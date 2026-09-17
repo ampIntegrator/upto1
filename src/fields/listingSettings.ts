@@ -1,17 +1,19 @@
 import type {Field, Tab} from 'payload';
 
 import type {Text} from '@/i18n/admin/languages';
+import {listingSlugField} from './listingSlug';
 
 /**
  * The fields of a listing settings global (Blog › Réglages du blog, Réalisations › Réglages des
- * réalisations): a « page » tab (chosen page, eyebrow, h1 title, lead, tone, entries per page)
+ * réalisations): a « page » tab (address, eyebrow, h1 title, lead, tone, entries per page)
  * and a « labels » tab (a `labels` group of localized texts, plus the listing's own fields).
  * Read on the site by `listingConfig` (src/lib/listings.ts).
  * A factory: every call returns fresh field objects (Payload mutates configs while sanitising).
  */
 export type ListingSettingsText = {
   tabs: {page: Text; labels: Text};
-  page: Text;
+  slug: Text;
+  slugDescription: Text;
   eyebrow: Text;
   title: Text;
   titleDescription: Text;
@@ -26,12 +28,12 @@ export type ListingSettingsText = {
 /** a localized label with its default, `width` in % of the row */
 export type ListingLabel = {name: string; label: Text; defaultValue: string; width: number};
 
-export function listingSettingsFields(o: {t: ListingSettingsText; eyebrow: string; title: string; labelRows: ListingLabel[][]; extraLabelFields?: () => Field[]}): Field[] {
+export function listingSettingsFields(o: {self: 'blog' | 'portfolio'; t: ListingSettingsText; slug: string; eyebrow: string; title: string; labelRows: ListingLabel[][]; extraLabelFields?: () => Field[]}): Field[] {
   const {t} = o;
   const pageTab: Tab = {
     label: t.tabs.page,
     fields: [
-      {name: 'page', type: 'relationship', relationTo: 'pages', label: t.page},
+      listingSlugField({self: o.self, label: t.slug, description: t.slugDescription, defaultValue: o.slug}),
       {type: 'row', fields: [
         {name: 'eyebrow', type: 'text', label: t.eyebrow, localized: true, defaultValue: o.eyebrow, admin: {width: '34%'}},
         {name: 'title', type: 'text', label: t.title, localized: true, defaultValue: o.title, admin: {width: '66%', description: t.titleDescription}},

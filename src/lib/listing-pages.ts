@@ -1,5 +1,5 @@
 /**
- * The listings as routes see them: which listing a page or an address belongs to, and, for each
+ * The listings as routes see them: which listing an address belongs to, and, for each
  * listing, how to load one page of cards, its categories and one category. Server only.
  * Adding a listing: a config in `listings.ts`, loaders, and an adapter here.
  */
@@ -46,8 +46,5 @@ export function listingAdapters(site: SiteListings, locale: Locale): ListingAdap
   ];
 }
 
-/** the listing whose chosen page is this page */
-export const listingOfPage = (site: SiteListings, locale: Locale, pageId: number): ListingAdapter | null => listingAdapters(site, locale).find((l) => l.cfg.pageId === pageId) ?? null;
-
-/** the listing living at this first segment of the address (only a chosen page has one) */
-export const listingAtBase = (site: SiteListings, locale: Locale, base: string): ListingAdapter | null => listingAdapters(site, locale).find((l) => l.cfg.base !== null && l.cfg.base === base) ?? null;
+/** the listing living at this first segment of the address */
+export const listingAtBase = (site: SiteListings, locale: Locale, base: string): ListingAdapter | null => listingAdapters(site, locale).find((l) => l.cfg.base === base) ?? null;

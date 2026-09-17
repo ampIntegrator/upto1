@@ -25,6 +25,18 @@ export const fieldsText = texts({
       en: 'Lowercase letters, digits and hyphens. “accueil” = home page.',
     },
     invalid: {fr: 'Minuscules, chiffres et tirets uniquement.', en: 'Lowercase letters, digits and hyphens only.'},
+    reserved: {
+      fr: ({slug}: {slug: string}) => `« ${slug} » est réservé par le site.`,
+      en: ({slug}: {slug: string}) => `“${slug}” is reserved by the site.`,
+    },
+    takenByPage: {
+      fr: ({slug}: {slug: string}) => `« ${slug} » est déjà l’adresse d’une page.`,
+      en: ({slug}: {slug: string}) => `“${slug}” is already a page’s address.`,
+    },
+    takenByListing: {
+      fr: ({slug, listing}: {slug: string; listing: string}) => `« ${slug} » est déjà l’adresse de la liste « ${listing} ».`,
+      en: ({slug, listing}: {slug: string; listing: string}) => `“${slug}” is already the address of the “${listing}” list.`,
+    },
   },
   silo: {
     label: {fr: "Silo d'accent", en: 'Accent silo'},

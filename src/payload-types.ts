@@ -7032,14 +7032,17 @@ export interface Footer {
   createdAt?: string | null;
 }
 /**
- * The chosen page shows the list of posts instead of its content, with the title and lead below. Posts and category archives take its address: /<page>/<post>, /<page>/categorie/<category>.
+ * The list of posts: its address, page top, labels and SEO. No page to create.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "blog".
  */
 export interface Blog {
   id: number;
-  page?: (number | null) | Page;
+  /**
+   * Lowercase letters, digits and hyphens. “news”: the list at site-name.com/news, posts at /news/<post>, archives at /news/categorie/<category>.
+   */
+  slug: string;
   eyebrow?: string | null;
   /**
    * A word between <span>…</span> is set in accent serif.
@@ -7059,18 +7062,29 @@ export interface Blog {
     relatedTitle?: string | null;
     empty?: string | null;
   };
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
 /**
- * The chosen page shows the list of case studies instead of its content, with the title and lead below. Case studies and category archives take their address from it: /<page>/<case study>, /<page>/categorie/<category>.
+ * The list of case studies: its address, page top, fact sheet labels and SEO. No page to create.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "portfolio".
  */
 export interface Portfolio {
   id: number;
-  page?: (number | null) | Page;
+  /**
+   * Lowercase letters, digits and hyphens. “work”: the list at site-name.com/work, case studies at /work/<case study>, archives at /work/categorie/<category>.
+   */
+  slug: string;
   eyebrow?: string | null;
   /**
    * A word between <span>…</span> is set in accent serif.
@@ -7106,6 +7120,14 @@ export interface Portfolio {
   cta?: {
     label?: string | null;
     href?: string | null;
+  };
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -7288,7 +7310,7 @@ export interface FooterSelect<T extends boolean = true> {
  * via the `definition` "blog_select".
  */
 export interface BlogSelect<T extends boolean = true> {
-  page?: T;
+  slug?: T;
   eyebrow?: T;
   title?: T;
   lead?: T;
@@ -7307,6 +7329,13 @@ export interface BlogSelect<T extends boolean = true> {
         relatedTitle?: T;
         empty?: T;
       };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -7316,7 +7345,7 @@ export interface BlogSelect<T extends boolean = true> {
  * via the `definition` "portfolio_select".
  */
 export interface PortfolioSelect<T extends boolean = true> {
-  page?: T;
+  slug?: T;
   eyebrow?: T;
   title?: T;
   lead?: T;
@@ -7349,6 +7378,13 @@ export interface PortfolioSelect<T extends boolean = true> {
     | {
         label?: T;
         href?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
       };
   updatedAt?: T;
   createdAt?: T;

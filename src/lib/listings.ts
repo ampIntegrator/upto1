@@ -1,8 +1,8 @@
 /**
  * Listings: the blog and the case studies, each described by its settings global (Blog ›
- * Réglages du blog, Réalisations › Réglages des réalisations), like WordPress's « posts page »:
- * the chosen page is the listing, its entries live under its address, the category archives
- * under /<listing>/categorie/<category>. No React and no Payload runtime here: used by routes,
+ * Réglages du blog, Réalisations › Réglages des réalisations). A listing is not a page: its global
+ * holds its address (« actualites » → /actualites), its page top, labels and SEO; its entries live
+ * under /<address>/<entry>, the category archives under /<address>/categorie/<category>. No React and no Payload runtime here: used by routes,
  * conversions, the footer and the section builder.
  */
 
@@ -26,11 +26,10 @@ export type ListingLabels = {
 
 export type ListingConfig<L extends ListingLabels = ListingLabels> = {
   kind: ListingKind;
-  /** id and slug of the page chosen as the listing (null: no page chosen) */
-  pageId: number | null;
-  base: string | null;
-  /** address used while no page is chosen */
-  fallbackBase: string;
+  /** the listing's address, first segment of its URLs (« actualites ») */
+  base: string;
+  /** SEO of the listing page (its global's SEO tab) */
+  meta?: {title?: string; description?: string};
   eyebrow?: string;
   title: string;
   lead?: string;
@@ -42,22 +41,18 @@ export type ListingConfig<L extends ListingLabels = ListingLabels> = {
 /** the category archive segment: /<listing>/categorie/<category> */
 export const CATEGORY_SEGMENT = 'categorie';
 
-type PageRef = number | {id: number; slug?: string | null} | null | undefined;
 type LabelsDoc = Partial<Record<string, string | null>> | null | undefined;
 /** the fields every listing global shares (src/fields/listingSettings.ts) */
-export type ListingGlobalDoc = {page?: PageRef; eyebrow?: string | null; title?: string | null; lead?: string | null; tone?: string | null; perPage?: number | null; labels?: LabelsDoc} | null | undefined;
+export type ListingGlobalDoc = {slug?: string | null; meta?: {title?: string | null; description?: string | null} | null; eyebrow?: string | null; title?: string | null; lead?: string | null; tone?: string | null; perPage?: number | null; labels?: LabelsDoc} | null | undefined;
 
-/** Reads a listing global: its page, page top, pagination, and labels with their defaults. */
-export function listingConfig<L extends ListingLabels>(kind: ListingKind, doc: ListingGlobalDoc, defaults: {fallbackBase: string; title: string; labels: L}): ListingConfig<L> {
-  const page = doc?.page;
-  const pageDoc = page && typeof page === 'object' ? page : null;
+/** Reads a listing global: its address, page top, pagination, SEO, and labels with their defaults. */
+export function listingConfig<L extends ListingLabels>(kind: ListingKind, doc: ListingGlobalDoc, defaults: {base: string; title: string; labels: L}): ListingConfig<L> {
   const given = doc?.labels ?? {};
   const labels = Object.fromEntries(Object.entries(defaults.labels).map(([key, fallback]) => [key, given[key] || fallback])) as L;
   return {
     kind,
-    pageId: pageDoc?.id ?? (typeof page === 'number' ? page : null),
-    base: pageDoc?.slug ?? null,
-    fallbackBase: defaults.fallbackBase,
+    base: doc?.slug || defaults.base,
+    meta: {title: doc?.meta?.title || undefined, description: doc?.meta?.description || undefined},
     eyebrow: doc?.eyebrow || undefined,
     title: doc?.title || defaults.title,
     lead: doc?.lead || undefined,
@@ -72,7 +67,7 @@ export type BlogConfig = ListingConfig<BlogLabels>;
 
 export const blogConfig = (doc: ListingGlobalDoc): BlogConfig =>
   listingConfig('blog', doc, {
-    fallbackBase: 'blog',
+    base: 'blog',
     title: 'Actualités',
     labels: {all: 'Tous', readMore: 'Lire l’article', dateLabel: 'Publié le', toc: 'Sommaire', categoryPrefix: 'Catégorie', more: 'Voir le blog', relatedEyebrow: 'Le blog', relatedTitle: 'Pour continuer <span>sur le sujet.</span>', empty: 'Aucun article pour le moment.'},
   });
@@ -99,7 +94,7 @@ type PortfolioDoc = (NonNullable<ListingGlobalDoc> & {sheet?: LabelsDoc; cta?: {
 export function casesConfig(doc: PortfolioDoc): CasesConfig {
   const sheet = doc?.sheet ?? {};
   const cfg = listingConfig('cases', {...doc, labels: {...(doc?.labels ?? {}), ...sheet}}, {
-    fallbackBase: 'realisations',
+    base: 'realisations',
     title: 'Des chantiers <span>chiffrés juste.</span>',
     labels: {
       all: 'Toutes', readMore: 'Voir l’étude', badge: 'Étude de cas', categoryPrefix: 'Catégorie', more: 'Voir toutes les réalisations', relatedEyebrow: 'Nos réalisations', relatedTitle: 'D’autres chantiers <span>chiffrés juste.</span>', empty: 'Aucune réalisation pour le moment.',
@@ -111,8 +106,8 @@ export function casesConfig(doc: PortfolioDoc): CasesConfig {
   return {...cfg, cta: label && href ? {label, href} : undefined};
 }
 
-/** /<listing>, or /<fallback> while no page is chosen */
-export const listingPath = (cfg: ListingConfig): string => `/${cfg.base ?? cfg.fallbackBase}`;
+/** /<listing address> */
+export const listingPath = (cfg: ListingConfig): string => `/${cfg.base}`;
 export const entryPath = (cfg: ListingConfig, slug: string): string => `${listingPath(cfg)}/${slug}`;
 export const categoryPath = (cfg: ListingConfig, category?: string | null): string => (category ? `${listingPath(cfg)}/${CATEGORY_SEGMENT}/${category}` : listingPath(cfg));
 /** page n (from 0) of a list: page 0 has no query */

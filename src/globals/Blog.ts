@@ -15,7 +15,9 @@ export const Blog: GlobalConfig = {
   admin: {group: ct.groups.blog, description: t.description},
   access: {read: () => true},
   fields: listingSettingsFields({
+    self: 'blog',
     t,
+    slug: 'blog',
     eyebrow: 'Le blog',
     title: 'Actualités',
     labelRows: [

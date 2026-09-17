@@ -5,17 +5,23 @@ mockup references). Mockups: `Orbita/orbita/18-blogPost.html` (post), `19-blogCa
 
 ## The blog page
 
-Like WordPress's « posts page »: in **Blog › Réglages du blog** (the `blog` global, in the Blog group
-next to posts, categories and authors), choose one page of the site. That page then renders the list of posts instead of its own page top and sections (a note says so in its
-admin). The global also holds the page top of the list (eyebrow, h1 title with an optional
-`<span>` serif accent, optional lead, light or night tone), the posts per page (12) and the labels
+Not a page: in **Blog › Réglages du blog** (the `blog` global, in the Blog group next to posts,
+categories and authors), type the blog's **address** (« actualites » → site.com/actualites; default
+« blog »). The global holds everything about the list: address, page top (eyebrow, h1 title with an
+optional `<span>` serif accent, optional lead, light or night tone), posts per page (12), labels
 (« Tous », « Lire l’article », « Publié le », « Sommaire », « Catégorie », « Voir le blog », related
-posts eyebrow and title, empty list).
+posts eyebrow and title, empty list) and an SEO tab. Nothing to create in Pages (decided with
+Nicolas on 17 September 2026: a page to create only to be replaced, with its required page top,
+was confusing).
+
+The address is checked when saving (`src/fields/listingSlug.ts`): format, not a site route
+(admin, api, design…), not a page's slug, not the case studies' address; and a page cannot take
+the blog's or the case studies' address. A listing address wins over a page at routing time.
 
 The blog is one of the site's two **listings**, the case studies being the other (`docs/cases.md`):
 the config, the routes, the list and the cards are shared (see « Shared listing code » below).
 
-Everything derives from that page's slug:
+Everything derives from that address:
 
 | URL | Content | Route |
 |---|---|---|
@@ -25,7 +31,7 @@ Everything derives from that page's slug:
 
 A post under any other first segment is a 404. The footer's latest posts, its « Tous les
 articles » link, the mega menu's featured post, post cards and collections of posts all link under
-the blog page (`src/lib/listings.ts`). While no blog page is chosen, links fall back to `/blog/…`.
+the blog's address (`src/lib/listings.ts`).
 
 ## A post
 
@@ -78,7 +84,7 @@ links, lists, tables) and `tabsEditor` (the same without tables: tabs, key point
 ## Tests and demo
 
 - `pnpm smoke:blog` (dev server running): throwaway category, author, post (every prose element and
-  figure) and page, set as the blog page for the test, then everything is deleted and the Blog
+  figure) and a throwaway blog address for the test, then everything is deleted and the Blog
   settings restored. Checks the blog page, the post, the category archive and a 404.
   `SMOKE_SHOTS=<dir>` also saves captures.
 - `pnpm smoke:sections` covers the section heading and the figures in columns.
@@ -91,7 +97,7 @@ links, lists, tables) and `tabsEditor` (the same without tables: tabs, key point
 
 Generalised on 17 September 2026 when the case studies were built:
 
-- `src/lib/listings.ts`: `ListingConfig` (kind, chosen page, fallback address, page top, labels),
+- `src/lib/listings.ts`: `ListingConfig` (kind, address, SEO, page top, labels),
   `blogConfig` / `casesConfig`, and the addresses `listingPath`, `entryPath`, `categoryPath`,
   `pagePath`, plus `plainTitle` (the title without its serif accent).
 - `src/lib/cards.ts`: `postCard` and `caseCard`, the one conversion of an entry to a site card
@@ -100,11 +106,11 @@ Generalised on 17 September 2026 when the case studies were built:
   one entry, related entries, latest entries, entries by id); `src/lib/posts.ts` and
   `src/lib/cases.ts` wrap them and add the page-specific props.
 - `src/lib/listing-pages.ts`: for each listing, how routes load a page of cards and its
-  categories, and which listing owns a page (`listingOfPage`) or an address (`listingAtBase`).
-- Routes are dispatchers: `[slug]/page.tsx` renders `ListingList` for a chosen page,
+  categories, and which listing owns an address (`listingAtBase`).
+- Routes are dispatchers: `[slug]/page.tsx` renders `ListingList` at a listing's address (before looking for a page),
   `[slug]/[entry]` renders `PostPage` or `CasePage` depending on the listing at that address,
   `[slug]/[entry]/[term]` renders a category archive when `entry` is « categorie » (Next.js forbids
   two differently named dynamic folders at the same level, hence the nesting).
 - Settings globals: `listingSettingsFields()` (`src/fields/listingSettings.ts`) builds both
-  globals' tabs; admin texts share `listingCommonText`. `ListingPageNotice` shows the note on the
-  page chosen by either global.
+  globals' tabs (address, page top, labels; the SEO plugin adds the SEO tab); admin texts share
+  `listingCommonText`.

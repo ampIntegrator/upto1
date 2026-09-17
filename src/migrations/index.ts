@@ -30,6 +30,8 @@ import * as migration_20260917_122357_remove_settings_blog from './20260917_1223
 import * as migration_20260917_130141_add_listing_empty_label from './20260917_130141_add_listing_empty_label';
 import * as migration_20260917_130513_add_case_studies_portfolio from './20260917_130513_add_case_studies_portfolio';
 import * as migration_20260917_130823_add_case_card_collection_source from './20260917_130823_add_case_card_collection_source';
+import * as migration_20260917_132335_add_listing_slug_seo from './20260917_132335_add_listing_slug_seo';
+import * as migration_20260917_132348_remove_listing_page from './20260917_132348_remove_listing_page';
 
 export const migrations = [
   {
@@ -190,6 +192,16 @@ export const migrations = [
   {
     up: migration_20260917_130823_add_case_card_collection_source.up,
     down: migration_20260917_130823_add_case_card_collection_source.down,
-    name: '20260917_130823_add_case_card_collection_source'
+    name: '20260917_130823_add_case_card_collection_source',
+  },
+  {
+    up: migration_20260917_132335_add_listing_slug_seo.up,
+    down: migration_20260917_132335_add_listing_slug_seo.down,
+    name: '20260917_132335_add_listing_slug_seo',
+  },
+  {
+    up: migration_20260917_132348_remove_listing_page.up,
+    down: migration_20260917_132348_remove_listing_page.down,
+    name: '20260917_132348_remove_listing_page'
   },
 ];
