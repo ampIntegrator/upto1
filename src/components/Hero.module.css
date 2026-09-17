@@ -4,6 +4,8 @@
 .lead { max-width: 640px; }
 .paragraph { max-width: 520px; font-size: 18px; line-height: 1.55; }
 .pageInner { padding-block: 64px; }
+/* compact page top (listing pages): the text sets the height, 80 px above and below */
+.pageCompact { padding-block: 80px; }
 
 /* scroll hint (mockup 16) */
 .scrollHint {

@@ -42,7 +42,7 @@ export function CasesDemo({page = 0}: {page?: number}) {
   return (
     <>
       <SiteHeader {...SITE_HEADER} />
-      <Hero variant="page" background="night-halo" eyebrow="Nos réalisations" title={'Des chantiers <span>chiffrés juste.</span>'} lead="Rénovation, gros œuvre, couverture : comment nos clients chiffrent plus vite et signent plus." />
+      <Hero variant="page" compact background="night-halo" eyebrow="Nos réalisations" title={'Des chantiers <span>chiffrés juste.</span>'} lead="Rénovation, gros œuvre, couverture : comment nos clients chiffrent plus vite et signent plus." />
       <PostArchive
         navLabel="Catégories de réalisations"
         categories={[{label: 'Toutes', href: '/mise-en-page/realisations', active: true}, ...CASE_CATEGORIES.map((c) => ({label: c, href: '#'}))]}
