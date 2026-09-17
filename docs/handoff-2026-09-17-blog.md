@@ -1,5 +1,12 @@
 # Handoff: blog (post template, blog card, archive) — 17 September 2026
 
+> **Status: done** (Claude Opus, 17 September 2026), except phase 2 (case studies). What was
+> built, how it works and what differs from this plan: `docs/blog.md`. Differences worth knowing:
+> the figure blocks and `buttonRowFields` are factories (sharing a config with a Lexical editor
+> dropped translation tables); the pagination takes precomputed links (`hrefs`); the TOC needed
+> the Section's `overflow: clip`; mockup captions and labels are 14 px (16 px for the stats band
+> label), dimensions rounded to even pixels.
+
 Written by Claude Fable for the next session (Claude Opus), after a brainstorm with Nicolas
 on 17 September 2026. Read `CLAUDE.md`, `docs/handoff-2026-09-17.md` (project rules, known
 traps, how previous handoffs were run) and `docs/section-builder.md` first. The rules there

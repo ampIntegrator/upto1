@@ -45,7 +45,7 @@ export const settingsText = texts({
   blog: {
     label: {fr: 'Page du blog', en: 'Blog page'},
     description: {fr: 'La page choisie affiche la liste des articles à la place de son contenu, avec le titre et le chapô ci-dessous. Les articles et les archives de catégorie prennent son adresse : /<page>/<article>, /<page>/categorie/<catégorie>.', en: 'The chosen page shows the list of posts instead of its content, with the title and lead below. Posts and category archives take its address: /<page>/<post>, /<page>/categorie/<category>.'},
-    page: {fr: 'Page du blog', en: 'Blog page'},
+    page: {fr: 'Page choisie', en: 'Chosen page'},
     title: {fr: 'Titre (h1)', en: 'Title (h1)'},
     titleDescription: {fr: 'Un mot entre <span>…</span> passe en serif accentué.', en: 'A word between <span>…</span> is set in accent serif.'},
     eyebrow: {fr: 'Surtitre', en: 'Eyebrow'},

@@ -3,6 +3,9 @@
  * every new block at several widths, with Unsplash images imported into the media
  * library. Re-runnable: the demo pages (slugs demo-*) are deleted and recreated, the
  * images are imported once (by file name). Real pages are never touched.
+ * Blog: a demo author (« Marie Lefebvre ») and a demo post using every prose element and figure
+ * (slug demo-industrialiser-le-cycle-commercial), recreated too. The blog page itself is chosen in
+ * Site settings › Blog: this script never changes the settings.
  */
 import config from '@payload-config';
 import {mkdtemp, writeFile} from 'node:fs/promises';
@@ -136,6 +139,52 @@ async function main() {
     await payload.create({collection: 'pages', data: {title: p.title, slug: p.slug, hero: {variant: 'page-glow', eyebrow: 'Démo', title: p.title, lead: LOREM, breadcrumbMode: 'hide'}, sections: p.sections} as never});
     log(`page « ${p.slug} » ${existing.docs.length ? 'recréée' : 'créée'} : http://localhost:3000/${p.slug}`);
   }
+  // 3 · blog: a demo author and a demo post (every prose element and figure)
+  const tx = (text: string, format = 0) => ({type: 'text', text, format, detail: 0, mode: 'normal', style: '', version: 1});
+  const el = (type: string, children: object[], extra: object = {}) => ({type, children, direction: 'ltr', format: '', indent: 0, version: 1, ...extra});
+  const para = (...children: object[]) => el('paragraph', children, {textFormat: 0, textStyle: ''});
+  const head = (tag: string, text: string) => el('heading', [tx(text)], {tag});
+  const item = (value: number, ...children: object[]) => el('listitem', children, {value});
+  const list = (type: 'bullet' | 'number', items: object[][]) => el('list', items.map((c, i) => item(i + 1, ...c)), {listType: type, start: 1, tag: type === 'bullet' ? 'ul' : 'ol'});
+  const fig = (fields: Record<string, unknown>) => ({type: 'block', version: 2, format: '', fields: {id: `demo${Math.random().toString(16).slice(2, 10)}`, blockName: '', ...fields}});
+  const cell = (text: string, headerState = 0) => el('tablecell', [para(tx(text))], {headerState, colSpan: 1, rowSpan: 1, backgroundColor: null});
+  const rowOf = (cells: string[], header = false) => el('tablerow', cells.map((c) => cell(c, header ? 1 : 0)));
+
+  const authorFound = await payload.find({collection: 'authors', where: {name: {equals: 'Marie Lefebvre'}}, limit: 1});
+  const author = authorFound.docs[0] ?? (await payload.create({collection: 'authors', data: {name: 'Marie Lefebvre', role: 'Responsable produit · Vidomia', photo: bureau} as never}));
+  const category = (await payload.find({collection: 'categories', where: {slug: {equals: 'chiffrage'}}, limit: 1})).docs[0] ?? (await payload.find({collection: 'categories', limit: 1})).docs[0];
+  const postSlug = 'demo-industrialiser-le-cycle-commercial';
+  const oldPosts = await payload.find({collection: 'posts', where: {slug: {equals: postSlug}}, limit: 5});
+  for (const doc of oldPosts.docs) await payload.delete({collection: 'posts', id: doc.id});
+  const content = {
+    root: el('root', [
+      head('h2', 'Le cycle commercial, ce maillon qui fuit'),
+      para(tx('Entre l’estimation envoyée et le paiement encaissé, le temps se perd en '), tx('ressaisies', 1), tx(', en relances et en allers-retours. Chaque étape '), tx('isolée', 2), tx(' fonctionne ; c’est la chaîne qui casse.')),
+      head('h3', 'Là où le temps se perd'),
+      list('bullet', [[tx('Le devis part en retard, faute de métré')], [tx('La relance dépend de la mémoire du commercial')], [tx('La facture ressaisit ce que le devis savait déjà')]]),
+      el('quote', [tx('« On ne pilote bien que ce qu’on rend visible. »'), {type: 'linebreak', version: 1}, tx('— Marie Lefebvre, responsable produit')]),
+      fig({blockType: 'statsBand', items: [{value: '−68 %', label: 'Temps de chiffrage'}, {value: '×2,4', label: 'Devis envoyés'}, {value: '+31 %', label: 'Taux de signature'}, {value: '48 h', label: 'Délai d’envoi'}]}),
+      head('h2', 'Trois leviers d’industrialisation'),
+      list('number', [[tx('Standardiser le devis', 1), tx(' : un modèle unique, des postes pré-chiffrés.')], [tx('Automatiser la relance', 1), tx(' : J+3, J+7, J+15, sans y penser.')], [tx('Relier devis et facture', 1), tx(' : la donnée saisie une fois circule jusqu’au paiement.')]]),
+      el('table', [rowOf(['Levier', 'Effort', 'Gain de temps', 'Délai de retour'], true), rowOf(['Devis standardisé', 'Faible', '−35 %', '2 sem.']), rowOf(['Relance automatisée', 'Faible', '−48 %', '1 sem.']), rowOf(['Devis → facture reliés', 'Moyen', '−21 %', '6 sem.'])]),
+      fig({blockType: 'keyPoints', eyebrow: 'À retenir', content: {root: el('root', [list('bullet', [[tx('Le gain le plus rapide vient de la '), tx('relance automatisée', 1), tx('.')], [tx('Une donnée saisie deux fois finira par diverger.')], [tx('Mesurez le '), tx('délai devis → facture', 1), tx(' avant tout autre indicateur.')]])])}}),
+      fig({blockType: 'ctaBand', variant: 'icon', iconKey: 'calculator', title: 'Estimez votre gain de temps', text: 'Quelques chiffres suffisent pour projeter l’impact sur votre cycle commercial.', button: {label: 'Lancer le calcul', href: '#', shape: 'split', variant: 'high', size: 'md'}}),
+      head('h2', 'Sur le terrain'),
+      para(tx('Six mois après la bascule, le métreur n’est plus un goulot mais un chef d’orchestre : il valide, ajuste, arbitre.')),
+      {type: 'upload', version: 3, format: '', relationTo: 'media', value: chantier, fields: {caption: 'Métré automatique sur plans, chantier de Nantes.'}},
+      fig({blockType: 'quoteCard', quote: '« En six semaines, on a transformé notre point faible en avantage commercial. »', name: 'Julien Vasseur', role: 'Gérant · Vasseur Construction', photo: immeuble}),
+      fig({blockType: 'gallery', images: [{image: archi}, {image: analyse}, {image: bureau}], wideFirst: true, caption: 'Du plan au devis, en une journée.'}),
+      head('h4', 'Pour aller plus loin'),
+      fig({blockType: 'ctaBand', variant: 'arrow', title: 'Lire le guide du chiffrage en visite', button: {label: 'En savoir plus', href: '#', shape: 'split', variant: 'high', size: 'md'}}),
+    ]),
+  };
+  await payload.create({
+    collection: 'posts',
+    data: {title: 'Du devis à la facturation : <span>industrialiser</span> le cycle commercial', slug: postSlug, excerpt: 'Entre l’estimation envoyée et le paiement encaissé, le temps se perd. Méthode en trois leviers, chiffres à l’appui.', cover: analyse, coverCaption: 'Un cycle commercial piloté de bout en bout.', author: author.id, category: category?.id, publishedAt: new Date().toISOString(), content} as never,
+  });
+  const settings = await payload.findGlobal({slug: 'settings', depth: 1});
+  const blogPage = settings.blog?.page && typeof settings.blog.page === 'object' ? settings.blog.page.slug : null;
+  log(blogPage ? `article de démo : http://localhost:3000/${blogPage}/${postSlug}` : 'article de démo créé ; choisissez la page du blog dans Réglages du site › Blog pour le voir');
   process.exit(0);
 }
 
