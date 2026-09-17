@@ -27,6 +27,11 @@ import * as migration_20260917_120422_add_section_heading_post_card from './2026
 import * as migration_20260917_121129_add_figure_column_blocks from './20260917_121129_add_figure_column_blocks';
 import * as migration_20260917_122335_add_blog_global from './20260917_122335_add_blog_global';
 import * as migration_20260917_122357_remove_settings_blog from './20260917_122357_remove_settings_blog';
+import * as migration_20260917_130141_add_listing_empty_label from './20260917_130141_add_listing_empty_label';
+import * as migration_20260917_130513_add_case_studies_portfolio from './20260917_130513_add_case_studies_portfolio';
+import * as migration_20260917_130823_add_case_card_collection_source from './20260917_130823_add_case_card_collection_source';
+import * as migration_20260917_132335_add_listing_slug_seo from './20260917_132335_add_listing_slug_seo';
+import * as migration_20260917_132348_remove_listing_page from './20260917_132348_remove_listing_page';
 
 export const migrations = [
   {
@@ -172,6 +177,31 @@ export const migrations = [
   {
     up: migration_20260917_122357_remove_settings_blog.up,
     down: migration_20260917_122357_remove_settings_blog.down,
-    name: '20260917_122357_remove_settings_blog'
+    name: '20260917_122357_remove_settings_blog',
+  },
+  {
+    up: migration_20260917_130141_add_listing_empty_label.up,
+    down: migration_20260917_130141_add_listing_empty_label.down,
+    name: '20260917_130141_add_listing_empty_label',
+  },
+  {
+    up: migration_20260917_130513_add_case_studies_portfolio.up,
+    down: migration_20260917_130513_add_case_studies_portfolio.down,
+    name: '20260917_130513_add_case_studies_portfolio',
+  },
+  {
+    up: migration_20260917_130823_add_case_card_collection_source.up,
+    down: migration_20260917_130823_add_case_card_collection_source.down,
+    name: '20260917_130823_add_case_card_collection_source',
+  },
+  {
+    up: migration_20260917_132335_add_listing_slug_seo.up,
+    down: migration_20260917_132335_add_listing_slug_seo.down,
+    name: '20260917_132335_add_listing_slug_seo',
+  },
+  {
+    up: migration_20260917_132348_remove_listing_page.up,
+    down: migration_20260917_132348_remove_listing_page.down,
+    name: '20260917_132348_remove_listing_page'
   },
 ];

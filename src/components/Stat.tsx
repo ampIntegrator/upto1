@@ -3,7 +3,8 @@
  * suffix in highlight-deep at 62 % of the number (highlight in night), optional
  * sub-label in spaced capitals (mockups 04-statsBar and 12-cardBlocks).
  *
- *   size  : 'bar' (40 px, figures bar) | 'card' (clamp 40–52 px, number card)
+ *   size  : 'bar' (40 px, figures bar) | 'card' (clamp 40–52 px, number card) |
+ *           'sheet' (26 px, a case study's fact sheet, mockup 23; mono sub-label)
  *   align : 'start' | 'center'
  *
  * Used alone in a figures bar, and by the number card.
@@ -20,7 +21,7 @@ export type StatProps = {
   suffix?: string;
   /** sub-label (« Courtiers actifs ») */
   label?: string;
-  size?: 'bar' | 'card';
+  size?: 'bar' | 'card' | 'sheet';
   align?: 'start' | 'center';
 };
 

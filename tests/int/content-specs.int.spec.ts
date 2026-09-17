@@ -61,9 +61,10 @@ describe('registre des emprises', () => {
     expect(maxSpan({type: 'buttonGroup', count: 2})).toBe(12);
   });
 
-  it('en-tête de section 6 à 12, carte article 3 à 4', () => {
+  it('en-tête de section 6 à 12, cartes article et réalisation 3 à 4', () => {
     expect([minSpan({type: 'sectionHeading'}), maxSpan({type: 'sectionHeading'})]).toEqual([6, 12]);
     expect([minSpan({type: 'postCard'}), maxSpan({type: 'postCard'})]).toEqual([3, 4]);
+    expect([minSpan({type: 'caseCard'}), maxSpan({type: 'caseCard'})]).toEqual([3, 4]);
   });
 
   it('figures d’article en colonne', () => {

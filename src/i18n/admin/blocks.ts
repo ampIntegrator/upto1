@@ -254,16 +254,18 @@ export const collectionBlockText = texts({
   source: {fr: 'Source des éléments', en: 'Items source'},
   sourceManual: {fr: 'Saisis ici', en: 'Entered here'},
   sourcePosts: {fr: 'Derniers articles du blog', en: 'Latest blog posts'},
+  sourceCases: {fr: 'Dernières réalisations', en: 'Latest case studies'},
   items: {fr: 'Éléments (tous du même type)', en: 'Items (all of the same type)'},
   item: {fr: 'Élément', en: 'Item'},
   itemsDescription: {
-    fr: 'Deux éléments au moins, tous du même type : témoignages, cartes, cartes comparatives ou paliers. Côte à côte : pas plus d’éléments que de visibles. Carrousel : autant que voulu.',
-    en: 'At least two items, all of the same type: testimonials, cards, compare cards or tiers. Side by side: no more items than visible ones. Carousel: as many as wanted.',
+    fr: 'Deux éléments au moins, tous du même type : témoignages, cartes, cartes comparatives, paliers, cartes article ou réalisation. Côte à côte : pas plus d’éléments que de visibles. Carrousel : autant que voulu.',
+    en: 'At least two items, all of the same type: testimonials, cards, compare cards, tiers, post or case cards. Side by side: no more items than visible ones. Carousel: as many as wanted.',
   },
   postsLimit: {fr: 'Nombre d’articles', en: 'Number of posts'},
   postsLimitDescription: {fr: 'Côte à côte : pas plus que de visibles. Carrousel : autant que voulu.', en: 'Side by side: no more than visible ones. Carousel: as many as wanted.'},
   postsCategory: {fr: 'Catégorie (vide : toutes)', en: 'Category (empty: all)'},
   postsCta: {fr: 'Libellé du lien des cartes', en: 'Card link label'},
+  casesLimit: {fr: 'Nombre de réalisations', en: 'Number of case studies'},
   tooMany: {
     fr: ({perView, capacity, span}: {perView: number; capacity: number; span: number}) => `${perView} éléments visibles pour une colonne de ${span} qui en accepte ${capacity}.`,
     en: ({perView, capacity, span}: {perView: number; capacity: number; span: number}) => `${perView} items per view in a column of ${span} that holds ${capacity}.`,
@@ -433,6 +435,12 @@ export const sectionHeadingBlockText = texts({
   align: {fr: 'Alignement', en: 'Alignment'},
   alignCenter: {fr: 'Centré', en: 'Centred'},
   alignStart: {fr: 'À gauche', en: 'Left'},
+});
+
+export const caseCardBlockText = texts({
+  name: {fr: 'Carte réalisation', en: 'Case card'},
+  plural: {fr: 'Cartes réalisation', en: 'Case cards'},
+  caseStudy: {fr: 'Réalisation', en: 'Case study'},
 });
 
 export const postCardBlockText = texts({

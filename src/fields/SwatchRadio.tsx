@@ -14,7 +14,7 @@ import React, {useEffect, useState} from 'react';
 
 import {SILOS, type SiloName} from '@/theme/silos/palettes';
 
-export type SwatchKind = 'body' | 'highlight' | 'night' | 'night-halo' | 'media';
+export type SwatchKind = 'body' | 'highlight' | 'night' | 'night-halo';
 
 /** hex a mixed with hex b, pctA % of a */
 function mix(a: string, b: string, pctA: number): string {
@@ -37,8 +37,6 @@ function swatchBackground(kind: SwatchKind, silo: (typeof SILOS)[SiloName]): str
       return silo.night;
     case 'night-halo':
       return `radial-gradient(circle at 70% 20%, ${mix(silo.highlight, silo.night, 55)} 0, ${silo.night} 70%)`;
-    case 'media':
-      return 'linear-gradient(135deg, #8A94A6 0%, #3A4456 60%, #1B2230 100%)';
   }
 }
 
@@ -81,13 +79,13 @@ export function SwatchRadio(props: SwatchRadioProps) {
               disabled={readOnly}
               onClick={() => setValue(o.value)}
               style={{
-                width: 48,
-                height: 28,
+                width: 150,
+                height: 50,
                 padding: 0,
                 cursor: readOnly ? 'default' : 'pointer',
                 background: swatchBackground(kind, silo),
                 border: '1px solid var(--theme-elevation-200)',
-                borderRadius: selected ? 14 : 0,
+                borderRadius: selected ? 25 : 0,
                 outline: selected ? '2px solid var(--theme-text)' : 'none',
                 outlineOffset: 2,
                 transition: 'border-radius .2s',

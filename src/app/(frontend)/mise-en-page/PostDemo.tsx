@@ -49,7 +49,7 @@ export function BlogDemo({page = 0}: {page?: number}) {
   return (
     <>
       <SiteHeader {...SITE_HEADER} />
-      <Hero variant="page" background="glow" eyebrow="Le blog" title={'Actualités et <span>méthodes.</span>'} lead="Chiffrage, chantier, métier : ce que nous apprenons avec nos clients, sans jargon." />
+      <Hero variant="page" compact background="glow" eyebrow="Le blog" title={'Actualités et <span>méthodes.</span>'} lead="Chiffrage, chantier, métier : ce que nous apprenons avec nos clients, sans jargon." />
       <PostArchive
         categories={[{label: 'Tous', href: '/mise-en-page/blog', active: true}, ...['Chiffrage', 'Chantier', 'Métier', 'Produit'].map((c) => ({label: c, href: '#'}))]}
         items={ARTICLE_CARDS.slice(current * perPage, current * perPage + perPage)}

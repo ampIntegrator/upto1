@@ -12,7 +12,8 @@ import {getPayload} from 'payload';
 
 import type {HeroProps} from '@/components/Hero';
 import type {SiteFooterData, SiteHeaderData, SiteNavEntry, SiteStrip} from '@/components/site-nav';
-import {type BlogConfig, blogConfig, blogPath, postPath} from '@/lib/blog';
+import {loadEntriesByIds, loadLatestEntries} from '@/lib/entries';
+import {type BlogConfig, blogConfig, type CasesConfig, casesConfig, entryPath, listingPath, plainTitle} from '@/lib/listings';
 import type {SectionsContext} from '@/lib/sections';
 import type {NucleoIconKey} from '@/theme/icons/nucleo';
 import type {SiloName} from '@/theme/index';
@@ -33,35 +34,38 @@ const icon = (k?: string | null): NucleoIconKey | undefined => (k ? (k as Nucleo
 
 export async function getSite(locale: Locale) {
   const payload = await getPayload({config});
-  const [settings, blog, languages, header, footer, posts] = await Promise.all([
+  const [settings, blog, portfolio, languages, header, footer, posts] = await Promise.all([
     payload.findGlobal({slug: 'settings', locale, depth: 1}),
     payload.findGlobal({slug: 'blog', locale, depth: 1}),
+    payload.findGlobal({slug: 'portfolio', locale, depth: 1}),
     payload.findGlobal({slug: 'languages', depth: 0}),
     payload.findGlobal({slug: 'header', locale, depth: 2}),
     payload.findGlobal({slug: 'footer', locale, depth: 1}),
     payload.find({collection: 'posts', locale, depth: 1, limit: 3, sort: '-publishedAt'}),
   ]);
-  return {settings, blog: blogConfig(blog), languages, header, footer, posts: posts.docs};
+  return {settings, blog: blogConfig(blog), cases: casesConfig(portfolio), languages, header, footer, posts: posts.docs};
 }
 
-/** Latest posts for a collection block fed by the blog (optional category). */
-export async function loadPosts(locale: Locale, q: {limit: number; category?: number}): Promise<Post[]> {
-  const payload = await getPayload({config});
-  const res = await payload.find({collection: 'posts', locale, depth: 1, limit: q.limit, sort: '-publishedAt', where: q.category ? {category: {equals: q.category}} : undefined});
-  return res.docs;
+/** An internal link of a rich text (a post, a case study, a page): its address under its listing, or the page's. */
+export function resolveEntryLink(site: {blog: BlogConfig; cases: CasesConfig}, link: {relationTo?: string; value: unknown}): string | undefined {
+  const slug = link.value && typeof link.value === 'object' && 'slug' in link.value ? String((link.value as {slug: unknown}).slug) : null;
+  if (!slug) return undefined;
+  if (link.relationTo === 'posts') return entryPath(site.blog, slug);
+  if (link.relationTo === 'case-studies') return entryPath(site.cases, slug);
+  return undefined;
 }
 
-/** Posts chosen by id (post cards), with their cover and category. */
-export async function loadPostsByIds(locale: Locale, ids: number[]): Promise<Post[]> {
-  if (!ids.length) return [];
-  const payload = await getPayload({config});
-  const res = await payload.find({collection: 'posts', locale, depth: 1, limit: ids.length, where: {id: {in: ids}}});
-  return res.docs;
-}
-
-/** What the section conversion needs from the site: locale, post loaders, post URLs under the blog page. */
-export function sectionsContext(locale: Locale, blog: BlogConfig): SectionsContext {
-  return {locale, posts: (q) => loadPosts(locale, q), postsByIds: (ids) => loadPostsByIds(locale, ids), postHref: (slug) => postPath(blog, slug), readMore: blog.labels.readMore};
+/** What the section conversion needs from the site: locale, the listings (entry URLs, card labels) and their entry loaders. */
+export function sectionsContext(locale: Locale, site: {blog: BlogConfig; cases: CasesConfig}): SectionsContext {
+  return {
+    locale,
+    blog: site.blog,
+    cases: site.cases,
+    posts: (q) => loadLatestEntries('posts', locale, q),
+    postsByIds: (ids) => loadEntriesByIds('posts', locale, ids),
+    caseStudies: (q) => loadLatestEntries('case-studies', locale, q),
+    caseStudiesByIds: (ids) => loadEntriesByIds('case-studies', locale, ids),
+  };
 }
 
 export function toStrip(s: Settings): SiteStrip {
@@ -83,7 +87,7 @@ export function toHeader(s: Settings, h: Header, l: Language, blog: BlogConfig):
       kind: 'mega',
       label: b.label,
       groups: (b.groups ?? []).map((g) => ({title: g.title, items: (g.items ?? []).map((it) => ({title: it.title, description: it.description ?? undefined, iconKey: icon(it.iconKey), href: it.href}))})),
-      featured: post ? {title: post.title.replace(/<\/?span>/g, ''), description: post.excerpt ?? undefined, image: mediaUrl(post.cover), linkLabel: b.featuredLinkLabel || "Lire l'article", linkHref: postPath(blog, post.slug)} : undefined,
+      featured: post ? {title: plainTitle(post.title), description: post.excerpt ?? undefined, image: mediaUrl(post.cover), linkLabel: b.featuredLinkLabel || "Lire l'article", linkHref: entryPath(blog, post.slug)} : undefined,
     };
   });
   return {
@@ -107,8 +111,8 @@ export function toFooter(s: Settings, f: Footer, posts: Post[], locale: Locale, 
     articles: f.articlesEnabled !== false && posts.length ? {
       eyebrow: f.articles?.eyebrow ?? 'En bref',
       allLabel: f.articles?.allLabel ?? 'Tous les articles',
-      allHref: f.articles?.allHref ?? blogPath(blog),
-      items: posts.map((p) => ({category: typeof p.category === 'object' ? p.category.title : '', title: p.title.replace(/<\/?span>/g, ''), date: fmt.format(new Date(p.publishedAt)), href: postPath(blog, p.slug)})),
+      allHref: f.articles?.allHref ?? listingPath(blog),
+      items: posts.map((p) => ({category: typeof p.category === 'object' ? p.category.title : '', title: plainTitle(p.title), date: fmt.format(new Date(p.publishedAt)), href: entryPath(blog, p.slug)})),
     } : undefined,
     columns: (f.columns ?? []).map((c) => ({title: c.title, links: (c.links ?? []).map((l) => ({label: l.label, href: l.href}))})),
     legal: {copyright: f.copyright ?? '', line: f.legalLine ?? undefined, links: (f.legalLinks ?? []).map((l) => ({label: l.label, href: l.href}))},

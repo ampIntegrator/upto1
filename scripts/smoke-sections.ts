@@ -40,6 +40,7 @@ async function main() {
   await expectError('3 steps on 6 columns', [[column(6, {blockType: 'processSteps', steps: steps(3)}), column(6)]], /accepte 2|holds 2/);
   await expectError('collection with 4 per view on 9 columns', [[column(9, {blockType: 'collection', layout: 'swipe', perView: '4', source: 'manual', items: [{blockType: 'testimonial', quote: 'A', name: 'A'}, {blockType: 'testimonial', quote: 'B', name: 'B'}]}), column(3)]], /accepte 3|holds 3/);
   await expectError('collection with mixed items', [[column(12, {blockType: 'collection', layout: 'swipe', perView: '3', source: 'manual', items: [{blockType: 'testimonial', quote: 'A', name: 'A'}, {blockType: 'cardTitle', title: 'B'}]})]], /même type|same type/);
+  await expectError('side-by-side collection with more latest case studies than visible', [[column(12, {blockType: 'collection', layout: 'swipe', perView: '3', source: 'cases', casesLimit: 5})]], /pas plus d’éléments|no more items/);
   await expectError('side-by-side collection with more items than visible', [[column(12, {blockType: 'collection', layout: 'swipe', perView: '3', source: 'manual', items: [1, 2, 3, 4].map((i) => ({blockType: 'testimonial', quote: `${i}`, name: `${i}`}))})]], /pas plus d’éléments|no more items/);
   await expectError('text box with display-1 on 3 columns', [[column(3, {blockType: 'textBox', title: 'T', titleTag: 'h2', titleSize: 'display-1'}), column(9)]], /demande 6 colonnes|needs 6 columns/);
   await expectError('5 tabs on 6 columns', [[column(6, {blockType: 'tabs', items: [1, 2, 3, 4, 5].map((i) => ({label: `Onglet ${i}`}))}), column(6)]], /accepte 4|holds 4/);
@@ -48,6 +49,10 @@ async function main() {
   await expectError('tier on 6 columns', [[column(6, {blockType: 'plan', name: 'Pro', price: {value: '79'}, cta: {label: 'Go', href: '#'}, features: [{label: 'A'}]}), column(6)]], /ne dépasse pas 4|must not exceed 4/);
 
   // 2 · a valid throwaway page with every block
+  // throwaway case studies for the case card and the « latest case studies » collection
+  const caseCategory = await payload.create({collection: 'case-categories', data: {title: 'Catégorie sections smoke', slug: `zz-smoke-sections-cat-${Date.now()}`}});
+  const caseA = await payload.create({collection: 'case-studies', data: {title: 'Réalisation sections smoke A', slug: `zz-smoke-sections-case-a-${Date.now()}`, category: caseCategory.id, publishedAt: new Date().toISOString(), sheet: {client: 'Client sections smoke', location: 'Lille', cardResult: 'Résultat sections smoke'}} as never});
+  const caseB = await payload.create({collection: 'case-studies', data: {title: 'Réalisation sections smoke B', slug: `zz-smoke-sections-case-b-${Date.now()}`, category: caseCategory.id, publishedAt: new Date().toISOString(), sheet: {client: 'Autre client sections', results: [{value: '+9 %', label: 'Gain'}]}} as never});
   const page = await payload.create({
     collection: 'pages',
     data: {
@@ -76,6 +81,8 @@ async function main() {
           [column(8, {blockType: 'tabs', items: [1, 2, 3, 4, 5, 6].map((i) => ({label: `Onglet smoke ${i}`, content: {root: {type: 'root', children: [{type: 'paragraph', children: [{type: 'text', text: `Panneau smoke ${i}`, format: 0}]}]}}}))}), column(4)],
           [column(12, {blockType: 'collection', layout: 'carousel', perView: '3', step: 'page', indicator: 'dots', arrows: true, source: 'manual', items: Array.from({length: 14}, (_, k) => k + 1).map((i) => ({blockType: 'testimonial', quote: `Citation collection ${i}.`, name: `Témoin collection ${i}`}))})],
           [column(9, {blockType: 'collection', layout: 'swipe', perView: '3', source: 'posts', postsLimit: 3, postsCta: 'Lire l’article'}), column(3)],
+          [column(3, {blockType: 'caseCard', caseStudy: caseA.id}), column(9, {blockType: 'collection', layout: 'carousel', perView: '3', source: 'cases', casesLimit: 6, casesCategory: caseCategory.id, casesCta: 'Lire l’étude smoke'})],
+          [column(8, {blockType: 'collection', layout: 'swipe', perView: '2', source: 'manual', items: [{blockType: 'caseCard', caseStudy: caseA.id}, {blockType: 'caseCard', caseStudy: caseB.id}]}), column(4)],
         ]),
       ],
     } as never,
@@ -83,11 +90,13 @@ async function main() {
   log(`page created: ${page.id} (${slug})`);
   try {
     const html = await (await fetch(`${BASE}/${slug}`)).text();
-    for (const marker of ['Valeur totale', 'Question smoke', 'Palier smoke', 'Témoin Smoke', 'APRÈS SMOKE', 'Étape 2', 'data-steps="2"', 'Témoin collection 14', 'data-layout="carousel"', 'Lire l’article', '<h2 class="Collapsible', '<h3 class="astryx-heading', '<h4 class="astryx-heading', '<span class="astryx-heading card', 'Encart smoke', '<strong>gras</strong>', 'Puce smoke', 'Bouton smoke', 'data-framed="true"', 'Sans titre smoke', 'Onglet smoke 6', 'Panneau smoke 6', 'role="tabpanel"', 'Groupe smoke 4', 'Espacé smoke 2', 'data-mode="attached"', 'data-mode="spaced"', 'À retenir colonne smoke', 'Point colonne smoke', 'Témoin colonne smoke', 'Chiffre colonne smoke', 'Bandeau colonne smoke', 'Surtitre smoke', 'Chapô en-tête smoke']) check(html.includes(marker), `site renders « ${marker} »`);
+    for (const marker of ['Valeur totale', 'Question smoke', 'Palier smoke', 'Témoin Smoke', 'APRÈS SMOKE', 'Étape 2', 'data-steps="2"', 'Témoin collection 14', 'data-layout="carousel"', 'Lire l’article', '<h2 class="Collapsible', '<h3 class="astryx-heading', '<h4 class="astryx-heading', '<span class="astryx-heading card', 'Encart smoke', '<strong>gras</strong>', 'Puce smoke', 'Bouton smoke', 'data-framed="true"', 'Sans titre smoke', 'Onglet smoke 6', 'Panneau smoke 6', 'role="tabpanel"', 'Groupe smoke 4', 'Espacé smoke 2', 'data-mode="attached"', 'data-mode="spaced"', 'À retenir colonne smoke', 'Point colonne smoke', 'Témoin colonne smoke', 'Chiffre colonne smoke', 'Bandeau colonne smoke', 'Surtitre smoke', 'Chapô en-tête smoke', 'Réalisation sections smoke A', 'Réalisation sections smoke B', 'Résultat sections smoke', 'Client sections smoke', 'Lire l’étude smoke', 'Voir l’étude', `/realisations/${caseA.slug}`]) check(html.includes(marker), `site renders « ${marker} »`);
     check(!/Unhandled Runtime Error|Build Error/.test(html), 'site page without runtime error');
   } finally {
     await payload.delete({collection: 'pages', id: page.id});
-    log(`page deleted: ${page.id}`);
+    for (const c of [caseA, caseB]) await payload.delete({collection: 'case-studies', id: c.id});
+    await payload.delete({collection: 'case-categories', id: caseCategory.id});
+    log(`page, case studies and case category deleted: ${page.id}`);
   }
   log(failures ? `${failures} check(s) failed` : 'all checks passed');
   process.exit(failures ? 1 : 0);

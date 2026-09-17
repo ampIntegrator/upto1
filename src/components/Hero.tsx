@@ -12,7 +12,8 @@
  *                    image with two labels overflowing the corners.
  *   variant="page"   500 px page header (mockup 25): dashed eyebrow, two-line
  *                    title, lead, two buttons; image background (A), light with glow (B)
- *                    or night with halos (C); breadcrumb band below.
+ *                    or night with halos (C); breadcrumb band below. `compact`: no fixed
+ *                    height, 80 px above and below the text (blog and case studies lists).
  *
  * Assembly: Section (background, height, header offset) > Container > Grid 12 >
  * Heading, Text, Chip, Button, BreadcrumbBand. The data matches the upcoming
@@ -60,6 +61,8 @@ export type HeroProps = {
   breadcrumb?: BreadcrumbBandProps;
   /** first block under the fixed header: reserves its height (default: yes) */
   underHeader?: boolean;
+  /** page: no 500 px height, 80 px above and below the text (listing pages: blog, case studies) */
+  compact?: boolean;
 };
 
 function Title({title, level = 1, type}: {title: HeroProps['title']; level?: 1 | 2; type: 'display-1' | 'display-3'}) {
@@ -81,7 +84,7 @@ function Actions({primary, secondary, center}: {primary?: HeroAction; secondary?
 }
 
 export function Hero(props: HeroProps) {
-  const {variant, image, video, overlay = 0.3, eyebrow, title, lead, primary, secondary, reassurance, media, scrollHint, breadcrumb, underHeader = true} = props;
+  const {variant, image, video, overlay = 0.3, eyebrow, title, lead, primary, secondary, reassurance, media, scrollHint, breadcrumb, underHeader = true, compact = false} = props;
 
   if (variant === 'media') {
     const background = props.background === 'video' ? 'video' : 'image';
@@ -163,11 +166,11 @@ export function Hero(props: HeroProps) {
   const background = props.background === 'image' || props.background === 'night-halo' ? props.background : 'glow';
   return (
     <>
-      <Section background={background} image={image} overlay={overlay} spacing="none" minHeight={underHeader ? 'calc(500px + var(--site-header-height))' : 500} underHeader={underHeader} centered edge>
+      <Section background={background} image={image} overlay={overlay} spacing="none" minHeight={compact ? undefined : underHeader ? 'calc(500px + var(--site-header-height))' : 500} underHeader={underHeader} centered edge>
         <Container>
           <Grid columns={12} gap={6} className="page-grid">
             <GridSpan style={{gridColumn: '3 / span 8'}}>
-              <VStack gap={5} align="center" className={`${styles.center} ${styles.pageInner}`}>
+              <VStack gap={5} align="center" className={`${styles.center} ${compact ? styles.pageCompact : styles.pageInner}`}>
                 {eyebrow ? <Text type="eyebrow-lines">{eyebrow}</Text> : null}
                 <Title title={title} type="display-3" />
                 {lead ? <Text type="large" color="secondary" className={styles.lead}>{lead}</Text> : null}
