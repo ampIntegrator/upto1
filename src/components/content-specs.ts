@@ -46,6 +46,11 @@ export type ContentRef =
   | {type: 'priceList'; variant: 'columns'; plans: number}
   | {type: 'plan'}
   | {type: 'postCard'}
+  | {type: 'keyPoints'}
+  | {type: 'ctaBand'}
+  | {type: 'statsBand'; count: number}
+  | {type: 'quoteCard'}
+  | {type: 'gallery'}
   | {type: 'collection'; perView: 2 | 3 | 4}
   | {type: 'textBox'; titleSize: 'display-1' | 'display-2' | 'display-3' | 'heading-1' | 'heading-2'}
   | {type: 'statsBar'};
@@ -136,6 +141,13 @@ export const CONTENT_SPECS: {[T in ContentType]: {label: string; minSpan: (c: Ex
   plan: {label: 'Palier de prix', minSpan: () => 3, maxSpan: 4},
   // a chosen blog post as an article card (mockup 19), three or four side by side
   postCard: {label: 'Carte article', minSpan: () => 3, maxSpan: 4},
+  // figures of a post, also placed in columns (17 Sept. 2026)
+  keyPoints: {label: 'À retenir', minSpan: () => 4},
+  ctaBand: {label: 'Bandeau d’appel', minSpan: () => 6},
+  // stats band: 2 cells from 6 columns, 3 from 8, 4 on 12 (buttonsCapacity table)
+  statsBand: {label: 'Bandeau de chiffres', minSpan: (c) => buttonsMinSpan(c.count)},
+  quoteCard: {label: 'Carte citation', minSpan: () => 4, maxSpan: 9},
+  gallery: {label: 'Galerie', minSpan: () => 6},
   // identical items side by side, swipe or carousel: from 8 columns, 4 per view needs 12
   collection: {label: 'Collection', minSpan: (c) => (c.perView >= 4 ? 12 : 8)},
   // text box: 3 to 9 columns; the two display title sizes need 6
@@ -174,6 +186,7 @@ export function describeContent(content: ContentRef): string {
     case 'tabs':
       return `${label} (${content.count})`;
     case 'buttonGroup':
+    case 'statsBand':
       return `${label} (${content.count})`;
     case 'priceList':
       return content.variant === 'single' ? `${label}, prix unique` : `${label} en ${content.plans} colonnes (catalogue)`;

@@ -66,6 +66,14 @@ describe('registre des emprises', () => {
     expect([minSpan({type: 'postCard'}), maxSpan({type: 'postCard'})]).toEqual([3, 4]);
   });
 
+  it('figures d’article en colonne', () => {
+    expect(minSpan({type: 'keyPoints'})).toBe(4);
+    expect(minSpan({type: 'ctaBand'})).toBe(6);
+    expect([2, 3, 4].map((count) => minSpan({type: 'statsBand', count}))).toEqual([6, 8, 12]);
+    expect([minSpan({type: 'quoteCard'}), maxSpan({type: 'quoteCard'})]).toEqual([4, 9]);
+    expect(minSpan({type: 'gallery'})).toBe(6);
+  });
+
   it('prend le contenu le plus large pour une colonne', () => {
     expect(columnMinSpan([{type: 'stat'}, {type: 'card'}, {type: 'sectionNote'}])).toBe(6);
     expect(columnMinSpan([])).toBe(2);

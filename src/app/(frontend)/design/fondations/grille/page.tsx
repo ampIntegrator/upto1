@@ -17,7 +17,7 @@ const SAMPLES: ContentRef[] = [
   {type: 'cardGrid', columns: 2}, {type: 'cardGrid', columns: 3}, {type: 'cardGrid', columns: 4},
   {type: 'sectionHeading'}, {type: 'sectionNote'}, {type: 'tabs', count: 4}, {type: 'tabs', count: 6}, {type: 'tabs', count: 8}, {type: 'buttonGroup', count: 2}, {type: 'buttonGroup', count: 3}, {type: 'buttonGroup', count: 4}, {type: 'collapsibleGroup'}, {type: 'testimonialCarousel'}, {type: 'mediaQuote'},
   {type: 'processSteps', steps: 1}, {type: 'processSteps', steps: 2}, {type: 'processSteps', steps: 3}, {type: 'processSteps', steps: 4},
-  {type: 'priceList', variant: 'single'}, {type: 'plan'}, {type: 'postCard'},
+  {type: 'priceList', variant: 'single'}, {type: 'plan'}, {type: 'postCard'}, {type: 'keyPoints'}, {type: 'ctaBand'}, {type: 'statsBand', count: 2}, {type: 'statsBand', count: 4}, {type: 'quoteCard'}, {type: 'gallery'},
   {type: 'collection', perView: 2}, {type: 'collection', perView: 3}, {type: 'collection', perView: 4},
   {type: 'textBox', titleSize: 'heading-1'}, {type: 'textBox', titleSize: 'display-2'},
   {type: 'statsBar'},
