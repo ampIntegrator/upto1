@@ -65,7 +65,7 @@ const block: Block = {
     {
       type: 'row',
       fields: [
-        {name: 'title', type: 'text', label: t.title, localized: true, admin: {width: '50%'}},
+        {name: 'title', type: 'text', label: t.title, localized: true, admin: {width: '50%', description: t.titleDescription}},
         tagField({name: 'titleTag', defaultValue: 'h2', width: '20%'}),
         {
           name: 'titleSize',

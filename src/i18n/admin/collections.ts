@@ -66,6 +66,16 @@ export const collectionsText = texts({
     plural: {fr: 'Utilisateurs', en: 'Users'},
     fields: {
       name: {fr: 'Nom', en: 'Name'},
+      sessionDays: {fr: 'Rester connecté', en: 'Stay signed in'},
+      sessionDaysDescription: {
+        fr: 'Durée pendant laquelle la session reste ouverte, comptée depuis votre dernière activité dans l’admin.',
+        en: 'How long the session stays open, counted from your last activity in the admin.',
+      },
+      sessionNone: {fr: 'Non (2 heures sans activité)', en: 'No (2 hours without activity)'},
+      sessionDaysOption: {
+        fr: ({days}: {days: number}) => `${days} jours`,
+        en: ({days}: {days: number}) => `${days} days`,
+      },
     },
   },
 });

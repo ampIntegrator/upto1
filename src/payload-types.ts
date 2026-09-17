@@ -246,6 +246,9 @@ export interface Page {
                                         id?: string | null;
                                       }[]
                                     | null;
+                                  /**
+                                   * Optional. Empty: no title and no separator.
+                                   */
                                   title?: string | null;
                                   /**
                                    * Structure and SEO only: the look does not change.
@@ -1000,6 +1003,9 @@ export interface Section {
                               id?: string | null;
                             }[]
                           | null;
+                        /**
+                         * Optional. Empty: no title and no separator.
+                         */
                         title?: string | null;
                         /**
                          * Structure and SEO only: the look does not change.
@@ -1685,6 +1691,10 @@ export interface Post {
 export interface User {
   id: number;
   name: string;
+  /**
+   * How long the session stays open, counted from your last activity in the admin.
+   */
+  sessionDays?: ('0' | '10' | '20' | '30') | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -3079,6 +3089,7 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  sessionDays?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;

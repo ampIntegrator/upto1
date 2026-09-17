@@ -284,6 +284,7 @@ export const textBoxBlockText = texts({
   badgeLabel: {fr: 'Texte', en: 'Text'},
   badgeTone: {fr: 'Couleur', en: 'Colour'},
   title: {fr: 'Titre', en: 'Title'},
+  titleDescription: {fr: 'Facultatif. Vide : pas de titre ni de séparateur.', en: 'Optional. Empty: no title and no separator.'},
   titleSize: {fr: 'Taille du titre', en: 'Title size'},
   titleSizeDescription: {fr: 'Les deux tailles display demandent 6 colonnes au moins.', en: 'The two display sizes need 6 columns at least.'},
   sizes: {

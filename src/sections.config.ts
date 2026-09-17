@@ -32,6 +32,8 @@ type Sibling = Record<string, unknown>;
 const when = (name: string, ...values: string[]) => (_d: unknown, s: Sibling) => values.includes(String(s?.[name] ?? ''));
 /** Settings are asked in order: the rest of the section appears once a background is chosen. */
 const modeChosen = when('mode', 'light', 'dark', 'media');
+/** A radio shown as colour swatches (name on hover): option value → swatch kind. */
+const swatches = (map: Record<string, string>) => ({Field: {path: '@/fields/SwatchRadio#SwatchRadio', clientProps: {swatches: map}}});
 
 /** Background of a section: light, night or media, then the settings of that background. */
 export const orbitaSectionSettings: Field[] = [
@@ -46,6 +48,7 @@ export const orbitaSectionSettings: Field[] = [
       {label: T.settings.backgroundDark, value: 'dark'},
       {label: T.settings.backgroundMedia, value: 'media'},
     ],
+    admin: {components: swatches({light: 'body', dark: 'night', media: 'media'})},
   },
   // 2a. light: tint and texture, side by side
   {
@@ -63,7 +66,7 @@ export const orbitaSectionSettings: Field[] = [
         ],
         // condition repeated on the field (not only on the row): without it, Payload makes
         // the column required in the database, and a night or media section could no longer be saved
-        admin: {width: '50%', condition: when('mode', 'light')},
+        admin: {width: '50%', condition: when('mode', 'light'), components: swatches({body: 'body', highlight: 'highlight'})},
       },
       {
         name: 'texture',
@@ -90,7 +93,7 @@ export const orbitaSectionSettings: Field[] = [
       {label: T.settings.darkNight, value: 'night'},
       {label: T.settings.darkNightHalo, value: 'night-halo'},
     ],
-    admin: {condition: when('mode', 'dark')},
+    admin: {condition: when('mode', 'dark'), components: swatches({night: 'night', 'night-halo': 'night-halo'})},
   },
   // 2c. media: the type, then the files and the overlay
   {
