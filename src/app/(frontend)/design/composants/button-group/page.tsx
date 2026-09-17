@@ -11,7 +11,7 @@ export const metadata = {title: 'Button Group — Design system Vidomia'};
 export default function Page() {
   return (
     <VStack gap={8}>
-      <ShowcaseBlock name="ButtonGroup" id="button-group" doc={"button-group"} category="Actions">
+      <ShowcaseBlock name="ButtonGroup" id="button-group" doc={null} dressed category="Actions">
         <ButtonGroupShowcase />
       </ShowcaseBlock>
       <ComponentNav category="actions" current="button-group" />

@@ -1,6 +1,6 @@
 import {describe, expect, it} from 'vitest';
 
-import {collectionCapacity, columnMinSpan, maxSpan, minSpan, STEPS_MIN_SPAN, stepsCapacity, tabsCapacity} from '@/components/content-specs';
+import {collectionCapacity, columnMinSpan, maxSpan, minSpan, STEPS_MIN_SPAN, buttonsCapacity, stepsCapacity, tabsCapacity} from '@/components/content-specs';
 
 describe('registre des emprises', () => {
   it('donne une emprise fixe aux contenus simples', () => {
@@ -53,6 +53,12 @@ describe('registre des emprises', () => {
     expect([2, 3, 4, 5, 6, 7, 8, 9, 12].map(tabsCapacity)).toEqual([0, 0, 0, 0, 4, 4, 6, 6, 8]);
     expect([2, 4, 5, 6, 7, 8].map((count) => minSpan({type: 'tabs', count}))).toEqual([6, 6, 8, 8, 12, 12]);
     expect(maxSpan({type: 'tabs', count: 3})).toBe(12);
+  });
+
+  it('groupe de boutons : 2 sur 6 et 7, 3 sur 8 et 9, 4 sur 12, jamais sous 6', () => {
+    expect([4, 5, 6, 7, 8, 9, 12].map(buttonsCapacity)).toEqual([0, 0, 2, 2, 3, 3, 4]);
+    expect([1, 2, 3, 4].map((count) => minSpan({type: 'buttonGroup', count}))).toEqual([6, 6, 8, 12]);
+    expect(maxSpan({type: 'buttonGroup', count: 2})).toBe(12);
   });
 
   it('prend le contenu le plus large pour une colonne', () => {

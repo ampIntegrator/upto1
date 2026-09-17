@@ -1,0 +1,27 @@
+/* ButtonGroup — attached or spaced buttons, sized to their column (container queries). */
+.root { width: 100%; min-width: 0; container-type: inline-size; }
+
+/* attached: the Astryx group, aligned in the column or stretched */
+.attached { width: 100%; flex-direction: row; }
+.root[data-align='center'] .attached { justify-content: center; }
+.root[data-align='end'] .attached { justify-content: flex-end; }
+.root[data-width='full'] .attached :global(.astryx-button-group) { width: 100%; }
+.root[data-width='full'] .attached :global(.astryx-button-group) > * { flex: 1 1 0; min-width: 0; }
+
+/* spaced: one inner column per button, the section's column gap */
+.spaced {
+  display: grid;
+  grid-template-columns: repeat(var(--buttons, 2), minmax(0, 1fr));
+  gap: var(--section-gap-x, 24px);
+  width: 100%;
+}
+.cell { min-width: 0; flex-direction: row; }
+.root[data-align='center'] .cell { justify-content: center; }
+.root[data-align='end'] .cell { justify-content: flex-end; }
+
+/* narrow column: the buttons stack */
+@container (max-width: 639px) {
+  .spaced { grid-template-columns: minmax(0, 1fr); row-gap: 12px; }
+  .attached :global(.astryx-button-group) { flex-direction: column; width: 100%; }
+  .attached :global(.astryx-button-group) > * { width: 100%; }
+}

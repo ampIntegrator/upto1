@@ -38,6 +38,7 @@ export type ContentRef =
   | {type: 'sectionHeading'}
   | {type: 'sectionNote'}
   | {type: 'tabs'; count: number}
+  | {type: 'buttonGroup'; count: number}
   | {type: 'collapsibleGroup'}
   | {type: 'testimonialCarousel'}
   | {type: 'processSteps'; steps: number}
@@ -82,6 +83,17 @@ export function tabsCapacity(span: number): 0 | 4 | 6 | 8 {
   if (span >= 6) return 4;
   return 0;
 }
+/**
+ * Button group: how many buttons a column holds, by width (decided 17 Sept. 2026):
+ * 6 or 7 columns → 2, 8 or 9 → 3, 12 → 4; narrower than 6 → none. Same rule in both modes.
+ */
+export function buttonsCapacity(span: number): 0 | 2 | 3 | 4 {
+  if (span >= 12) return 4;
+  if (span >= 8) return 3;
+  if (span >= 6) return 2;
+  return 0;
+}
+const buttonsMinSpan = (count: number): ColumnSpan => (count <= 2 ? 6 : count === 3 ? 8 : 12);
 const tabsMinSpan = (count: number): ColumnSpan => (count <= 4 ? 6 : count <= 6 ? 8 : 12);
 
 const stepsMinSpan = (steps: number): ColumnSpan => STEPS_MIN_SPAN[Math.min(Math.max(Math.round(steps), 1), 4) as 1 | 2 | 3 | 4];
@@ -107,6 +119,8 @@ export const CONTENT_SPECS: {[T in ContentType]: {label: string; minSpan: (c: Ex
   cardGrid: {label: 'Grille de cartes', minSpan: (c) => snapUp(c.columns * 3)},
   sectionHeading: {label: 'En-tête de section', minSpan: () => 6},
   sectionNote: {label: 'Note et bouton', minSpan: () => 6},
+  // button group: capacity table (buttonsCapacity), 6 to 12 columns
+  buttonGroup: {label: 'Groupe de boutons', minSpan: (c) => buttonsMinSpan(c.count), maxSpan: 12},
   // tabs: capacity table (tabsCapacity), 6 to 12 columns
   tabs: {label: 'Onglets', minSpan: (c) => tabsMinSpan(c.count), maxSpan: 12},
   // FAQ: readable between 6 and 9, never full width
@@ -154,6 +168,8 @@ export function describeContent(content: ContentRef): string {
     case 'textBox':
       return `${label}, titre ${content.titleSize}`;
     case 'tabs':
+      return `${label} (${content.count})`;
+    case 'buttonGroup':
       return `${label} (${content.count})`;
     case 'priceList':
       return content.variant === 'single' ? `${label}, prix unique` : `${label} en ${content.plans} colonnes (catalogue)`;

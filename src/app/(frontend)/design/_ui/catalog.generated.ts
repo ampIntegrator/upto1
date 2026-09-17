@@ -22,9 +22,9 @@ export const CATALOG: CatalogCategory[] = [
         "label": "Button Group",
         "slug": "button-group",
         "href": "/design/composants/button-group",
-        "dressed": false,
+        "dressed": true,
         "parent": null,
-        "doc": "button-group"
+        "doc": null
       },
       {
         "name": "DropdownMenu",
