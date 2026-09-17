@@ -7039,9 +7039,6 @@ export interface Footer {
  */
 export interface Blog {
   id: number;
-  /**
-   * Lowercase letters, digits and hyphens. “news”: the list at site-name.com/news, posts at /news/<post>, archives at /news/categorie/<category>.
-   */
   slug: string;
   eyebrow?: string | null;
   /**
@@ -7081,9 +7078,6 @@ export interface Blog {
  */
 export interface Portfolio {
   id: number;
-  /**
-   * Lowercase letters, digits and hyphens. “work”: the list at site-name.com/work, case studies at /work/<case study>, archives at /work/categorie/<category>.
-   */
   slug: string;
   eyebrow?: string | null;
   /**

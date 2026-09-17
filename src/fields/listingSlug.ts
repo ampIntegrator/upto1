@@ -38,13 +38,14 @@ export const listingSlugValidate = (self: 'blog' | 'portfolio') => async (value:
 };
 
 /** The address field of a listing settings global (a factory, like every shared config). */
-export const listingSlugField = (o: {self: 'blog' | 'portfolio'; label: Text; description: Text; defaultValue: string}): Field => ({
+export const listingSlugField = (o: {self: 'blog' | 'portfolio'; label: Text; defaultValue: string}): Field => ({
   name: 'slug',
   type: 'text',
   label: o.label,
   required: true,
   defaultValue: o.defaultValue,
-  admin: {description: o.description},
+  // live description: the addresses the typed slug gives, and a button opening the list
+  admin: {components: {Description: {path: '@/fields/ListingAddress#ListingAddress', clientProps: {listing: o.self}}}},
   validate: listingSlugValidate(o.self) as never,
 });
 

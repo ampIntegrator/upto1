@@ -13,7 +13,6 @@ import {listingSlugField} from './listingSlug';
 export type ListingSettingsText = {
   tabs: {page: Text; labels: Text};
   slug: Text;
-  slugDescription: Text;
   eyebrow: Text;
   title: Text;
   titleDescription: Text;
@@ -33,7 +32,7 @@ export function listingSettingsFields(o: {self: 'blog' | 'portfolio'; t: Listing
   const pageTab: Tab = {
     label: t.tabs.page,
     fields: [
-      listingSlugField({self: o.self, label: t.slug, description: t.slugDescription, defaultValue: o.slug}),
+      listingSlugField({self: o.self, label: t.slug, defaultValue: o.slug}),
       {type: 'row', fields: [
         {name: 'eyebrow', type: 'text', label: t.eyebrow, localized: true, defaultValue: o.eyebrow, admin: {width: '34%'}},
         {name: 'title', type: 'text', label: t.title, localized: true, defaultValue: o.title, admin: {width: '66%', description: t.titleDescription}},

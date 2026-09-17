@@ -148,6 +148,12 @@ export const languagesText = texts({
 /** Admin texts shared by the listing settings globals (blog, case studies): src/fields/listingSettings.ts. */
 const listingCommonText = {
   slug: {fr: 'Adresse', en: 'Address'},
+  slugFormat: {fr: 'Minuscules, chiffres et tirets.', en: 'Lowercase letters, digits and hyphens.'},
+  slugList: {fr: 'La liste', en: 'The list'},
+  slugArchives: {fr: 'Archives', en: 'Archives'},
+  slugCategory: {fr: 'catégorie', en: 'category'},
+  slugOpen: {fr: 'Ouvrir', en: 'Open'},
+  slugSaveFirst: {fr: 'Enregistrez pour ouvrir la nouvelle adresse.', en: 'Save to open the new address.'},
   title: {fr: 'Titre (h1)', en: 'Title (h1)'},
   titleDescription: {fr: 'Un mot entre <span>…</span> passe en serif accentué.', en: 'A word between <span>…</span> is set in accent serif.'},
   eyebrow: {fr: 'Surtitre', en: 'Eyebrow'},
@@ -166,7 +172,8 @@ const listingCommonText = {
 export const blogText = texts({
   ...listingCommonText,
   label: {fr: 'Réglages du blog', en: 'Blog settings'},
-  slugDescription: {fr: 'Minuscules, chiffres et tirets. « actualites » : la liste à nom-du-site.com/actualites, les articles à /actualites/<article>, les archives à /actualites/categorie/<catégorie>.', en: 'Lowercase letters, digits and hyphens. “news”: the list at site-name.com/news, posts at /news/<post>, archives at /news/categorie/<category>.'},
+  slugEntries: {fr: 'Articles', en: 'Posts'},
+  slugEntry: {fr: 'article', en: 'post'},
   tabs: {
     page: {fr: 'Page du blog', en: 'Blog page'},
     labels: {fr: 'Libellés', en: 'Labels'},
@@ -184,7 +191,8 @@ export const blogText = texts({
 export const portfolioText = texts({
   ...listingCommonText,
   label: {fr: 'Réglages des réalisations', en: 'Case studies settings'},
-  slugDescription: {fr: 'Minuscules, chiffres et tirets. « realisations » : la liste à nom-du-site.com/realisations, les réalisations à /realisations/<réalisation>, les archives à /realisations/categorie/<catégorie>.', en: 'Lowercase letters, digits and hyphens. “work”: the list at site-name.com/work, case studies at /work/<case study>, archives at /work/categorie/<category>.'},
+  slugEntries: {fr: 'Réalisations', en: 'Case studies'},
+  slugEntry: {fr: 'réalisation', en: 'case study'},
   tabs: {
     page: {fr: 'Page des réalisations', en: 'Case studies page'},
     labels: {fr: 'Fiche et libellés', en: 'Fact sheet and labels'},

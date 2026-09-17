@@ -26,6 +26,7 @@ import { UploadFeatureClient as UploadFeatureClient_e70f5e05f09f93e00b997edb1ef0
 import { BlockquoteFeatureClient as BlockquoteFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { HeadingFeatureClient as HeadingFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { SocialRowLabel as SocialRowLabel_68d35ead5fc0bb4a6089201e765040fa } from '@/fields/RowLabels'
+import { ListingAddress as ListingAddress_eaf34fb40fbdec0839902891d44e68d7 } from '@/fields/ListingAddress'
 import { LanguageSwitcher as LanguageSwitcher_f86abc942e585c438aeb7fe1174268e3 } from '@/i18n/admin/LanguageSwitcher'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
@@ -59,6 +60,7 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#BlockquoteFeatureClient": BlockquoteFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#HeadingFeatureClient": HeadingFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@/fields/RowLabels#SocialRowLabel": SocialRowLabel_68d35ead5fc0bb4a6089201e765040fa,
+  "@/fields/ListingAddress#ListingAddress": ListingAddress_eaf34fb40fbdec0839902891d44e68d7,
   "@/i18n/admin/LanguageSwitcher#LanguageSwitcher": LanguageSwitcher_f86abc942e585c438aeb7fe1174268e3,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

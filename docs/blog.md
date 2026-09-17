@@ -14,6 +14,8 @@ posts eyebrow and title, empty list) and an SEO tab. Nothing to create in Pages 
 Nicolas on 17 September 2026: a page to create only to be replaced, with its required page top,
 was confusing).
 
+Under the field, `ListingAddress` shows, as it is typed, the list's full URL with an « Ouvrir »
+button (new tab; disabled until the change is saved) and the entries' and archives' addresses.
 The address is checked when saving (`src/fields/listingSlug.ts`): format, not a site route
 (admin, api, design…), not a page's slug, not the case studies' address; and a page cannot take
 the blog's or the case studies' address. A listing address wins over a page at routing time.
