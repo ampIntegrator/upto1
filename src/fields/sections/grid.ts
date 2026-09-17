@@ -29,14 +29,15 @@ export const toSpan = (v: unknown): ColumnSpan => {
 export const SPAN_OPTIONS = COLUMN_SPANS.map((s) => ({label: `${s} / ${GRID_COLUMNS}`, value: String(s)}));
 
 /**
- * Row layouts offered by the builder: 14, the widest column first, no mirrors
- * (columns are reordered inside the row). Widths stay free afterwards, the only
+ * Row layouts offered by the builder: 15, the widest column first, no mirrors
+ * (columns are reordered inside the row: 8·2·2 also gives 2·8·2, a centred 66 % column). Widths stay free afterwards, the only
  * rule being that the row adds up to GRID_COLUMNS.
  */
 export const ROW_PRESETS: readonly ColumnSpan[][] = [
   [12],
   [6, 6],
   [8, 4],
+  [8, 2, 2],
   [7, 5],
   [9, 3],
   [4, 4, 4],
@@ -60,6 +61,13 @@ export const rowTotal = (spans: readonly number[]): number => spans.reduce<numbe
 
 /** True when the row adds up to GRID_COLUMNS. */
 export const rowIsComplete = (spans: readonly number[]): boolean => spans.length > 0 && rowTotal(spans) === GRID_COLUMNS;
+
+/**
+ * A row created with blocks already placed in its columns (host option, for instance a
+ * full-width row holding a collection). `blocks[j]` is the slug placed in column j, or null.
+ * `label` is shown in the thumbnail (plain string or one string per admin language).
+ */
+export type PresetRow = {id: string; label: string | Record<string, string>; spans: ColumnSpan[]; blocks: (string | null)[]};
 
 /** Space at the top and bottom of a section, in pixels (halved below 640 px). */
 export const SPACING_VALUES = ['0', '20', '40', '60', '80', '100', '120', '140', '160'] as const;

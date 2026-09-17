@@ -34,7 +34,7 @@ import {useAdminText} from '@/i18n/admin/useAdminText';
 
 import {EMPTY_SLUG} from './emptyBlock';
 import {hasMobileOrder, mobileSequence} from './mobileOrder';
-import {type ColumnSpan, presetLabel, ROW_PRESETS, spansKey, toSpan} from './grid';
+import {type ColumnSpan, presetLabel, type PresetRow, ROW_PRESETS, spansKey, toSpan} from './grid';
 import {type SortableHandle, SortableItem, SortableList} from './sortable';
 import {rowWidthError} from './validation';
 
@@ -60,8 +60,8 @@ function PhoneGlyph() {
   );
 }
 
-/** Layout thumbnail: one rectangle per column, light on dark, in the width proportions. */
-function Tile({spans, active}: {spans: readonly number[]; active: boolean}) {
+/** Layout thumbnail: one rectangle per column, light on dark, in the width proportions, each showing its width (or a label). */
+function Tile({spans, active, labels}: {spans: readonly number[]; active: boolean; labels?: readonly string[]}) {
   return (
     <span
       aria-hidden="true"
@@ -77,16 +77,41 @@ function Tile({spans, active}: {spans: readonly number[]; active: boolean}) {
         background: active ? 'var(--theme-elevation-1000)' : 'var(--theme-elevation-150)',
         outline: active ? '2px solid var(--theme-elevation-1000)' : 'none',
       }}>
-      {spans.map((_, i) => (
-        <span key={i} style={{background: active ? 'var(--theme-elevation-0)' : 'var(--theme-elevation-700)', borderRadius: 2}} />
+      {spans.map((s, i) => (
+        <span
+          key={i}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minWidth: 0,
+            overflow: 'visible',
+            whiteSpace: 'nowrap',
+            ...text14,
+            lineHeight: 1,
+            fontWeight: 600,
+            background: active ? 'var(--theme-elevation-0)' : 'var(--theme-elevation-700)',
+            color: active ? 'var(--theme-elevation-1000)' : 'var(--theme-elevation-0)',
+            borderRadius: 2,
+          }}>
+          {labels?.[i] ?? s}
+        </span>
       ))}
     </span>
   );
 }
 
-/** Thumbnails: a click replaces the selected row's layout, a double click adds a row. */
-function PresetTiles({current, onReplace, onAdd}: {current: string; onReplace: (spans: readonly number[]) => void; onAdd: (spans: readonly number[]) => void}) {
+/**
+ * Thumbnails: a click replaces the selected row's layout, a double click adds a row.
+ * Preset rows (host option) always add a row, with their blocks placed: a click or a double click.
+ * current: spans key of the selected row; currentTypes: first block type of each of its columns.
+ */
+function PresetTiles({current, currentTypes, presetRows, onReplace, onAdd, onAddPreset}: {current: string; currentTypes: readonly string[]; presetRows: readonly PresetRow[]; onReplace: (spans: readonly number[]) => void; onAdd: (spans: readonly number[]) => void; onAddPreset: (preset: PresetRow) => void}) {
   const {t} = useAdminText();
+  const {i18n} = useTranslation();
+  /** the selected row matches a preset row: same widths and the preset's blocks in place */
+  const matchesPreset = (p: PresetRow) => spansKey(p.spans) === current && p.blocks.every((slug, j) => !slug || currentTypes[j] === slug);
+  const presetActive = presetRows.some(matchesPreset);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const click = (spans: readonly number[]) => {
     if (timer.current) clearTimeout(timer.current);
@@ -100,11 +125,24 @@ function PresetTiles({current, onReplace, onAdd}: {current: string; onReplace: (
     timer.current = null;
     onAdd(spans);
   };
+  /** a preset row: click and double click both add one row (the timer swallows the double click's two clicks) */
+  const presetClick = (preset: PresetRow) => {
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(() => {
+      timer.current = null;
+      onAddPreset(preset);
+    }, 220);
+  };
+  const presetDblClick = (preset: PresetRow) => {
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = null;
+    onAddPreset(preset);
+  };
   return (
-    <div role="radiogroup" aria-label={t(T.builder.layout)} style={{display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gap: 8}}>
+    <div role="radiogroup" aria-label={t(T.builder.layout)} style={{display: 'grid', gridTemplateColumns: 'repeat(8, minmax(0, 1fr))', gap: 8}}>
       {ROW_PRESETS.map((spans) => {
-        // active as soon as the widths match, in any order
-        const active = spansKey(spans) === current;
+        // active as soon as the widths match, in any order (unless a preset row describes the row better)
+        const active = spansKey(spans) === current && !presetActive;
         const label = presetLabel(spans);
         return (
           <button
@@ -118,6 +156,24 @@ function PresetTiles({current, onReplace, onAdd}: {current: string; onReplace: (
             onDoubleClick={() => dblClick(spans)}
             style={{display: 'block', width: '100%', padding: 0, border: 0, background: 'transparent', cursor: 'pointer'}}>
             <Tile spans={spans} active={active} />
+          </button>
+        );
+      })}
+      {presetRows.map((p) => {
+        const label = getTranslation(p.label, i18n);
+        const active = matchesPreset(p);
+        return (
+          <button
+            key={`preset-${p.id}`}
+            type="button"
+            role="radio"
+            aria-checked={active}
+            aria-label={label}
+            title={t(T.builder.presetTileTitle, {label})}
+            onClick={() => presetClick(p)}
+            onDoubleClick={() => presetDblClick(p)}
+            style={{display: 'block', width: '100%', padding: 0, border: 0, background: 'transparent', cursor: 'pointer'}}>
+            <Tile spans={p.spans} active={active} labels={p.spans.map((s, j) => (j === 0 ? label : String(s)))} />
           </button>
         );
       })}
@@ -206,11 +262,11 @@ function Cell({cell, index, rowSelected, onOpen, drag}: {cell: CellSnapshot; ind
   );
 }
 
-/** minSpans, maxSpans: block slug → minimum and maximum column width, passed by the field config (clientProps). */
-export type RowsBuilderProps = ArrayFieldClientProps & {minSpans?: Record<string, number>; maxSpans?: Record<string, number>};
+/** minSpans, maxSpans: block slug → minimum and maximum column width; presetRows: thumbnails with blocks placed (clientProps). */
+export type RowsBuilderProps = ArrayFieldClientProps & {minSpans?: Record<string, number>; maxSpans?: Record<string, number>; presetRows?: PresetRow[]};
 
 export function RowsBuilder(props: RowsBuilderProps) {
-  const {field, path, permissions, readOnly, schemaPath: schemaPathFromProps, minSpans = {}, maxSpans = {}} = props;
+  const {field, path, permissions, readOnly, schemaPath: schemaPathFromProps, minSpans = {}, maxSpans = {}, presetRows = []} = props;
   const schemaPath = schemaPathFromProps ?? field.name;
   const {t, language} = useAdminText();
   const {i18n} = useTranslation();
@@ -284,7 +340,7 @@ export function RowsBuilder(props: RowsBuilderProps) {
       const need = (c?.types ?? []).reduce((m, t) => Math.max(m, minSpans[t] ?? 0), 0);
       // narrowest maximum among the column's contents (12 when none declares one)
       const cap = (c?.types ?? []).reduce((m, t) => Math.min(m, maxSpans[t] ?? 12), 12);
-      return {span, contents: (c?.contents ?? []).map((label, k) => c?.names?.[k]?.trim() || label).filter(Boolean), filled: Boolean(c?.filled), narrow: need > span ? need : null, wide: need <= span && span > cap ? cap : null, mobileOrder: c?.mobileOrder ?? null};
+      return {span, types: (c?.types ?? []).filter(Boolean), contents: (c?.contents ?? []).map((label, k) => c?.names?.[k]?.trim() || label).filter(Boolean), filled: Boolean(c?.filled), narrow: need > span ? need : null, wide: need <= span && span > cap ? cap : null, mobileOrder: c?.mobileOrder ?? null};
     })})));
   });
   const snapshot = useMemo<RowSnapshot[]>(() => JSON.parse(snapshotJson) as RowSnapshot[], [snapshotJson]);
@@ -305,12 +361,18 @@ export function RowsBuilder(props: RowsBuilderProps) {
     [addFieldRow, columnsSchemaPath, dispatchFields, getDataByPath, path, removeFieldRow, setModified],
   );
 
-  /** double click: adds a row below the selected row (otherwise at the bottom), which becomes selected */
+  /**
+   * double click: adds a row below the selected row (otherwise at the bottom), which becomes selected.
+   * blocks[j]: slug of a block placed in column j (preset rows); Payload's form state completes its fields.
+   */
   const addRow = useCallback(
-    (spans: readonly number[]) => {
+    (spans: readonly number[], blocks: readonly (string | null)[] = []) => {
       const index = selected !== null && selected < rows.length ? selected + 1 : rows.length;
       addFieldRow({path, rowIndex: index, schemaPath});
       spans.forEach((s, j) => addFieldRow({path: `${path}.${index}.columns`, rowIndex: j, schemaPath: columnsSchemaPath, subFieldState: {span: {value: String(s), initialValue: String(s), valid: true}}}));
+      blocks.forEach((blockType, j) => {
+        if (blockType) addFieldRow({path: `${path}.${index}.columns.${j}.contents`, rowIndex: 0, blockType, schemaPath: `${columnsSchemaPath}.contents`});
+      });
       setModified(true);
       setSelected(index);
     },
@@ -421,13 +483,14 @@ export function RowsBuilder(props: RowsBuilderProps) {
   // static description from the config: a string or a Text object (function descriptions are not rendered here)
   const description = typeof rawDescription === 'string' || (rawDescription && typeof rawDescription === 'object') ? getTranslation(rawDescription as Record<string, string> | string, i18n) : undefined;
   const selectedSpans = selected !== null ? spansKey((snapshot[selected]?.columns ?? []).map((c) => c.span)) : '';
+  const selectedTypes = selected !== null ? (snapshot[selected]?.columns ?? []).map((c) => c.types?.[0] ?? '') : [];
 
   return (
     <div className="field-type rows-builder" style={{marginBottom: 'var(--base)'}}>
       {description ? <p style={{...text14, ...dim, margin: '0 0 12px'}}>{description}</p> : null}
       {!readOnly ? (
         <div style={{marginBottom: 12}}>
-          <PresetTiles current={selectedSpans} onReplace={replaceRow} onAdd={addRow} />
+          <PresetTiles current={selectedSpans} currentTypes={selectedTypes} presetRows={presetRows} onReplace={replaceRow} onAdd={(spans) => addRow(spans)} onAddPreset={(p) => addRow(p.spans, p.blocks)} />
           <p style={{...text14, ...dim, margin: '8px 0 0'}}>
             {selected === null ? t(T.builder.helpNoSelection) : t(T.builder.helpSelected, {n: selected + 1})}
           </p>

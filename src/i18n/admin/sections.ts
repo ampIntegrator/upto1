@@ -75,6 +75,10 @@ export const sectionsText = texts({
   },
   builder: {
     layout: {fr: 'Disposition', en: 'Layout'},
+    presetTileTitle: {
+      fr: ({label}: {label: string}) => `${label} · clic ou double clic : ajouter une rangée pleine largeur, contenu déjà posé`,
+      en: ({label}: {label: string}) => `${label} · click or double click: add a full-width row, content already placed`,
+    },
     tileTitle: {
       fr: ({label}: {label: string}) => `${label} · clic : remplacer la rangée sélectionnée · double clic : ajouter une rangée`,
       en: ({label}: {label: string}) => `${label} · click: replace the selected row · double click: add a row`,

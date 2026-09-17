@@ -1,7 +1,7 @@
 import type {Field} from 'payload';
 
 import {CARD_BLOCKS} from '@/fields/blocks/cardBlocks';
-import {collectionBlock} from '@/fields/blocks/collectionBlock';
+import {COLLECTION_SLUG, collectionBlock} from '@/fields/blocks/collectionBlock';
 import {compareCardBlock} from '@/fields/blocks/compareCardBlock';
 import {faqBlock} from '@/fields/blocks/faqBlock';
 import {mediaBlock} from '@/fields/blocks/mediaBlock';
@@ -12,6 +12,7 @@ import {processStepsBlock} from '@/fields/blocks/processStepsBlock';
 import {testimonialBlock} from '@/fields/blocks/testimonialBlock';
 import {textBoxBlock} from '@/fields/blocks/textBoxBlock';
 import {createSectionBuilder} from '@/fields/sections/builder';
+import {collectionBlockText} from '@/i18n/admin/blocks';
 import {sectionsText as T} from '@/i18n/admin/sections';
 
 /**
@@ -120,4 +121,6 @@ export const sections = createSectionBuilder({
   fieldName: 'sections',
   shared: {collection: 'sections'},
   condition: modeChosen,
+  // « Carousel » thumbnail: a full-width row with a collection already placed (swipe by default)
+  presetRows: [{id: 'carousel', label: collectionBlockText.rowPreset, spans: [12], blocks: [COLLECTION_SLUG]}],
 });

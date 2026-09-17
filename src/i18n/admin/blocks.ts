@@ -234,6 +234,8 @@ export const processStepsBlockText = texts({
 
 export const collectionBlockText = texts({
   name: {fr: 'Collection (contenus identiques)', en: 'Collection (identical items)'},
+  /** Label of the builder thumbnail that creates a full-width row holding a collection. */
+  rowPreset: {fr: 'Carousel', en: 'Carousel'},
   plural: {fr: 'Collections', en: 'Collections'},
   layout: {fr: 'Mise en page', en: 'Layout'},
   layoutSwipe: {fr: 'Côte à côte, glisser sur mobile', en: 'Side by side, swipe on mobile'},

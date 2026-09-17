@@ -26,6 +26,12 @@ describe('grille du constructeur de sections', () => {
     expect(new Set(ROW_PRESETS.map(spansKey)).size).toBe(ROW_PRESETS.length);
   });
 
+  it('propose 15 dispositions, dont 8·2·2 (colonne de 66 % centrée une fois réordonnée)', () => {
+    expect(ROW_PRESETS).toHaveLength(15);
+    expect(ROW_PRESETS).toContainEqual([8, 2, 2]);
+    expect(spansKey([2, 8, 2])).toBe(spansKey([8, 2, 2]));
+  });
+
   it('identifie une disposition quel que soit l’ordre des colonnes', () => {
     expect(spansKey([4, 8])).toBe(spansKey([8, 4]));
     expect(rowTotal([6, 4])).toBe(10);
@@ -58,5 +64,15 @@ describe('déclarations des blocs de contenu', async () => {
   it('refuse un contenu trop large, dans la langue de l’admin', () => {
     expect(tooWideError('FAQ', 9, 12, 'fr')).toMatch(/ne dépasse pas 9 colonnes/);
     expect(tooWideError('FAQ', 9, 12, 'en')).toMatch(/must not exceed 9 columns/);
+  });
+});
+
+describe('rangées pré-remplies (option du constructeur)', async () => {
+  const {createSectionBuilder} = await import('@/fields/sections/builder');
+  const block = (slug: string) => ({block: {slug, fields: []}, minSpan: 2 as const});
+  it('refuse une rangée pré-remplie qui ne fait pas 12 ou qui cite un bloc inconnu', () => {
+    expect(() => createSectionBuilder({blocks: [block('a')], presetRows: [{id: 'x', label: 'X', spans: [6, 4], blocks: ['a']}]})).toThrow(/add up to 12/);
+    expect(() => createSectionBuilder({blocks: [block('a')], presetRows: [{id: 'x', label: 'X', spans: [12], blocks: ['b']}]})).toThrow(/unknown block/);
+    expect(() => createSectionBuilder({blocks: [block('a')], presetRows: [{id: 'x', label: 'X', spans: [12], blocks: ['a']}]})).not.toThrow();
   });
 });

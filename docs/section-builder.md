@@ -38,9 +38,11 @@ The light tint field keeps its own `admin.condition`. Without it, Payload marks 
 
 ## Rows and layouts
 
-The **Rangées** panel shows 14 layouts as thumbnails, widest column first, with no mirrored duplicates (columns can be reordered inside a row):
+The **Rangées** panel shows 15 layouts as thumbnails, widest column first, with no mirrored duplicates (columns can be reordered inside a row, so `8 2 2` also gives `2 8 2`, a centred 66 % column). Each cell of a thumbnail shows its width:
 
-`12` · `6 6` · `8 4` · `7 5` · `9 3` · `4 4 4` · `6 3 3` · `6 4 2` · `3 3 3 3` · `6 2 2 2` · `4 4 2 2` · `4 2 2 2 2` · `3 3 2 2 2` · `2 2 2 2 2 2`
+`12` · `6 6` · `8 4` · `8 2 2` · `7 5` · `9 3` · `4 4 4` · `6 3 3` · `6 4 2` · `3 3 3 3` · `6 2 2 2` · `4 4 2 2` · `4 2 2 2 2` · `3 3 2 2 2` · `2 2 2 2 2 2`
+
+A 16th thumbnail, **Carousel**, adds a full-width row with a Collection block already placed (swipe by default; switch to carousel inside the block). It comes from the builder's `presetRows` option, declared in `src/sections.config.ts`: the core only knows « a row with these widths and these block slugs », checked at start-up. A click or a double click adds the row below the selection; the thumbnail lights up when the selected row matches it. The plain `12` thumbnail stays for image, image with quote, steps and tabs.
 
 Allowed column widths are 2, 3, 4, 5, 6, 7, 8, 9 and 12 (`COLUMN_SPANS` in `src/fields/sections/grid.ts`, which also owns the layouts and the spacing scale).
 

@@ -8,7 +8,7 @@ import {BLOCK_NAME_MAX} from './blockName';
 import {type ContentBlock, labelMap, maxSpanMap, minSpanMap} from './contentBlock';
 import {EMPTY_SLUG, emptyBlock} from './emptyBlock';
 import {SECTION_GAP_OPTIONS, SITE_GAP} from './gaps';
-import {DEFAULT_SPACING, SPACING_OPTIONS, SPAN_OPTIONS, toSpan} from './grid';
+import {DEFAULT_SPACING, type PresetRow, SPACING_OPTIONS, SPAN_OPTIONS, toSpan} from './grid';
 import {rowWidthError, tooNarrowError, tooWideError} from './validation';
 
 /**
@@ -35,6 +35,8 @@ export type SectionFieldsOptions = {
    * nullable when a condition exists above them, so adding or removing it changes the schema.
    */
   condition?: Condition;
+  /** Thumbnails that create a row with blocks already placed (builder option). */
+  presetRows?: PresetRow[];
 };
 
 const getByPath = (data: unknown, path: (number | string)[]): unknown => path.reduce<unknown>((o, k) => (o && typeof o === 'object' ? (o as Record<string, unknown>)[String(k)] : undefined), data);
@@ -44,7 +46,7 @@ const getByPath = (data: unknown, path: (number | string)[]): unknown => path.re
  * `condition` sits on the array field itself (not only on its collapsible): Payload's database
  * adapter only reads it there when it decides whether the rows' required columns are NOT NULL.
  */
-export function rowsField(blocks: ContentBlock[], condition?: Condition): Field {
+export function rowsField(blocks: ContentBlock[], condition?: Condition, presetRows: PresetRow[] = []): Field {
   const minSpans = minSpanMap(blocks);
   const maxSpans = maxSpanMap(blocks);
   const labels = labelMap(blocks);
@@ -94,7 +96,7 @@ export function rowsField(blocks: ContentBlock[], condition?: Condition): Field 
       condition,
       description: T.rows.description,
       // builder view: strips, proportional cells, one drawer per column
-      components: {Field: {path: '@/fields/sections/RowsBuilder#RowsBuilder', clientProps: {minSpans, maxSpans}}},
+      components: {Field: {path: '@/fields/sections/RowsBuilder#RowsBuilder', clientProps: {minSpans, maxSpans, presetRows}}},
     },
     fields: [
       {
@@ -139,7 +141,7 @@ export function rowsField(blocks: ContentBlock[], condition?: Condition): Field 
  * A section's fields, in two framed blocks: « Section settings » (the host's settings
  * first, then spacing, anchor, gaps and sharing), then the rows.
  */
-export function sectionFields({blocks, settings = [], shareable = false, condition}: SectionFieldsOptions): Field[] {
+export function sectionFields({blocks, settings = [], shareable = false, condition, presetRows = []}: SectionFieldsOptions): Field[] {
   const common: Field[] = [
     ...settings,
     // spacing and anchor
@@ -184,6 +186,6 @@ export function sectionFields({blocks, settings = [], shareable = false, conditi
     // closed by default (Nicolas, 17 Sept. 2026): the rows are what editors open a section for
     {type: 'collapsible', label: T.settings.collapsible, admin: {initCollapsed: true}, fields: common},
     // the rows, in their own collapsible block (RowsBuilder)
-    {type: 'collapsible', label: T.rows.collapsible, admin: {initCollapsed: false, condition}, fields: [rowsField(blocks, condition)]},
+    {type: 'collapsible', label: T.rows.collapsible, admin: {initCollapsed: false, condition}, fields: [rowsField(blocks, condition, presetRows)]},
   ];
 }
