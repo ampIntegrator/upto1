@@ -339,3 +339,29 @@ export const tabsBlockText = texts({
   },
   tooFew: {fr: 'Deux onglets au moins.', en: 'At least two tabs.'},
 });
+
+export const buttonGroupBlockText = texts({
+  name: {fr: 'Groupe de boutons', en: 'Button group'},
+  plural: {fr: 'Groupes de boutons', en: 'Button groups'},
+  mode: {fr: 'Disposition', en: 'Arrangement'},
+  modeAttached: {fr: 'Collés (un seul contrôle)', en: 'Attached (one control)'},
+  modeSpaced: {fr: 'Espacés (une colonne par bouton)', en: 'Spaced (one column per button)'},
+  width: {fr: 'Largeur', en: 'Width'},
+  widthNatural: {fr: 'Naturelle', en: 'Natural'},
+  widthFull: {fr: 'Pleine largeur', en: 'Full width'},
+  align: {fr: 'Alignement', en: 'Alignment'},
+  alignStart: {fr: 'Gauche', en: 'Left'},
+  alignCenter: {fr: 'Centre', en: 'Centre'},
+  alignEnd: {fr: 'Droite', en: 'Right'},
+  alignDescription: {fr: 'En largeur naturelle seulement.', en: 'With natural width only.'},
+  buttons: {fr: 'Boutons', en: 'Buttons'},
+  button: {fr: 'Bouton', en: 'Button'},
+  buttonsDescription: {
+    fr: 'Capacité selon la largeur de la colonne : 2 boutons sur 6 ou 7 colonnes, 3 sur 8 ou 9, 4 sur 12. En espacé, chaque bouton a sa colonne.',
+    en: 'Capacity by column width: 2 buttons on 6 or 7 columns, 3 on 8 or 9, 4 on 12. Spaced: each button gets its column.',
+  },
+  tooMany: {
+    fr: ({count, capacity, span}: {count: number; capacity: number; span: number}) => `${count} boutons pour une colonne de ${span} qui en accepte ${capacity}. Élargissez la colonne ou retirez des boutons.`,
+    en: ({count, capacity, span}: {count: number; capacity: number; span: number}) => `${count} buttons in a column of ${span} that holds ${capacity}. Widen the column or remove buttons.`,
+  },
+});

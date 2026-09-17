@@ -12,13 +12,15 @@ import type {PriceCardProps} from '@/components/PriceCard';
 import type {ProcessStep} from '@/components/ProcessSteps';
 import type {Testimonial} from '@/components/TestimonialCard';
 import type {TabsItem} from '@/components/Tabs';
-import type {TextBoxProps} from '@/components/TextBox';
+import type {ButtonGroupProps} from '@/components/ButtonGroup';
+import type {TextBoxButton, TextBoxProps} from '@/components/TextBox';
 import type {RichTextDocument} from '@/components/RichText';
 import {type TitleTag, toTitleTag} from '@/components/title-tags';
 import type {CheckListItem} from '@/components/CheckList';
 import type {ChipTone} from '@/components/Chip';
 import type {MediaQuoteProps, MediaQuoteSize, MediaQuoteTag} from '@/components/MediaQuote';
 import type {SectionBackground, SectionTint} from '@/components/Section';
+import {BUTTON_GROUP_SLUG} from '@/fields/blocks/buttonGroupBlock';
 import {CARD_VARIANTS} from '@/fields/blocks/cardBlocks';
 import {COLLECTION_SLUG} from '@/fields/blocks/collectionBlock';
 import {COMPARE_CARD_SLUG} from '@/fields/blocks/compareCardBlock';
@@ -53,6 +55,7 @@ export type CollectionData = {layout: 'swipe' | 'carousel'; perView: 2 | 3 | 4; 
 export type ContentData =
   | {type: 'textBox'; textBox: TextBoxProps}
   | {type: 'tabs'; items: TabsItem[]}
+  | {type: 'buttonGroup'; buttonGroup: ButtonGroupProps}
   | {type: 'collection'; collection: CollectionData}
   | {type: 'card'; card: CardProps}
   | {type: 'media'; media: MediaProps}
@@ -172,6 +175,25 @@ type FaqBlockData = {mode?: string | null; columns?: string | null; firstOpen?: 
 const FAQ_TAGS = ['h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span'] as const;
 type TestimonialData = {quote: string; name: string; role?: string | null; result?: string | null};
 type CompareCardData = {chipLabel: string; chipTone?: string | null; meta?: string | null; quote: string; items?: {label: string}[] | null; tone?: string | null; featured?: boolean | null};
+/** A button row of the text box or the button group (buttonFields.ts). */
+type ButtonData = {label: string; href: string; shape?: string | null; variant?: string | null; size?: string | null; iconKey?: string | null};
+const BUTTON_VARIANTS = ['primary', 'high', 'secondary', 'ghost'] as const;
+function toButton(x: ButtonData): TextBoxButton {
+  const variant = (BUTTON_VARIANTS as readonly string[]).includes(x.variant ?? '') ? (x.variant as TextBoxButton['variant']) : 'primary';
+  const split = x.shape === 'split';
+  return {label: x.label, href: x.href, arrow: split, variant, size: x.size === 'lg' ? 'lg' : 'md', iconKey: split ? undefined : ((x.iconKey || undefined) as NucleoIconKey | undefined)};
+}
+
+type ButtonGroupData = {mode?: string | null; width?: string | null; align?: string | null; buttons?: ButtonData[] | null};
+function toButtonGroup(b: ButtonGroupData): ContentData | null {
+  const buttons = (b.buttons ?? []).filter((x) => x.label && x.href).slice(0, 4).map(toButton);
+  if (!buttons.length) return null;
+  return {
+    type: 'buttonGroup',
+    buttonGroup: {buttons, mode: b.mode === 'attached' ? 'attached' : 'spaced', width: b.width === 'full' ? 'full' : 'natural', align: b.align === 'center' || b.align === 'end' ? b.align : 'start'},
+  };
+}
+
 type TabsData = {items?: {label?: string | null; content?: RichTextDocument | null}[] | null};
 
 /** Tabs with a label; a tab without text keeps an empty panel. */
@@ -186,7 +208,7 @@ type TextBoxData = {
   titleTag?: string | null;
   titleSize?: string | null;
   content?: RichTextDocument | null;
-  buttons?: {label: string; href: string; shape?: string | null; variant?: string | null; size?: string | null; iconKey?: string | null}[] | null;
+  buttons?: ButtonData[] | null;
   framed?: boolean | null;
   center?: boolean | null;
   vAlign?: string | null;
@@ -203,7 +225,7 @@ function toTextBox(b: TextBoxData): ContentData | null {
       titleTag: toTitleTag(b.titleTag, 'h2'),
       titleSize: (b.titleSize ?? 'heading-1') as TextBoxProps['titleSize'],
       content: hasText ? (b.content as RichTextDocument) : undefined,
-      buttons: (b.buttons ?? []).slice(0, 2).map((x) => ({label: x.label, href: x.href, arrow: x.shape === 'split', variant: (x.variant ?? 'primary') as 'primary', size: x.size === 'lg' ? 'lg' : 'md', iconKey: (x.iconKey || undefined) as NucleoIconKey | undefined})),
+      buttons: (b.buttons ?? []).slice(0, 2).map(toButton),
       framed: Boolean(b.framed),
       center: Boolean(b.center),
       vAlign: (b.vAlign === 'center' || b.vAlign === 'end' ? b.vAlign : 'start') as TextBoxProps['vAlign'],
@@ -370,6 +392,8 @@ function toContent(block: ContentBlock): ContentData | null {
       return toTextBox(block as unknown as TextBoxData);
     case TABS_SLUG:
       return toTabs(block as unknown as TabsData);
+    case BUTTON_GROUP_SLUG:
+      return toButtonGroup(block as unknown as ButtonGroupData);
     default:
       return null;
   }

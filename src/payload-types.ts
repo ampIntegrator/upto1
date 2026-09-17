@@ -639,6 +639,31 @@ export interface Page {
                                   blockType: 'tabs';
                                 }
                               | {
+                                  mode?: ('spaced' | 'attached') | null;
+                                  width?: ('natural' | 'full') | null;
+                                  /**
+                                   * With natural width only.
+                                   */
+                                  align?: ('start' | 'center' | 'end') | null;
+                                  /**
+                                   * Capacity by column width: 2 buttons on 6 or 7 columns, 3 on 8 or 9, 4 on 12. Spaced: each button gets its column.
+                                   */
+                                  buttons?:
+                                    | {
+                                        label: string;
+                                        href: string;
+                                        shape?: ('simple' | 'split') | null;
+                                        variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
+                                        size?: ('md' | 'lg') | null;
+                                        iconKey?: string | null;
+                                        id?: string | null;
+                                      }[]
+                                    | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'buttonGroup';
+                                }
+                              | {
                                   layout?: ('swipe' | 'carousel') | null;
                                   /**
                                    * 3 at most on 8 or 9 columns, 4 on 12. Two lines = two rows.
@@ -1362,6 +1387,31 @@ export interface Section {
                         id?: string | null;
                         blockName?: string | null;
                         blockType: 'tabs';
+                      }
+                    | {
+                        mode?: ('spaced' | 'attached') | null;
+                        width?: ('natural' | 'full') | null;
+                        /**
+                         * With natural width only.
+                         */
+                        align?: ('start' | 'center' | 'end') | null;
+                        /**
+                         * Capacity by column width: 2 buttons on 6 or 7 columns, 3 on 8 or 9, 4 on 12. Spaced: each button gets its column.
+                         */
+                        buttons?:
+                          | {
+                              label: string;
+                              href: string;
+                              shape?: ('simple' | 'split') | null;
+                              variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
+                              size?: ('md' | 'lg') | null;
+                              iconKey?: string | null;
+                              id?: string | null;
+                            }[]
+                          | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'buttonGroup';
                       }
                     | {
                         layout?: ('swipe' | 'carousel') | null;
@@ -2146,6 +2196,26 @@ export interface PagesSelect<T extends boolean = true> {
                                       id?: T;
                                       blockName?: T;
                                     };
+                                buttonGroup?:
+                                  | T
+                                  | {
+                                      mode?: T;
+                                      width?: T;
+                                      align?: T;
+                                      buttons?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            href?: T;
+                                            shape?: T;
+                                            variant?: T;
+                                            size?: T;
+                                            iconKey?: T;
+                                            id?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
                                 collection?:
                                   | T
                                   | {
@@ -2720,6 +2790,26 @@ export interface SectionsSelect<T extends boolean = true> {
                             | {
                                 label?: T;
                                 content?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    buttonGroup?:
+                      | T
+                      | {
+                          mode?: T;
+                          width?: T;
+                          align?: T;
+                          buttons?:
+                            | T
+                            | {
+                                label?: T;
+                                href?: T;
+                                shape?: T;
+                                variant?: T;
+                                size?: T;
+                                iconKey?: T;
                                 id?: T;
                               };
                           id?: T;

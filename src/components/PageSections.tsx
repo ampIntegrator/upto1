@@ -15,6 +15,7 @@ import {Text} from '@astryxdesign/core/Text';
 import React from 'react';
 
 import type {ContentData, FaqData, SectionData} from '@/lib/sections';
+import {ButtonGroup} from './ButtonGroup';
 import {Card} from './Card';
 import {Collapsible, CollapsibleGroup} from './Collapsible';
 import {Collection} from './Collection';
@@ -67,6 +68,8 @@ function Content({content, id}: {content: ContentData; id: string}) {
       return <TextBox {...content.textBox} />;
     case 'tabs':
       return <Tabs items={content.items} />;
+    case 'buttonGroup':
+      return <ButtonGroup {...content.buttonGroup} />;
     case 'collection':
       return (
         <Collection layout={content.collection.layout} perView={content.collection.perView} step={content.collection.step} arrows={content.collection.arrows} indicator={content.collection.indicator}>

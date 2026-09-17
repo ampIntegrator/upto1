@@ -5,8 +5,8 @@ import {minSpan} from '@/components/content-specs';
 import {columnSpanAt, type ContentBlock} from '@/fields/sections/contentBlock';
 import {tr} from '@/i18n/admin/languages';
 import {textBoxBlockText as t} from '../../i18n/admin/blocks';
-import {iconField} from '../iconField';
 import {tagField} from '../tagField';
+import {buttonRowFields} from './buttonFields';
 
 /**
  * « Text box » block of a column (the TextBox component), 3 to 9 columns: badges, title
@@ -98,56 +98,7 @@ const block: Block = {
       labels: {singular: t.button, plural: t.buttons},
       maxRows: 2,
       validate: twoAtMost,
-      fields: [
-        {
-          type: 'row',
-          fields: [
-            {name: 'label', type: 'text', label: {fr: 'Libellé', en: 'Label'}, localized: true, required: true, admin: {width: '50%'}},
-            {name: 'href', type: 'text', label: {fr: 'Adresse', en: 'Address'}, required: true, admin: {width: '50%'}},
-          ],
-        },
-        {
-          type: 'row',
-          fields: [
-            {
-              name: 'shape',
-              type: 'select',
-              label: t.buttonShape,
-              defaultValue: 'simple',
-              options: [
-                {label: t.shapeSimple, value: 'simple'},
-                {label: t.shapeSplit, value: 'split'},
-              ],
-              admin: {width: '25%'},
-            },
-            {
-              name: 'variant',
-              type: 'select',
-              label: t.buttonVariant,
-              defaultValue: 'primary',
-              options: [
-                {label: t.variants.primary, value: 'primary'},
-                {label: t.variants.high, value: 'high'},
-                {label: t.variants.secondary, value: 'secondary'},
-                {label: t.variants.ghost, value: 'ghost'},
-              ],
-              admin: {width: '25%'},
-            },
-            {
-              name: 'size',
-              type: 'select',
-              label: t.buttonSize,
-              defaultValue: 'md',
-              options: [
-                {label: t.sizeMd, value: 'md'},
-                {label: t.sizeLg, value: 'lg'},
-              ],
-              admin: {width: '25%'},
-            },
-            iconField({name: 'iconKey', label: t.buttonIcon, admin: {width: '25%'}}),
-          ],
-        },
-      ],
+      fields: buttonRowFields,
     },
     {
       type: 'row',

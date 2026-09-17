@@ -4,6 +4,7 @@ import {VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
 import React from 'react';
 
+import {ButtonGroup} from '@/components/ButtonGroup';
 import {Card, type CardProps} from '@/components/Card';
 import {Collapsible, CollapsibleGroup} from '@/components/Collapsible';
 import {Collection} from '@/components/Collection';
@@ -16,6 +17,7 @@ import {ProcessSteps} from '@/components/ProcessSteps';
 import {TestimonialCard} from '@/components/TestimonialCard';
 import {Tabs} from '@/components/Tabs';
 import {TextBox} from '@/components/TextBox';
+import {BUTTON_GROUP_SLUG} from '@/fields/blocks/buttonGroupBlock';
 import {CARD_VARIANTS} from '@/fields/blocks/cardBlocks';
 import {COLLECTION_SLUG} from '@/fields/blocks/collectionBlock';
 import {COMPARE_CARD_SLUG} from '@/fields/blocks/compareCardBlock';
@@ -35,7 +37,7 @@ import {FAQ} from '../../design/_showcases/faq.shared';
 import {LOREM_DOC} from '../../design/_showcases/textbox.shared';
 
 /** Wider box for the blocks that need several columns (single price, FAQ, steps). */
-const WIDE = new Set([PRICE_SINGLE_SLUG, FAQ_SLUG, PROCESS_STEPS_SLUG, COLLECTION_SLUG, TABS_SLUG]);
+const WIDE = new Set([PRICE_SINGLE_SLUG, FAQ_SLUG, PROCESS_STEPS_SLUG, COLLECTION_SLUG, TABS_SLUG, BUTTON_GROUP_SLUG]);
 
 const IMG = 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80';
 const TEXT = 'Une phrase de présentation courte, deux lignes au plus, pour situer le contenu de la carte.';
@@ -63,7 +65,12 @@ export function Apercu({slug}: {slug: string}) {
   return (
     <OrbitaThemeProvider fixedSilo="blue" initialMode="light">
       <VStack data-apercu style={{width: WIDE.has(slug) ? 'var(--apercu-width-wide, 900px)' : 'var(--apercu-width, 360px)', padding: 'var(--spacing-6)', background: 'var(--color-background-body)'}}>
-        {slug === TABS_SLUG ? (
+        {slug === BUTTON_GROUP_SLUG ? (
+          <VStack gap={6}>
+            <ButtonGroup mode="attached" label="Profils" buttons={[{label: 'Particuliers', href: '#', variant: 'secondary', iconKey: 'home'}, {label: 'Professionnels', href: '#', variant: 'secondary', iconKey: 'calculator'}, {label: 'Collectivités', href: '#', variant: 'secondary', iconKey: 'building'}]} />
+            <ButtonGroup mode="spaced" width="full" buttons={[{label: 'Demander une démo', href: '#', variant: 'primary', arrow: true}, {label: 'Voir les tarifs', href: '#', variant: 'high', arrow: true}]} />
+          </VStack>
+        ) : slug === TABS_SLUG ? (
           <Tabs items={['Le standard se perd en route', 'Le reporting est introuvable', 'Les pannes deviennent des incidents'].map((label) => ({label, content: LOREM_DOC}))} label="Situations" />
         ) : slug === TEXT_BOX_SLUG ? (
           <TextBox badges={[{label: 'Nouveau', tone: 'high'}]} title="Le chiffrage juste" titleTag="h2" titleSize="heading-1" content={LOREM_DOC} buttons={[{label: 'Commencer', href: '#', arrow: true}]} framed />
