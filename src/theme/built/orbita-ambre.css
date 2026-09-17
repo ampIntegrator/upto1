@@ -1349,7 +1349,7 @@
 
   .astryx-top-nav-item.selected {
     background-color: transparent;
-    color: var(--color-text-primary);
+    color: var(--color-text-accent);
   }
 
   .astryx-top-nav-menu {
@@ -1372,7 +1372,7 @@
 
   .astryx-top-nav-menu.selected {
     background-color: transparent;
-    color: var(--color-text-primary);
+    color: var(--color-text-accent);
   }
 
   .astryx-top-nav-mega-menu {
@@ -1395,7 +1395,7 @@
 
   .astryx-top-nav-mega-menu.selected {
     background-color: transparent;
-    color: var(--color-text-primary);
+    color: var(--color-text-accent);
   }
 
   .astryx-top-nav-mega-menu-item {

@@ -506,7 +506,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         // padding 0: the logo aligns with the container edge, like the breadcrumb and the blocks
         base: {padding: '0', fontFamily: 'var(--font-family-serif)', fontSize: '18px', fontWeight: '500', letterSpacing: '1px', lineHeight: '1.2', textTransform: 'uppercase'},
       },
-      // navigation entries: 14.5 px medium secondary ink, ink on hover, no pill
+      // navigation entries: 14.5 px medium secondary ink, ink on hover, no pill; the current page in silo colour
       ...Object.fromEntries(
         ['top-nav-item', 'top-nav-menu', 'top-nav-mega-menu'].map((k) => [
           k,
@@ -524,7 +524,7 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
               transition: 'color var(--duration-medium) var(--ease-standard)',
               ':hover': {backgroundColor: 'transparent', color: 'var(--color-text-primary)'},
             },
-            selected: {backgroundColor: 'transparent', color: 'var(--color-text-primary)'},
+            selected: {backgroundColor: 'transparent', color: 'var(--color-text-accent)'},
           },
         ]),
       ),

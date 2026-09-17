@@ -1105,7 +1105,7 @@ export const orbitaBlueTheme = {
       },
       "selected": {
         "backgroundColor": "transparent",
-        "color": "var(--color-text-primary)"
+        "color": "var(--color-text-accent)"
       }
     },
     "top-nav-menu": {
@@ -1127,7 +1127,7 @@ export const orbitaBlueTheme = {
       },
       "selected": {
         "backgroundColor": "transparent",
-        "color": "var(--color-text-primary)"
+        "color": "var(--color-text-accent)"
       }
     },
     "top-nav-mega-menu": {
@@ -1149,7 +1149,7 @@ export const orbitaBlueTheme = {
       },
       "selected": {
         "backgroundColor": "transparent",
-        "color": "var(--color-text-primary)"
+        "color": "var(--color-text-accent)"
       }
     },
     "top-nav-mega-menu-item": {
