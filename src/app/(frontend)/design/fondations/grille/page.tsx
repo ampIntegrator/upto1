@@ -15,7 +15,7 @@ export const metadata = {title: 'Grille & emprises — Design system Vidomia'};
 const SAMPLES: ContentRef[] = [
   {type: 'text'}, {type: 'image'}, {type: 'stat'}, {type: 'checkList'}, {type: 'callout'}, {type: 'card'}, {type: 'testimonialCard'}, {type: 'compareCard'},
   {type: 'cardGrid', columns: 2}, {type: 'cardGrid', columns: 3}, {type: 'cardGrid', columns: 4},
-  {type: 'sectionHeading'}, {type: 'sectionNote'}, {type: 'tabs'}, {type: 'collapsibleGroup'}, {type: 'testimonialCarousel'}, {type: 'mediaQuote'},
+  {type: 'sectionHeading'}, {type: 'sectionNote'}, {type: 'tabs', count: 4}, {type: 'tabs', count: 6}, {type: 'tabs', count: 8}, {type: 'collapsibleGroup'}, {type: 'testimonialCarousel'}, {type: 'mediaQuote'},
   {type: 'processSteps', steps: 1}, {type: 'processSteps', steps: 2}, {type: 'processSteps', steps: 3}, {type: 'processSteps', steps: 4},
   {type: 'priceList', variant: 'single'}, {type: 'plan'},
   {type: 'collection', perView: 2}, {type: 'collection', perView: 3}, {type: 'collection', perView: 4},
@@ -75,6 +75,7 @@ export default function Page() {
             <Text type="body" color="secondary">1. Les largeurs d'une rangée font exactement 12.</Text>
             <Text type="body" color="secondary">2. Le contenu d'une colonne respecte son emprise minimale et, s'il en a une, son emprise maximale.</Text>
             <Text type="body" color="secondary">2 bis. Étapes : 1 étape sur 4 ou 5 colonnes, 2 sur 6 ou 7, 3 sur 8 ou 9, 4 sur 12 ; le panneau suit la largeur de sa colonne.</Text>
+            <Text type="body" color="secondary">2 quater. Onglets : 4 au plus sur 6 ou 7 colonnes, 6 sur 8 ou 9, 8 sur 12 ; libellés de 50 caractères au plus, la barre défile au-delà.</Text>
             <Text type="body" color="secondary">2 ter. Collection : contenus identiques côte à côte, dès 8 colonnes ; 3 visibles au plus sur 8 ou 9, 4 sur 12. Pour deux lignes, deux rangées.</Text>
             <Text type="body" color="secondary">3. Pas d'imbrication de colonnes. Grille de cartes, liste de prix en colonnes, étapes et carrousel gèrent leur intérieur, et suivent la largeur de leur colonne (requêtes de conteneur), pas celle de l'écran.</Text>
             <Text type="body" color="secondary">4. Un contenu ne casse jamais si la règle est contournée : il se replie sur une disposition plus étroite.</Text>
