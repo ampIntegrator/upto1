@@ -370,3 +370,54 @@ export const buttonGroupBlockText = texts({
     en: ({count, capacity, span}: {count: number; capacity: number; span: number}) => `${count} buttons in a column of ${span} that holds ${capacity}. Widen the column or remove buttons.`,
   },
 });
+
+/** Texts of the figure blocks inserted in a post's prose (and later placed in columns). */
+export const proseBlockText = texts({
+  keyPoints: {
+    name: {fr: 'À retenir', en: 'Key points'},
+    plural: {fr: 'À retenir', en: 'Key points'},
+    eyebrow: {fr: 'Surtitre', en: 'Eyebrow'},
+    content: {fr: 'Points', en: 'Points'},
+    contentDescription: {fr: 'Une liste à puces, avec du gras et des liens.', en: 'A bulleted list, with bold and links.'},
+  },
+  ctaBand: {
+    name: {fr: 'Bandeau d’appel', en: 'Call-to-action band'},
+    plural: {fr: 'Bandeaux d’appel', en: 'Call-to-action bands'},
+    variant: {fr: 'Variante', en: 'Variant'},
+    variantIcon: {fr: 'Icône, titre et texte', en: 'Icon, title and text'},
+    variantArrow: {fr: 'Flèche et une ligne', en: 'Arrow and one line'},
+    icon: {fr: 'Icône', en: 'Icon'},
+    title: {fr: 'Titre', en: 'Title'},
+    text: {fr: 'Texte d’appui', en: 'Supporting text'},
+    button: {fr: 'Bouton', en: 'Button'},
+  },
+  statsBand: {
+    name: {fr: 'Bandeau de chiffres', en: 'Stats band'},
+    plural: {fr: 'Bandeaux de chiffres', en: 'Stats bands'},
+    items: {fr: 'Chiffres (2 à 4)', en: 'Figures (2 to 4)'},
+    item: {fr: 'Chiffre', en: 'Figure'},
+    value: {fr: 'Valeur (« −68 % », « ×2,4 »)', en: 'Value (« −68 % », « ×2.4 »)'},
+    label: {fr: 'Libellé', en: 'Label'},
+  },
+  quoteCard: {
+    name: {fr: 'Carte citation', en: 'Quote card'},
+    plural: {fr: 'Cartes citation', en: 'Quote cards'},
+    quote: {fr: 'Citation', en: 'Quote'},
+    personName: {fr: 'Nom', en: 'Name'},
+    role: {fr: 'Rôle', en: 'Role'},
+    photo: {fr: 'Photo', en: 'Photo'},
+  },
+  gallery: {
+    name: {fr: 'Galerie', en: 'Gallery'},
+    plural: {fr: 'Galeries', en: 'Galleries'},
+    images: {fr: 'Images (2 à 5)', en: 'Images (2 to 5)'},
+    image: {fr: 'Image', en: 'Image'},
+    wideFirst: {fr: 'Première image en large', en: 'Wide first image'},
+    caption: {fr: 'Légende', en: 'Caption'},
+  },
+  upload: {
+    caption: {fr: 'Légende', en: 'Caption'},
+  },
+  tableDescription: {fr: 'Un tableau défile horizontalement dans une colonne étroite : préférez 6 colonnes ou plus.', en: 'A table scrolls horizontally in a narrow column: prefer 6 columns or more.'},
+});
+

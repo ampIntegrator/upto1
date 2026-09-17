@@ -1,10 +1,10 @@
-import {BoldFeature, FixedToolbarFeature, InlineToolbarFeature, ItalicFeature, lexicalEditor, LinkFeature, OrderedListFeature, ParagraphFeature, UnorderedListFeature} from '@payloadcms/richtext-lexical';
+import {textBoxEditor} from '../editors';
 import type {Block, PayloadRequest} from 'payload';
 
 import {minSpan} from '@/components/content-specs';
 import {columnSpanAt, type ContentBlock} from '@/fields/sections/contentBlock';
 import {tr} from '@/i18n/admin/languages';
-import {textBoxBlockText as t} from '../../i18n/admin/blocks';
+import {proseBlockText, textBoxBlockText as t} from '../../i18n/admin/blocks';
 import {tagField} from '../tagField';
 import {buttonRowFields} from './buttonFields';
 
@@ -21,11 +21,7 @@ export {TEXT_BOX_SLUG};
 type Sibling = Record<string, unknown>;
 const twoAtMost = (value: unknown, {req}: {req: PayloadRequest}) => (!Array.isArray(value) || value.length <= 2 ? true : tr(t.tooMany, req.i18n?.language));
 
-/** The editor of the text: only what the site renders (RichText). */
-export const textBoxEditor = lexicalEditor({
-  // fixed toolbar above the field and inline toolbar on selection: without them bold and links have no button
-  features: () => [ParagraphFeature(), BoldFeature(), ItalicFeature(), LinkFeature({enabledCollections: ['pages', 'posts']}), UnorderedListFeature(), OrderedListFeature(), FixedToolbarFeature(), InlineToolbarFeature()],
-});
+export {textBoxEditor};
 
 const block: Block = {
   slug: TEXT_BOX_SLUG,
@@ -90,7 +86,7 @@ const block: Block = {
         },
       ],
     },
-    {name: 'content', type: 'richText', label: t.content, localized: true, editor: textBoxEditor, admin: {description: t.contentDescription}},
+    {name: 'content', type: 'richText', label: t.content, localized: true, editor: textBoxEditor, admin: {description: {fr: `${t.contentDescription.fr} ${proseBlockText.tableDescription.fr}`, en: `${t.contentDescription.en} ${proseBlockText.tableDescription.en}`}}},
     {
       name: 'buttons',
       type: 'array',
@@ -98,7 +94,7 @@ const block: Block = {
       labels: {singular: t.button, plural: t.buttons},
       maxRows: 2,
       validate: twoAtMost,
-      fields: buttonRowFields,
+      fields: buttonRowFields(),
     },
     {
       type: 'row',

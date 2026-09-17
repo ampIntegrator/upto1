@@ -75,7 +75,7 @@ const block: Block = {
         const capacity = buttonsCapacity(span);
         return count <= capacity || tr(t.tooMany, req.i18n?.language, {count, capacity, span});
       },
-      fields: buttonRowFields,
+      fields: buttonRowFields(),
     },
   ],
 };
