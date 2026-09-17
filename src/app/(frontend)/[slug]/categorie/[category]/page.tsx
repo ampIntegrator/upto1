@@ -1,7 +1,6 @@
 import {notFound} from 'next/navigation';
 import React from 'react';
 
-import {blogConfig} from '@/lib/blog';
 import {loadCategory} from '@/lib/posts';
 import {getLocale, getSite} from '@/lib/site';
 import {BlogList, pageFromQuery} from '../../BlogList';
@@ -12,7 +11,7 @@ export const dynamic = 'force-dynamic';
 async function load(slug: string, categorySlug: string) {
   const locale = await getLocale();
   const site = await getSite(locale);
-  const blog = blogConfig(site.settings);
+  const blog = site.blog;
   if (!blog.base || blog.base !== slug) return null;
   const category = await loadCategory(locale, categorySlug);
   return category ? {locale, site, blog, category} : null;

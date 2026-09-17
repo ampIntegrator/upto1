@@ -8,7 +8,7 @@ import {sections} from '@/sections.config';
 /**
  * Blog posts (mockup 18): title, cover and its caption, lead, prose (post editor with inserted
  * figures), author, category, date; optional builder sections shown under the post. Rendered at
- * /<blog page>/<slug> (Site settings › Blog).
+ * /<blog page>/<slug> (Blog settings).
  */
 export const Posts: CollectionConfig = {
   slug: 'posts',

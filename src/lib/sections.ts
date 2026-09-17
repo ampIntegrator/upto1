@@ -320,7 +320,7 @@ export type SectionsContext = {
   posts?: PostsLoader;
   /** chosen posts (post cards), loaded with their cover and category */
   postsByIds?: (ids: number[]) => Promise<Post[]>;
-  /** a post's URL under the blog page (Site settings › Blog) */
+  /** a post's URL under the blog page (Blog settings) */
   postHref?: (slug: string) => string;
   /** label of the cards' link */
   readMore?: string;

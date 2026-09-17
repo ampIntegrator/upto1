@@ -25,6 +25,8 @@ import * as migration_20260917_101827_add_user_session_days from './20260917_101
 import * as migration_20260917_120207_add_blog_authors_posts_settings from './20260917_120207_add_blog_authors_posts_settings';
 import * as migration_20260917_120422_add_section_heading_post_card from './20260917_120422_add_section_heading_post_card';
 import * as migration_20260917_121129_add_figure_column_blocks from './20260917_121129_add_figure_column_blocks';
+import * as migration_20260917_122335_add_blog_global from './20260917_122335_add_blog_global';
+import * as migration_20260917_122357_remove_settings_blog from './20260917_122357_remove_settings_blog';
 
 export const migrations = [
   {
@@ -160,6 +162,16 @@ export const migrations = [
   {
     up: migration_20260917_121129_add_figure_column_blocks.up,
     down: migration_20260917_121129_add_figure_column_blocks.down,
-    name: '20260917_121129_add_figure_column_blocks'
+    name: '20260917_121129_add_figure_column_blocks',
+  },
+  {
+    up: migration_20260917_122335_add_blog_global.up,
+    down: migration_20260917_122335_add_blog_global.down,
+    name: '20260917_122335_add_blog_global',
+  },
+  {
+    up: migration_20260917_122357_remove_settings_blog.up,
+    down: migration_20260917_122357_remove_settings_blog.down,
+    name: '20260917_122357_remove_settings_blog'
   },
 ];

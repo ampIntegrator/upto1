@@ -27,8 +27,8 @@ async function main() {
     log(`${ok ? 'OK ' : 'KO '} ${label}`);
     if (!ok) failures += 1;
   };
-  const settings = await payload.findGlobal({slug: 'settings', depth: 0});
-  const previousBlogPage = settings.blog?.page ?? null;
+  const blogSettings = await payload.findGlobal({slug: 'blog', depth: 0});
+  const previous = {page: blogSettings.page ?? null, title: blogSettings.title, lead: blogSettings.lead ?? null};
   const image = (await payload.find({collection: 'media', limit: 1, where: {mimeType: {contains: 'image'}}})).docs[0];
   const created: {collection: 'posts' | 'pages' | 'authors' | 'categories'; id: number}[] = [];
   try {
@@ -38,7 +38,7 @@ async function main() {
     created.push({collection: 'authors', id: author.id});
     const page = await payload.create({collection: 'pages', data: {title: 'Blog smoke', slug: `zz-smoke-blog-${stamp}`, hero: {variant: 'page-glow', title: 'Blog smoke'}} as never});
     created.push({collection: 'pages', id: page.id});
-    await payload.updateGlobal({slug: 'settings', data: {blog: {...(settings.blog ?? {}), page: page.id, title: 'Actualités <span>smoke</span>', lead: 'Chapô smoke du blog.'}} as never});
+    await payload.updateGlobal({slug: 'blog', data: {page: page.id, title: 'Actualités <span>smoke</span>', lead: 'Chapô smoke du blog.'}});
 
     const content = {
       root: el('root', [
@@ -109,7 +109,7 @@ async function main() {
     const wrong = await get(`/not-the-blog-${stamp}/${post.slug}`);
     check(wrong.status === 404, `a post under another first segment → ${wrong.status}`);
   } finally {
-    await payload.updateGlobal({slug: 'settings', data: {blog: {...(settings.blog ?? {}), page: previousBlogPage}} as never});
+    await payload.updateGlobal({slug: 'blog', data: previous});
     for (const c of created.reverse()) await payload.delete({collection: c.collection, id: c.id});
     log('cleanup done, Blog settings restored');
   }

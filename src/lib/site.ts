@@ -12,7 +12,7 @@ import {getPayload} from 'payload';
 
 import type {HeroProps} from '@/components/Hero';
 import type {SiteFooterData, SiteHeaderData, SiteNavEntry, SiteStrip} from '@/components/site-nav';
-import {blogConfig, blogPath, postPath} from '@/lib/blog';
+import {type BlogConfig, blogConfig, blogPath, postPath} from '@/lib/blog';
 import type {SectionsContext} from '@/lib/sections';
 import type {NucleoIconKey} from '@/theme/icons/nucleo';
 import type {SiloName} from '@/theme/index';
@@ -33,14 +33,15 @@ const icon = (k?: string | null): NucleoIconKey | undefined => (k ? (k as Nucleo
 
 export async function getSite(locale: Locale) {
   const payload = await getPayload({config});
-  const [settings, languages, header, footer, posts] = await Promise.all([
+  const [settings, blog, languages, header, footer, posts] = await Promise.all([
     payload.findGlobal({slug: 'settings', locale, depth: 1}),
+    payload.findGlobal({slug: 'blog', locale, depth: 1}),
     payload.findGlobal({slug: 'languages', depth: 0}),
     payload.findGlobal({slug: 'header', locale, depth: 2}),
     payload.findGlobal({slug: 'footer', locale, depth: 1}),
     payload.find({collection: 'posts', locale, depth: 1, limit: 3, sort: '-publishedAt'}),
   ]);
-  return {settings, languages, header, footer, posts: posts.docs};
+  return {settings, blog: blogConfig(blog), languages, header, footer, posts: posts.docs};
 }
 
 /** Latest posts for a collection block fed by the blog (optional category). */
@@ -59,8 +60,7 @@ export async function loadPostsByIds(locale: Locale, ids: number[]): Promise<Pos
 }
 
 /** What the section conversion needs from the site: locale, post loaders, post URLs under the blog page. */
-export function sectionsContext(locale: Locale, s: Settings): SectionsContext {
-  const blog = blogConfig(s);
+export function sectionsContext(locale: Locale, blog: BlogConfig): SectionsContext {
   return {locale, posts: (q) => loadPosts(locale, q), postsByIds: (ids) => loadPostsByIds(locale, ids), postHref: (slug) => postPath(blog, slug), readMore: blog.labels.readMore};
 }
 
@@ -74,7 +74,7 @@ export function toStrip(s: Settings): SiteStrip {
   };
 }
 
-export function toHeader(s: Settings, h: Header, l: Language): SiteHeaderData {
+export function toHeader(s: Settings, h: Header, l: Language, blog: BlogConfig): SiteHeaderData {
   const nav: SiteNavEntry[] = (h.nav ?? []).map((b): SiteNavEntry => {
     if (b.blockType === 'link') return {kind: 'link', label: b.label, href: b.href};
     if (b.blockType === 'menu') return {kind: 'menu', label: b.label, items: (b.items ?? []).map((it) => ({title: it.title, description: it.description ?? undefined, iconKey: icon(it.iconKey), href: it.href}))};
@@ -83,7 +83,7 @@ export function toHeader(s: Settings, h: Header, l: Language): SiteHeaderData {
       kind: 'mega',
       label: b.label,
       groups: (b.groups ?? []).map((g) => ({title: g.title, items: (g.items ?? []).map((it) => ({title: it.title, description: it.description ?? undefined, iconKey: icon(it.iconKey), href: it.href}))})),
-      featured: post ? {title: post.title.replace(/<\/?span>/g, ''), description: post.excerpt ?? undefined, image: mediaUrl(post.cover), linkLabel: b.featuredLinkLabel || "Lire l'article", linkHref: postPath(blogConfig(s), post.slug)} : undefined,
+      featured: post ? {title: post.title.replace(/<\/?span>/g, ''), description: post.excerpt ?? undefined, image: mediaUrl(post.cover), linkLabel: b.featuredLinkLabel || "Lire l'article", linkHref: postPath(blog, post.slug)} : undefined,
     };
   });
   return {
@@ -98,7 +98,7 @@ export function toHeader(s: Settings, h: Header, l: Language): SiteHeaderData {
   };
 }
 
-export function toFooter(s: Settings, f: Footer, posts: Post[], locale: Locale): SiteFooterData {
+export function toFooter(s: Settings, f: Footer, posts: Post[], locale: Locale, blog: BlogConfig): SiteFooterData {
   const fmt = new Intl.DateTimeFormat(locale, {day: 'numeric', month: 'long', year: 'numeric'});
   const n = f.newsletter;
   return {
@@ -107,8 +107,8 @@ export function toFooter(s: Settings, f: Footer, posts: Post[], locale: Locale):
     articles: f.articlesEnabled !== false && posts.length ? {
       eyebrow: f.articles?.eyebrow ?? 'En bref',
       allLabel: f.articles?.allLabel ?? 'Tous les articles',
-      allHref: f.articles?.allHref ?? blogPath(blogConfig(s)),
-      items: posts.map((p) => ({category: typeof p.category === 'object' ? p.category.title : '', title: p.title.replace(/<\/?span>/g, ''), date: fmt.format(new Date(p.publishedAt)), href: postPath(blogConfig(s), p.slug)})),
+      allHref: f.articles?.allHref ?? blogPath(blog),
+      items: posts.map((p) => ({category: typeof p.category === 'object' ? p.category.title : '', title: p.title.replace(/<\/?span>/g, ''), date: fmt.format(new Date(p.publishedAt)), href: postPath(blog, p.slug)})),
     } : undefined,
     columns: (f.columns ?? []).map((c) => ({title: c.title, links: (c.links ?? []).map((l) => ({label: l.label, href: l.href}))})),
     legal: {copyright: f.copyright ?? '', line: f.legalLine ?? undefined, links: (f.legalLinks ?? []).map((l) => ({label: l.label, href: l.href}))},

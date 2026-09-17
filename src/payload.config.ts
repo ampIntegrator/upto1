@@ -14,6 +14,7 @@ import { Posts } from './collections/Posts'
 import { Sections } from './collections/Sections'
 import { Users } from './collections/Users'
 import { adminI18n } from './i18n/admin/payload'
+import { Blog } from './globals/Blog'
 import { Footer } from './globals/Footer'
 import { Header } from './globals/Header'
 import { Languages } from './globals/Languages'
@@ -49,7 +50,7 @@ export default buildConfig({
     fallback: true,
   },
   collections: [Pages, Sections, Posts, Categories, Authors, Media, Users],
-  globals: [Settings, Languages, Header, Footer],
+  globals: [Settings, Languages, Header, Footer, Blog],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

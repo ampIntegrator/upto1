@@ -5,7 +5,7 @@
  * images are imported once (by file name). Real pages are never touched.
  * Blog: a demo author (« Marie Lefebvre ») and a demo post using every prose element and figure
  * (slug demo-industrialiser-le-cycle-commercial), recreated too. The blog page itself is chosen in
- * Site settings › Blog: this script never changes the settings.
+ * Blog › Réglages du blog: this script never changes the settings.
  */
 import config from '@payload-config';
 import {mkdtemp, writeFile} from 'node:fs/promises';
@@ -182,9 +182,9 @@ async function main() {
     collection: 'posts',
     data: {title: 'Du devis à la facturation : <span>industrialiser</span> le cycle commercial', slug: postSlug, excerpt: 'Entre l’estimation envoyée et le paiement encaissé, le temps se perd. Méthode en trois leviers, chiffres à l’appui.', cover: analyse, coverCaption: 'Un cycle commercial piloté de bout en bout.', author: author.id, category: category?.id, publishedAt: new Date().toISOString(), content} as never,
   });
-  const settings = await payload.findGlobal({slug: 'settings', depth: 1});
-  const blogPage = settings.blog?.page && typeof settings.blog.page === 'object' ? settings.blog.page.slug : null;
-  log(blogPage ? `article de démo : http://localhost:3000/${blogPage}/${postSlug}` : 'article de démo créé ; choisissez la page du blog dans Réglages du site › Blog pour le voir');
+  const blogSettings = await payload.findGlobal({slug: 'blog', depth: 1});
+  const blogPage = blogSettings.page && typeof blogSettings.page === 'object' ? blogSettings.page.slug : null;
+  log(blogPage ? `article de démo : http://localhost:3000/${blogPage}/${postSlug}` : 'article de démo créé ; choisissez la page du blog dans Blog › Réglages du blog pour le voir');
   process.exit(0);
 }
 

@@ -107,12 +107,14 @@ export interface Config {
     languages: Language;
     header: Header;
     footer: Footer;
+    blog: Blog;
   };
   globalsSelect: {
     settings: SettingsSelect<false> | SettingsSelect<true>;
     languages: LanguagesSelect<false> | LanguagesSelect<true>;
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    blog: BlogSelect<false> | BlogSelect<true>;
   };
   locale: 'fr' | 'en' | 'de' | 'es' | 'it';
   widgets: {
@@ -5092,30 +5094,6 @@ export interface Setting {
     homeLabel?: string | null;
   };
   /**
-   * The chosen page shows the list of posts instead of its content, with the title and lead below. Posts and category archives take its address: /<page>/<post>, /<page>/categorie/<category>.
-   */
-  blog?: {
-    page?: (number | null) | Page;
-    eyebrow?: string | null;
-    /**
-     * A word between <span>…</span> is set in accent serif.
-     */
-    title?: string | null;
-    lead?: string | null;
-    tone?: ('light' | 'night') | null;
-    perPage?: number | null;
-    labels?: {
-      all?: string | null;
-      readMore?: string | null;
-      dateLabel?: string | null;
-      toc?: string | null;
-      categoryPrefix?: string | null;
-      more?: string | null;
-      relatedEyebrow?: string | null;
-      relatedTitle?: string | null;
-    };
-  };
-  /**
    * Default gaps for sections built in the Content tab of pages. Each section can override them.
    */
   sectionGrid: {
@@ -5259,6 +5237,36 @@ export interface Footer {
   createdAt?: string | null;
 }
 /**
+ * The chosen page shows the list of posts instead of its content, with the title and lead below. Posts and category archives take its address: /<page>/<post>, /<page>/categorie/<category>.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog".
+ */
+export interface Blog {
+  id: number;
+  page?: (number | null) | Page;
+  eyebrow?: string | null;
+  /**
+   * A word between <span>…</span> is set in accent serif.
+   */
+  title?: string | null;
+  lead?: string | null;
+  tone?: ('light' | 'night') | null;
+  perPage?: number | null;
+  labels?: {
+    all?: string | null;
+    readMore?: string | null;
+    dateLabel?: string | null;
+    toc?: string | null;
+    categoryPrefix?: string | null;
+    more?: string | null;
+    relatedEyebrow?: string | null;
+    relatedTitle?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "settings_select".
  */
@@ -5286,28 +5294,6 @@ export interface SettingsSelect<T extends boolean = true> {
         enabled?: T;
         homeStyle?: T;
         homeLabel?: T;
-      };
-  blog?:
-    | T
-    | {
-        page?: T;
-        eyebrow?: T;
-        title?: T;
-        lead?: T;
-        tone?: T;
-        perPage?: T;
-        labels?:
-          | T
-          | {
-              all?: T;
-              readMore?: T;
-              dateLabel?: T;
-              toc?: T;
-              categoryPrefix?: T;
-              more?: T;
-              relatedEyebrow?: T;
-              relatedTitle?: T;
-            };
       };
   sectionGrid?:
     | T
@@ -5448,6 +5434,33 @@ export interface FooterSelect<T extends boolean = true> {
         label?: T;
         href?: T;
         id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog_select".
+ */
+export interface BlogSelect<T extends boolean = true> {
+  page?: T;
+  eyebrow?: T;
+  title?: T;
+  lead?: T;
+  tone?: T;
+  perPage?: T;
+  labels?:
+    | T
+    | {
+        all?: T;
+        readMore?: T;
+        dateLabel?: T;
+        toc?: T;
+        categoryPrefix?: T;
+        more?: T;
+        relatedEyebrow?: T;
+        relatedTitle?: T;
       };
   updatedAt?: T;
   createdAt?: T;

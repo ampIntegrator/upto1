@@ -5,9 +5,9 @@ mockup references). Mockups: `Orbita/orbita/18-blogPost.html` (post), `19-blogCa
 
 ## The blog page
 
-Like WordPress's « posts page »: in **Site settings › Blog**, choose one page of the site. That page
-then renders the list of posts instead of its own page top and sections (a note says so in its
-admin). The tab also holds the page top of the list (eyebrow, h1 title with an optional
+Like WordPress's « posts page »: in **Blog › Réglages du blog** (the `blog` global, in the Blog group
+next to posts, categories and authors), choose one page of the site. That page then renders the list of posts instead of its own page top and sections (a note says so in its
+admin). The global also holds the page top of the list (eyebrow, h1 title with an optional
 `<span>` serif accent, optional lead, light or night tone), the posts per page (12) and the labels
 (« Tous », « Lire l’article », « Publié le », « Sommaire », « Catégorie », « Voir le blog », related
 posts eyebrow and title).
