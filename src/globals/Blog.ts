@@ -12,7 +12,7 @@ import {blogText as t} from '@/i18n/admin/globals';
 export const Blog: GlobalConfig = {
   slug: 'blog',
   label: t.label,
-  admin: {group: ct.groups.blog, description: t.description},
+  admin: {components: {elements: {beforeDocumentControls: ['@/fields/PreviewLayoutMenu#PreviewLayoutMenu']}}, group: ct.groups.blog, description: t.description},
   access: {read: () => true},
   fields: listingSettingsFields({
     self: 'blog',

@@ -13,7 +13,7 @@ import {portfolioText as t} from '@/i18n/admin/globals';
 export const Portfolio: GlobalConfig = {
   slug: 'portfolio',
   label: t.label,
-  admin: {group: ct.groups.cases, description: t.description},
+  admin: {components: {elements: {beforeDocumentControls: ['@/fields/PreviewLayoutMenu#PreviewLayoutMenu']}}, group: ct.groups.cases, description: t.description},
   access: {read: () => true},
   fields: listingSettingsFields({
     self: 'portfolio',

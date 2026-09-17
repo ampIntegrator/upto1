@@ -25,7 +25,10 @@ const sheetRow = (name: string, label: typeof f.location, placeholder?: typeof f
 export const CaseStudies: CollectionConfig = {
   slug: 'case-studies',
   labels: {singular: ct.caseStudies.singular, plural: ct.caseStudies.plural},
-  admin: {useAsTitle: 'title', group: ct.groups.cases, defaultColumns: ['title', 'category', 'publishedAt']},
+  admin: {
+    // « Vue » menu next to the Live Preview eye (side by side, top / bottom, dialog)
+    components: {edit: {beforeDocumentControls: ['@/fields/PreviewLayoutMenu#PreviewLayoutMenu']}},
+    useAsTitle: 'title', group: ct.groups.cases, defaultColumns: ['title', 'category', 'publishedAt']},
   access: {read: () => true},
   defaultSort: '-publishedAt',
   hooks: {beforeChange: sections.beforeChange},

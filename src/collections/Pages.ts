@@ -12,6 +12,8 @@ export const Pages: CollectionConfig = {
   slug: 'pages',
   labels: {singular: ct.pages.singular, plural: ct.pages.plural},
   admin: {
+    // « Vue » menu next to the Live Preview eye (side by side, top / bottom, dialog)
+    components: {edit: {beforeDocumentControls: ['@/fields/PreviewLayoutMenu#PreviewLayoutMenu']}},
     useAsTitle: 'title',
     group: ct.groups.site,
     defaultColumns: ['title', 'slug', 'silo', 'updatedAt'],
