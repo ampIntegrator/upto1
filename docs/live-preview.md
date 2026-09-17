@@ -11,6 +11,13 @@ Started on 17 September 2026 at Nicolas's request, on its own branch to test the
 - No drafts: the preview follows each save, and saving publishes. Drafts with autosave (preview
   while typing, nothing published) would need versions tables and a draft-aware site: to decide
   after the trial.
-- Layout: Payload's default is side by side (preview 60 % wide), with a « pop out » button opening
-  the preview in its own window and a zoom. Ideas to test next: a top / bottom split (admin CSS
-  override) and a preview in a dialog, keeping the form full width.
+- Layouts: a « Vue » menu just before the eye (`src/fields/PreviewLayoutMenu.tsx`, declared as
+  `beforeDocumentControls` on pages, posts, case studies and the two listing globals) offers
+  « Côte à côte » (Payload's own layout, preview 60 % wide), « Dessus / dessous » (form in full width,
+  preview stuck to the bottom half of the screen) and « Fenêtre » (form in full width, preview in a
+  dialog over it, closed with its button or Escape). Picking one opens the preview. The choice is
+  remembered per user (Payload preferences, key `live-preview-layout`, no migration) and set as
+  `data-preview-layout` on `<html>`; the two extra layouts are CSS in `src/app/(payload)/custom.scss`,
+  written against Payload 3.88's class names (`collection-edit__main-wrapper`,
+  `live-preview-window--is-live-previewing`): check them after a Payload update. Payload's own
+  « pop out » button (a separate browser window) stays available.

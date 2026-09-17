@@ -48,3 +48,67 @@
   padding: 8px 4px 2px;
   font-size: 13px;
 }
+
+/* Live Preview layouts, chosen in the « Vue » menu next to the eye (src/fields/PreviewLayoutMenu.tsx).
+   Side by side is Payload's own layout; the two others are set here. */
+.preview-layout-menu__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: calc(var(--base) * 1.6);
+  padding: 0 10px;
+  border: 1px solid var(--theme-elevation-150);
+  font-size: 14px;
+  color: var(--theme-elevation-800);
+  cursor: pointer;
+}
+.preview-layout-menu__button:hover { border-color: var(--theme-elevation-400); }
+
+/* top / bottom: the form in full width, the preview stuck to the bottom half of the screen */
+html[data-preview-layout='horizontal'] .collection-edit__main-wrapper:has(> .live-preview-window--is-live-previewing) {
+  flex-direction: column;
+}
+html[data-preview-layout='horizontal'] .live-preview-window--is-live-previewing {
+  width: 100%;
+  top: auto;
+  bottom: 0;
+  height: 50vh;
+  z-index: 20;
+  border-top: 2px solid var(--theme-elevation-250);
+  box-shadow: 0 -12px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* dialog: the form keeps the full width, the preview opens in a window over it */
+html[data-preview-layout='dialog'] .live-preview-window--is-live-previewing {
+  position: fixed;
+  top: 64px;
+  right: 40px;
+  bottom: 32px;
+  left: 40px;
+  width: auto;
+  height: auto;
+  z-index: 110;
+  border: 1px solid var(--theme-elevation-200);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
+}
+/* the backdrop lives in the same stacking context as the preview window (the edit view's), under it */
+html[data-preview-layout='dialog'] .collection-edit__main-wrapper:has(> .live-preview-window--is-live-previewing)::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.5);
+}
+.preview-layout-close {
+  position: fixed;
+  top: 20px;
+  right: 40px;
+  z-index: 120;
+  height: 32px;
+  padding: 0 14px;
+  border: 0;
+  background: var(--theme-bg);
+  color: var(--theme-elevation-1000);
+  font-size: 14px;
+  cursor: pointer;
+}

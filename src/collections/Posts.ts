@@ -13,7 +13,10 @@ import {sections} from '@/sections.config';
 export const Posts: CollectionConfig = {
   slug: 'posts',
   labels: {singular: ct.posts.singular, plural: ct.posts.plural},
-  admin: {useAsTitle: 'title', group: ct.groups.blog, defaultColumns: ['title', 'category', 'author', 'publishedAt']},
+  admin: {
+    // « Vue » menu next to the Live Preview eye (side by side, top / bottom, dialog)
+    components: {edit: {beforeDocumentControls: ['@/fields/PreviewLayoutMenu#PreviewLayoutMenu']}},
+    useAsTitle: 'title', group: ct.groups.blog, defaultColumns: ['title', 'category', 'author', 'publishedAt']},
   access: {read: () => true},
   defaultSort: '-publishedAt',
   hooks: {beforeChange: sections.beforeChange},
