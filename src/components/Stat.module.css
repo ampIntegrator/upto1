@@ -2,6 +2,9 @@
 .stat[data-align='center'] { align-items: center; text-align: center; }
 .value { white-space: nowrap; }
 .stat[data-size='bar'] .value { font-size: 40px; letter-spacing: -0.02em; }
+.stat[data-size='sheet'] .value { font-size: 26px; letter-spacing: -0.02em; line-height: 1; }
+/* fact sheet sub-label: mono (mockup 23, 9.5 px → 12 px) */
+.stat[data-size='sheet'] .label { margin-top: 6px; font-family: var(--font-family-mono); letter-spacing: 0.12em; line-height: 1.4; }
 /* prefix / suffix: 62 % of the number, highlight-deep (highlight in night) */
 .sign {
   color: light-dark(var(--color-highlight-deep), var(--color-highlight));

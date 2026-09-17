@@ -868,6 +868,24 @@ export const CATALOG: CatalogCategory[] = [
         "doc": null
       },
       {
+        "name": "CaseHero",
+        "label": "Case Hero",
+        "slug": "case-hero",
+        "href": "/design/composants/case-hero",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
+        "name": "CaseSheet",
+        "label": "Case Sheet",
+        "slug": "case-sheet",
+        "href": "/design/composants/case-sheet",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
         "name": "ProcessSteps",
         "label": "Process Steps",
         "slug": "process-steps",

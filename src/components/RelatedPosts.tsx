@@ -1,6 +1,7 @@
 /**
- * RelatedPosts — « Pour continuer sur le sujet » (mockup 19): a centred section heading, then
- * the article cards side by side (three or four), and a button to the blog.
+ * RelatedPosts — « Pour continuer sur le sujet » (mockup 19), under a post or a case study: a
+ * centred section heading, then the cards side by side (three or four; article or realisation
+ * preset, carried by the cards), and a button to the listing page.
  */
 import {Grid, GridSpan} from '@astryxdesign/core/Grid';
 import {HStack} from '@astryxdesign/core/Stack';
@@ -30,7 +31,7 @@ export function RelatedPosts({eyebrow = 'Le blog', title = 'Pour continuer <span
         <Grid columns={12} gap={6} className="page-grid" align="stretch">
           {items.slice(0, 4).map((card, i) => (
             <GridSpan key={i} columns={span}>
-              <Card {...card} preset="article" />
+              <Card preset="article" {...card} />
             </GridSpan>
           ))}
         </Grid>

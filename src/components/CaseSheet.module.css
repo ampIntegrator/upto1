@@ -1,0 +1,27 @@
+/* CaseSheet — a case study's fact sheet (mockup 23 .case-info, .case-row). */
+@media (min-width: 1024px) {
+  .card { position: sticky; top: calc(var(--site-header-bar-scrolled, 60px) + 30px); }
+}
+.card {
+  padding: 20px 24px;
+  border: var(--border-width) solid var(--color-border);
+  background: var(--color-background-surface);
+  box-shadow: var(--shadow-med);
+}
+.list { margin: 0; }
+.row { padding-block: 8px; border-top: var(--border-width) solid var(--color-border); }
+.row:first-child { border-top: 0; padding-top: 0; }
+.label { color: var(--color-editorial); } /* mockup 10 px mono: 12 px */
+.value { margin: 0; }
+.valueText { font-size: 14px; font-weight: var(--font-weight-medium); line-height: 1.4; color: var(--color-text-primary); } /* mockup 14.5 px */
+.link { display: inline-flex; flex: 0 0 auto; color: var(--color-text-accent); transition: color var(--duration-medium) var(--ease-standard); }
+.link:hover { color: var(--color-accent-deep); }
+.results {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: var(--border-width) solid var(--color-border);
+}
+.cta { margin-top: 16px; }

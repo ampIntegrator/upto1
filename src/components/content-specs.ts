@@ -46,6 +46,7 @@ export type ContentRef =
   | {type: 'priceList'; variant: 'columns'; plans: number}
   | {type: 'plan'}
   | {type: 'postCard'}
+  | {type: 'caseCard'}
   | {type: 'keyPoints'}
   | {type: 'ctaBand'}
   | {type: 'statsBand'; count: number}
@@ -141,6 +142,7 @@ export const CONTENT_SPECS: {[T in ContentType]: {label: string; minSpan: (c: Ex
   plan: {label: 'Palier de prix', minSpan: () => 3, maxSpan: 4},
   // a chosen blog post as an article card (mockup 19), three or four side by side
   postCard: {label: 'Carte article', minSpan: () => 3, maxSpan: 4},
+  caseCard: {label: 'Carte réalisation', minSpan: () => 3, maxSpan: 4},
   // figures of a post, also placed in columns (17 Sept. 2026)
   keyPoints: {label: 'À retenir', minSpan: () => 4},
   ctaBand: {label: 'Bandeau d’appel', minSpan: () => 6},
