@@ -9,9 +9,10 @@
 .inner { width: 100%; min-width: 0; }
 .root[data-center] .inner { text-align: center; }
 .root[data-center] .prose { align-items: center; }
-/* centred content: markers inside the line so the list stays centred */
-.root[data-center] .prose ul,
-.root[data-center] .prose ol { padding-left: 0; list-style-position: inside; }
+/* centred content: the list markers join the line (inline) so each item stays centred */
+.root[data-center] .prose :is(ul, ol) > li { padding-left: 0; }
+.root[data-center] .prose :is(ul, ol) > li::before { position: relative; top: auto; left: auto; display: inline-flex; vertical-align: 0.1em; margin-right: 12px; }
+.root[data-center] .prose ul > li::before { vertical-align: 0.15em; }
 /* title: the size is independent of the tag (same scale as the image with quote) */
 .title { margin: 0; font-family: var(--font-family-heading); color: var(--color-text-primary); overflow-wrap: break-word; }
 .title[data-size='display-1'] { font-size: var(--text-display-1-size); line-height: var(--text-display-1-leading); font-weight: var(--text-display-1-weight); letter-spacing: -0.025em; }

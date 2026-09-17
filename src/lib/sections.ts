@@ -14,7 +14,7 @@ import type {Testimonial} from '@/components/TestimonialCard';
 import type {TabsItem} from '@/components/Tabs';
 import type {ButtonGroupProps} from '@/components/ButtonGroup';
 import type {TextBoxButton, TextBoxProps} from '@/components/TextBox';
-import type {RichTextDocument} from '@/components/RichText';
+import type {RichTextDocument} from '@/components/rich-text';
 import {type TitleTag, toTitleTag} from '@/components/title-tags';
 import type {CheckListItem} from '@/components/CheckList';
 import type {ChipTone} from '@/components/Chip';
