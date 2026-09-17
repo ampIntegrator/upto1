@@ -60,3 +60,7 @@ It also lists the project rules and known traps: read it before a new column blo
 Blog and case studies (done on 17 Sept. 2026): `docs/blog.md` (with the listing code they share)
 and `docs/cases.md`; decisions in `docs/handoff-2026-09-17-blog.md` and `-cases.md`. Trap: never share a field or block config object between a
 Lexical editor and a collection (Payload mutates it; tables get dropped): use factories.
+
+Open study (for Claude Fable, analysis only, then a handoff for Opus): a live preview of the row
+being built in the section builder, in a movable window. Brief: `etude-apercu-rangee/README.md`.
+The Live Preview trial it builds on lives on the `preview` branch (`docs/live-preview.md`).
