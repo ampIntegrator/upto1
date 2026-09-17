@@ -177,6 +177,7 @@ export const blogText = texts({
   more: {fr: 'Bouton vers le blog', en: 'Button to the blog'},
   dateLabel: {fr: 'Libellé de la date', en: 'Date label'},
   toc: {fr: 'Titre du sommaire', en: 'Table of contents title'},
+  role: {fr: 'Page du blog', en: 'Blog page'},
   notice: {fr: 'Cette page est la page du blog (Blog › Réglages du blog) : son haut de page et ses sections ne sont pas affichés, le site montre la liste des articles.', en: 'This page is the blog page (Blog › Blog settings): its page top and sections are not displayed, the site shows the list of posts.'},
 });
 
@@ -206,5 +207,6 @@ export const portfolioText = texts({
   ctaDescription: {fr: 'Bouton sous les chiffres de la fiche. Chaque réalisation peut le remplacer.', en: 'Button under the fact sheet figures. Each case study can replace it.'},
   ctaLabel: {fr: 'Texte', en: 'Label'},
   ctaHref: {fr: 'Lien', en: 'Link'},
+  role: {fr: 'Page des réalisations', en: 'Case studies page'},
   notice: {fr: 'Cette page est la page des réalisations (Réalisations › Réglages des réalisations) : son haut de page et ses sections ne sont pas affichés, le site montre la liste des réalisations.', en: 'This page is the case studies page (Case studies › Case studies settings): its page top and sections are not displayed, the site shows the list of case studies.'},
 });

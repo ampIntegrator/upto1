@@ -29,7 +29,7 @@ export const Pages: CollectionConfig = {
     {
       type: 'tabs',
       tabs: [
-        {label: ct.pages.tabs.pageTop, fields: [{name: 'listingNoticeTop', type: 'ui', admin: {components: {Field: '@/fields/ListingPageNotice#ListingPageNotice'}}}, {name: 'title', type: 'text', label: ct.pages.fields.title, required: true, localized: true}, heroField]},
+        {label: ct.pages.tabs.pageTop, fields: [{name: 'listingNoticeTop', type: 'ui', admin: {components: {Field: '@/fields/ListingPageNotice#ListingPageNotice'}}}, {name: 'title', type: 'text', label: ct.pages.fields.title, required: true, localized: true, admin: {components: {Cell: '@/fields/ListingPageNotice#ListingTitleCell'}}}, heroField]},
         {
           label: ct.pages.tabs.content,
           description: ct.pages.tabs.contentDescription,
