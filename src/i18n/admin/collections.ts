@@ -39,17 +39,31 @@ export const collectionsText = texts({
       },
     },
   },
+  authors: {
+    singular: {fr: 'Auteur', en: 'Author'},
+    plural: {fr: 'Auteurs', en: 'Authors'},
+    fields: {
+      name: {fr: 'Nom', en: 'Name'},
+      role: {fr: 'Rôle (« Responsable produit · Vidomia »)', en: 'Role (« Product lead · Vidomia »)'},
+      photo: {fr: 'Photo (carrée de préférence)', en: 'Photo (square preferred)'},
+    },
+  },
   posts: {
     singular: {fr: 'Article', en: 'Post'},
     plural: {fr: 'Articles', en: 'Posts'},
     tabs: {
       post: {fr: 'Article', en: 'Post'},
+      sections: {fr: 'Sections après l’article', en: 'Sections after the post'},
+      sectionsDescription: {fr: 'Facultatif : une FAQ, un appel à l’action ou tout contenu du constructeur, affiché sous l’article et avant les articles liés.', en: 'Optional: a FAQ, a call to action or any builder content, shown under the post and before the related posts.'},
     },
     fields: {
       title: {fr: 'Titre', en: 'Title'},
       cover: {fr: 'Image de couverture', en: 'Cover image'},
-      excerpt: {fr: 'Extrait', en: 'Excerpt'},
+      excerpt: {fr: 'Chapô (aussi l’extrait des cartes et la description SEO par défaut)', en: 'Lead (also the cards’ excerpt and the default SEO description)'},
       content: {fr: 'Contenu', en: 'Content'},
+      contentDescription: {fr: 'Titres h2 à h4 (le sommaire s’y accroche), listes, citation (une dernière ligne « — Nom » devient l’attribution), images légendées, tableaux, et blocs insérés : À retenir, bandeau d’appel, bandeau de chiffres, carte citation, galerie.', en: 'Headings h2 to h4 (the table of contents uses them), lists, quote (a last line « — Name » becomes the attribution), captioned images, tables, and inserted blocks: key points, call-to-action band, stats band, quote card, gallery.'},
+      coverCaption: {fr: 'Légende de l’image', en: 'Image caption'},
+      author: {fr: 'Auteur', en: 'Author'},
       category: {fr: 'Catégorie', en: 'Category'},
       publishedAt: {fr: 'Date de publication', en: 'Publication date'},
     },

@@ -27,6 +27,7 @@ import {PlanCard} from './PlanCard';
 import {PriceCard} from './PriceCard';
 import {ProcessSteps} from './ProcessSteps';
 import {Section} from './Section';
+import {SectionHeading} from './SectionHeading';
 import {TestimonialCard} from './TestimonialCard';
 import {Tabs} from './Tabs';
 import {TextBox} from './TextBox';
@@ -66,6 +67,8 @@ function Content({content, id}: {content: ContentData; id: string}) {
   switch (content.type) {
     case 'textBox':
       return <TextBox {...content.textBox} />;
+    case 'sectionHeading':
+      return <SectionHeading {...content.heading} />;
     case 'tabs':
       return <Tabs items={content.items} />;
     case 'buttonGroup':

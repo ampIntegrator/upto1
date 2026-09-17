@@ -5,7 +5,9 @@
 .section {
   position: relative;
   isolation: isolate;
-  overflow: hidden;
+  /* clip, not hidden: clips textures and media without creating a scroll container, so a
+     sticky child (a post's table of contents) still sticks to the viewport */
+  overflow: clip;
   width: 100%;
   background-color: var(--color-background-body);
 }

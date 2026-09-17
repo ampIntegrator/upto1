@@ -1452,6 +1452,34 @@
     line-height: inherit;
   }
 
+  .astryx-avatar.square {
+    border-width: var(--border-width);
+    border-style: solid;
+    border-color: var(--color-border-emphasized);
+  }
+
+  .astryx-outline-item {
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--color-text-secondary);
+    transition: color var(--duration-medium) var(--ease-standard);
+  }
+
+  .astryx-outline-item:hover:where(:not(:disabled,[aria-disabled="true"])) {
+    color: var(--color-text-primary);
+  }
+
+  .astryx-outline-item.active {
+    color: light-dark(var(--color-text-accent), var(--color-highlight));
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .astryx-outline-indicator {
+    width: 2px;
+    border-radius: 0;
+    background-color: light-dark(var(--color-accent), var(--color-highlight));
+  }
+
   .astryx-tab-list {
     height: auto;
     font-family: var(--font-family-body);

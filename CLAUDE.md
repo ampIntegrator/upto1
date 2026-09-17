@@ -56,3 +56,6 @@ will need a data-dependent `minSpan(data)` on the server (not done yet).
 
 Last handoff (tabs, button group, row layouts, done on 17 Sept. 2026): `docs/handoff-2026-09-17.md`.
 It also lists the project rules and known traps: read it before a new column block.
+
+Current handoff (blog: post template, cards, archive): `docs/handoff-2026-09-17-blog.md`.
+Read it first; it opens with decisions to confirm with Nicolas.

@@ -1,0 +1,8 @@
+/* PostLayout — sidebar and prose (mockup 18 .post-layout). */
+.grid { display: grid; grid-template-columns: minmax(0, 760px); justify-content: center; gap: 64px; }
+.grid[data-sidebar] { grid-template-columns: 300px minmax(0, 760px); justify-content: start; }
+.sidebar { min-width: 0; align-self: stretch; }
+.main { min-width: 0; }
+@media (max-width: 1023px) {
+  .grid[data-sidebar] { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+}

@@ -4,7 +4,7 @@ import {tabsCapacity} from '@/components/content-specs';
 import {columnSpanAt, type ContentBlock} from '@/fields/sections/contentBlock';
 import {tr} from '@/i18n/admin/languages';
 import {tabsBlockText as t} from '../../i18n/admin/blocks';
-import {textBoxEditor} from './textBoxBlock';
+import {tabsEditor} from '../editors';
 import {TABS_SLUG} from './tabsSlug';
 
 export {TABS_SLUG};
@@ -39,7 +39,7 @@ const block: Block = {
       },
       fields: [
         {name: 'label', type: 'text', label: t.label, localized: true, required: true, maxLength: LABEL_MAX, admin: {description: t.labelDescription}},
-        {name: 'content', type: 'richText', label: t.content, localized: true, editor: textBoxEditor, admin: {description: t.contentDescription}},
+        {name: 'content', type: 'richText', label: t.content, localized: true, editor: tabsEditor, admin: {description: t.contentDescription}},
       ],
     },
   ],

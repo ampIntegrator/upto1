@@ -13,14 +13,17 @@ import type {ProcessStep} from '@/components/ProcessSteps';
 import type {Testimonial} from '@/components/TestimonialCard';
 import type {TabsItem} from '@/components/Tabs';
 import type {ButtonGroupProps} from '@/components/ButtonGroup';
+import type {SectionHeadingProps} from '@/components/SectionHeading';
 import type {TextBoxButton, TextBoxProps} from '@/components/TextBox';
-import type {RichTextDocument} from '@/components/RichText';
+import type {RichTextDocument} from '@/components/rich-text';
 import {type TitleTag, toTitleTag} from '@/components/title-tags';
 import type {CheckListItem} from '@/components/CheckList';
 import type {ChipTone} from '@/components/Chip';
 import type {MediaQuoteProps, MediaQuoteSize, MediaQuoteTag} from '@/components/MediaQuote';
 import type {SectionBackground, SectionTint} from '@/components/Section';
 import {BUTTON_GROUP_SLUG} from '@/fields/blocks/buttonGroupBlock';
+import {POST_CARD_SLUG} from '@/fields/blocks/postCardBlock';
+import {SECTION_HEADING_SLUG} from '@/fields/blocks/sectionHeadingBlock';
 import {CARD_VARIANTS} from '@/fields/blocks/cardBlocks';
 import {COLLECTION_SLUG} from '@/fields/blocks/collectionBlock';
 import {COMPARE_CARD_SLUG} from '@/fields/blocks/compareCardBlock';
@@ -56,6 +59,7 @@ export type ContentData =
   | {type: 'textBox'; textBox: TextBoxProps}
   | {type: 'tabs'; items: TabsItem[]}
   | {type: 'buttonGroup'; buttonGroup: ButtonGroupProps}
+  | {type: 'sectionHeading'; heading: SectionHeadingProps}
   | {type: 'collection'; collection: CollectionData}
   | {type: 'card'; card: CardProps}
   | {type: 'media'; media: MediaProps}
@@ -176,9 +180,9 @@ const FAQ_TAGS = ['h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span'] as const;
 type TestimonialData = {quote: string; name: string; role?: string | null; result?: string | null};
 type CompareCardData = {chipLabel: string; chipTone?: string | null; meta?: string | null; quote: string; items?: {label: string}[] | null; tone?: string | null; featured?: boolean | null};
 /** A button row of the text box or the button group (buttonFields.ts). */
-type ButtonData = {label: string; href: string; shape?: string | null; variant?: string | null; size?: string | null; iconKey?: string | null};
+export type ButtonData = {label: string; href: string; shape?: string | null; variant?: string | null; size?: string | null; iconKey?: string | null};
 const BUTTON_VARIANTS = ['primary', 'high', 'secondary', 'ghost'] as const;
-function toButton(x: ButtonData): TextBoxButton {
+export function toButton(x: ButtonData): TextBoxButton {
   const variant = (BUTTON_VARIANTS as readonly string[]).includes(x.variant ?? '') ? (x.variant as TextBoxButton['variant']) : 'primary';
   const split = x.shape === 'split';
   return {label: x.label, href: x.href, arrow: split, variant, size: x.size === 'lg' ? 'lg' : 'md', iconKey: split ? undefined : ((x.iconKey || undefined) as NucleoIconKey | undefined)};
@@ -308,7 +312,16 @@ type CollectionBlockData = {id?: string | null; layout?: string | null; perView?
 
 /** Loads posts for a collection with the « latest posts » source (the page gives it, with the locale). */
 export type PostsLoader = (q: {limit: number; category?: number}) => Promise<Post[]>;
-export type SectionsContext = {locale?: string; posts?: PostsLoader};
+export type SectionsContext = {
+  locale?: string;
+  posts?: PostsLoader;
+  /** chosen posts (post cards), loaded with their cover and category */
+  postsByIds?: (ids: number[]) => Promise<Post[]>;
+  /** a post's URL under the blog page (Site settings › Blog) */
+  postHref?: (slug: string) => string;
+  /** label of the cards' link */
+  readMore?: string;
+};
 
 /** A blog post as an article card. */
 function postCard(p: Post, locale: string, ctaLabel: string): ContentData {
@@ -321,8 +334,8 @@ function postCard(p: Post, locale: string, ctaLabel: string): ContentData {
       media: cover ? {type: 'image', src: cover, alt: mediaAlt(p.cover)} : {type: 'none'},
       chip: typeof p.category === 'object' && p.category ? {label: p.category.title} : undefined,
       date: fmt.format(new Date(p.publishedAt)),
-      title: p.title,
-      cta: {label: ctaLabel, href: `/blog/${p.slug}`},
+      title: p.title.replace(/<\/?span>/g, ''),
+      cta: {label: ctaLabel, href: sectionsCtx.postHref ? sectionsCtx.postHref(p.slug) : `/blog/${p.slug}`},
     },
   };
 }
@@ -355,7 +368,7 @@ async function loadPostItems(sources: SectionSource[], ctx: SectionsContext): Pr
           const category = typeof b.postsCategory === 'object' && b.postsCategory ? b.postsCategory.id : (b.postsCategory ?? undefined);
           const id = b.id;
           jobs.push(ctx.posts({limit: b.postsLimit ?? 6, category: category ?? undefined}).then((docs) => {
-            out.set(id, docs.map((p) => postCard(p, ctx.locale ?? 'fr', b.postsCta || 'Lire')));
+            out.set(id, docs.map((p) => postCard(p, ctx.locale ?? 'fr', b.postsCta || ctx.readMore || 'Lire')));
           }));
         }
       }
@@ -366,6 +379,41 @@ async function loadPostItems(sources: SectionSource[], ctx: SectionsContext): Pr
 }
 
 let postItems: PostItems = new Map();
+/** the context of the current conversion (set by toSections) */
+let sectionsCtx: SectionsContext = {};
+/** posts chosen in post cards, loaded by toSections */
+let chosenPosts = new Map<number, Post>();
+
+type PostCardData = {post?: number | Post | null};
+const postIdOf = (b: PostCardData): number | null => (typeof b.post === 'object' && b.post ? b.post.id : typeof b.post === 'number' ? b.post : null);
+
+function toPostCard(b: PostCardData): ContentData | null {
+  const id = postIdOf(b);
+  const doc = (id !== null ? chosenPosts.get(id) : undefined) ?? (typeof b.post === 'object' && b.post ? b.post : null);
+  return doc ? postCard(doc, sectionsCtx.locale ?? 'fr', sectionsCtx.readMore || 'Lire l’article') : null;
+}
+
+/** The posts chosen in post cards (columns and collection items), loaded once with their relations. */
+async function loadChosenPosts(sources: SectionSource[], ctx: SectionsContext): Promise<Map<number, Post>> {
+  const ids = new Set<number>();
+  const visit = (block: ContentBlock) => {
+    if (block.blockType === POST_CARD_SLUG) {
+      const id = postIdOf(block as unknown as PostCardData);
+      if (id !== null) ids.add(id);
+    }
+    if (block.blockType === COLLECTION_SLUG) for (const item of (block as unknown as CollectionBlockData).items ?? []) visit(item);
+  };
+  for (const s of sources) for (const r of s.rows ?? []) for (const c of r.columns ?? []) for (const block of c.contents ?? []) visit(block);
+  if (!ids.size || !ctx.postsByIds) return new Map();
+  const docs = await ctx.postsByIds([...ids]);
+  return new Map(docs.map((p) => [p.id, p]));
+}
+
+type SectionHeadingData = {eyebrow?: string | null; title?: string | null; tag?: string | null; lead?: string | null; align?: string | null};
+function toSectionHeading(b: SectionHeadingData): ContentData | null {
+  if (!b.title) return null;
+  return {type: 'sectionHeading', heading: {eyebrow: orUndefined(b.eyebrow), title: b.title, tag: toTitleTag(b.tag, 'h2'), size: 'display-3', text: orUndefined(b.lead), align: b.align === 'start' ? 'start' : 'center'}};
+}
 
 function toContent(block: ContentBlock): ContentData | null {
   // empty cell: no content, the column is treated as empty (hidden on mobile)
@@ -394,6 +442,10 @@ function toContent(block: ContentBlock): ContentData | null {
       return toTabs(block as unknown as TabsData);
     case BUTTON_GROUP_SLUG:
       return toButtonGroup(block as unknown as ButtonGroupData);
+    case POST_CARD_SLUG:
+      return toPostCard(block as unknown as PostCardData);
+    case SECTION_HEADING_SLUG:
+      return toSectionHeading(block as unknown as SectionHeadingData);
     default:
       return null;
   }
@@ -453,6 +505,8 @@ export async function toSections(blocks: Page['sections'], settings?: Pick<Setti
     if (b.blockType === 'section') sources.push({source: b, key});
     else if (b.blockType === 'sharedSection' && b.section && typeof b.section === 'object') sources.push({source: b.section, key});
   });
-  postItems = await loadPostItems(sources.map((s) => s.source), ctx);
+  sectionsCtx = ctx;
+  const list = sources.map((s) => s.source);
+  [postItems, chosenPosts] = await Promise.all([loadPostItems(list, ctx), loadChosenPosts(list, ctx)]);
   return sources.map((s) => toSection(s.source, s.key, site));
 }

@@ -1,0 +1,8 @@
+/* PostArchive — posts grid of the blog page and the category archives (mockup 19). */
+.grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--archive-gap-x, 30px); row-gap: var(--archive-gap-y, 40px); margin: 0; padding: 0; list-style: none; }
+.cell { min-width: 0; margin: 0; }
+.cell > * { height: 100%; }
+.chip { display: inline-flex; text-decoration: none; }
+.empty { padding: 48px 0; color: var(--color-text-secondary); }
+@media (max-width: 1023px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 639px) { .grid { grid-template-columns: minmax(0, 1fr); row-gap: var(--archive-gap-y-mobile, 40px); } }

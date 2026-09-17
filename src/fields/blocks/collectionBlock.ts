@@ -7,6 +7,7 @@ import {collectionBlockText as t} from '../../i18n/admin/blocks';
 import {CARD_BLOCKS} from './cardBlocks';
 import {compareCardBlock} from './compareCardBlock';
 import {planBlock} from './planBlock';
+import {postCardBlock} from './postCardBlock';
 import {testimonialBlock} from './testimonialBlock';
 
 /**
@@ -23,7 +24,7 @@ type Sibling = Record<string, unknown>;
 const whenSource = (value: string) => (_d: unknown, s: Sibling) => (s?.source ?? 'manual') === value;
 
 /** The blocks an item can be: those that make sense repeated side by side. */
-const ITEM_BLOCKS: ContentBlock[] = [testimonialBlock, ...CARD_BLOCKS, compareCardBlock, planBlock];
+const ITEM_BLOCKS: ContentBlock[] = [testimonialBlock, ...CARD_BLOCKS, compareCardBlock, planBlock, postCardBlock];
 
 const block: Block = {
   slug: COLLECTION_SLUG,

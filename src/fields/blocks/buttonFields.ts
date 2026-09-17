@@ -7,10 +7,14 @@ import {iconField} from '../iconField';
  * The settings of a site button, shared by the text box and the button group blocks:
  * label, address, shape (simple or split), style, size, and a Nucleo icon on simple
  * buttons only. Field names are stored in the database: do not rename them.
+ *
+ * A function, not a shared array: Payload mutates field configs while sanitising them (inside a
+ * localized rich text it strips `localized` from nested fields), so each block needs its own
+ * objects, otherwise the post editor's CTA band would change the text box's schema.
  */
 type Sibling = Record<string, unknown>;
 
-export const buttonRowFields: Field[] = [
+export const buttonRowFields = (): Field[] => [
   {
     type: 'row',
     fields: [

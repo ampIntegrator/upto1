@@ -1,0 +1,8 @@
+/* PostToc — table of contents (mockup 18 .toc). */
+.sticky { position: sticky; top: calc(var(--site-header-bar-scrolled, 60px) + 30px); }
+.eyebrow::after { content: ''; flex: 1; height: 1px; background: var(--color-editorial); opacity: 0.5; }
+.eyebrowText { font-size: 14px; white-space: nowrap; } /* mockup 11 px mono */
+.details { border: var(--border-width) solid var(--color-border); background: light-dark(var(--color-background-surface), var(--color-background-card)); }
+.summary { padding: 14px 20px; cursor: pointer; list-style-position: inside; }
+.summary::marker { color: var(--color-editorial); }
+.body { padding: 0 20px 16px; }

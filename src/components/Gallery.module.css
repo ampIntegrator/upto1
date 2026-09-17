@@ -1,0 +1,8 @@
+/* Gallery — two-column image grid (mockup 23 .case-gallery). */
+.root { width: 100%; margin: 0; container-type: inline-size; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.cell { position: relative; aspect-ratio: 4 / 3; overflow: hidden; border: var(--border-width) solid var(--color-border); background: var(--color-background-surface); }
+.cell[data-wide] { grid-column: 1 / -1; aspect-ratio: 16 / 8; }
+.image { object-fit: cover; }
+.caption { font-family: var(--font-family-mono); font-size: 14px; letter-spacing: 0.04em; color: var(--color-text-secondary); }
+@container (max-width: 479px) { .grid { grid-template-columns: minmax(0, 1fr); } .cell[data-wide] { aspect-ratio: 4 / 3; } }

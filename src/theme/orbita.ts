@@ -567,6 +567,21 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
         base: {margin: '0', padding: '0', borderWidth: '0', color: 'inherit', fontStyle: 'normal', fontSize: 'inherit', lineHeight: 'inherit'},
       },
 
+      /* Avatar (post author, quote card — mockups 18 and 23): square with a 1 px rule */
+      avatar: {
+        'shape:square': {borderWidth: 'var(--border-width)', borderStyle: 'solid', borderColor: 'var(--color-border-emphasized)'},
+      },
+
+      /* Outline (post table of contents, mockup 18 .toc): 14 px links in secondary ink, the
+         current one in silo colour and semibold; 2 px silo indicator on the rule */
+      'outline-item': {
+        base: {fontSize: '14px', lineHeight: '1.4', color: 'var(--color-text-secondary)', transition: 'color var(--duration-medium) var(--ease-standard)', ':hover': {color: 'var(--color-text-primary)'}},
+        active: {color: 'light-dark(var(--color-text-accent), var(--color-highlight))', fontWeight: 'var(--font-weight-semibold)'},
+      },
+      'outline-indicator': {
+        base: {width: '2px', borderRadius: '0', backgroundColor: 'light-dark(var(--color-accent), var(--color-highlight))'},
+      },
+
       /* ─────────────────────────────────────────────────────────────────
          TABS (mockup 06-tabs) — Tab, TabList, TabMenu
          Astryx targets: tab-list (the bar), tab-strip (the track), tab (a

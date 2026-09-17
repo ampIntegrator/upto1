@@ -6,6 +6,7 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
+import { Authors } from './collections/Authors'
 import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
@@ -47,7 +48,7 @@ export default buildConfig({
     defaultLocale: 'fr',
     fallback: true,
   },
-  collections: [Pages, Sections, Posts, Categories, Media, Users],
+  collections: [Pages, Sections, Posts, Categories, Authors, Media, Users],
   globals: [Settings, Languages, Header, Footer],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
