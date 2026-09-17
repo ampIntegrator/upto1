@@ -5262,6 +5262,7 @@ export interface Blog {
     more?: string | null;
     relatedEyebrow?: string | null;
     relatedTitle?: string | null;
+    empty?: string | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -5461,6 +5462,7 @@ export interface BlogSelect<T extends boolean = true> {
         more?: T;
         relatedEyebrow?: T;
         relatedTitle?: T;
+        empty?: T;
       };
   updatedAt?: T;
   createdAt?: T;

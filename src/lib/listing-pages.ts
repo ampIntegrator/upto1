@@ -1,0 +1,43 @@
+/**
+ * The listings as routes see them: which listing a page or an address belongs to, and, for each
+ * listing, how to load one page of cards, its categories and one category. Server only.
+ * Adding a listing: a config in `listings.ts`, loaders, and an adapter here.
+ */
+import type {CardProps} from '@/components/Card';
+import {postCard} from '@/lib/cards';
+import type {BlogConfig, ListingConfig} from '@/lib/listings';
+import {loadCategories, loadCategory, loadPostPage} from '@/lib/posts';
+import type {Locale} from '@/locales';
+
+export type ListingCategory = {id: number; title: string; slug: string};
+
+export type ListingAdapter = {
+  cfg: ListingConfig;
+  /** one page of cards (from 0), all categories or one */
+  loadPage: (locale: Locale, page: number, category?: number) => Promise<{cards: CardProps[]; page: number; pages: number}>;
+  loadCategories: (locale: Locale) => Promise<ListingCategory[]>;
+  loadCategory: (locale: Locale, slug: string) => Promise<ListingCategory | null>;
+};
+
+type SiteListings = {blog: BlogConfig};
+
+export function listingAdapters(site: SiteListings, locale: Locale): ListingAdapter[] {
+  const {blog} = site;
+  return [
+    {
+      cfg: blog,
+      loadPage: async (loc, page, category) => {
+        const list = await loadPostPage(loc, blog, page, category);
+        return {cards: list.posts.map((p) => postCard(p, blog, locale)), page: list.page, pages: list.pages};
+      },
+      loadCategories,
+      loadCategory,
+    },
+  ];
+}
+
+/** the listing whose chosen page is this page */
+export const listingOfPage = (site: SiteListings, locale: Locale, pageId: number): ListingAdapter | null => listingAdapters(site, locale).find((l) => l.cfg.pageId === pageId) ?? null;
+
+/** the listing living at this first segment of the address (only a chosen page has one) */
+export const listingAtBase = (site: SiteListings, locale: Locale, base: string): ListingAdapter | null => listingAdapters(site, locale).find((l) => l.cfg.base !== null && l.cfg.base === base) ?? null;

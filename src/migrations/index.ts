@@ -27,6 +27,7 @@ import * as migration_20260917_120422_add_section_heading_post_card from './2026
 import * as migration_20260917_121129_add_figure_column_blocks from './20260917_121129_add_figure_column_blocks';
 import * as migration_20260917_122335_add_blog_global from './20260917_122335_add_blog_global';
 import * as migration_20260917_122357_remove_settings_blog from './20260917_122357_remove_settings_blog';
+import * as migration_20260917_130141_add_listing_empty_label from './20260917_130141_add_listing_empty_label';
 
 export const migrations = [
   {
@@ -172,6 +173,11 @@ export const migrations = [
   {
     up: migration_20260917_122357_remove_settings_blog.up,
     down: migration_20260917_122357_remove_settings_blog.down,
-    name: '20260917_122357_remove_settings_blog'
+    name: '20260917_122357_remove_settings_blog',
+  },
+  {
+    up: migration_20260917_130141_add_listing_empty_label.up,
+    down: migration_20260917_130141_add_listing_empty_label.down,
+    name: '20260917_130141_add_listing_empty_label'
   },
 ];

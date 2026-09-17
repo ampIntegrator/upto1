@@ -17,6 +17,8 @@ import type {SectionHeadingProps} from '@/components/SectionHeading';
 import type {TextBoxButton, TextBoxProps} from '@/components/TextBox';
 import type {RichTextDocument} from '@/components/rich-text';
 import {type TitleTag, toTitleTag} from '@/components/title-tags';
+import {postCard} from '@/lib/cards';
+import {type BlogConfig, blogConfig} from '@/lib/listings';
 import type {CheckListItem} from '@/components/CheckList';
 import type {ChipTone} from '@/components/Chip';
 import type {MediaQuoteProps, MediaQuoteSize, MediaQuoteTag} from '@/components/MediaQuote';
@@ -317,31 +319,15 @@ type CollectionBlockData = {id?: string | null; layout?: string | null; perView?
 export type PostsLoader = (q: {limit: number; category?: number}) => Promise<Post[]>;
 export type SectionsContext = {
   locale?: string;
+  /** the blog (Blog settings): post URLs under its page, cards' link label */
+  blog?: BlogConfig;
   posts?: PostsLoader;
   /** chosen posts (post cards), loaded with their cover and category */
   postsByIds?: (ids: number[]) => Promise<Post[]>;
-  /** a post's URL under the blog page (Blog settings) */
-  postHref?: (slug: string) => string;
-  /** label of the cards' link */
-  readMore?: string;
 };
 
 /** A blog post as an article card. */
-function postCard(p: Post, locale: string, ctaLabel: string): ContentData {
-  const fmt = new Intl.DateTimeFormat(locale, {day: 'numeric', month: 'long', year: 'numeric'});
-  const cover = mediaUrl(p.cover);
-  return {
-    type: 'card',
-    card: {
-      preset: 'article',
-      media: cover ? {type: 'image', src: cover, alt: mediaAlt(p.cover)} : {type: 'none'},
-      chip: typeof p.category === 'object' && p.category ? {label: p.category.title} : undefined,
-      date: fmt.format(new Date(p.publishedAt)),
-      title: p.title.replace(/<\/?span>/g, ''),
-      cta: {label: ctaLabel, href: sectionsCtx.postHref ? sectionsCtx.postHref(p.slug) : `/blog/${p.slug}`},
-    },
-  };
-}
+const postContent = (p: Post, ctaLabel?: string): ContentData => ({type: 'card', card: postCard(p, sectionsCtx.blog ?? blogConfig(null), sectionsCtx.locale ?? 'fr', ctaLabel)});
 
 /** Items of the collections fed by the blog, keyed by block id, loaded before the (synchronous) conversion. */
 type PostItems = Map<string, ContentData[]>;
@@ -371,7 +357,7 @@ async function loadPostItems(sources: SectionSource[], ctx: SectionsContext): Pr
           const category = typeof b.postsCategory === 'object' && b.postsCategory ? b.postsCategory.id : (b.postsCategory ?? undefined);
           const id = b.id;
           jobs.push(ctx.posts({limit: b.postsLimit ?? 6, category: category ?? undefined}).then((docs) => {
-            out.set(id, docs.map((p) => postCard(p, ctx.locale ?? 'fr', b.postsCta || ctx.readMore || 'Lire')));
+            out.set(id, docs.map((p) => postContent(p, b.postsCta || undefined)));
           }));
         }
       }
@@ -393,7 +379,7 @@ const postIdOf = (b: PostCardData): number | null => (typeof b.post === 'object'
 function toPostCard(b: PostCardData): ContentData | null {
   const id = postIdOf(b);
   const doc = (id !== null ? chosenPosts.get(id) : undefined) ?? (typeof b.post === 'object' && b.post ? b.post : null);
-  return doc ? postCard(doc, sectionsCtx.locale ?? 'fr', sectionsCtx.readMore || 'Lire l’article') : null;
+  return doc ? postContent(doc) : null;
 }
 
 /** The posts chosen in post cards (columns and collection items), loaded once with their relations. */

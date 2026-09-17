@@ -1,34 +1,15 @@
 /**
- * Blog data: posts as article cards, the paginated list of the blog page and category
+ * Blog data: the paginated list of the blog page and category
  * archives, related posts, a post as PostHeader props. Server only (Payload local API).
  */
 import config from '@payload-config';
 import {getPayload, type Where} from 'payload';
 
-import type {CardProps} from '@/components/Card';
+import {formatDate, mediaImage as media} from '@/lib/cards';
 import type {PostHeaderProps} from '@/components/PostHeader';
-import {type BlogConfig, categoryPath, postPath} from '@/lib/blog';
+import {type BlogConfig, categoryPath} from '@/lib/listings';
 import type {Locale} from '@/locales';
-import type {Author, Category, Media, Post} from '@/payload-types';
-
-const media = (m: Media | number | null | undefined): {src: string; alt?: string; width?: number; height?: number} | undefined =>
-  m && typeof m === 'object' && m.url ? {src: m.url, alt: m.alt || undefined, width: m.width ?? undefined, height: m.height ?? undefined} : undefined;
-
-export const formatDate = (iso: string, locale: string) => new Intl.DateTimeFormat(locale, {day: 'numeric', month: 'long', year: 'numeric'}).format(new Date(iso));
-
-export function postCard(p: Post, blog: BlogConfig, locale: string): CardProps {
-  const cover = media(p.cover);
-  const category = typeof p.category === 'object' && p.category ? p.category : null;
-  return {
-    preset: 'article',
-    media: cover ? {type: 'image', src: cover.src, alt: cover.alt} : {type: 'none'},
-    chip: category ? {label: category.title} : undefined,
-    date: formatDate(p.publishedAt, locale),
-    // the serif accent (<span>) is for the post's h1 only
-    title: p.title.replace(/<\/?span>/g, ''),
-    cta: {label: blog.labels.readMore, href: postPath(blog, p.slug)},
-  };
-}
+import type {Author, Category, Post} from '@/payload-types';
 
 /** One page of posts (all, or one category), newest first. */
 export async function loadPostPage(locale: Locale, blog: BlogConfig, page: number, category?: number) {
