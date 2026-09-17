@@ -4,8 +4,9 @@
  * Adding a listing: a config in `listings.ts`, loaders, and an adapter here.
  */
 import type {CardProps} from '@/components/Card';
-import {postCard} from '@/lib/cards';
-import type {BlogConfig, ListingConfig} from '@/lib/listings';
+import {caseCard, postCard} from '@/lib/cards';
+import {loadCaseCategories, loadCaseCategory, loadCasePage} from '@/lib/cases';
+import type {BlogConfig, CasesConfig, ListingConfig} from '@/lib/listings';
 import {loadCategories, loadCategory, loadPostPage} from '@/lib/posts';
 import type {Locale} from '@/locales';
 
@@ -19,10 +20,10 @@ export type ListingAdapter = {
   loadCategory: (locale: Locale, slug: string) => Promise<ListingCategory | null>;
 };
 
-type SiteListings = {blog: BlogConfig};
+type SiteListings = {blog: BlogConfig; cases: CasesConfig};
 
 export function listingAdapters(site: SiteListings, locale: Locale): ListingAdapter[] {
-  const {blog} = site;
+  const {blog, cases} = site;
   return [
     {
       cfg: blog,
@@ -32,6 +33,15 @@ export function listingAdapters(site: SiteListings, locale: Locale): ListingAdap
       },
       loadCategories,
       loadCategory,
+    },
+    {
+      cfg: cases,
+      loadPage: async (loc, page, category) => {
+        const list = await loadCasePage(loc, cases, page, category);
+        return {cards: list.docs.map((c) => caseCard(c, cases)), page: list.page, pages: list.pages};
+      },
+      loadCategories: loadCaseCategories,
+      loadCategory: loadCaseCategory,
     },
   ];
 }

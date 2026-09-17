@@ -7,6 +7,7 @@ import {collectionBlockText as t} from '../../i18n/admin/blocks';
 import {CARD_BLOCKS} from './cardBlocks';
 import {compareCardBlock} from './compareCardBlock';
 import {planBlock} from './planBlock';
+import {caseCardBlock} from './caseCardBlock';
 import {postCardBlock} from './postCardBlock';
 import {testimonialBlock} from './testimonialBlock';
 
@@ -14,8 +15,8 @@ import {testimonialBlock} from './testimonialBlock';
  * « Collection » block of a column: identical items side by side (the Collection
  * component), in a column of 8 to 12. Side by side (« swipe ») holds no more items than
  * visible ones (4 at 25 % at most); the carousel takes as many items as wanted. The items are the existing column blocks
- * (testimonial, cards, compare card, tier), all of the same type, or the latest blog
- * posts rendered as article cards. Items per view are checked against the column
+ * (testimonial, cards, compare card, tier, post or case card), all of the same type, or
+ * the latest blog posts or case studies rendered as article or realisation cards. Items per view are checked against the column
  * width (content-specs, collectionCapacity): 3 at most on 8 or 9 columns, 4 on 12.
  */
 export const COLLECTION_SLUG = 'collection';
@@ -23,8 +24,16 @@ export const COLLECTION_SLUG = 'collection';
 type Sibling = Record<string, unknown>;
 const whenSource = (value: string) => (_d: unknown, s: Sibling) => (s?.source ?? 'manual') === value;
 
+/** the number of latest entries: side by side, no more than visible ones; a carousel takes as many as wanted */
+const limitValidate = (source: string) => (value: unknown, {siblingData, req}: {siblingData: Sibling; req: PayloadRequest}) => {
+  const count = Number(value ?? 6);
+  const perView = Number(siblingData?.perView ?? 3);
+  if ((siblingData?.source ?? 'manual') === source && (siblingData?.layout ?? 'swipe') === 'swipe' && count > perView) return tr(t.swipeOverflow, req.i18n?.language, {count, perView});
+  return true;
+};
+
 /** The blocks an item can be: those that make sense repeated side by side. */
-const ITEM_BLOCKS: ContentBlock[] = [testimonialBlock, ...CARD_BLOCKS, compareCardBlock, planBlock, postCardBlock];
+const ITEM_BLOCKS: ContentBlock[] = [testimonialBlock, ...CARD_BLOCKS, compareCardBlock, planBlock, postCardBlock, caseCardBlock];
 
 const block: Block = {
   slug: COLLECTION_SLUG,
@@ -100,6 +109,7 @@ const block: Block = {
       options: [
         {label: t.sourceManual, value: 'manual'},
         {label: t.sourcePosts, value: 'posts'},
+        {label: t.sourceCases, value: 'cases'},
       ],
     },
     {
@@ -131,15 +141,19 @@ const block: Block = {
           // no maximum: a carousel takes as many posts as wanted; side by side, no more than visible ones
           min: 2,
           admin: {width: '34%', description: t.postsLimitDescription},
-          validate: (value: unknown, {siblingData, req}: {siblingData: Sibling; req: PayloadRequest}) => {
-            const count = Number(value ?? 6);
-            const perView = Number(siblingData?.perView ?? 3);
-            if ((siblingData?.source ?? 'manual') === 'posts' && (siblingData?.layout ?? 'swipe') === 'swipe' && count > perView) return tr(t.swipeOverflow, req.i18n?.language, {count, perView});
-            return true;
-          },
+          validate: limitValidate('posts'),
         },
         {name: 'postsCategory', type: 'relationship', relationTo: 'categories', label: t.postsCategory, admin: {width: '33%'}},
         {name: 'postsCta', type: 'text', label: t.postsCta, localized: true, admin: {width: '33%'}},
+      ],
+    },
+    {
+      type: 'row',
+      admin: {condition: whenSource('cases')},
+      fields: [
+        {name: 'casesLimit', type: 'number', label: t.casesLimit, defaultValue: 6, min: 2, admin: {width: '34%', description: t.postsLimitDescription}, validate: limitValidate('cases')},
+        {name: 'casesCategory', type: 'relationship', relationTo: 'case-categories', label: t.postsCategory, admin: {width: '33%'}},
+        {name: 'casesCta', type: 'text', label: t.postsCta, localized: true, admin: {width: '33%'}},
       ],
     },
   ],

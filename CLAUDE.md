@@ -57,9 +57,6 @@ will need a data-dependent `minSpan(data)` on the server (not done yet).
 Last handoff (tabs, button group, row layouts, done on 17 Sept. 2026): `docs/handoff-2026-09-17.md`.
 It also lists the project rules and known traps: read it before a new column block.
 
-Blog (done on 17 Sept. 2026, case studies still to build): `docs/blog.md`; decisions in
-`docs/handoff-2026-09-17-blog.md`.
-
-Current handoff (case studies « réalisations »): `docs/handoff-2026-09-17-cases.md`. Read it
-first; it opens with decisions to confirm and lists the blog code to generalise before building. Trap: never share a field or block config object between a
+Blog and case studies (done on 17 Sept. 2026): `docs/blog.md` (with the listing code they share)
+and `docs/cases.md`; decisions in `docs/handoff-2026-09-17-blog.md` and `-cases.md`. Trap: never share a field or block config object between a
 Lexical editor and a collection (Payload mutates it; tables get dropped): use factories.

@@ -26,7 +26,7 @@ export async function PostPage({locale, site, post}: {locale: Locale; site: Awai
   const {blog, settings: s} = site;
   const content = post.content as unknown as RichTextDocument | null;
   const category = typeof post.category === 'object' && post.category ? post.category : null;
-  const [related, sections] = await Promise.all([loadRelated(locale, post), toSections(post.sections, s, sectionsContext(locale, blog))]);
+  const [related, sections] = await Promise.all([loadRelated(locale, post), toSections(post.sections, s, sectionsContext(locale, site))]);
   return (
     <SitePage silo={pageSilo(null, s)} header={toHeader(s, site.header, site.languages, blog)} footer={toFooter(s, site.footer, site.posts, locale, blog)} tone="light" currentHref={listingPath(blog)}>
       <Section background="paper" spacing="none" underHeader>

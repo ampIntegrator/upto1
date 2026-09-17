@@ -1,10 +1,11 @@
 /**
- * Entries of a listing as site cards: a blog post as an article card. Pure conversion (no React,
+ * Entries of a listing as site cards: a blog post as an article card, a case study as a
+ * realisation card. Pure conversion (no React,
  * no Payload runtime), shared by the listing pages, the related entries and the section builder.
  */
 import type {CardProps} from '@/components/Card';
-import {type BlogConfig, entryPath, plainTitle} from '@/lib/listings';
-import type {Media, Post} from '@/payload-types';
+import {type BlogConfig, type CasesConfig, entryPath, plainTitle} from '@/lib/listings';
+import type {CaseStudy, Media, Post} from '@/payload-types';
 
 export type MediaRef = Media | number | null | undefined;
 
@@ -24,5 +25,21 @@ export function postCard(p: Post, blog: BlogConfig, locale: string, ctaLabel?: s
     date: formatDate(p.publishedAt, locale),
     title: plainTitle(p.title),
     cta: {label: ctaLabel || blog.labels.readMore, href: entryPath(blog, p.slug)},
+  };
+}
+
+/** A case study as a realisation card: cover, category, short result, title, client · location, link. */
+export function caseCard(c: CaseStudy, cases: CasesConfig, ctaLabel?: string): CardProps {
+  const cover = mediaImage(c.cover);
+  const category = typeof c.category === 'object' && c.category ? c.category : null;
+  const result = c.sheet?.cardResult || c.sheet?.results?.[0]?.value || undefined;
+  return {
+    preset: 'realisation',
+    media: cover ? {type: 'image', src: cover.src, alt: cover.alt} : {type: 'none'},
+    chip: category ? {label: category.title, tone: 'high'} : undefined,
+    result,
+    title: plainTitle(c.title),
+    client: c.sheet?.client ? {name: c.sheet.client, location: c.sheet.location || undefined} : undefined,
+    cta: {label: ctaLabel || cases.labels.readMore, href: entryPath(cases, c.slug)},
   };
 }

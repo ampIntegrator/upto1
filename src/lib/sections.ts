@@ -17,13 +17,14 @@ import type {SectionHeadingProps} from '@/components/SectionHeading';
 import type {TextBoxButton, TextBoxProps} from '@/components/TextBox';
 import type {RichTextDocument} from '@/components/rich-text';
 import {type TitleTag, toTitleTag} from '@/components/title-tags';
-import {postCard} from '@/lib/cards';
-import {type BlogConfig, blogConfig} from '@/lib/listings';
+import {caseCard, postCard} from '@/lib/cards';
+import {type BlogConfig, blogConfig, type CasesConfig, casesConfig} from '@/lib/listings';
 import type {CheckListItem} from '@/components/CheckList';
 import type {ChipTone} from '@/components/Chip';
 import type {MediaQuoteProps, MediaQuoteSize, MediaQuoteTag} from '@/components/MediaQuote';
 import type {SectionBackground, SectionTint} from '@/components/Section';
 import {BUTTON_GROUP_SLUG} from '@/fields/blocks/buttonGroupBlock';
+import {CASE_CARD_SLUG} from '@/fields/blocks/caseCardBlock';
 import {POST_CARD_SLUG} from '@/fields/blocks/postCardBlock';
 import {CTA_BAND_SLUG, GALLERY_SLUG, KEY_POINTS_SLUG, QUOTE_CARD_SLUG, STATS_BAND_SLUG} from '@/fields/blocks/prose/slugs';
 import {SECTION_HEADING_SLUG} from '@/fields/blocks/sectionHeadingBlock';
@@ -45,7 +46,7 @@ import {sections as siteSections} from '@/sections.config';
 import {hasMobileOrder, mobileRanks} from '@/fields/sections/mobileOrder';
 import {type ColumnSpan, toSpan} from '@/fields/sections/grid';
 import type {NucleoIconKey} from '@/theme/icons/nucleo';
-import type {Media, Page, Post, Section as SharedSection, Setting} from '@/payload-types';
+import type {CaseStudy, Media, Page, Post, Section as SharedSection, Setting} from '@/payload-types';
 
 type PageSection = NonNullable<Page['sections']>[number];
 type SectionBlock = Extract<PageSection, {blockType: 'section'}>;
@@ -313,27 +314,31 @@ function toSteps(b: StepsData): ContentData | null {
   return steps.length ? {type: 'processSteps', steps, tag: toTitleTag(b.tag, 'h3')} : null;
 }
 
-type CollectionBlockData = {id?: string | null; layout?: string | null; perView?: string | null; step?: string | null; arrows?: boolean | null; indicator?: string | null; source?: string | null; items?: ContentBlock[] | null; postsLimit?: number | null; postsCategory?: number | {id: number} | null; postsCta?: string | null};
+type CollectionBlockData = {id?: string | null; layout?: string | null; perView?: string | null; step?: string | null; arrows?: boolean | null; indicator?: string | null; source?: string | null; items?: ContentBlock[] | null; postsLimit?: number | null; postsCategory?: number | {id: number} | null; postsCta?: string | null; casesLimit?: number | null; casesCategory?: number | {id: number} | null; casesCta?: string | null};
 
-/** Loads posts for a collection with the « latest posts » source (the page gives it, with the locale). */
-export type PostsLoader = (q: {limit: number; category?: number}) => Promise<Post[]>;
+/** Loads the latest entries of a listing for a collection block (the page gives it, with the locale). */
+export type EntriesLoader<T> = (q: {limit: number; category?: number}) => Promise<T[]>;
 export type SectionsContext = {
   locale?: string;
-  /** the blog (Blog settings): post URLs under its page, cards' link label */
+  /** the blog and the case studies (their settings): entry URLs under their page, cards' link label */
   blog?: BlogConfig;
-  posts?: PostsLoader;
-  /** chosen posts (post cards), loaded with their cover and category */
+  cases?: CasesConfig;
+  posts?: EntriesLoader<Post>;
+  caseStudies?: EntriesLoader<CaseStudy>;
+  /** entries chosen in post cards and case cards, loaded with their cover and category */
   postsByIds?: (ids: number[]) => Promise<Post[]>;
+  caseStudiesByIds?: (ids: number[]) => Promise<CaseStudy[]>;
 };
 
-/** A blog post as an article card. */
+/** A blog post as an article card, a case study as a realisation card. */
 const postContent = (p: Post, ctaLabel?: string): ContentData => ({type: 'card', card: postCard(p, sectionsCtx.blog ?? blogConfig(null), sectionsCtx.locale ?? 'fr', ctaLabel)});
+const caseContent = (c: CaseStudy, ctaLabel?: string): ContentData => ({type: 'card', card: caseCard(c, sectionsCtx.cases ?? casesConfig(null), ctaLabel)});
 
-/** Items of the collections fed by the blog, keyed by block id, loaded before the (synchronous) conversion. */
-type PostItems = Map<string, ContentData[]>;
+/** Items of the collections fed by a listing, keyed by block id, loaded before the (synchronous) conversion. */
+type EntryItems = Map<string, ContentData[]>;
 
-function toCollection(b: CollectionBlockData, posts: PostItems): ContentData | null {
-  const items = b.source === 'posts' ? (posts.get(b.id ?? '') ?? []) : (b.items ?? []).map(toContent).filter((x): x is ContentData => x !== null);
+function toCollection(b: CollectionBlockData, entries: EntryItems): ContentData | null {
+  const items = b.source === 'posts' || b.source === 'cases' ? (entries.get(b.id ?? '') ?? []) : (b.items ?? []).map(toContent).filter((x): x is ContentData => x !== null);
   if (items.length < 2) return null;
   const perView = Math.min(Math.max(Number(b.perView ?? 3), 2), 4) as 2 | 3 | 4;
   return {
@@ -342,60 +347,79 @@ function toCollection(b: CollectionBlockData, posts: PostItems): ContentData | n
   };
 }
 
-/** Posts of every blog-fed collection of the sections, loaded once. */
-async function loadPostItems(sources: SectionSource[], ctx: SectionsContext): Promise<PostItems> {
-  const out: PostItems = new Map();
-  if (!ctx.posts) return out;
+
+const refId = (ref: number | {id: number} | null | undefined): number | null => (typeof ref === 'object' && ref ? ref.id : typeof ref === 'number' ? ref : null);
+
+/** Every content block of the sources, collection items included. */
+function eachBlock(sources: SectionSource[], visit: (block: ContentBlock) => void) {
+  const walk = (block: ContentBlock) => {
+    visit(block);
+    if (block.blockType === COLLECTION_SLUG) for (const item of (block as unknown as CollectionBlockData).items ?? []) walk(item);
+  };
+  for (const s of sources) for (const r of s.rows ?? []) for (const c of r.columns ?? []) for (const block of c.contents ?? []) walk(block);
+}
+
+/** Latest entries of every listing-fed collection of the sections, loaded once. */
+async function loadEntryItems(sources: SectionSource[], ctx: SectionsContext): Promise<EntryItems> {
+  const out: EntryItems = new Map();
   const jobs: Promise<void>[] = [];
-  for (const s of sources) {
-    for (const r of s.rows ?? []) {
-      for (const c of r.columns ?? []) {
-        for (const block of c.contents ?? []) {
-          if (block.blockType !== COLLECTION_SLUG) continue;
-          const b = block as unknown as CollectionBlockData;
-          if (b.source !== 'posts' || !b.id) continue;
-          const category = typeof b.postsCategory === 'object' && b.postsCategory ? b.postsCategory.id : (b.postsCategory ?? undefined);
-          const id = b.id;
-          jobs.push(ctx.posts({limit: b.postsLimit ?? 6, category: category ?? undefined}).then((docs) => {
-            out.set(id, docs.map((p) => postContent(p, b.postsCta || undefined)));
-          }));
-        }
-      }
+  eachBlock(sources, (block) => {
+    if (block.blockType !== COLLECTION_SLUG) return;
+    const b = block as unknown as CollectionBlockData;
+    const id = b.id;
+    if (!id) return;
+    if (b.source === 'posts' && ctx.posts) {
+      jobs.push(ctx.posts({limit: b.postsLimit ?? 6, category: refId(b.postsCategory) ?? undefined}).then((docs) => void out.set(id, docs.map((p) => postContent(p, b.postsCta || undefined)))));
     }
-  }
+    if (b.source === 'cases' && ctx.caseStudies) {
+      jobs.push(ctx.caseStudies({limit: b.casesLimit ?? 6, category: refId(b.casesCategory) ?? undefined}).then((docs) => void out.set(id, docs.map((c) => caseContent(c, b.casesCta || undefined)))));
+    }
+  });
   await Promise.all(jobs);
   return out;
 }
 
-let postItems: PostItems = new Map();
+let entryItems: EntryItems = new Map();
 /** the context of the current conversion (set by toSections) */
 let sectionsCtx: SectionsContext = {};
-/** posts chosen in post cards, loaded by toSections */
+/** entries chosen in post cards and case cards, loaded by toSections */
 let chosenPosts = new Map<number, Post>();
+let chosenCases = new Map<number, CaseStudy>();
 
 type PostCardData = {post?: number | Post | null};
-const postIdOf = (b: PostCardData): number | null => (typeof b.post === 'object' && b.post ? b.post.id : typeof b.post === 'number' ? b.post : null);
+type CaseCardData = {caseStudy?: number | CaseStudy | null};
 
 function toPostCard(b: PostCardData): ContentData | null {
-  const id = postIdOf(b);
+  const id = refId(b.post);
   const doc = (id !== null ? chosenPosts.get(id) : undefined) ?? (typeof b.post === 'object' && b.post ? b.post : null);
   return doc ? postContent(doc) : null;
 }
 
-/** The posts chosen in post cards (columns and collection items), loaded once with their relations. */
-async function loadChosenPosts(sources: SectionSource[], ctx: SectionsContext): Promise<Map<number, Post>> {
-  const ids = new Set<number>();
-  const visit = (block: ContentBlock) => {
+function toCaseCard(b: CaseCardData): ContentData | null {
+  const id = refId(b.caseStudy);
+  const doc = (id !== null ? chosenCases.get(id) : undefined) ?? (typeof b.caseStudy === 'object' && b.caseStudy ? b.caseStudy : null);
+  return doc ? caseContent(doc) : null;
+}
+
+/** The entries chosen in post cards and case cards (columns and collection items), loaded once with their relations. */
+async function loadChosenEntries(sources: SectionSource[], ctx: SectionsContext): Promise<[Map<number, Post>, Map<number, CaseStudy>]> {
+  const postIds = new Set<number>();
+  const caseIds = new Set<number>();
+  eachBlock(sources, (block) => {
     if (block.blockType === POST_CARD_SLUG) {
-      const id = postIdOf(block as unknown as PostCardData);
-      if (id !== null) ids.add(id);
+      const id = refId((block as unknown as PostCardData).post);
+      if (id !== null) postIds.add(id);
     }
-    if (block.blockType === COLLECTION_SLUG) for (const item of (block as unknown as CollectionBlockData).items ?? []) visit(item);
-  };
-  for (const s of sources) for (const r of s.rows ?? []) for (const c of r.columns ?? []) for (const block of c.contents ?? []) visit(block);
-  if (!ids.size || !ctx.postsByIds) return new Map();
-  const docs = await ctx.postsByIds([...ids]);
-  return new Map(docs.map((p) => [p.id, p]));
+    if (block.blockType === CASE_CARD_SLUG) {
+      const id = refId((block as unknown as CaseCardData).caseStudy);
+      if (id !== null) caseIds.add(id);
+    }
+  });
+  const [posts, cases] = await Promise.all([
+    postIds.size && ctx.postsByIds ? ctx.postsByIds([...postIds]) : Promise.resolve([] as Post[]),
+    caseIds.size && ctx.caseStudiesByIds ? ctx.caseStudiesByIds([...caseIds]) : Promise.resolve([] as CaseStudy[]),
+  ]);
+  return [new Map(posts.map((p) => [p.id, p])), new Map(cases.map((c) => [c.id, c]))];
 }
 
 type SectionHeadingData = {eyebrow?: string | null; title?: string | null; tag?: string | null; lead?: string | null; align?: string | null};
@@ -424,7 +448,7 @@ function toContent(block: ContentBlock): ContentData | null {
     case PROCESS_STEPS_SLUG:
       return toSteps(block as unknown as StepsData);
     case COLLECTION_SLUG:
-      return toCollection(block as unknown as CollectionBlockData, postItems);
+      return toCollection(block as unknown as CollectionBlockData, entryItems);
     case TEXT_BOX_SLUG:
       return toTextBox(block as unknown as TextBoxData);
     case TABS_SLUG:
@@ -433,6 +457,8 @@ function toContent(block: ContentBlock): ContentData | null {
       return toButtonGroup(block as unknown as ButtonGroupData);
     case POST_CARD_SLUG:
       return toPostCard(block as unknown as PostCardData);
+    case CASE_CARD_SLUG:
+      return toCaseCard(block as unknown as CaseCardData);
     case SECTION_HEADING_SLUG:
       return toSectionHeading(block as unknown as SectionHeadingData);
     case KEY_POINTS_SLUG:
@@ -490,7 +516,7 @@ function sectionRows(rows: SectionSource['rows']): ColumnData[][] {
 /**
  * The « sections » blocks of a page (loaded with depth ≥ 2 for shared section media).
  * `settings`: site settings, for the grid's default gaps (Mise en page).
- * `ctx`: the locale and the posts loader, for collections fed by the blog.
+ * `ctx`: the locale, the listings and their entry loaders (collections fed by a listing, post and case cards).
  */
 export async function toSections(blocks: Page['sections'], settings?: Pick<Setting, 'sectionGrid'> | null, ctx: SectionsContext = {}): Promise<SectionData[]> {
   const site = siteGaps(settings?.sectionGrid);
@@ -502,6 +528,6 @@ export async function toSections(blocks: Page['sections'], settings?: Pick<Setti
   });
   sectionsCtx = ctx;
   const list = sources.map((s) => s.source);
-  [postItems, chosenPosts] = await Promise.all([loadPostItems(list, ctx), loadChosenPosts(list, ctx)]);
+  [entryItems, [chosenPosts, chosenCases]] = await Promise.all([loadEntryItems(list, ctx), loadChosenEntries(list, ctx)]);
   return sources.map((s) => toSection(s.source, s.key, site));
 }

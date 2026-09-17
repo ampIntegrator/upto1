@@ -6,6 +6,9 @@
  * Blog: a demo author (« Marie Lefebvre ») and a demo post using every prose element and figure
  * (slug demo-industrialiser-le-cycle-commercial), recreated too. The blog page itself is chosen in
  * Blog › Réglages du blog: this script never changes the settings.
+ * Case studies: the « Vasseur Construction » case study of mockup 23 (slug demo-vasseur-construction)
+ * in a « Rénovation » category (created once), recreated too; the case studies page is chosen in
+ * Réalisations › Réglages des réalisations.
  */
 import config from '@payload-config';
 import {mkdtemp, writeFile} from 'node:fs/promises';
@@ -185,6 +188,56 @@ async function main() {
   const blogSettings = await payload.findGlobal({slug: 'blog', depth: 1});
   const blogPage = blogSettings.page && typeof blogSettings.page === 'object' ? blogSettings.page.slug : null;
   log(blogPage ? `article de démo : http://localhost:3000/${blogPage}/${postSlug}` : 'article de démo créé ; choisissez la page du blog dans Blog › Réglages du blog pour le voir');
+
+  // 4 · case studies: the « Vasseur Construction » case study of mockup 23, in a « Rénovation » category
+  const renovation = (await payload.find({collection: 'case-categories', where: {slug: {equals: 'renovation'}}, limit: 1})).docs[0] ?? (await payload.create({collection: 'case-categories', data: {title: 'Rénovation', slug: 'renovation'}}));
+  const caseSlug = 'demo-vasseur-construction';
+  const oldCases = await payload.find({collection: 'case-studies', where: {slug: {equals: caseSlug}}, limit: 5});
+  for (const doc of oldCases.docs) await payload.delete({collection: 'case-studies', id: doc.id});
+  const story = {
+    root: el('root', [
+      para(tx('Vasseur Construction signe une centaine de chantiers par an, de la rénovation énergétique au gros œuvre. Mais derrière chaque affaire signée, un même goulot d’étranglement : le chiffrage. Récit d’un déploiement qui a déverrouillé tout le cycle commercial.')),
+      head('h2', 'Le contexte : un seul métreur, cent chantiers'),
+      para(tx('Comme beaucoup d’entreprises de sa taille, Vasseur reposait sur l’expérience d’un unique métreur pour estimer l’ensemble de ses chantiers. Quand les demandes s’accumulaient, les devis partaient en retard, et les '), tx('meilleures affaires filaient chez le concurrent le plus réactif', 1), tx('.')),
+      list('bullet', [[tx('Un seul métreur expérimenté pour toute l’agence')], [tx('Trois jours de délai moyen entre la visite et le devis')], [tx('Près d’une affaire sur quatre perdue, faute de réactivité')]]),
+      el('quote', [tx('« On perdait des chantiers non pas sur le prix, mais sur le délai. Le premier qui chiffre, c’est souvent celui qui signe. »'), {type: 'linebreak', version: 1}, tx('— Julien Vasseur, gérant, Vasseur Construction')]),
+      head('h2', 'L’approche : industrialiser sans dénaturer'),
+      para(tx('L’enjeu n’était pas de remplacer le savoir-faire du métreur, mais de le '), tx('démultiplier', 2), tx('. Plutôt que d’imposer une nouvelle bibliothèque de prix, Orbita a repris celle de Vasseur, pour que l’équipe retrouve ses repères dès le premier devis.')),
+      head('h2', 'Le déploiement, étape par étape'),
+      para(tx('Inutile de tout changer d’un coup. Le déploiement s’est fait en six semaines, levier après levier, sans interrompre l’activité :')),
+      list('number', [[tx('Reprise de la bibliothèque de prix', 1), tx(' existante, telle quelle.')], [tx('Paramétrage des ouvrages types', 1), tx(' les plus fréquents.')], [tx('Métré automatique', 1), tx(' connecté aux plans PDF et DWG.')], [tx('Formation de l’équipe', 1), tx(' en deux demi-journées.')], [tx('Bascule progressive', 1), tx(', chantier par chantier.')]]),
+      fig({blockType: 'statsBand', items: [{value: '−68 %', label: 'Temps de chiffrage'}, {value: '×2,4', label: 'Devis envoyés / mois'}, {value: '+31 %', label: 'Taux de signature'}, {value: '48 h', label: 'Délai moyen d’envoi'}]}),
+      head('h2', 'Sur le terrain'),
+      para(tx('Six mois après la bascule, le métreur n’est plus un goulot mais un chef d’orchestre : il valide, ajuste, arbitre, pendant que les estimations courantes sortent en quelques heures.')),
+      fig({blockType: 'gallery', images: [{image: chantier}, {image: archi}, {image: immeuble}], wideFirst: true, caption: 'Chantiers chiffrés avec Orbita (Nantes, 2025).'}),
+      fig({blockType: 'keyPoints', eyebrow: 'À retenir', content: {root: el('root', [list('bullet', [[tx('Le gain le plus net vient du '), tx('métré automatique', 1), tx(', pas du calcul de prix.')], [tx('Une bibliothèque de prix reprise '), tx('telle quelle', 1), tx(' = adoption immédiate.')], [tx('Mesurez le '), tx('délai visite → devis', 1), tx(' avant tout autre indicateur.')]])])}}),
+      head('h2', 'Les résultats, six mois après'),
+      para(tx('Le délai moyen d’envoi d’un devis est passé de trois jours à moins de quarante-huit heures. Le volume de devis émis a plus que doublé, sans embauche. Et le taux de transformation a grimpé de près d’un tiers.')),
+      fig({blockType: 'quoteCard', quote: '« En six semaines, on a transformé notre point faible en avantage commercial. Aujourd’hui, on répond plus vite que tout le monde, et ça se voit sur le carnet de commandes. »', name: 'Julien Vasseur', role: 'Gérant · Vasseur Construction', photo: immeuble}),
+      head('h2', 'Conclusion'),
+      para(tx('Industrialiser le chiffrage ne consiste pas à retirer l’humain de l’équation, mais à le placer là où il crée le plus de valeur.')),
+    ]),
+  };
+  await payload.create({
+    collection: 'case-studies',
+    data: {
+      title: 'Comment Vasseur Construction a <span>divisé par trois</span> son temps de chiffrage',
+      slug: caseSlug,
+      excerpt: 'Estimer un chantier de rénovation prenait jusqu’à trois jours. En six semaines, l’équipe a ramené ce délai à quelques heures, sans embaucher, sans rogner sur la précision.',
+      cover: archi,
+      category: renovation.id,
+      publishedAt: new Date().toISOString(),
+      content: story,
+      sheet: {
+        client: 'Vasseur Construction', clientUrl: 'https://example.com', location: 'Nantes (44)', deployment: '6 semaines · mars 2025', modules: 'Chiffrage instantané, métré automatique, devis client',
+        results: [{value: '−68 %', label: 'Temps de chiffrage'}, {value: '×2,4', label: 'Devis envoyés'}],
+        cardResult: '−68 % délai',
+      },
+    } as never,
+  });
+  const portfolio = await payload.findGlobal({slug: 'portfolio', depth: 1});
+  const casesPage = portfolio.page && typeof portfolio.page === 'object' ? portfolio.page.slug : null;
+  log(casesPage ? `réalisation de démo : http://localhost:3000/${casesPage}/${caseSlug}` : 'réalisation de démo créée ; choisissez la page des réalisations dans Réalisations › Réglages des réalisations pour la voir');
   process.exit(0);
 }
 

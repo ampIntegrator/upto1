@@ -7,6 +7,8 @@ import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
 import { Authors } from './collections/Authors'
+import { CaseCategories } from './collections/CaseCategories'
+import { CaseStudies } from './collections/CaseStudies'
 import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
@@ -15,6 +17,7 @@ import { Sections } from './collections/Sections'
 import { Users } from './collections/Users'
 import { adminI18n } from './i18n/admin/payload'
 import { Blog } from './globals/Blog'
+import { Portfolio } from './globals/Portfolio'
 import { Footer } from './globals/Footer'
 import { Header } from './globals/Header'
 import { Languages } from './globals/Languages'
@@ -49,8 +52,8 @@ export default buildConfig({
     defaultLocale: 'fr',
     fallback: true,
   },
-  collections: [Pages, Sections, Posts, Categories, Authors, Media, Users],
-  globals: [Settings, Languages, Header, Footer, Blog],
+  collections: [Pages, Sections, Posts, Categories, Authors, CaseStudies, CaseCategories, Media, Users],
+  globals: [Settings, Languages, Header, Footer, Blog, Portfolio],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -68,9 +71,9 @@ export default buildConfig({
   }),
   sharp,
   plugins: [
-    // Basic SEO (title, description, share image, preview): « SEO » tab of pages and posts.
+    // Basic SEO (title, description, share image, preview): « SEO » tab of pages, posts and case studies.
     seoPlugin({
-      collections: ['pages', 'posts'],
+      collections: ['pages', 'posts', 'case-studies'],
       uploadsCollection: 'media',
       tabbedUI: true,
       // translatable title and description, like the rest of the content
@@ -78,9 +81,15 @@ export default buildConfig({
         defaultFields.map((f) => ('name' in f && (f.name === 'title' || f.name === 'description') ? { ...f, localized: true } : f)),
       generateTitle: ({ doc }) => (doc?.title ? `${doc.title} · Vidomia` : 'Vidomia'),
       generateDescription: ({ doc }) => doc?.excerpt ?? doc?.hero?.lead ?? '',
-      generateURL: ({ doc, collectionSlug }) => {
+      // posts and case studies live under the page chosen in their settings global
+      generateURL: async ({ doc, collectionSlug, req }) => {
         const base = process.env.NEXT_PUBLIC_SERVER_URL ?? 'http://localhost:3000'
-        if (collectionSlug === 'posts') return `${base}/blog/${doc?.slug ?? ''}`
+        const listing = collectionSlug === 'posts' ? 'blog' : collectionSlug === 'case-studies' ? 'portfolio' : null
+        if (listing) {
+          const settings = await req.payload.findGlobal({ slug: listing, depth: 1, req })
+          const page = settings.page && typeof settings.page === 'object' ? settings.page.slug : null
+          return `${base}/${page ?? (listing === 'blog' ? 'blog' : 'realisations')}/${doc?.slug ?? ''}`
+        }
         return doc?.slug && doc.slug !== 'accueil' ? `${base}/${doc.slug}` : base
       },
     }),

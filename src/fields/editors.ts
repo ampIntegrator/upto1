@@ -12,7 +12,7 @@ export const baseFeatures = () => [
   ParagraphFeature(),
   BoldFeature(),
   ItalicFeature(),
-  LinkFeature({enabledCollections: ['pages', 'posts']}),
+  LinkFeature({enabledCollections: ['pages', 'posts', 'case-studies']}),
   UnorderedListFeature(),
   OrderedListFeature(),
   // fixed toolbar above the field and inline toolbar on selection: without them bold and links have no button

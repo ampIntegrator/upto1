@@ -10,19 +10,22 @@ next to posts, categories and authors), choose one page of the site. That page t
 admin). The global also holds the page top of the list (eyebrow, h1 title with an optional
 `<span>` serif accent, optional lead, light or night tone), the posts per page (12) and the labels
 (« Tous », « Lire l’article », « Publié le », « Sommaire », « Catégorie », « Voir le blog », related
-posts eyebrow and title).
+posts eyebrow and title, empty list).
+
+The blog is one of the site's two **listings**, the case studies being the other (`docs/cases.md`):
+the config, the routes, the list and the cards are shared (see « Shared listing code » below).
 
 Everything derives from that page's slug:
 
 | URL | Content | Route |
 |---|---|---|
-| `/<blog>` | category chips, cards in four columns, pagination (`?page=n`) | `src/app/(frontend)/[slug]/page.tsx` → `BlogList` |
-| `/<blog>/<post>` | the post | `src/app/(frontend)/[slug]/[post]/page.tsx` |
-| `/<blog>/categorie/<category>` | archive, automatic h1, no lead | `src/app/(frontend)/[slug]/categorie/[category]/page.tsx` |
+| `/<blog>` | category chips, cards in four columns, pagination (`?page=n`) | `src/app/(frontend)/[slug]/page.tsx` → `ListingList` |
+| `/<blog>/<post>` | the post | `src/app/(frontend)/[slug]/[entry]/page.tsx` → `PostPage` |
+| `/<blog>/categorie/<category>` | archive, automatic h1, no lead | `src/app/(frontend)/[slug]/[entry]/[term]/page.tsx` |
 
 A post under any other first segment is a 404. The footer's latest posts, its « Tous les
 articles » link, the mega menu's featured post, post cards and collections of posts all link under
-the blog page (`src/lib/blog.ts`). While no blog page is chosen, links fall back to `/blog/…`.
+the blog page (`src/lib/listings.ts`). While no blog page is chosen, links fall back to `/blog/…`.
 
 ## A post
 
@@ -84,8 +87,24 @@ links, lists, tables) and `tabsEditor` (the same without tables: tabs, key point
 - Static demos in the catalogue: « Page · article de blog (18) » and « Page · blog, liste des
   articles (19) » (`src/app/(frontend)/mise-en-page/PostDemo.tsx`).
 
-## Phase 2: case studies
+## Shared listing code (blog and case studies)
 
-Not built. Ready to share: the post editor and figure blocks, `PostLayout`'s sidebar slot (a fact
-sheet instead of the table of contents), `QuoteCard`, `StatsBand`, `Gallery`. To build: a
-`realisations` collection, `CaseHero` (full-bleed image, night veil) and `CaseSheet` (mockup 23).
+Generalised on 17 September 2026 when the case studies were built:
+
+- `src/lib/listings.ts`: `ListingConfig` (kind, chosen page, fallback address, page top, labels),
+  `blogConfig` / `casesConfig`, and the addresses `listingPath`, `entryPath`, `categoryPath`,
+  `pagePath`, plus `plainTitle` (the title without its serif accent).
+- `src/lib/cards.ts`: `postCard` and `caseCard`, the one conversion of an entry to a site card
+  (listing pages, related entries, section builder).
+- `src/lib/entries.ts`: the Payload loaders for both collections (a page of entries, categories,
+  one entry, related entries, latest entries, entries by id); `src/lib/posts.ts` and
+  `src/lib/cases.ts` wrap them and add the page-specific props.
+- `src/lib/listing-pages.ts`: for each listing, how routes load a page of cards and its
+  categories, and which listing owns a page (`listingOfPage`) or an address (`listingAtBase`).
+- Routes are dispatchers: `[slug]/page.tsx` renders `ListingList` for a chosen page,
+  `[slug]/[entry]` renders `PostPage` or `CasePage` depending on the listing at that address,
+  `[slug]/[entry]/[term]` renders a category archive when `entry` is « categorie » (Next.js forbids
+  two differently named dynamic folders at the same level, hence the nesting).
+- Settings globals: `listingSettingsFields()` (`src/fields/listingSettings.ts`) builds both
+  globals' tabs; admin texts share `listingCommonText`. `ListingPageNotice` shows the note on the
+  page chosen by either global.

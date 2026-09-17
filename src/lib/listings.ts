@@ -77,6 +77,40 @@ export const blogConfig = (doc: ListingGlobalDoc): BlogConfig =>
     labels: {all: 'Tous', readMore: 'Lire l’article', dateLabel: 'Publié le', toc: 'Sommaire', categoryPrefix: 'Catégorie', more: 'Voir le blog', relatedEyebrow: 'Le blog', relatedTitle: 'Pour continuer <span>sur le sujet.</span>', empty: 'Aucun article pour le moment.'},
   });
 
+export type CasesLabels = ListingLabels & {
+  /** chip before the category in a case study's page top */
+  badge: string;
+  /** fact sheet row labels (each overridable on a case study) */
+  client: string;
+  category: string;
+  location: string;
+  deployment: string;
+  modules: string;
+  /** accessible name of the client site link */
+  clientLink: string;
+};
+export type CasesConfig = ListingConfig<CasesLabels> & {
+  /** the fact sheet's default button (overridable on a case study) */
+  cta?: {label: string; href: string};
+};
+
+type PortfolioDoc = (NonNullable<ListingGlobalDoc> & {sheet?: LabelsDoc; cta?: {label?: string | null; href?: string | null} | null}) | null | undefined;
+
+export function casesConfig(doc: PortfolioDoc): CasesConfig {
+  const sheet = doc?.sheet ?? {};
+  const cfg = listingConfig('cases', {...doc, labels: {...(doc?.labels ?? {}), ...sheet}}, {
+    fallbackBase: 'realisations',
+    title: 'Des chantiers <span>chiffrés juste.</span>',
+    labels: {
+      all: 'Toutes', readMore: 'Voir l’étude', badge: 'Étude de cas', categoryPrefix: 'Catégorie', more: 'Voir toutes les réalisations', relatedEyebrow: 'Nos réalisations', relatedTitle: 'D’autres chantiers <span>chiffrés juste.</span>', empty: 'Aucune réalisation pour le moment.',
+      client: 'Client', category: 'Catégorie', location: 'Localisation', deployment: 'Déploiement', modules: 'Modules Orbita', clientLink: 'Site du client',
+    },
+  });
+  const label = doc?.cta?.label;
+  const href = doc?.cta?.href;
+  return {...cfg, cta: label && href ? {label, href} : undefined};
+}
+
 /** /<listing>, or /<fallback> while no page is chosen */
 export const listingPath = (cfg: ListingConfig): string => `/${cfg.base ?? cfg.fallbackBase}`;
 export const entryPath = (cfg: ListingConfig, slug: string): string => `${listingPath(cfg)}/${slug}`;

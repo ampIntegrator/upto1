@@ -28,6 +28,8 @@ import * as migration_20260917_121129_add_figure_column_blocks from './20260917_
 import * as migration_20260917_122335_add_blog_global from './20260917_122335_add_blog_global';
 import * as migration_20260917_122357_remove_settings_blog from './20260917_122357_remove_settings_blog';
 import * as migration_20260917_130141_add_listing_empty_label from './20260917_130141_add_listing_empty_label';
+import * as migration_20260917_130513_add_case_studies_portfolio from './20260917_130513_add_case_studies_portfolio';
+import * as migration_20260917_130823_add_case_card_collection_source from './20260917_130823_add_case_card_collection_source';
 
 export const migrations = [
   {
@@ -178,6 +180,16 @@ export const migrations = [
   {
     up: migration_20260917_130141_add_listing_empty_label.up,
     down: migration_20260917_130141_add_listing_empty_label.down,
-    name: '20260917_130141_add_listing_empty_label'
+    name: '20260917_130141_add_listing_empty_label',
+  },
+  {
+    up: migration_20260917_130513_add_case_studies_portfolio.up,
+    down: migration_20260917_130513_add_case_studies_portfolio.down,
+    name: '20260917_130513_add_case_studies_portfolio',
+  },
+  {
+    up: migration_20260917_130823_add_case_card_collection_source.up,
+    down: migration_20260917_130823_add_case_card_collection_source.down,
+    name: '20260917_130823_add_case_card_collection_source'
   },
 ];

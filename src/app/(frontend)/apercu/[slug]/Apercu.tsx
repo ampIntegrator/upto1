@@ -22,6 +22,7 @@ import {Tabs} from '@/components/Tabs';
 import {TextBox} from '@/components/TextBox';
 import {BUTTON_GROUP_SLUG} from '@/fields/blocks/buttonGroupBlock';
 import {CARD_VARIANTS} from '@/fields/blocks/cardBlocks';
+import {CASE_CARD_SLUG} from '@/fields/blocks/caseCardBlock';
 import {POST_CARD_SLUG} from '@/fields/blocks/postCardBlock';
 import {SECTION_HEADING_SLUG} from '@/fields/blocks/sectionHeadingBlock';
 import {COLLECTION_SLUG} from '@/fields/blocks/collectionBlock';
@@ -85,6 +86,8 @@ export function Apercu({slug}: {slug: string}) {
           <SectionHeading eyebrow="Le blog" title="Pour continuer <span>sur le sujet.</span>" size="display-3" text="Chiffrage, chantier, métier : ce que nous apprenons avec nos clients." />
         ) : slug === POST_CARD_SLUG ? (
           <Card preset="article" media={{type: 'image', src: IMG, alt: ''}} chip={{label: 'Chiffrage'}} date="12 septembre 2026" title="Du devis à la facturation : industrialiser le cycle commercial" cta={{label: 'Lire l’article', href: '#'}} />
+        ) : slug === CASE_CARD_SLUG ? (
+          <Card preset="realisation" media={{type: 'image', src: IMG, alt: ''}} chip={{label: 'Rénovation', tone: 'high'}} result="−68 % délai" title="Vasseur Construction : le chiffrage divisé par trois" client={{name: 'Vasseur Construction', location: 'Nantes (44)'}} cta={{label: 'Voir l’étude', href: '#'}} />
         ) : slug === BUTTON_GROUP_SLUG ? (
           <VStack gap={6}>
             <ButtonGroup mode="attached" label="Profils" buttons={[{label: 'Particuliers', href: '#', variant: 'secondary', iconKey: 'home'}, {label: 'Professionnels', href: '#', variant: 'secondary', iconKey: 'calculator'}, {label: 'Collectivités', href: '#', variant: 'secondary', iconKey: 'building'}]} />

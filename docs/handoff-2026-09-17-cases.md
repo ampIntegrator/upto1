@@ -1,5 +1,21 @@
 # Handoff: case studies (« réalisations ») — 17 September 2026
 
+> **Status: done** (Claude Opus, 17 September 2026). What was built: `docs/cases.md`; the shared
+> listing code: `docs/blog.md`. Differences from this plan:
+> - The category archive route is `[slug]/[entry]/[term]` (checking that `entry` is « categorie »),
+>   not `[slug]/[segment]/[term]`: Next.js refuses two differently named dynamic folders at the
+>   same level.
+> - `src/lib/entries.ts` holds the Payload loaders of both collections; `posts.ts` and `cases.ts`
+>   wrap them. `toHeader` and `toFooter` still take the blog config only (they only link to posts).
+> - One migration for the case studies, their categories and the global
+>   (`add_case_studies_portfolio`), one for the case card and the collection source, and one for the
+>   « empty list » label added to the blog global by the factory.
+> - Label overrides on a case study: location, deployment and modules (client and category keep the
+>   global label). The client is required. The sheet's default button needs a link to show.
+> - The hero's category chip uses the `high` chip on night (translucent), not the mockup's opaque
+>   pale chip.
+> - The SEO plugin's URL now follows the page chosen for posts and case studies.
+
 Analysis by Claude Fable, implementation by Claude Opus. Nicolas's request (consignes.md,
 17 Sept. 14:33): « regarder ce qui a été fait sur le blog et préparer le portfolio réalisations,
 avec la même logique admin : un item Réalisations pour gérer, avec les onglets comme pour le
