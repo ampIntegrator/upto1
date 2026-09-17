@@ -63,4 +63,5 @@ Lexical editor and a collection (Payload mutates it; tables get dropped): use fa
 
 Open study (for Claude Fable, analysis only, then a handoff for Opus): a live preview of the row
 being built in the section builder, in a movable window. Brief: `etude-apercu-rangee/README.md`.
-The Live Preview trial it builds on lives on the `preview` branch (`docs/live-preview.md`).
+It builds on the admin's Live Preview (« Aperçu en direct » and its « Vue » menu, in main since
+17 Sept. 2026): `docs/live-preview.md`.
