@@ -107,12 +107,14 @@ export interface Config {
     languages: Language;
     header: Header;
     footer: Footer;
+    blog: Blog;
   };
   globalsSelect: {
     settings: SettingsSelect<false> | SettingsSelect<true>;
     languages: LanguagesSelect<false> | LanguagesSelect<true>;
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    blog: BlogSelect<false> | BlogSelect<true>;
   };
   locale: 'fr' | 'en' | 'de' | 'es' | 'it';
   widgets: {
@@ -689,6 +691,81 @@ export interface Page {
                                   id?: string | null;
                                   blockName?: string | null;
                                   blockType: 'postCard';
+                                }
+                              | {
+                                  eyebrow?: string | null;
+                                  /**
+                                   * A bulleted list, with bold and links.
+                                   */
+                                  content: {
+                                    root: {
+                                      type: string;
+                                      children: {
+                                        type: any;
+                                        version: number;
+                                        [k: string]: unknown;
+                                      }[];
+                                      direction: ('ltr' | 'rtl') | null;
+                                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                                      indent: number;
+                                      version: number;
+                                    };
+                                    [k: string]: unknown;
+                                  };
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'keyPoints';
+                                }
+                              | {
+                                  variant?: ('icon' | 'arrow') | null;
+                                  iconKey?: string | null;
+                                  title: string;
+                                  text?: string | null;
+                                  button: {
+                                    label: string;
+                                    href: string;
+                                    shape?: ('simple' | 'split') | null;
+                                    variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
+                                    size?: ('md' | 'lg') | null;
+                                    iconKey?: string | null;
+                                  };
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'ctaBand';
+                                }
+                              | {
+                                  items?:
+                                    | {
+                                        value: string;
+                                        label: string;
+                                        id?: string | null;
+                                      }[]
+                                    | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'statsBand';
+                                }
+                              | {
+                                  quote: string;
+                                  name: string;
+                                  role?: string | null;
+                                  photo?: (number | null) | Media;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'quoteCard';
+                                }
+                              | {
+                                  images?:
+                                    | {
+                                        image: number | Media;
+                                        id?: string | null;
+                                      }[]
+                                    | null;
+                                  wideFirst?: boolean | null;
+                                  caption?: string | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'gallery';
                                 }
                               | {
                                   layout?: ('swipe' | 'carousel') | null;
@@ -1494,6 +1571,81 @@ export interface Post {
                                   blockType: 'postCard';
                                 }
                               | {
+                                  eyebrow?: string | null;
+                                  /**
+                                   * A bulleted list, with bold and links.
+                                   */
+                                  content: {
+                                    root: {
+                                      type: string;
+                                      children: {
+                                        type: any;
+                                        version: number;
+                                        [k: string]: unknown;
+                                      }[];
+                                      direction: ('ltr' | 'rtl') | null;
+                                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                                      indent: number;
+                                      version: number;
+                                    };
+                                    [k: string]: unknown;
+                                  };
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'keyPoints';
+                                }
+                              | {
+                                  variant?: ('icon' | 'arrow') | null;
+                                  iconKey?: string | null;
+                                  title: string;
+                                  text?: string | null;
+                                  button: {
+                                    label: string;
+                                    href: string;
+                                    shape?: ('simple' | 'split') | null;
+                                    variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
+                                    size?: ('md' | 'lg') | null;
+                                    iconKey?: string | null;
+                                  };
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'ctaBand';
+                                }
+                              | {
+                                  items?:
+                                    | {
+                                        value: string;
+                                        label: string;
+                                        id?: string | null;
+                                      }[]
+                                    | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'statsBand';
+                                }
+                              | {
+                                  quote: string;
+                                  name: string;
+                                  role?: string | null;
+                                  photo?: (number | null) | Media;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'quoteCard';
+                                }
+                              | {
+                                  images?:
+                                    | {
+                                        image: number | Media;
+                                        id?: string | null;
+                                      }[]
+                                    | null;
+                                  wideFirst?: boolean | null;
+                                  caption?: string | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'gallery';
+                                }
+                              | {
                                   layout?: ('swipe' | 'carousel') | null;
                                   /**
                                    * 3 at most on 8 or 9 columns, 4 on 12. Two lines = two rows.
@@ -2256,6 +2408,81 @@ export interface Section {
                         id?: string | null;
                         blockName?: string | null;
                         blockType: 'postCard';
+                      }
+                    | {
+                        eyebrow?: string | null;
+                        /**
+                         * A bulleted list, with bold and links.
+                         */
+                        content: {
+                          root: {
+                            type: string;
+                            children: {
+                              type: any;
+                              version: number;
+                              [k: string]: unknown;
+                            }[];
+                            direction: ('ltr' | 'rtl') | null;
+                            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                            indent: number;
+                            version: number;
+                          };
+                          [k: string]: unknown;
+                        };
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'keyPoints';
+                      }
+                    | {
+                        variant?: ('icon' | 'arrow') | null;
+                        iconKey?: string | null;
+                        title: string;
+                        text?: string | null;
+                        button: {
+                          label: string;
+                          href: string;
+                          shape?: ('simple' | 'split') | null;
+                          variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
+                          size?: ('md' | 'lg') | null;
+                          iconKey?: string | null;
+                        };
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'ctaBand';
+                      }
+                    | {
+                        items?:
+                          | {
+                              value: string;
+                              label: string;
+                              id?: string | null;
+                            }[]
+                          | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'statsBand';
+                      }
+                    | {
+                        quote: string;
+                        name: string;
+                        role?: string | null;
+                        photo?: (number | null) | Media;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'quoteCard';
+                      }
+                    | {
+                        images?:
+                          | {
+                              image: number | Media;
+                              id?: string | null;
+                            }[]
+                          | null;
+                        wideFirst?: boolean | null;
+                        caption?: string | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'gallery';
                       }
                     | {
                         layout?: ('swipe' | 'carousel') | null;
@@ -3066,6 +3293,71 @@ export interface PagesSelect<T extends boolean = true> {
                                       id?: T;
                                       blockName?: T;
                                     };
+                                keyPoints?:
+                                  | T
+                                  | {
+                                      eyebrow?: T;
+                                      content?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                ctaBand?:
+                                  | T
+                                  | {
+                                      variant?: T;
+                                      iconKey?: T;
+                                      title?: T;
+                                      text?: T;
+                                      button?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            href?: T;
+                                            shape?: T;
+                                            variant?: T;
+                                            size?: T;
+                                            iconKey?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                statsBand?:
+                                  | T
+                                  | {
+                                      items?:
+                                        | T
+                                        | {
+                                            value?: T;
+                                            label?: T;
+                                            id?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                quoteCard?:
+                                  | T
+                                  | {
+                                      quote?: T;
+                                      name?: T;
+                                      role?: T;
+                                      photo?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                gallery?:
+                                  | T
+                                  | {
+                                      images?:
+                                        | T
+                                        | {
+                                            image?: T;
+                                            id?: T;
+                                          };
+                                      wideFirst?: T;
+                                      caption?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
                                 collection?:
                                   | T
                                   | {
@@ -3690,6 +3982,71 @@ export interface SectionsSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
+                    keyPoints?:
+                      | T
+                      | {
+                          eyebrow?: T;
+                          content?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    ctaBand?:
+                      | T
+                      | {
+                          variant?: T;
+                          iconKey?: T;
+                          title?: T;
+                          text?: T;
+                          button?:
+                            | T
+                            | {
+                                label?: T;
+                                href?: T;
+                                shape?: T;
+                                variant?: T;
+                                size?: T;
+                                iconKey?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    statsBand?:
+                      | T
+                      | {
+                          items?:
+                            | T
+                            | {
+                                value?: T;
+                                label?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    quoteCard?:
+                      | T
+                      | {
+                          quote?: T;
+                          name?: T;
+                          role?: T;
+                          photo?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    gallery?:
+                      | T
+                      | {
+                          images?:
+                            | T
+                            | {
+                                image?: T;
+                                id?: T;
+                              };
+                          wideFirst?: T;
+                          caption?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     collection?:
                       | T
                       | {
@@ -4306,6 +4663,71 @@ export interface PostsSelect<T extends boolean = true> {
                                       id?: T;
                                       blockName?: T;
                                     };
+                                keyPoints?:
+                                  | T
+                                  | {
+                                      eyebrow?: T;
+                                      content?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                ctaBand?:
+                                  | T
+                                  | {
+                                      variant?: T;
+                                      iconKey?: T;
+                                      title?: T;
+                                      text?: T;
+                                      button?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            href?: T;
+                                            shape?: T;
+                                            variant?: T;
+                                            size?: T;
+                                            iconKey?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                statsBand?:
+                                  | T
+                                  | {
+                                      items?:
+                                        | T
+                                        | {
+                                            value?: T;
+                                            label?: T;
+                                            id?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                quoteCard?:
+                                  | T
+                                  | {
+                                      quote?: T;
+                                      name?: T;
+                                      role?: T;
+                                      photo?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                gallery?:
+                                  | T
+                                  | {
+                                      images?:
+                                        | T
+                                        | {
+                                            image?: T;
+                                            id?: T;
+                                          };
+                                      wideFirst?: T;
+                                      caption?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
                                 collection?:
                                   | T
                                   | {
@@ -4672,30 +5094,6 @@ export interface Setting {
     homeLabel?: string | null;
   };
   /**
-   * The chosen page shows the list of posts instead of its content, with the title and lead below. Posts and category archives take its address: /<page>/<post>, /<page>/categorie/<category>.
-   */
-  blog?: {
-    page?: (number | null) | Page;
-    eyebrow?: string | null;
-    /**
-     * A word between <span>…</span> is set in accent serif.
-     */
-    title?: string | null;
-    lead?: string | null;
-    tone?: ('light' | 'night') | null;
-    perPage?: number | null;
-    labels?: {
-      all?: string | null;
-      readMore?: string | null;
-      dateLabel?: string | null;
-      toc?: string | null;
-      categoryPrefix?: string | null;
-      more?: string | null;
-      relatedEyebrow?: string | null;
-      relatedTitle?: string | null;
-    };
-  };
-  /**
    * Default gaps for sections built in the Content tab of pages. Each section can override them.
    */
   sectionGrid: {
@@ -4839,6 +5237,36 @@ export interface Footer {
   createdAt?: string | null;
 }
 /**
+ * The chosen page shows the list of posts instead of its content, with the title and lead below. Posts and category archives take its address: /<page>/<post>, /<page>/categorie/<category>.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog".
+ */
+export interface Blog {
+  id: number;
+  page?: (number | null) | Page;
+  eyebrow?: string | null;
+  /**
+   * A word between <span>…</span> is set in accent serif.
+   */
+  title?: string | null;
+  lead?: string | null;
+  tone?: ('light' | 'night') | null;
+  perPage?: number | null;
+  labels?: {
+    all?: string | null;
+    readMore?: string | null;
+    dateLabel?: string | null;
+    toc?: string | null;
+    categoryPrefix?: string | null;
+    more?: string | null;
+    relatedEyebrow?: string | null;
+    relatedTitle?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "settings_select".
  */
@@ -4866,28 +5294,6 @@ export interface SettingsSelect<T extends boolean = true> {
         enabled?: T;
         homeStyle?: T;
         homeLabel?: T;
-      };
-  blog?:
-    | T
-    | {
-        page?: T;
-        eyebrow?: T;
-        title?: T;
-        lead?: T;
-        tone?: T;
-        perPage?: T;
-        labels?:
-          | T
-          | {
-              all?: T;
-              readMore?: T;
-              dateLabel?: T;
-              toc?: T;
-              categoryPrefix?: T;
-              more?: T;
-              relatedEyebrow?: T;
-              relatedTitle?: T;
-            };
       };
   sectionGrid?:
     | T
@@ -5028,6 +5434,33 @@ export interface FooterSelect<T extends boolean = true> {
         label?: T;
         href?: T;
         id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog_select".
+ */
+export interface BlogSelect<T extends boolean = true> {
+  page?: T;
+  eyebrow?: T;
+  title?: T;
+  lead?: T;
+  tone?: T;
+  perPage?: T;
+  labels?:
+    | T
+    | {
+        all?: T;
+        readMore?: T;
+        dateLabel?: T;
+        toc?: T;
+        categoryPrefix?: T;
+        more?: T;
+        relatedEyebrow?: T;
+        relatedTitle?: T;
       };
   updatedAt?: T;
   createdAt?: T;

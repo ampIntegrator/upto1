@@ -12,19 +12,23 @@ import {CTA_BAND_SLUG, GALLERY_SLUG, KEY_POINTS_SLUG, QUOTE_CARD_SLUG, STATS_BAN
  * BlocksFeature, rendered by the site's components (KeyPoints, CtaBand, StatsBand, QuoteCard,
  * Gallery). The same Block configs can be offered as column blocks of the section builder.
  * Server only (they use editors): client code imports the slugs from ./slugs.
+ *
+ * Functions, not shared objects: Payload mutates block configs while sanitising them (inside a
+ * localized rich text it strips `localized` from nested fields), so the post editor and the
+ * section builder each need their own copies.
  */
 type Sibling = Record<string, unknown>;
 
-export const keyPointsBlock: Block = {
+export const keyPointsBlock = (): Block => ({
   slug: KEY_POINTS_SLUG,
   labels: {singular: t.keyPoints.name, plural: t.keyPoints.plural},
   fields: [
     {name: 'eyebrow', type: 'text', label: t.keyPoints.eyebrow, localized: true, defaultValue: 'À retenir'},
     {name: 'content', type: 'richText', label: t.keyPoints.content, localized: true, required: true, editor: tabsEditor, admin: {description: t.keyPoints.contentDescription}},
   ],
-};
+});
 
-export const ctaBandBlock: Block = {
+export const ctaBandBlock = (): Block => ({
   slug: CTA_BAND_SLUG,
   labels: {singular: t.ctaBand.name, plural: t.ctaBand.plural},
   fields: [
@@ -49,9 +53,9 @@ export const ctaBandBlock: Block = {
     {name: 'text', type: 'textarea', label: t.ctaBand.text, localized: true, admin: {rows: 2, condition: (_d: unknown, s: Sibling) => (s?.variant ?? 'icon') === 'icon'}},
     {name: 'button', type: 'group', label: t.ctaBand.button, fields: buttonRowFields()},
   ],
-};
+});
 
-export const statsBandBlock: Block = {
+export const statsBandBlock = (): Block => ({
   slug: STATS_BAND_SLUG,
   labels: {singular: t.statsBand.name, plural: t.statsBand.plural},
   fields: [
@@ -73,9 +77,9 @@ export const statsBandBlock: Block = {
       ],
     },
   ],
-};
+});
 
-export const quoteCardBlock: Block = {
+export const quoteCardBlock = (): Block => ({
   slug: QUOTE_CARD_SLUG,
   labels: {singular: t.quoteCard.name, plural: t.quoteCard.plural},
   fields: [
@@ -89,9 +93,9 @@ export const quoteCardBlock: Block = {
     },
     {name: 'photo', type: 'upload', relationTo: 'media', label: t.quoteCard.photo},
   ],
-};
+});
 
-export const galleryBlock: Block = {
+export const galleryBlock = (): Block => ({
   slug: GALLERY_SLUG,
   labels: {singular: t.gallery.name, plural: t.gallery.plural},
   fields: [
@@ -112,9 +116,9 @@ export const galleryBlock: Block = {
       ],
     },
   ],
-};
+});
 
-export const PROSE_BLOCKS: Block[] = [keyPointsBlock, ctaBandBlock, statsBandBlock, quoteCardBlock, galleryBlock];
+export const proseBlocks = (): Block[] => [keyPointsBlock(), ctaBandBlock(), statsBandBlock(), quoteCardBlock(), galleryBlock()];
 
 /** The editor of a post: headings h2–h4, quotes, captioned images, tables, rules and the figure blocks. */
 export const postEditor = lexicalEditor({
@@ -125,6 +129,6 @@ export const postEditor = lexicalEditor({
     UploadFeature({collections: {media: {fields: [{name: 'caption', type: 'text', label: t.upload.caption}]}}}),
     EXPERIMENTAL_TableFeature(),
     HorizontalRuleFeature(),
-    BlocksFeature({blocks: PROSE_BLOCKS}),
+    BlocksFeature({blocks: proseBlocks()}),
   ],
 });

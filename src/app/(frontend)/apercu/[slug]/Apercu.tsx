@@ -7,6 +7,8 @@ import React from 'react';
 import {ButtonGroup} from '@/components/ButtonGroup';
 import {Card, type CardProps} from '@/components/Card';
 import {SectionHeading} from '@/components/SectionHeading';
+import {GALLERY, renderDemoBlock} from '../../design/_showcases/post.shared';
+import {CTA_BAND_SLUG, GALLERY_SLUG, KEY_POINTS_SLUG, QUOTE_CARD_SLUG, STATS_BAND_SLUG} from '@/fields/blocks/prose/slugs';
 import {Collapsible, CollapsibleGroup} from '@/components/Collapsible';
 import {Collection} from '@/components/Collection';
 import {CompareCard} from '@/components/CompareCard';
@@ -40,7 +42,16 @@ import {FAQ} from '../../design/_showcases/faq.shared';
 import {LOREM_DOC} from '../../design/_showcases/textbox.shared';
 
 /** Wider box for the blocks that need several columns (single price, FAQ, steps). */
-const WIDE = new Set([SECTION_HEADING_SLUG, PRICE_SINGLE_SLUG, FAQ_SLUG, PROCESS_STEPS_SLUG, COLLECTION_SLUG, TABS_SLUG, BUTTON_GROUP_SLUG]);
+/** the demo post's figures, as they appear in a post */
+const FIGURE_DEMOS: Record<string, Record<string, unknown>> = {
+  [KEY_POINTS_SLUG]: {blockType: 'keyPoints'},
+  [CTA_BAND_SLUG]: {blockType: 'ctaBand', variant: 'icon', iconKey: 'calculator', title: 'Estimez votre gain de temps', text: 'Quelques chiffres suffisent pour projeter l’impact.', button: {label: 'Lancer le calcul', href: '#', variant: 'high', arrow: true}},
+  [STATS_BAND_SLUG]: {blockType: 'statsBand', items: [{value: '−68 %', label: 'Temps de chiffrage'}, {value: '×2,4', label: 'Devis envoyés'}, {value: '+31 %', label: 'Signature'}]},
+  [QUOTE_CARD_SLUG]: {blockType: 'quoteCard', quote: '« En six semaines, on a transformé notre point faible en avantage commercial. »', name: 'Julien Vasseur', role: 'Gérant · Vasseur Construction', photo: {src: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=96&q=80'}},
+  [GALLERY_SLUG]: {blockType: 'gallery', caption: 'Chantier Vasseur, Nantes.', images: GALLERY},
+};
+
+const WIDE = new Set([CTA_BAND_SLUG, STATS_BAND_SLUG, GALLERY_SLUG, KEY_POINTS_SLUG, QUOTE_CARD_SLUG, SECTION_HEADING_SLUG, PRICE_SINGLE_SLUG, FAQ_SLUG, PROCESS_STEPS_SLUG, COLLECTION_SLUG, TABS_SLUG, BUTTON_GROUP_SLUG]);
 
 const IMG = 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80';
 const TEXT = 'Une phrase de présentation courte, deux lignes au plus, pour situer le contenu de la carte.';
@@ -68,7 +79,9 @@ export function Apercu({slug}: {slug: string}) {
   return (
     <OrbitaThemeProvider fixedSilo="blue" initialMode="light">
       <VStack data-apercu style={{width: WIDE.has(slug) ? 'var(--apercu-width-wide, 900px)' : 'var(--apercu-width, 360px)', padding: 'var(--spacing-6)', background: 'var(--color-background-body)'}}>
-        {slug === SECTION_HEADING_SLUG ? (
+        {FIGURE_DEMOS[slug] ? (
+          renderDemoBlock({type: 'block', fields: FIGURE_DEMOS[slug]})
+        ) : slug === SECTION_HEADING_SLUG ? (
           <SectionHeading eyebrow="Le blog" title="Pour continuer <span>sur le sujet.</span>" size="display-3" text="Chiffrage, chantier, métier : ce que nous apprenons avec nos clients." />
         ) : slug === POST_CARD_SLUG ? (
           <Card preset="article" media={{type: 'image', src: IMG, alt: ''}} chip={{label: 'Chiffrage'}} date="12 septembre 2026" title="Du devis à la facturation : industrialiser le cycle commercial" cta={{label: 'Lire l’article', href: '#'}} />

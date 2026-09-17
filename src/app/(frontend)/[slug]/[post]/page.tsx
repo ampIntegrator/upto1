@@ -11,18 +11,18 @@ import {RelatedPosts} from '@/components/RelatedPosts';
 import {RichText, type RichTextDocument, richTextHeadings} from '@/components/RichText';
 import {Section} from '@/components/Section';
 import {SitePage} from '@/components/SitePage';
-import {blogConfig, blogPath, categoryPath, postPath} from '@/lib/blog';
+import {blogPath, categoryPath, postPath} from '@/lib/blog';
 import {loadPost, loadRelated, postCard, postHeader} from '@/lib/posts';
 import {toSections} from '@/lib/sections';
 import {getLocale, getSite, pageSilo, sectionsContext, toFooter, toHeader} from '@/lib/site';
 
 export const dynamic = 'force-dynamic';
 
-/** A post, at /<blog page>/<post> (Site settings › Blog). Any other first segment: 404. */
+/** A post, at /<blog page>/<post> (Blog settings). Any other first segment: 404. */
 async function load(slug: string, postSlug: string) {
   const locale = await getLocale();
   const site = await getSite(locale);
-  const blog = blogConfig(site.settings);
+  const blog = site.blog;
   if (!blog.base || blog.base !== slug) return null;
   const post = await loadPost(locale, postSlug);
   return post ? {locale, site, blog, post} : null;
@@ -44,10 +44,10 @@ export default async function Page({params}: {params: Promise<{slug: string; pos
   const s = site.settings;
   const content = post.content as unknown as RichTextDocument | null;
   const category = typeof post.category === 'object' && post.category ? post.category : null;
-  const [related, sections] = await Promise.all([loadRelated(locale, post), toSections(post.sections, s, sectionsContext(locale, s))]);
+  const [related, sections] = await Promise.all([loadRelated(locale, post), toSections(post.sections, s, sectionsContext(locale, site.blog))]);
   const plainTitle = post.title.replace(/<\/?span>/g, '');
   return (
-    <SitePage silo={pageSilo(null, s)} header={toHeader(s, site.header, site.languages)} footer={toFooter(s, site.footer, site.posts, locale)} tone="light" currentHref={blogPath(blog)}>
+    <SitePage silo={pageSilo(null, s)} header={toHeader(s, site.header, site.languages, site.blog)} footer={toFooter(s, site.footer, site.posts, locale, site.blog)} tone="light" currentHref={blogPath(blog)}>
       <Section background="paper" spacing="none" underHeader>
         {s.breadcrumb?.enabled !== false ? (
           <BreadcrumbBand

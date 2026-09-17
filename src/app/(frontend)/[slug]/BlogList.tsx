@@ -1,5 +1,5 @@
 /**
- * BlogList — the blog page (Site settings › Blog) and the category archives: the page top (title,
+ * BlogList — the blog page (Blog settings) and the category archives: the page top (title,
  * lead, light or night), the category chips, the article cards and the pagination. Rendered
  * in place of the chosen page's own content.
  */
@@ -20,7 +20,7 @@ export async function BlogList({locale, blog, site, page, category}: {locale: Lo
   const night = blog.tone === 'night';
   const s = site.settings;
   return (
-    <SitePage silo={pageSilo(null, s)} header={toHeader(s, site.header, site.languages)} footer={toFooter(s, site.footer, site.posts, locale)} tone={night ? 'dark' : 'light'} currentHref={blogPath(blog)}>
+    <SitePage silo={pageSilo(null, s)} header={toHeader(s, site.header, site.languages, site.blog)} footer={toFooter(s, site.footer, site.posts, locale, site.blog)} tone={night ? 'dark' : 'light'} currentHref={blogPath(blog)}>
       <Hero
         variant="page"
         background={night ? 'night-halo' : 'glow'}

@@ -1,9 +1,9 @@
 /**
- * The blog, as the Site settings › Blog tab describes it (like WordPress's « posts page »): the
+ * The blog, as the Blog settings global describes it (Blog › Réglages du blog) (like WordPress's « posts page »): the
  * chosen page is the blog, posts live under its address, category archives under
  * /<blog>/categorie/<category>. No React here: used by routes, conversions and the footer.
  */
-import type {Setting} from '@/payload-types';
+import type {Blog} from '@/payload-types';
 
 export type BlogConfig = {
   /** id and slug of the page chosen as the blog (null: no blog page chosen) */
@@ -20,8 +20,7 @@ export type BlogConfig = {
 /** the category archive segment: /<blog>/categorie/<category> */
 export const CATEGORY_SEGMENT = 'categorie';
 
-export function blogConfig(s: Pick<Setting, 'blog'> | null | undefined): BlogConfig {
-  const b = s?.blog;
+export function blogConfig(b: Blog | null | undefined): BlogConfig {
   const page = b?.page;
   const pageDoc = page && typeof page === 'object' ? page : null;
   const l = b?.labels;

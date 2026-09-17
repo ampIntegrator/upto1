@@ -23,6 +23,7 @@ import type {MediaQuoteProps, MediaQuoteSize, MediaQuoteTag} from '@/components/
 import type {SectionBackground, SectionTint} from '@/components/Section';
 import {BUTTON_GROUP_SLUG} from '@/fields/blocks/buttonGroupBlock';
 import {POST_CARD_SLUG} from '@/fields/blocks/postCardBlock';
+import {CTA_BAND_SLUG, GALLERY_SLUG, KEY_POINTS_SLUG, QUOTE_CARD_SLUG, STATS_BAND_SLUG} from '@/fields/blocks/prose/slugs';
 import {SECTION_HEADING_SLUG} from '@/fields/blocks/sectionHeadingBlock';
 import {CARD_VARIANTS} from '@/fields/blocks/cardBlocks';
 import {COLLECTION_SLUG} from '@/fields/blocks/collectionBlock';
@@ -60,6 +61,8 @@ export type ContentData =
   | {type: 'tabs'; items: TabsItem[]}
   | {type: 'buttonGroup'; buttonGroup: ButtonGroupProps}
   | {type: 'sectionHeading'; heading: SectionHeadingProps}
+  /** a post figure placed in a column: rendered by ProseBlock like in a post */
+  | {type: 'figure'; fields: Record<string, unknown>}
   | {type: 'collection'; collection: CollectionData}
   | {type: 'card'; card: CardProps}
   | {type: 'media'; media: MediaProps}
@@ -317,7 +320,7 @@ export type SectionsContext = {
   posts?: PostsLoader;
   /** chosen posts (post cards), loaded with their cover and category */
   postsByIds?: (ids: number[]) => Promise<Post[]>;
-  /** a post's URL under the blog page (Site settings › Blog) */
+  /** a post's URL under the blog page (Blog settings) */
   postHref?: (slug: string) => string;
   /** label of the cards' link */
   readMore?: string;
@@ -446,6 +449,12 @@ function toContent(block: ContentBlock): ContentData | null {
       return toPostCard(block as unknown as PostCardData);
     case SECTION_HEADING_SLUG:
       return toSectionHeading(block as unknown as SectionHeadingData);
+    case KEY_POINTS_SLUG:
+    case CTA_BAND_SLUG:
+    case STATS_BAND_SLUG:
+    case QUOTE_CARD_SLUG:
+    case GALLERY_SLUG:
+      return {type: 'figure', fields: block as unknown as Record<string, unknown>};
     default:
       return null;
   }

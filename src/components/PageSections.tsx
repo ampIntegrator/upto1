@@ -27,6 +27,7 @@ import {PlanCard} from './PlanCard';
 import {PriceCard} from './PriceCard';
 import {ProcessSteps} from './ProcessSteps';
 import {Section} from './Section';
+import {renderProseBlock} from './ProseBlock';
 import {SectionHeading} from './SectionHeading';
 import {TestimonialCard} from './TestimonialCard';
 import {Tabs} from './Tabs';
@@ -69,6 +70,8 @@ function Content({content, id}: {content: ContentData; id: string}) {
       return <TextBox {...content.textBox} />;
     case 'sectionHeading':
       return <SectionHeading {...content.heading} />;
+    case 'figure':
+      return renderProseBlock({type: 'block', fields: content.fields});
     case 'tabs':
       return <Tabs items={content.items} />;
     case 'buttonGroup':
