@@ -6,25 +6,58 @@ traps, how previous handoffs were run) and `docs/section-builder.md` first. The 
 apply here: French with Nicolas, English in code and docs, FR/EN admin dictionaries, backup
 and reviewed migrations, throwaway pages for tests, `consignes.md` never written.
 
-## Decisions to confirm with Nicolas before coding
+## Decisions (taken with Nicolas on 17 September 2026)
 
-Each one has a recommendation; ask him in one message, then apply his answers.
+1. **Authors**: a small `authors` collection (name, role, photo), shown in the post header
+   with the Astryx `Avatar`, dressed by the theme (square, 1 px border, 46 px).
+2. **Tags**: none in this phase, categories only. The post header shows the category chip.
+3. **Prose tables**: Lexical's `EXPERIMENTAL_TableFeature`, rendered with the editorial
+   table style. The same feature is added to the text box editor (pages need tables too),
+   not to the tabs editor: two restricted editors, one with tables and one without. A
+   table in a narrow column scrolls horizontally: say so in the field's description.
+4. **Under the post**: related posts, automatic (three article cards of the same category);
+   and the section builder's field, optional, on posts (« Sections après l'article »), which
+   is how an optional FAQ, a CTA or anything else is added.
+5. **Case studies** (« réalisations », mockup 23): phase 2, separate collection. Build the
+   shared parts so they serve both: the prose editor, the figure blocks, the post layout
+   with a sidebar slot (TOC or fact sheet), QuoteCard, StatsBand, Gallery.
+6. **The blog page, like WordPress's « posts page »** (see below). Category archives are
+   generated under it. 12 posts per page, category filter chips. Reading time: not shown.
+7. **Archive pagination**: the carousel's controls (`CarouselControls`: segments on the
+   left, square arrows on the right) adapted to links (`?page=n`, crawlable); beyond ten
+   pages the segments give way to numbers (« 3 / 14 »). No Astryx Pagination.
+8. **Section heading as a column block** (« En-tête de section », mockup 19): the existing
+   `SectionHeading` component (eyebrow between gold dashes, title with a serif accent span,
+   lead), size fixed to `display-3` (the mockup's clamp(34px, 4.4vw, 56px) within 2 px),
+   tag h2 to h4 with the shared `tagField`, optional lead, centred or left, 6 to 12
+   columns, no button, no row-height fill.
+9. **Post card as a column block** (« Carte article »): a relationship to a post, rendered
+   with the existing `Card` preset `article` (built from mockup 19). 3 or 4 columns; also
+   an item type of the Collection block (carousel and side by side), next to the existing
+   « latest posts » source, which stays for automatic lists.
 
-1. **Authors**: a small `authors` collection (name, role, photo, optional bio) related from
-   posts. Recommended over reusing admin users, which are accounts, not bylines.
-2. **Tags**: a `tags` collection like `categories` (mockup 18 shows a category chip and a
-   plain tag chip). Recommended; skip if he does not want a second taxonomy.
-3. **Prose tables**: Lexical's `EXPERIMENTAL_TableFeature` (a real cell editor, rendered
-   with the editorial table style) rather than a rows-and-columns block. Recommended;
-   the feature is marked experimental by Payload.
-4. **Sections after the post**: the section builder's field on posts, optional, so a post
-   can end with a FAQ, a CTA or anything the builder offers (mockup 18 ends with a night
-   FAQ and « Pour continuer sur le sujet »). Recommended.
-5. **Case studies** (« réalisations », mockup 23): a separate collection with its own fact
-   sheet sidebar, sharing the prose editor and the figure blocks. Recommended as phase 2,
-   after the blog; design the prose and blocks so they are shared.
-6. **Archive filters**: category chips above the grid (query parameter), 12 posts per page.
-   Reading time in the post header: optional, computed from the content (words / 200).
+## The blog page (« page des articles »)
+
+Not a block, not a component to place. In the site settings, a **Blog tab** holds:
+
+- `page`: a relationship to one page of the site: that page *is* the blog;
+- `title` (h1), `lead` (optional), `tone` (light / night) for that page's header;
+- `perPage` (12) and the labels (« Lire l'article », « Pour continuer sur le sujet »,
+  « Tous les articles », « Catégorie »).
+
+When the chosen page's URL is requested, the site renders the blog template instead of the
+page's own content: a Hero « page » variant (glow for light, night-halo for night) with the
+tab's title and lead, the category filter chips, the four-column grid of article cards on
+the page grid with the site's gaps, and the pagination. The page's own hero and sections
+are ignored; a note in that page's admin says it is the blog page and that its content is
+not displayed (a UI field with a `condition` reading the setting, or a description on the
+sections tab). Everything else derives from that page's slug: posts at
+`/<slug>/<post-slug>`, category archives at `/<slug>/categorie/<category-slug>` with an
+automatic h1 (the category title), no lead, the same grid and pagination. The footer's
+« Tous les articles » link and the breadcrumb use the same setting. Routes:
+`src/app/(frontend)/[slug]/page.tsx` checks the setting first (blog page or plain page),
+`src/app/(frontend)/[slug]/[post]/page.tsx` serves a post when `[slug]` is the blog page
+(404 otherwise), `src/app/(frontend)/[slug]/categorie/[category]/page.tsx` the archives.
 
 ## Design references
 
@@ -115,6 +148,7 @@ archive; the segments / dots controls of `CarouselControls` are the house refere
 
 New: `RichText` extensions (heading ids from the text, `renderBlock` prop, upload nodes as
 figures, blockquote with `cite`, table with the editorial style, the new list design);
+`CarouselControls` gains link rendering (`hrefFor(page)`) for the archive pagination;
 `KeyPoints`; `CtaBand`; `StatsBand`; `QuoteCard`; `Gallery`; `ProseTable` (if the Lexical
 table needs its own renderer); `PostHeader` (chips, title, lead, author, date, featured
 image); `PostToc` (Outline + IntersectionObserver on the prose headings, sticky at
@@ -127,24 +161,22 @@ list design shown on the RichText showcase; `pnpm catalog:build`.
 
 ## Payload (branch `payload`)
 
-- `posts`: `content` gets `postEditor`; new fields `author` (relationship, decision 1),
-  `tags` (decision 2), `coverCaption` (text, localized), `readingTime` (computed in a
-  beforeChange hook, decision 6), optional `sections` (decision 4: `sections.field` from
+- `posts`: `content` gets `postEditor`; new fields `author` (relationship to `authors`),
+  `coverCaption` (text, localized), optional `sections` (`sections.field` from
   `src/sections.config.ts`, in a « Sections après l'article » tab, with the share hook).
-- `authors` collection (decision 1): name, role, photo (media), bio; admin group blog.
-- `tags` collection (decision 2): title, slug.
-- Global `blog`: archive hero (eyebrow, title, lead, tone light / night), posts per page,
-  labels (« Lire l'article », « Pour continuer sur le sujet »).
-- Routes: `src/app/(frontend)/blog/page.tsx` (archive: hero, category chips, 4-column
-  grid of article cards on the page grid with the site gaps, Pagination, `?page=` and
-  `?categorie=`), `src/app/(frontend)/blog/[slug]/page.tsx` (post: header, layout with TOC
-  and prose, related posts, optional builder sections, SEO meta from the plugin). Both
-  `force-dynamic` like the other pages, locale from `getLocale()`.
+- `authors` collection: name, role, photo (media); admin group blog.
+- Column blocks for the builder: `sectionHeading` (decision 8) and `postCard` (decision 9,
+  also an item type of `collectionBlock`'s `ITEM_BLOCKS`).
+- Settings global: a **Blog tab** (page relationship, title, lead, tone, perPage, labels),
+  see « The blog page » above. No separate global.
+- Routes as described above (blog page, post, category archive), all `force-dynamic` like
+  the other pages, locale from `getLocale()`; the post page renders header, layout with
+  TOC and prose, related posts, optional builder sections, SEO meta from the plugin.
 - Conversion: `src/lib/posts.ts` (post document → `PostHeader` props, prose document,
   TOC entries, related posts), the figure blocks converted in `lib/sections.ts`-style
   functions and rendered through the `renderBlock` map.
-- Migrations: one per step (authors, tags, post fields, blog global), each reviewed; the
-  `content` editor change itself creates no column.
+- Migrations: one per step (authors, post fields, blog tab of the settings, the two column
+  blocks), each reviewed; the `content` editor change itself creates no column.
 - Seed: extend `scripts/seed.ts` or `seed-demo.ts` with an author, tags and a demo post
   using every prose element and every figure block, plus a smoke test (`smoke:sections`
   pattern: create, render `/blog/<slug>`, check markers, delete) — `scripts/smoke-blog.ts`.
@@ -154,7 +186,8 @@ list design shown on the RichText showcase; `pnpm catalog:build`.
 1. `astryx`: RichText extensions and the generalised lists (visible at once in the text
    box, tabs and FAQ), then the figure components and their showcases, then PostHeader,
    PostToc, PostLayout, RelatedPosts, dressed Avatar / Outline / Pagination.
-2. `payload`: authors and tags (migrations), post fields and editor, blog global, routes,
+2. `payload`: authors (migration), post fields and editors (tables in the text box editor
+   too), the Blog tab of the settings, the two column blocks, routes,
    conversion, seed and smoke test, docs (`docs/blog.md`), then the section builder gets
    the shareable figure blocks in a second pass.
 3. Phase 2: case studies (collection, hero, fact sheet, gallery), route `/realisations`.
