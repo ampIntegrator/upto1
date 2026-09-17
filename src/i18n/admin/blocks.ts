@@ -441,3 +441,10 @@ export const postCardBlockText = texts({
   post: {fr: 'Article', en: 'Post'},
 });
 
+export const statsBandColumnText = texts({
+  tooMany: {
+    fr: ({count, capacity, span}: {count: number; capacity: number; span: number}) => `${count} chiffres pour une colonne de ${span} qui en accepte ${capacity}.`,
+    en: ({count, capacity, span}: {count: number; capacity: number; span: number}) => `${count} figures in a column of ${span} that holds ${capacity}.`,
+  },
+});
+

@@ -691,6 +691,81 @@ export interface Page {
                                   blockType: 'postCard';
                                 }
                               | {
+                                  eyebrow?: string | null;
+                                  /**
+                                   * A bulleted list, with bold and links.
+                                   */
+                                  content: {
+                                    root: {
+                                      type: string;
+                                      children: {
+                                        type: any;
+                                        version: number;
+                                        [k: string]: unknown;
+                                      }[];
+                                      direction: ('ltr' | 'rtl') | null;
+                                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                                      indent: number;
+                                      version: number;
+                                    };
+                                    [k: string]: unknown;
+                                  };
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'keyPoints';
+                                }
+                              | {
+                                  variant?: ('icon' | 'arrow') | null;
+                                  iconKey?: string | null;
+                                  title: string;
+                                  text?: string | null;
+                                  button: {
+                                    label: string;
+                                    href: string;
+                                    shape?: ('simple' | 'split') | null;
+                                    variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
+                                    size?: ('md' | 'lg') | null;
+                                    iconKey?: string | null;
+                                  };
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'ctaBand';
+                                }
+                              | {
+                                  items?:
+                                    | {
+                                        value: string;
+                                        label: string;
+                                        id?: string | null;
+                                      }[]
+                                    | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'statsBand';
+                                }
+                              | {
+                                  quote: string;
+                                  name: string;
+                                  role?: string | null;
+                                  photo?: (number | null) | Media;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'quoteCard';
+                                }
+                              | {
+                                  images?:
+                                    | {
+                                        image: number | Media;
+                                        id?: string | null;
+                                      }[]
+                                    | null;
+                                  wideFirst?: boolean | null;
+                                  caption?: string | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'gallery';
+                                }
+                              | {
                                   layout?: ('swipe' | 'carousel') | null;
                                   /**
                                    * 3 at most on 8 or 9 columns, 4 on 12. Two lines = two rows.
@@ -1494,6 +1569,81 @@ export interface Post {
                                   blockType: 'postCard';
                                 }
                               | {
+                                  eyebrow?: string | null;
+                                  /**
+                                   * A bulleted list, with bold and links.
+                                   */
+                                  content: {
+                                    root: {
+                                      type: string;
+                                      children: {
+                                        type: any;
+                                        version: number;
+                                        [k: string]: unknown;
+                                      }[];
+                                      direction: ('ltr' | 'rtl') | null;
+                                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                                      indent: number;
+                                      version: number;
+                                    };
+                                    [k: string]: unknown;
+                                  };
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'keyPoints';
+                                }
+                              | {
+                                  variant?: ('icon' | 'arrow') | null;
+                                  iconKey?: string | null;
+                                  title: string;
+                                  text?: string | null;
+                                  button: {
+                                    label: string;
+                                    href: string;
+                                    shape?: ('simple' | 'split') | null;
+                                    variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
+                                    size?: ('md' | 'lg') | null;
+                                    iconKey?: string | null;
+                                  };
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'ctaBand';
+                                }
+                              | {
+                                  items?:
+                                    | {
+                                        value: string;
+                                        label: string;
+                                        id?: string | null;
+                                      }[]
+                                    | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'statsBand';
+                                }
+                              | {
+                                  quote: string;
+                                  name: string;
+                                  role?: string | null;
+                                  photo?: (number | null) | Media;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'quoteCard';
+                                }
+                              | {
+                                  images?:
+                                    | {
+                                        image: number | Media;
+                                        id?: string | null;
+                                      }[]
+                                    | null;
+                                  wideFirst?: boolean | null;
+                                  caption?: string | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'gallery';
+                                }
+                              | {
                                   layout?: ('swipe' | 'carousel') | null;
                                   /**
                                    * 3 at most on 8 or 9 columns, 4 on 12. Two lines = two rows.
@@ -2256,6 +2406,81 @@ export interface Section {
                         id?: string | null;
                         blockName?: string | null;
                         blockType: 'postCard';
+                      }
+                    | {
+                        eyebrow?: string | null;
+                        /**
+                         * A bulleted list, with bold and links.
+                         */
+                        content: {
+                          root: {
+                            type: string;
+                            children: {
+                              type: any;
+                              version: number;
+                              [k: string]: unknown;
+                            }[];
+                            direction: ('ltr' | 'rtl') | null;
+                            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                            indent: number;
+                            version: number;
+                          };
+                          [k: string]: unknown;
+                        };
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'keyPoints';
+                      }
+                    | {
+                        variant?: ('icon' | 'arrow') | null;
+                        iconKey?: string | null;
+                        title: string;
+                        text?: string | null;
+                        button: {
+                          label: string;
+                          href: string;
+                          shape?: ('simple' | 'split') | null;
+                          variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
+                          size?: ('md' | 'lg') | null;
+                          iconKey?: string | null;
+                        };
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'ctaBand';
+                      }
+                    | {
+                        items?:
+                          | {
+                              value: string;
+                              label: string;
+                              id?: string | null;
+                            }[]
+                          | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'statsBand';
+                      }
+                    | {
+                        quote: string;
+                        name: string;
+                        role?: string | null;
+                        photo?: (number | null) | Media;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'quoteCard';
+                      }
+                    | {
+                        images?:
+                          | {
+                              image: number | Media;
+                              id?: string | null;
+                            }[]
+                          | null;
+                        wideFirst?: boolean | null;
+                        caption?: string | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'gallery';
                       }
                     | {
                         layout?: ('swipe' | 'carousel') | null;
@@ -3066,6 +3291,71 @@ export interface PagesSelect<T extends boolean = true> {
                                       id?: T;
                                       blockName?: T;
                                     };
+                                keyPoints?:
+                                  | T
+                                  | {
+                                      eyebrow?: T;
+                                      content?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                ctaBand?:
+                                  | T
+                                  | {
+                                      variant?: T;
+                                      iconKey?: T;
+                                      title?: T;
+                                      text?: T;
+                                      button?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            href?: T;
+                                            shape?: T;
+                                            variant?: T;
+                                            size?: T;
+                                            iconKey?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                statsBand?:
+                                  | T
+                                  | {
+                                      items?:
+                                        | T
+                                        | {
+                                            value?: T;
+                                            label?: T;
+                                            id?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                quoteCard?:
+                                  | T
+                                  | {
+                                      quote?: T;
+                                      name?: T;
+                                      role?: T;
+                                      photo?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                gallery?:
+                                  | T
+                                  | {
+                                      images?:
+                                        | T
+                                        | {
+                                            image?: T;
+                                            id?: T;
+                                          };
+                                      wideFirst?: T;
+                                      caption?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
                                 collection?:
                                   | T
                                   | {
@@ -3690,6 +3980,71 @@ export interface SectionsSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
+                    keyPoints?:
+                      | T
+                      | {
+                          eyebrow?: T;
+                          content?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    ctaBand?:
+                      | T
+                      | {
+                          variant?: T;
+                          iconKey?: T;
+                          title?: T;
+                          text?: T;
+                          button?:
+                            | T
+                            | {
+                                label?: T;
+                                href?: T;
+                                shape?: T;
+                                variant?: T;
+                                size?: T;
+                                iconKey?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    statsBand?:
+                      | T
+                      | {
+                          items?:
+                            | T
+                            | {
+                                value?: T;
+                                label?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    quoteCard?:
+                      | T
+                      | {
+                          quote?: T;
+                          name?: T;
+                          role?: T;
+                          photo?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    gallery?:
+                      | T
+                      | {
+                          images?:
+                            | T
+                            | {
+                                image?: T;
+                                id?: T;
+                              };
+                          wideFirst?: T;
+                          caption?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     collection?:
                       | T
                       | {
@@ -4303,6 +4658,71 @@ export interface PostsSelect<T extends boolean = true> {
                                   | T
                                   | {
                                       post?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                keyPoints?:
+                                  | T
+                                  | {
+                                      eyebrow?: T;
+                                      content?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                ctaBand?:
+                                  | T
+                                  | {
+                                      variant?: T;
+                                      iconKey?: T;
+                                      title?: T;
+                                      text?: T;
+                                      button?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            href?: T;
+                                            shape?: T;
+                                            variant?: T;
+                                            size?: T;
+                                            iconKey?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                statsBand?:
+                                  | T
+                                  | {
+                                      items?:
+                                        | T
+                                        | {
+                                            value?: T;
+                                            label?: T;
+                                            id?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                quoteCard?:
+                                  | T
+                                  | {
+                                      quote?: T;
+                                      name?: T;
+                                      role?: T;
+                                      photo?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                gallery?:
+                                  | T
+                                  | {
+                                      images?:
+                                        | T
+                                        | {
+                                            image?: T;
+                                            id?: T;
+                                          };
+                                      wideFirst?: T;
+                                      caption?: T;
                                       id?: T;
                                       blockName?: T;
                                     };
