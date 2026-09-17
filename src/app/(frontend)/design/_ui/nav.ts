@@ -15,5 +15,7 @@ export const FOUNDATIONS: NavEntry[] = [
   {slug: 'mise-en-page-image', label: 'Page · haut de page image (25 A) ↗', href: '/mise-en-page/image', external: true},
   {slug: 'mise-en-page-clair', label: 'Page · haut de page clair (25 B) ↗', href: '/mise-en-page/clair', external: true},
   {slug: 'mise-en-page-nuit', label: 'Page · haut de page nuit (25 C) ↗', href: '/mise-en-page/nuit', external: true},
+  {slug: 'mise-en-page-article', label: 'Page · article de blog (18) ↗', href: '/mise-en-page/article', external: true},
+  {slug: 'mise-en-page-blog', label: 'Page · blog, liste des articles (19) ↗', href: '/mise-en-page/blog', external: true},
 ];
 

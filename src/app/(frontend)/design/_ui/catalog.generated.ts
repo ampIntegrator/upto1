@@ -259,6 +259,51 @@ export const CATALOG: CatalogCategory[] = [
         "doc": null
       },
       {
+        "name": "KeyPoints",
+        "label": "Key Points",
+        "slug": "key-points",
+        "href": "/design/composants/key-points",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
+        "name": "CtaBand",
+        "label": "Cta Band",
+        "slug": "cta-band",
+        "href": "/design/composants/cta-band",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
+        "name": "StatsBand",
+        "label": "Stats Band",
+        "slug": "stats-band",
+        "href": "/design/composants/stats-band",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
+        "name": "QuoteCard",
+        "label": "Quote Card",
+        "slug": "quote-card",
+        "href": "/design/composants/quote-card",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
+        "name": "Gallery",
+        "label": "Gallery",
+        "slug": "gallery",
+        "href": "/design/composants/gallery",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
         "name": "Stat",
         "label": "Stat",
         "slug": "stat",
@@ -773,6 +818,51 @@ export const CATALOG: CatalogCategory[] = [
         "label": "Section Heading",
         "slug": "section-heading",
         "href": "/design/composants/section-heading",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
+        "name": "PostHeader",
+        "label": "Post Header",
+        "slug": "post-header",
+        "href": "/design/composants/post-header",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
+        "name": "PostToc",
+        "label": "Post Toc",
+        "slug": "post-toc",
+        "href": "/design/composants/post-toc",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
+        "name": "PostLayout",
+        "label": "Post Layout",
+        "slug": "post-layout",
+        "href": "/design/composants/post-layout",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
+        "name": "PostArchive",
+        "label": "Post Archive",
+        "slug": "post-archive",
+        "href": "/design/composants/post-archive",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
+        "name": "RelatedPosts",
+        "label": "Related Posts",
+        "slug": "related-posts",
+        "href": "/design/composants/related-posts",
         "dressed": true,
         "parent": null,
         "doc": null

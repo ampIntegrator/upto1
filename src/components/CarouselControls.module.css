@@ -47,3 +47,11 @@
 .arrow[aria-disabled='true'],
 .arrow:disabled { opacity: 0.32; pointer-events: none; }
 .arrow svg { width: 18px; height: 18px; }
+
+/* link mode (archive pagination): the current page carries aria-current instead of aria-selected;
+   the arrows are links laid out like the icon buttons (the arrows stay visible on mobile) */
+.linkDot { display: inline-block; }
+.seg.linkDot[aria-current='page'] { width: 44px; background: light-dark(var(--color-accent), var(--color-highlight)); }
+.dot.linkDot[aria-current='page'] { background: light-dark(var(--color-accent), var(--color-highlight)); transform: scale(1.25); }
+a.arrow, span.arrow { display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; }
+nav.ui .arrow { display: inline-flex; }

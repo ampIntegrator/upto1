@@ -1210,6 +1210,35 @@ export const orbitaBlueTheme = {
         "lineHeight": "inherit"
       }
     },
+    "avatar": {
+      "shape:square": {
+        "borderWidth": "var(--border-width)",
+        "borderStyle": "solid",
+        "borderColor": "var(--color-border-emphasized)"
+      }
+    },
+    "outline-item": {
+      "base": {
+        "fontSize": "14px",
+        "lineHeight": "1.4",
+        "color": "var(--color-text-secondary)",
+        "transition": "color var(--duration-medium) var(--ease-standard)",
+        ":hover": {
+          "color": "var(--color-text-primary)"
+        }
+      },
+      "active": {
+        "color": "light-dark(var(--color-text-accent), var(--color-highlight))",
+        "fontWeight": "var(--font-weight-semibold)"
+      }
+    },
+    "outline-indicator": {
+      "base": {
+        "width": "2px",
+        "borderRadius": "0",
+        "backgroundColor": "light-dark(var(--color-accent), var(--color-highlight))"
+      }
+    },
     "tab-list": {
       "base": {
         "height": "auto",

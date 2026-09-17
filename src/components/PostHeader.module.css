@@ -1,0 +1,16 @@
+/* PostHeader — top of a post (mockup 18 .post-meta, .post-author, .post-hero). */
+.head { max-width: 920px; }
+.title { margin: 0; }
+.lead { max-width: 680px; font-size: 18px; line-height: 1.6; color: var(--color-text-secondary); } /* mockup 19 px: even */
+.meta { padding-top: 8px; }
+.name { font-size: 14px; font-weight: var(--font-weight-semibold); color: var(--color-text-primary); line-height: 1.4; }
+.role { font-size: 14px; color: var(--color-text-secondary); line-height: 1.4; } /* mockup 12.5 px: 14 px minimum */
+.divider { width: 1px; height: 36px; background: var(--color-border); }
+.dateLabel { font-family: var(--font-family-mono); font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-secondary); line-height: 1.4; } /* mockup 10.5 px */
+.date { font-size: 14px; color: var(--color-text-secondary); line-height: 1.4; }
+.chipLink { display: inline-flex; text-decoration: none; }
+.figure { margin: 32px 0 0; }
+.cover { position: relative; width: 100%; aspect-ratio: 16 / 7; overflow: hidden; border: var(--border-width) solid var(--color-border); background: var(--color-background-surface); }
+.coverImage { object-fit: cover; }
+.caption { font-family: var(--font-family-mono); font-size: 14px; letter-spacing: 0.04em; color: var(--color-text-secondary); }
+@media (max-width: 767px) { .cover { aspect-ratio: 4 / 3; } }

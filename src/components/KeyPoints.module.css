@@ -1,0 +1,5 @@
+/* KeyPoints — « À retenir » panel (mockup 18). */
+.root { width: 100%; padding: 32px; background: light-dark(var(--color-background-surface), var(--color-background-card)); border: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.15)); box-shadow: var(--shadow-med); }
+.eyebrow::before { content: ''; width: 30px; height: 1px; background: var(--color-editorial); flex: 0 0 auto; }
+.eyebrowText { font-size: 14px; } /* mockup 11 px mono: 14 px minimum */
+@container (max-width: 479px) { .root { padding: 24px; } }
