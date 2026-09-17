@@ -79,13 +79,13 @@ export function SwatchRadio(props: SwatchRadioProps) {
               disabled={readOnly}
               onClick={() => setValue(o.value)}
               style={{
-                width: 48,
-                height: 28,
+                width: 150,
+                height: 50,
                 padding: 0,
                 cursor: readOnly ? 'default' : 'pointer',
                 background: swatchBackground(kind, silo),
                 border: '1px solid var(--theme-elevation-200)',
-                borderRadius: selected ? 14 : 0,
+                borderRadius: selected ? 25 : 0,
                 outline: selected ? '2px solid var(--theme-text)' : 'none',
                 outlineOffset: 2,
                 transition: 'border-radius .2s',
