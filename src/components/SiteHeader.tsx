@@ -55,6 +55,10 @@ function LeafIcon({iconKey}: {iconKey?: SiteNavLeaf['iconKey']}) {
   return <Glyph width={24} height={24} />;
 }
 
+/** true when the current page is one of the entry's sub-items: its label takes the silo colour */
+const holdsCurrent = (e: SiteNavEntry, currentHref?: string): boolean =>
+  Boolean(currentHref) && (e.kind === 'menu' ? e.items.some((it) => it.href === currentHref) : e.kind === 'mega' ? e.groups.some((g) => g.items.some((it) => it.href === currentHref)) : false);
+
 function NavEntries({nav, currentHref}: {nav: SiteNavEntry[]; currentHref?: string}) {
   return (
     <>
@@ -62,13 +66,13 @@ function NavEntries({nav, currentHref}: {nav: SiteNavEntry[]; currentHref?: stri
         if (e.kind === 'link') return <TopNavItem key={e.label} label={e.label} href={e.href} isSelected={e.href === currentHref} />;
         if (e.kind === 'menu') {
           return (
-            <HStack key={e.label} className={styles.menuWrap} vAlign="stretch">
+            <HStack key={e.label} className={styles.menuWrap} vAlign="stretch" data-current={holdsCurrent(e, currentHref) || undefined}>
               <TopNavMenu label={e.label} items={e.items.map((it) => ({title: it.title, description: it.description, icon: <LeafIcon iconKey={it.iconKey} />, href: it.href}))} />
             </HStack>
           );
         }
         return (
-          <HStack key={e.label} className={styles.megaWrap} vAlign="stretch">
+          <HStack key={e.label} className={styles.megaWrap} vAlign="stretch" data-current={holdsCurrent(e, currentHref) || undefined}>
           <TopNavMegaMenu
             label={e.label}
             items={
