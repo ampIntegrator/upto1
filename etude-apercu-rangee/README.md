@@ -26,7 +26,7 @@ comments and docs are in English. Read `CLAUDE.md`, then `docs/section-builder.m
   `@/sections.config`) and `src/components/PageSections.tsx`.
 - **Isolated block route**: `src/app/(frontend)/apercu/[slug]/` renders one block alone with demo
   data, captured for the admin block picker (`pnpm previews:build`).
-- **Live Preview** (branch `preview`, trial, see `docs/live-preview.md`): Payload's built-in
+- **Live Preview** (in main since 17 September 2026, see `docs/live-preview.md`): Payload's built-in
   preview in server-side mode (iframe of the site page, reloaded on save), a « Vue » menu with
   side by side, top / bottom and dialog layouts, preference stored per user.
 - **Silo per page**, section background (light with tint and texture, night, media), section
@@ -75,4 +75,4 @@ section, refreshed on save only): mention it if it is worth it.
 - Decisions to confirm with Nicolas, each with a recommendation first.
 - A handoff in `docs/` for Opus (branch, order of work, tests: throwaway pages only, headless
   checks, locks cleaned), and the git flow reminder (components on `astryx`, admin on `payload`,
-  or the trial branch `preview`; give Nicolas the compare links).
+  or a trial branch; Claude creates the pull requests with `gh` and gives Nicolas their links).

@@ -1,7 +1,7 @@
-# Live Preview (branch `preview`, trial)
+# Live Preview
 
-Started on 17 September 2026 at Nicolas's request, on its own branch to test the admin's
-« Aperçu en direct ».
+Started on 17 September 2026 at Nicolas's request as a trial on the `preview` branch, then kept:
+merged into main the same day (PR #30).
 
 - Payload's built-in Live Preview (no paid plugin), server-side mode: `src/livePreview.ts`
   (collections pages, posts, case-studies; globals blog, portfolio; breakpoints mobile 390,
