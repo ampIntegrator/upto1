@@ -7,7 +7,7 @@
  * opens the saved address: while the form has unsaved changes, it is disabled.
  */
 import {Button, useFormFields, useFormModified} from '@payloadcms/ui';
-import React, {useEffect, useState} from 'react';
+import React, {useSyncExternalStore} from 'react';
 
 import {blogText, portfolioText} from '@/i18n/admin/globals';
 import {useAdminText} from '@/i18n/admin/useAdminText';
@@ -15,13 +15,16 @@ import {useAdminText} from '@/i18n/admin/useAdminText';
 const TEXTS = {blog: blogText, portfolio: portfolioText};
 const FORMAT = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
+/** the admin's origin (the site's), empty during server rendering */
+const noSubscription = () => () => {};
+const useOrigin = () => useSyncExternalStore(noSubscription, () => window.location.origin, () => '');
+
 export function ListingAddress({listing = 'blog', path = 'slug'}: {listing?: 'blog' | 'portfolio'; path?: string}) {
   const {t} = useAdminText();
   const text = TEXTS[listing];
   const slug = useFormFields(([fields]) => fields[path]?.value);
   const modified = useFormModified();
-  const [origin, setOrigin] = useState('');
-  useEffect(() => setOrigin(window.location.origin), []);
+  const origin = useOrigin();
   const value = typeof slug === 'string' ? slug.trim() : '';
   const valid = FORMAT.test(value);
   const muted: React.CSSProperties = {color: 'var(--theme-elevation-500)'};
