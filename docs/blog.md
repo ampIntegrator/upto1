@@ -71,6 +71,10 @@ post editor and the section builder each get fresh copies. The same rule applies
 `buttonRowFields()`. Sharing a config object between a Lexical editor and a collection changes the
 database schema of the collection (tables dropped): always use a factory.
 
+Every site editor (they all share `baseFeatures()`) has an admin shortcut: « lorem40 » then a
+space inserts forty words of lorem ipsum (1 to 999 words; `src/fields/lorem/`, a Lexical markdown
+shortcut, nothing stored differently). « Lorem » alone or inside a word is left alone.
+
 The other editors (`src/fields/editors.ts`): `textBoxEditor` (text box: paragraphs, bold, italic,
 links, lists, tables) and `tabsEditor` (the same without tables: tabs, key points). The lists
 (diamond bullets, two-digit numbers in a silo square) are site-wide, in `RichText`.
