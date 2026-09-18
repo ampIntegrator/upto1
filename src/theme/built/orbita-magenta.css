@@ -446,8 +446,8 @@
     font-style: italic;
     font-weight: 600;
     color: var(--color-accent);
-    font-size: inherit;
-    line-height: inherit;
+    font-size: 1.1em;
+    line-height: 0;
     letter-spacing: -0.01em;
   }
 

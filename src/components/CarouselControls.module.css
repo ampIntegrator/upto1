@@ -1,5 +1,7 @@
 /* CarouselControls — indicator on the left, square arrows on the right (mockup 07). */
 .ui { width: 100%; }
+/* « see all » button and arrows, pushed right; alone on its line when the row is too narrow */
+.end { margin-inline-start: auto; }
 /* below 640 px you swipe: the arrows go, the indicator stays */
 @media (max-width: 639px) { .arrows { display: none !important; } }
 /* page segments: square bars, the current page lengthens in silo colour */
