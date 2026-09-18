@@ -45,8 +45,8 @@ export async function CasePage({locale, site, caseStudy}: {locale: Locale; site:
       <PostLayout sidebar={<CaseSheet {...caseSheet(caseStudy, cases)} />}>
         <RichText content={content} size="prose" renderBlock={renderProseBlock} resolveLink={(link) => resolveEntryLink(site, link)} />
       </PostLayout>
-      <EntryFaq title={cases.faq.title} tag={cases.faq.tag} items={faq} />
-      <RelatedPosts eyebrow={cases.labels.relatedEyebrow} title={cases.labels.relatedTitle} items={related.map((c) => caseCard(c, cases))} more={{label: cases.labels.more, href: listingPath(cases)}} />
+      <EntryFaq {...cases.faq} items={faq} />
+      <RelatedPosts {...cases.related} items={related.map((c) => caseCard(c, cases))} more={{label: cases.labels.more, href: listingPath(cases)}} />
     </SitePage>
   );
 }

@@ -51,13 +51,17 @@ The « Sous l’article » tab (`src/fields/entryBelow.ts`, shared with the case
 
 - **FAQ**: « Afficher une FAQ » (unticked by default), then questions and answers (a blank line
   in an answer = a new paragraph). Rendered by `EntryFaq`: night section, accordion in two columns,
-  first question open. Its **title and tag are shared**, in Blog › Réglages du blog › « Sous les
-  articles » (`faqTitle`, empty = no title; `faqTag`, h2 by default); the questions take the next
-  heading level (h3 under an h2).
+  first question open. The questions take the next heading level (h3 under an h2).
 - **Articles liés**: automatic (same category, then the newest; the default), chosen (in their
-  order, completed by automatic ones if short) or hidden. The count, **3 or 4**, is shared
-  (`relatedCount`, same tab of the settings); eyebrow and title stay in the Labels tab.
-  `loadRelatedEntries` in `src/lib/entries.ts`.
+  order, completed by automatic ones if short) or hidden. `loadRelatedEntries` in
+  `src/lib/entries.ts`.
+
+**Shared, never per post**, in Blog › Réglages du blog › « Sous les articles » (same tab in the
+case studies settings): the two section headings, the same fields for both (eyebrow, title with an
+optional `<span>` accent, tag h2 by default; **an empty title = no heading**, eyebrow included:
+`faqEyebrow` / `faqTitle` / `faqTag`, `relatedEyebrow` / `relatedTitle` / `relatedTag`), and the
+number of related posts, 3 or 4 (`relatedCount`). The related eyebrow and title lived in the
+Labels tab until 18 September 2026 (migration `related_heading` copied them over).
 
 The page: breadcrumb, `PostHeader` (category chip, title, lead, author with a square avatar, date,
 16:7 cover), `PostLayout` with `PostToc` (the h2–h4 of the content through the Astryx Outline,

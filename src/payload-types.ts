@@ -4117,18 +4117,26 @@ export interface Blog {
     toc?: string | null;
     categoryPrefix?: string | null;
     more?: string | null;
-    relatedEyebrow?: string | null;
-    relatedTitle?: string | null;
     empty?: string | null;
   };
+  faqEyebrow?: string | null;
   /**
-   * Shared by every FAQ. Empty: no title. A word between <span>…</span> is set in accent serif.
+   * Empty: no section heading (neither eyebrow nor title). A word between <span>…</span> is set in accent serif.
    */
   faqTitle?: string | null;
   /**
    * Structure and SEO only: the look does not change.
    */
   faqTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+  relatedEyebrow?: string | null;
+  /**
+   * Empty: no section heading (neither eyebrow nor title). A word between <span>…</span> is set in accent serif.
+   */
+  relatedTitle?: string | null;
+  /**
+   * Structure and SEO only: the look does not change.
+   */
+  relatedTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
   relatedCount?: ('3' | '4') | null;
   meta?: {
     title?: string | null;
@@ -4164,8 +4172,6 @@ export interface Portfolio {
     badge?: string | null;
     categoryPrefix?: string | null;
     more?: string | null;
-    relatedEyebrow?: string | null;
-    relatedTitle?: string | null;
     empty?: string | null;
   };
   /**
@@ -4186,14 +4192,24 @@ export interface Portfolio {
     label?: string | null;
     href?: string | null;
   };
+  faqEyebrow?: string | null;
   /**
-   * Shared by every FAQ. Empty: no title. A word between <span>…</span> is set in accent serif.
+   * Empty: no section heading (neither eyebrow nor title). A word between <span>…</span> is set in accent serif.
    */
   faqTitle?: string | null;
   /**
    * Structure and SEO only: the look does not change.
    */
   faqTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+  relatedEyebrow?: string | null;
+  /**
+   * Empty: no section heading (neither eyebrow nor title). A word between <span>…</span> is set in accent serif.
+   */
+  relatedTitle?: string | null;
+  /**
+   * Structure and SEO only: the look does not change.
+   */
+  relatedTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
   relatedCount?: ('3' | '4') | null;
   meta?: {
     title?: string | null;
@@ -4399,12 +4415,14 @@ export interface BlogSelect<T extends boolean = true> {
         toc?: T;
         categoryPrefix?: T;
         more?: T;
-        relatedEyebrow?: T;
-        relatedTitle?: T;
         empty?: T;
       };
+  faqEyebrow?: T;
   faqTitle?: T;
   faqTag?: T;
+  relatedEyebrow?: T;
+  relatedTitle?: T;
+  relatedTag?: T;
   relatedCount?: T;
   meta?:
     | T
@@ -4436,8 +4454,6 @@ export interface PortfolioSelect<T extends boolean = true> {
         badge?: T;
         categoryPrefix?: T;
         more?: T;
-        relatedEyebrow?: T;
-        relatedTitle?: T;
         empty?: T;
       };
   sheet?:
@@ -4456,8 +4472,12 @@ export interface PortfolioSelect<T extends boolean = true> {
         label?: T;
         href?: T;
       };
+  faqEyebrow?: T;
   faqTitle?: T;
   faqTag?: T;
+  relatedEyebrow?: T;
+  relatedTitle?: T;
+  relatedTag?: T;
   relatedCount?: T;
   meta?:
     | T

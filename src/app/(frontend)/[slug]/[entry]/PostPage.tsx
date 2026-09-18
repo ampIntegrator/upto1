@@ -45,8 +45,8 @@ export async function PostPage({locale, site, post}: {locale: Locale; site: Awai
       <PostLayout sidebar={<PostToc items={richTextHeadings(content)} label={blog.labels.toc} />}>
         <RichText content={content} size="prose" renderBlock={renderProseBlock} resolveLink={(link) => resolveEntryLink(site, link)} />
       </PostLayout>
-      <EntryFaq title={blog.faq.title} tag={blog.faq.tag} items={faq} />
-      <RelatedPosts eyebrow={blog.labels.relatedEyebrow} title={blog.labels.relatedTitle} items={related.map((p) => postCard(p, blog, locale))} more={{label: blog.labels.more, href: listingPath(blog)}} />
+      <EntryFaq {...blog.faq} items={faq} />
+      <RelatedPosts {...blog.related} items={related.map((p) => postCard(p, blog, locale))} more={{label: blog.labels.more, href: listingPath(blog)}} />
     </SitePage>
   );
 }

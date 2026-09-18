@@ -20,10 +20,10 @@ export const Blog: GlobalConfig = {
     slug: 'blog',
     eyebrow: 'Le blog',
     title: 'Actualités',
+    related: {eyebrow: 'Le blog', title: 'Pour continuer <span>sur le sujet.</span>'},
     labelRows: [
       [{name: 'all', label: t.all, defaultValue: 'Tous', width: 33}, {name: 'readMore', label: t.readMore, defaultValue: 'Lire l’article', width: 33}, {name: 'dateLabel', label: t.dateLabel, defaultValue: 'Publié le', width: 34}],
       [{name: 'toc', label: t.toc, defaultValue: 'Sommaire', width: 33}, {name: 'categoryPrefix', label: t.categoryPrefix, defaultValue: 'Catégorie', width: 33}, {name: 'more', label: t.more, defaultValue: 'Voir le blog', width: 34}],
-      [{name: 'relatedEyebrow', label: t.relatedEyebrow, defaultValue: 'Le blog', width: 33}, {name: 'relatedTitle', label: t.relatedTitle, defaultValue: 'Pour continuer <span>sur le sujet.</span>', width: 67}],
       [{name: 'empty', label: t.empty, defaultValue: 'Aucun article pour le moment.', width: 100}],
     ],
   }),

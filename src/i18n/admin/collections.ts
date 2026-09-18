@@ -48,7 +48,7 @@ export const collectionsText = texts({
       sheet: {fr: 'Colonne latérale', en: 'Side column'},
       sheetDescription: {fr: 'À gauche du récit sur ordinateur, au-dessus sur mobile : client, lignes d’information, deux chiffres et un bouton.', en: 'Left of the story on desktop, above it on mobile: client, information rows, two figures and a button.'},
       below: {fr: 'Sous la réalisation', en: 'Under the case study'},
-      belowDescription: {fr: 'Une FAQ et les réalisations liées, affichées après le récit. Leur titre et le nombre de réalisations liées se règlent dans Réglages des réalisations › Sous les réalisations.', en: 'A FAQ and the related case studies, shown after the story. Their title and the number of related case studies are set in Case studies settings › Under the case studies.'},
+      belowDescription: {fr: 'Une FAQ et les réalisations liées, affichées après le récit. Leurs titres et le nombre de réalisations liées se règlent dans Réglages des réalisations › Sous les réalisations.', en: 'A FAQ and the related case studies, shown after the story. Their headings and the number of related case studies are set in Case studies settings › Under the case studies.'},
     },
     fields: {
       title: {fr: 'Titre', en: 'Title'},
@@ -126,7 +126,7 @@ export const collectionsText = texts({
     tabs: {
       post: {fr: 'Contenu', en: 'Content'},
       below: {fr: 'Sous l’article', en: 'Under the post'},
-      belowDescription: {fr: 'Une FAQ et les articles liés, affichés après l’article. Leur titre et le nombre d’articles liés se règlent dans Blog › Réglages du blog › Sous les articles.', en: 'A FAQ and the related posts, shown after the post. Their title and the number of related posts are set in Blog › Blog settings › Under the posts.'},
+      belowDescription: {fr: 'Une FAQ et les articles liés, affichés après l’article. Leurs titres et le nombre d’articles liés se règlent dans Blog › Réglages du blog › Sous les articles.', en: 'A FAQ and the related posts, shown after the post. Their headings and the number of related posts are set in Blog › Blog settings › Under the posts.'},
     },
     fields: {
       title: {fr: 'Titre', en: 'Title'},

@@ -166,8 +166,9 @@ const listingCommonText = {
   readMore: {fr: 'Lien des cartes', en: 'Card link'},
   categoryPrefix: {fr: 'Surtitre des archives de catégorie', en: 'Category archive eyebrow'},
   empty: {fr: 'Liste vide', en: 'Empty list'},
+  faqEyebrow: {fr: 'Surtitre de la FAQ', en: 'FAQ eyebrow'},
   faqTitle: {fr: 'Titre de la FAQ', en: 'FAQ title'},
-  faqTitleDescription: {fr: 'Commun à toutes les FAQ. Vide : pas de titre. Un mot entre <span>…</span> passe en serif accentué.', en: 'Shared by every FAQ. Empty: no title. A word between <span>…</span> is set in accent serif.'},
+  headingDescription: {fr: 'Vide : pas d’en-tête de section (ni surtitre ni titre). Un mot entre <span>…</span> passe en serif accentué.', en: 'Empty: no section heading (neither eyebrow nor title). A word between <span>…</span> is set in accent serif.'},
   relatedCount: {fr: 'Nombre de contenus liés', en: 'Number of related entries'},
 };
 
@@ -182,7 +183,7 @@ export const blogText = texts({
     labels: {fr: 'Libellés', en: 'Labels'},
     below: {fr: 'Sous les articles', en: 'Under the posts'},
   },
-  belowDescription: {fr: 'La FAQ et les articles liés de chaque article (chaque article choisit de les afficher, dans son onglet Sous l’article). Le surtitre et le titre des articles liés sont dans l’onglet Libellés.', en: 'The FAQ and the related posts of every post (each post chooses to show them, in its Under the post tab). The related posts eyebrow and title are in the Labels tab.'},
+  belowDescription: {fr: 'Les en-têtes de la FAQ et des articles liés, communs à tous les articles, et le nombre d’articles liés. Chaque article choisit de les afficher, dans son onglet Sous l’article.', en: 'The headings of the FAQ and the related posts, shared by every post, and the number of related posts. Each post chooses to show them, in its Under the post tab.'},
   description: {fr: 'La liste des articles : son adresse, son haut de page, ses libellés, ce qui s’affiche sous chaque article et son référencement. Aucune page à créer.', en: 'The list of posts: its address, page top, labels, what shows under each post, and SEO. No page to create.'},
   perPage: {fr: 'Articles par page', en: 'Posts per page'},
   relatedEyebrow: {fr: 'Surtitre des articles liés', en: 'Related posts eyebrow'},
@@ -203,7 +204,7 @@ export const portfolioText = texts({
     labels: {fr: 'Colonne latérale et libellés', en: 'Side column and labels'},
     below: {fr: 'Sous les réalisations', en: 'Under the case studies'},
   },
-  belowDescription: {fr: 'La FAQ et les réalisations liées de chaque réalisation (chaque réalisation choisit de les afficher, dans son onglet Sous la réalisation). Le surtitre et le titre des réalisations liées sont dans l’onglet Colonne latérale et libellés.', en: 'The FAQ and the related case studies of every case study (each one chooses to show them, in its Under the case study tab). The related eyebrow and title are in the Side column and labels tab.'},
+  belowDescription: {fr: 'Les en-têtes de la FAQ et des réalisations liées, communs à toutes les réalisations, et le nombre de réalisations liées. Chaque réalisation choisit de les afficher, dans son onglet Sous la réalisation.', en: 'The headings of the FAQ and the related case studies, shared by every case study, and the number of related case studies. Each case study chooses to show them, in its Under the case study tab.'},
   description: {fr: 'La liste des réalisations : son adresse, son haut de page, les libellés de la colonne latérale, ce qui s’affiche sous chaque réalisation et son référencement. Aucune page à créer.', en: 'The list of case studies: its address, page top, side column labels, what shows under each case study, and SEO. No page to create.'},
   perPage: {fr: 'Réalisations par page', en: 'Case studies per page'},
   relatedEyebrow: {fr: 'Surtitre des réalisations liées', en: 'Related case studies eyebrow'},
