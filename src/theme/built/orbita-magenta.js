@@ -298,8 +298,8 @@ export const orbitaMagentaTheme = {
         "fontStyle": "italic",
         "fontWeight": "600",
         "color": "var(--color-accent)",
-        "fontSize": "inherit",
-        "lineHeight": "inherit",
+        "fontSize": "1.1em",
+        "lineHeight": "0",
         "letterSpacing": "-0.01em"
       },
       "type:serif-upright": {

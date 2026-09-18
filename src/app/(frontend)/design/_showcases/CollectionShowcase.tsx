@@ -16,13 +16,13 @@ import {TestimonialCard} from '@/components/TestimonialCard';
 import {METIERS, TESTIMONIALS} from './blocks.shared';
 
 const IMG = 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80';
-const ARTICLES = Array.from({length: 7}, (_, i) => ({preset: 'article' as const, media: {type: 'image' as const, src: IMG, alt: ''}, chip: {label: 'Chiffrage'}, date: `${i + 2} septembre 2026`, title: `Article ${i + 1} : lorem ipsum dolor sit amet consectetur`, cta: {label: 'Lire', href: '#'}}));
+const ARTICLES = Array.from({length: 14}, (_, i) => ({preset: 'article' as const, media: {type: 'image' as const, src: IMG, alt: ''}, chip: {label: 'Chiffrage'}, date: `${i + 2} septembre 2026`, title: `Article ${i + 1} : lorem ipsum dolor sit amet consectetur`, cta: {label: 'Lire', href: '#'}}));
 
 export default function CollectionShowcase() {
   return (
     <VStack gap={8}>
       <Text type="body" color="secondary">
-        La collection : des contenus identiques côte à côte dans une colonne de 8 à 12, 2 à 4 visibles (3 au plus sur 8 ou 9 colonnes, 4 sur 12). Deux mises en page sur le Carousel Astryx : « swipe », sans contrôle, l'élément suivant dépasse du bord droit et des points apparaissent sous 640 px ; « carrousel », flèches et indicateur (segments, points ou numéros), flèches masquées sous 640 px. Défilement par page ou par élément ; jamais automatique, jamais en boucle. Les éléments suivent la largeur de la colonne : 2 entre 520 et 800 px, 1 avec aperçu en dessous.
+        La collection : des contenus identiques côte à côte dans une colonne de 8 à 12, 2 à 4 visibles (3 au plus sur 8 ou 9 colonnes, 4 sur 12). Deux mises en page sur le Carousel Astryx : « swipe », sans contrôle, l'élément suivant dépasse du bord droit et des points apparaissent sous 640 px ; « carrousel », flèches et indicateur (segments, points ou numéros), flèches masquées sous 640 px. Défilement par page ou par élément ; jamais automatique, jamais en boucle. Au-delà de dix pages, segments et points laissent la place aux numéros (« 3 / 12 »). Bouton « voir tout » facultatif (bouton simple, couleur silo) à gauche des flèches, à leur place sous 640 px. Les éléments suivent la largeur de la colonne : 2 entre 520 et 800 px, 1 avec aperçu en dessous.
       </Text>
       <VStack gap={3}>
         <Heading level={3}>Carrousel, 3 témoignages visibles, segments (maquette 07)</Heading>
@@ -31,16 +31,22 @@ export default function CollectionShowcase() {
         </Collection>
       </VStack>
       <VStack gap={3}>
-        <Heading level={3}>Carrousel d'articles, 4 visibles, points, un élément à la fois</Heading>
-        <Collection layout="carousel" perView={4} indicator="dots" step="item" label="Articles">
+        <Heading level={3}>Carrousel d'articles, 4 visibles, points, bouton « voir tout »</Heading>
+        <Collection layout="carousel" perView={4} indicator="dots" label="Articles" more={{label: 'Voir tous les articles', href: '#'}}>
+          {ARTICLES.slice(0, 7).map((a) => <Card key={a.title} {...a} />)}
+        </Collection>
+      </VStack>
+      <VStack gap={3}>
+        <Heading level={3}>14 articles un par un : plus de dix pages, les points deviennent des numéros</Heading>
+        <Collection layout="carousel" perView={4} indicator="dots" step="item" label="Articles" more={{label: 'Voir tous les articles', href: '#'}}>
           {ARTICLES.map((a) => <Card key={a.title} {...a} />)}
         </Collection>
       </VStack>
       <VStack gap={3}>
-        <Heading level={3}>Swipe, dans une colonne de 8 (3 visibles), numéros sur la colonne de 4</Heading>
+        <Heading level={3}>Swipe, dans une colonne de 8 (3 visibles), avec bouton « voir tout »</Heading>
         <Grid columns={12} gap={6} className="page-grid" align="start">
           <GridSpan columns={8}>
-            <Collection layout="swipe" perView={3} label="Métiers">
+            <Collection layout="swipe" perView={3} label="Métiers" more={{label: 'Tous les métiers', href: '#'}}>
               {[...METIERS, ...METIERS].map((m, i) => <CompareCard key={i} {...m} />)}
             </Collection>
           </GridSpan>

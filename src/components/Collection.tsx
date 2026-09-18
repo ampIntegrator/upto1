@@ -11,6 +11,9 @@
  *                      hidden below 640 px, where you swipe. `step`: a page (the visible items)
  *                      or one item at a time.
  *
+ * `more`: a « see all » button (the blog, the case studies, any link) in the controls, left of
+ * the arrows; in the swipe layout it is shown at every width, alone on the right.
+ *
  * Items per view follow the column width (container queries): `perView` from 800 px
  * (a column of 8 is about 880 px wide), 2 between 520 and 800 px, 1 with a peek below. Equal-height items. No auto-advance,
  * no loop (Astryx rules).
@@ -19,7 +22,7 @@ import {Carousel, type CarouselHandle} from '@astryxdesign/core/Carousel';
 import {VStack} from '@astryxdesign/core/Stack';
 import React, {useEffect, useRef, useState} from 'react';
 
-import {type CarouselIndicator, CarouselControls} from './CarouselControls';
+import {type CarouselIndicator, type CarouselMore, CarouselControls} from './CarouselControls';
 import styles from './Collection.module.css';
 import {useCarouselPages} from './useCarouselPages';
 
@@ -33,6 +36,8 @@ export type CollectionProps = {
   indicator?: CarouselIndicator;
   /** accessible label of the region */
   label?: string;
+  /** « see all » button in the controls */
+  more?: CarouselMore;
   children: React.ReactNode[];
 };
 
@@ -44,7 +49,7 @@ function perViewNow(el: HTMLElement | null, perView: number): number {
   return perView;
 }
 
-export function Collection({layout = 'swipe', perView = 3, step = 'page', arrows = true, indicator = 'segments', label = 'Collection', children}: CollectionProps) {
+export function Collection({layout = 'swipe', perView = 3, step = 'page', arrows = true, indicator = 'segments', label = 'Collection', more, children}: CollectionProps) {
   const handle = useRef<CarouselHandle>(null);
   const root = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState<number>(perView);
@@ -72,11 +77,11 @@ export function Collection({layout = 'swipe', perView = 3, step = 'page', arrows
         ))}
       </Carousel>
       {swipe ? (
-        <VStack className={styles.swipeDots}>
-          <CarouselControls page={page} pages={pages} onChange={go} indicator="dots" arrows={false} />
+        <VStack className={styles.swipeControls} data-more={more ? '' : undefined}>
+          <CarouselControls page={page} pages={pages} onChange={go} indicator="dots" arrows={false} more={more} />
         </VStack>
       ) : (
-        <CarouselControls page={page} pages={pages} onChange={go} indicator={indicator} arrows={arrows} />
+        <CarouselControls page={page} pages={pages} onChange={go} indicator={indicator} arrows={arrows} more={more} />
       )}
     </VStack>
   );
