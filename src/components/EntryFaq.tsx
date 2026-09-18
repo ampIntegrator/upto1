@@ -1,6 +1,7 @@
 /**
  * EntryFaq — the FAQ under a blog post or a case study (mockup 18): a full-width night section,
- * an optional centred title (display-3, tag h2 by default), then an accordion in two columns
+ * an optional centred heading (eyebrow, title in display-3, tag h2 by default; no title = no
+ * heading), then an accordion in two columns
  * from about 900 px, one open at a time, the first one open. The questions take the heading
  * level under the title (h3 under an h2), h3 without a heading title.
  */
@@ -16,6 +17,8 @@ import type {TitleTag} from './title-tags';
 export type FaqItem = {question: string; answer: string};
 
 export type EntryFaqProps = {
+  /** shown with the title only */
+  eyebrow?: string;
   /** optional; a word between <span>…</span> is set in serif */
   title?: string;
   tag?: TitleTag;
@@ -50,13 +53,13 @@ const questionTag = (title: string | undefined, tag: TitleTag): CollapsibleTag =
   return (title && level >= 0 ? HEADINGS[Math.min(level + 1, 5)] : 'h3') as CollapsibleTag;
 };
 
-export function EntryFaq({title, tag = 'h2', items, background = 'night', id = 'faq'}: EntryFaqProps) {
+export function EntryFaq({eyebrow, title, tag = 'h2', items, background = 'night', id = 'faq'}: EntryFaqProps) {
   if (!items.length) return null;
   const qTag = questionTag(title, tag);
   return (
     <Section background={background} spacing="md">
       <Container gap={10}>
-        {title ? <SectionHeading title={title} tag={tag} size="display-3" /> : null}
+        {title ? <SectionHeading eyebrow={eyebrow} title={title} tag={tag} size="display-3" /> : null}
         <CollapsibleGroup type="single" columns={2} defaultValue={`${id}-0`}>
           {items.map((q, i) => (
             <Collapsible key={i} value={`${id}-${i}`} question={q.question} tag={qTag}>

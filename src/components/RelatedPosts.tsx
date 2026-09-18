@@ -1,7 +1,8 @@
 /**
- * RelatedPosts — « Pour continuer sur le sujet » (mockup 19), under a post or a case study: a
- * centred section heading, then the cards side by side (three or four; article or realisation
- * preset, carried by the cards), and a button to the listing page.
+ * RelatedPosts — « Pour continuer sur le sujet » (mockup 19), under a post or a case study: an
+ * optional centred section heading (eyebrow, title in the chosen tag; no title = no heading), then
+ * the cards side by side (three or four; article or realisation preset, carried by the cards), and
+ * a button to the listing page.
  */
 import {Grid, GridSpan} from '@astryxdesign/core/Grid';
 import {HStack} from '@astryxdesign/core/Stack';
@@ -12,22 +13,26 @@ import {Card, type CardProps} from './Card';
 import {Container} from './Container';
 import {Section, type SectionBackground} from './Section';
 import {SectionHeading} from './SectionHeading';
+import type {TitleTag} from './title-tags';
 
 export type RelatedPostsProps = {
+  /** shown with the title only */
   eyebrow?: string;
+  /** optional; a word between <span>…</span> is set in serif */
   title?: string;
+  tag?: TitleTag;
   items: CardProps[];
   more?: {label: string; href: string};
   background?: SectionBackground;
 };
 
-export function RelatedPosts({eyebrow = 'Le blog', title = 'Pour continuer <span>sur le sujet.</span>', items, more, background = 'paper'}: RelatedPostsProps) {
+export function RelatedPosts({eyebrow, title, tag = 'h2', items, more, background = 'paper'}: RelatedPostsProps) {
   if (!items.length) return null;
   const span = items.length >= 4 ? 3 : 4;
   return (
     <Section background={background} spacing="md">
       <Container gap={10}>
-        <SectionHeading eyebrow={eyebrow} title={title} size="display-3" />
+        {title ? <SectionHeading eyebrow={eyebrow} title={title} tag={tag} size="display-3" /> : null}
         <Grid columns={12} gap={6} className="page-grid" align="stretch">
           {items.slice(0, 4).map((card, i) => (
             <GridSpan key={i} columns={span}>

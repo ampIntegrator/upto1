@@ -17,8 +17,8 @@ const ITEMS = [
 export default function EntryFaqShowcase() {
   return (
     <VStack gap={6}>
-      <Text type="body" color="secondary">Sous un article ou une réalisation, avant les contenus liés : section nuit pleine largeur, titre facultatif (commun à tous les articles, balise h2 par défaut), accordéon sur deux colonnes, une question ouverte à la fois, la première ouverte. Les questions prennent le niveau sous le titre.</Text>
-      <EntryFaq title="Questions <span>fréquentes</span>" items={ITEMS} id="faq-demo" />
+      <Text type="body" color="secondary">Sous un article ou une réalisation, avant les contenus liés : section nuit pleine largeur, surtitre et titre facultatifs (communs à tous les articles, balise h2 par défaut ; sans titre, pas d’en-tête), accordéon sur deux colonnes, une question ouverte à la fois, la première ouverte. Les questions prennent le niveau sous le titre.</Text>
+      <EntryFaq eyebrow="FAQ" title="Questions <span>fréquentes</span>" items={ITEMS} id="faq-demo" />
       <Text type="body" color="secondary">Sans titre (comme la maquette 18) :</Text>
       <EntryFaq items={ITEMS.slice(0, 2)} id="faq-demo-2" />
     </VStack>
