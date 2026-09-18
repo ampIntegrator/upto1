@@ -992,17 +992,26 @@ export interface Page {
                                       )[]
                                     | null;
                                   /**
-                                   * Side by side: no more than visible ones. Carousel: as many as wanted.
+                                   * Side by side: no more than visible ones. Carousel: 24 at most; for the rest, the « see all » button.
                                    */
                                   postsLimit?: number | null;
                                   postsCategory?: (number | null) | Category;
                                   postsCta?: string | null;
                                   /**
-                                   * Side by side: no more than visible ones. Carousel: as many as wanted.
+                                   * Side by side: no more than visible ones. Carousel: 24 at most; for the rest, the « see all » button.
                                    */
                                   casesLimit?: number | null;
                                   casesCategory?: (number | null) | CaseCategory;
                                   casesCta?: string | null;
+                                  /**
+                                   * Simple silo button, left of the arrows (in their place on mobile).
+                                   */
+                                  moreLink?: ('none' | 'blog' | 'cases' | 'custom') | null;
+                                  /**
+                                   * Empty: the settings label (« Voir le blog », « Voir toutes les réalisations »).
+                                   */
+                                  moreLabel?: string | null;
+                                  moreHref?: string | null;
                                   id?: string | null;
                                   blockName?: string | null;
                                   blockType: 'collection';
@@ -1888,17 +1897,26 @@ export interface Post {
                                       )[]
                                     | null;
                                   /**
-                                   * Side by side: no more than visible ones. Carousel: as many as wanted.
+                                   * Side by side: no more than visible ones. Carousel: 24 at most; for the rest, the « see all » button.
                                    */
                                   postsLimit?: number | null;
                                   postsCategory?: (number | null) | Category;
                                   postsCta?: string | null;
                                   /**
-                                   * Side by side: no more than visible ones. Carousel: as many as wanted.
+                                   * Side by side: no more than visible ones. Carousel: 24 at most; for the rest, the « see all » button.
                                    */
                                   casesLimit?: number | null;
                                   casesCategory?: (number | null) | CaseCategory;
                                   casesCta?: string | null;
+                                  /**
+                                   * Simple silo button, left of the arrows (in their place on mobile).
+                                   */
+                                  moreLink?: ('none' | 'blog' | 'cases' | 'custom') | null;
+                                  /**
+                                   * Empty: the settings label (« Voir le blog », « Voir toutes les réalisations »).
+                                   */
+                                  moreLabel?: string | null;
+                                  moreHref?: string | null;
                                   id?: string | null;
                                   blockName?: string | null;
                                   blockType: 'collection';
@@ -2797,17 +2815,26 @@ export interface CaseStudy {
                                       )[]
                                     | null;
                                   /**
-                                   * Side by side: no more than visible ones. Carousel: as many as wanted.
+                                   * Side by side: no more than visible ones. Carousel: 24 at most; for the rest, the « see all » button.
                                    */
                                   postsLimit?: number | null;
                                   postsCategory?: (number | null) | Category;
                                   postsCta?: string | null;
                                   /**
-                                   * Side by side: no more than visible ones. Carousel: as many as wanted.
+                                   * Side by side: no more than visible ones. Carousel: 24 at most; for the rest, the « see all » button.
                                    */
                                   casesLimit?: number | null;
                                   casesCategory?: (number | null) | CaseCategory;
                                   casesCta?: string | null;
+                                  /**
+                                   * Simple silo button, left of the arrows (in their place on mobile).
+                                   */
+                                  moreLink?: ('none' | 'blog' | 'cases' | 'custom') | null;
+                                  /**
+                                   * Empty: the settings label (« Voir le blog », « Voir toutes les réalisations »).
+                                   */
+                                  moreLabel?: string | null;
+                                  moreHref?: string | null;
                                   id?: string | null;
                                   blockName?: string | null;
                                   blockType: 'collection';
@@ -3667,17 +3694,26 @@ export interface Section {
                             )[]
                           | null;
                         /**
-                         * Side by side: no more than visible ones. Carousel: as many as wanted.
+                         * Side by side: no more than visible ones. Carousel: 24 at most; for the rest, the « see all » button.
                          */
                         postsLimit?: number | null;
                         postsCategory?: (number | null) | Category;
                         postsCta?: string | null;
                         /**
-                         * Side by side: no more than visible ones. Carousel: as many as wanted.
+                         * Side by side: no more than visible ones. Carousel: 24 at most; for the rest, the « see all » button.
                          */
                         casesLimit?: number | null;
                         casesCategory?: (number | null) | CaseCategory;
                         casesCta?: string | null;
+                        /**
+                         * Simple silo button, left of the arrows (in their place on mobile).
+                         */
+                        moreLink?: ('none' | 'blog' | 'cases' | 'custom') | null;
+                        /**
+                         * Empty: the settings label (« Voir le blog », « Voir toutes les réalisations »).
+                         */
+                        moreLabel?: string | null;
+                        moreHref?: string | null;
                         id?: string | null;
                         blockName?: string | null;
                         blockType: 'collection';
@@ -4563,6 +4599,9 @@ export interface PagesSelect<T extends boolean = true> {
                                       casesLimit?: T;
                                       casesCategory?: T;
                                       casesCta?: T;
+                                      moreLink?: T;
+                                      moreLabel?: T;
+                                      moreHref?: T;
                                       id?: T;
                                       blockName?: T;
                                     };
@@ -5269,6 +5308,9 @@ export interface SectionsSelect<T extends boolean = true> {
                           casesLimit?: T;
                           casesCategory?: T;
                           casesCta?: T;
+                          moreLink?: T;
+                          moreLabel?: T;
+                          moreHref?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -5967,6 +6009,9 @@ export interface PostsSelect<T extends boolean = true> {
                                       casesLimit?: T;
                                       casesCategory?: T;
                                       casesCta?: T;
+                                      moreLink?: T;
+                                      moreLabel?: T;
+                                      moreHref?: T;
                                       id?: T;
                                       blockName?: T;
                                     };
@@ -6733,6 +6778,9 @@ export interface CaseStudiesSelect<T extends boolean = true> {
                                       casesLimit?: T;
                                       casesCategory?: T;
                                       casesCta?: T;
+                                      moreLink?: T;
+                                      moreLabel?: T;
+                                      moreHref?: T;
                                       id?: T;
                                       blockName?: T;
                                     };

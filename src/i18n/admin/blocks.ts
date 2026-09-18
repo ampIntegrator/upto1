@@ -262,7 +262,7 @@ export const collectionBlockText = texts({
     en: 'At least two items, all of the same type: testimonials, cards, compare cards, tiers, post or case cards. Side by side: no more items than visible ones. Carousel: as many as wanted.',
   },
   postsLimit: {fr: 'Nombre d’articles', en: 'Number of posts'},
-  postsLimitDescription: {fr: 'Côte à côte : pas plus que de visibles. Carrousel : autant que voulu.', en: 'Side by side: no more than visible ones. Carousel: as many as wanted.'},
+  postsLimitDescription: {fr: 'Côte à côte : pas plus que de visibles. Carrousel : 24 au plus ; pour le reste, le bouton « voir tout ».', en: 'Side by side: no more than visible ones. Carousel: 24 at most; for the rest, the « see all » button.'},
   postsCategory: {fr: 'Catégorie (vide : toutes)', en: 'Category (empty: all)'},
   postsCta: {fr: 'Libellé du lien des cartes', en: 'Card link label'},
   casesLimit: {fr: 'Nombre de réalisations', en: 'Number of case studies'},
@@ -276,6 +276,20 @@ export const collectionBlockText = texts({
     en: ({count, perView}: {count: number; perView: number}) => `${count} items for ${perView} per view: side by side, no more items than visible ones. Beyond that, choose the carousel.`,
   },
   tooFew: {fr: 'Deux éléments au moins.', en: 'At least two items.'},
+  entriesRange: {
+    fr: ({max}: {max: number}) => `De 2 à ${max} : au-delà, le bouton « voir tout » mène à la liste complète.`,
+    en: ({max}: {max: number}) => `From 2 to ${max}: beyond, the « see all » button leads to the full list.`,
+  },
+  more: {fr: 'Bouton « voir tout »', en: '« See all » button'},
+  moreNone: {fr: 'Aucun', en: 'None'},
+  moreBlog: {fr: 'Vers le blog', en: 'To the blog'},
+  moreCases: {fr: 'Vers les réalisations', en: 'To the case studies'},
+  moreCustom: {fr: 'Lien libre', en: 'Custom link'},
+  moreDescription: {fr: 'Bouton simple, couleur silo, à gauche des flèches (à leur place sur mobile).', en: 'Simple silo button, left of the arrows (in their place on mobile).'},
+  moreLabel: {fr: 'Libellé du bouton', en: 'Button label'},
+  moreLabelDescription: {fr: 'Vide : le libellé des réglages (« Voir le blog », « Voir toutes les réalisations »).', en: 'Empty: the settings label (« Voir le blog », « Voir toutes les réalisations »).'},
+  moreHref: {fr: 'Lien du bouton', en: 'Button link'},
+  moreCustomRequired: {fr: 'Un lien libre demande un libellé et un lien.', en: 'A custom link needs a label and a link.'},
 });
 
 export const textBoxBlockText = texts({
