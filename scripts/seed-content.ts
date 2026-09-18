@@ -3,7 +3,7 @@
  * eight, with lorem ipsum, to check the listing pages, the cards, the carousels and the related entries.
  * Every entry gets an Unsplash cover (imported once into the media library, found by file name
  * afterwards) and a content of ten or so elements (headings, paragraphs, lists, quote, image,
- * table and the figures). Re-runnable: entries are found by slug and updated, missing ones are
+ * table and the figures), and one out of two a FAQ underneath. Re-runnable: entries are found by slug and updated, missing ones are
  * created. Posts that already exist keep their title, excerpt, category and date; only an empty
  * cover, author or content is filled. The settings are never changed.
  */
@@ -103,6 +103,9 @@ const content = (n: number, img: number[], people: {photo: number; name: string;
   };
 };
 
+/** a FAQ under one entry out of two (the « under the entry » tab) */
+const faq = (n: number) => (n % 2 === 0 ? {show: true, items: ['Lorem ipsum dolor sit amet ?', 'Consectetur adipiscing elit ?', 'Sed do eiusmod tempor ?', 'Ut enim ad minim veniam ?'].map((question, i) => ({question, answer: [L1, L2, L3][(n + i) % 3]}))} : {show: false});
+
 const POSTS = [
   {slug: 'renover-sans-mauvaise-surprise', title: 'Rénover <span>sans mauvaise surprise</span> : les dix points à vérifier', excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.', category: 'chantier', date: '2026-08-05'},
   {slug: 'bibliotheque-de-prix-a-jour', title: 'Tenir sa bibliothèque de prix <span>à jour</span>', excerpt: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.', category: 'chiffrage', date: '2026-07-29'},
@@ -194,6 +197,7 @@ async function main() {
     if (!post.cover) data.cover = covers[n % covers.length];
     if (!post.author) data.author = authors[n % authors.length].id;
     if (empty) data.content = content(n, covers, people[n % people.length]);
+    if (!post.faq?.show && n % 2 === 0) data.faq = faq(n);
     if (Object.keys(data).length) {
       await payload.update({collection: 'posts', id: post.id, data: data as never});
       log(`article complété : ${post.slug}`);
@@ -205,6 +209,7 @@ async function main() {
       title: p.title, slug: p.slug, excerpt: p.excerpt, category: categoryId(p.category), publishedAt: new Date(p.date).toISOString(),
       cover: covers[n % covers.length], coverCaption: 'Lorem ipsum dolor sit amet.', author: authors[n % authors.length].id,
       content: content(n, covers, people[n % people.length]),
+      faq: faq(n),
     };
     const found = (await payload.find({collection: 'posts', where: {slug: {equals: p.slug}}, limit: 1})).docs[0];
     if (found) await payload.update({collection: 'posts', id: found.id, data: data as never});
@@ -224,6 +229,7 @@ async function main() {
       title: c.title, slug: c.slug, category: caseCategory[c.category], publishedAt: new Date(c.date).toISOString(),
       excerpt: `${L1} ${L2.split('.')[0]}.`, cover: covers[(n * 2) % covers.length],
       content: content(n, covers, people[n % people.length]),
+      faq: faq(n),
       sheet: {
         client: c.client, clientUrl: 'https://example.com', location: c.location, deployment: c.deployment,
         modules: 'Chiffrage instantané, métré automatique, devis client',

@@ -28,14 +28,14 @@ async function main() {
     if (!ok) failures += 1;
   };
   const settings = await payload.findGlobal({slug: 'portfolio', depth: 0});
-  const previous = {slug: settings.slug, title: settings.title, lead: settings.lead ?? null, cta: {label: settings.cta?.label ?? null, href: settings.cta?.href ?? null}};
+  const previous = {slug: settings.slug, title: settings.title, lead: settings.lead ?? null, cta: {label: settings.cta?.label ?? null, href: settings.cta?.href ?? null}, faqTitle: settings.faqTitle ?? null};
   const image = (await payload.find({collection: 'media', limit: 1, where: {mimeType: {contains: 'image'}}})).docs[0];
   const created: {collection: 'case-studies' | 'pages' | 'case-categories'; id: number}[] = [];
   try {
     const category = await payload.create({collection: 'case-categories', data: {title: 'Catégorie réalisation smoke', slug: `zz-smoke-case-cat-${stamp}`}});
     created.push({collection: 'case-categories', id: category.id});
     const page = {slug: `zz-smoke-cases-${stamp}`};
-    await payload.updateGlobal({slug: 'portfolio', data: {slug: page.slug, title: 'Réalisations <span>smoke</span>', lead: 'Chapô smoke des réalisations.', cta: {label: 'Bouton global smoke', href: '/contact'}}});
+    await payload.updateGlobal({slug: 'portfolio', data: {slug: page.slug, title: 'Réalisations <span>smoke</span>', lead: 'Chapô smoke des réalisations.', cta: {label: 'Bouton global smoke', href: '/contact'}, faqTitle: 'FAQ réalisations smoke'}});
 
     const content = {
       root: el('root', [
@@ -49,18 +49,18 @@ async function main() {
     };
     const sheet = {
       client: 'Client Smoke SA', clientUrl: 'https://example.com',
-      location: 'Nantes smoke', deployment: 'Six semaines smoke', deploymentLabel: 'Durée smoke', modules: 'Modules texte smoke',
+      location: 'Nantes smoke', deployment: 'Six semaines smoke', customDefaults: true, deploymentLabel: 'Durée smoke', modules: 'Modules texte smoke',
       results: [{value: '−42 %', label: 'Mini chiffre smoke'}, {value: '×3', label: 'Second mini chiffre'}],
       cardResult: 'Résultat carte smoke',
     };
     const main = await payload.create({
       collection: 'case-studies',
-      data: {title: 'Réalisation <span>smoke</span>', slug: `zz-smoke-case-${stamp}`, excerpt: 'Chapô smoke de la réalisation.', cover: image?.id, category: category.id, publishedAt: new Date().toISOString(), content, sheet} as never,
+      data: {faq: {show: true, items: [{question: 'Question réalisation smoke', answer: 'Réponse réalisation smoke.'}]}, title: 'Réalisation <span>smoke</span>', slug: `zz-smoke-case-${stamp}`, excerpt: 'Chapô smoke de la réalisation.', cover: image?.id, category: category.id, publishedAt: new Date().toISOString(), content, sheet} as never,
     });
     created.push({collection: 'case-studies', id: main.id});
     const other = await payload.create({
       collection: 'case-studies',
-      data: {title: 'Autre réalisation smoke', slug: `zz-smoke-case-b-${stamp}`, cover: image?.id, category: category.id, publishedAt: new Date(Date.now() - 86400000).toISOString(), sheet: {client: 'Autre client smoke', location: 'Lyon', results: [{value: '+18 pts', label: 'Marge'}], cta: {label: 'Bouton local smoke', href: '/demo'}}} as never,
+      data: {title: 'Autre réalisation smoke', slug: `zz-smoke-case-b-${stamp}`, cover: image?.id, category: category.id, publishedAt: new Date(Date.now() - 86400000).toISOString(), sheet: {client: 'Autre client smoke', location: 'Lyon', results: [{value: '+18 pts', label: 'Marge'}], customDefaults: true, cta: {label: 'Bouton local smoke', href: '/demo'}}, related: {mode: 'hidden'}} as never,
     });
     created.push({collection: 'case-studies', id: other.id});
     log(`created: case studies at /${page.slug}, case studies ${main.id} and ${other.id}, category ${category.id}`);
@@ -82,6 +82,11 @@ async function main() {
 
     const otherPage = await get(`/${page.slug}/${other.slug}`);
     check(otherPage.status === 200 && otherPage.html.includes('Bouton local smoke') && !otherPage.html.includes('Bouton global smoke'), 'a case study button replaces the global one');
+    check(!otherPage.html.includes('D’autres chantiers') && !otherPage.html.includes('FAQ réalisations smoke'), 'related hidden and no FAQ: neither shown');
+    for (const m of ['FAQ réalisations smoke', 'Question réalisation smoke', 'D’autres chantiers', `/${page.slug}/${other.slug}`]) check(casePage.html.includes(m), `case study shows « ${m} » (FAQ, related)`);
+    await payload.update({collection: 'case-studies', id: other.id, data: {sheet: {customDefaults: false}} as never});
+    const unticked = await get(`/${page.slug}/${other.slug}`);
+    check(unticked.html.includes('Bouton global smoke') && !unticked.html.includes('Bouton local smoke'), '« change the default values » unticked: the global button is back');
 
     const archive = await get(`/${page.slug}/categorie/${category.slug}`);
     check(archive.status === 200, `category archive → ${archive.status}`);

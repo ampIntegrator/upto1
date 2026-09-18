@@ -2,16 +2,22 @@ import type {Field, Tab} from 'payload';
 
 import type {Text} from '@/i18n/admin/languages';
 import {listingSlugField} from './listingSlug';
+import {tagField} from './tagField';
 
 /**
  * The fields of a listing settings global (Blog › Réglages du blog, Réalisations › Réglages des
  * réalisations): a « page » tab (address, eyebrow, h1 title, lead, tone, entries per page)
- * and a « labels » tab (a `labels` group of localized texts, plus the listing's own fields).
+ * a « labels » tab (a `labels` group of localized texts, plus the listing's own fields) and an
+ * « under the entries » tab (FAQ title and tag, number of related entries).
  * Read on the site by `listingConfig` (src/lib/listings.ts).
  * A factory: every call returns fresh field objects (Payload mutates configs while sanitising).
  */
 export type ListingSettingsText = {
-  tabs: {page: Text; labels: Text};
+  tabs: {page: Text; labels: Text; below: Text};
+  belowDescription: Text;
+  faqTitle: Text;
+  faqTitleDescription: Text;
+  relatedCount: Text;
   slug: Text;
   eyebrow: Text;
   title: Text;
@@ -62,5 +68,20 @@ export function listingSettingsFields(o: {self: 'blog' | 'portfolio'; t: Listing
       ...(o.extraLabelFields?.() ?? []),
     ],
   };
-  return [{type: 'tabs', tabs: [pageTab, labelsTab]}];
+  const belowTab: Tab = {
+    label: t.tabs.below,
+    description: t.belowDescription,
+    fields: [
+      {type: 'row', fields: [
+        {name: 'faqTitle', type: 'text', label: t.faqTitle, localized: true, admin: {width: '66%', description: t.faqTitleDescription}},
+        tagField({name: 'faqTag', defaultValue: 'h2', width: '34%'}),
+      ]},
+      {
+        name: 'relatedCount', type: 'radio', label: t.relatedCount, defaultValue: '3',
+        options: [{label: '3', value: '3'}, {label: '4', value: '4'}],
+        admin: {layout: 'horizontal'},
+      },
+    ],
+  };
+  return [{type: 'tabs', tabs: [pageTab, labelsTab, belowTab]}];
 }

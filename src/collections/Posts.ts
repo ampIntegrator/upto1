@@ -1,9 +1,10 @@
 import type {CollectionConfig} from 'payload';
 
 import {postEditor} from '@/fields/blocks/prose';
+import {entryBelowTab} from '@/fields/entryBelow';
+import {entryUrl} from '@/fields/entryUrl';
 import {slugField} from '@/fields/shared';
 import {collectionsText as ct} from '@/i18n/admin/collections';
-import {sections} from '@/sections.config';
 
 /**
  * Blog posts (mockup 18): title, cover and its caption, lead, prose (post editor with inserted
@@ -15,11 +16,13 @@ export const Posts: CollectionConfig = {
   labels: {singular: ct.posts.singular, plural: ct.posts.plural},
   admin: {
     // « Vue » menu next to the Live Preview eye (side by side, top / bottom, dialog)
-    components: {edit: {beforeDocumentControls: ['@/fields/PreviewLayoutMenu#PreviewLayoutMenu']}},
-    useAsTitle: 'title', group: ct.groups.blog, defaultColumns: ['title', 'category', 'author', 'publishedAt']},
+    components: {edit: {beforeDocumentControls: ['@/fields/PreviewLayoutMenu#PreviewLayoutMenu'], PreviewButton: '@/fields/ViewOnSiteButton#ViewOnSiteButton'}},
+    useAsTitle: 'title', group: ct.groups.blog, defaultColumns: ['title', 'category', 'author', 'publishedAt'],
+    // button that opens the post on the site in a new tab, under the blog's address
+    preview: (doc, {req}) => entryUrl(req, 'blog', doc.slug),
+  },
   access: {read: () => true},
   defaultSort: '-publishedAt',
-  hooks: {beforeChange: sections.beforeChange},
   // tabs first: the SEO plugin appends its tab after them; slug, author, category and date in the sidebar
   fields: [
     {
@@ -35,11 +38,7 @@ export const Posts: CollectionConfig = {
             {name: 'content', type: 'richText', label: ct.posts.fields.content, localized: true, editor: postEditor, admin: {description: ct.posts.fields.contentDescription}},
           ],
         },
-        {
-          label: ct.posts.tabs.sections,
-          description: ct.posts.tabs.sectionsDescription,
-          fields: [sections.field],
-        },
+        entryBelowTab({collection: 'posts', label: ct.posts.tabs.below, description: ct.posts.tabs.belowDescription}),
       ],
     },
     slugField,

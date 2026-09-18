@@ -1,6 +1,28 @@
 import {texts} from './languages';
 
 /** Admin texts of the collections (Categories, Case studies, Media, Pages, Posts, Sections, Users). */
+/** Admin texts of the « under the entry » tab of posts and case studies (FAQ, related entries). */
+export const entryBelowText = texts({
+  faq: {fr: 'FAQ', en: 'FAQ'},
+  faqShow: {fr: 'Afficher une FAQ', en: 'Show a FAQ'},
+  faqItems: {fr: 'Questions', en: 'Questions'},
+  faqItem: {fr: 'Question', en: 'Question'},
+  faqEmpty: {fr: 'Ajoutez au moins une question, ou décochez la FAQ.', en: 'Add at least one question, or untick the FAQ.'},
+  question: {fr: 'Question', en: 'Question'},
+  answer: {fr: 'Réponse', en: 'Answer'},
+  answerDescription: {fr: 'Une ligne vide = un nouveau paragraphe.', en: 'A blank line = a new paragraph.'},
+  relatedPosts: {fr: 'Articles liés', en: 'Related posts'},
+  relatedCases: {fr: 'Réalisations liées', en: 'Related case studies'},
+  relatedAuto: {fr: 'Automatiques (même catégorie, puis les plus récents)', en: 'Automatic (same category, then the newest)'},
+  relatedManual: {fr: 'Choisis', en: 'Chosen'},
+  relatedHidden: {fr: 'Masqués', en: 'Hidden'},
+  relatedAutoCases: {fr: 'Automatiques (même catégorie, puis les plus récentes)', en: 'Automatic (same category, then the newest)'},
+  relatedManualCases: {fr: 'Choisies', en: 'Chosen'},
+  relatedHiddenCases: {fr: 'Masquées', en: 'Hidden'},
+  relatedItems: {fr: 'À afficher', en: 'To show'},
+  relatedItemsDescription: {fr: '3 ou 4 selon les réglages ; s’il en manque, les automatiques complètent.', en: '3 or 4 depending on the settings; if some are missing, automatic ones fill in.'},
+});
+
 export const collectionsText = texts({
   groups: {
     blog: {fr: 'Blog', en: 'Blog'},
@@ -22,11 +44,11 @@ export const collectionsText = texts({
     singular: {fr: 'Réalisation', en: 'Case study'},
     plural: {fr: 'Réalisations', en: 'Case studies'},
     tabs: {
-      caseStudy: {fr: 'Réalisation', en: 'Case study'},
-      sheet: {fr: 'Fiche projet', en: 'Fact sheet'},
-      sheetDescription: {fr: 'La colonne de gauche de la réalisation : lignes de texte, deux chiffres, bouton. Un libellé laissé vide reprend celui des réglages des réalisations.', en: 'The left column of the case study: text rows, two figures, a button. An empty label uses the one of the case studies settings.'},
-      sections: {fr: 'Sections après la réalisation', en: 'Sections after the case study'},
-      sectionsDescription: {fr: 'Facultatif : une FAQ, un appel à l’action ou tout contenu du constructeur, affiché sous la réalisation et avant les réalisations liées.', en: 'Optional: a FAQ, a call to action or any builder content, shown under the case study and before the related case studies.'},
+      caseStudy: {fr: 'Contenu', en: 'Content'},
+      sheet: {fr: 'Colonne latérale', en: 'Side column'},
+      sheetDescription: {fr: 'À gauche du récit sur ordinateur, au-dessus sur mobile : client, lignes d’information, deux chiffres et un bouton.', en: 'Left of the story on desktop, above it on mobile: client, information rows, two figures and a button.'},
+      below: {fr: 'Sous la réalisation', en: 'Under the case study'},
+      belowDescription: {fr: 'Une FAQ et les réalisations liées, affichées après le récit. Leur titre et le nombre de réalisations liées se règlent dans Réglages des réalisations › Sous les réalisations.', en: 'A FAQ and the related case studies, shown after the story. Their title and the number of related case studies are set in Case studies settings › Under the case studies.'},
     },
     fields: {
       title: {fr: 'Titre', en: 'Title'},
@@ -43,17 +65,22 @@ export const collectionsText = texts({
       deployment: {fr: 'Déploiement', en: 'Deployment'},
       deploymentPlaceholder: {fr: '6 semaines · mars 2025', en: '6 weeks · March 2025'},
       modules: {fr: 'Modules', en: 'Modules'},
-      labelOverride: {fr: 'Libellé (facultatif)', en: 'Label (optional)'},
-      results: {fr: 'Chiffres de la fiche', en: 'Fact sheet figures'},
-      resultsDescription: {fr: 'Deux au plus, sous les lignes de la fiche.', en: 'Two at most, under the fact sheet rows.'},
+      customDefaults: {fr: 'Modifier les valeurs par défaut', en: 'Change the default values'},
+      customDefaultsDescription: {fr: 'Les libellés des lignes et le bouton viennent de Réglages des réalisations. Cochez pour les remplacer sur cette réalisation seulement ; décochée, la case garde vos valeurs mais le site ne les utilise plus.', en: 'The row labels and the button come from the Case studies settings. Tick to replace them on this case study only; unticked, your values are kept but the site no longer uses them.'},
+      locationLabel: {fr: 'Libellé de la ligne Localisation', en: 'Location row label'},
+      deploymentLabel: {fr: 'Libellé de la ligne Déploiement', en: 'Deployment row label'},
+      modulesLabel: {fr: 'Libellé de la ligne Modules', en: 'Modules row label'},
+      labelEmpty: {fr: 'Vide : celui des réglages.', en: 'Empty: the settings one.'},
+      results: {fr: 'Chiffres', en: 'Figures'},
+      resultsDescription: {fr: 'Deux au plus, sous les lignes d’information.', en: 'Two at most, under the information rows.'},
       resultSingular: {fr: 'Chiffre', en: 'Figure'},
       resultPlural: {fr: 'Chiffres', en: 'Figures'},
       resultValue: {fr: 'Valeur (« −68 % »)', en: 'Value (« −68 % »)'},
       resultLabel: {fr: 'Libellé (« Temps de chiffrage »)', en: 'Label (« Quoting time »)'},
       cardResult: {fr: 'Résultat de la carte', en: 'Card result'},
       cardResultDescription: {fr: 'Court, à droite de la catégorie sur les cartes (« −68 % délai »). Vide : la valeur du premier chiffre.', en: 'Short, right of the category on cards (« −68 % lead time »). Empty: the first figure’s value.'},
-      cta: {fr: 'Bouton de la fiche', en: 'Fact sheet button'},
-      ctaDescription: {fr: 'Vide : le bouton des réglages des réalisations.', en: 'Empty: the button of the case studies settings.'},
+      cta: {fr: 'Bouton', en: 'Button'},
+      ctaDescription: {fr: 'Vide : le bouton des réglages des réalisations. Sans lien, pas de bouton.', en: 'Empty: the button of the case studies settings. Without a link, no button.'},
       ctaLabel: {fr: 'Texte', en: 'Label'},
       ctaHref: {fr: 'Lien', en: 'Link'},
     },
@@ -97,9 +124,9 @@ export const collectionsText = texts({
     singular: {fr: 'Article', en: 'Post'},
     plural: {fr: 'Articles', en: 'Posts'},
     tabs: {
-      post: {fr: 'Article', en: 'Post'},
-      sections: {fr: 'Sections après l’article', en: 'Sections after the post'},
-      sectionsDescription: {fr: 'Facultatif : une FAQ, un appel à l’action ou tout contenu du constructeur, affiché sous l’article et avant les articles liés.', en: 'Optional: a FAQ, a call to action or any builder content, shown under the post and before the related posts.'},
+      post: {fr: 'Contenu', en: 'Content'},
+      below: {fr: 'Sous l’article', en: 'Under the post'},
+      belowDescription: {fr: 'Une FAQ et les articles liés, affichés après l’article. Leur titre et le nombre d’articles liés se règlent dans Blog › Réglages du blog › Sous les articles.', en: 'A FAQ and the related posts, shown after the post. Their title and the number of related posts are set in Blog › Blog settings › Under the posts.'},
     },
     fields: {
       title: {fr: 'Titre', en: 'Title'},

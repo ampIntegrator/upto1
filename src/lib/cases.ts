@@ -33,15 +33,17 @@ export function caseSheet(c: CaseStudy, cases: CasesConfig): CaseSheetProps {
   const s = c.sheet;
   const l = cases.labels;
   const category = categoryOf(c);
-  const ctaLabel = s?.cta?.label;
-  const ctaHref = s?.cta?.href;
+  // the case study's own labels and button count only when « change the default values » is ticked
+  const own = s?.customDefaults ? s : null;
+  const ctaLabel = own?.cta?.label;
+  const ctaHref = own?.cta?.href;
   return {
     rows: [
       {label: l.client, value: s?.client ?? '', href: s?.clientUrl || undefined, hrefLabel: s?.client ? `${l.clientLink} · ${s.client}` : undefined},
       {label: l.category, value: category?.title ?? ''},
-      {label: s?.locationLabel || l.location, value: s?.location ?? ''},
-      {label: s?.deploymentLabel || l.deployment, value: s?.deployment ?? ''},
-      {label: s?.modulesLabel || l.modules, value: s?.modules ?? ''},
+      {label: own?.locationLabel || l.location, value: s?.location ?? ''},
+      {label: own?.deploymentLabel || l.deployment, value: s?.deployment ?? ''},
+      {label: own?.modulesLabel || l.modules, value: s?.modules ?? ''},
     ],
     results: (s?.results ?? []).slice(0, 2).map((r) => ({value: r.value, label: r.label})),
     cta: ctaLabel && ctaHref ? {label: ctaLabel, href: ctaHref} : cases.cta,

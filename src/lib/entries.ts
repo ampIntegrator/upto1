@@ -40,15 +40,31 @@ export async function loadEntryBySlug<C extends EntryCollection>(collection: C, 
   return (res.docs[0] as Entries[C] | undefined) ?? null;
 }
 
-/** Entries of the same category (newest first), then the newest others if the category is short. */
+/**
+ * The related entries under an entry (its « under the entry » tab): none when hidden; the chosen
+ * ones in their order when chosen, completed if short; otherwise entries of the same category
+ * (newest first), then the newest others if the category is short.
+ */
 export async function loadRelatedEntries<C extends EntryCollection>(collection: C, locale: Locale, entry: Entries[C], count = 3): Promise<Entries[C][]> {
+  const related = entry.related;
+  if (related?.mode === 'hidden') return [];
   const payload = await getPayload({config});
+  const chosenIds = related?.mode === 'manual' ? (related.items ?? []).map((i) => (typeof i === 'object' ? i.id : i)).filter((id) => id !== entry.id).slice(0, count) : [];
+  const chosen = chosenIds.length ? ((await payload.find({collection, locale, depth: 1, limit: chosenIds.length, where: {id: {in: chosenIds}}})).docs as Entries[C][]) : [];
+  chosen.sort((a, b) => chosenIds.indexOf(a.id) - chosenIds.indexOf(b.id));
+  if (chosen.length >= count) return chosen;
+  const exclude = [entry.id, ...chosen.map((d) => d.id)];
   const category = typeof entry.category === 'object' && entry.category ? entry.category.id : entry.category;
-  const same = await payload.find({collection, locale, depth: 1, limit: count, sort: '-publishedAt', where: {and: [{id: {not_equals: entry.id}}, {category: {equals: category}}]}});
-  if (same.docs.length >= count) return same.docs as Entries[C][];
-  const others = await payload.find({collection, locale, depth: 1, limit: count - same.docs.length, sort: '-publishedAt', where: {and: [{id: {not_equals: entry.id}}, {id: {not_in: same.docs.map((d) => d.id)}}]}});
-  return [...same.docs, ...others.docs] as Entries[C][];
+  const same = await payload.find({collection, locale, depth: 1, limit: count - chosen.length, sort: '-publishedAt', where: {and: [{id: {not_in: exclude}}, {category: {equals: category}}]}});
+  const found = [...chosen, ...(same.docs as Entries[C][])];
+  if (found.length >= count) return found;
+  const others = await payload.find({collection, locale, depth: 1, limit: count - found.length, sort: '-publishedAt', where: {id: {not_in: [...exclude, ...same.docs.map((d) => d.id)]}}});
+  return [...found, ...(others.docs as Entries[C][])];
 }
+
+/** The FAQ under an entry, when ticked and filled. */
+export const entryFaq = (entry: Post | CaseStudy): {question: string; answer: string}[] =>
+  entry.faq?.show ? (entry.faq.items ?? []).filter((i) => i.question && i.answer).map((i) => ({question: i.question, answer: i.answer})) : [];
 
 /** The latest entries (collection blocks fed by a listing), optionally of one category. */
 export async function loadLatestEntries<C extends EntryCollection>(collection: C, locale: Locale, q: {limit: number; category?: number}): Promise<Entries[C][]> {

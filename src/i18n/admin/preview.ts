@@ -8,4 +8,5 @@ export const previewText = texts({
   horizontal: {fr: 'Dessus / dessous', en: 'Top / bottom'},
   dialog: {fr: 'Fenêtre', en: 'Dialog'},
   close: {fr: 'Fermer l’aperçu', en: 'Close the preview'},
+  viewOnSite: {fr: 'Voir la page', en: 'View page'},
 });

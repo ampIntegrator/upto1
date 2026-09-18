@@ -39,13 +39,30 @@ the blog's address (`src/lib/listings.ts`).
 
 `posts`: title (a `<span>` accent is kept for the h1 only), cover and caption, lead (« chapô »,
 also the cards’ excerpt and the default SEO description), content, author (`authors`: name, role,
-photo), category, date, and an optional « Sections après l’article » tab (the section builder).
+photo), category, date. Tabs « Contenu », « Sous l’article » and SEO; a « Voir la page » button
+(`ViewOnSiteButton`, replacing Payload's preview icon on pages, posts and case studies) opens the
+post on the site in a new tab (`src/fields/entryUrl.ts`: under the listing's address).
+
+## Under the post: FAQ and related posts, nothing else
+
+Decided with Nicolas on 18 September 2026 (mockup 18): no section builder under a post (removed
+with its 152 tables, migration `remove_entry_sections`), only two fixed elements, in this order.
+The « Sous l’article » tab (`src/fields/entryBelow.ts`, shared with the case studies):
+
+- **FAQ**: « Afficher une FAQ » (unticked by default), then questions and answers (a blank line
+  in an answer = a new paragraph). Rendered by `EntryFaq`: night section, accordion in two columns,
+  first question open. Its **title and tag are shared**, in Blog › Réglages du blog › « Sous les
+  articles » (`faqTitle`, empty = no title; `faqTag`, h2 by default); the questions take the next
+  heading level (h3 under an h2).
+- **Articles liés**: automatic (same category, then the newest; the default), chosen (in their
+  order, completed by automatic ones if short) or hidden. The count, **3 or 4**, is shared
+  (`relatedCount`, same tab of the settings); eyebrow and title stay in the Labels tab.
+  `loadRelatedEntries` in `src/lib/entries.ts`.
 
 The page: breadcrumb, `PostHeader` (category chip, title, lead, author with a square avatar, date,
 16:7 cover), `PostLayout` with `PostToc` (the h2–h4 of the content through the Astryx Outline,
-sticky 30 px under the collapsed header, collapsible below 1024 px) and the prose, the optional
-builder sections, then `RelatedPosts` (three posts of the same category, completed with the
-newest ones).
+sticky 30 px under the collapsed header, collapsible below 1024 px) and the prose, then `EntryFaq`
+and `RelatedPosts` (see above).
 
 ## The content: prose in Lexical, figures as blocks
 
@@ -91,7 +108,8 @@ links, lists, tables) and `tabsEditor` (the same without tables: tabs, key point
 
 - `pnpm smoke:blog` (dev server running): throwaway category, author, post (every prose element and
   figure) and a throwaway blog address for the test, then everything is deleted and the Blog
-  settings restored. Checks the blog page, the post, the category archive and a 404.
+  settings restored. Checks the blog page, the post (with its FAQ under the shared title, h3
+  questions, 4 related posts; then FAQ unticked and related hidden), the category archive and a 404.
   `SMOKE_SHOTS=<dir>` also saves captures.
 - `pnpm smoke:sections` covers the section heading and the figures in columns.
 - `pnpm seed:content` fills the blog to twenty posts (twelve of them lorem ipsum down to the
