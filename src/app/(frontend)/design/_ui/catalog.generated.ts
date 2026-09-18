@@ -859,6 +859,15 @@ export const CATALOG: CatalogCategory[] = [
         "doc": null
       },
       {
+        "name": "EntryFaq",
+        "label": "Entry Faq",
+        "slug": "entry-faq",
+        "href": "/design/composants/entry-faq",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
         "name": "RelatedPosts",
         "label": "Related Posts",
         "slug": "related-posts",

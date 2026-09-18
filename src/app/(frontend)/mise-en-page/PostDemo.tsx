@@ -36,7 +36,7 @@ export function PostDemo() {
       <PostLayout sidebar={<PostToc items={richTextHeadings(POST_DOC)} />}>
         <RichText content={POST_DOC} size="prose" renderBlock={renderDemoBlock} />
       </PostLayout>
-      <RelatedPosts items={ARTICLE_CARDS.slice(1, 4)} more={{label: 'Voir le blog', href: '/mise-en-page/blog'}} />
+      <RelatedPosts eyebrow="Le blog" title="Pour continuer <span>sur le sujet.</span>" items={ARTICLE_CARDS.slice(1, 4)} more={{label: 'Voir le blog', href: '/mise-en-page/blog'}} />
       <SiteFooter {...SITE_FOOTER} strip={SITE_HEADER.strip} />
     </>
   );
