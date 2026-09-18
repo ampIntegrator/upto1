@@ -102,7 +102,7 @@ async function main() {
           row(column(12, collection(['Sophie M.', 'Karim B.', 'Léa D.', 'Marc P.', 'Inès R.', 'Paul V.', 'Nora K.'].map((n, i) => testimonial(n, i % 2 ? undefined : '+ 28 %'))))),
           row(column(12, collection(Array.from({length: 8}, (_, i) => cardImage([chantier, bureau, immeuble, analyse][i % 4], `Carte ${i + 1}`)), {perView: '4', indicator: 'dots', step: 'item'}))),
           row(column(8, collection(['COURTIER', 'AGENT', 'PROMOTEUR'].map((l, i) => compare(l, 'high', 'check', i === 1)), {layout: 'swipe'})), column(4, text())),
-          row(column(12, collection([], {source: 'posts', postsLimit: 6, postsCta: 'Lire l’article', indicator: 'numbers'}))),
+          row(column(12, collection([], {source: 'posts', postsLimit: 12, postsCta: 'Lire l’article', indicator: 'segments', moreLink: 'blog'}))),
         ], {anchor: 'collections'}),
         light([
           row(column(6, tabs(4)), column(6, media(bureau, '400'))),

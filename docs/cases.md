@@ -59,6 +59,7 @@ Conversions: `caseHero`, `caseSheet` in `src/lib/cases.ts`, `caseCard` in `src/l
   everything and restores the settings. `SMOKE_SHOTS=<dir>` also saves captures.
 - `pnpm smoke:sections` covers the case card in a column, in a manual collection and the
   « Dernières réalisations » source.
+- `pnpm seed:content` adds seven case studies in four categories (see `docs/blog.md`).
 - `pnpm seed:demo` creates the « Rénovation » category and the case study
   `demo-vasseur-construction` (mockup 23); it never changes the settings.
 - Static demos in the catalogue: « Page · réalisation (23) » and « Page · réalisations, liste (24) »

@@ -32,6 +32,7 @@ import * as migration_20260917_130513_add_case_studies_portfolio from './2026091
 import * as migration_20260917_130823_add_case_card_collection_source from './20260917_130823_add_case_card_collection_source';
 import * as migration_20260917_132335_add_listing_slug_seo from './20260917_132335_add_listing_slug_seo';
 import * as migration_20260917_132348_remove_listing_page from './20260917_132348_remove_listing_page';
+import * as migration_20260918_090420_collection_see_all from './20260918_090420_collection_see_all';
 
 export const migrations = [
   {
@@ -202,6 +203,11 @@ export const migrations = [
   {
     up: migration_20260917_132348_remove_listing_page.up,
     down: migration_20260917_132348_remove_listing_page.down,
-    name: '20260917_132348_remove_listing_page'
+    name: '20260917_132348_remove_listing_page',
+  },
+  {
+    up: migration_20260918_090420_collection_see_all.up,
+    down: migration_20260918_090420_collection_see_all.down,
+    name: '20260918_090420_collection_see_all'
   },
 ];

@@ -71,6 +71,10 @@ post editor and the section builder each get fresh copies. The same rule applies
 `buttonRowFields()`. Sharing a config object between a Lexical editor and a collection changes the
 database schema of the collection (tables dropped): always use a factory.
 
+Every site editor (they all share `baseFeatures()`) has an admin shortcut: « lorem40 » then a
+space inserts forty words of lorem ipsum (1 to 999 words; `src/fields/lorem/`, a Lexical markdown
+shortcut, nothing stored differently). « Lorem » alone or inside a word is left alone.
+
 The other editors (`src/fields/editors.ts`): `textBoxEditor` (text box: paragraphs, bold, italic,
 links, lists, tables) and `tabsEditor` (the same without tables: tabs, key points). The lists
 (diamond bullets, two-digit numbers in a silo square) are site-wide, in `RichText`.
@@ -90,6 +94,10 @@ links, lists, tables) and `tabsEditor` (the same without tables: tabs, key point
   settings restored. Checks the blog page, the post, the category archive and a 404.
   `SMOKE_SHOTS=<dir>` also saves captures.
 - `pnpm smoke:sections` covers the section heading and the figures in columns.
+- `pnpm seed:content` fills the blog to twenty posts (twelve of them lorem ipsum down to the
+  title) and the case studies to eight (lorem ipsum, Unsplash covers, three authors, a dozen
+  content elements per entry) to check the lists, pagination, cards and carousels. Re-runnable: entries found by slug; existing posts only get an empty cover,
+  author or content filled.
 - `pnpm seed:demo` creates the author « Marie Lefebvre » and the post
   `demo-industrialiser-le-cycle-commercial`; it never changes the settings.
 - Static demos in the catalogue: « Page · article de blog (18) » and « Page · blog, liste des

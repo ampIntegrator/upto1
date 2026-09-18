@@ -16,21 +16,29 @@ import {testimonialBlock} from './testimonialBlock';
  * component), in a column of 8 to 12. Side by side (« swipe ») holds no more items than
  * visible ones (4 at 25 % at most); the carousel takes as many items as wanted. The items are the existing column blocks
  * (testimonial, cards, compare card, tier, post or case card), all of the same type, or
- * the latest blog posts or case studies rendered as article or realisation cards. Items per view are checked against the column
- * width (content-specs, collectionCapacity): 3 at most on 8 or 9 columns, 4 on 12.
+ * the latest blog posts or case studies rendered as article or realisation cards (24 at most). Items per view are checked against the column
+ * width (content-specs, collectionCapacity): 3 at most on 8 or 9 columns, 4 on 12. An optional « see all » button leads
+ * to the blog, the case studies or any link.
  */
 export const COLLECTION_SLUG = 'collection';
 
 type Sibling = Record<string, unknown>;
 const whenSource = (value: string) => (_d: unknown, s: Sibling) => (s?.source ?? 'manual') === value;
 
-/** the number of latest entries: side by side, no more than visible ones; a carousel takes as many as wanted */
+/** the most latest entries a collection shows: beyond, the « see all » button leads to the listing */
+const MAX_ENTRIES = 24;
+
+/** the number of latest entries: 2 to 24; side by side, no more than visible ones. A custom validate replaces
+ *  Payload's own, so min and max are checked here too */
 const limitValidate = (source: string) => (value: unknown, {siblingData, req}: {siblingData: Sibling; req: PayloadRequest}) => {
   const count = Number(value ?? 6);
+  if ((siblingData?.source ?? 'manual') === source && (count < 2 || count > MAX_ENTRIES)) return tr(t.entriesRange, req.i18n?.language, {max: MAX_ENTRIES});
   const perView = Number(siblingData?.perView ?? 3);
   if ((siblingData?.source ?? 'manual') === source && (siblingData?.layout ?? 'swipe') === 'swipe' && count > perView) return tr(t.swipeOverflow, req.i18n?.language, {count, perView});
   return true;
 };
+
+const whenMore = (_d: unknown, s: Sibling) => Boolean(s?.moreLink) && s?.moreLink !== 'none';
 
 /** The blocks an item can be: those that make sense repeated side by side. */
 const ITEM_BLOCKS: ContentBlock[] = [testimonialBlock, ...CARD_BLOCKS, compareCardBlock, planBlock, postCardBlock, caseCardBlock];
@@ -138,8 +146,9 @@ const block: Block = {
           type: 'number',
           label: t.postsLimit,
           defaultValue: 6,
-          // no maximum: a carousel takes as many posts as wanted; side by side, no more than visible ones
+          // side by side, no more than visible ones; a carousel, 24 at most (the « see all » button leads to the rest)
           min: 2,
+          max: MAX_ENTRIES,
           admin: {width: '34%', description: t.postsLimitDescription},
           validate: limitValidate('posts'),
         },
@@ -151,9 +160,37 @@ const block: Block = {
       type: 'row',
       admin: {condition: whenSource('cases')},
       fields: [
-        {name: 'casesLimit', type: 'number', label: t.casesLimit, defaultValue: 6, min: 2, admin: {width: '34%', description: t.postsLimitDescription}, validate: limitValidate('cases')},
+        {name: 'casesLimit', type: 'number', label: t.casesLimit, defaultValue: 6, min: 2, max: MAX_ENTRIES, admin: {width: '34%', description: t.postsLimitDescription}, validate: limitValidate('cases')},
         {name: 'casesCategory', type: 'relationship', relationTo: 'case-categories', label: t.postsCategory, admin: {width: '33%'}},
         {name: 'casesCta', type: 'text', label: t.postsCta, localized: true, admin: {width: '33%'}},
+      ],
+    },
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'moreLink',
+          type: 'select',
+          label: t.more,
+          defaultValue: 'none',
+          options: [
+            {label: t.moreNone, value: 'none'},
+            {label: t.moreBlog, value: 'blog'},
+            {label: t.moreCases, value: 'cases'},
+            {label: t.moreCustom, value: 'custom'},
+          ],
+          admin: {width: '34%', description: t.moreDescription},
+        },
+        {
+          name: 'moreLabel',
+          type: 'text',
+          label: t.moreLabel,
+          localized: true,
+          admin: {width: '33%', condition: whenMore, description: t.moreLabelDescription},
+          validate: (value: unknown, {siblingData, req}: {siblingData: Sibling; req: PayloadRequest}) =>
+            siblingData?.moreLink !== 'custom' || (Boolean(value) && Boolean(siblingData?.moreHref)) || tr(t.moreCustomRequired, req.i18n?.language),
+        },
+        {name: 'moreHref', type: 'text', label: t.moreHref, admin: {width: '33%', placeholder: '/contact', condition: (_d, s: Sibling) => s?.moreLink === 'custom'}},
       ],
     },
   ],

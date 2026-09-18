@@ -18,7 +18,7 @@ import type {TextBoxButton, TextBoxProps} from '@/components/TextBox';
 import type {RichTextDocument} from '@/components/rich-text';
 import {type TitleTag, toTitleTag} from '@/components/title-tags';
 import {caseCard, postCard} from '@/lib/cards';
-import {type BlogConfig, blogConfig, type CasesConfig, casesConfig} from '@/lib/listings';
+import {type BlogConfig, blogConfig, type CasesConfig, casesConfig, listingPath} from '@/lib/listings';
 import type {CheckListItem} from '@/components/CheckList';
 import type {ChipTone} from '@/components/Chip';
 import type {MediaQuoteProps, MediaQuoteSize, MediaQuoteTag} from '@/components/MediaQuote';
@@ -57,7 +57,7 @@ type ContentBlock = NonNullable<NonNullable<NonNullable<SectionBlock['rows']>[nu
 export type FaqData = {mode: 'single' | 'multiple'; columns: 1 | 2; firstOpen: boolean; tag: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span'; items: {question: string; answer: string}[]};
 
 /** A collection: identical items side by side, swipe or carousel. */
-export type CollectionData = {layout: 'swipe' | 'carousel'; perView: 2 | 3 | 4; step: 'page' | 'item'; arrows: boolean; indicator: 'segments' | 'dots' | 'numbers' | 'none'; items: ContentData[]};
+export type CollectionData = {layout: 'swipe' | 'carousel'; perView: 2 | 3 | 4; step: 'page' | 'item'; arrows: boolean; indicator: 'segments' | 'dots' | 'numbers' | 'none'; items: ContentData[]; more?: {label: string; href: string}};
 
 export type ContentData =
   | {type: 'textBox'; textBox: TextBoxProps}
@@ -314,7 +314,7 @@ function toSteps(b: StepsData): ContentData | null {
   return steps.length ? {type: 'processSteps', steps, tag: toTitleTag(b.tag, 'h3')} : null;
 }
 
-type CollectionBlockData = {id?: string | null; layout?: string | null; perView?: string | null; step?: string | null; arrows?: boolean | null; indicator?: string | null; source?: string | null; items?: ContentBlock[] | null; postsLimit?: number | null; postsCategory?: number | {id: number} | null; postsCta?: string | null; casesLimit?: number | null; casesCategory?: number | {id: number} | null; casesCta?: string | null};
+type CollectionBlockData = {id?: string | null; layout?: string | null; perView?: string | null; step?: string | null; arrows?: boolean | null; indicator?: string | null; source?: string | null; items?: ContentBlock[] | null; postsLimit?: number | null; postsCategory?: number | {id: number} | null; postsCta?: string | null; casesLimit?: number | null; casesCategory?: number | {id: number} | null; casesCta?: string | null; moreLink?: string | null; moreLabel?: string | null; moreHref?: string | null};
 
 /** Loads the latest entries of a listing for a collection block (the page gives it, with the locale). */
 export type EntriesLoader<T> = (q: {limit: number; category?: number}) => Promise<T[]>;
@@ -343,8 +343,16 @@ function toCollection(b: CollectionBlockData, entries: EntryItems): ContentData 
   const perView = Math.min(Math.max(Number(b.perView ?? 3), 2), 4) as 2 | 3 | 4;
   return {
     type: 'collection',
-    collection: {layout: b.layout === 'carousel' ? 'carousel' : 'swipe', perView, step: b.step === 'item' ? 'item' : 'page', arrows: b.arrows !== false, indicator: (b.indicator ?? 'segments') as CollectionData['indicator'], items},
+    collection: {layout: b.layout === 'carousel' ? 'carousel' : 'swipe', perView, step: b.step === 'item' ? 'item' : 'page', arrows: b.arrows !== false, indicator: (b.indicator ?? 'segments') as CollectionData['indicator'], items, more: collectionMore(b)},
   };
+}
+
+/** The « see all » button: the blog or the case studies (label from their settings unless typed), or a custom link. */
+function collectionMore(b: CollectionBlockData): CollectionData['more'] {
+  const listing = b.moreLink === 'blog' ? (sectionsCtx.blog ?? blogConfig(null)) : b.moreLink === 'cases' ? (sectionsCtx.cases ?? casesConfig(null)) : null;
+  if (listing) return {label: b.moreLabel || listing.labels.more, href: listingPath(listing)};
+  if (b.moreLink === 'custom' && b.moreLabel && b.moreHref) return {label: b.moreLabel, href: b.moreHref};
+  return undefined;
 }
 
 
