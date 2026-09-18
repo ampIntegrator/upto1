@@ -1,6 +1,6 @@
 /**
- * Listing content (pnpm seed:content): fills the blog and the case studies to eight entries each,
- * with lorem ipsum, to check the listing pages, the cards, the carousels and the related entries.
+ * Listing content (pnpm seed:content): fills the blog to twenty posts and the case studies to
+ * eight, with lorem ipsum, to check the listing pages, the cards, the carousels and the related entries.
  * Every entry gets an Unsplash cover (imported once into the media library, found by file name
  * afterwards) and a content of ten or so elements (headings, paragraphs, lists, quote, image,
  * table and the figures). Re-runnable: entries are found by slug and updated, missing ones are
@@ -31,6 +31,11 @@ const UNSPLASH: {name: string; id: string; alt: string}[] = [
   {name: 'seed-villa.jpg', id: '1580587771525-78b9dba3b914', alt: 'Villa neuve'},
   {name: 'seed-pavillon.jpg', id: '1570129477492-45c003edd2be', alt: 'Pavillon'},
   {name: 'seed-architecture.jpg', id: '1486718448742-163732cd1544', alt: 'Architecture en courbes'},
+  {name: 'seed-salon.jpg', id: '1503174971373-b1f69850bded', alt: 'Salon ouvert sur le jardin'},
+  {name: 'seed-sejour-bois.jpg', id: '1604014237800-1c9102c219da', alt: 'Séjour et terrasse'},
+  {name: 'seed-escalier.jpg', id: '1600573472550-8090b5e0745e', alt: 'Escalier et baie vitrée'},
+  {name: 'seed-maison-brique.jpg', id: '1605276374104-dee2a0ed3cd6', alt: 'Maison en brique'},
+  {name: 'seed-chambre.jpg', id: '1616594039964-ae9021a400a0', alt: 'Chambre rénovée'},
   {name: 'seed-portrait-1.jpg', id: '1500648767791-00dcc994a43e', alt: 'Portrait'},
   {name: 'seed-portrait-2.jpg', id: '1494790108377-be9c29b29330', alt: 'Portrait'},
   {name: 'seed-portrait-3.jpg', id: '1438761681033-6461ffad8d80', alt: 'Portrait'},
@@ -102,7 +107,27 @@ const POSTS = [
   {slug: 'renover-sans-mauvaise-surprise', title: 'Rénover <span>sans mauvaise surprise</span> : les dix points à vérifier', excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.', category: 'chantier', date: '2026-08-05'},
   {slug: 'bibliotheque-de-prix-a-jour', title: 'Tenir sa bibliothèque de prix <span>à jour</span>', excerpt: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.', category: 'chiffrage', date: '2026-07-29'},
   {slug: 'recruter-un-metreur', title: 'Recruter un métreur : <span>ce qui a changé</span>', excerpt: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.', category: 'metier', date: '2026-07-22'},
-];
+  // twelve posts in lorem ipsum down to the title, to fill the list to twenty (pagination, carousels)
+  ...[
+    'Lorem ipsum <span>dolor</span> sit amet',
+    'Consectetur adipiscing elit, <span>sed do eiusmod</span> tempor incididunt ut labore',
+    'Ut enim ad <span>minim veniam</span>',
+    'Quis nostrud exercitation <span>ullamco</span> laboris nisi ut aliquip ex ea commodo',
+    'Duis aute irure <span>dolor</span> in reprehenderit',
+    '<span>Excepteur sint</span> occaecat cupidatat non proident',
+    'Sunt in culpa qui <span>officia</span> deserunt mollit anim id est laborum',
+    'Curabitur pretium <span>tincidunt</span> lacus',
+    'Nulla gravida orci a odio, <span>nullam varius</span> turpis et commodo pharetra',
+    'Est eros bibendum <span>elit</span>',
+    'Nec luctus magna felis <span>sollicitudin</span> mauris',
+    'Integer in mauris eu nibh <span>euismod gravida</span>, duis ac tellus et risus vulputate vehicula',
+  ].map((title, i) => ({
+    slug: `lorem-ipsum-${String(i + 1).padStart(2, '0')}`,
+    title,
+    excerpt: [L1, L2, L3][i % 3].split(' ').slice(0, 12 + (i % 4) * 6).join(' ').replace(/[,.]?$/, '.'),
+    category: ['chiffrage', 'chantier', 'metier', 'produit'][i % 4],
+    date: new Date(Date.UTC(2026, 6, 15) - i * 6 * 86400000).toISOString().slice(0, 10),
+  })),];
 
 const CASE_CATEGORIES = [
   {slug: 'renovation', title: 'Rénovation'},

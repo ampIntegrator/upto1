@@ -94,9 +94,9 @@ links, lists, tables) and `tabsEditor` (the same without tables: tabs, key point
   settings restored. Checks the blog page, the post, the category archive and a 404.
   `SMOKE_SHOTS=<dir>` also saves captures.
 - `pnpm smoke:sections` covers the section heading and the figures in columns.
-- `pnpm seed:content` fills the blog and the case studies to eight entries each (lorem ipsum,
-  Unsplash covers, three authors, a dozen content elements per entry) to check the lists, cards
-  and carousels. Re-runnable: entries found by slug; existing posts only get an empty cover,
+- `pnpm seed:content` fills the blog to twenty posts (twelve of them lorem ipsum down to the
+  title) and the case studies to eight (lorem ipsum, Unsplash covers, three authors, a dozen
+  content elements per entry) to check the lists, pagination, cards and carousels. Re-runnable: entries found by slug; existing posts only get an empty cover,
   author or content filled.
 - `pnpm seed:demo` creates the author « Marie Lefebvre » and the post
   `demo-industrialiser-le-cycle-commercial`; it never changes the settings.
