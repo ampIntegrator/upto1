@@ -1,20 +1,14 @@
-import type {CollectionConfig, Field} from 'payload';
+import type {CollectionConfig} from 'payload';
 
 import {postEditor} from '@/fields/blocks/prose';
+import {entryBelowTab} from '@/fields/entryBelow';
+import {entryUrl} from '@/fields/entryUrl';
 import {slugField} from '@/fields/shared';
 import {collectionsText as ct} from '@/i18n/admin/collections';
-import {sections} from '@/sections.config';
 
 const f = ct.caseStudies.fields;
 
-/** a text row of the fact sheet and, next to it, its optional label replacing the global one */
-const sheetRow = (name: string, label: typeof f.location, placeholder?: typeof f.deploymentPlaceholder): Field => ({
-  type: 'row',
-  fields: [
-    {name, type: 'text', label, localized: true, admin: {width: '66%', ...(placeholder ? {placeholder} : null)}},
-    {name: `${name}Label`, type: 'text', label: f.labelOverride, localized: true, admin: {width: '34%'}},
-  ],
-});
+const whenCustom = (_d: unknown, s: Record<string, unknown>) => Boolean(s?.customDefaults);
 
 /**
  * Case studies (« réalisations », mockups 23 and 24): title, lead, full-width cover, story (the
@@ -27,11 +21,13 @@ export const CaseStudies: CollectionConfig = {
   labels: {singular: ct.caseStudies.singular, plural: ct.caseStudies.plural},
   admin: {
     // « Vue » menu next to the Live Preview eye (side by side, top / bottom, dialog)
-    components: {edit: {beforeDocumentControls: ['@/fields/PreviewLayoutMenu#PreviewLayoutMenu']}},
-    useAsTitle: 'title', group: ct.groups.cases, defaultColumns: ['title', 'category', 'publishedAt']},
+    components: {edit: {beforeDocumentControls: ['@/fields/PreviewLayoutMenu#PreviewLayoutMenu'], PreviewButton: '@/fields/ViewOnSiteButton#ViewOnSiteButton'}},
+    useAsTitle: 'title', group: ct.groups.cases, defaultColumns: ['title', 'category', 'publishedAt'],
+    // button that opens the case study on the site in a new tab, under the case studies' address
+    preview: (doc, {req}) => entryUrl(req, 'portfolio', doc.slug),
+  },
   access: {read: () => true},
   defaultSort: '-publishedAt',
-  hooks: {beforeChange: sections.beforeChange},
   // tabs first: the SEO plugin appends its tab after them; slug, category and date in the sidebar
   fields: [
     {
@@ -57,9 +53,11 @@ export const CaseStudies: CollectionConfig = {
                   {name: 'client', type: 'text', label: f.client, required: true, admin: {width: '50%'}},
                   {name: 'clientUrl', type: 'text', label: f.clientUrl, admin: {width: '50%', placeholder: 'https://'}},
                 ]},
-                sheetRow('location', f.location),
-                sheetRow('deployment', f.deployment, f.deploymentPlaceholder),
-                sheetRow('modules', f.modules),
+                {type: 'row', fields: [
+                  {name: 'location', type: 'text', label: f.location, localized: true, admin: {width: '50%'}},
+                  {name: 'deployment', type: 'text', label: f.deployment, localized: true, admin: {width: '50%', placeholder: f.deploymentPlaceholder}},
+                ]},
+                {name: 'modules', type: 'text', label: f.modules, localized: true},
                 {
                   name: 'results', type: 'array', label: f.results, maxRows: 2,
                   labels: {singular: f.resultSingular, plural: f.resultPlural},
@@ -72,9 +70,16 @@ export const CaseStudies: CollectionConfig = {
                   ],
                 },
                 {name: 'cardResult', type: 'text', label: f.cardResult, localized: true, admin: {description: f.cardResultDescription}},
+                // row labels and button come from the case studies settings; replaced here only when ticked
+                {name: 'customDefaults', type: 'checkbox', label: f.customDefaults, defaultValue: false, admin: {description: f.customDefaultsDescription}},
+                {type: 'row', admin: {condition: whenCustom}, fields: [
+                  {name: 'locationLabel', type: 'text', label: f.locationLabel, localized: true, admin: {width: '33%', description: f.labelEmpty}},
+                  {name: 'deploymentLabel', type: 'text', label: f.deploymentLabel, localized: true, admin: {width: '33%', description: f.labelEmpty}},
+                  {name: 'modulesLabel', type: 'text', label: f.modulesLabel, localized: true, admin: {width: '34%', description: f.labelEmpty}},
+                ]},
                 {
                   name: 'cta', type: 'group', label: f.cta,
-                  admin: {description: f.ctaDescription},
+                  admin: {description: f.ctaDescription, condition: whenCustom},
                   fields: [
                     {type: 'row', fields: [
                       {name: 'label', type: 'text', label: f.ctaLabel, localized: true, admin: {width: '50%'}},
@@ -86,11 +91,7 @@ export const CaseStudies: CollectionConfig = {
             },
           ],
         },
-        {
-          label: ct.caseStudies.tabs.sections,
-          description: ct.caseStudies.tabs.sectionsDescription,
-          fields: [sections.field],
-        },
+        entryBelowTab({collection: 'case-studies', label: ct.caseStudies.tabs.below, description: ct.caseStudies.tabs.belowDescription}),
       ],
     },
     slugField,

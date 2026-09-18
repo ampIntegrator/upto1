@@ -5,6 +5,7 @@
  * under /<address>/<entry>, the category archives under /<address>/categorie/<category>. No React and no Payload runtime here: used by routes,
  * conversions, the footer and the section builder.
  */
+import {type TitleTag, toTitleTag} from '@/components/title-tags';
 
 export type ListingKind = 'blog' | 'cases';
 
@@ -36,6 +37,10 @@ export type ListingConfig<L extends ListingLabels = ListingLabels> = {
   tone: 'light' | 'night';
   perPage: number;
   labels: L;
+  /** FAQ under the entries: its title (none when empty) and tag */
+  faq: {title?: string; tag: TitleTag};
+  /** related entries under an entry */
+  relatedCount: 3 | 4;
 };
 
 /** the category archive segment: /<listing>/categorie/<category> */
@@ -43,7 +48,7 @@ export const CATEGORY_SEGMENT = 'categorie';
 
 type LabelsDoc = Partial<Record<string, string | null>> | null | undefined;
 /** the fields every listing global shares (src/fields/listingSettings.ts) */
-export type ListingGlobalDoc = {slug?: string | null; meta?: {title?: string | null; description?: string | null} | null; eyebrow?: string | null; title?: string | null; lead?: string | null; tone?: string | null; perPage?: number | null; labels?: LabelsDoc} | null | undefined;
+export type ListingGlobalDoc = {slug?: string | null; meta?: {title?: string | null; description?: string | null} | null; eyebrow?: string | null; title?: string | null; lead?: string | null; tone?: string | null; perPage?: number | null; labels?: LabelsDoc; faqTitle?: string | null; faqTag?: string | null; relatedCount?: string | null} | null | undefined;
 
 /** Reads a listing global: its address, page top, pagination, SEO, and labels with their defaults. */
 export function listingConfig<L extends ListingLabels>(kind: ListingKind, doc: ListingGlobalDoc, defaults: {base: string; title: string; labels: L}): ListingConfig<L> {
@@ -59,6 +64,8 @@ export function listingConfig<L extends ListingLabels>(kind: ListingKind, doc: L
     tone: doc?.tone === 'night' ? 'night' : 'light',
     perPage: Math.min(Math.max(Number(doc?.perPage ?? 12), 4), 48),
     labels,
+    faq: {title: doc?.faqTitle || undefined, tag: toTitleTag(doc?.faqTag, 'h2')},
+    relatedCount: doc?.relatedCount === '4' ? 4 : 3,
   };
 }
 
