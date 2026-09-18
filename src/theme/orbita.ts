@@ -268,9 +268,11 @@ export function defineOrbitaSilo(silo: OrbitaSilo) {
           fontStyle: 'italic',
           fontWeight: '600',
           color: 'var(--color-accent)',
-          // Inherits the parent's size: usable inside a display heading.
-          fontSize: 'inherit',
-          lineHeight: 'inherit',
+          // 10 % above the parent's size: Cormorant's small x-height makes it look smaller at
+          // equal size (Nicolas, 18 Sept. 2026). Proportional, so usable in any heading.
+          fontSize: '1.1em',
+          // no line height of its own: the heading's lines keep their rhythm despite the larger size
+          lineHeight: '0',
           letterSpacing: '-0.01em',
         },
         // Upright serif (mockup .c-serif): Cormorant 500, silo color — step numbers,
