@@ -134,6 +134,15 @@
   pointer-events: none;
   background: rgb(0, 0, 0);
 }
+/* top edge line: the junction with the section above */
+.section[data-edge-top]::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  z-index: 3;
+  height: 4px;
+  background: var(--gradient-edge);
+}
 /* bottom edge line: silo at the edges, highlight in the center */
 .section[data-edge]::after {
   content: '';
