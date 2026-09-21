@@ -18,6 +18,9 @@ const METIERS = [
   {value: 'entreprise', label: 'Entreprise du bâtiment'},
 ];
 
+const MODULES = ['Chiffrage', 'Métré', 'Devis', 'Facturation', 'Suivi de chantier', 'Planning', 'Achats'].map((label) => ({value: label.toLowerCase(), label}));
+const DEPARTEMENTS = ['Ain', 'Aisne', 'Allier', 'Alpes-Maritimes', 'Ardèche', 'Bouches-du-Rhône', 'Calvados', 'Gironde', 'Loire-Atlantique', 'Nord', 'Paris', 'Rhône'].map((label) => ({value: label.toLowerCase(), label}));
+
 /** the mockup's « Demander une démo » form */
 const DEMO: FormStep[] = [
   {
@@ -42,6 +45,8 @@ const STEPS: FormStep[] = [
     {type: 'tel', name: 'telephone', label: 'Téléphone', width: 'half'},
   ]},
   {title: 'Votre projet', fields: [
+    {type: 'select', name: 'modules', label: 'Modules qui vous intéressent', multiple: true, options: MODULES},
+    {type: 'select', name: 'departement', label: 'Département', searchFrom: 0, options: DEPARTEMENTS, width: 'half'},
     {type: 'radio', name: 'taille', label: 'Taille de l’équipe', required: true, options: [{value: '1', label: '1 à 5'}, {value: '6', label: '6 à 20'}, {value: '21', label: 'Plus de 20'}]},
     {type: 'number', name: 'chantiers', label: 'Chantiers par an', width: 'half'},
     {type: 'date', name: 'date', label: 'Date souhaitée', width: 'half'},
@@ -70,7 +75,7 @@ export default function SiteFormShowcase() {
   return (
     <VStack gap={10}>
       <Text type="body" color="secondary">
-        Un formulaire du site (maquette 17), simple ou en plusieurs étapes. La largeur de la colonne décide : une colonne de champs jusqu’à 7/12, deux à partir de 8/12, où un champ « demi » prend une colonne. Carte encadrée ou non ; surtitre (texte ou badge), titre et chapô facultatifs. Chaque étape est vérifiée avant de passer à la suivante ; un seul envoi à la fin, puis le message de confirmation remplace le formulaire. Le catalogue n’envoie rien.
+        Un formulaire du site (maquette 17), simple ou en plusieurs étapes. La largeur de la colonne décide : une colonne de champs jusqu’à 7/12, deux à partir de 8/12, où un champ « demi » prend une colonne. Carte encadrée ou non ; surtitre (texte ou badge), titre et chapô facultatifs. Listes déroulantes : recherche au-delà de 5 options (ou toujours), choix multiple en badges. Chaque étape est vérifiée avant de passer à la suivante ; un seul envoi à la fin, puis le message de confirmation remplace le formulaire. Le catalogue n’envoie rien.
       </Text>
       <VStack gap={3}>
         <Heading level={3}>Sur 12 colonnes : deux colonnes de champs</Heading>

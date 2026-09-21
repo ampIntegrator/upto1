@@ -46,13 +46,15 @@ export type FormField =
   | (Base & {type: 'text' | 'email' | 'tel' | 'textarea'; defaultValue?: string})
   | (Base & {type: 'number'; defaultValue?: number})
   | (Base & {type: 'date'; defaultValue?: string})
-  | (Base & {type: 'select' | 'radio'; options: {value: string; label: string}[]; defaultValue?: string})
+  | (Base & {type: 'radio'; options: {value: string; label: string}[]; defaultValue?: string})
+  /** a dropdown: several choices shown as badges in the field (`multiple`); search from `searchFrom` options (5; 0 = always) */
+  | (Base & {type: 'select'; options: {value: string; label: string}[]; defaultValue?: string; multiple?: boolean; searchFrom?: number})
   | (Base & {type: 'checkbox'; defaultValue?: boolean})
   | (Base & {type: 'consent'; link?: {label: string; href: string}})
   | {type: 'message'; name: string; content: React.ReactNode; width?: FormFieldWidth};
 
 export type FormStep = {title?: string; fields: FormField[]};
-export type FormValue = string | number | boolean | null;
+export type FormValue = string | string[] | number | boolean | null;
 export type FormValues = Record<string, FormValue>;
 export type FormSubmitInput = {formId?: number; values: FormValues; honeypot: string; startedAt: number};
 export type FormSubmitResult = {ok: true} | {ok: false; errors?: Record<string, string>; message?: string};
@@ -112,6 +114,7 @@ const initialValue = (f: FormField): FormValue => {
   if (f.type === 'checkbox') return f.defaultValue ?? false;
   if (f.type === 'consent') return false;
   if (f.type === 'number') return f.defaultValue ?? null;
+  if (f.type === 'select' && f.multiple) return f.defaultValue ? [f.defaultValue] : [];
   return f.defaultValue ?? '';
 };
 
@@ -119,7 +122,7 @@ const initialValue = (f: FormField): FormValue => {
 function fieldError(f: FormField, v: FormValue, l: FormLabels): string | null {
   if (f.type === 'message') return null;
   if (f.type === 'consent') return v === true ? null : l.consent;
-  const empty = v === null || v === '' || v === false;
+  const empty = v === null || v === '' || v === false || (Array.isArray(v) && v.length === 0);
   if (f.required && empty) return l.required;
   if (f.type === 'email' && typeof v === 'string' && v && !EMAIL.test(v.trim())) return l.email;
   return null;
@@ -244,7 +247,11 @@ export function SiteForm({id, formId, eyebrow, eyebrowStyle = 'eyebrow', title, 
       case 'date':
         return <DateField label={f.label} value={typeof v === 'string' && v ? (v as never) : undefined} onChange={(x) => set(f.name, x ?? '')} isRequired={f.required} status={status} />;
       case 'select':
-        return <Select label={f.label} options={f.options} value={typeof v === 'string' && v ? v : null} onChange={(x) => set(f.name, x)} isRequired={f.required} status={status} />;
+        return f.multiple ? (
+          <Select mode="multiple" label={f.label} options={f.options} value={Array.isArray(v) ? v : []} onChange={(x) => set(f.name, x)} searchFrom={f.searchFrom} isRequired={f.required} status={status} />
+        ) : (
+          <Select label={f.label} options={f.options} value={typeof v === 'string' && v ? v : null} onChange={(x) => set(f.name, x)} searchFrom={f.searchFrom} isRequired={f.required} status={status} />
+        );
       case 'radio':
         return (
           <RadioList label={mark(f)} value={String(v ?? '')} onChange={(x) => set(f.name, x)} status={status} htmlName={`${id}-${f.name}`}>
