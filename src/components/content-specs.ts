@@ -54,7 +54,8 @@ export type ContentRef =
   | {type: 'gallery'}
   | {type: 'collection'; perView: 2 | 3 | 4}
   | {type: 'textBox'; titleSize: 'display-1' | 'display-2' | 'display-3' | 'heading-1' | 'heading-2'}
-  | {type: 'statsBar'};
+  | {type: 'statsBar'}
+  | {type: 'form'};
 
 export type ContentType = ContentRef['type'];
 
@@ -155,6 +156,8 @@ export const CONTENT_SPECS: {[T in ContentType]: {label: string; minSpan: (c: Ex
   // text box: 3 to 9 columns; the two display title sizes need 6
   textBox: {label: 'Encart texte', minSpan: (c) => (c.titleSize === 'display-1' || c.titleSize === 'display-2' ? 6 : 3), maxSpan: 9},
   statsBar: {label: 'Barre de chiffres', minSpan: () => 12},
+  // a form (21 Sept. 2026): one column of fields up to 7 columns, two from 8 (SiteForm)
+  form: {label: 'Formulaire', minSpan: () => 4},
 };
 
 /** Minimum span of a content. */

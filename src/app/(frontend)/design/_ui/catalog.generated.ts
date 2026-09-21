@@ -590,6 +590,15 @@ export const CATALOG: CatalogCategory[] = [
     "href": "/design/composants#formulaires",
     "items": [
       {
+        "name": "SiteForm",
+        "label": "Site Form",
+        "slug": "site-form",
+        "href": "/design/composants/site-form",
+        "dressed": true,
+        "parent": null,
+        "doc": null
+      },
+      {
         "name": "Calendar",
         "label": "Calendar",
         "slug": "calendar",
