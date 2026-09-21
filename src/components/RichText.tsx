@@ -47,8 +47,10 @@ function linkHref(node: RichTextNode, ctx: Ctx): string {
   if (f.linkType === 'internal' && f.doc) {
     const resolved = ctx.resolveLink?.({relationTo: f.doc.relationTo, value: f.doc.value});
     if (resolved) return resolved;
-    const slug = typeof f.doc.value === 'object' && f.doc.value ? f.doc.value.slug : undefined;
-    if (slug) return `/${slug}`;
+    // a page without a resolver: its stored full address, else its slug (the site redirects it)
+    const doc = typeof f.doc.value === 'object' && f.doc.value ? (f.doc.value as {slug?: string; path?: string}) : undefined;
+    if (doc?.path) return doc.path;
+    if (doc?.slug) return `/${doc.slug}`;
   }
   return f.url ?? '#';
 }
