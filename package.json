@@ -27,6 +27,7 @@
     "seed": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/seed.ts",
     "smoke:sections": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/smoke-sections.ts",
     "seed:demo": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/seed-demo.ts",
+    "seed:pages": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/seed-pages.ts",
     "seed:content": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/seed-content.ts",
     "smoke:blog": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/smoke-blog.ts",
     "smoke:cases": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/smoke-cases.ts",
