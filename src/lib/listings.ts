@@ -5,6 +5,7 @@
  * under /<address>/<entry>, the category archives under /<address>/categorie/<category>. No React and no Payload runtime here: used by routes,
  * conversions, the footer and the section builder.
  */
+import {type TitleTag, toTitleTag} from '@/components/title-tags';
 
 export type ListingKind = 'blog' | 'cases';
 
@@ -18,8 +19,6 @@ export type ListingLabels = {
   categoryPrefix: string;
   /** button to the listing page (related entries) */
   more: string;
-  relatedEyebrow: string;
-  relatedTitle: string;
   /** archive without entries */
   empty: string;
 };
@@ -36,14 +35,22 @@ export type ListingConfig<L extends ListingLabels = ListingLabels> = {
   tone: 'light' | 'night';
   perPage: number;
   labels: L;
+  /** headings under the entries (FAQ, related entries): no title = no heading */
+  faq: EntryHeading;
+  related: EntryHeading;
+  /** related entries under an entry */
+  relatedCount: 3 | 4;
 };
+
+/** a section heading under an entry (settings, « Sous les articles / réalisations ») */
+export type EntryHeading = {eyebrow?: string; title?: string; tag: TitleTag};
 
 /** the category archive segment: /<listing>/categorie/<category> */
 export const CATEGORY_SEGMENT = 'categorie';
 
 type LabelsDoc = Partial<Record<string, string | null>> | null | undefined;
 /** the fields every listing global shares (src/fields/listingSettings.ts) */
-export type ListingGlobalDoc = {slug?: string | null; meta?: {title?: string | null; description?: string | null} | null; eyebrow?: string | null; title?: string | null; lead?: string | null; tone?: string | null; perPage?: number | null; labels?: LabelsDoc} | null | undefined;
+export type ListingGlobalDoc = {slug?: string | null; meta?: {title?: string | null; description?: string | null} | null; eyebrow?: string | null; title?: string | null; lead?: string | null; tone?: string | null; perPage?: number | null; labels?: LabelsDoc; faqEyebrow?: string | null; faqTitle?: string | null; faqTag?: string | null; relatedEyebrow?: string | null; relatedTitle?: string | null; relatedTag?: string | null; relatedCount?: string | null} | null | undefined;
 
 /** Reads a listing global: its address, page top, pagination, SEO, and labels with their defaults. */
 export function listingConfig<L extends ListingLabels>(kind: ListingKind, doc: ListingGlobalDoc, defaults: {base: string; title: string; labels: L}): ListingConfig<L> {
@@ -59,6 +66,9 @@ export function listingConfig<L extends ListingLabels>(kind: ListingKind, doc: L
     tone: doc?.tone === 'night' ? 'night' : 'light',
     perPage: Math.min(Math.max(Number(doc?.perPage ?? 12), 4), 48),
     labels,
+    faq: {eyebrow: doc?.faqEyebrow || undefined, title: doc?.faqTitle || undefined, tag: toTitleTag(doc?.faqTag, 'h2')},
+    related: {eyebrow: doc?.relatedEyebrow || undefined, title: doc?.relatedTitle || undefined, tag: toTitleTag(doc?.relatedTag, 'h2')},
+    relatedCount: doc?.relatedCount === '4' ? 4 : 3,
   };
 }
 
@@ -69,7 +79,7 @@ export const blogConfig = (doc: ListingGlobalDoc): BlogConfig =>
   listingConfig('blog', doc, {
     base: 'blog',
     title: 'Actualités',
-    labels: {all: 'Tous', readMore: 'Lire l’article', dateLabel: 'Publié le', toc: 'Sommaire', categoryPrefix: 'Catégorie', more: 'Voir le blog', relatedEyebrow: 'Le blog', relatedTitle: 'Pour continuer <span>sur le sujet.</span>', empty: 'Aucun article pour le moment.'},
+    labels: {all: 'Tous', readMore: 'Lire l’article', dateLabel: 'Publié le', toc: 'Sommaire', categoryPrefix: 'Catégorie', more: 'Voir le blog', empty: 'Aucun article pour le moment.'},
   });
 
 export type CasesLabels = ListingLabels & {
@@ -97,7 +107,7 @@ export function casesConfig(doc: PortfolioDoc): CasesConfig {
     base: 'realisations',
     title: 'Des chantiers <span>chiffrés juste.</span>',
     labels: {
-      all: 'Toutes', readMore: 'Voir l’étude', badge: 'Étude de cas', categoryPrefix: 'Catégorie', more: 'Voir toutes les réalisations', relatedEyebrow: 'Nos réalisations', relatedTitle: 'D’autres chantiers <span>chiffrés juste.</span>', empty: 'Aucune réalisation pour le moment.',
+      all: 'Toutes', readMore: 'Voir l’étude', badge: 'Étude de cas', categoryPrefix: 'Catégorie', more: 'Voir toutes les réalisations', empty: 'Aucune réalisation pour le moment.',
       client: 'Client', category: 'Catégorie', location: 'Localisation', deployment: 'Déploiement', modules: 'Modules Orbita', clientLink: 'Site du client',
     },
   });

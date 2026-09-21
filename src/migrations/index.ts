@@ -33,6 +33,10 @@ import * as migration_20260917_130823_add_case_card_collection_source from './20
 import * as migration_20260917_132335_add_listing_slug_seo from './20260917_132335_add_listing_slug_seo';
 import * as migration_20260917_132348_remove_listing_page from './20260917_132348_remove_listing_page';
 import * as migration_20260918_090420_collection_see_all from './20260918_090420_collection_see_all';
+import * as migration_20260918_093309_entry_faq_related from './20260918_093309_entry_faq_related';
+import * as migration_20260918_093504_remove_entry_sections from './20260918_093504_remove_entry_sections';
+import * as migration_20260918_122135_related_heading from './20260918_122135_related_heading';
+import * as migration_20260918_122158_remove_related_labels from './20260918_122158_remove_related_labels';
 
 export const migrations = [
   {
@@ -208,6 +212,26 @@ export const migrations = [
   {
     up: migration_20260918_090420_collection_see_all.up,
     down: migration_20260918_090420_collection_see_all.down,
-    name: '20260918_090420_collection_see_all'
+    name: '20260918_090420_collection_see_all',
+  },
+  {
+    up: migration_20260918_093309_entry_faq_related.up,
+    down: migration_20260918_093309_entry_faq_related.down,
+    name: '20260918_093309_entry_faq_related',
+  },
+  {
+    up: migration_20260918_093504_remove_entry_sections.up,
+    down: migration_20260918_093504_remove_entry_sections.down,
+    name: '20260918_093504_remove_entry_sections',
+  },
+  {
+    up: migration_20260918_122135_related_heading.up,
+    down: migration_20260918_122135_related_heading.down,
+    name: '20260918_122135_related_heading',
+  },
+  {
+    up: migration_20260918_122158_remove_related_labels.up,
+    down: migration_20260918_122158_remove_related_labels.down,
+    name: '20260918_122158_remove_related_labels'
   },
 ];

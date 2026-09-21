@@ -13,11 +13,11 @@ export const Pages: CollectionConfig = {
   labels: {singular: ct.pages.singular, plural: ct.pages.plural},
   admin: {
     // « Vue » menu next to the Live Preview eye (side by side, top / bottom, dialog)
-    components: {edit: {beforeDocumentControls: ['@/fields/PreviewLayoutMenu#PreviewLayoutMenu']}},
+    components: {edit: {beforeDocumentControls: ['@/fields/PreviewLayoutMenu#PreviewLayoutMenu'], PreviewButton: '@/fields/ViewOnSiteButton#ViewOnSiteButton'}},
     useAsTitle: 'title',
     group: ct.groups.site,
     defaultColumns: ['title', 'slug', 'silo', 'updatedAt'],
-    // « Aperçu » button: opens the site page in a new tab
+    // « Voir la page » button (ViewOnSiteButton): opens the site page in a new tab
     preview: (doc, {req}) => {
       const slug = typeof doc.slug === 'string' ? doc.slug : '';
       const path = slug === 'accueil' || !slug ? '/' : `/${slug}`;

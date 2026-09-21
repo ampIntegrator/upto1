@@ -1,13 +1,14 @@
 /**
  * CasePage — a case study (mockup 23): breadcrumb, full-bleed hero, fact sheet and story with its
- * figures, optional builder sections, related case studies.
+ * figures, then the optional FAQ and the related case studies (the case study's « under the case
+ * study » tab, title and count in the case studies settings).
  */
 import React from 'react';
 
 import {BreadcrumbBand} from '@/components/BreadcrumbBand';
 import {CaseHero} from '@/components/CaseHero';
 import {CaseSheet} from '@/components/CaseSheet';
-import {PageSections} from '@/components/PageSections';
+import {EntryFaq} from '@/components/EntryFaq';
 import {PostLayout} from '@/components/PostLayout';
 import {renderProseBlock} from '@/components/ProseBlock';
 import {RelatedPosts} from '@/components/RelatedPosts';
@@ -16,9 +17,9 @@ import {Section} from '@/components/Section';
 import {SitePage} from '@/components/SitePage';
 import {caseCard} from '@/lib/cards';
 import {caseHero, caseSheet, loadRelatedCases} from '@/lib/cases';
+import {entryFaq} from '@/lib/entries';
 import {categoryPath, listingPath, plainTitle} from '@/lib/listings';
-import {toSections} from '@/lib/sections';
-import {getSite, pageSilo, resolveEntryLink, sectionsContext, toFooter, toHeader} from '@/lib/site';
+import {getSite, pageSilo, resolveEntryLink, toFooter, toHeader} from '@/lib/site';
 import type {Locale} from '@/locales';
 import type {CaseStudy} from '@/payload-types';
 
@@ -26,7 +27,8 @@ export async function CasePage({locale, site, caseStudy}: {locale: Locale; site:
   const {cases, settings: s} = site;
   const content = caseStudy.content as unknown as RichTextDocument | null;
   const category = typeof caseStudy.category === 'object' && caseStudy.category ? caseStudy.category : null;
-  const [related, sections] = await Promise.all([loadRelatedCases(locale, caseStudy), toSections(caseStudy.sections, s, sectionsContext(locale, site))]);
+  const related = await loadRelatedCases(locale, caseStudy, cases.relatedCount);
+  const faq = entryFaq(caseStudy);
   return (
     <SitePage silo={pageSilo(null, s)} header={toHeader(s, site.header, site.languages, site.blog)} footer={toFooter(s, site.footer, site.posts, locale, site.blog)} tone="light" currentHref={listingPath(cases)}>
       <Section background="paper" spacing="none" underHeader>
@@ -43,8 +45,8 @@ export async function CasePage({locale, site, caseStudy}: {locale: Locale; site:
       <PostLayout sidebar={<CaseSheet {...caseSheet(caseStudy, cases)} />}>
         <RichText content={content} size="prose" renderBlock={renderProseBlock} resolveLink={(link) => resolveEntryLink(site, link)} />
       </PostLayout>
-      {sections.length ? <PageSections sections={sections} /> : null}
-      <RelatedPosts eyebrow={cases.labels.relatedEyebrow} title={cases.labels.relatedTitle} items={related.map((c) => caseCard(c, cases))} more={{label: cases.labels.more, href: listingPath(cases)}} />
+      <EntryFaq {...cases.faq} items={faq} />
+      <RelatedPosts {...cases.related} items={related.map((c) => caseCard(c, cases))} more={{label: cases.labels.more, href: listingPath(cases)}} />
     </SitePage>
   );
 }

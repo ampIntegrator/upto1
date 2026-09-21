@@ -21,10 +21,10 @@ export const Portfolio: GlobalConfig = {
     slug: 'realisations',
     eyebrow: 'Nos réalisations',
     title: 'Des chantiers <span>chiffrés juste.</span>',
+    related: {eyebrow: 'Nos réalisations', title: 'D’autres chantiers <span>chiffrés juste.</span>'},
     labelRows: [
       [{name: 'all', label: t.all, defaultValue: 'Toutes', width: 33}, {name: 'readMore', label: t.readMore, defaultValue: 'Voir l’étude', width: 33}, {name: 'badge', label: t.badge, defaultValue: 'Étude de cas', width: 34}],
       [{name: 'categoryPrefix', label: t.categoryPrefix, defaultValue: 'Catégorie', width: 33}, {name: 'more', label: t.more, defaultValue: 'Voir toutes les réalisations', width: 67}],
-      [{name: 'relatedEyebrow', label: t.relatedEyebrow, defaultValue: 'Nos réalisations', width: 33}, {name: 'relatedTitle', label: t.relatedTitle, defaultValue: 'D’autres chantiers <span>chiffrés juste.</span>', width: 67}],
       [{name: 'empty', label: t.empty, defaultValue: 'Aucune réalisation pour le moment.', width: 100}],
     ],
     extraLabelFields: () => [
