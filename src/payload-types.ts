@@ -212,6 +212,10 @@ export interface Page {
             mode: 'light' | 'dark' | 'media';
             tint?: ('body' | 'highlight') | null;
             texture?: ('none' | 'grid' | 'dots' | 'losange') | null;
+            /**
+             * Marks the junction with the section above. Automatic: only between two light backgrounds of the same shade whose texture changes.
+             */
+            edgeTop?: ('auto' | 'always' | 'never') | null;
             darkStyle?: ('night' | 'night-halo') | null;
             mediaType?: ('image' | 'video') | null;
             image?: (number | null) | Media;
@@ -1559,6 +1563,10 @@ export interface Section {
   mode: 'light' | 'dark' | 'media';
   tint?: ('body' | 'highlight') | null;
   texture?: ('none' | 'grid' | 'dots' | 'losange') | null;
+  /**
+   * Marks the junction with the section above. Automatic: only between two light backgrounds of the same shade whose texture changes.
+   */
+  edgeTop?: ('auto' | 'always' | 'never') | null;
   darkStyle?: ('night' | 'night-halo') | null;
   mediaType?: ('image' | 'video') | null;
   image?: (number | null) | Media;
@@ -2633,6 +2641,7 @@ export interface PagesSelect<T extends boolean = true> {
               mode?: T;
               tint?: T;
               texture?: T;
+              edgeTop?: T;
               darkStyle?: T;
               mediaType?: T;
               image?: T;
@@ -3363,6 +3372,7 @@ export interface SectionsSelect<T extends boolean = true> {
   mode?: T;
   tint?: T;
   texture?: T;
+  edgeTop?: T;
   darkStyle?: T;
   mediaType?: T;
   image?: T;
