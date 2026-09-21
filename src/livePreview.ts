@@ -1,4 +1,5 @@
 import type {LivePreviewConfig, PayloadRequest} from 'payload';
+import {pagePath} from '@/lib/page-paths';
 
 /**
  * Live Preview (Payload, built in): the « Aperçu en direct » tab of pages, posts, case studies and
@@ -30,8 +31,8 @@ export const livePreview: LivePreviewConfig & {collections: string[]; globals: s
     if (globalConfig?.slug === 'blog' || globalConfig?.slug === 'portfolio') return slug ? `${base}/${slug}` : null;
     if (collectionConfig?.slug === 'posts') return slug ? `${base}/${await listingBase(req, 'blog')}/${slug}` : null;
     if (collectionConfig?.slug === 'case-studies') return slug ? `${base}/${await listingBase(req, 'portfolio')}/${slug}` : null;
-    // pages: the home page at /, the others at their slug
+    // pages: their full address (nested pages, src/lib/page-paths.ts)
     if (!slug) return null;
-    return slug === 'accueil' ? `${base}/` : `${base}/${slug}`;
+    return `${base}${pagePath(data as {slug?: string; path?: string})}`;
   },
 };

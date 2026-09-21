@@ -6,11 +6,12 @@
  *   - steps: the fields are split at each « Nouvelle étape » block; one at the very top names the
  *     first step; without any, the form has one step;
  *   - width: « half » or « full » (a percentage stored before the select: ≤ 50 = half);
- *   - redirect: a chosen page (its address, « accueil » = /) or a typed URL.
+ *   - redirect: a chosen page (its full address) or a typed URL.
  */
 import type {RichTextDocument} from '@/components/rich-text';
 import {type TitleTag, toTitleTag} from '@/components/title-tags';
 import {CONSENT_SLUG, STEP_SLUG, TEL_SLUG} from '@/fields/forms/slugs';
+import {pagePath} from '@/lib/page-paths';
 import type {Form, Page} from '@/payload-types';
 
 type Width = 'half' | 'full';
@@ -73,8 +74,8 @@ function field(b: Block): FormFieldData | null {
   return null;
 }
 
-/** the address of a chosen page (« accueil » = the home page) */
-const pageHref = (page: number | Page | null | undefined): string | null => (typeof page === 'object' && page ? (page.slug && page.slug !== 'accueil' ? `/${page.slug}` : '/') : null);
+/** the address of a chosen page (nested pages: its full address) */
+const pageHref = (page: number | Page | null | undefined): string | null => (typeof page === 'object' && page ? pagePath(page) : null);
 
 export function formData(form: Form, o: {id: string; framed: boolean; showHeading: boolean}): FormData | null {
   const steps: FormData['steps'] = [{fields: []}];

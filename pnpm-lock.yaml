@@ -38,6 +38,12 @@ importers:
       '@payloadcms/plugin-form-builder':
         specifier: 3.88.0
         version: 3.88.0(@types/react@19.2.14)(monaco-editor@0.56.0)(next@16.3.3(@babel/core@7.29.7)(@playwright/test@1.58.2)(@types/node@22.19.9)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@3.88.0(graphql@16.14.2)(typescript@5.7.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.7.3)
+      '@payloadcms/plugin-nested-docs':
+        specifier: 3.88.0
+        version: 3.88.0(payload@3.88.0(graphql@16.14.2)(typescript@5.7.3))
+      '@payloadcms/plugin-redirects':
+        specifier: 3.88.0
+        version: 3.88.0(payload@3.88.0(graphql@16.14.2)(typescript@5.7.3))
       '@payloadcms/plugin-seo':
         specifier: 3.88.0
         version: 3.88.0(@types/react@19.2.14)(monaco-editor@0.56.0)(next@16.3.3(@babel/core@7.29.7)(@playwright/test@1.58.2)(@types/node@22.19.9)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@3.88.0(graphql@16.14.2)(typescript@5.7.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.7.3)
@@ -1651,6 +1657,16 @@ packages:
       payload: 3.88.0
       react: ^19.0.1 || ^19.1.2 || ^19.2.1
       react-dom: ^19.0.1 || ^19.1.2 || ^19.2.1
+
+  '@payloadcms/plugin-nested-docs@3.88.0':
+    resolution: {integrity: sha512-HXoWApBJRbrJbnQqn6saVrz2GHXIZpVeXNXBqHetkDwHWDSGZO74xCIAaA5xknG5E3EEPNTcpR4wD5RJHiIDvg==}
+    peerDependencies:
+      payload: 3.88.0
+
+  '@payloadcms/plugin-redirects@3.88.0':
+    resolution: {integrity: sha512-DrDhbKZfpaTNFkT49QsWUG+QeAbVEIQ6mSRr8/QTgn3B7wifK5AsX4x/VQf6JVT5FYgZEXhwo9hF5k7mHWDbDA==}
+    peerDependencies:
+      payload: 3.88.0
 
   '@payloadcms/plugin-seo@3.88.0':
     resolution: {integrity: sha512-3eFWoqpXZQZ3ghdFksPo7nQ08XUG0PXWc/qf1ibtXiKPlMN43Asa8Z9wGNKYtkDhIM+OYi6EmlFzRLWkCRcwrg==}
@@ -6151,6 +6167,15 @@ snapshots:
       - next
       - supports-color
       - typescript
+
+  '@payloadcms/plugin-nested-docs@3.88.0(payload@3.88.0(graphql@16.14.2)(typescript@5.7.3))':
+    dependencies:
+      payload: 3.88.0(graphql@16.14.2)(typescript@5.7.3)
+
+  '@payloadcms/plugin-redirects@3.88.0(payload@3.88.0(graphql@16.14.2)(typescript@5.7.3))':
+    dependencies:
+      '@payloadcms/translations': 3.88.0
+      payload: 3.88.0(graphql@16.14.2)(typescript@5.7.3)
 
   '@payloadcms/plugin-seo@3.88.0(@types/react@19.2.14)(monaco-editor@0.56.0)(next@16.3.3(@babel/core@7.29.7)(@playwright/test@1.58.2)(@types/node@22.19.9)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@3.88.0(graphql@16.14.2)(typescript@5.7.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.7.3)':
     dependencies:

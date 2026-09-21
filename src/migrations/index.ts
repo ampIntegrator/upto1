@@ -38,6 +38,7 @@ import * as migration_20260918_093504_remove_entry_sections from './20260918_093
 import * as migration_20260918_122135_related_heading from './20260918_122135_related_heading';
 import * as migration_20260918_122158_remove_related_labels from './20260918_122158_remove_related_labels';
 import * as migration_20260921_084545_forms from './20260921_084545_forms';
+import * as migration_20260921_091226_nested_pages from './20260921_091226_nested_pages';
 
 export const migrations = [
   {
@@ -238,6 +239,11 @@ export const migrations = [
   {
     up: migration_20260921_084545_forms.up,
     down: migration_20260921_084545_forms.down,
-    name: '20260921_084545_forms'
+    name: '20260921_084545_forms',
+  },
+  {
+    up: migration_20260921_091226_nested_pages.up,
+    down: migration_20260921_091226_nested_pages.down,
+    name: '20260921_091226_nested_pages'
   },
 ];

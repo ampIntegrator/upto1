@@ -76,6 +76,7 @@ export interface Config {
     'case-categories': CaseCategory;
     media: Media;
     users: User;
+    redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
     'payload-kv': PayloadKv;
@@ -94,6 +95,7 @@ export interface Config {
     'case-categories': CaseCategoriesSelect<false> | CaseCategoriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -1067,6 +1069,22 @@ export interface Page {
    * Preset to the site silo; change it for this page only.
    */
   silo?: ('blue' | 'green' | 'orange' | 'violet' | 'magenta' | 'ambre') | null;
+  /**
+   * Empty: the page sits at the site's root. Its place sets its address (/parent/page) and breadcrumb; 3 levels at most.
+   */
+  parent?: (number | null) | Page;
+  /**
+   * Computed on save. When it changes, the old address redirects to the new one (Site › Redirects).
+   */
+  path?: string | null;
+  breadcrumbs?:
+    | {
+        doc?: (number | null) | Page;
+        url?: string | null;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -2395,6 +2413,35 @@ export interface User {
   collection: 'users';
 }
 /**
+ * An old address → a page, a post, a case study or a custom address (permanent redirect). Created automatically when a page changes address; add your own for old links.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects".
+ */
+export interface Redirect {
+  id: number;
+  from: string;
+  to?: {
+    type?: ('reference' | 'custom') | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'case-studies';
+          value: number | CaseStudy;
+        } | null);
+    url?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions".
  */
@@ -2470,6 +2517,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: number | User;
+      } | null)
+    | ({
+        relationTo: 'redirects';
+        value: number | Redirect;
       } | null)
     | ({
         relationTo: 'forms';
@@ -3287,6 +3338,16 @@ export interface PagesSelect<T extends boolean = true> {
       };
   slug?: T;
   silo?: T;
+  parent?: T;
+  path?: T;
+  breadcrumbs?:
+    | T
+    | {
+        doc?: T;
+        url?: T;
+        label?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -4169,6 +4230,22 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects_select".
+ */
+export interface RedirectsSelect<T extends boolean = true> {
+  from?: T;
+  to?:
+    | T
+    | {
+        type?: T;
+        reference?: T;
+        url?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

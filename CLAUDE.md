@@ -61,6 +61,9 @@ Blog and case studies (done on 17 Sept. 2026): `docs/blog.md` (with the listing 
 and `docs/cases.md`; decisions in `docs/handoff-2026-09-17-blog.md` and `-cases.md`. Trap: never share a field or block config object between a
 Lexical editor and a collection (Payload mutates it; tables get dropped): use factories.
 
+Nested pages (done on 21 Sept. 2026): `docs/pages.md` (parent page, full address `path`, 3 levels set
+by `MAX_PAGE_DEPTH`, automatic redirects, routes as dispatchers). Build every page URL with `pagePath()`.
+
 Forms (done on 21 Sept. 2026): `docs/forms.md` (plugin-form-builder, « Formulaire » column block 4 to 12,
 one or two columns of fields, multi-step, server action, connection points for the tech lead);
 decisions in `docs/handoff-2026-09-21-forms.md`.
