@@ -10,7 +10,8 @@
  *     below the threshold every field is full width. A container query, so the column width
  *     decides, not the screen. DOM order = reading and tab order.
  *   - Card: `framed` = paper card (the surface colour, night card on night), 48 px padding, 24 px
- *     under 520 px of container; optional eyebrow, title (tag chosen, look fixed) and intro.
+ *     under 520 px of container; optional eyebrow (mono text or badge), title (tag chosen, look
+ *     fixed) and intro.
  *   - Steps: more than one step = Astryx Stepper above the fields, « Retour » / « Continuer » on a
  *     full row, the submit button on the last step only. Each step is validated before moving on,
  *     values are kept when going back, focus moves to the step title. One submission at the end.
@@ -29,6 +30,7 @@ import {Text} from '@astryxdesign/core/Text';
 import React, {useEffect, useId, useRef, useState} from 'react';
 
 import {Button} from './Button';
+import {Chip} from './Chip';
 import {DateField} from './DateField';
 import {Field} from './Field';
 import {NumberField} from './NumberField';
@@ -84,6 +86,8 @@ export type SiteFormProps = {
   /** the form document, sent back with the values */
   formId?: number;
   eyebrow?: string;
+  /** the eyebrow as mono text (mockup) or as a badge */
+  eyebrowStyle?: 'eyebrow' | 'badge';
   /** a word between <span>…</span> is set in serif */
   title?: string;
   tag?: TitleTag;
@@ -121,7 +125,7 @@ function fieldError(f: FormField, v: FormValue, l: FormLabels): string | null {
   return null;
 }
 
-export function SiteForm({id, formId, eyebrow, title, tag = 'h3', intro, framed = true, steps, submitLabel, submitAction, confirmation, labels}: SiteFormProps) {
+export function SiteForm({id, formId, eyebrow, eyebrowStyle = 'eyebrow', title, tag = 'h3', intro, framed = true, steps, submitLabel, submitAction, confirmation, labels}: SiteFormProps) {
   const l = {...LABELS, ...labels};
   const all = steps.flatMap((s) => s.fields);
   const [values, setValues] = useState<FormValues>(() => Object.fromEntries(all.map((f) => [f.name, initialValue(f)])));
@@ -200,7 +204,13 @@ export function SiteForm({id, formId, eyebrow, title, tag = 'h3', intro, framed 
 
   const heading = (
     <>
-      {eyebrow ? <Text type="eyebrow-mono" color="primary" className={styles.center}>{eyebrow}</Text> : null}
+      {eyebrow && eyebrowStyle === 'badge' ? (
+        <HStack hAlign="center" className={styles.badge}>
+          <Chip label={eyebrow} tone="accent" />
+        </HStack>
+      ) : eyebrow ? (
+        <Text type="eyebrow-mono" color="primary" className={styles.center}>{eyebrow}</Text>
+      ) : null}
       {title ? <Title tag={tag} className={styles.title}>{renderTitle(title)}</Title> : null}
       {intro ? <Text type="body" color="secondary" className={styles.center}>{intro}</Text> : null}
     </>

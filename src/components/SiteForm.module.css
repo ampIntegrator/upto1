@@ -11,6 +11,7 @@
   .submit { width: 100%; }
 }
 .center { text-align: center; }
+.badge { margin-block-end: var(--spacing-2); }
 .title {
   margin: 0 0 var(--spacing-2);
   text-align: center;
