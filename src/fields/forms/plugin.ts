@@ -14,7 +14,8 @@ import {CONSENT_SLUG, HALF_BY_DEFAULT, STEP_SLUG, TEL_SLUG} from './slugs';
  *     free percentage `width` becomes « demi » / « pleine » (SiteForm: two columns from 8/12);
  *   - three blocks of ours: Téléphone, Consentement (always required, optional privacy link) and
  *     Nouvelle étape (splits the form into steps);
- *   - the displayed heading of the form: eyebrow, title with its tag, intro;
+ *   - one title, shown on the site and in the list (a plain copy, `listTitle`, for the admin), its
+ *     tag, an eyebrow as text or badge, a lead; three tabs (form, after sending, emails);
  *   - submissions: created by the site's server action only (local API), read by logged-in users.
  * Email sending and anti-spam services are the tech lead's (docs/forms.md). A factory: every call
  * builds fresh configs (Payload mutates them while sanitising).
@@ -100,39 +101,72 @@ const uniqueNames = (value: unknown, {req}: {req: PayloadRequest}) => {
   return true;
 };
 
+/** the plugin's field of that name */
+const pick = (fields: Field[], name: string): Field | undefined => fields.find((f) => 'name' in f && f.name === name);
+
+/**
+ * The form's admin, in three tabs (unnamed: the data stays flat, as the plugin expects):
+ *   Formulaire     title (shown on the site and in the list) and its tag, eyebrow and its style,
+ *                  lead, the fields, the submit button label;
+ *   Après l'envoi  confirmation message or redirect;
+ *   E-mails        the plugin's emails (sent once the tech lead sets up an email adapter).
+ */
 function formFields(defaultFields: Field[]): Field[] {
-  const out: Field[] = [];
-  for (const f of defaultFields) {
-    if ('name' in f && f.name === 'fields' && f.type === 'blocks') {
-      const plugin = Object.fromEntries(f.blocks.map((b) => [b.slug, {...b, labels: BLOCK_LABELS[b.slug] ?? b.labels, fields: withWidthSelect(b.fields, b.slug)}]));
-      const mine: Record<string, Block> = {[TEL_SLUG]: telBlock(), [CONSENT_SLUG]: consentBlock(), [STEP_SLUG]: stepBlock()};
-      const all: Record<string, Block> = {...plugin, ...mine};
-      // the picker's order: the usual fields first, the step separator last
-      const blocks = [...BLOCK_ORDER.filter((s) => all[s]).map((s) => all[s]), ...Object.values(all).filter((b) => !BLOCK_ORDER.includes(b.slug))];
-      out.push({...f, blocks, validate: uniqueNames, admin: {...f.admin, description: t.fieldsDescription}});
-      continue;
-    }
-    if ('name' in f && f.name === 'submitButtonLabel') {
-      out.push({...f, label: t.submitLabel} as Field);
-      continue;
-    }
-    out.push(f);
-    if ('name' in f && f.name === 'title') {
-      // the heading shown above the fields (the plugin's title names the form in the admin)
-      out.push(
-        {type: 'row', fields: [
-          {name: 'eyebrow', type: 'text', label: t.eyebrow, localized: true, admin: {width: '34%'}},
-          {name: 'heading', type: 'text', label: t.heading, localized: true, admin: {width: '66%', description: t.headingDescription}},
-        ]},
-        {type: 'row', fields: [
-          {name: 'intro', type: 'textarea', label: t.intro, localized: true, admin: {width: '66%', rows: 2}},
-          tagField({name: 'headingTag', defaultValue: 'h2', width: '34%'}),
-        ]},
-      );
-    }
+  const blocksField = pick(defaultFields, 'fields');
+  const used = new Set(['title', 'fields', 'submitButtonLabel', 'confirmationType', 'confirmationMessage', 'redirect', 'emails']);
+  const rest = defaultFields.filter((f) => !('name' in f && used.has(f.name)));
+  const fields: Field[] = [];
+  if (blocksField && blocksField.type === 'blocks') {
+    const plugin = Object.fromEntries(blocksField.blocks.map((b) => [b.slug, {...b, labels: BLOCK_LABELS[b.slug] ?? b.labels, fields: withWidthSelect(b.fields, b.slug)}]));
+    const mine: Record<string, Block> = {[TEL_SLUG]: telBlock(), [CONSENT_SLUG]: consentBlock(), [STEP_SLUG]: stepBlock()};
+    const all: Record<string, Block> = {...plugin, ...mine};
+    // the picker's order: the usual fields first, the step separator last
+    const blocks = [...BLOCK_ORDER.filter((s) => all[s]).map((s) => all[s]), ...Object.values(all).filter((b) => !BLOCK_ORDER.includes(b.slug))];
+    fields.push({...blocksField, blocks, validate: uniqueNames, admin: {...blocksField.admin, description: t.fieldsDescription}});
   }
-  return out;
+  const submit = pick(defaultFields, 'submitButtonLabel');
+  const after = ['confirmationType', 'confirmationMessage', 'redirect'].map((n) => pick(defaultFields, n)).filter((f): f is Field => Boolean(f));
+  const emails = pick(defaultFields, 'emails');
+  return [
+    {
+      type: 'tabs',
+      tabs: [
+        {
+          label: t.tabs.form,
+          fields: [
+            {type: 'row', fields: [
+              // the plugin's title, now the displayed one: translatable, with an optional serif accent
+              {name: 'title', type: 'text', label: t.title, required: true, localized: true, admin: {width: '66%', description: t.titleDescription}},
+              tagField({name: 'headingTag', defaultValue: 'h2', width: '34%'}),
+            ]},
+            {type: 'row', fields: [
+              {name: 'eyebrow', type: 'text', label: t.eyebrow, localized: true, admin: {width: '66%'}},
+              {
+                name: 'eyebrowStyle', type: 'radio', label: t.eyebrowStyle, defaultValue: 'eyebrow',
+                options: [{label: t.eyebrowText, value: 'eyebrow'}, {label: t.eyebrowBadge, value: 'badge'}],
+                admin: {width: '34%', layout: 'horizontal'},
+              },
+            ]},
+            {name: 'intro', type: 'textarea', label: t.intro, localized: true, admin: {rows: 2}},
+            ...fields,
+            ...(submit ? [{...submit, label: t.submitLabel} as Field] : []),
+          ],
+        },
+        {label: t.tabs.after, description: t.afterDescription, fields: after},
+        ...(emails ? [{label: t.tabs.emails, description: t.emailsDescription, fields: [emails]}] : []),
+      ],
+    },
+    // the list and the relationship pickers: the title without its <span> tags
+    {name: 'listTitle', type: 'text', label: t.title, localized: true, admin: {hidden: true}},
+    ...rest,
+  ];
 }
+
+/** the title without its serif accent tags, for the admin list */
+const plainListTitle = ({data}: {data: Record<string, unknown>}) => {
+  if (typeof data.title === 'string') data.listTitle = data.title.replace(/<\/?span>/g, '').trim();
+  return data;
+};
 
 export const formsPlugin = () =>
   formBuilderPlugin({
@@ -140,7 +174,8 @@ export const formsPlugin = () =>
     redirectRelationships: ['pages'],
     formOverrides: {
       labels: t.forms,
-      admin: {group: ct.groups.forms, useAsTitle: 'title', defaultColumns: ['title', 'updatedAt']},
+      admin: {group: ct.groups.forms, useAsTitle: 'listTitle', defaultColumns: ['listTitle', 'updatedAt']},
+      hooks: {beforeChange: [plainListTitle]},
       fields: ({defaultFields}) => formFields(defaultFields),
     },
     formSubmissionOverrides: {

@@ -8,8 +8,9 @@
  * settings (the addresses of the blog and the case studies are typed in their settings global).
  * Case studies: the « Vasseur Construction » case study of mockup 23 (slug demo-vasseur-construction)
  * in a « Rénovation » category (created once), recreated too.
- * Forms: « Démo · Demander une démo » (mockup 17) and « Démo · Projet en trois étapes », found by
- * title and updated (their submissions are kept), shown on /demo-contenus (anchor « formulaires »).
+ * Forms: « Demander une démo » (mockup 17) and « Parlons de votre projet » (three steps), found by
+ * their list title and updated (their submissions are kept), shown on /demo-contenus (anchor
+ * « formulaires »).
  */
 import config from '@payload-config';
 import {mkdtemp, writeFile} from 'node:fs/promises';
@@ -85,9 +86,8 @@ async function main() {
   const METIERS = [{label: 'Courtier', value: 'courtier'}, {label: 'Agent immobilier', value: 'agent'}, {label: 'Architecte', value: 'architecte'}, {label: 'Entreprise du bâtiment', value: 'entreprise'}];
   const formDocs = [
     {
-      title: 'Démo · Demander une démo',
+      title: 'Demander <span>une démo</span>',
       eyebrow: 'Formulaire assemblé',
-      heading: 'Demander <span>une démo</span>',
       intro: 'Réponse sous 24 h ouvrées. Sans engagement.',
       submitButtonLabel: 'Envoyer ma demande',
       confirmationType: 'message',
@@ -103,8 +103,9 @@ async function main() {
       ],
     },
     {
-      title: 'Démo · Projet en trois étapes',
-      heading: 'Parlons de <span>votre projet</span>',
+      title: 'Parlons de <span>votre projet</span>',
+      eyebrow: 'Trois étapes',
+      eyebrowStyle: 'badge',
       submitButtonLabel: 'Envoyer',
       confirmationType: 'message',
       confirmationMessage: rich('Merci, nous revenons vers vous très vite.'),
@@ -126,7 +127,8 @@ async function main() {
   ];
   const formIds: number[] = [];
   for (const data of formDocs) {
-    const found = (await payload.find({collection: 'forms', where: {title: {equals: data.title}}, limit: 1, depth: 0})).docs[0];
+    const listTitle = data.title.replace(/<\/?span>/g, '');
+    const found = (await payload.find({collection: 'forms', where: {listTitle: {equals: listTitle}}, limit: 1, depth: 0})).docs[0];
     const doc = found ? await payload.update({collection: 'forms', id: found.id, data: data as never}) : await payload.create({collection: 'forms', data: data as never});
     formIds.push(doc.id);
     log(`formulaire ${found ? 'mis à jour' : 'créé'} : ${data.title}`);

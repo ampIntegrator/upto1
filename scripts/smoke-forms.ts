@@ -32,9 +32,9 @@ async function main() {
   const steps = await payload.create({
     collection: 'forms',
     data: {
-      title: `zz smoke formulaire étapes ${stamp}`,
+      title: 'Formulaire <span>smoke</span>',
       eyebrow: 'Surtitre smoke',
-      heading: 'Formulaire <span>smoke</span>',
+      eyebrowStyle: 'badge',
       intro: 'Chapô smoke du formulaire.',
       headingTag: 'h2',
       submitButtonLabel: 'Envoyer smoke',
@@ -61,7 +61,7 @@ async function main() {
   const simple = await payload.create({
     collection: 'forms',
     data: {
-      title: `zz smoke formulaire simple ${stamp}`,
+      title: `Simple smoke ${stamp}`,
       submitButtonLabel: 'Valider smoke',
       confirmationType: 'message',
       confirmationMessage: doc('Merci simple smoke.'),
@@ -107,6 +107,8 @@ async function main() {
   });
   log(`page created: ${page.id} (${slug})`);
   try {
+    const listed = await payload.findByID({collection: 'forms', id: steps.id, depth: 0});
+    check(listed.listTitle === 'Formulaire smoke', `list title without the span: « ${listed.listTitle} »`);
     const html = await (await fetch(`${BASE}/${slug}`)).text();
     for (const m of ['Surtitre smoke', 'Formulaire ', 'Chapô smoke du formulaire.', 'Contact smoke', 'Projet smoke', 'Envoi smoke', 'Prénom smoke', 'E-mail smoke', 'Téléphone smoke', 'Envoyer smoke', 'data-steps="3"', 'data-steps="1"', 'Nom simple smoke', 'Valider smoke', 'data-width="half"', 'company_website']) check(html.includes(m), `site renders « ${m} »`);
     check((html.match(/data-steps="1"/g) ?? []).length === 2, 'the simple form is rendered twice (6 and 4 columns)');

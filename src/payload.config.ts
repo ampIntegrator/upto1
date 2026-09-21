@@ -47,6 +47,8 @@ export default buildConfig({
     components: {
       // interface language selector, next to the content language selector
       actions: ['@/i18n/admin/LanguageSwitcher#LanguageSwitcher'],
+      // « Nouveau formulaire » right under the Formulaires group (the last one of the menu)
+      afterNavLinks: ['@/fields/forms/NewFormNavLink#NewFormNavLink'],
     },
   },
   i18n: adminI18n,

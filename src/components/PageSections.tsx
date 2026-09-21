@@ -58,7 +58,7 @@ function Form({form}: {form: FormData}) {
     fields: s.fields.map((f): FormField => (f.type === 'message' ? {type: 'message', name: f.name, width: f.width, content: <RichText content={f.content} />} : f)),
   }));
   const confirmation = form.confirmation.type === 'redirect' ? form.confirmation : {type: 'message' as const, content: <RichText content={form.confirmation.content} />};
-  return <SiteForm id={form.id} formId={form.formId} eyebrow={form.eyebrow} title={form.title} tag={form.tag} intro={form.intro} framed={form.framed} steps={steps} submitLabel={form.submitLabel} confirmation={confirmation} submitAction={submitForm} />;
+  return <SiteForm id={form.id} formId={form.formId} eyebrow={form.eyebrow} eyebrowStyle={form.eyebrowStyle} title={form.title} tag={form.tag} intro={form.intro} framed={form.framed} steps={steps} submitLabel={form.submitLabel} confirmation={confirmation} submitAction={submitForm} />;
 }
 
 function Content({content, id}: {content: ContentData; id: string}) {

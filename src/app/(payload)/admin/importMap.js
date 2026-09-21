@@ -40,6 +40,7 @@ import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997e
 import { SocialRowLabel as SocialRowLabel_68d35ead5fc0bb4a6089201e765040fa } from '@/fields/RowLabels'
 import { ListingAddress as ListingAddress_eaf34fb40fbdec0839902891d44e68d7 } from '@/fields/ListingAddress'
 import { LanguageSwitcher as LanguageSwitcher_f86abc942e585c438aeb7fe1174268e3 } from '@/i18n/admin/LanguageSwitcher'
+import { NewFormNavLink as NewFormNavLink_a6c03d099269d353f3a5605f36db50bd } from '@/fields/forms/NewFormNavLink'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -86,5 +87,6 @@ export const importMap = {
   "@/fields/RowLabels#SocialRowLabel": SocialRowLabel_68d35ead5fc0bb4a6089201e765040fa,
   "@/fields/ListingAddress#ListingAddress": ListingAddress_eaf34fb40fbdec0839902891d44e68d7,
   "@/i18n/admin/LanguageSwitcher#LanguageSwitcher": LanguageSwitcher_f86abc942e585c438aeb7fe1174268e3,
+  "@/fields/forms/NewFormNavLink#NewFormNavLink": NewFormNavLink_a6c03d099269d353f3a5605f36db50bd,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

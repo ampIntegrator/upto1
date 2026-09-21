@@ -31,6 +31,7 @@ export type FormData = {
   /** unique on the page */
   id: string;
   eyebrow?: string;
+  eyebrowStyle: 'eyebrow' | 'badge';
   title?: string;
   tag: TitleTag;
   intro?: string;
@@ -97,7 +98,8 @@ export function formData(form: Form, o: {id: string; framed: boolean; showHeadin
     formId: form.id,
     id: o.id,
     eyebrow: o.showHeading ? orUndefined(form.eyebrow) : undefined,
-    title: o.showHeading ? orUndefined(form.heading) : undefined,
+    eyebrowStyle: form.eyebrowStyle === 'badge' ? 'badge' : 'eyebrow',
+    title: o.showHeading ? orUndefined(form.title) : undefined,
     tag: toTitleTag(form.headingTag, 'h2'),
     intro: o.showHeading ? orUndefined(form.intro) : undefined,
     framed: o.framed,

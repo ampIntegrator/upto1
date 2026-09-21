@@ -1330,17 +1330,17 @@ export interface CaseCategory {
  */
 export interface Form {
   id: number;
-  title: string;
-  eyebrow?: string | null;
   /**
-   * Above the fields. A word between <span>…</span> is set in accent serif. The « Title » above only names the form in the admin.
+   * Shown above the fields and in the forms list. A word between <span>…</span> is set in accent serif on the site.
    */
-  heading?: string | null;
-  intro?: string | null;
+  title: string;
   /**
    * Structure and SEO only: the look does not change.
    */
   headingTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+  eyebrow?: string | null;
+  eyebrowStyle?: ('eyebrow' | 'badge') | null;
+  intro?: string | null;
   /**
    * A « New step » block splits the form into steps; at the very top it names the first one. « Half » width: two fields side by side when the column is 8/12 or wider.
    */
@@ -1543,6 +1543,7 @@ export interface Form {
         id?: string | null;
       }[]
     | null;
+  listTitle?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -4253,10 +4254,10 @@ export interface RedirectsSelect<T extends boolean = true> {
  */
 export interface FormsSelect<T extends boolean = true> {
   title?: T;
-  eyebrow?: T;
-  heading?: T;
-  intro?: T;
   headingTag?: T;
+  eyebrow?: T;
+  eyebrowStyle?: T;
+  intro?: T;
   fields?:
     | T
     | {
@@ -4419,6 +4420,7 @@ export interface FormsSelect<T extends boolean = true> {
         message?: T;
         id?: T;
       };
+  listTitle?: T;
   updatedAt?: T;
   createdAt?: T;
 }

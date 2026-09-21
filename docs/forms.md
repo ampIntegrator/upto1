@@ -8,10 +8,14 @@ Nicolas). Mockup: `Orbita/orbita/17-forms.html` (fields, states, « Demander une
 Group **Formulaires**, from the official `@payloadcms/plugin-form-builder` (pinned to 3.88.0, like
 Payload), set up in `src/fields/forms/plugin.ts` (`formsPlugin()`, registered in `payload.config.ts`):
 
-- **Formulaires** (`forms`): « Titre » (the admin name), then the heading shown above the fields
-  (surtitre, titre affiché with an optional `<span>` accent, texte d'introduction, balise h2 by
-  default), the **Champs**, the submit button label, the confirmation (message, or redirect to a page
-  or a URL) and the plugin's **Emails** (sent once an email adapter exists, see below).
+- **Formulaires** (`forms`), in three tabs (reworked on 21 September 2026 at Nicolas's request):
+  **Formulaire**: the **title** (translatable, shown on the site above the fields and in the list;
+  an optional `<span>` accent, stripped in the list through the hidden `listTitle`) and its tag (h2
+  by default), the **eyebrow** and its style (text in small caps, or a badge), the **lead**, the
+  **Champs**, the submit button label; **Après l'envoi**: confirmation message or redirect to a page
+  or a URL; **E-mails**: the plugin's emails (sent once an email adapter exists, see below).
+- A **« Nouveau formulaire »** button ends the sidebar menu, right under the Formulaires group
+  (`src/fields/forms/NewFormNavLink.tsx`, `afterNavLinks`).
 - **Champs** (blocks, in the picker's order): Texte court, E-mail, Téléphone, Texte long, Liste
   déroulante, Choix unique (radios), Case à cocher, Nombre, Date, Texte libre (between fields),
   **Consentement** (always required, optional privacy link) and **Nouvelle étape**. Each value field
@@ -48,6 +52,10 @@ decision, 21 September 2026).
   checks run again on the server.
 - **After sending**: the confirmation replaces the form in its card, or the browser goes to the
   redirect. A failed sending shows an error banner and keeps the values.
+
+Migrations of the rework: `form_heading_add` (eyebrow style, list title), `form_heading_drop` (the
+former « Titre affiché » copied into the title, then dropped), `form_title_localized` (the title moves
+to the translated table, copied, list title filled).
 
 Conversion: `src/lib/forms.ts` (`formData`: steps, widths, redirect), loaded once per page by
 `toSections` (`formsByIds`, `src/lib/forms-load.ts`); rendering in `PageSections` (rich texts through
