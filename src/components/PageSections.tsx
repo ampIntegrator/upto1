@@ -11,7 +11,6 @@
  */
 import {Grid, GridSpan} from '@astryxdesign/core/Grid';
 import {VStack} from '@astryxdesign/core/Stack';
-import {Text} from '@astryxdesign/core/Text';
 import React from 'react';
 
 import type {ContentData, FaqData, SectionData} from '@/lib/sections';
@@ -21,6 +20,7 @@ import {Collapsible, CollapsibleGroup} from './Collapsible';
 import {Collection} from './Collection';
 import {CompareCard} from './CompareCard';
 import {Container} from './Container';
+import {FaqAnswer} from './EntryFaq';
 import {Media} from './Media';
 import {MediaQuote} from './MediaQuote';
 import {PlanCard} from './PlanCard';
@@ -33,23 +33,6 @@ import {TestimonialCard} from './TestimonialCard';
 import {Tabs} from './Tabs';
 import {TextBox} from './TextBox';
 
-/** Paragraphs of an answer, as <p>: their colour comes from the collapsible (white on the silo fill). */
-function AnswerParagraphs({text}: {text: string}) {
-  return (
-    <>
-      {text
-        .split(/\n\s*\n/)
-        .map((p) => p.trim())
-        .filter(Boolean)
-        .map((p, i) => (
-          <Text key={i} as="p" type="body">
-            {p}
-          </Text>
-        ))}
-    </>
-  );
-}
-
 /** A FAQ: one group, values indexed, the first question open when asked, questions in the chosen tag. */
 function Faq({faq, id}: {faq: FaqData; id: string}) {
   const first = `${id}-0`;
@@ -57,7 +40,7 @@ function Faq({faq, id}: {faq: FaqData; id: string}) {
     <CollapsibleGroup type={faq.mode} columns={faq.columns} defaultValue={faq.firstOpen ? (faq.mode === 'multiple' ? [first] : first) : undefined}>
       {faq.items.map((q, i) => (
         <Collapsible key={i} value={`${id}-${i}`} question={q.question} tag={faq.tag}>
-          <AnswerParagraphs text={q.answer} />
+          <FaqAnswer text={q.answer} />
         </Collapsible>
       ))}
     </CollapsibleGroup>
