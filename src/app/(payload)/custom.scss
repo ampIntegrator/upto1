@@ -112,3 +112,9 @@ html[data-preview-layout='dialog'] .collection-edit__main-wrapper:has(> .live-pr
   font-size: 14px;
   cursor: pointer;
 }
+
+/* « Nouveau formulaire » under the Formulaires group of the sidebar (src/fields/forms/NewFormNavLink.tsx) */
+.new-form-link {
+  margin-top: 8px;
+  align-self: flex-start;
+}

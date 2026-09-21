@@ -1,5 +1,13 @@
 # Handoff: forms (admin, column block, multi-step) — 21 September 2026
 
+> **Status: done** (Claude Opus, 21 September 2026). What was built and how it works: `docs/forms.md`.
+> Differences worth knowing: the component prop is `submitAction` (a function crossing from a server
+> to a client component must be named `action` or `…Action` in this Next.js) and the form id travels
+> in the submitted input rather than through `bind`; the Astryx TextInput has no `tel` type, so the
+> telephone is a text input with the phone icon; the plugin's field blocks are renamed in French and
+> English (its translations leave « Checkbox », « Select », « Textarea »); the width rule lives in
+> `smoke:forms` (a form on 3 columns is refused) rather than in `smoke:sections`.
+
 Written by Claude Fable for the next session (Claude Opus), after an analysis and arbitrations
 with Nicolas on 21 September 2026. Read `CLAUDE.md`, `docs/handoff-2026-09-17.md` (project rules,
 known traps) and `docs/section-builder.md` first. The rules there apply here: French with Nicolas

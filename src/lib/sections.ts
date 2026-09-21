@@ -32,6 +32,8 @@ import {CARD_VARIANTS} from '@/fields/blocks/cardBlocks';
 import {COLLECTION_SLUG} from '@/fields/blocks/collectionBlock';
 import {COMPARE_CARD_SLUG} from '@/fields/blocks/compareCardBlock';
 import {FAQ_SLUG} from '@/fields/blocks/faqBlock';
+import {FORM_SLUG} from '@/fields/blocks/formBlock';
+import {type FormData, formData} from '@/lib/forms';
 import {PLAN_SLUG} from '@/fields/blocks/planBlock';
 import {PRICE_SINGLE_SLUG} from '@/fields/blocks/priceSingleBlock';
 import {PROCESS_STEPS_SLUG} from '@/fields/blocks/processStepsBlock';
@@ -46,7 +48,7 @@ import {sections as siteSections} from '@/sections.config';
 import {hasMobileOrder, mobileRanks} from '@/fields/sections/mobileOrder';
 import {type ColumnSpan, toSpan} from '@/fields/sections/grid';
 import type {NucleoIconKey} from '@/theme/icons/nucleo';
-import type {CaseStudy, Media, Page, Post, Section as SharedSection, Setting} from '@/payload-types';
+import type {CaseStudy, Form, Media, Page, Post, Section as SharedSection, Setting} from '@/payload-types';
 
 type PageSection = NonNullable<Page['sections']>[number];
 type SectionBlock = Extract<PageSection, {blockType: 'section'}>;
@@ -67,6 +69,7 @@ export type ContentData =
   /** a post figure placed in a column: rendered by ProseBlock like in a post */
   | {type: 'figure'; fields: Record<string, unknown>}
   | {type: 'collection'; collection: CollectionData}
+  | {type: 'form'; form: FormData}
   | {type: 'card'; card: CardProps}
   | {type: 'media'; media: MediaProps}
   | {type: 'mediaQuote'; mediaQuote: MediaQuoteProps}
@@ -328,6 +331,8 @@ export type SectionsContext = {
   /** entries chosen in post cards and case cards, loaded with their cover and category */
   postsByIds?: (ids: number[]) => Promise<Post[]>;
   caseStudiesByIds?: (ids: number[]) => Promise<CaseStudy[]>;
+  /** forms chosen in the « Formulaire » blocks, loaded with their redirect page */
+  formsByIds?: (ids: number[]) => Promise<Form[]>;
 };
 
 /** A blog post as an article card, a case study as a realisation card. */
@@ -393,6 +398,28 @@ let sectionsCtx: SectionsContext = {};
 /** entries chosen in post cards and case cards, loaded by toSections */
 let chosenPosts = new Map<number, Post>();
 let chosenCases = new Map<number, CaseStudy>();
+let chosenForms = new Map<number, Form>();
+
+type FormBlockData = {id?: string | null; form?: number | Form | null; framed?: boolean | null; showHeading?: boolean | null};
+
+function toForm(b: FormBlockData): ContentData | null {
+  const id = refId(b.form as number | {id: number} | null);
+  const doc = (id !== null ? chosenForms.get(id) : undefined) ?? (typeof b.form === 'object' && b.form ? b.form : null);
+  const form = doc ? formData(doc, {id: `form-${b.id ?? doc.id}`, framed: b.framed !== false, showHeading: b.showHeading !== false}) : null;
+  return form ? {type: 'form', form} : null;
+}
+
+/** The forms chosen in « Formulaire » blocks, loaded once. */
+async function loadChosenForms(sources: SectionSource[], ctx: SectionsContext): Promise<Map<number, Form>> {
+  const ids = new Set<number>();
+  eachBlock(sources, (block) => {
+    if (block.blockType !== FORM_SLUG) return;
+    const id = refId((block as unknown as FormBlockData).form as number | {id: number} | null);
+    if (id !== null) ids.add(id);
+  });
+  const forms = ids.size && ctx.formsByIds ? await ctx.formsByIds([...ids]) : [];
+  return new Map(forms.map((f) => [f.id, f]));
+}
 
 type PostCardData = {post?: number | Post | null};
 type CaseCardData = {caseStudy?: number | CaseStudy | null};
@@ -467,6 +494,8 @@ function toContent(block: ContentBlock): ContentData | null {
       return toPostCard(block as unknown as PostCardData);
     case CASE_CARD_SLUG:
       return toCaseCard(block as unknown as CaseCardData);
+    case FORM_SLUG:
+      return toForm(block as unknown as FormBlockData);
     case SECTION_HEADING_SLUG:
       return toSectionHeading(block as unknown as SectionHeadingData);
     case KEY_POINTS_SLUG:
@@ -536,6 +565,6 @@ export async function toSections(blocks: Page['sections'], settings?: Pick<Setti
   });
   sectionsCtx = ctx;
   const list = sources.map((s) => s.source);
-  [entryItems, [chosenPosts, chosenCases]] = await Promise.all([loadEntryItems(list, ctx), loadChosenEntries(list, ctx)]);
+  [entryItems, [chosenPosts, chosenCases], chosenForms] = await Promise.all([loadEntryItems(list, ctx), loadChosenEntries(list, ctx), loadChosenForms(list, ctx)]);
   return sources.map((s) => toSection(s.source, s.key, site));
 }

@@ -13,6 +13,9 @@ import {getPayload} from 'payload';
 import type {HeroProps} from '@/components/Hero';
 import type {SiteFooterData, SiteHeaderData, SiteNavEntry, SiteStrip} from '@/components/site-nav';
 import {loadEntriesByIds, loadLatestEntries} from '@/lib/entries';
+import {loadFormsByIds} from '@/lib/forms-load';
+import {pageAncestors} from '@/lib/pages';
+import {pagePath} from '@/lib/page-paths';
 import {type BlogConfig, blogConfig, type CasesConfig, casesConfig, entryPath, listingPath, plainTitle} from '@/lib/listings';
 import type {SectionsContext} from '@/lib/sections';
 import type {NucleoIconKey} from '@/theme/icons/nucleo';
@@ -52,6 +55,8 @@ export function resolveEntryLink(site: {blog: BlogConfig; cases: CasesConfig}, l
   if (!slug) return undefined;
   if (link.relationTo === 'posts') return entryPath(site.blog, slug);
   if (link.relationTo === 'case-studies') return entryPath(site.cases, slug);
+  // a page: its full address (nested pages)
+  if (link.relationTo === 'pages') return pagePath(link.value as {slug?: string; path?: string});
   return undefined;
 }
 
@@ -65,6 +70,7 @@ export function sectionsContext(locale: Locale, site: {blog: BlogConfig; cases: 
     postsByIds: (ids) => loadEntriesByIds('posts', locale, ids),
     caseStudies: (q) => loadLatestEntries('case-studies', locale, q),
     caseStudiesByIds: (ids) => loadEntriesByIds('case-studies', locale, ids),
+    formsByIds: (ids) => loadFormsByIds(locale, ids),
   };
 }
 
@@ -128,9 +134,9 @@ export function showBreadcrumb(page: Page, s: Settings): boolean {
   return s.breadcrumb?.enabled !== false;
 }
 
-/** Breadcrumb props for a page: home as icon or text depending on the setting. */
+/** Breadcrumb props for a page: home as icon or text depending on the setting, then the parent pages. */
 export function breadcrumbProps(page: Page, s: Settings) {
-  return {items: [], current: page.title, homeLabel: s.breadcrumb?.homeLabel ?? 'Accueil', homeStyle: (s.breadcrumb?.homeStyle ?? 'icon') as 'icon' | 'text'};
+  return {items: pageAncestors(page), current: page.title, homeLabel: s.breadcrumb?.homeLabel ?? 'Accueil', homeStyle: (s.breadcrumb?.homeStyle ?? 'icon') as 'icon' | 'text'};
 }
 
 /** A Payload page's page top → Hero component props. */

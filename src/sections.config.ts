@@ -9,6 +9,7 @@ import {CARD_BLOCKS} from '@/fields/blocks/cardBlocks';
 import {COLLECTION_SLUG, collectionBlock} from '@/fields/blocks/collectionBlock';
 import {compareCardBlock} from '@/fields/blocks/compareCardBlock';
 import {faqBlock} from '@/fields/blocks/faqBlock';
+import {formBlock} from '@/fields/blocks/formBlock';
 import {mediaBlock} from '@/fields/blocks/mediaBlock';
 import {mediaQuoteBlock} from '@/fields/blocks/mediaQuoteBlock';
 import {planBlock} from '@/fields/blocks/planBlock';
@@ -126,7 +127,7 @@ export const orbitaSectionSettings: Field[] = [
 
 /** The site's section builder: pages get `sections.field` and `sections.beforeChange`, the shared collection `sections.sharedFields`. */
 export const sections = createSectionBuilder({
-  blocks: [sectionHeadingBlock, textBoxBlock, mediaBlock, mediaQuoteBlock, ...CARD_BLOCKS, priceSingleBlock, planBlock, faqBlock, testimonialBlock, compareCardBlock, processStepsBlock, tabsBlock, buttonGroupBlock, postCardBlock, caseCardBlock, ...FIGURE_BLOCKS, collectionBlock],
+  blocks: [sectionHeadingBlock, textBoxBlock, mediaBlock, mediaQuoteBlock, ...CARD_BLOCKS, priceSingleBlock, planBlock, faqBlock, testimonialBlock, compareCardBlock, processStepsBlock, tabsBlock, buttonGroupBlock, postCardBlock, caseCardBlock, ...FIGURE_BLOCKS, collectionBlock, formBlock],
   settings: orbitaSectionSettings,
   fieldName: 'sections',
   shared: {collection: 'sections'},

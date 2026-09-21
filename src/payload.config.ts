@@ -1,4 +1,6 @@
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
+import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
+import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
@@ -15,7 +17,11 @@ import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Sections } from './collections/Sections'
 import { Users } from './collections/Users'
+import { formsPlugin } from './fields/forms/plugin'
 import { adminI18n } from './i18n/admin/payload'
+import { collectionsText } from './i18n/admin/collections'
+import { pageTreeText } from './i18n/admin/pageTree'
+import { pagePath } from './lib/page-paths'
 import { livePreview } from './livePreview'
 import { Blog } from './globals/Blog'
 import { Portfolio } from './globals/Portfolio'
@@ -41,6 +47,8 @@ export default buildConfig({
     components: {
       // interface language selector, next to the content language selector
       actions: ['@/i18n/admin/LanguageSwitcher#LanguageSwitcher'],
+      // « Nouveau formulaire » right under the Formulaires group (the last one of the menu)
+      afterNavLinks: ['@/fields/forms/NewFormNavLink#NewFormNavLink'],
     },
   },
   i18n: adminI18n,
@@ -74,6 +82,24 @@ export default buildConfig({
   }),
   sharp,
   plugins: [
+    // Nested pages: parent page and breadcrumb (the address lives in the page's `path`, src/fields/pageTree.ts)
+    nestedDocsPlugin({
+      collections: ['pages'],
+      generateLabel: (_docs, doc) => String(doc.title ?? ''),
+      generateURL: (docs) => docs.reduce((url, d) => `${url}/${String(d.slug ?? '')}`, ''),
+    }),
+    // Redirects: created when a page's address changes, or by hand; followed by the site's routes
+    redirectsPlugin({
+      collections: ['pages', 'posts', 'case-studies'],
+      overrides: {
+        labels: pageTreeText.redirects,
+        admin: { group: collectionsText.groups.site, description: pageTreeText.redirectsDescription },
+        // the site reads them through the local API
+        access: { read: ({ req }) => Boolean(req.user) },
+      },
+    }),
+    // Forms: « Formulaires » group (forms, submissions), shaped for the site's SiteForm (docs/forms.md)
+    formsPlugin(),
     // Basic SEO (title, description, share image, preview): « SEO » tab of pages, posts and case studies.
     seoPlugin({
       collections: ['pages', 'posts', 'case-studies'],
@@ -96,7 +122,7 @@ export default buildConfig({
           const settings = await req.payload.findGlobal({ slug: listing, depth: 0, req })
           return `${base}/${settings.slug}/${doc?.slug ?? ''}`
         }
-        return doc?.slug && doc.slug !== 'accueil' ? `${base}/${doc.slug}` : base
+        return `${base}${pagePath(doc as { slug?: string; path?: string })}`.replace(/\/$/, '') || base
       },
     }),
   ],
