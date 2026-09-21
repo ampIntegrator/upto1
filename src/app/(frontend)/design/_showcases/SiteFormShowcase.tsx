@@ -70,7 +70,7 @@ export default function SiteFormShowcase() {
   return (
     <VStack gap={10}>
       <Text type="body" color="secondary">
-        Un formulaire du site (maquette 17), simple ou en plusieurs étapes. La largeur de la colonne décide : une colonne de champs jusqu’à 7/12, deux à partir de 8/12, où un champ « demi » prend une colonne. Carte encadrée ou non ; surtitre, titre et chapô facultatifs. Chaque étape est vérifiée avant de passer à la suivante ; un seul envoi à la fin, puis le message de confirmation remplace le formulaire. Le catalogue n’envoie rien.
+        Un formulaire du site (maquette 17), simple ou en plusieurs étapes. La largeur de la colonne décide : une colonne de champs jusqu’à 7/12, deux à partir de 8/12, où un champ « demi » prend une colonne. Carte encadrée ou non ; surtitre (texte ou badge), titre et chapô facultatifs. Chaque étape est vérifiée avant de passer à la suivante ; un seul envoi à la fin, puis le message de confirmation remplace le formulaire. Le catalogue n’envoie rien.
       </Text>
       <VStack gap={3}>
         <Heading level={3}>Sur 12 colonnes : deux colonnes de champs</Heading>
@@ -83,7 +83,7 @@ export default function SiteFormShowcase() {
             <SiteForm id="demo-6" {...head} steps={DEMO} submitLabel="Envoyer ma demande" submitAction={fakeSubmit} confirmation={thanks} />
           </GridSpan>
           <GridSpan columns={4}>
-            <SiteForm id="demo-4" title="Être rappelé" steps={[{fields: DEMO[0].fields.slice(0, 4)}]} submitLabel="Envoyer" submitAction={fakeSubmit} confirmation={thanks} />
+            <SiteForm id="demo-4" eyebrow="Rappel gratuit" eyebrowStyle="badge" title="Être rappelé" steps={[{fields: DEMO[0].fields.slice(0, 4)}]} submitLabel="Envoyer" submitAction={fakeSubmit} confirmation={thanks} />
           </GridSpan>
         </Grid>
       </VStack>
