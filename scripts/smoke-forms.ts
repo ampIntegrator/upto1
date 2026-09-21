@@ -46,6 +46,7 @@ async function main() {
         {blockType: 'email', name: 'email', label: 'E-mail smoke', required: true, width: 'half'},
         {blockType: 'tel', name: 'telephone', label: 'Téléphone smoke', width: 'half'},
         {blockType: 'select', name: 'metier', label: 'Métier smoke', width: 'half', options: [{label: 'Courtier', value: 'courtier'}, {label: 'Architecte', value: 'architecte'}]},
+        {blockType: 'select', name: 'modules', label: 'Modules smoke', multiple: true, search: 'always', options: [{label: 'Chiffrage', value: 'chiffrage'}, {label: 'Métré', value: 'metre'}, {label: 'Devis', value: 'devis'}]},
         {blockType: 'stepBreak', title: 'Projet smoke'},
         {blockType: 'radio', name: 'taille', label: 'Taille smoke', required: true, options: [{label: 'Petite', value: 'petite'}, {label: 'Grande', value: 'grande'}]},
         {blockType: 'number', name: 'chantiers', label: 'Chantiers smoke', width: 'half'},
@@ -110,19 +111,19 @@ async function main() {
     const listed = await payload.findByID({collection: 'forms', id: steps.id, depth: 0});
     check(listed.listTitle === 'Formulaire smoke', `list title without the span: « ${listed.listTitle} »`);
     const html = await (await fetch(`${BASE}/${slug}`)).text();
-    for (const m of ['Surtitre smoke', 'Formulaire ', 'Chapô smoke du formulaire.', 'Contact smoke', 'Projet smoke', 'Envoi smoke', 'Prénom smoke', 'E-mail smoke', 'Téléphone smoke', 'Envoyer smoke', 'data-steps="3"', 'data-steps="1"', 'Nom simple smoke', 'Valider smoke', 'data-width="half"', 'company_website']) check(html.includes(m), `site renders « ${m} »`);
+    for (const m of ['Modules smoke', 'Formulaire ', 'Chapô smoke du formulaire.', 'Contact smoke', 'Projet smoke', 'Envoi smoke', 'Prénom smoke', 'E-mail smoke', 'Téléphone smoke', 'Envoyer smoke', 'data-steps="3"', 'data-steps="1"', 'Nom simple smoke', 'Valider smoke', 'data-width="half"', 'company_website']) check(html.includes(m), `site renders « ${m} »`);
     check((html.match(/data-steps="1"/g) ?? []).length === 2, 'the simple form is rendered twice (6 and 4 columns)');
     check(!/Unhandled Runtime Error|Build Error/.test(html), 'site page without runtime error');
 
     // submissions
     const count = async (form: number) => (await payload.count({collection: 'form-submissions', where: {form: {equals: form}}})).totalDocs;
     const shown = Date.now() - 5000;
-    const valid = {prenom: 'Priya', email: 'priya@exemple.fr', telephone: '06 12 34 56 78', metier: 'architecte', taille: 'grande', chantiers: 12, date: '2026-10-01', rappel: true, projet: 'Projet smoke', consentement: true, intrus: 'ignoré'};
+    const valid = {prenom: 'Priya', email: 'priya@exemple.fr', telephone: '06 12 34 56 78', metier: 'architecte', modules: ['chiffrage', 'devis'], taille: 'grande', chantiers: 12, date: '2026-10-01', rappel: true, projet: 'Projet smoke', consentement: true, intrus: 'ignoré'};
     const ok = await submitForm({formId: steps.id, values: valid, honeypot: '', startedAt: shown});
     check(ok.ok, 'a valid submission is accepted');
     const stored = (await payload.find({collection: 'form-submissions', where: {form: {equals: steps.id}}, limit: 1})).docs[0];
     const data = Object.fromEntries((stored?.submissionData ?? []).map((d) => [d.field, d.value]));
-    check(data.prenom === 'Priya' && data.email === 'priya@exemple.fr' && data.metier === 'architecte' && data.chantiers === '12' && data.rappel === 'Oui' && data.consentement === 'Oui', `stored values ${JSON.stringify(data)}`);
+    check(data.prenom === 'Priya' && data.email === 'priya@exemple.fr' && data.metier === 'Architecte' && data.modules === 'Chiffrage, Devis' && data.taille === 'Grande' && data.chantiers === '12' && data.rappel === 'Oui' && data.consentement === 'Oui', `stored values ${JSON.stringify(data)}`);
     check(!('intrus' in data), 'an undeclared name is not stored');
 
     const missing = await submitForm({formId: steps.id, values: {...valid, prenom: '', taille: ''}, honeypot: '', startedAt: shown});

@@ -87,6 +87,21 @@ const stepBlock = (): Block => ({
 });
 
 const BLOCK_LABELS: Record<string, Block['labels']> = t.blocks;
+
+/** the dropdown's own settings: several choices (badges in the field), search in the list */
+const selectOptions = (): Field[] => [
+  {
+    type: 'row',
+    fields: [
+      {name: 'multiple', type: 'checkbox', label: t.multiple, defaultValue: false, admin: {width: '50%'}},
+      {
+        name: 'search', type: 'radio', label: t.search, defaultValue: 'auto',
+        options: [{label: t.searchAuto, value: 'auto'}, {label: t.searchAlways, value: 'always'}, {label: t.searchNever, value: 'never'}],
+        admin: {width: '50%', layout: 'horizontal'},
+      },
+    ],
+  },
+];
 const BLOCK_ORDER = ['text', 'email', TEL_SLUG, 'textarea', 'select', 'radio', 'checkbox', 'number', 'date', 'message', CONSENT_SLUG, STEP_SLUG];
 
 /** every named field of the form has its own name (the submission is keyed by name) */
@@ -117,7 +132,7 @@ function formFields(defaultFields: Field[]): Field[] {
   const rest = defaultFields.filter((f) => !('name' in f && used.has(f.name)));
   const fields: Field[] = [];
   if (blocksField && blocksField.type === 'blocks') {
-    const plugin = Object.fromEntries(blocksField.blocks.map((b) => [b.slug, {...b, labels: BLOCK_LABELS[b.slug] ?? b.labels, fields: withWidthSelect(b.fields, b.slug)}]));
+    const plugin = Object.fromEntries(blocksField.blocks.map((b) => [b.slug, {...b, labels: BLOCK_LABELS[b.slug] ?? b.labels, fields: [...withWidthSelect(b.fields, b.slug), ...(b.slug === 'select' ? selectOptions() : [])]}]));
     const mine: Record<string, Block> = {[TEL_SLUG]: telBlock(), [CONSENT_SLUG]: consentBlock(), [STEP_SLUG]: stepBlock()};
     const all: Record<string, Block> = {...plugin, ...mine};
     // the picker's order: the usual fields first, the step separator last

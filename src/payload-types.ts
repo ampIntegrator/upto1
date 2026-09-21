@@ -1398,6 +1398,8 @@ export interface Form {
                 }[]
               | null;
             required?: boolean | null;
+            multiple?: boolean | null;
+            search?: ('auto' | 'always' | 'never') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'select';
@@ -4319,6 +4321,8 @@ export interface FormsSelect<T extends boolean = true> {
                     id?: T;
                   };
               required?: T;
+              multiple?: T;
+              search?: T;
               id?: T;
               blockName?: T;
             };

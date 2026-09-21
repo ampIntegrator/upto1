@@ -20,7 +20,8 @@ export type FormFieldData =
   | (Base & {type: 'text' | 'email' | 'tel' | 'textarea'; defaultValue?: string})
   | (Base & {type: 'number'; defaultValue?: number})
   | (Base & {type: 'date'; defaultValue?: string})
-  | (Base & {type: 'select' | 'radio'; options: {value: string; label: string}[]; defaultValue?: string})
+  | (Base & {type: 'radio'; options: {value: string; label: string}[]; defaultValue?: string})
+  | (Base & {type: 'select'; options: {value: string; label: string}[]; defaultValue?: string; multiple?: boolean; searchFrom?: number})
   | (Base & {type: 'checkbox'; defaultValue?: boolean})
   | (Base & {type: 'consent'; link?: {label: string; href: string}})
   | {type: 'message'; name: string; width: Width; content: RichTextDocument};
@@ -66,9 +67,11 @@ function field(b: Block): FormFieldData | null {
       return {...base, type: 'number', width: width(b.width, 'half'), defaultValue: orUndefined(b.defaultValue)};
     case 'date':
       return {...base, type: 'date', width: width(b.width, 'half'), defaultValue: orUndefined(b.defaultValue)};
-    case 'select':
     case 'radio':
-      return {...base, type: b.blockType, width: width(b.width, b.blockType === 'radio' ? 'full' : 'half'), options: (b.options ?? []).map((o) => ({value: o.value, label: o.label})), defaultValue: orUndefined(b.defaultValue)};
+      return {...base, type: 'radio', width: width(b.width, 'full'), options: (b.options ?? []).map((o) => ({value: o.value, label: o.label})), defaultValue: orUndefined(b.defaultValue)};
+    case 'select':
+      // search: beyond 5 options (the component's default), always (0) or never
+      return {...base, type: 'select', width: width(b.width, 'half'), options: (b.options ?? []).map((o) => ({value: o.value, label: o.label})), defaultValue: orUndefined(b.defaultValue), multiple: Boolean(b.multiple), searchFrom: b.search === 'always' ? 0 : b.search === 'never' ? Number.MAX_SAFE_INTEGER : undefined};
     case 'checkbox':
       return {...base, type: 'checkbox', width: width(b.width, 'full'), defaultValue: Boolean(b.defaultValue)};
   }

@@ -22,6 +22,9 @@ Payload), set up in `src/fields/forms/plugin.ts` (`formsPlugin()`, registered in
   has a technical **name** (unique in the form: checked on save), a label, « Obligatoire », and a
   **width**: « demi » (default for short fields) or « pleine ». The plugin's state, country, payment
   and upload fields are off (upload: phase 2).
+- **Liste déroulante** has two settings of its own: « Choix multiple » (the choices show as badges
+  in the field, each with its remove cross) and « Recherche dans la liste » (beyond 5 options, the
+  default; always; never). Submissions store the option labels, comma-separated when several.
 - **Nouvelle étape** splits the form: the fields after it form a new step, up to the next one. At
   the very top, it names the first step. No separator = a plain form.
 - **Réponses** (`form-submissions`): one per sending, with the form and the values (`field` = name,

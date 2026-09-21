@@ -36,11 +36,17 @@ type Named = Extract<Block, {name: string}>;
 /** the blocks that hold a value (not the step separators nor the free messages) */
 const isNamed = (b: Block): b is Named => 'name' in b && typeof b.name === 'string';
 
-/** a value as stored text: « Oui » / « Non » for boxes, empty for nothing */
+/**
+ * a value as stored text, readable in « Réponses »: « Oui » / « Non » for boxes, the label of the
+ * chosen option(s) for dropdowns and radios (comma-separated when several), empty for nothing
+ */
 const asText = (v: FormValue | undefined, b: Named): string => {
   if (b.blockType === 'checkbox' || b.blockType === CONSENT_SLUG) return v === true ? 'Oui' : 'Non';
   if (v === null || v === undefined || v === false) return '';
-  return String(v).trim();
+  const options = b.blockType === 'select' || b.blockType === 'radio' ? (b.options ?? []) : [];
+  const label = (x: unknown) => options.find((o) => o.value === x)?.label ?? String(x).trim();
+  if (Array.isArray(v)) return v.map(label).join(', ');
+  return label(v);
 };
 
 export async function submitForm(input: FormSubmitInput): Promise<FormSubmitResult> {

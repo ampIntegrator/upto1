@@ -42,6 +42,7 @@ import * as migration_20260921_091226_nested_pages from './20260921_091226_neste
 import * as migration_20260921_092235_form_heading_add from './20260921_092235_form_heading_add';
 import * as migration_20260921_092247_form_heading_drop from './20260921_092247_form_heading_drop';
 import * as migration_20260921_092308_form_title_localized from './20260921_092308_form_title_localized';
+import * as migration_20260921_102407_form_select_options from './20260921_102407_form_select_options';
 
 export const migrations = [
   {
@@ -262,6 +263,11 @@ export const migrations = [
   {
     up: migration_20260921_092308_form_title_localized.up,
     down: migration_20260921_092308_form_title_localized.down,
-    name: '20260921_092308_form_title_localized'
+    name: '20260921_092308_form_title_localized',
+  },
+  {
+    up: migration_20260921_102407_form_select_options.up,
+    down: migration_20260921_102407_form_select_options.down,
+    name: '20260921_102407_form_select_options'
   },
 ];
