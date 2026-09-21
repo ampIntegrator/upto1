@@ -75,6 +75,10 @@ describe('registre des emprises', () => {
     expect(minSpan({type: 'gallery'})).toBe(6);
   });
 
+  it('formulaire de 4 à 12 colonnes', () => {
+    expect([minSpan({type: 'form'}), maxSpan({type: 'form'})]).toEqual([4, 12]);
+  });
+
   it('prend le contenu le plus large pour une colonne', () => {
     expect(columnMinSpan([{type: 'stat'}, {type: 'card'}, {type: 'sectionNote'}])).toBe(6);
     expect(columnMinSpan([])).toBe(2);

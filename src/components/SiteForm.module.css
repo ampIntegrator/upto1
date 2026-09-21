@@ -1,0 +1,39 @@
+/* SiteForm — one or two columns of fields decided by the column's width (container query). */
+.root { width: 100%; container-type: inline-size; outline: none; }
+.card { width: 100%; }
+.root[data-framed] .card {
+  padding: var(--spacing-12);
+  background: var(--color-background-surface);
+  border: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.12));
+}
+@container (max-width: 519px) {
+  .root[data-framed] .card { padding: var(--spacing-6); }
+  .submit { width: 100%; }
+}
+.center { text-align: center; }
+.title {
+  margin: 0 0 var(--spacing-2);
+  text-align: center;
+  font-family: var(--font-family-heading);
+  font-size: var(--text-heading-1-size);
+  line-height: var(--text-heading-1-leading);
+  font-weight: var(--font-weight-extrabold, 800);
+  letter-spacing: -0.02em;
+  color: light-dark(var(--color-accent), var(--color-highlight));
+}
+.title + .center { margin-block-end: var(--spacing-6); }
+
+/* the grid: one column; from 840 px of column, two, a « half » field in one of them */
+.form { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--spacing-5); margin-block-start: var(--spacing-4); }
+.cell, .full { grid-column: 1 / -1; min-width: 0; }
+@container (min-width: 840px) {
+  .form { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--spacing-6); }
+  .cell[data-width='half'] { grid-column: span 1; }
+}
+.stepTitle { outline: none; }
+.message { color: var(--color-text-secondary); }
+.consentLink { font-size: var(--font-size-sm); padding-inline-start: var(--spacing-8); }
+.actions { margin-block-start: var(--spacing-2); }
+
+/* honeypot: out of sight, out of the tab order */
+.trap { position: absolute; width: 2px; height: 2px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; opacity: 0; pointer-events: none; }
