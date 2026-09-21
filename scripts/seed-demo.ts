@@ -116,6 +116,8 @@ async function main() {
         {blockType: 'email', name: 'email', label: 'E-mail', required: true, width: 'half'},
         {blockType: 'tel', name: 'telephone', label: 'Téléphone', width: 'half'},
         {blockType: 'stepBreak', title: 'Votre projet'},
+        {blockType: 'select', name: 'modules', label: 'Modules qui vous intéressent', multiple: true, width: 'full', options: ['Chiffrage', 'Métré', 'Devis', 'Facturation', 'Suivi de chantier', 'Planning', 'Achats'].map((label) => ({label, value: label.toLowerCase()}))},
+        {blockType: 'select', name: 'departement', label: 'Département', search: 'always', width: 'half', options: ['Ain', 'Aisne', 'Allier', 'Alpes-Maritimes', 'Ardèche', 'Bouches-du-Rhône', 'Calvados', 'Gironde', 'Loire-Atlantique', 'Nord', 'Paris', 'Rhône'].map((label) => ({label, value: label.toLowerCase()}))},
         {blockType: 'radio', name: 'taille', label: 'Taille de l’équipe', required: true, options: [{label: '1 à 5', value: '1-5'}, {label: '6 à 20', value: '6-20'}, {label: 'Plus de 20', value: '20+'}]},
         {blockType: 'number', name: 'chantiers', label: 'Chantiers par an', width: 'half'},
         {blockType: 'date', name: 'date', label: 'Date souhaitée', width: 'half'},

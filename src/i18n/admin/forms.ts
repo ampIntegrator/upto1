@@ -23,6 +23,11 @@ export const formsText = texts({
   afterDescription: {fr: 'Ce que voit le visiteur une fois le formulaire envoyé : un message à la place du formulaire, ou une autre page.', en: 'What the visitor sees once the form is sent: a message in place of the form, or another page.'},
   emailsDescription: {fr: 'Envoyés à chaque réponse, une fois le service d’envoi configuré (tech lead). En attendant, les réponses sont rangées dans Formulaires › Réponses.', en: 'Sent with every submission once the email service is set up (tech lead). Meanwhile, submissions are stored in Forms › Submissions.'},
   newForm: {fr: 'Nouveau formulaire', en: 'New form'},
+  multiple: {fr: 'Choix multiple (les choix s’affichent en badges dans le champ)', en: 'Several choices (shown as badges in the field)'},
+  search: {fr: 'Recherche dans la liste', en: 'Search in the list'},
+  searchAuto: {fr: 'Au-delà de 5 options', en: 'Beyond 5 options'},
+  searchAlways: {fr: 'Toujours', en: 'Always'},
+  searchNever: {fr: 'Jamais', en: 'Never'},
   fieldsDescription: {fr: 'Un bloc « Nouvelle étape » coupe le formulaire en étapes ; placé tout en haut, il nomme la première. Largeur « demi » : deux champs côte à côte quand la colonne fait 8/12 ou plus.', en: 'A « New step » block splits the form into steps; at the very top it names the first one. « Half » width: two fields side by side when the column is 8/12 or wider.'},
   duplicateName: {
     fr: ({name}: {name: string}) => `Le nom « ${name} » est utilisé par deux champs : chaque champ doit avoir un nom unique.`,
