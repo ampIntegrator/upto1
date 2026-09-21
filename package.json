@@ -29,7 +29,8 @@
     "seed:demo": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/seed-demo.ts",
     "seed:content": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/seed-content.ts",
     "smoke:blog": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/smoke-blog.ts",
-    "smoke:cases": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/smoke-cases.ts"
+    "smoke:cases": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/smoke-cases.ts",
+    "smoke:forms": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/smoke-forms.ts"
   },
   "dependencies": {
     "@astryxdesign/core": "0.5.4",
@@ -41,6 +42,7 @@
     "@payloadcms/db-sqlite": "3.88.0",
     "@payloadcms/live-preview-react": "3.88.0",
     "@payloadcms/next": "3.88.0",
+    "@payloadcms/plugin-form-builder": "3.88.0",
     "@payloadcms/plugin-seo": "3.88.0",
     "@payloadcms/richtext-lexical": "3.88.0",
     "@payloadcms/translations": "3.88.0",

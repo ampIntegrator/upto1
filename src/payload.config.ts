@@ -15,6 +15,7 @@ import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Sections } from './collections/Sections'
 import { Users } from './collections/Users'
+import { formsPlugin } from './fields/forms/plugin'
 import { adminI18n } from './i18n/admin/payload'
 import { livePreview } from './livePreview'
 import { Blog } from './globals/Blog'
@@ -74,6 +75,8 @@ export default buildConfig({
   }),
   sharp,
   plugins: [
+    // Forms: « Formulaires » group (forms, submissions), shaped for the site's SiteForm (docs/forms.md)
+    formsPlugin(),
     // Basic SEO (title, description, share image, preview): « SEO » tab of pages, posts and case studies.
     seoPlugin({
       collections: ['pages', 'posts', 'case-studies'],

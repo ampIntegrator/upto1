@@ -1,6 +1,5 @@
 import {texts} from './languages';
 
-/** Admin texts of the collections (Categories, Case studies, Media, Pages, Posts, Sections, Users). */
 /** Admin texts of the « under the entry » tab of posts and case studies (FAQ, related entries). */
 export const entryBelowText = texts({
   faq: {fr: 'FAQ', en: 'FAQ'},
@@ -23,11 +22,13 @@ export const entryBelowText = texts({
   relatedItemsDescription: {fr: '3 ou 4 selon les réglages ; s’il en manque, les automatiques complètent.', en: '3 or 4 depending on the settings; if some are missing, automatic ones fill in.'},
 });
 
+/** Admin texts of the collections (Categories, Case studies, Media, Pages, Posts, Sections, Users). */
 export const collectionsText = texts({
   groups: {
     blog: {fr: 'Blog', en: 'Blog'},
     cases: {fr: 'Réalisations', en: 'Case studies'},
     site: {fr: 'Site', en: 'Site'},
+    forms: {fr: 'Formulaires', en: 'Forms'},
   },
   categories: {
     singular: {fr: 'Catégorie', en: 'Category'},

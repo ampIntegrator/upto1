@@ -13,6 +13,8 @@ import {Grid, GridSpan} from '@astryxdesign/core/Grid';
 import {VStack} from '@astryxdesign/core/Stack';
 import React from 'react';
 
+import {submitForm} from '@/app/(frontend)/actions/submitForm';
+import type {FormData} from '@/lib/forms';
 import type {ContentData, FaqData, SectionData} from '@/lib/sections';
 import {ButtonGroup} from './ButtonGroup';
 import {Card} from './Card';
@@ -26,7 +28,9 @@ import {MediaQuote} from './MediaQuote';
 import {PlanCard} from './PlanCard';
 import {PriceCard} from './PriceCard';
 import {ProcessSteps} from './ProcessSteps';
+import {RichText} from './RichText';
 import {Section} from './Section';
+import {type FormField, SiteForm} from './SiteForm';
 import {renderProseBlock} from './ProseBlock';
 import {SectionHeading} from './SectionHeading';
 import {TestimonialCard} from './TestimonialCard';
@@ -45,6 +49,16 @@ function Faq({faq, id}: {faq: FaqData; id: string}) {
       ))}
     </CollapsibleGroup>
   );
+}
+
+/** A form block: its rich texts rendered here, the submission through the server action. */
+function Form({form}: {form: FormData}) {
+  const steps = form.steps.map((s) => ({
+    title: s.title,
+    fields: s.fields.map((f): FormField => (f.type === 'message' ? {type: 'message', name: f.name, width: f.width, content: <RichText content={f.content} />} : f)),
+  }));
+  const confirmation = form.confirmation.type === 'redirect' ? form.confirmation : {type: 'message' as const, content: <RichText content={form.confirmation.content} />};
+  return <SiteForm id={form.id} formId={form.formId} eyebrow={form.eyebrow} title={form.title} tag={form.tag} intro={form.intro} framed={form.framed} steps={steps} submitLabel={form.submitLabel} confirmation={confirmation} submitAction={submitForm} />;
 }
 
 function Content({content, id}: {content: ContentData; id: string}) {
@@ -85,6 +99,8 @@ function Content({content, id}: {content: ContentData; id: string}) {
       return <Media {...content.media} />;
     case 'mediaQuote':
       return <MediaQuote {...content.mediaQuote} />;
+    case 'form':
+      return <Form form={content.form} />;
     default:
       return null;
   }

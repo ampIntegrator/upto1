@@ -37,6 +37,7 @@ import * as migration_20260918_093309_entry_faq_related from './20260918_093309_
 import * as migration_20260918_093504_remove_entry_sections from './20260918_093504_remove_entry_sections';
 import * as migration_20260918_122135_related_heading from './20260918_122135_related_heading';
 import * as migration_20260918_122158_remove_related_labels from './20260918_122158_remove_related_labels';
+import * as migration_20260921_084545_forms from './20260921_084545_forms';
 
 export const migrations = [
   {
@@ -232,6 +233,11 @@ export const migrations = [
   {
     up: migration_20260918_122158_remove_related_labels.up,
     down: migration_20260918_122158_remove_related_labels.down,
-    name: '20260918_122158_remove_related_labels'
+    name: '20260918_122158_remove_related_labels',
+  },
+  {
+    up: migration_20260921_084545_forms.up,
+    down: migration_20260921_084545_forms.down,
+    name: '20260921_084545_forms'
   },
 ];

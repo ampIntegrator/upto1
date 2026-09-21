@@ -13,6 +13,7 @@ import {getPayload} from 'payload';
 import type {HeroProps} from '@/components/Hero';
 import type {SiteFooterData, SiteHeaderData, SiteNavEntry, SiteStrip} from '@/components/site-nav';
 import {loadEntriesByIds, loadLatestEntries} from '@/lib/entries';
+import {loadFormsByIds} from '@/lib/forms-load';
 import {type BlogConfig, blogConfig, type CasesConfig, casesConfig, entryPath, listingPath, plainTitle} from '@/lib/listings';
 import type {SectionsContext} from '@/lib/sections';
 import type {NucleoIconKey} from '@/theme/icons/nucleo';
@@ -65,6 +66,7 @@ export function sectionsContext(locale: Locale, site: {blog: BlogConfig; cases: 
     postsByIds: (ids) => loadEntriesByIds('posts', locale, ids),
     caseStudies: (q) => loadLatestEntries('case-studies', locale, q),
     caseStudiesByIds: (ids) => loadEntriesByIds('case-studies', locale, ids),
+    formsByIds: (ids) => loadFormsByIds(locale, ids),
   };
 }
 

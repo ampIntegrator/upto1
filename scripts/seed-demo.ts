@@ -8,6 +8,8 @@
  * settings (the addresses of the blog and the case studies are typed in their settings global).
  * Case studies: the « Vasseur Construction » case study of mockup 23 (slug demo-vasseur-construction)
  * in a « Rénovation » category (created once), recreated too.
+ * Forms: « Démo · Demander une démo » (mockup 17) and « Démo · Projet en trois étapes », found by
+ * title and updated (their submissions are kept), shown on /demo-contenus (anchor « formulaires »).
  */
 import config from '@payload-config';
 import {mkdtemp, writeFile} from 'node:fs/promises';
@@ -78,6 +80,60 @@ async function main() {
   }
   const [chantier, bureau, immeuble, analyse, archi] = img;
 
+  // 1b · two demo forms, updated in place (their submissions stay)
+  const rich = (text: string) => ({root: {type: 'root', format: '', indent: 0, version: 1, direction: 'ltr', children: [{type: 'paragraph', format: '', indent: 0, version: 1, direction: 'ltr', textFormat: 0, textStyle: '', children: [{type: 'text', text, format: 0, detail: 0, mode: 'normal', style: '', version: 1}]}]}});
+  const METIERS = [{label: 'Courtier', value: 'courtier'}, {label: 'Agent immobilier', value: 'agent'}, {label: 'Architecte', value: 'architecte'}, {label: 'Entreprise du bâtiment', value: 'entreprise'}];
+  const formDocs = [
+    {
+      title: 'Démo · Demander une démo',
+      eyebrow: 'Formulaire assemblé',
+      heading: 'Demander <span>une démo</span>',
+      intro: 'Réponse sous 24 h ouvrées. Sans engagement.',
+      submitButtonLabel: 'Envoyer ma demande',
+      confirmationType: 'message',
+      confirmationMessage: rich('Merci ! Votre demande est bien partie. Réponse sous 24 h ouvrées.'),
+      fields: [
+        {blockType: 'text', name: 'prenom', label: 'Prénom', required: true, width: 'half'},
+        {blockType: 'text', name: 'nom', label: 'Nom', required: true, width: 'half'},
+        {blockType: 'email', name: 'email', label: 'E-mail professionnel', required: true, width: 'half'},
+        {blockType: 'tel', name: 'telephone', label: 'Téléphone', width: 'half'},
+        {blockType: 'select', name: 'metier', label: 'Votre métier', width: 'full', options: METIERS},
+        {blockType: 'textarea', name: 'projet', label: 'Votre projet (facultatif)', width: 'full'},
+        {blockType: 'consent', name: 'consentement', label: 'J’accepte d’être recontacté par l’équipe.', privacyLabel: 'Politique de confidentialité', privacyHref: '#'},
+      ],
+    },
+    {
+      title: 'Démo · Projet en trois étapes',
+      heading: 'Parlons de <span>votre projet</span>',
+      submitButtonLabel: 'Envoyer',
+      confirmationType: 'message',
+      confirmationMessage: rich('Merci, nous revenons vers vous très vite.'),
+      fields: [
+        {blockType: 'stepBreak', title: 'Vous'},
+        {blockType: 'text', name: 'prenom', label: 'Prénom', required: true, width: 'half'},
+        {blockType: 'text', name: 'nom', label: 'Nom', required: true, width: 'half'},
+        {blockType: 'email', name: 'email', label: 'E-mail', required: true, width: 'half'},
+        {blockType: 'tel', name: 'telephone', label: 'Téléphone', width: 'half'},
+        {blockType: 'stepBreak', title: 'Votre projet'},
+        {blockType: 'radio', name: 'taille', label: 'Taille de l’équipe', required: true, options: [{label: '1 à 5', value: '1-5'}, {label: '6 à 20', value: '6-20'}, {label: 'Plus de 20', value: '20+'}]},
+        {blockType: 'number', name: 'chantiers', label: 'Chantiers par an', width: 'half'},
+        {blockType: 'date', name: 'date', label: 'Date souhaitée', width: 'half'},
+        {blockType: 'stepBreak', title: 'Envoi'},
+        {blockType: 'message', message: rich('Dernière étape : votre accord, puis l’envoi.')},
+        {blockType: 'consent', name: 'consentement', label: 'J’accepte d’être recontacté par l’équipe.'},
+      ],
+    },
+  ];
+  const formIds: number[] = [];
+  for (const data of formDocs) {
+    const found = (await payload.find({collection: 'forms', where: {title: {equals: data.title}}, limit: 1, depth: 0})).docs[0];
+    const doc = found ? await payload.update({collection: 'forms', id: found.id, data: data as never}) : await payload.create({collection: 'forms', data: data as never});
+    formIds.push(doc.id);
+    log(`formulaire ${found ? 'mis à jour' : 'créé'} : ${data.title}`);
+  }
+  const [demoForm, stepsForm] = formIds;
+  const form = (id: number, opts: Record<string, unknown> = {}) => ({blockType: 'form', form: id, framed: true, showHeading: true, ...opts});
+
   // 2 · the three pages
   const pages = [
     {
@@ -116,6 +172,11 @@ async function main() {
           row(column(8, buttonGroup([btn('Demander une démo', 'primary', {shape: 'split', size: 'lg'}), btn('Voir les tarifs', 'high', {shape: 'split', size: 'lg'})], {mode: 'attached'})), column(4, textBox({titleSize: 'heading-2', titleTag: 'h3', badges: [], buttons: [], title: 'Deux boutons collés'}))),
           row(column(6, buttonGroup([btn('Commencer', 'primary', {shape: 'split'}), btn('En savoir plus', 'ghost')], {align: 'center'})), column(6, buttonGroup([btn('Commencer', 'primary', {shape: 'split'}), btn('En savoir plus', 'ghost')], {width: 'full'}))),
         ], {anchor: 'boutons'}),
+        light([
+          row(column(12, form(demoForm))),
+          row(column(7, form(stepsForm)), column(5, media(chantier, '480'))),
+          row(column(4, form(demoForm, {showHeading: false})), column(8, text())),
+        ], {anchor: 'formulaires', tint: 'highlight'}),
         light([row(column(12, mediaQuote(analyse)))]),
       ],
     },

@@ -26,6 +26,8 @@ import {CASE_CARD_SLUG} from '@/fields/blocks/caseCardBlock';
 import {POST_CARD_SLUG} from '@/fields/blocks/postCardBlock';
 import {SECTION_HEADING_SLUG} from '@/fields/blocks/sectionHeadingBlock';
 import {COLLECTION_SLUG} from '@/fields/blocks/collectionBlock';
+import {FORM_SLUG} from '@/fields/blocks/formBlock';
+import {SiteForm} from '@/components/SiteForm';
 import {COMPARE_CARD_SLUG} from '@/fields/blocks/compareCardBlock';
 import {FAQ_SLUG} from '@/fields/blocks/faqBlock';
 import {PLAN_SLUG} from '@/fields/blocks/planBlock';
@@ -97,6 +99,15 @@ export function Apercu({slug}: {slug: string}) {
           <Tabs items={['Le standard se perd en route', 'Le reporting est introuvable', 'Les pannes deviennent des incidents'].map((label) => ({label, content: LOREM_DOC}))} label="Situations" />
         ) : slug === TEXT_BOX_SLUG ? (
           <TextBox badges={[{label: 'Nouveau', tone: 'high'}]} title="Le chiffrage juste" titleTag="h2" titleSize="heading-1" content={LOREM_DOC} buttons={[{label: 'Commencer', href: '#', arrow: true}]} framed />
+        ) : slug === FORM_SLUG ? (
+          <SiteForm
+            id="apercu-form"
+            title="Demander <span>une démo</span>"
+            steps={[{fields: [{type: 'text', name: 'nom', label: 'Nom', required: true}, {type: 'email', name: 'email', label: 'E-mail', required: true}, {type: 'consent', name: 'ok', label: 'J’accepte d’être recontacté.'}]}]}
+            submitLabel="Envoyer"
+            submitAction={async () => ({ok: true})}
+            confirmation={{type: 'message', content: null}}
+          />
         ) : slug === COLLECTION_SLUG ? (
           <Collection layout="carousel" perView={3} label="Témoignages">
             {TESTIMONIALS.slice(0, 5).map((t) => (
