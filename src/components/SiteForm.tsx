@@ -14,8 +14,8 @@
  *   - Steps: more than one step = Astryx Stepper above the fields, « Retour » / « Continuer » on a
  *     full row, the submit button on the last step only. Each step is validated before moving on,
  *     values are kept when going back, focus moves to the step title. One submission at the end.
- *   - Sending: `onSubmit` (a server action given by the page) receives the values, a honeypot and
- *     the time the form was shown; the server decides what is spam. After success the confirmation
+ *   - Sending: `submitAction` (a server action given by the page) receives the form id, the values,
+ *     a honeypot and the time the form was shown; the server decides what is spam. After success the confirmation
  *     replaces the form in the card, or the browser goes to `confirmation.href`.
  * No Payload here: the page converts a form document into these props (src/lib/forms.ts).
  */
@@ -52,7 +52,7 @@ export type FormField =
 export type FormStep = {title?: string; fields: FormField[]};
 export type FormValue = string | number | boolean | null;
 export type FormValues = Record<string, FormValue>;
-export type FormSubmitInput = {values: FormValues; honeypot: string; startedAt: number};
+export type FormSubmitInput = {formId?: number; values: FormValues; honeypot: string; startedAt: number};
 export type FormSubmitResult = {ok: true} | {ok: false; errors?: Record<string, string>; message?: string};
 
 export type FormLabels = {
@@ -81,6 +81,8 @@ const LABELS: FormLabels = {
 export type SiteFormProps = {
   /** unique on the page (field ids, anchors) */
   id: string;
+  /** the form document, sent back with the values */
+  formId?: number;
   eyebrow?: string;
   /** a word between <span>…</span> is set in serif */
   title?: string;
@@ -89,7 +91,8 @@ export type SiteFormProps = {
   framed?: boolean;
   steps: FormStep[];
   submitLabel: string;
-  onSubmit: (input: FormSubmitInput) => Promise<FormSubmitResult>;
+  /** a server action (a name ending in « Action »: Next.js lets it cross to this client component) */
+  submitAction: (input: FormSubmitInput) => Promise<FormSubmitResult>;
   confirmation: {type: 'message'; content: React.ReactNode} | {type: 'redirect'; href: string};
   labels?: Partial<FormLabels>;
 };
@@ -118,7 +121,7 @@ function fieldError(f: FormField, v: FormValue, l: FormLabels): string | null {
   return null;
 }
 
-export function SiteForm({id, eyebrow, title, tag = 'h3', intro, framed = true, steps, submitLabel, onSubmit, confirmation, labels}: SiteFormProps) {
+export function SiteForm({id, formId, eyebrow, title, tag = 'h3', intro, framed = true, steps, submitLabel, submitAction, confirmation, labels}: SiteFormProps) {
   const l = {...LABELS, ...labels};
   const all = steps.flatMap((s) => s.fields);
   const [values, setValues] = useState<FormValues>(() => Object.fromEntries(all.map((f) => [f.name, initialValue(f)])));
@@ -176,7 +179,7 @@ export function SiteForm({id, eyebrow, title, tag = 'h3', intro, framed = true, 
     setStatus('sending');
     setFailure(null);
     try {
-      const res = await onSubmit({values, honeypot, startedAt: startedAt.current});
+      const res = await submitAction({formId, values, honeypot, startedAt: startedAt.current});
       if (res.ok) {
         if (confirmation.type === 'redirect') {
           window.location.assign(confirmation.href);

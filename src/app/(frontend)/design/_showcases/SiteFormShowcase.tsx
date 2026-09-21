@@ -74,16 +74,16 @@ export default function SiteFormShowcase() {
       </Text>
       <VStack gap={3}>
         <Heading level={3}>Sur 12 colonnes : deux colonnes de champs</Heading>
-        <SiteForm id="demo-12" {...head} steps={DEMO} submitLabel="Envoyer ma demande" onSubmit={fakeSubmit} confirmation={thanks} />
+        <SiteForm id="demo-12" {...head} steps={DEMO} submitLabel="Envoyer ma demande" submitAction={fakeSubmit} confirmation={thanks} />
       </VStack>
       <VStack gap={3}>
         <Heading level={3}>Sur 6 et 4 colonnes : une seule colonne</Heading>
         <Grid columns={12} gap={6} className="page-grid" align="start">
           <GridSpan columns={6}>
-            <SiteForm id="demo-6" {...head} steps={DEMO} submitLabel="Envoyer ma demande" onSubmit={fakeSubmit} confirmation={thanks} />
+            <SiteForm id="demo-6" {...head} steps={DEMO} submitLabel="Envoyer ma demande" submitAction={fakeSubmit} confirmation={thanks} />
           </GridSpan>
           <GridSpan columns={4}>
-            <SiteForm id="demo-4" title="Être rappelé" steps={[{fields: DEMO[0].fields.slice(0, 4)}]} submitLabel="Envoyer" onSubmit={fakeSubmit} confirmation={thanks} />
+            <SiteForm id="demo-4" title="Être rappelé" steps={[{fields: DEMO[0].fields.slice(0, 4)}]} submitLabel="Envoyer" submitAction={fakeSubmit} confirmation={thanks} />
           </GridSpan>
         </Grid>
       </VStack>
@@ -91,7 +91,7 @@ export default function SiteFormShowcase() {
         <Heading level={3}>En trois étapes, sur 8 colonnes</Heading>
         <Grid columns={12} gap={6} className="page-grid" align="start">
           <GridSpan columns={8}>
-            <SiteForm id="demo-steps" title="Parlons de <span>votre projet</span>" steps={STEPS} submitLabel="Envoyer" onSubmit={fakeSubmit} confirmation={thanks} />
+            <SiteForm id="demo-steps" title="Parlons de <span>votre projet</span>" steps={STEPS} submitLabel="Envoyer" submitAction={fakeSubmit} confirmation={thanks} />
           </GridSpan>
         </Grid>
       </VStack>
@@ -99,7 +99,7 @@ export default function SiteFormShowcase() {
         <Heading level={3}>Sans carte, envoi en échec</Heading>
         <Grid columns={12} gap={6} className="page-grid" align="start">
           <GridSpan columns={6}>
-            <SiteForm id="demo-fail" framed={false} steps={[{fields: DEMO[0].fields.slice(2, 3)}]} submitLabel="S’inscrire" onSubmit={failingSubmit} confirmation={thanks} />
+            <SiteForm id="demo-fail" framed={false} steps={[{fields: DEMO[0].fields.slice(2, 3)}]} submitLabel="S’inscrire" submitAction={failingSubmit} confirmation={thanks} />
           </GridSpan>
         </Grid>
       </VStack>
@@ -109,7 +109,7 @@ export default function SiteFormShowcase() {
           <Container>
             <Grid columns={12} gap={6} className="page-grid" align="start">
               <GridSpan style={{gridColumn: '3 / span 8'}}>
-                <SiteForm id="demo-night" {...head} steps={DEMO} submitLabel="Envoyer ma demande" onSubmit={fakeSubmit} confirmation={thanks} />
+                <SiteForm id="demo-night" {...head} steps={DEMO} submitLabel="Envoyer ma demande" submitAction={fakeSubmit} confirmation={thanks} />
               </GridSpan>
             </Grid>
           </Container>
