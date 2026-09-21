@@ -61,6 +61,9 @@ Blog and case studies (done on 17 Sept. 2026): `docs/blog.md` (with the listing 
 and `docs/cases.md`; decisions in `docs/handoff-2026-09-17-blog.md` and `-cases.md`. Trap: never share a field or block config object between a
 Lexical editor and a collection (Payload mutates it; tables get dropped): use factories.
 
+Next work (for Claude Opus): forms (admin group « Formulaires », column block 4 to 12, one or two
+columns of fields, multi-step). Handoff: `docs/handoff-2026-09-21-forms.md`. PRs #36 and #37 first.
+
 Open study (for Claude Fable, analysis only, then a handoff for Opus): a live preview of the row
 being built in the section builder, in a movable window. Brief: `etude-apercu-rangee/README.md`.
 It builds on the admin's Live Preview (« Aperçu en direct » and its « Vue » menu, in main since
