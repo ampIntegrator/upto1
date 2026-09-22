@@ -12,6 +12,10 @@
 .footer {
   background: light-dark(var(--color-background-muted), rgba(0, 0, 0, 0.2));
 }
+/* a footer left without any button (a form's buttons gone once it is sent): no empty strip */
+.footer:not(:has(button, a[href])) {
+  display: none;
+}
 
 .close {
   width: 38px !important;
