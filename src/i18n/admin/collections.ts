@@ -140,6 +140,10 @@ export const collectionsText = texts({
         fr: '« Réponse obligatoire » : pour un texte à accepter. Ajoutez au moins un bouton.',
         en: '“Answer required”: for a text to accept. Add at least one button.',
       },
+      formButtons: {
+        fr: 'Avec un formulaire dans le contenu, le pied ne peut porter qu’un bouton « Fermer la modale » (style secondaire ou fantôme, « Annuler ») : le formulaire apporte son bouton d’envoi, et « Fermer » apparaît une fois envoyé.',
+        en: 'With a form in the content, the footer can hold only one « Close the modal » button (secondary or ghost style, « Cancel »): the form brings its send button, and « Close » appears once sent.',
+      },
       dismissNeedsButton: {
         fr: 'Une modale à réponse obligatoire a besoin d’au moins un bouton pour être fermée.',
         en: 'A modal with a required answer needs at least one button to be closed.',

@@ -1,13 +1,14 @@
 /**
  * Demo pages of the column blocks (pnpm seed:demo): three lorem ipsum pages that use
  * every new block at several widths, with Unsplash images imported into the media
- * library. Re-runnable: the demo pages (slugs demo-*) are deleted and recreated, the
+ * library. Re-runnable: the demo pages (slugs demo-*) are updated in place (never deleted: an
+ * open admin tab would loop), the
  * images are imported once (by file name). Real pages are never touched.
  * Blog: a demo author (« Marie Lefebvre ») and a demo post using every prose element and figure
- * (slug demo-industrialiser-le-cycle-commercial), recreated too. This script never changes the
+ * (slug demo-industrialiser-le-cycle-commercial), updated in place too. This script never changes the
  * settings (the addresses of the blog and the case studies are typed in their settings global).
  * Case studies: the « Vasseur Construction » case study of mockup 23 (slug demo-vasseur-construction)
- * in a « Rénovation » category (created once), recreated too.
+ * in a « Rénovation » category (created once), updated in place too.
  * Forms: « Demander une démo » (mockup 17) and « Parlons de votre projet » (three steps), found by
  * their list title and updated (their submissions are kept), shown on /demo-contenus (anchor
  * « formulaires »).
@@ -264,11 +265,14 @@ async function main() {
       ],
     },
   ];
+  // updated in place, never deleted: a demo page open in the admin (with its live preview) would
+  // otherwise reload in a loop and lock the database (seen on 22 September 2026)
   for (const p of pages) {
-    const existing = await payload.find({collection: 'pages', where: {slug: {equals: p.slug}}, limit: 5});
-    for (const doc of existing.docs) await payload.delete({collection: 'pages', id: doc.id});
-    await payload.create({collection: 'pages', data: {title: p.title, slug: p.slug, hero: {variant: 'page-glow', eyebrow: 'Démo', title: p.title, lead: LOREM, breadcrumbMode: 'hide'}, sections: p.sections} as never});
-    log(`page « ${p.slug} » ${existing.docs.length ? 'recréée' : 'créée'} : http://localhost:3000/${p.slug}`);
+    const existing = (await payload.find({collection: 'pages', where: {slug: {equals: p.slug}}, limit: 1, depth: 0})).docs[0];
+    const data = {title: p.title, slug: p.slug, hero: {variant: 'page-glow', eyebrow: 'Démo', title: p.title, lead: LOREM, breadcrumbMode: 'hide'}, sections: p.sections};
+    if (existing) await payload.update({collection: 'pages', id: existing.id, data: data as never});
+    else await payload.create({collection: 'pages', data: data as never});
+    log(`page « ${p.slug} » ${existing ? 'mise à jour' : 'créée'} : http://localhost:3000/${p.slug}`);
   }
   // 3 · blog: a demo author and a demo post (every prose element and figure)
   const tx = (text: string, format = 0) => ({type: 'text', text, format, detail: 0, mode: 'normal', style: '', version: 1});
@@ -285,8 +289,7 @@ async function main() {
   const author = authorFound.docs[0] ?? (await payload.create({collection: 'authors', data: {name: 'Marie Lefebvre', role: 'Responsable produit · Vidomia', photo: bureau} as never}));
   const category = (await payload.find({collection: 'categories', where: {slug: {equals: 'chiffrage'}}, limit: 1})).docs[0] ?? (await payload.find({collection: 'categories', limit: 1})).docs[0];
   const postSlug = 'demo-industrialiser-le-cycle-commercial';
-  const oldPosts = await payload.find({collection: 'posts', where: {slug: {equals: postSlug}}, limit: 5});
-  for (const doc of oldPosts.docs) await payload.delete({collection: 'posts', id: doc.id});
+  const oldPost = (await payload.find({collection: 'posts', where: {slug: {equals: postSlug}}, limit: 1, depth: 0})).docs[0];
   const content = {
     root: el('root', [
       head('h2', 'Le cycle commercial, ce maillon qui fuit'),
@@ -309,18 +312,16 @@ async function main() {
       fig({blockType: 'ctaBand', variant: 'arrow', title: 'Lire le guide du chiffrage en visite', button: {label: 'En savoir plus', href: '#', shape: 'split', variant: 'high', size: 'md'}}),
     ]),
   };
-  await payload.create({
-    collection: 'posts',
-    data: {title: 'Du devis à la facturation : <span>industrialiser</span> le cycle commercial', slug: postSlug, excerpt: 'Entre l’estimation envoyée et le paiement encaissé, le temps se perd. Méthode en trois leviers, chiffres à l’appui.', cover: analyse, coverCaption: 'Un cycle commercial piloté de bout en bout.', author: author.id, category: category?.id, publishedAt: new Date().toISOString(), content} as never,
-  });
+  const postData = {title: 'Du devis à la facturation : <span>industrialiser</span> le cycle commercial', slug: postSlug, excerpt: 'Entre l’estimation envoyée et le paiement encaissé, le temps se perd. Méthode en trois leviers, chiffres à l’appui.', cover: analyse, coverCaption: 'Un cycle commercial piloté de bout en bout.', author: author.id, category: category?.id, publishedAt: new Date().toISOString(), content};
+  if (oldPost) await payload.update({collection: 'posts', id: oldPost.id, data: postData as never});
+  else await payload.create({collection: 'posts', data: postData as never});
   const blogSettings = await payload.findGlobal({slug: 'blog', depth: 1});
   log(`article de démo : http://localhost:3000/${blogSettings.slug}/${postSlug}`);
 
   // 4 · case studies: the « Vasseur Construction » case study of mockup 23, in a « Rénovation » category
   const renovation = (await payload.find({collection: 'case-categories', where: {slug: {equals: 'renovation'}}, limit: 1})).docs[0] ?? (await payload.create({collection: 'case-categories', data: {title: 'Rénovation', slug: 'renovation'}}));
   const caseSlug = 'demo-vasseur-construction';
-  const oldCases = await payload.find({collection: 'case-studies', where: {slug: {equals: caseSlug}}, limit: 5});
-  for (const doc of oldCases.docs) await payload.delete({collection: 'case-studies', id: doc.id});
+  const oldCase = (await payload.find({collection: 'case-studies', where: {slug: {equals: caseSlug}}, limit: 1, depth: 0})).docs[0];
   const story = {
     root: el('root', [
       para(tx('Vasseur Construction signe une centaine de chantiers par an, de la rénovation énergétique au gros œuvre. Mais derrière chaque affaire signée, un même goulot d’étranglement : le chiffrage. Récit d’un déploiement qui a déverrouillé tout le cycle commercial.')),
@@ -345,9 +346,7 @@ async function main() {
       para(tx('Industrialiser le chiffrage ne consiste pas à retirer l’humain de l’équation, mais à le placer là où il crée le plus de valeur.')),
     ]),
   };
-  await payload.create({
-    collection: 'case-studies',
-    data: {
+  const caseData = {
       title: 'Comment Vasseur Construction a <span>divisé par trois</span> son temps de chiffrage',
       slug: caseSlug,
       excerpt: 'Estimer un chantier de rénovation prenait jusqu’à trois jours. En six semaines, l’équipe a ramené ce délai à quelques heures, sans embaucher, sans rogner sur la précision.',
@@ -360,8 +359,9 @@ async function main() {
         results: [{value: '−68 %', label: 'Temps de chiffrage'}, {value: '×2,4', label: 'Devis envoyés'}],
         cardResult: '−68 % délai',
       },
-    } as never,
-  });
+    };
+  if (oldCase) await payload.update({collection: 'case-studies', id: oldCase.id, data: caseData as never});
+  else await payload.create({collection: 'case-studies', data: caseData as never});
   const portfolio = await payload.findGlobal({slug: 'portfolio', depth: 1});
   log(`réalisation de démo : http://localhost:3000/${portfolio.slug}/${caseSlug}`);
   process.exit(0);

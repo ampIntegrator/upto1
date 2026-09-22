@@ -7,7 +7,9 @@
  * navigation). Closing (cross, Escape, a « close » footer button) removes the anchor: back in
  * history when the anchor was added by a click on this page, a replacement otherwise (the page
  * was loaded with the anchor). The browser's Back closes it too (popstate).
- * One modal at a time: a link to another modal replaces the open one.
+ * One modal at a time: a link to another modal replaces the open one. A form in the body owns the
+ * main action (its buttons sit in the footer, SiteForm portal); once it is sent, the modal's own
+ * buttons give way to a single « Fermer ».
  *
  * Each item: the modal's settings, its body rendered by the server (SiteModalBody) and, for a
  * body holding a form, the footer element that receives the form's buttons (SiteForm portal).
@@ -21,6 +23,7 @@ import React, {useEffect, useState} from 'react';
 import {type ModalButton, type ModalPurpose, type ModalSize, type ModalTone, modalSlugFromHash} from '@/lib/modal-paths';
 import {Button} from './Button';
 import {Dialog} from './Dialog';
+import {SITE_FORM_SENT_EVENT} from './SiteForm';
 
 /** key set on the history entries this component pushes */
 const PUSHED = 'siteModalPushed';
@@ -35,6 +38,8 @@ export type SiteModalItem = {
   buttons: ModalButton[];
   /** DOM id of the footer element receiving the body's form buttons (a body with a form) */
   actionsTarget?: string;
+  /** ids of the forms in the body: once one is sent, the footer offers « Fermer » in place of the modal's buttons */
+  formIds?: string[];
   body: React.ReactNode;
 };
 
@@ -42,11 +47,25 @@ export type SiteModalsProps = {
   items: SiteModalItem[];
   initialSlug?: string;
   closeHref?: string;
+  /** label of the button offered once a form is sent (French by default) */
+  closeLabel?: string;
 };
 
-export function SiteModals({items, initialSlug, closeHref}: SiteModalsProps) {
+export function SiteModals({items, initialSlug, closeHref, closeLabel = 'Fermer'}: SiteModalsProps) {
   const router = useRouter();
   const [open, setOpen] = useState<string | null>(initialSlug ?? null);
+  // modals whose form was sent: their footer shows « Fermer » only
+  const [sent, setSent] = useState<Record<string, true>>({});
+
+  useEffect(() => {
+    const onSent = (e: Event) => {
+      const id = (e as CustomEvent<{id?: string}>).detail?.id;
+      const item = id ? items.find((m) => m.formIds?.includes(id)) : undefined;
+      if (item) setSent((prev) => ({...prev, [item.slug]: true}));
+    };
+    document.addEventListener(SITE_FORM_SENT_EVENT, onSent);
+    return () => document.removeEventListener(SITE_FORM_SENT_EVENT, onSent);
+  }, [items]);
 
   useEffect(() => {
     const read = () => {
@@ -100,9 +119,11 @@ export function SiteModals({items, initialSlug, closeHref}: SiteModalsProps) {
   return (
     <>
       {items.map((m) => {
-        const own = m.buttons.map((b, i) =>
-          b.action === 'close' ? <Button key={i} label={b.label} variant={b.variant} onClick={close} /> : <Button key={i} label={b.label} variant={b.variant} href={b.href} />,
-        );
+        const own = sent[m.slug]
+          ? [<Button key="close" label={closeLabel} variant="primary" onClick={close} />]
+          : m.buttons.map((b, i) =>
+              b.action === 'close' ? <Button key={i} label={b.label} variant={b.variant} onClick={close} /> : <Button key={i} label={b.label} variant={b.variant} href={b.href} />,
+            );
         // the form's buttons join the footer through a portal into this element (no box of its own)
         const actions =
           own.length || m.actionsTarget ? (

@@ -5,9 +5,18 @@ import {modalEditor} from '@/fields/editors';
 import {collectionsText as ct} from '@/i18n/admin/collections';
 import {fieldsText} from '@/i18n/admin/fields';
 import {tr} from '@/i18n/admin/languages';
-import {modalPath} from '@/lib/modal-paths';
+import {MODAL_FORM_SLUG, modalPath} from '@/lib/modal-paths';
 
 const f = ct.modals.fields;
+
+/** whether a body (Lexical JSON) holds a « Formulaire » block, anywhere */
+function hasFormBlock(value: unknown): boolean {
+  if (!value || typeof value !== 'object') return false;
+  if (Array.isArray(value)) return value.some(hasFormBlock);
+  const node = value as {type?: unknown; fields?: {blockType?: unknown}; children?: unknown};
+  if (node.type === 'block' && node.fields?.blockType === MODAL_FORM_SLUG) return true;
+  return Object.values(value).some(hasFormBlock);
+}
 
 /**
  * Modals (« Modales »): content written once, opened over any page by an internal link of a rich
@@ -87,10 +96,15 @@ export const Modals: CollectionConfig = {
       maxRows: 2,
       admin: {description: f.buttonsDescription, initCollapsed: false},
       fields: modalButtonFields(),
-      // a required answer: the buttons are the only way out, at least one is needed
+      // a required answer: the buttons are the only way out, at least one is needed; with a form in
+      // the body, the form owns the main action: one « close » button at most, secondary or ghost
       validate: (value: unknown, {siblingData, req}: {siblingData?: Record<string, unknown>; req?: {i18n?: {language?: string}}}) => {
-        const count = Array.isArray(value) ? value.length : Number(value) || 0;
-        return siblingData?.dismiss !== 'required' || count > 0 || tr(f.dismissNeedsButton, req?.i18n?.language);
+        const rows = (Array.isArray(siblingData?.buttons) ? siblingData.buttons : Array.isArray(value) ? value : []) as {action?: string; variant?: string}[];
+        const count = Array.isArray(value) ? value.length : Number(value) || rows.length;
+        const language = req?.i18n?.language;
+        if (siblingData?.dismiss === 'required' && count === 0) return tr(f.dismissNeedsButton, language);
+        if (hasFormBlock(siblingData?.body) && (count > 1 || rows.some((b) => b.action === 'link' || (b.variant && b.variant !== 'secondary' && b.variant !== 'ghost')))) return tr(f.formButtons, language);
+        return true;
       },
     },
     {

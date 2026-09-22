@@ -107,12 +107,22 @@ async function main() {
         buttons: [{label: 'J’accepte smoke', action: 'close', variant: 'primary'}],
       } as never,
     });
+    // with a form in the body: one « close » button at most, secondary or ghost
+    const formBody = doc(paragraph(text('Introduction smoke.')), formBlock('smokeformblock', form.id), paragraph(text('Mention légale smoke.')));
+    try {
+      const m = await payload.create({collection: 'modals', data: {title: 'zz smoke form primaire', slug: `${slug}-formprimary`, body: formBody, buttons: [{label: 'Aller', action: 'link', kind: 'url', href: '/', variant: 'primary'}]} as never});
+      created.modals.push(m.id);
+      check(false, 'form modal with a primary link button: accepted, expected a validation error');
+    } catch {
+      check(true, 'a form modal refuses a primary or link button');
+    }
     const withForm = await payload.create({
       collection: 'modals',
       data: {
         title: 'Demande smoke',
         slug: `${slug}-form`,
-        body: doc(paragraph(text('Introduction smoke.')), formBlock('smokeformblock', form.id), paragraph(text('Mention légale smoke.'))),
+        body: formBody,
+        buttons: [{label: 'Annuler smoke', action: 'close', variant: 'ghost'}],
       } as never,
     });
     created.modals.push(note.id, terms.id, withForm.id);
@@ -231,7 +241,11 @@ async function main() {
       await dialog.getByRole('button', {name: 'Envoyer smoke'}).click();
       await dialog.getByText('Merci modale smoke.').waitFor({timeout: 10000}).catch(() => undefined);
       check(await dialog.getByText('Merci modale smoke.').isVisible(), 'the form sent from the modal shows its confirmation in it');
-      check(!(await dialog.locator('[class*="footer"]').isVisible()), 'once sent, the empty footer strip is gone');
+      const closeBtn = dialog.locator('[class*="footer"]').getByRole('button', {name: 'Fermer'});
+      check((await closeBtn.count()) === 1 && (await dialog.locator('[class*="footer"]').getByRole('button', {name: 'Annuler smoke'}).count()) === 0, 'once sent, the footer offers « Fermer » in place of the modal\'s buttons');
+      await closeBtn.click();
+      await p.waitForTimeout(500);
+      check((await dialog.count()) === 0 && p.url() === pageUrl, '« Fermer » closes it and keeps the page');
       const stored = (await payload.find({collection: 'form-submissions', where: {form: {equals: form.id}}, limit: 1})).docs[0];
       const data = Object.fromEntries((stored?.submissionData ?? []).map((d) => [d.field, d.value]));
       check(data.nom === 'Priya smoke' && data.email === 'priya@exemple.fr', `the submission is stored ${JSON.stringify(data)}`);

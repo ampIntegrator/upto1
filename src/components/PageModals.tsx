@@ -26,6 +26,7 @@ export async function PageModals({sources, locale, initialSlug, closeHref}: {sou
     purpose: m.purpose,
     buttons: m.buttons,
     actionsTarget: m.footerForm ? m.actionsTarget : undefined,
+    formIds: Object.values(m.forms).map((form) => form.id),
     body: <SiteModalBody modal={m} />,
   }));
   return <SiteModals items={items} initialSlug={initialSlug} closeHref={closeHref} />;

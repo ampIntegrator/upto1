@@ -92,6 +92,14 @@ an **anchor**, `/tarifs#modale-demo-demande`, not through a route of its own.
   never split (Nicolas, 22 September 2026: no split button in a modal, ever). `SiteModals` puts that element (`display: contents`) in the
   Dialog footer; the loader names it (`actionsTarget`) and picks the body's first form
   (`footerForm`). The house Dialog hides a footer left without any button or link.
+- **A form owns the modal's action** (Nicolas, 22 September 2026). Footer order: the modal's own
+  buttons on the left, the form's on the right (« Envoyer » last). With a form in the body the
+  admin accepts one own button at most, « Fermer la modale », secondary or ghost (« Annuler »);
+  a link button or a primary one is refused on save. Once the form is sent (`siteform:sent` DOM
+  event from `SiteForm`), the modal's own buttons give way to a single primary « Fermer », so a
+  required-answer modal never traps the visitor in front of the confirmation. A form set to
+  redirect leaves the page, which closes the modal: the only closing that leaves the page, and a
+  setting of the form, not of the modal.
 - **Rendering**: `SiteModals` (client: the house `Dialog` per modal, the footer buttons, the
   anchor) and `SiteModalBody` (server: `RichText`, inserted forms through `SiteFormBlock`, the
   form block also used by `PageSections`).
