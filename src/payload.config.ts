@@ -18,6 +18,7 @@ import { Posts } from './collections/Posts'
 import { Sections } from './collections/Sections'
 import { Users } from './collections/Users'
 import { formsPlugin } from './fields/forms/plugin'
+import { withoutCollapseMemory } from './fields/noCollapseMemory'
 import { adminI18n } from './i18n/admin/payload'
 import { collectionsText } from './i18n/admin/collections'
 import { pageTreeText } from './i18n/admin/pageTree'
@@ -35,7 +36,10 @@ const dirname = path.dirname(filename)
 
 export { LOCALES, type Locale } from './locales'
 
-export default buildConfig({
+const withoutCollapseMemoryAsync = async (config: ReturnType<typeof buildConfig>) => withoutCollapseMemory(await config)
+
+// pages always open with their sections folded: no memory of folded accordions (src/fields/noCollapseMemory.ts)
+export default withoutCollapseMemoryAsync(buildConfig({
   admin: {
     user: Users.slug,
     importMap: {
@@ -126,4 +130,4 @@ export default buildConfig({
       },
     }),
   ],
-})
+}))

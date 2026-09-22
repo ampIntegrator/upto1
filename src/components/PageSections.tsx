@@ -110,7 +110,7 @@ export function PageSections({sections}: {sections: SectionData[]}) {
   return (
     <>
       {sections.map((s) => (
-        <Section key={s.key} id={s.id} background={s.background} tint={s.tint} image={s.image} video={s.video} overlay={s.overlay} spacingTop={s.spacingTop} spacingBottom={s.spacingBottom}>
+        <Section key={s.key} id={s.id} edgeTop={s.edgeTop} background={s.background} tint={s.tint} image={s.image} video={s.video} overlay={s.overlay} spacingTop={s.spacingTop} spacingBottom={s.spacingBottom}>
           <Container>
             <Grid
               columns={12}

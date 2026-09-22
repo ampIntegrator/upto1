@@ -89,6 +89,20 @@ export const orbitaSectionSettings: Field[] = [
       },
     ],
   },
+  // the edge line at the top of a light section (Nicolas, 21 Sept. 2026: two same-shade backgrounds
+  // whose only difference is the texture meet badly without it)
+  {
+    name: 'edgeTop',
+    type: 'radio',
+    label: T.settings.edgeTop,
+    defaultValue: 'auto',
+    options: [
+      {label: T.settings.edgeTopAuto, value: 'auto'},
+      {label: T.settings.edgeTopAlways, value: 'always'},
+      {label: T.settings.edgeTopNever, value: 'never'},
+    ],
+    admin: {layout: 'horizontal', condition: when('mode', 'light'), description: T.settings.edgeTopDescription},
+  },
   // 2b. night: the colour, no texture
   {
     name: 'darkStyle',

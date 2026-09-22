@@ -89,6 +89,8 @@ export type ColumnData = {span: ColumnSpan; contents: ContentData[]; empty: bool
 export type SectionData = {
   key: string;
   id?: string;
+  /** edge line at the top: the junction with the section above */
+  edgeTop?: boolean;
   background: SectionBackground;
   tint?: SectionTint;
   image?: {src: string; alt?: string};
@@ -509,6 +511,20 @@ function toContent(block: ContentBlock): ContentData | null {
   }
 }
 
+/**
+ * The edge line at the top of a light section: always, never, or automatic = the section above is
+ * light too, of the same shade, and the texture changes (the two backgrounds would meet badly).
+ * Never on the first section (the page top has its own edge) nor on night and media backgrounds.
+ */
+function edgeTop(s: SectionSource, above: SectionSource | undefined): boolean {
+  const mode = (s as {edgeTop?: string | null}).edgeTop ?? 'auto';
+  if (s.mode !== 'light' || mode === 'never' || !above) return false;
+  if (mode === 'always') return true;
+  const shade = (x: SectionSource) => (x.tint === 'highlight' ? 'highlight' : 'body');
+  const texture = (x: SectionSource) => x.texture ?? 'none';
+  return above.mode === 'light' && shade(above) === shade(s) && texture(above) !== texture(s);
+}
+
 function toSection(s: SectionSource, key: string, site: Gaps): SectionData {
   const isMedia = s.mode === 'media';
   return {
@@ -566,5 +582,5 @@ export async function toSections(blocks: Page['sections'], settings?: Pick<Setti
   sectionsCtx = ctx;
   const list = sources.map((s) => s.source);
   [entryItems, [chosenPosts, chosenCases], chosenForms] = await Promise.all([loadEntryItems(list, ctx), loadChosenEntries(list, ctx), loadChosenForms(list, ctx)]);
-  return sources.map((s) => toSection(s.source, s.key, site));
+  return sources.map((s, i) => ({...toSection(s.source, s.key, site), edgeTop: edgeTop(s.source, sources[i - 1]?.source)}));
 }
