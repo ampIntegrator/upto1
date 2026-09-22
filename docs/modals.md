@@ -65,7 +65,8 @@ an **anchor**, `/tarifs#modale-demo-demande`, not through a route of its own.
 - **The form's buttons in the footer**: `SiteForm` takes `actionsTarget`, the DOM id of an element
   outside the form; its buttons render there through a React portal (still driven by the form:
   steps, sending state), the send button calls `requestSubmit()`, and a hidden submit button stays
-  in the form so Enter still sends it. `SiteModals` puts that element (`display: contents`) in the
+  in the form so Enter still sends it. In a modal's footer the form's buttons are simple ones,
+  never split (Nicolas, 22 September 2026: no split button in a modal, ever). `SiteModals` puts that element (`display: contents`) in the
   Dialog footer; the loader names it (`actionsTarget`) and picks the body's first form
   (`footerForm`). The house Dialog hides a footer left without any button or link.
 - **Rendering**: `SiteModals` (client: the house `Dialog` per modal, the footer buttons, the
