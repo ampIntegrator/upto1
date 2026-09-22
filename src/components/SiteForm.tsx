@@ -17,6 +17,8 @@
  *     values are kept when going back, focus moves to the step title. One submission at the end.
  *   - Buttons: under the fields (split send button), or in an element outside the form
  *     (`actionsTarget`: a modal's footer, simple buttons only), still driven by the form.
+ *   - Once sent, the root dispatches a `siteform:sent` DOM event (a modal replaces its buttons by
+ *     « Fermer »).
  *   - Sending: `submitAction` (a server action given by the page) receives the form id, the values,
  *     a honeypot and the time the form was shown; the server decides what is spam. After success the confirmation
  *     replaces the form in the card, or the browser goes to `confirmation.href`.
@@ -42,6 +44,9 @@ import {Title} from './TitleTag';
 import {renderTitle} from './TitleText';
 import type {TitleTag} from './title-tags';
 import styles from './SiteForm.module.css';
+
+/** DOM event (bubbling) sent by the form's root once a submission succeeded; `detail.id` = the form's `id` prop */
+export const SITE_FORM_SENT_EVENT = 'siteform:sent';
 
 export type FormFieldWidth = 'half' | 'full';
 type Base = {name: string; label: string; required?: boolean; width?: FormFieldWidth};
@@ -211,6 +216,8 @@ export function SiteForm({id, formId, eyebrow, eyebrowStyle = 'eyebrow', title, 
           return;
         }
         setStatus('sent');
+        // tells the host (a modal) the form is done: it can offer a « close » button in its place
+        root.current?.dispatchEvent(new CustomEvent(SITE_FORM_SENT_EVENT, {bubbles: true, detail: {id}}));
         requestAnimationFrame(() => root.current?.focus());
         return;
       }
