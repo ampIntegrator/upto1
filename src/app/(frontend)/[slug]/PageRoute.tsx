@@ -9,6 +9,7 @@ import React from 'react';
 
 import {BreadcrumbBand} from '@/components/BreadcrumbBand';
 import {Hero} from '@/components/Hero';
+import {PageModals} from '@/components/PageModals';
 import {PageSections} from '@/components/PageSections';
 import {SitePage} from '@/components/SitePage';
 import {loadPageByPath, missingTarget} from '@/lib/pages';
@@ -48,6 +49,8 @@ export async function PageRoute({segments}: {segments: string[]}) {
       <Hero {...hero} />
       {bandBreadcrumb ? <BreadcrumbBand {...breadcrumbProps(page, site.settings)} /> : null}
       <PageSections sections={await toSections(page.sections, site.settings, sectionsContext(locale, site))} />
+      {/* the modals this page links to, closed until their anchor is reached */}
+      <PageModals sources={[page.hero, page.sections]} locale={locale} />
     </SitePage>
   );
 }

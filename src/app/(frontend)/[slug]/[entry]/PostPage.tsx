@@ -7,6 +7,7 @@ import React from 'react';
 
 import {BreadcrumbBand} from '@/components/BreadcrumbBand';
 import {EntryFaq} from '@/components/EntryFaq';
+import {PageModals} from '@/components/PageModals';
 import {PostHeader} from '@/components/PostHeader';
 import {PostLayout} from '@/components/PostLayout';
 import {PostToc} from '@/components/PostToc';
@@ -47,6 +48,7 @@ export async function PostPage({locale, site, post}: {locale: Locale; site: Awai
       </PostLayout>
       <EntryFaq {...blog.faq} items={faq} />
       <RelatedPosts {...blog.related} items={related.map((p) => postCard(p, blog, locale))} more={{label: blog.labels.more, href: listingPath(blog)}} />
+      <PageModals sources={[post.content, post.faq]} locale={locale} />
     </SitePage>
   );
 }

@@ -1,13 +1,13 @@
 /**
- * /modale/<slug> reached directly (a shared link, a refresh, the admin's Live Preview): the site
- * frame with the modal open over an empty page, in the site's default silo; closing goes to the
- * home page. Not indexed: a modal is not a page.
+ * /modale/<slug>: the modal's own page, for the admin's preview (the eye, the Live Preview): the
+ * site frame in the site's default silo with the modal open over an empty page, closing going to
+ * the home page. Not indexed and not linked from the site: a modal opens over the page that links
+ * to it, through its anchor (#modale-<slug>).
  */
 import {notFound} from 'next/navigation';
 import React from 'react';
 
-import {SiteModal} from '@/components/SiteModal';
-import {SiteModalBody} from '@/components/SiteModalBody';
+import {PageModals} from '@/components/PageModals';
 import {SitePage} from '@/components/SitePage';
 import {loadModal} from '@/lib/modals';
 import {getLocale, getSite, pageSilo, toFooter, toHeader} from '@/lib/site';
@@ -23,16 +23,13 @@ export async function generateMetadata({params}: Params) {
 }
 
 export default async function ModalPage({params}: Params) {
-  const {slug} = await params;
+  const slug = decodeURIComponent((await params).slug);
   const locale = await getLocale();
-  const [site, modal] = await Promise.all([getSite(locale), loadModal(decodeURIComponent(slug), locale)]);
+  const [site, modal] = await Promise.all([getSite(locale), loadModal(slug, locale)]);
   if (!modal) notFound();
-  const silo = pageSilo(null, site.settings);
   return (
-    <SitePage silo={silo} header={toHeader(site.settings, site.header, site.languages, site.blog)} footer={toFooter(site.settings, site.footer, site.posts, locale, site.blog)}>
-      <SiteModal title={modal.title} eyebrow={modal.eyebrow} size={modal.size} tone={modal.tone} purpose={modal.purpose} buttons={modal.buttons} actionsTarget={modal.footerForm ? modal.actionsTarget : undefined} closeHref="/" silo={silo}>
-        <SiteModalBody modal={modal} />
-      </SiteModal>
+    <SitePage silo={pageSilo(null, site.settings)} header={toHeader(site.settings, site.header, site.languages, site.blog)} footer={toFooter(site.settings, site.footer, site.posts, locale, site.blog)}>
+      <PageModals sources={[]} locale={locale} initialSlug={slug} closeHref="/" />
     </SitePage>
   );
 }

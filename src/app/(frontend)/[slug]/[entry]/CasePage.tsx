@@ -9,6 +9,7 @@ import {BreadcrumbBand} from '@/components/BreadcrumbBand';
 import {CaseHero} from '@/components/CaseHero';
 import {CaseSheet} from '@/components/CaseSheet';
 import {EntryFaq} from '@/components/EntryFaq';
+import {PageModals} from '@/components/PageModals';
 import {PostLayout} from '@/components/PostLayout';
 import {renderProseBlock} from '@/components/ProseBlock';
 import {RelatedPosts} from '@/components/RelatedPosts';
@@ -47,6 +48,7 @@ export async function CasePage({locale, site, caseStudy}: {locale: Locale; site:
       </PostLayout>
       <EntryFaq {...cases.faq} items={faq} />
       <RelatedPosts {...cases.related} items={related.map((c) => caseCard(c, cases))} more={{label: cases.labels.more, href: listingPath(cases)}} />
+      <PageModals sources={[caseStudy.content, caseStudy.faq]} locale={locale} />
     </SitePage>
   );
 }

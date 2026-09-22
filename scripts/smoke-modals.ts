@@ -2,10 +2,11 @@
  * Smoke test of the modals (pnpm smoke:modals, dev server running): creates a throwaway form, three
  * throwaway modals (a sentence with two buttons; a long text with a required answer; a form inserted
  * between two paragraphs) and a throwaway page in the green silo whose text box links to them
- * (internal links in the text, a button to /modale/<slug>) and to an existing post. Checks the
- * admin rules, the addresses written in the page, each /modale/<slug> page, then, in a headless
- * browser: opening over the page, the page's silo, Escape, the required answer, the button, a form
- * sent from the modal. Deletes the submissions, the page, the modals and the form. Never touches
+ * (internal links in the text, a button to #modale-<slug>) and to an existing post. Checks the
+ * admin rules, the anchors written in the page and the modals rendered closed in it, each
+ * /modale/<slug> preview page, then, in a headless browser: opening over the page (address = page
+ * + anchor), the page's silo, Escape, Back, the required answer, the button, a form sent from the
+ * modal, a load with the anchor. Deletes the submissions, the page, the modals and the form. Never touches
  * real content (the post is only read).
  *   SMOKE_BASE: server address (default http://localhost:3000)
  */
@@ -13,7 +14,7 @@ import config from '@payload-config';
 import {getPayload} from 'payload';
 
 import {blogConfig, entryPath} from '@/lib/listings';
-import {modalPath} from '@/lib/modal-paths';
+import {modalHash, modalPath} from '@/lib/modal-paths';
 
 const BASE = process.env.SMOKE_BASE ?? 'http://localhost:3000';
 const stamp = Date.now();
@@ -132,7 +133,7 @@ async function main() {
         slug,
         silo: 'green',
         hero: {variant: 'page-glow', title: 'Smoke modales'},
-        sections: [section([[column(6, {blockType: 'textBox', title: 'Encart modales smoke', titleTag: 'h2', content, buttons: [{label: 'Bouton modale smoke', href: modalPath(note.slug), shape: 'simple', variant: 'primary', size: 'md'}]}), column(6)]])],
+        sections: [section([[column(6, {blockType: 'textBox', title: 'Encart modales smoke', titleTag: 'h2', content, buttons: [{label: 'Bouton modale smoke', href: modalHash(note.slug), shape: 'simple', variant: 'primary', size: 'md'}]}), column(6)]])],
       } as never,
     });
     created.pages.push(page.id);
@@ -140,7 +141,8 @@ async function main() {
 
     // the page: every internal link carries its address
     const html = await (await fetch(`${BASE}/${slug}`)).text();
-    for (const m of [note, terms, withForm]) check(html.includes(`href="${modalPath(m.slug)}"`), `the page links to ${modalPath(m.slug)}`);
+    for (const m of [note, terms, withForm]) check(html.includes(`href="${modalHash(m.slug)}"`), `the page links to ${modalHash(m.slug)}`);
+    for (const m of ['Offre smoke', 'Conditions smoke', 'Demande smoke', 'Nom modale smoke']) check(html.includes(m), `the page renders the closed modal « ${m} »`);
     if (postHref) check(html.includes(`href="${postHref}"`), `an internal link to a post in a text box goes to ${postHref}`);
     check(!/Unhandled Runtime Error|Build Error/.test(html), 'page without runtime error');
 
@@ -171,7 +173,7 @@ async function main() {
 
       await p.getByRole('link', {name: 'Lien note smoke'}).click();
       await dialog.waitFor({timeout: 10000});
-      check(p.url().endsWith(modalPath(note.slug)), `the address becomes ${modalPath(note.slug)}`);
+      check(p.url() === pageUrl + modalHash(note.slug), `the address becomes the page + ${modalHash(note.slug)} (${p.url()})`);
       check(await p.getByRole('heading', {name: 'Encart modales smoke'}).isVisible(), 'the page stays behind the modal');
       check(await dialog.getByText('Une phrase smoke').isVisible(), 'the modal shows its body');
       // the page's silo (green) on the modal: its title in the silo's accent
@@ -181,11 +183,16 @@ async function main() {
       check(destructive === 'destructive', `the destructive button keeps its style (${destructive})`);
       await p.keyboard.press('Escape');
       await dialog.waitFor({state: 'detached', timeout: 5000}).catch(() => undefined);
-      check((await dialog.count()) === 0 && p.url() === pageUrl, 'Escape closes it and returns to the page address');
+      check((await dialog.count()) === 0 && p.url() === pageUrl, `Escape closes it and returns to the page address (${p.url()})`);
+      await p.getByRole('link', {name: 'Lien note smoke'}).click();
+      await dialog.waitFor({timeout: 10000});
+      await p.goBack();
+      await p.waitForTimeout(500);
+      check((await dialog.count()) === 0 && p.url() === pageUrl, 'the browser\'s Back closes it');
 
       await p.getByRole('link', {name: 'Bouton modale smoke'}).click();
       await dialog.waitFor({timeout: 10000});
-      check(p.url().endsWith(modalPath(note.slug)), 'a button to /modale/<slug> opens it over the page too');
+      check(p.url() === pageUrl + modalHash(note.slug), 'a button to #modale-<slug> opens it over the page too');
       await dialog.getByRole('button', {name: 'Annuler smoke'}).click();
       await p.waitForURL(pageUrl, {timeout: 5000}).catch(() => undefined);
       check((await dialog.count()) === 0 && p.url() === pageUrl, 'a « close » footer button closes it');
@@ -196,7 +203,7 @@ async function main() {
       await dialog.getByRole('link', {name: 'Vers accueil smoke'}).click();
       await p.waitForURL(`${BASE}/`, {timeout: 10000}).catch(() => undefined);
       await p.waitForTimeout(400);
-      check(p.url() === `${BASE}/` && (await dialog.count()) === 0, 'a footer button to a page goes there and the modal is gone');
+      check(p.url() === `${BASE}/` && (await dialog.count()) === 0, `a footer button to a page goes there and the modal is gone (${p.url()}, ${await dialog.count()} dialog)`);
       await p.goto(pageUrl, {waitUntil: 'networkidle'});
 
       await p.getByRole('link', {name: 'Lien conditions smoke'}).click();
@@ -227,7 +234,14 @@ async function main() {
       const data = Object.fromEntries((stored?.submissionData ?? []).map((d) => [d.field, d.value]));
       check(data.nom === 'Priya smoke' && data.email === 'priya@exemple.fr', `the submission is stored ${JSON.stringify(data)}`);
 
-      // back to the page, then a full load of the modal's address: the page of its own
+      // a load of the page with the anchor: the modal opens at once, closing keeps the page
+      await p.goto(pageUrl + modalHash(note.slug), {waitUntil: 'networkidle'});
+      await dialog.waitFor({timeout: 10000}).catch(() => undefined);
+      check((await dialog.count()) === 1, 'a load of the page with the anchor opens the modal');
+      await p.keyboard.press('Escape');
+      await p.waitForTimeout(500);
+      check((await dialog.count()) === 0 && p.url() === pageUrl, `closing after such a load keeps the page (${p.url()})`);
+      // the modal's own page (admin preview)
       await p.goto(`${BASE}${modalPath(note.slug)}`, {waitUntil: 'networkidle'});
       check((await dialog.count()) === 1, 'a full load of /modale/<slug> shows the modal');
       await dialog.getByRole('button', {name: 'Annuler smoke'}).click();

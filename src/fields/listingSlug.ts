@@ -54,7 +54,7 @@ export const listingSlugField = (o: {self: 'blog' | 'portfolio'; label: Text; de
 export const pageSlugValidate = async (value: unknown, {req, siblingData}: ValidateArgs & {siblingData?: {parent?: unknown}}) => {
   const language = req?.i18n?.language;
   if (typeof value !== 'string' || !FORMAT.test(value)) return tr(fieldsText.slug.invalid, language);
-  // a top-level page cannot take the modals' address (/modale/<slug> is a site route)
+  // a top-level page cannot take the modals' preview address (/modale/<slug> is a site route)
   if (value === MODAL_SEGMENT && !siblingData?.parent) return tr(fieldsText.slug.reserved, language, {slug: value});
   if (!req?.payload) return true;
   for (const listing of LISTING_GLOBALS) {

@@ -1,7 +1,8 @@
 /**
- * Loads a modal of the « Modales » collection for the site (server only, Payload local API): its
- * texts, width, tone, how it closes, its body with the internal links' addresses written on them,
- * the forms inserted in the body (converted with `formData`) and its footer buttons.
+ * Loads the modals of the « Modales » collection for the site (server only, Payload local API):
+ * texts, width, tone, how it closes, the body with the internal links' addresses written on it,
+ * the forms inserted in the body (converted with `formData`) and the footer buttons. A page
+ * loads every modal it links to (`collectModalSlugs`) and renders them closed (SiteModals).
  */
 import config from '@payload-config';
 import {getPayload} from 'payload';
@@ -9,7 +10,7 @@ import {getPayload} from 'payload';
 import type {RichTextDocument, RichTextNode} from '@/components/rich-text';
 import {type FormData, formData} from '@/lib/forms';
 import {loadFormsByIds} from '@/lib/forms-load';
-import {stampInternalLinks} from '@/lib/links';
+import {collectModalSlugs, type LinkSite, stampInternalLinks} from '@/lib/links';
 import {blogConfig, casesConfig} from '@/lib/listings';
 import {MODAL_FORM_SLUG, type ModalButton, type ModalPurpose, type ModalSize, type ModalTone} from '@/lib/modal-paths';
 import type {Locale} from '@/locales';
@@ -59,17 +60,40 @@ function toButtons(rows: Modal['buttons']): ModalButton[] {
   return out;
 }
 
+/** One modal by slug (its own page, the admin's preview). */
 export async function loadModal(slug: string, locale: Locale): Promise<ModalData | null> {
+  return (await loadModals([slug], locale))[0] ?? null;
+}
+
+/**
+ * The modals some content can open (`collectModalSlugs`), loaded with their forms, in the order
+ * given; a modal that links to another modal brings it along (one level, then another: three
+ * rounds at most). Unknown slugs are skipped.
+ */
+export async function loadModals(slugs: string[], locale: Locale): Promise<ModalData[]> {
+  if (!slugs.length) return [];
   const payload = await getPayload({config});
-  const [res, blog, portfolio] = await Promise.all([
-    payload.find({collection: 'modals', locale, depth: 1, limit: 1, where: {slug: {equals: slug}}}),
-    payload.findGlobal({slug: 'blog', locale, depth: 0}),
-    payload.findGlobal({slug: 'portfolio', locale, depth: 0}),
-  ]);
-  const modal = res.docs[0];
-  if (!modal) return null;
+  const [blog, portfolio] = await Promise.all([payload.findGlobal({slug: 'blog', locale, depth: 0}), payload.findGlobal({slug: 'portfolio', locale, depth: 0})]);
+  const site = {blog: blogConfig(blog), cases: casesConfig(portfolio)};
+  const out: ModalData[] = [];
+  let wanted = [...new Set(slugs)];
+  for (let round = 0; round < 3 && wanted.length; round++) {
+    const res = await payload.find({collection: 'modals', locale, depth: 1, limit: wanted.length, where: {slug: {in: wanted}}});
+    const docs = wanted.map((s) => res.docs.find((d) => d.slug === s)).filter((d): d is Modal => Boolean(d));
+    const next: string[] = [];
+    for (const doc of docs) {
+      const data = await toModalData(doc, locale, site);
+      out.push(data);
+      for (const s of collectModalSlugs([doc.body, doc.buttons])) if (!out.some((m) => m.slug === s) && !next.includes(s)) next.push(s);
+    }
+    wanted = next;
+  }
+  return out;
+}
+
+async function toModalData(modal: Modal, locale: Locale, site: LinkSite): Promise<ModalData> {
   const body = (modal.body ?? null) as RichTextDocument | null;
-  if (body) stampInternalLinks(body, {blog: blogConfig(blog), cases: casesConfig(portfolio)});
+  if (body) stampInternalLinks(body, site);
 
   // forms of the body: loaded once, with their redirect page (like the « Formulaire » column block)
   const blocks = formBlocks(body?.root.children);
@@ -79,7 +103,7 @@ export async function loadModal(slug: string, locale: Locale): Promise<ModalData
   for (const b of blocks) {
     const id = formId(b.form);
     const doc = id !== null ? docs.get(id) : undefined;
-    const data = doc && b.id ? formData(doc, {id: `modal-form-${b.id}`, framed: false, showHeading: b.showHeading === true}) : null;
+    const data = doc && b.id ? formData(doc, {id: `modal-form-${modal.slug}-${b.id}`, framed: false, showHeading: b.showHeading === true}) : null;
     if (data && b.id) forms[b.id] = data;
   }
 

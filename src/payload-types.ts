@@ -2396,7 +2396,7 @@ export interface Section {
   createdAt: string;
 }
 /**
- * A modal opens over the page from an internal link (« Modals » collection) or a button whose address is /modale/<identifier>.
+ * A modal opens over the page from an internal link (« Modals » collection) or a button whose address is #modale-<identifier>.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "modals".
@@ -2442,7 +2442,7 @@ export interface Modal {
       }[]
     | null;
   /**
-   * Lowercase letters, digits and hyphens. The modal opens at /modale/<identifier>.
+   * Lowercase letters, digits and hyphens. A button opens it with the address #modale-<identifier>; a text, through an internal link.
    */
   slug: string;
   updatedAt: string;

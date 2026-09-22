@@ -12,6 +12,13 @@
 >   server conversion instead (`src/lib/links.ts`, `fields.resolvedHref`).
 > - The inserted form lives in the JSON of the rich text: no `modals_rels` table.
 >
+> - **Reworked the same day at Nicolas's request**: the intercepted route changed the page's
+>   address to `/modale/<slug>`, which he found confusing. A modal now opens through an anchor,
+>   `#modale-<slug>`; the page renders the modals it links to, closed (`PageModals`,
+>   `SiteModals`), inside `SitePage` (page silo by construction: `SiloMark` gone). The `@modal`
+>   slot and the intercepted route are gone; `/modale/<slug>` stays for the admin's preview only.
+>   See `docs/modals.md`.
+>
 > **Original status: ready for Opus, nothing built.** Written by Claude Fable for the next session (Claude
 > Opus), from Nicolas's note in `consignes.md` and his answers on 22 September 2026. Every
 > decision is taken (§ Decisions). Read `CLAUDE.md`, `docs/handoff-2026-09-17.md` (project

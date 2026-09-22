@@ -11,8 +11,8 @@ const f = ct.modals.fields;
 
 /**
  * Modals (« Modales »): content written once, opened over any page by an internal link of a rich
- * text (the link editor's « Lien interne », collection Modales) or a button whose address is
- * /modale/<slug>. A title, an eyebrow, a width (the site Dialog's sm / md / lg), a tone, how it
+ * text (the link editor's « Lien interne », collection Modales) or a button whose address is the
+ * modal's anchor, #modale-<slug>; /modale/<slug> is its own page, for the admin's preview. A title, an eyebrow, a width (the site Dialog's sm / md / lg), a tone, how it
  * closes, a free body (text with forms inserted anywhere) and up to two footer buttons. The silo
  * is the page's. Site side: docs/modals.md.
  */

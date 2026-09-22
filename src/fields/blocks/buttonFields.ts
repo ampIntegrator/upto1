@@ -70,7 +70,7 @@ export const buttonRowFields = (): Field[] => [
 
 /**
  * A footer button of a modal (« Modales »): label, action (close the modal, or go to an address:
- * a page, another modal at /modale/<slug>…) and style, destructive included. Simple buttons only:
+ * a page, another modal's anchor #modale-<slug>…) and style, destructive included. Simple buttons only:
  * no split shape, no size, no icon. A factory too, for the same reason as `buttonRowFields`.
  */
 export const modalButtonFields = (): Field[] => {
