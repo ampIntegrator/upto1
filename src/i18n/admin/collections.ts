@@ -116,15 +116,15 @@ export const collectionsText = texts({
     singular: {fr: 'Modale', en: 'Modal'},
     plural: {fr: 'Modales', en: 'Modals'},
     description: {
-      fr: 'Une modale s’ouvre par-dessus la page depuis un lien interne (collection « Modales ») ou un bouton dont l’adresse est #modale-<identifiant>.',
-      en: 'A modal opens over the page from an internal link (« Modals » collection) or a button whose address is #modale-<identifier>.',
+      fr: 'Une modale s’ouvre par-dessus la page depuis un lien interne d’un texte ou un bouton (« Lien vers : Contenu du site », collection « Modales »).',
+      en: 'A modal opens over the page from an internal link of a text or a button (« Link to: Site content », « Modals » collection).',
     },
     fields: {
       title: {fr: 'Titre', en: 'Title'},
       eyebrow: {fr: 'Surtitre', en: 'Eyebrow'},
       slugDescription: {
-        fr: 'Minuscules, chiffres et tirets. Un bouton l’ouvre avec l’adresse #modale-<identifiant> ; un texte, par un lien interne.',
-        en: 'Lowercase letters, digits and hyphens. A button opens it with the address #modale-<identifier>; a text, through an internal link.',
+        fr: 'Minuscules, chiffres et tirets. L’ancre de la modale sur une page : #modale-<identifiant>.',
+        en: 'Lowercase letters, digits and hyphens. The modal’s anchor on a page: #modale-<identifier>.',
       },
       size: {fr: 'Largeur', en: 'Width'},
       sizeSm: {fr: 'Étroite (420 px)', en: 'Narrow (420 px)'},

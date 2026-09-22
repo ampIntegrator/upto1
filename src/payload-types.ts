@@ -175,12 +175,48 @@ export interface Page {
     lead?: string | null;
     primary?: {
       label?: string | null;
+      kind?: ('url' | 'internal') | null;
       href?: string | null;
+      doc?:
+        | ({
+            relationTo: 'pages';
+            value: number | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: number | Post;
+          } | null)
+        | ({
+            relationTo: 'case-studies';
+            value: number | CaseStudy;
+          } | null)
+        | ({
+            relationTo: 'modals';
+            value: number | Modal;
+          } | null);
       iconKey?: string | null;
     };
     secondary?: {
       label?: string | null;
+      kind?: ('url' | 'internal') | null;
       href?: string | null;
+      doc?:
+        | ({
+            relationTo: 'pages';
+            value: number | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: number | Post;
+          } | null)
+        | ({
+            relationTo: 'case-studies';
+            value: number | CaseStudy;
+          } | null)
+        | ({
+            relationTo: 'modals';
+            value: number | Modal;
+          } | null);
       iconKey?: string | null;
     };
     image?: (number | null) | Media;
@@ -318,7 +354,25 @@ export interface Page {
                                   buttons?:
                                     | {
                                         label: string;
-                                        href: string;
+                                        kind?: ('url' | 'internal') | null;
+                                        href?: string | null;
+                                        doc?:
+                                          | ({
+                                              relationTo: 'pages';
+                                              value: number | Page;
+                                            } | null)
+                                          | ({
+                                              relationTo: 'posts';
+                                              value: number | Post;
+                                            } | null)
+                                          | ({
+                                              relationTo: 'case-studies';
+                                              value: number | CaseStudy;
+                                            } | null)
+                                          | ({
+                                              relationTo: 'modals';
+                                              value: number | Modal;
+                                            } | null);
                                         shape?: ('simple' | 'split') | null;
                                         variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
                                         size?: ('md' | 'lg') | null;
@@ -437,7 +491,25 @@ export interface Page {
                                   text?: string | null;
                                   cta: {
                                     label: string;
-                                    href: string;
+                                    kind?: ('url' | 'internal') | null;
+                                    href?: string | null;
+                                    doc?:
+                                      | ({
+                                          relationTo: 'pages';
+                                          value: number | Page;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'posts';
+                                          value: number | Post;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'case-studies';
+                                          value: number | CaseStudy;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'modals';
+                                          value: number | Modal;
+                                        } | null);
                                   };
                                   id?: string | null;
                                   blockName?: string | null;
@@ -453,7 +525,25 @@ export interface Page {
                                   text?: string | null;
                                   cta: {
                                     label: string;
-                                    href: string;
+                                    kind?: ('url' | 'internal') | null;
+                                    href?: string | null;
+                                    doc?:
+                                      | ({
+                                          relationTo: 'pages';
+                                          value: number | Page;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'posts';
+                                          value: number | Post;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'case-studies';
+                                          value: number | CaseStudy;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'modals';
+                                          value: number | Modal;
+                                        } | null);
                                   };
                                   id?: string | null;
                                   blockName?: string | null;
@@ -471,7 +561,25 @@ export interface Page {
                                   text?: string | null;
                                   cta: {
                                     label: string;
-                                    href: string;
+                                    kind?: ('url' | 'internal') | null;
+                                    href?: string | null;
+                                    doc?:
+                                      | ({
+                                          relationTo: 'pages';
+                                          value: number | Page;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'posts';
+                                          value: number | Post;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'case-studies';
+                                          value: number | CaseStudy;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'modals';
+                                          value: number | Modal;
+                                        } | null);
                                   };
                                   id?: string | null;
                                   blockName?: string | null;
@@ -486,7 +594,25 @@ export interface Page {
                                   text?: string | null;
                                   cta: {
                                     label: string;
-                                    href: string;
+                                    kind?: ('url' | 'internal') | null;
+                                    href?: string | null;
+                                    doc?:
+                                      | ({
+                                          relationTo: 'pages';
+                                          value: number | Page;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'posts';
+                                          value: number | Post;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'case-studies';
+                                          value: number | CaseStudy;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'modals';
+                                          value: number | Modal;
+                                        } | null);
                                   };
                                   id?: string | null;
                                   blockName?: string | null;
@@ -511,7 +637,25 @@ export interface Page {
                                   };
                                   cta: {
                                     label: string;
-                                    href: string;
+                                    kind?: ('url' | 'internal') | null;
+                                    href?: string | null;
+                                    doc?:
+                                      | ({
+                                          relationTo: 'pages';
+                                          value: number | Page;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'posts';
+                                          value: number | Post;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'case-studies';
+                                          value: number | CaseStudy;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'modals';
+                                          value: number | Modal;
+                                        } | null);
                                   };
                                   mention?: string | null;
                                   guarantee?: {
@@ -554,7 +698,25 @@ export interface Page {
                                     | null;
                                   cta: {
                                     label: string;
-                                    href: string;
+                                    kind?: ('url' | 'internal') | null;
+                                    href?: string | null;
+                                    doc?:
+                                      | ({
+                                          relationTo: 'pages';
+                                          value: number | Page;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'posts';
+                                          value: number | Post;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'case-studies';
+                                          value: number | CaseStudy;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'modals';
+                                          value: number | Modal;
+                                        } | null);
                                   };
                                   mention?: string | null;
                                   guarantee?: {
@@ -692,7 +854,25 @@ export interface Page {
                                   buttons?:
                                     | {
                                         label: string;
-                                        href: string;
+                                        kind?: ('url' | 'internal') | null;
+                                        href?: string | null;
+                                        doc?:
+                                          | ({
+                                              relationTo: 'pages';
+                                              value: number | Page;
+                                            } | null)
+                                          | ({
+                                              relationTo: 'posts';
+                                              value: number | Post;
+                                            } | null)
+                                          | ({
+                                              relationTo: 'case-studies';
+                                              value: number | CaseStudy;
+                                            } | null)
+                                          | ({
+                                              relationTo: 'modals';
+                                              value: number | Modal;
+                                            } | null);
                                         shape?: ('simple' | 'split') | null;
                                         variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
                                         size?: ('md' | 'lg') | null;
@@ -747,7 +927,25 @@ export interface Page {
                                   text?: string | null;
                                   button: {
                                     label: string;
-                                    href: string;
+                                    kind?: ('url' | 'internal') | null;
+                                    href?: string | null;
+                                    doc?:
+                                      | ({
+                                          relationTo: 'pages';
+                                          value: number | Page;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'posts';
+                                          value: number | Post;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'case-studies';
+                                          value: number | CaseStudy;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'modals';
+                                          value: number | Modal;
+                                        } | null);
                                     shape?: ('simple' | 'split') | null;
                                     variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
                                     size?: ('md' | 'lg') | null;
@@ -874,7 +1072,25 @@ export interface Page {
                                             text?: string | null;
                                             cta: {
                                               label: string;
-                                              href: string;
+                                              kind?: ('url' | 'internal') | null;
+                                              href?: string | null;
+                                              doc?:
+                                                | ({
+                                                    relationTo: 'pages';
+                                                    value: number | Page;
+                                                  } | null)
+                                                | ({
+                                                    relationTo: 'posts';
+                                                    value: number | Post;
+                                                  } | null)
+                                                | ({
+                                                    relationTo: 'case-studies';
+                                                    value: number | CaseStudy;
+                                                  } | null)
+                                                | ({
+                                                    relationTo: 'modals';
+                                                    value: number | Modal;
+                                                  } | null);
                                             };
                                             id?: string | null;
                                             blockName?: string | null;
@@ -890,7 +1106,25 @@ export interface Page {
                                             text?: string | null;
                                             cta: {
                                               label: string;
-                                              href: string;
+                                              kind?: ('url' | 'internal') | null;
+                                              href?: string | null;
+                                              doc?:
+                                                | ({
+                                                    relationTo: 'pages';
+                                                    value: number | Page;
+                                                  } | null)
+                                                | ({
+                                                    relationTo: 'posts';
+                                                    value: number | Post;
+                                                  } | null)
+                                                | ({
+                                                    relationTo: 'case-studies';
+                                                    value: number | CaseStudy;
+                                                  } | null)
+                                                | ({
+                                                    relationTo: 'modals';
+                                                    value: number | Modal;
+                                                  } | null);
                                             };
                                             id?: string | null;
                                             blockName?: string | null;
@@ -908,7 +1142,25 @@ export interface Page {
                                             text?: string | null;
                                             cta: {
                                               label: string;
-                                              href: string;
+                                              kind?: ('url' | 'internal') | null;
+                                              href?: string | null;
+                                              doc?:
+                                                | ({
+                                                    relationTo: 'pages';
+                                                    value: number | Page;
+                                                  } | null)
+                                                | ({
+                                                    relationTo: 'posts';
+                                                    value: number | Post;
+                                                  } | null)
+                                                | ({
+                                                    relationTo: 'case-studies';
+                                                    value: number | CaseStudy;
+                                                  } | null)
+                                                | ({
+                                                    relationTo: 'modals';
+                                                    value: number | Modal;
+                                                  } | null);
                                             };
                                             id?: string | null;
                                             blockName?: string | null;
@@ -923,7 +1175,25 @@ export interface Page {
                                             text?: string | null;
                                             cta: {
                                               label: string;
-                                              href: string;
+                                              kind?: ('url' | 'internal') | null;
+                                              href?: string | null;
+                                              doc?:
+                                                | ({
+                                                    relationTo: 'pages';
+                                                    value: number | Page;
+                                                  } | null)
+                                                | ({
+                                                    relationTo: 'posts';
+                                                    value: number | Post;
+                                                  } | null)
+                                                | ({
+                                                    relationTo: 'case-studies';
+                                                    value: number | CaseStudy;
+                                                  } | null)
+                                                | ({
+                                                    relationTo: 'modals';
+                                                    value: number | Modal;
+                                                  } | null);
                                             };
                                             id?: string | null;
                                             blockName?: string | null;
@@ -974,7 +1244,25 @@ export interface Page {
                                               | null;
                                             cta: {
                                               label: string;
-                                              href: string;
+                                              kind?: ('url' | 'internal') | null;
+                                              href?: string | null;
+                                              doc?:
+                                                | ({
+                                                    relationTo: 'pages';
+                                                    value: number | Page;
+                                                  } | null)
+                                                | ({
+                                                    relationTo: 'posts';
+                                                    value: number | Post;
+                                                  } | null)
+                                                | ({
+                                                    relationTo: 'case-studies';
+                                                    value: number | CaseStudy;
+                                                  } | null)
+                                                | ({
+                                                    relationTo: 'modals';
+                                                    value: number | Modal;
+                                                  } | null);
                                             };
                                             mention?: string | null;
                                             guarantee?: {
@@ -1096,25 +1384,6 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: number;
-  alt: string;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts".
  */
 export interface Post {
@@ -1178,6 +1447,25 @@ export interface Post {
   publishedAt: string;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  alt: string;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1276,7 +1564,25 @@ export interface CaseStudy {
      */
     cta?: {
       label?: string | null;
+      kind?: ('url' | 'internal') | null;
       href?: string | null;
+      doc?:
+        | ({
+            relationTo: 'pages';
+            value: number | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: number | Post;
+          } | null)
+        | ({
+            relationTo: 'case-studies';
+            value: number | CaseStudy;
+          } | null)
+        | ({
+            relationTo: 'modals';
+            value: number | Modal;
+          } | null);
     };
   };
   faq?: {
@@ -1313,6 +1619,77 @@ export interface CaseStudy {
   slug: string;
   category: number | CaseCategory;
   publishedAt: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * A modal opens over the page from an internal link of a text or a button (« Link to: Site content », « Modals » collection).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "modals".
+ */
+export interface Modal {
+  id: number;
+  eyebrow?: string | null;
+  title: string;
+  size: 'sm' | 'md' | 'lg';
+  tone: 'light' | 'night';
+  /**
+   * “Answer required”: for a text to accept. Add at least one button.
+   */
+  dismiss: 'free' | 'required';
+  /**
+   * Text, links, lists, tables. The « + » button (or « / ») inserts a form wherever you want.
+   */
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Two at most, right-aligned.
+   */
+  buttons?:
+    | {
+        label: string;
+        variant: 'primary' | 'secondary' | 'ghost' | 'destructive';
+        action: 'close' | 'link';
+        kind?: ('url' | 'internal') | null;
+        href?: string | null;
+        doc?:
+          | ({
+              relationTo: 'pages';
+              value: number | Page;
+            } | null)
+          | ({
+              relationTo: 'posts';
+              value: number | Post;
+            } | null)
+          | ({
+              relationTo: 'case-studies';
+              value: number | CaseStudy;
+            } | null)
+          | ({
+              relationTo: 'modals';
+              value: number | Modal;
+            } | null);
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Lowercase letters, digits and hyphens. The modal’s anchor on a page: #modale-<identifier>.
+   */
+  slug: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -1663,7 +2040,25 @@ export interface Section {
                         buttons?:
                           | {
                               label: string;
-                              href: string;
+                              kind?: ('url' | 'internal') | null;
+                              href?: string | null;
+                              doc?:
+                                | ({
+                                    relationTo: 'pages';
+                                    value: number | Page;
+                                  } | null)
+                                | ({
+                                    relationTo: 'posts';
+                                    value: number | Post;
+                                  } | null)
+                                | ({
+                                    relationTo: 'case-studies';
+                                    value: number | CaseStudy;
+                                  } | null)
+                                | ({
+                                    relationTo: 'modals';
+                                    value: number | Modal;
+                                  } | null);
                               shape?: ('simple' | 'split') | null;
                               variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
                               size?: ('md' | 'lg') | null;
@@ -1782,7 +2177,25 @@ export interface Section {
                         text?: string | null;
                         cta: {
                           label: string;
-                          href: string;
+                          kind?: ('url' | 'internal') | null;
+                          href?: string | null;
+                          doc?:
+                            | ({
+                                relationTo: 'pages';
+                                value: number | Page;
+                              } | null)
+                            | ({
+                                relationTo: 'posts';
+                                value: number | Post;
+                              } | null)
+                            | ({
+                                relationTo: 'case-studies';
+                                value: number | CaseStudy;
+                              } | null)
+                            | ({
+                                relationTo: 'modals';
+                                value: number | Modal;
+                              } | null);
                         };
                         id?: string | null;
                         blockName?: string | null;
@@ -1798,7 +2211,25 @@ export interface Section {
                         text?: string | null;
                         cta: {
                           label: string;
-                          href: string;
+                          kind?: ('url' | 'internal') | null;
+                          href?: string | null;
+                          doc?:
+                            | ({
+                                relationTo: 'pages';
+                                value: number | Page;
+                              } | null)
+                            | ({
+                                relationTo: 'posts';
+                                value: number | Post;
+                              } | null)
+                            | ({
+                                relationTo: 'case-studies';
+                                value: number | CaseStudy;
+                              } | null)
+                            | ({
+                                relationTo: 'modals';
+                                value: number | Modal;
+                              } | null);
                         };
                         id?: string | null;
                         blockName?: string | null;
@@ -1816,7 +2247,25 @@ export interface Section {
                         text?: string | null;
                         cta: {
                           label: string;
-                          href: string;
+                          kind?: ('url' | 'internal') | null;
+                          href?: string | null;
+                          doc?:
+                            | ({
+                                relationTo: 'pages';
+                                value: number | Page;
+                              } | null)
+                            | ({
+                                relationTo: 'posts';
+                                value: number | Post;
+                              } | null)
+                            | ({
+                                relationTo: 'case-studies';
+                                value: number | CaseStudy;
+                              } | null)
+                            | ({
+                                relationTo: 'modals';
+                                value: number | Modal;
+                              } | null);
                         };
                         id?: string | null;
                         blockName?: string | null;
@@ -1831,7 +2280,25 @@ export interface Section {
                         text?: string | null;
                         cta: {
                           label: string;
-                          href: string;
+                          kind?: ('url' | 'internal') | null;
+                          href?: string | null;
+                          doc?:
+                            | ({
+                                relationTo: 'pages';
+                                value: number | Page;
+                              } | null)
+                            | ({
+                                relationTo: 'posts';
+                                value: number | Post;
+                              } | null)
+                            | ({
+                                relationTo: 'case-studies';
+                                value: number | CaseStudy;
+                              } | null)
+                            | ({
+                                relationTo: 'modals';
+                                value: number | Modal;
+                              } | null);
                         };
                         id?: string | null;
                         blockName?: string | null;
@@ -1856,7 +2323,25 @@ export interface Section {
                         };
                         cta: {
                           label: string;
-                          href: string;
+                          kind?: ('url' | 'internal') | null;
+                          href?: string | null;
+                          doc?:
+                            | ({
+                                relationTo: 'pages';
+                                value: number | Page;
+                              } | null)
+                            | ({
+                                relationTo: 'posts';
+                                value: number | Post;
+                              } | null)
+                            | ({
+                                relationTo: 'case-studies';
+                                value: number | CaseStudy;
+                              } | null)
+                            | ({
+                                relationTo: 'modals';
+                                value: number | Modal;
+                              } | null);
                         };
                         mention?: string | null;
                         guarantee?: {
@@ -1899,7 +2384,25 @@ export interface Section {
                           | null;
                         cta: {
                           label: string;
-                          href: string;
+                          kind?: ('url' | 'internal') | null;
+                          href?: string | null;
+                          doc?:
+                            | ({
+                                relationTo: 'pages';
+                                value: number | Page;
+                              } | null)
+                            | ({
+                                relationTo: 'posts';
+                                value: number | Post;
+                              } | null)
+                            | ({
+                                relationTo: 'case-studies';
+                                value: number | CaseStudy;
+                              } | null)
+                            | ({
+                                relationTo: 'modals';
+                                value: number | Modal;
+                              } | null);
                         };
                         mention?: string | null;
                         guarantee?: {
@@ -2037,7 +2540,25 @@ export interface Section {
                         buttons?:
                           | {
                               label: string;
-                              href: string;
+                              kind?: ('url' | 'internal') | null;
+                              href?: string | null;
+                              doc?:
+                                | ({
+                                    relationTo: 'pages';
+                                    value: number | Page;
+                                  } | null)
+                                | ({
+                                    relationTo: 'posts';
+                                    value: number | Post;
+                                  } | null)
+                                | ({
+                                    relationTo: 'case-studies';
+                                    value: number | CaseStudy;
+                                  } | null)
+                                | ({
+                                    relationTo: 'modals';
+                                    value: number | Modal;
+                                  } | null);
                               shape?: ('simple' | 'split') | null;
                               variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
                               size?: ('md' | 'lg') | null;
@@ -2092,7 +2613,25 @@ export interface Section {
                         text?: string | null;
                         button: {
                           label: string;
-                          href: string;
+                          kind?: ('url' | 'internal') | null;
+                          href?: string | null;
+                          doc?:
+                            | ({
+                                relationTo: 'pages';
+                                value: number | Page;
+                              } | null)
+                            | ({
+                                relationTo: 'posts';
+                                value: number | Post;
+                              } | null)
+                            | ({
+                                relationTo: 'case-studies';
+                                value: number | CaseStudy;
+                              } | null)
+                            | ({
+                                relationTo: 'modals';
+                                value: number | Modal;
+                              } | null);
                           shape?: ('simple' | 'split') | null;
                           variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
                           size?: ('md' | 'lg') | null;
@@ -2219,7 +2758,25 @@ export interface Section {
                                   text?: string | null;
                                   cta: {
                                     label: string;
-                                    href: string;
+                                    kind?: ('url' | 'internal') | null;
+                                    href?: string | null;
+                                    doc?:
+                                      | ({
+                                          relationTo: 'pages';
+                                          value: number | Page;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'posts';
+                                          value: number | Post;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'case-studies';
+                                          value: number | CaseStudy;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'modals';
+                                          value: number | Modal;
+                                        } | null);
                                   };
                                   id?: string | null;
                                   blockName?: string | null;
@@ -2235,7 +2792,25 @@ export interface Section {
                                   text?: string | null;
                                   cta: {
                                     label: string;
-                                    href: string;
+                                    kind?: ('url' | 'internal') | null;
+                                    href?: string | null;
+                                    doc?:
+                                      | ({
+                                          relationTo: 'pages';
+                                          value: number | Page;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'posts';
+                                          value: number | Post;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'case-studies';
+                                          value: number | CaseStudy;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'modals';
+                                          value: number | Modal;
+                                        } | null);
                                   };
                                   id?: string | null;
                                   blockName?: string | null;
@@ -2253,7 +2828,25 @@ export interface Section {
                                   text?: string | null;
                                   cta: {
                                     label: string;
-                                    href: string;
+                                    kind?: ('url' | 'internal') | null;
+                                    href?: string | null;
+                                    doc?:
+                                      | ({
+                                          relationTo: 'pages';
+                                          value: number | Page;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'posts';
+                                          value: number | Post;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'case-studies';
+                                          value: number | CaseStudy;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'modals';
+                                          value: number | Modal;
+                                        } | null);
                                   };
                                   id?: string | null;
                                   blockName?: string | null;
@@ -2268,7 +2861,25 @@ export interface Section {
                                   text?: string | null;
                                   cta: {
                                     label: string;
-                                    href: string;
+                                    kind?: ('url' | 'internal') | null;
+                                    href?: string | null;
+                                    doc?:
+                                      | ({
+                                          relationTo: 'pages';
+                                          value: number | Page;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'posts';
+                                          value: number | Post;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'case-studies';
+                                          value: number | CaseStudy;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'modals';
+                                          value: number | Modal;
+                                        } | null);
                                   };
                                   id?: string | null;
                                   blockName?: string | null;
@@ -2319,7 +2930,25 @@ export interface Section {
                                     | null;
                                   cta: {
                                     label: string;
-                                    href: string;
+                                    kind?: ('url' | 'internal') | null;
+                                    href?: string | null;
+                                    doc?:
+                                      | ({
+                                          relationTo: 'pages';
+                                          value: number | Page;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'posts';
+                                          value: number | Post;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'case-studies';
+                                          value: number | CaseStudy;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'modals';
+                                          value: number | Modal;
+                                        } | null);
                                   };
                                   mention?: string | null;
                                   guarantee?: {
@@ -2392,59 +3021,6 @@ export interface Section {
         id?: string | null;
       }[]
     | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * A modal opens over the page from an internal link (« Modals » collection) or a button whose address is #modale-<identifier>.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "modals".
- */
-export interface Modal {
-  id: number;
-  eyebrow?: string | null;
-  title: string;
-  size: 'sm' | 'md' | 'lg';
-  tone: 'light' | 'night';
-  /**
-   * “Answer required”: for a text to accept. Add at least one button.
-   */
-  dismiss: 'free' | 'required';
-  /**
-   * Text, links, lists, tables. The « + » button (or « / ») inserts a form wherever you want.
-   */
-  body?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  /**
-   * Two at most, right-aligned.
-   */
-  buttons?:
-    | {
-        label: string;
-        variant: 'primary' | 'secondary' | 'ghost' | 'destructive';
-        action: 'close' | 'link';
-        href?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Lowercase letters, digits and hyphens. A button opens it with the address #modale-<identifier>; a text, through an internal link.
-   */
-  slug: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -2659,14 +3235,18 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               label?: T;
+              kind?: T;
               href?: T;
+              doc?: T;
               iconKey?: T;
             };
         secondary?:
           | T
           | {
               label?: T;
+              kind?: T;
               href?: T;
+              doc?: T;
               iconKey?: T;
             };
         image?: T;
@@ -2761,7 +3341,9 @@ export interface PagesSelect<T extends boolean = true> {
                                         | T
                                         | {
                                             label?: T;
+                                            kind?: T;
                                             href?: T;
+                                            doc?: T;
                                             shape?: T;
                                             variant?: T;
                                             size?: T;
@@ -2849,7 +3431,9 @@ export interface PagesSelect<T extends boolean = true> {
                                         | T
                                         | {
                                             label?: T;
+                                            kind?: T;
                                             href?: T;
+                                            doc?: T;
                                           };
                                       id?: T;
                                       blockName?: T;
@@ -2865,7 +3449,9 @@ export interface PagesSelect<T extends boolean = true> {
                                         | T
                                         | {
                                             label?: T;
+                                            kind?: T;
                                             href?: T;
+                                            doc?: T;
                                           };
                                       id?: T;
                                       blockName?: T;
@@ -2883,7 +3469,9 @@ export interface PagesSelect<T extends boolean = true> {
                                         | T
                                         | {
                                             label?: T;
+                                            kind?: T;
                                             href?: T;
+                                            doc?: T;
                                           };
                                       id?: T;
                                       blockName?: T;
@@ -2898,7 +3486,9 @@ export interface PagesSelect<T extends boolean = true> {
                                         | T
                                         | {
                                             label?: T;
+                                            kind?: T;
                                             href?: T;
+                                            doc?: T;
                                           };
                                       id?: T;
                                       blockName?: T;
@@ -2928,7 +3518,9 @@ export interface PagesSelect<T extends boolean = true> {
                                         | T
                                         | {
                                             label?: T;
+                                            kind?: T;
                                             href?: T;
+                                            doc?: T;
                                           };
                                       mention?: T;
                                       guarantee?:
@@ -2969,7 +3561,9 @@ export interface PagesSelect<T extends boolean = true> {
                                         | T
                                         | {
                                             label?: T;
+                                            kind?: T;
                                             href?: T;
+                                            doc?: T;
                                           };
                                       mention?: T;
                                       guarantee?:
@@ -3072,7 +3666,9 @@ export interface PagesSelect<T extends boolean = true> {
                                         | T
                                         | {
                                             label?: T;
+                                            kind?: T;
                                             href?: T;
+                                            doc?: T;
                                             shape?: T;
                                             variant?: T;
                                             size?: T;
@@ -3115,7 +3711,9 @@ export interface PagesSelect<T extends boolean = true> {
                                         | T
                                         | {
                                             label?: T;
+                                            kind?: T;
                                             href?: T;
+                                            doc?: T;
                                             shape?: T;
                                             variant?: T;
                                             size?: T;
@@ -3235,7 +3833,9 @@ export interface PagesSelect<T extends boolean = true> {
                                                     | T
                                                     | {
                                                         label?: T;
+                                                        kind?: T;
                                                         href?: T;
+                                                        doc?: T;
                                                       };
                                                   id?: T;
                                                   blockName?: T;
@@ -3251,7 +3851,9 @@ export interface PagesSelect<T extends boolean = true> {
                                                     | T
                                                     | {
                                                         label?: T;
+                                                        kind?: T;
                                                         href?: T;
+                                                        doc?: T;
                                                       };
                                                   id?: T;
                                                   blockName?: T;
@@ -3269,7 +3871,9 @@ export interface PagesSelect<T extends boolean = true> {
                                                     | T
                                                     | {
                                                         label?: T;
+                                                        kind?: T;
                                                         href?: T;
+                                                        doc?: T;
                                                       };
                                                   id?: T;
                                                   blockName?: T;
@@ -3284,7 +3888,9 @@ export interface PagesSelect<T extends boolean = true> {
                                                     | T
                                                     | {
                                                         label?: T;
+                                                        kind?: T;
                                                         href?: T;
+                                                        doc?: T;
                                                       };
                                                   id?: T;
                                                   blockName?: T;
@@ -3335,7 +3941,9 @@ export interface PagesSelect<T extends boolean = true> {
                                                     | T
                                                     | {
                                                         label?: T;
+                                                        kind?: T;
                                                         href?: T;
+                                                        doc?: T;
                                                       };
                                                   mention?: T;
                                                   guarantee?:
@@ -3490,7 +4098,9 @@ export interface SectionsSelect<T extends boolean = true> {
                             | T
                             | {
                                 label?: T;
+                                kind?: T;
                                 href?: T;
+                                doc?: T;
                                 shape?: T;
                                 variant?: T;
                                 size?: T;
@@ -3578,7 +4188,9 @@ export interface SectionsSelect<T extends boolean = true> {
                             | T
                             | {
                                 label?: T;
+                                kind?: T;
                                 href?: T;
+                                doc?: T;
                               };
                           id?: T;
                           blockName?: T;
@@ -3594,7 +4206,9 @@ export interface SectionsSelect<T extends boolean = true> {
                             | T
                             | {
                                 label?: T;
+                                kind?: T;
                                 href?: T;
+                                doc?: T;
                               };
                           id?: T;
                           blockName?: T;
@@ -3612,7 +4226,9 @@ export interface SectionsSelect<T extends boolean = true> {
                             | T
                             | {
                                 label?: T;
+                                kind?: T;
                                 href?: T;
+                                doc?: T;
                               };
                           id?: T;
                           blockName?: T;
@@ -3627,7 +4243,9 @@ export interface SectionsSelect<T extends boolean = true> {
                             | T
                             | {
                                 label?: T;
+                                kind?: T;
                                 href?: T;
+                                doc?: T;
                               };
                           id?: T;
                           blockName?: T;
@@ -3657,7 +4275,9 @@ export interface SectionsSelect<T extends boolean = true> {
                             | T
                             | {
                                 label?: T;
+                                kind?: T;
                                 href?: T;
+                                doc?: T;
                               };
                           mention?: T;
                           guarantee?:
@@ -3698,7 +4318,9 @@ export interface SectionsSelect<T extends boolean = true> {
                             | T
                             | {
                                 label?: T;
+                                kind?: T;
                                 href?: T;
+                                doc?: T;
                               };
                           mention?: T;
                           guarantee?:
@@ -3801,7 +4423,9 @@ export interface SectionsSelect<T extends boolean = true> {
                             | T
                             | {
                                 label?: T;
+                                kind?: T;
                                 href?: T;
+                                doc?: T;
                                 shape?: T;
                                 variant?: T;
                                 size?: T;
@@ -3844,7 +4468,9 @@ export interface SectionsSelect<T extends boolean = true> {
                             | T
                             | {
                                 label?: T;
+                                kind?: T;
                                 href?: T;
+                                doc?: T;
                                 shape?: T;
                                 variant?: T;
                                 size?: T;
@@ -3964,7 +4590,9 @@ export interface SectionsSelect<T extends boolean = true> {
                                         | T
                                         | {
                                             label?: T;
+                                            kind?: T;
                                             href?: T;
+                                            doc?: T;
                                           };
                                       id?: T;
                                       blockName?: T;
@@ -3980,7 +4608,9 @@ export interface SectionsSelect<T extends boolean = true> {
                                         | T
                                         | {
                                             label?: T;
+                                            kind?: T;
                                             href?: T;
+                                            doc?: T;
                                           };
                                       id?: T;
                                       blockName?: T;
@@ -3998,7 +4628,9 @@ export interface SectionsSelect<T extends boolean = true> {
                                         | T
                                         | {
                                             label?: T;
+                                            kind?: T;
                                             href?: T;
+                                            doc?: T;
                                           };
                                       id?: T;
                                       blockName?: T;
@@ -4013,7 +4645,9 @@ export interface SectionsSelect<T extends boolean = true> {
                                         | T
                                         | {
                                             label?: T;
+                                            kind?: T;
                                             href?: T;
+                                            doc?: T;
                                           };
                                       id?: T;
                                       blockName?: T;
@@ -4064,7 +4698,9 @@ export interface SectionsSelect<T extends boolean = true> {
                                         | T
                                         | {
                                             label?: T;
+                                            kind?: T;
                                             href?: T;
+                                            doc?: T;
                                           };
                                       mention?: T;
                                       guarantee?:
@@ -4138,7 +4774,9 @@ export interface ModalsSelect<T extends boolean = true> {
         label?: T;
         variant?: T;
         action?: T;
+        kind?: T;
         href?: T;
+        doc?: T;
         id?: T;
       };
   slug?: T;
@@ -4241,7 +4879,9 @@ export interface CaseStudiesSelect<T extends boolean = true> {
           | T
           | {
               label?: T;
+              kind?: T;
               href?: T;
+              doc?: T;
             };
       };
   faq?:

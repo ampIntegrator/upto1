@@ -4,6 +4,7 @@ import { fieldsText } from '@/i18n/admin/fields'
 import { type Text, tr } from '@/i18n/admin/languages'
 
 import { iconField } from './iconField'
+import { linkTarget } from './linkTarget'
 
 /** Title entered in a textarea in TitleText format: line break = line break, <span> = serif accent. */
 export function titleField(overrides: Partial<TextareaField> & { name: string }): TextareaField {
@@ -20,15 +21,18 @@ export function titleField(overrides: Partial<TextareaField> & { name: string })
   } as TextareaField
 }
 
-/** Link: label (translatable) + address, with optional Nucleo icon. */
+/**
+ * Link: label (translatable) + target (an address, or a content of the site: linkTarget.ts), with
+ * optional Nucleo icon. `plain`: a typed address only (the header and footer, kept simple for now).
+ */
 export function linkGroup(
   name: string,
   label: string | Text,
-  opts: { icon?: boolean; required?: boolean } = {},
+  opts: { icon?: boolean; required?: boolean; plain?: boolean } = {},
 ): GroupField {
   const fields: Field[] = [
     { name: 'label', type: 'text', label: fieldsText.link.label, localized: true, required: opts.required },
-    { name: 'href', type: 'text', label: fieldsText.link.href, required: opts.required },
+    ...(opts.plain ? [{ name: 'href', type: 'text', label: fieldsText.link.href, required: opts.required } as Field] : linkTarget({ required: opts.required })),
   ]
   if (opts.icon) fields.push(iconField({ name: 'iconKey', label: fieldsText.link.icon }))
   return { name, type: 'group', label, fields }

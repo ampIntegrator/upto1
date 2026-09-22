@@ -19,6 +19,7 @@ import {SitePage} from '@/components/SitePage';
 import {caseCard} from '@/lib/cards';
 import {caseHero, caseSheet, loadRelatedCases} from '@/lib/cases';
 import {entryFaq} from '@/lib/entries';
+import {stampInternalLinks} from '@/lib/links';
 import {categoryPath, listingPath, plainTitle} from '@/lib/listings';
 import {getSite, pageSilo, resolveEntryLink, toFooter, toHeader} from '@/lib/site';
 import type {Locale} from '@/locales';
@@ -26,6 +27,8 @@ import type {CaseStudy} from '@/payload-types';
 
 export async function CasePage({locale, site, caseStudy}: {locale: Locale; site: Awaited<ReturnType<typeof getSite>>; caseStudy: CaseStudy}) {
   const {cases, settings: s} = site;
+  // buttons of the prose figures and the case's CTA targeting a content of the site: their address
+  stampInternalLinks([caseStudy.content, caseStudy.sheet], site);
   const content = caseStudy.content as unknown as RichTextDocument | null;
   const category = typeof caseStudy.category === 'object' && caseStudy.category ? caseStudy.category : null;
   const related = await loadRelatedCases(locale, caseStudy, cases.relatedCount);

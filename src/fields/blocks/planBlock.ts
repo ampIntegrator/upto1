@@ -38,7 +38,7 @@ const block: Block = {
       ],
     },
     featuresField,
-    ctaField,
+    ctaField(),
     mentionField,
     guaranteeGroup,
   ],

@@ -132,8 +132,8 @@ async function main() {
         title: 'Smoke modales',
         slug,
         silo: 'green',
-        hero: {variant: 'page-glow', title: 'Smoke modales'},
-        sections: [section([[column(6, {blockType: 'textBox', title: 'Encart modales smoke', titleTag: 'h2', content, buttons: [{label: 'Bouton modale smoke', href: modalHash(note.slug), shape: 'simple', variant: 'primary', size: 'md'}]}), column(6)]])],
+        sections: [section([[column(6, {blockType: 'textBox', title: 'Encart modales smoke', titleTag: 'h2', content, buttons: [{label: 'Bouton modale smoke', kind: 'internal', doc: {relationTo: 'modals', value: note.id}, shape: 'simple', variant: 'primary', size: 'md'}, {label: 'Bouton ancre smoke', href: modalHash(terms.slug), shape: 'simple', variant: 'ghost', size: 'md'}]}), column(6)]])],
+        hero: {variant: 'page-glow', title: 'Smoke modales', primary: {label: 'Hero article smoke', kind: 'internal', doc: post ? {relationTo: 'posts', value: post.id} : null}},
       } as never,
     });
     created.pages.push(page.id);
@@ -143,6 +143,8 @@ async function main() {
     const html = await (await fetch(`${BASE}/${slug}`)).text();
     for (const m of [note, terms, withForm]) check(html.includes(`href="${modalHash(m.slug)}"`), `the page links to ${modalHash(m.slug)}`);
     for (const m of ['Offre smoke', 'Conditions smoke', 'Demande smoke', 'Nom modale smoke']) check(html.includes(m), `the page renders the closed modal « ${m} »`);
+    check((html.match(new RegExp(`href="${modalHash(note.slug)}"`, 'g')) ?? []).length >= 2, 'a button whose target is a chosen modal gets its anchor');
+    if (postHref) check(html.includes(`Hero article smoke`) && html.includes(`href="${postHref}"`), 'a hero button whose target is a chosen post gets its address');
     if (postHref) check(html.includes(`href="${postHref}"`), `an internal link to a post in a text box goes to ${postHref}`);
     check(!/Unhandled Runtime Error|Build Error/.test(html), 'page without runtime error');
 
@@ -192,7 +194,7 @@ async function main() {
 
       await p.getByRole('link', {name: 'Bouton modale smoke'}).click();
       await dialog.waitFor({timeout: 10000});
-      check(p.url() === pageUrl + modalHash(note.slug), 'a button to #modale-<slug> opens it over the page too');
+      check(p.url() === pageUrl + modalHash(note.slug), 'a button whose target is a modal opens it over the page too');
       await dialog.getByRole('button', {name: 'Annuler smoke'}).click();
       await p.waitForURL(pageUrl, {timeout: 5000}).catch(() => undefined);
       check((await dialog.count()) === 0 && p.url() === pageUrl, 'a « close » footer button closes it');

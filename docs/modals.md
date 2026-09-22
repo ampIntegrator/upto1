@@ -28,10 +28,33 @@ Collection **Modales** (`modals`, group « Site »), `src/collections/Modals.ts`
 - No silo: a modal takes the silo of the page it opens over.
 
 **Opening a modal**: in any rich text (text box, tabs, key points, posts, case studies, another
-modal), select words, add a link, « Lien interne », collection « Modales », then the modal. Any
-button or link field whose address is the modal's anchor, `#modale-<slug>`, opens it too (hero,
-text box, button group, CTA band…). Header and footer: not needed (Nicolas's decision), but the
-anchor works there when the page renders the modal (see below).
+modal), select words, add a link, « Lien interne », collection « Modales », then the modal. In a
+button (hero, text box, button group, CTA band, clickable cards, price CTAs, a case study's CTA,
+a modal's footer), « Lien vers : Contenu du site », collection « Modales », then the modal: the
+same picker as in the texts (see « Link targets » below). A typed address equal to the anchor,
+`#modale-<slug>`, works too. Header and footer: not needed (Nicolas's decision); their links stay
+typed addresses.
+
+## Link targets (buttons)
+
+Added on 22 September 2026 (Nicolas: « un sélecteur quand on peut faire un lien »). Every button
+or link field of the site content is a **target** (`src/fields/linkTarget.ts`, a factory):
+
+- **« Lien vers »**: « Adresse » (a URL or an anchor, typed in « Adresse ») or « Contenu du site »
+  (a page, a post, a case study or a modal, picked in « Contenu » with the collection dropdown and
+  a search, like the rich text link editor).
+- Stored as `kind`, `href` (the typed address) and `doc` (the chosen content). Existing data (an
+  `href` alone) is the « Adresse » case: nothing to migrate but the new columns.
+- The site writes the chosen content's address on `href` when it loads the data
+  (`stampInternalLinks`, page → `pagePath`, post and case study → under their listing, modal →
+  its anchor): every renderer keeps reading `href`. A page loads its data with depth 2, enough
+  for a target inside a block of a shared section.
+- Used by: `linkGroup` (hero buttons, clickable cards, price CTAs; the header keeps `plain`
+  addresses), `buttonRowFields` (text box, button group, CTA band), `modalButtonFields` (a
+  modal's « Aller à une adresse » buttons), the case study's own CTA. Not the header, the footer,
+  the collection block's « see all » link nor the forms' privacy link.
+- Migration `link_target`: `kind` columns and the `pages_rels`, `sections_rels`, `modals_rels`
+  tables (the chosen contents), `case_studies_rels` extended.
 
 ## Site
 

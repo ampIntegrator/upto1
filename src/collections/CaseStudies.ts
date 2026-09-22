@@ -3,6 +3,7 @@ import type {CollectionConfig} from 'payload';
 import {postEditor} from '@/fields/blocks/prose';
 import {entryBelowTab} from '@/fields/entryBelow';
 import {entryUrl} from '@/fields/entryUrl';
+import {linkTarget} from '@/fields/linkTarget';
 import {slugField} from '@/fields/shared';
 import {collectionsText as ct} from '@/i18n/admin/collections';
 
@@ -81,10 +82,8 @@ export const CaseStudies: CollectionConfig = {
                   name: 'cta', type: 'group', label: f.cta,
                   admin: {description: f.ctaDescription, condition: whenCustom},
                   fields: [
-                    {type: 'row', fields: [
-                      {name: 'label', type: 'text', label: f.ctaLabel, localized: true, admin: {width: '50%'}},
-                      {name: 'href', type: 'text', label: f.ctaHref, admin: {width: '50%'}},
-                    ]},
+                    {name: 'label', type: 'text', label: f.ctaLabel, localized: true},
+                    ...linkTarget(),
                   ],
                 },
               ],

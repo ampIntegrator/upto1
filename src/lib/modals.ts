@@ -94,6 +94,7 @@ export async function loadModals(slugs: string[], locale: Locale): Promise<Modal
 async function toModalData(modal: Modal, locale: Locale, site: LinkSite): Promise<ModalData> {
   const body = (modal.body ?? null) as RichTextDocument | null;
   if (body) stampInternalLinks(body, site);
+  stampInternalLinks(modal.buttons, site);
 
   // forms of the body: loaded once, with their redirect page (like the « Formulaire » column block)
   const blocks = formBlocks(body?.root.children);

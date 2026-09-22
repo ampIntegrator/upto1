@@ -45,6 +45,7 @@ import * as migration_20260921_092308_form_title_localized from './20260921_0923
 import * as migration_20260921_102407_form_select_options from './20260921_102407_form_select_options';
 import * as migration_20260921_112839_section_edge_top from './20260921_112839_section_edge_top';
 import * as migration_20260922_090646_modals from './20260922_090646_modals';
+import * as migration_20260922_114839_link_target from './20260922_114839_link_target';
 
 export const migrations = [
   {
@@ -280,6 +281,11 @@ export const migrations = [
   {
     up: migration_20260922_090646_modals.up,
     down: migration_20260922_090646_modals.down,
-    name: '20260922_090646_modals'
+    name: '20260922_090646_modals',
+  },
+  {
+    up: migration_20260922_114839_link_target.up,
+    down: migration_20260922_114839_link_target.down,
+    name: '20260922_114839_link_target'
   },
 ];

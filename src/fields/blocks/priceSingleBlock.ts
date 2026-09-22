@@ -24,7 +24,7 @@ const block: Block = {
     },
     {name: 'priceLabel', type: 'text', label: t.priceLabel, localized: true},
     priceGroup,
-    ctaField,
+    ctaField(),
     mentionField,
     guaranteeGroup,
   ],

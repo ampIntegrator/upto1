@@ -196,9 +196,9 @@ async function main() {
     titleSize: 'heading-1',
     content: lexRoot(
       lexParagraph(lexText('Un lien interne vers une modale l’ouvre par-dessus la page : '), lexModalLink(modalIds['demo-offre'], 'une phrase'), lexText(', '), lexModalLink(modalIds['demo-conditions'], 'des conditions à accepter'), lexText(' ou '), lexModalLink(modalIds['demo-demande'], 'un formulaire'), lexText('.')),
-      lexParagraph(lexText('Un bouton dont l’adresse est #modale-<identifiant> aussi.')),
+      lexParagraph(lexText('Un bouton dont le lien va vers un « Contenu du site » aussi.')),
     ),
-    buttons: [{label: 'Demander une démo', href: '#modale-demo-demande', shape: 'split', variant: 'primary', size: 'md'}],
+    buttons: [{label: 'Demander une démo', kind: 'internal', doc: {relationTo: 'modals', value: modalIds['demo-demande']}, shape: 'split', variant: 'primary', size: 'md'}],
   };
 
   // 2 · the three pages
