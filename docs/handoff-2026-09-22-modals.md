@@ -1,8 +1,8 @@
 # Handoff: links that open a modal (22 September 2026)
 
-> **Status: study, nothing built.** Written by Claude Fable for the next session (Claude Opus),
-> from Nicolas's note in `consignes.md` and his answers on 22 September 2026. One decision is still
-> open (the body layout, § Decisions). Read `CLAUDE.md`, `docs/handoff-2026-09-17.md` (project
+> **Status: ready for Opus, nothing built.** Written by Claude Fable for the next session (Claude
+> Opus), from Nicolas's note in `consignes.md` and his answers on 22 September 2026. Every
+> decision is taken (§ Decisions). Read `CLAUDE.md`, `docs/handoff-2026-09-17.md` (project
 > rules and traps) and `docs/forms.md` before touching code. The rules there apply here: French with
 > Nicolas, English in code and docs, FR/EN admin dictionaries, backup and reviewed migrations,
 > throwaway pages for tests, `consignes.md` never written.
@@ -16,13 +16,15 @@ Answers of 22 September 2026:
 
 - **Three cases matter most**: a simple modal with one or two sentences; a modal with a lot of text
   (terms to accept, scrolling); a modal with a form. The rest is secondary.
-- **Width chosen per modal**: 300, 500 or 800 px.
+- **Width chosen per modal**: the three existing widths of the site's Dialog (420 / 620 / 840),
+  which Nicolas prefers to his first idea of 300 / 500 / 800.
 - **Footer buttons**: simple buttons only (no split), with a **destructive** style available.
 - **Silo**: the page's, no choice on the modal.
 - **The modal is chosen as an internal link** (« Lien interne »), not through an « open in a
   modal » switch.
 - Address `/modale/<slug>`: yes. No need for modals in the header or the footer.
-- A fixed body order (text, then form) is the point he finds problematic: see the open decision.
+- A fixed body order (text, then form) was the point he found problematic: he chose the free
+  body (option A below).
 
 ## What already exists
 
@@ -92,9 +94,9 @@ Every modal has a URL, `/modale/<slug>`, opened with Next's **parallel + interce
 
 | Case | Fields used | Behaviour |
 |---|---|---|
-| One or two sentences (a notice, a confirmation) | title, body text, width 300 or 500, one or two footer buttons (« Fermer », or « Annuler » + an action) | `purpose: 'info'`: Escape and backdrop close |
-| Long text (terms to accept) | title, eyebrow, long body, width 500 or 800, a footer button « J'accepte » | the body scrolls under the fixed header and footer (already in `Dialog`); `purpose: 'required'` when the writer ticks « Réponse obligatoire » (no Escape, no backdrop click: the button is the only way out). Nothing is recorded: the site has no visitor accounts, « accepting » closes the modal or follows the button's address. |
-| A form (request a demo, contact) | title, a short intro, the form, width 500 or 800 | `purpose: 'form'` (the backdrop stops closing once the visitor typed); the confirmation replaces the form inside the modal; a redirect leaves the page, which closes the modal |
+| One or two sentences (a notice, a confirmation) | title, body text, width sm or md, one or two footer buttons (« Fermer », or « Annuler » + an action) | `purpose: 'info'`: Escape and backdrop close |
+| Long text (terms to accept) | title, eyebrow, long body, width md or lg, a footer button « J'accepte » | the body scrolls under the fixed header and footer (already in `Dialog`); `purpose: 'required'` when the writer ticks « Réponse obligatoire » (no Escape, no backdrop click: the button is the only way out). Nothing is recorded: the site has no visitor accounts, « accepting » closes the modal or follows the button's address. |
+| A form (request a demo, contact) | title, a short intro, the form, width md or lg | `purpose: 'form'` (the backdrop stops closing once the visitor typed); the confirmation replaces the form inside the modal; a redirect leaves the page, which closes the modal |
 
 ### Why not the alternatives
 
@@ -117,11 +119,10 @@ Every modal has a URL, `/modale/<slug>`, opened with Next's **parallel + interce
 | `title` | text, localized, required | the heading inside the dialog; names it for assistive tech |
 | `slug` | `slugField` (sidebar) | the address `/modale/<slug>`; add `modale` to `RESERVED` in `src/fields/listingSlug.ts` and to the pages' slug check if one exists |
 | `eyebrow` | text, localized | the small gold caps above the title |
-| `width` | select 300 / 500 / 800, default 500 | stored as `'300' \| '500' \| '800'`; see the Dialog note below |
+| `size` | select sm / md / lg (420 / 620 / 840), default md | the house `Dialog`'s `size`; labels show the pixel widths |
 | `tone` | select light / night, default light | `Dialog` `tone` |
 | `dismiss` | select « Libre » (info) / « Réponse obligatoire » (required), default free | `purpose`; a form in the body forces `form` when free |
-| `body` | richText, localized, **its own editor** `modalEditor` | see the open decision: text only, or text with an inserted « Formulaire » block |
-| `form` | relationship → `forms`, optional | **only if the fixed layout is chosen** (rendered after the text) |
+| `body` | richText, localized, **its own editor** `modalEditor` | text box features plus an inserted « Formulaire » block (option A below) |
 | `buttons` | array, max 2, **`modalButtonFields()`** | the footer's actions, right-aligned; a new small factory, not `buttonRowFields()` (no shape, no size, no icon) |
 
 `modalButtonFields()` (in `src/fields/blocks/buttonFields.ts`, next to the existing factory):
@@ -129,12 +130,9 @@ Every modal has a URL, `/modale/<slug>`, opened with Next's **parallel + interce
 (default close); `href` (required when action is address; may be `/modale/<autre>`); `variant`
 select primary / secondary / ghost / **destructive**. Simple buttons only.
 
-**Widths and the Dialog component** (branch `astryx`): Nicolas's widths are 300 / 500 / 800, the
-mockup's were 420 / 620 / 840. Change `WIDTH` in `src/components/Dialog.tsx` to
-`{sm: 300, md: 500, lg: 800}` (even values, as required) and update the showcase labels; the
-mockup 20 note in the component comment says where the old values came from. Check the 300 case
-with the header's close button and a two-button footer (buttons wrap; `HStack wrap`). A form at
-300 is single column by construction (`SiteForm` goes single column under 840 px of column).
+**Widths**: the house `Dialog`'s `WIDTH` (420 / 620 / 840) stays as it is. Check the sm case
+with a two-button footer (buttons wrap; `HStack wrap`). A form at sm is single column by
+construction (`SiteForm` goes single column under 840 px of column).
 
 **Destructive variant**: Astryx `Button` has `variant="destructive"`; the house `Button`
 (`src/components/Button.tsx`) passes variants through and the theme dresses secondary /
@@ -142,17 +140,16 @@ destructive with sharp corners (`orbita.ts` line 330). Add it to the house `Butt
 show it in the Button showcase, and check the night tone.
 
 Migration: new tables `modals`, `modals_locales`, `modals_buttons`, `modals_buttons_locales`,
-`modals_rels` (form, when the relationship or the block exists). Rich text link nodes live in
+`modals_rels` (the form of an inserted block). Rich text link nodes live in
 JSON: enabling `modals` in `LinkFeature` changes no schema. Check with
 `pnpm payload migrate:create check --skip-empty` after the collection: only the new tables,
 nothing dropped.
 
-## The open decision: how the body is laid out
+## The body: free text with an inserted « Formulaire » block (option A, chosen)
 
-Nicolas finds a fixed order (text, then the form) problematic. Two ways to give freedom, the first
-recommended:
+Nicolas found a fixed order (text, then the form) problematic and chose the free body:
 
-**A. Free body: a rich text with an inserted « Formulaire » block (recommended).** `modalEditor`
+**A. Free body: a rich text with an inserted « Formulaire » block.** `modalEditor`
 = the text box features (paragraphs, bold, italic, links, lists, tables) + `BlocksFeature` with
 a `modalFormBlock()` factory (one relationship to `forms`, « Afficher le titre du formulaire »
 off by default). The writer puts the form where they want: after an intro, before a legal note,
@@ -160,12 +157,7 @@ alone. Same mechanism as the post editor's figure blocks, rendered through `rend
 referenced in the body are found by a small walker over the Lexical nodes (`type: 'block'`,
 `blockType: 'modalForm'`), the ids loaded with `loadFormsByIds`. The footer buttons stay a
 separate array: they are the modal's actions, not content. Cost: one block factory, one walker,
-one `renderBlock` case. Nothing else changes.
-
-**B. Fixed slots, more of them**: `intro` text, `form`, `outro` text. Simpler admin, no editor
-block, but a second rich text field and still a fixed shape.
-
-Choose A unless Nicolas prefers the plainer form. Either way the footer buttons stay separate.
+one `renderBlock` case. (The rejected alternative was fixed intro / form / outro slots.)
 
 ## Site side
 
@@ -212,21 +204,18 @@ src/components/SiteFormBlock.tsx                     extracted from PageSections
 ## Decisions
 
 Taken on 22 September 2026: internal link (yes); address `/modale/<slug>` (yes); silo from the
-page (yes); widths 300 / 500 / 800; footer buttons simple only, destructive available; no modals
-needed in header or footer.
-
-**Open**: body layout, A (free text with an inserted « Formulaire » block, recommended) or B
-(intro, form, outro slots).
+page (yes); widths: the Dialog's existing sm / md / lg; footer buttons simple only, destructive
+available; no modals needed in header or footer; body: free text with an inserted « Formulaire »
+block (option A).
 
 ## Work items, in order (Opus)
 
-Branch `astryx` (small): 1. `WIDTH` 300 / 500 / 800 in `Dialog.tsx` and its showcase;
-2. `destructive` in the house `Button` and its showcase; 3. `SiteModal` composition example in
-`DialogShowcase` (sentence, long text, form). Then `git checkout payload && git merge --ff-only
+Branch `astryx` (small): 1. `destructive` in the house `Button` and its showcase; 2. `SiteModal`
+composition example in `DialogShowcase` (sentence, long text, form). Then `git checkout payload && git merge --ff-only
 astryx`.
 
 Branch `payload`:
-1. `collectionsText.modals` dictionaries; `modalButtonFields()`; `modalFormBlock()` (option A);
+1. `collectionsText.modals` dictionaries; `modalButtonFields()`; `modalFormBlock()`;
    `modalEditor` in `editors.ts`; `src/collections/Modals.ts`; register in `payload.config.ts`;
    `'modals'` in `LinkFeature` and `livePreview`; `modale` in `RESERVED`.
 2. `pnpm run db:backup`, `pnpm run migrate:create modals`, review (only new tables),
@@ -238,7 +227,7 @@ Branch `payload`:
    throwaway modals (sentence with two buttons, long required text, form), a throwaway page with
    a text box holding internal links to them and a button to `/modale/<slug>`; checks: the page's
    HTML links to `/modale/<slug>`, each `/modale/<slug>` renders the dialog markup (title,
-   eyebrow, width, form fields, buttons with their variants), a headless browser opens the page,
+   eyebrow, size, form fields, buttons with their variants), a headless browser opens the page,
    clicks a link, sees the dialog with the page still behind and the page's silo, Escape returns
    to the page URL, Escape does nothing on the required one; then deletes everything.
 5. `pnpm seed:demo`: three demo modals linked from `/demo-contenus`.
@@ -261,7 +250,7 @@ Branch `payload`:
   `modalButtonFields()` are called, never shared arrays. After registering the collection, the
   `--skip-empty` check must create nothing more than the new tables.
 - **Server-only imports**: `src/collections/Modals.ts` imports `editors.ts` (server). Anything the
-  client needs (the `/modale` prefix, widths) lives in `src/lib/modal-paths.ts`.
+  client needs (the `/modale` prefix) lives in `src/lib/modal-paths.ts`.
 - **Payload internals**: none touched (no admin CSS, no patched feature), which is the point of
   the internal-link choice.
 - **Locks**: the headless smoke test edits nothing in the admin; if it ever does, clean the
