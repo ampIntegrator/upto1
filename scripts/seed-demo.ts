@@ -166,7 +166,7 @@ async function main() {
       dismiss: 'required',
       body: lexRoot(...Array.from({length: 8}, (_, i) => [lexHeading(`Article ${i + 1}`), lexParagraph(lexText(`${LOREM} ${LOREM_2}`))]).flat()),
       buttons: [
-        {label: 'Refuser', action: 'link', href: '/', variant: 'destructive'},
+        {label: 'Refuser', action: 'close', variant: 'destructive'},
         {label: 'J’accepte', action: 'close', variant: 'primary'},
       ],
     },
