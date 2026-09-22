@@ -2,7 +2,7 @@
 
 /**
  * TextBox — the text box (« Encart texte »): in a page column of 3 to 9, top to bottom,
- * one or two badges, a title with the animated diamond separator under it (aligned like it),
+ * one or two badges, a title with the animated diamond separator centred under its text,
  * rich text (paragraphs, bold, links, lists), one or two buttons. Options: a frame
  * (border and surface background, like the cards) or no background; content centred;
  * vertical alignment inside its row (top, centre, bottom). The title's tag (h2 to h6,
