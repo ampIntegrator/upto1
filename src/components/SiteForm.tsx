@@ -15,8 +15,8 @@
  *   - Steps: more than one step = Astryx Stepper above the fields, « Retour » / « Continuer » on a
  *     full row, the submit button on the last step only. Each step is validated before moving on,
  *     values are kept when going back, focus moves to the step title. One submission at the end.
- *   - Buttons: under the fields, or in an element outside the form (`actionsTarget`: a modal's
- *     footer), still driven by the form.
+ *   - Buttons: under the fields (split send button), or in an element outside the form
+ *     (`actionsTarget`: a modal's footer, simple buttons only), still driven by the form.
  *   - Sending: `submitAction` (a server action given by the page) receives the form id, the values,
  *     a honeypot and the time the form was shown; the server decides what is spam. After success the confirmation
  *     replaces the form in the card, or the browser goes to `confirmation.href`.
@@ -294,8 +294,9 @@ export function SiteForm({id, formId, eyebrow, eyebrowStyle = 'eyebrow', title, 
     <>
       {multi && step > 0 ? <Button label={l.back} variant="ghost" type="button" onClick={() => goTo(step - 1)} className={styles.button} /> : null}
       {target ? (
-        // outside the form element: submits it through the form's own handler
-        <Button label={label} variant="primary" arrow type="button" isDisabled={status === 'sending'} onClick={() => formRef.current?.requestSubmit()} className={styles.button} />
+        // outside the form element (a modal's footer): a simple button, never a split one there;
+        // submits the form through its own handler
+        <Button label={label} variant="primary" type="button" isDisabled={status === 'sending'} onClick={() => formRef.current?.requestSubmit()} className={styles.button} />
       ) : (
         <Button label={label} variant="primary" arrow type="submit" isDisabled={status === 'sending'} className={`${styles.button} ${styles.submit}`} />
       )}
