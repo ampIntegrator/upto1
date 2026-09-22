@@ -40,7 +40,7 @@ type SiteDemo = {id: string; tag: string; name: string; desc: string};
 const SITE_DEMOS: SiteDemo[] = [
   {id: 'site-note', tag: 'SM · libre', name: 'Une phrase', desc: 'Un avis court, un bouton pour fermer.'},
   {id: 'site-terms', tag: 'LG · obligatoire', name: 'Conditions à accepter', desc: 'Texte long qui défile ; ni Échap ni clic à côté, seul le bouton ferme.'},
-  {id: 'site-form', tag: 'MD · formulaire', name: 'Formulaire du site', desc: 'Le formulaire assemblé dans Payload, sans carte, dans le corps.'},
+  {id: 'site-form', tag: 'MD · formulaire', name: 'Formulaire du site', desc: 'Le formulaire assemblé dans Payload, sans carte ; son bouton d’envoi dans le pied.'},
 ];
 
 const SITE_FORM: FormStep[] = [
@@ -134,7 +134,20 @@ export default function DialogShowcase() {
         ))}
       </Dialog>
 
-      <Dialog isOpen={open === 'site-form'} onOpenChange={(o) => !o && close()} size="md" purpose="form" eyebrow="Rappel gratuit" title="Demander une démo">
+      <Dialog
+        isOpen={open === 'site-form'}
+        onOpenChange={(o) => !o && close()}
+        size="md"
+        purpose="form"
+        eyebrow="Rappel gratuit"
+        title="Demander une démo"
+        // the form's buttons go to the footer (SiteForm actionsTarget)
+        actions={
+          <>
+            <Button label="Annuler" variant="ghost" onClick={close} />
+            <HStack id="dialog-site-form-actions" gap={3} style={{display: 'contents'}} />
+          </>
+        }>
         <Text type="body">Laissez vos coordonnées, un conseiller vous rappelle sous 24 h ouvrées.</Text>
         <SiteForm
           id="dialog-site-form"
@@ -143,6 +156,7 @@ export default function DialogShowcase() {
           submitLabel="Envoyer ma demande"
           submitAction={fakeSubmit}
           confirmation={{type: 'message', content: <Text type="body">Merci, votre demande est bien partie.</Text>}}
+          actionsTarget="dialog-site-form-actions"
         />
       </Dialog>
 
