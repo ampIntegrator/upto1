@@ -45,6 +45,8 @@ export type SectionProps = {
   overlay?: number;
   /** silo → highlight → silo gradient edge line at the bottom */
   edge?: boolean;
+  /** the same edge line at the top: the junction with the section above (same background, another texture) */
+  edgeTop?: boolean;
   /** light background color (combines with textures) */
   tint?: SectionTint;
   spacing?: SectionSpacing;
@@ -67,7 +69,7 @@ export type SectionProps = {
 const DARK: SectionBackground[] = ['night', 'night-halo', 'night-beam', 'image', 'video'];
 const MEDIA: SectionBackground[] = ['image', 'video'];
 
-export function Section({background = 'light', image, video, overlay = 0, edge, tint, spacing = 'md', spacingTop, spacingBottom, dividers, underHeader, centered, minHeight, id, children, foot}: SectionProps) {
+export function Section({background = 'light', image, video, overlay = 0, edge, edgeTop, tint, spacing = 'md', spacingTop, spacingBottom, dividers, underHeader, centered, minHeight, id, children, foot}: SectionProps) {
   const {theme} = useOrbitaTheme();
   const isMedia = MEDIA.includes(background);
   const showEdge = edge ?? isMedia;
@@ -81,6 +83,7 @@ export function Section({background = 'light', image, video, overlay = 0, edge, 
       data-spacing={spacing}
       data-tint={tint}
       data-edge={showEdge || undefined}
+      data-edge-top={edgeTop || undefined}
       data-dividers={dividers || undefined}
       data-under-header={underHeader || undefined}
       data-centered={centered || undefined}
