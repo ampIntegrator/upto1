@@ -17,7 +17,7 @@ export default async function InterceptedModal({params}: Params) {
   const modal = await loadModal(decodeURIComponent(slug), await getLocale());
   if (!modal) return null;
   return (
-    <SiteModal key={modal.slug} title={modal.title} eyebrow={modal.eyebrow} size={modal.size} tone={modal.tone} purpose={modal.purpose} buttons={modal.buttons}>
+    <SiteModal key={modal.slug} title={modal.title} eyebrow={modal.eyebrow} size={modal.size} tone={modal.tone} purpose={modal.purpose} buttons={modal.buttons} actionsTarget={modal.footerForm ? modal.actionsTarget : undefined}>
       <SiteModalBody modal={modal} />
     </SiteModal>
   );

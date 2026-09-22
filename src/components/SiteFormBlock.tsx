@@ -10,11 +10,12 @@ import type {FormData} from '@/lib/forms';
 import {RichText} from './RichText';
 import {type FormField, SiteForm} from './SiteForm';
 
-export function SiteFormBlock({form}: {form: FormData}) {
+/** `actionsTarget`: DOM id of an element outside the form receiving its buttons (a modal's footer) */
+export function SiteFormBlock({form, actionsTarget}: {form: FormData; actionsTarget?: string}) {
   const steps = form.steps.map((s) => ({
     title: s.title,
     fields: s.fields.map((f): FormField => (f.type === 'message' ? {type: 'message', name: f.name, width: f.width, content: <RichText content={f.content} />} : f)),
   }));
   const confirmation = form.confirmation.type === 'redirect' ? form.confirmation : {type: 'message' as const, content: <RichText content={form.confirmation.content} />};
-  return <SiteForm id={form.id} formId={form.formId} eyebrow={form.eyebrow} eyebrowStyle={form.eyebrowStyle} title={form.title} tag={form.tag} intro={form.intro} framed={form.framed} steps={steps} submitLabel={form.submitLabel} confirmation={confirmation} submitAction={submitForm} />;
+  return <SiteForm id={form.id} formId={form.formId} eyebrow={form.eyebrow} eyebrowStyle={form.eyebrowStyle} title={form.title} tag={form.tag} intro={form.intro} framed={form.framed} steps={steps} submitLabel={form.submitLabel} confirmation={confirmation} submitAction={submitForm} actionsTarget={actionsTarget} />;
 }

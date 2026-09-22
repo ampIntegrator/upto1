@@ -211,12 +211,18 @@ async function main() {
 
       await p.getByRole('link', {name: 'Lien formulaire smoke'}).click();
       await dialog.waitFor({timeout: 10000});
+      // the form's send button sits in the modal's footer, not at the end of the scrolling body
+      await dialog.locator('form').waitFor();
+      await p.waitForTimeout(300);
+      check((await dialog.locator('form').getByRole('button', {name: 'Envoyer smoke'}).count()) === 0, 'the send button is not in the body');
+      check((await dialog.locator('[class*="footer"]').getByRole('button', {name: 'Envoyer smoke'}).count()) === 1, 'the send button is in the modal footer');
       await dialog.getByLabel('Nom modale smoke').fill('Priya smoke');
       await dialog.getByLabel('E-mail modale smoke').fill('priya@exemple.fr');
       await p.waitForTimeout(3200); // the anti-spam delay of the forms
       await dialog.getByRole('button', {name: 'Envoyer smoke'}).click();
       await dialog.getByText('Merci modale smoke.').waitFor({timeout: 10000}).catch(() => undefined);
       check(await dialog.getByText('Merci modale smoke.').isVisible(), 'the form sent from the modal shows its confirmation in it');
+      check(!(await dialog.locator('[class*="footer"]').isVisible()), 'once sent, the empty footer strip is gone');
       const stored = (await payload.find({collection: 'form-submissions', where: {form: {equals: form.id}}, limit: 1})).docs[0];
       const data = Object.fromEntries((stored?.submissionData ?? []).map((d) => [d.field, d.value]));
       check(data.nom === 'Priya smoke' && data.email === 'priya@exemple.fr', `the submission is stored ${JSON.stringify(data)}`);

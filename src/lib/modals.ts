@@ -26,6 +26,10 @@ export type ModalData = {
   body: RichTextDocument | null;
   /** the forms inserted in the body, by the id of their block */
   forms: Record<string, FormData>;
+  /** the block id of the body's first form: its buttons go to the modal's footer (null: no form) */
+  footerForm: string | null;
+  /** DOM id of the footer element that receives those buttons */
+  actionsTarget: string;
   buttons: ModalButton[];
 };
 
@@ -89,6 +93,8 @@ export async function loadModal(slug: string, locale: Locale): Promise<ModalData
     purpose,
     body,
     forms,
+    footerForm: blocks.find((b) => b.id && forms[b.id])?.id ?? null,
+    actionsTarget: `modal-actions-${modal.slug}`,
     buttons: toButtons(modal.buttons),
   };
 }

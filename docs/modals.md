@@ -16,7 +16,9 @@ Collection **Modales** (`modals`, group « Site »), `src/collections/Modals.ts`
 - **Contenu**: a rich text (`modalEditor` in `src/fields/editors.ts`: the text box's features, plus a
   **« Formulaire »** block inserted anywhere with « + » or « / »: a form of the Formulaires
   collection, shown without its card, its heading hidden unless ticked). The text can come before,
-  after or around the form, or the form alone.
+  after or around the form, or the form alone. The first form's buttons (« Retour », « Continuer »,
+  the send button) sit in the modal's footer, after the modal's own buttons, not at the end of the
+  scrolling body; once the form is sent they go, and an empty footer is hidden.
 - **Boutons du pied**: two at most, right-aligned; each has a label, a style (primary, secondary,
   ghost, **destructive**) and an action: « Fermer la modale » or « Aller à une adresse » (a page, or
   another modal at `/modale/<slug>`). Simple buttons only (no split, no icon).
@@ -38,6 +40,12 @@ CTA band…). Header and footer: not needed (Nicolas's decision), but typing the
   links' addresses written on them, the inserted forms converted with `formData` (loaded once with
   `loadFormsByIds`), the buttons; `purpose` is `required` for a required answer, `form` when the
   body holds a form (clicking outside stops closing once the visitor typed), otherwise `info`.
+- **The form's buttons in the footer**: `SiteForm` takes `actionsTarget`, the DOM id of an element
+  outside the form; its buttons render there through a React portal (still driven by the form:
+  steps, sending state), the send button calls `requestSubmit()`, and a hidden submit button stays
+  in the form so Enter still sends it. `SiteModal` puts that element (`display: contents`) in the
+  Dialog footer; the loader names it (`actionsTarget`) and picks the body's first form
+  (`footerForm`). The house Dialog hides a footer left without any button or link.
 - **Rendering**: `SiteModal` (client: the house `Dialog`, the footer buttons, closing) and
   `SiteModalBody` (server: `RichText`, inserted forms through `SiteFormBlock`, the form block also
   used by `PageSections`).
@@ -81,7 +89,8 @@ cross), the site form inside a modal. The house `Dialog` hides its close cross w
   `/modale/<slug>` page and a 404, then in a headless browser: opening over the page with the page
   behind, the page's silo, the destructive style, Escape, a button to `/modale/<slug>`, a « close »
   button, a button to a page, the required answer (no cross, Escape ignored, button closes), a form
-  sent from the modal (confirmation inside, submission stored), the direct address and its closing
+  sent from the modal (send button in the footer and not in the body, confirmation inside,
+  submission stored, empty footer hidden), the direct address and its closing
   to the home page. Deletes everything.
 - `pnpm seed:demo`: « Offre de lancement », « Conditions générales de vente » (answer required,
   « Refuser » destructive) and « Demander une démo » (the demo form), slugs `demo-*`, updated in

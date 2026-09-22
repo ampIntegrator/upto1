@@ -30,7 +30,7 @@ export default async function ModalPage({params}: Params) {
   const silo = pageSilo(null, site.settings);
   return (
     <SitePage silo={silo} header={toHeader(site.settings, site.header, site.languages, site.blog)} footer={toFooter(site.settings, site.footer, site.posts, locale, site.blog)}>
-      <SiteModal title={modal.title} eyebrow={modal.eyebrow} size={modal.size} tone={modal.tone} purpose={modal.purpose} buttons={modal.buttons} closeHref="/" silo={silo}>
+      <SiteModal title={modal.title} eyebrow={modal.eyebrow} size={modal.size} tone={modal.tone} purpose={modal.purpose} buttons={modal.buttons} actionsTarget={modal.footerForm ? modal.actionsTarget : undefined} closeHref="/" silo={silo}>
         <SiteModalBody modal={modal} />
       </SiteModal>
     </SitePage>
