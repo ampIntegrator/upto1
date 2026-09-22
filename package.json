@@ -32,7 +32,8 @@
     "smoke:blog": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/smoke-blog.ts",
     "smoke:cases": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/smoke-cases.ts",
     "smoke:forms": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/smoke-forms.ts",
-    "smoke:pages": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/smoke-pages.ts"
+    "smoke:pages": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/smoke-pages.ts",
+    "smoke:modals": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/smoke-modals.ts"
   },
   "dependencies": {
     "@astryxdesign/core": "0.5.4",

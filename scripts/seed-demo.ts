@@ -11,6 +11,8 @@
  * Forms: « Demander une démo » (mockup 17) and « Parlons de votre projet » (three steps), found by
  * their list title and updated (their submissions are kept), shown on /demo-contenus (anchor
  * « formulaires »).
+ * Modals: « Offre de lancement », « Conditions générales de vente » (answer required) and « Demander une
+ * démo » (the demo form inside), found by slug (demo-*) and updated, linked from /demo-contenus#modales.
  */
 import config from '@payload-config';
 import {mkdtemp, writeFile} from 'node:fs/promises';
@@ -138,6 +140,67 @@ async function main() {
   const [demoForm, stepsForm] = formIds;
   const form = (id: number, opts: Record<string, unknown> = {}) => ({blockType: 'form', form: id, framed: true, showHeading: true, ...opts});
 
+  // 1c · three demo modals (a sentence, terms to accept, a form), updated in place, linked from /demo-contenus#modales
+  type LexNode = Record<string, unknown>;
+  const lexText = (t: string, format = 0): LexNode => ({type: 'text', text: t, format, detail: 0, mode: 'normal', style: '', version: 1});
+  const lexParagraph = (...children: LexNode[]): LexNode => ({type: 'paragraph', format: '', indent: 0, version: 1, direction: 'ltr', textFormat: 0, textStyle: '', children});
+  const lexHeading = (t: string): LexNode => lexParagraph(lexText(t, 1));
+  const lexRoot = (...children: LexNode[]) => ({root: {type: 'root', format: '', indent: 0, version: 1, direction: 'ltr', children}});
+  const lexModalLink = (id: number, label: string): LexNode => ({type: 'link', version: 3, format: '', indent: 0, direction: 'ltr', fields: {linkType: 'internal', doc: {relationTo: 'modals', value: id}, newTab: false}, children: [lexText(label)]});
+  const modalDocs = [
+    {
+      slug: 'demo-offre',
+      title: 'Offre de lancement',
+      size: 'sm',
+      body: lexRoot(lexParagraph(lexText('Jusqu’au 31 octobre, '), lexText('le premier mois est offert', 1), lexText(' sur toutes les formules.'))),
+      buttons: [
+        {label: 'Plus tard', action: 'close', variant: 'ghost'},
+        {label: 'Voir les tarifs', action: 'link', href: '/demo-tarifs', variant: 'primary'},
+      ],
+    },
+    {
+      slug: 'demo-conditions',
+      title: 'Conditions générales de vente',
+      eyebrow: 'Conditions',
+      size: 'lg',
+      dismiss: 'required',
+      body: lexRoot(...Array.from({length: 8}, (_, i) => [lexHeading(`Article ${i + 1}`), lexParagraph(lexText(`${LOREM} ${LOREM_2}`))]).flat()),
+      buttons: [
+        {label: 'Refuser', action: 'link', href: '/', variant: 'destructive'},
+        {label: 'J’accepte', action: 'close', variant: 'primary'},
+      ],
+    },
+    {
+      slug: 'demo-demande',
+      title: 'Demander une démo',
+      eyebrow: 'Rappel gratuit',
+      size: 'md',
+      body: lexRoot(
+        lexParagraph(lexText('Laissez vos coordonnées, un conseiller vous rappelle sous 24 h ouvrées.')),
+        {type: 'block', version: 2, format: '', fields: {id: 'demoformblock', blockName: '', blockType: 'modalForm', form: demoForm, showHeading: false}},
+        lexParagraph(lexText('Vos données servent uniquement à vous recontacter.')),
+      ),
+    },
+  ];
+  const modalIds: Record<string, number> = {};
+  for (const data of modalDocs) {
+    const found = (await payload.find({collection: 'modals', where: {slug: {equals: data.slug}}, limit: 1, depth: 0})).docs[0];
+    const doc = found ? await payload.update({collection: 'modals', id: found.id, data: data as never}) : await payload.create({collection: 'modals', data: data as never});
+    modalIds[data.slug] = doc.id;
+    log(`modale ${found ? 'mise à jour' : 'créée'} : ${data.title}`);
+  }
+  const modalsBox = {
+    blockType: 'textBox',
+    title: 'Trois modales',
+    titleTag: 'h2',
+    titleSize: 'heading-1',
+    content: lexRoot(
+      lexParagraph(lexText('Un lien interne vers une modale l’ouvre par-dessus la page : '), lexModalLink(modalIds['demo-offre'], 'une phrase'), lexText(', '), lexModalLink(modalIds['demo-conditions'], 'des conditions à accepter'), lexText(' ou '), lexModalLink(modalIds['demo-demande'], 'un formulaire'), lexText('.')),
+      lexParagraph(lexText('Un bouton dont l’adresse est /modale/<identifiant> aussi.')),
+    ),
+    buttons: [{label: 'Demander une démo', href: '/modale/demo-demande', shape: 'split', variant: 'primary', size: 'md'}],
+  };
+
   // 2 · the three pages
   const pages = [
     {
@@ -181,6 +244,7 @@ async function main() {
           row(column(7, form(stepsForm)), column(5, media(chantier, '480'))),
           row(column(4, form(demoForm, {showHeading: false})), column(8, text())),
         ], {anchor: 'formulaires', tint: 'highlight'}),
+        light([row(column(6, modalsBox), column(6, media(bureau, '320')))], {anchor: 'modales'}),
         light([row(column(12, mediaQuote(analyse)))]),
       ],
     },

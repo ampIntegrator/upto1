@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     pages: Page;
     sections: Section;
+    modals: Modal;
     posts: Post;
     categories: Category;
     authors: Author;
@@ -88,6 +89,7 @@ export interface Config {
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
     sections: SectionsSelect<false> | SectionsSelect<true>;
+    modals: ModalsSelect<false> | ModalsSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
@@ -2394,6 +2396,59 @@ export interface Section {
   createdAt: string;
 }
 /**
+ * A modal opens over the page from an internal link (« Modals » collection) or a button whose address is /modale/<identifier>.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "modals".
+ */
+export interface Modal {
+  id: number;
+  eyebrow?: string | null;
+  title: string;
+  size: 'sm' | 'md' | 'lg';
+  tone: 'light' | 'night';
+  /**
+   * “Answer required”: for a text to accept. Add at least one button.
+   */
+  dismiss: 'free' | 'required';
+  /**
+   * Text, links, lists, tables. The « + » button (or « / ») inserts a form wherever you want.
+   */
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Two at most, right-aligned.
+   */
+  buttons?:
+    | {
+        label: string;
+        variant: 'primary' | 'secondary' | 'ghost' | 'destructive';
+        action: 'close' | 'link';
+        href?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Lowercase letters, digits and hyphens. The modal opens at /modale/<identifier>.
+   */
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
@@ -2500,6 +2555,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'sections';
         value: number | Section;
+      } | null)
+    | ({
+        relationTo: 'modals';
+        value: number | Modal;
       } | null)
     | ({
         relationTo: 'posts';
@@ -4059,6 +4118,30 @@ export interface SectionsSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "modals_select".
+ */
+export interface ModalsSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  size?: T;
+  tone?: T;
+  dismiss?: T;
+  body?: T;
+  buttons?:
+    | T
+    | {
+        label?: T;
+        variant?: T;
+        action?: T;
+        href?: T;
+        id?: T;
+      };
+  slug?: T;
   updatedAt?: T;
   createdAt?: T;
 }

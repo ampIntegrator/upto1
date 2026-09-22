@@ -10,13 +10,17 @@ export const metadata = {
   title: 'Orbita',
 }
 
-export default async function RootLayout(props: {children: React.ReactNode}) {
-  const {children} = props
+/** `modal`: the modal slot (@modal), a modal opened over the page by a client-side link to /modale/<slug> */
+export default async function RootLayout(props: {children: React.ReactNode; modal: React.ReactNode}) {
+  const {children, modal} = props
 
   return (
     <html lang="fr" className={fontVariables} suppressHydrationWarning>
       <body>
-        <OrbitaThemeProvider>{children}</OrbitaThemeProvider>
+        <OrbitaThemeProvider>
+          {children}
+          {modal}
+        </OrbitaThemeProvider>
         {/* Live Preview in the admin: reload the route on save (nothing outside the preview iframe) */}
         <LivePreviewRefresh />
       </body>

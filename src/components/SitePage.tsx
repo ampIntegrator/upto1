@@ -9,11 +9,13 @@ import type {SiloName} from '@/theme/index';
 import {BackToTop} from './BackToTop';
 import {SiteFooter} from './SiteFooter';
 import {SiteHeader} from './SiteHeader';
+import {SiloMark} from './SiloMark';
 import type {SiteFooterData, SiteHeaderData} from './site-nav';
 
 export function SitePage({silo, header, footer, tone, currentHref, children}: {silo: SiloName; header: SiteHeaderData; footer: SiteFooterData; tone?: 'auto' | 'light' | 'dark'; currentHref?: string; children: React.ReactNode}) {
   return (
     <OrbitaThemeProvider fixedSilo={silo}>
+      <SiloMark silo={silo} />
       <SiteHeader {...header} tone={tone} currentHref={currentHref} />
       {children}
       <SiteFooter {...footer} />

@@ -1,5 +1,6 @@
-import {BoldFeature, EXPERIMENTAL_TableFeature, FixedToolbarFeature, InlineToolbarFeature, ItalicFeature, lexicalEditor, LinkFeature, OrderedListFeature, ParagraphFeature, UnorderedListFeature} from '@payloadcms/richtext-lexical';
+import {BlocksFeature, BoldFeature, EXPERIMENTAL_TableFeature, FixedToolbarFeature, InlineToolbarFeature, ItalicFeature, lexicalEditor, LinkFeature, OrderedListFeature, ParagraphFeature, UnorderedListFeature} from '@payloadcms/richtext-lexical';
 
+import {modalFormBlock} from './blocks/modalFormBlock';
 import {LoremFeature} from './lorem/feature.server';
 
 /**
@@ -7,7 +8,8 @@ import {LoremFeature} from './lorem/feature.server';
  * this file (or a block that imports it) from client code; block slugs live in *Slug.ts files.
  *
  *   tabsEditor    : paragraphs, bold, italic, links, lists (tabs, key points);
- *   textBoxEditor : the same plus tables (text box: pages need tables too).
+ *   textBoxEditor : the same plus tables (text box: pages need tables too);
+ *   modalEditor   : the text box's, plus a « Formulaire » block inserted anywhere (« Modales »).
  * In all of them (the post editor too), « lorem40 » + space inserts forty words of lorem ipsum.
  * The post editor, with headings, quotes, images and inserted blocks, is in blocks/prose.
  */
@@ -15,7 +17,8 @@ export const baseFeatures = () => [
   ParagraphFeature(),
   BoldFeature(),
   ItalicFeature(),
-  LinkFeature({enabledCollections: ['pages', 'posts', 'case-studies']}),
+  // internal links: pages, posts, case studies, and modals (a link to a modal opens it over the page)
+  LinkFeature({enabledCollections: ['pages', 'posts', 'case-studies', 'modals']}),
   UnorderedListFeature(),
   OrderedListFeature(),
   // fixed toolbar above the field and inline toolbar on selection: without them bold and links have no button
@@ -28,3 +31,5 @@ export const baseFeatures = () => [
 export const tabsEditor = lexicalEditor({features: () => baseFeatures()});
 
 export const textBoxEditor = lexicalEditor({features: () => [...baseFeatures(), EXPERIMENTAL_TableFeature()]});
+
+export const modalEditor = lexicalEditor({features: () => [...baseFeatures(), EXPERIMENTAL_TableFeature(), BlocksFeature({blocks: [modalFormBlock()]})]});

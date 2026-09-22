@@ -22,7 +22,7 @@ export const entryBelowText = texts({
   relatedItemsDescription: {fr: '3 ou 4 selon les réglages ; s’il en manque, les automatiques complètent.', en: '3 or 4 depending on the settings; if some are missing, automatic ones fill in.'},
 });
 
-/** Admin texts of the collections (Categories, Case studies, Media, Pages, Posts, Sections, Users). */
+/** Admin texts of the collections (Categories, Case studies, Media, Modals, Pages, Posts, Sections, Users). */
 export const collectionsText = texts({
   groups: {
     blog: {fr: 'Blog', en: 'Blog'},
@@ -109,6 +109,69 @@ export const collectionsText = texts({
       siloDescription: {
         fr: 'Présélectionné sur le silo du site ; changez-le pour cette page seulement.',
         en: 'Preset to the site silo; change it for this page only.',
+      },
+    },
+  },
+  modals: {
+    singular: {fr: 'Modale', en: 'Modal'},
+    plural: {fr: 'Modales', en: 'Modals'},
+    description: {
+      fr: 'Une modale s’ouvre par-dessus la page depuis un lien interne (collection « Modales ») ou un bouton dont l’adresse est /modale/<identifiant>.',
+      en: 'A modal opens over the page from an internal link (« Modals » collection) or a button whose address is /modale/<identifier>.',
+    },
+    fields: {
+      title: {fr: 'Titre', en: 'Title'},
+      eyebrow: {fr: 'Surtitre', en: 'Eyebrow'},
+      slugDescription: {
+        fr: 'Minuscules, chiffres et tirets. La modale s’ouvre à l’adresse /modale/<identifiant>.',
+        en: 'Lowercase letters, digits and hyphens. The modal opens at /modale/<identifier>.',
+      },
+      size: {fr: 'Largeur', en: 'Width'},
+      sizeSm: {fr: 'Étroite (420 px)', en: 'Narrow (420 px)'},
+      sizeMd: {fr: 'Moyenne (620 px)', en: 'Medium (620 px)'},
+      sizeLg: {fr: 'Large (840 px)', en: 'Wide (840 px)'},
+      tone: {fr: 'Fond', en: 'Background'},
+      toneLight: {fr: 'Clair', en: 'Light'},
+      toneNight: {fr: 'Nuit', en: 'Night'},
+      dismiss: {fr: 'Fermeture', en: 'Closing'},
+      dismissFree: {fr: 'Libre (croix, Échap, clic à côté)', en: 'Free (cross, Escape, click outside)'},
+      dismissRequired: {fr: 'Réponse obligatoire (seuls les boutons ferment)', en: 'Answer required (only the buttons close it)'},
+      dismissDescription: {
+        fr: '« Réponse obligatoire » : pour un texte à accepter. Ajoutez au moins un bouton.',
+        en: '“Answer required”: for a text to accept. Add at least one button.',
+      },
+      dismissNeedsButton: {
+        fr: 'Une modale à réponse obligatoire a besoin d’au moins un bouton pour être fermée.',
+        en: 'A modal with a required answer needs at least one button to be closed.',
+      },
+      body: {fr: 'Contenu', en: 'Content'},
+      bodyDescription: {
+        fr: 'Texte, liens, listes, tableaux. Le bouton « + » (ou « / ») insère un formulaire où vous voulez.',
+        en: 'Text, links, lists, tables. The « + » button (or « / ») inserts a form wherever you want.',
+      },
+      buttons: {fr: 'Boutons du pied', en: 'Footer buttons'},
+      button: {fr: 'Bouton', en: 'Button'},
+      buttonsDescription: {fr: 'Deux au plus, alignés à droite.', en: 'Two at most, right-aligned.'},
+      label: {fr: 'Libellé', en: 'Label'},
+      action: {fr: 'Action', en: 'Action'},
+      actionClose: {fr: 'Fermer la modale', en: 'Close the modal'},
+      actionLink: {fr: 'Aller à une adresse', en: 'Go to an address'},
+      href: {fr: 'Adresse', en: 'Address'},
+      hrefRequired: {fr: 'Indiquez l’adresse où mène le bouton.', en: 'Give the address the button leads to.'},
+      variant: {fr: 'Style', en: 'Style'},
+      variantPrimary: {fr: 'Principal', en: 'Primary'},
+      variantSecondary: {fr: 'Secondaire', en: 'Secondary'},
+      variantGhost: {fr: 'Fantôme', en: 'Ghost'},
+      variantDestructive: {fr: 'Destructif', en: 'Destructive'},
+    },
+    formBlock: {
+      singular: {fr: 'Formulaire', en: 'Form'},
+      plural: {fr: 'Formulaires', en: 'Forms'},
+      form: {fr: 'Formulaire', en: 'Form'},
+      showHeading: {fr: 'Afficher le surtitre, le titre et l’introduction du formulaire', en: 'Show the form’s eyebrow, title and intro'},
+      showHeadingDescription: {
+        fr: 'Décoché par défaut : le titre de la modale suffit en général.',
+        en: 'Unticked by default: the modal’s title is usually enough.',
       },
     },
   },
