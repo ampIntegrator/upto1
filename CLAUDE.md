@@ -72,3 +72,7 @@ Open study (for Claude Fable, analysis only, then a handoff for Opus): a live pr
 being built in the section builder, in a movable window. Brief: `etude-apercu-rangee/README.md`.
 It builds on the admin's Live Preview (« Aperçu en direct » and its « Vue » menu, in main since
 17 Sept. 2026): `docs/live-preview.md`.
+
+Study done on 22 Sept. 2026 (Fable, waiting for Nicolas's decisions, then Opus): links that open a
+modal (« Modales » collection, internal links, `/modale/<slug>` intercepted route):
+`docs/handoff-2026-09-22-modals.md`.
