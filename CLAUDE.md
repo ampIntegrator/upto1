@@ -49,7 +49,10 @@ Adding a column component, in this order:
 4. Tests on a throwaway page created and deleted by the script, never on a real page.
 
 Width rules: one component per column, minimum width declared by the block, a row always adds
-up to 12. A component that subdivides (card grid, price list, steps) carries its own grid and
+up to 12. **A component fills its container, always** (Nicolas, 22 Sept. 2026): no max-width or
+auto centring on a card or a block; the column is the only width authority (a narrower look comes
+from a narrower column or an empty side column). Text measure caps (a lead, a note) are the only
+exception. A component that subdivides (card grid, price list, steps) carries its own grid and
 will need a data-dependent `minSpan(data)` on the server (not done yet).
 
 `consignes.md` is Nicolas's own scratch file: read it, never write to it.
