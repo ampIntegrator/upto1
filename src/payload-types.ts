@@ -257,7 +257,7 @@ export interface Page {
             saveAsShared?: boolean | null;
             sharedTitle?: string | null;
             mode: 'light' | 'dark' | 'media';
-            tint?: ('body' | 'highlight') | null;
+            tint?: ('body' | 'light' | 'highlight') | null;
             texture?: ('none' | 'grid' | 'dots' | 'losange') | null;
             /**
              * Marks the junction with the section above. Automatic: only between two light backgrounds of the same shade whose texture changes.
@@ -1944,7 +1944,7 @@ export interface Section {
    */
   anchor?: string | null;
   mode: 'light' | 'dark' | 'media';
-  tint?: ('body' | 'highlight') | null;
+  tint?: ('body' | 'light' | 'highlight') | null;
   texture?: ('none' | 'grid' | 'dots' | 'losange') | null;
   /**
    * Marks the junction with the section above. Automatic: only between two light backgrounds of the same shade whose texture changes.

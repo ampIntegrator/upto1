@@ -75,11 +75,12 @@ export const orbitaSectionSettings: Field[] = [
         required: true,
         options: [
           {label: T.settings.tintBody, value: 'body'},
+          {label: T.settings.tintLight, value: 'light'},
           {label: T.settings.tintHighlight, value: 'highlight'},
         ],
         // condition repeated on the field (not only on the row): without it, Payload makes
         // the column required in the database, and a night or media section could no longer be saved
-        admin: {width: '50%', condition: when('mode', 'light'), components: swatches({body: 'body', highlight: 'highlight'})},
+        admin: {width: '50%', condition: when('mode', 'light'), components: swatches({body: 'body', light: 'light', highlight: 'highlight'})},
       },
       {
         name: 'texture',

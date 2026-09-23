@@ -521,7 +521,7 @@ function edgeTop(s: SectionSource, above: SectionSource | undefined): boolean {
   const mode = (s as {edgeTop?: string | null}).edgeTop ?? 'auto';
   if (s.mode !== 'light' || mode === 'never' || !above) return false;
   if (mode === 'always') return true;
-  const shade = (x: SectionSource) => (x.tint === 'highlight' ? 'highlight' : 'body');
+  const shade = (x: SectionSource) => (x.tint === 'highlight' || x.tint === 'light' ? x.tint : 'body');
   const texture = (x: SectionSource) => x.texture ?? 'none';
   return above.mode === 'light' && shade(above) === shade(s) && texture(above) !== texture(s);
 }
@@ -532,7 +532,7 @@ function toSection(s: SectionSource, key: string, site: Gaps): SectionData {
     key,
     id: s.anchor || undefined,
     background: background(s),
-    tint: s.mode === 'light' && s.tint === 'highlight' ? 'highlight' : undefined,
+    tint: s.mode === 'light' && (s.tint === 'highlight' || s.tint === 'light') ? s.tint : undefined,
     image: isMedia && s.mediaType !== 'video' ? {src: mediaUrl(s.image) ?? '', alt: mediaAlt(s.image)} : undefined,
     video: isMedia && s.mediaType === 'video' ? {src: mediaUrl(s.video) ?? '', poster: mediaUrl(s.poster)} : undefined,
     overlay: isMedia ? (s.overlay ?? 0.3) : 0,

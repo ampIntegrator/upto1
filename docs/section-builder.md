@@ -43,7 +43,7 @@ The background is asked first: the rest of the section appears once it is chosen
 
 | Background | Options |
 |---|---|
-| Light (`light`) | Tint: page background or light silo highlight. Texture: none, grid, dots, diamonds |
+| Light (`light`) | Tint: page background (`background-body`), light silo (`background-light`, the silo's primary at 5 %) or light highlight (`highlight-light`). Texture: none, grid, dots, diamonds |
 | Dark (`dark`) | Night or night with halo (no texture) |
 | Media (`media`) | Image or video, video poster, black overlay (0–1) |
 

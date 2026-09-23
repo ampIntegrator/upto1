@@ -14,7 +14,7 @@ import React, {useEffect, useState} from 'react';
 
 import {SILOS, type SiloName} from '@/theme/silos/palettes';
 
-export type SwatchKind = 'body' | 'highlight' | 'night' | 'night-halo';
+export type SwatchKind = 'body' | 'light' | 'highlight' | 'night' | 'night-halo';
 
 /** hex a mixed with hex b, pctA % of a */
 function mix(a: string, b: string, pctA: number): string {
@@ -30,6 +30,9 @@ function swatchBackground(kind: SwatchKind, silo: (typeof SILOS)[SiloName]): str
   switch (kind) {
     case 'body':
       return silo.bg;
+    // the silo's primary at 5 % on the page background (--color-background-light)
+    case 'light':
+      return mix(silo.primary, silo.bg, 5);
     // highlight at 5 % on the page background, with a strip of the highlight so it reads at swatch size
     case 'highlight':
       return `linear-gradient(to top, ${silo.highlight} 0 4px, ${mix(silo.highlight, silo.bg, 5)} 4px)`;

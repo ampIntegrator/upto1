@@ -257,7 +257,7 @@ async function main() {
           row(column(8, tabs(6)), column(4, testimonial('Sophie M.', '+ 28 %'))),
           row(column(12, tabs(8))),
           row(column(2), column(8, faq(4)), column(2)),
-        ], {anchor: 'onglets', tint: 'highlight'}),
+        ], {anchor: 'onglets', tint: 'light'}),
         light([
           row(column(12, buttonGroup([btn('Particuliers', 'secondary', {iconKey: 'home'}), btn('Professionnels', 'secondary', {iconKey: 'calculator'}), btn('Collectivités', 'secondary', {iconKey: 'building'}), btn('Nous appeler', 'secondary', {iconKey: 'phone'})], {mode: 'attached', align: 'center'}))),
           row(column(12, buttonGroup([btn('Commencer', 'primary', {shape: 'split'}), btn('Tarifs', 'high'), btn('Nous appeler', 'ghost', {iconKey: 'phone'}), btn('Documentation', 'secondary', {shape: 'split'})], {width: 'full'}))),
