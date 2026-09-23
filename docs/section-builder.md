@@ -43,7 +43,7 @@ The background is asked first: the rest of the section appears once it is chosen
 
 | Background | Options |
 |---|---|
-| Light (`light`) | Shade and texture chosen in one **background composer** (`src/fields/BackgroundComposer.tsx`, bound to `tint`, driving the hidden `texture` field): a 300 × 80 preview of the composed background in the page's silo, then the shades and the textures as named tiles. Shades: page background (`background-body`), light silo (`background-light`, the silo's primary at 5 %), light highlight (`highlight-light`). Textures: none, grid, dots, diamonds |
+| Light (`light`) | Shade and texture chosen in one **background composer** (`src/fields/BackgroundComposer.tsx`, bound to `tint`, driving the hidden `texture` field): a 500 × 160 preview of the composed background in the page's silo, then the shades and the textures as named tiles. Shades: page background (`background-body`), light silo (`background-light`, the silo's primary at 5 %), light highlight (`highlight-light`). Textures: none, grid, dots, diamonds |
 | Dark (`dark`) | Night or night with halo (no texture) |
 | Media (`media`) | Image or video, video poster, black overlay (0–1) |
 

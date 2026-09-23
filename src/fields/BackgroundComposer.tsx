@@ -2,8 +2,8 @@
 
 /**
  * BackgroundComposer — admin component for a light section's background: one preview box
- * (300 × 80) rendering the chosen shade with the chosen texture, in the real colours of the
- * page's silo, and beside it the shades and the textures as small named tiles. Bound to the
+ * (500 × 160) rendering the chosen shade with the chosen texture, in the real colours of the
+ * page's silo, and beside it, stacked on two lines, the shades then the textures as named tiles. Bound to the
  * `tint` field; it drives the sibling `texture` field too (hidden in the form). Nicolas,
  * 23 September 2026: « un composeur de background, pour croiser les fonds et les textures avec
  * une boîte de rendu ». Admin UI: outside the site design system, inline styles on Payload
@@ -105,13 +105,14 @@ export function BackgroundComposer(props: RadioFieldClientProps) {
   return (
     <div className="field-type background-composer" style={{flex: '1 1 0', minWidth: 0, width: '100%'}}>
       {label ? <FieldLabel label={field.label} path={path} required={field.required} /> : null}
-      <div style={{display: 'flex', alignItems: 'flex-start', gap: 24, flexWrap: 'wrap'}}>
+      <div style={{display: 'flex', alignItems: 'flex-start', gap: 28, flexWrap: 'wrap'}}>
         {/* the composed background, as the page will show it */}
         <div
           aria-hidden="true"
           title={`${short(tintLabel[tint])} · ${textureLabel[texture]}`}
-          style={{width: 300, height: 80, flex: '0 0 auto', borderRadius: 3, border: '1px solid var(--theme-elevation-250)', backgroundColor: shadeColor(tint, silo), ...textureImage(texture)}}
+          style={{width: 500, height: 160, flex: '0 0 auto', borderRadius: 3, border: '1px solid var(--theme-elevation-250)', backgroundColor: shadeColor(tint, silo), ...textureImage(texture)}}
         />
+        <div style={{display: 'flex', flexDirection: 'column', gap: 18}}>
         <div style={{display: 'flex', flexDirection: 'column', gap: 6}}>
           <p style={legend}>{t(T.settings.tint)}</p>
           <div role="radiogroup" aria-label={t(T.settings.tint)} style={{display: 'flex', gap: 12}}>
@@ -139,6 +140,7 @@ export function BackgroundComposer(props: RadioFieldClientProps) {
               );
             })}
           </div>
+        </div>
         </div>
       </div>
       {showError && errorMessage ? <FieldError message={errorMessage} path={path} showError /> : null}
