@@ -82,8 +82,9 @@ export function SwatchRadio(props: SwatchRadioProps) {
               onClick={() => setValue(o.value)}
               // the same tile as the background composer's: a thin ring when selected, no pill
               style={{
-                width: 120,
-                height: 48,
+                // the night shades (the only use left): 300 × 120, big enough to read the halo
+                width: 300,
+                height: 120,
                 padding: 0,
                 cursor: readOnly ? 'default' : 'pointer',
                 background: swatchBackground(kind, silo),
