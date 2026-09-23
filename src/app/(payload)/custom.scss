@@ -118,3 +118,93 @@ html[data-preview-layout='dialog'] .collection-edit__main-wrapper:has(> .live-pr
   margin-top: 8px;
   align-self: flex-start;
 }
+
+/* ---------------------------------------------------------------------------------------------
+ * Vertical rhythm of the edit forms (23 September 2026, Nicolas: « c'est collé »): one constant
+ * gap between fields, room under the help notes, list and group titles brought to the style of
+ * the section group headings (src/fields/sections/GroupHeading.tsx: small caps, a rule above),
+ * checkboxes aligned on the input line of their row, the rich text editor framed like a field.
+ * Written against Payload 3.88's class names: check after an update.
+ * ------------------------------------------------------------------------------------------- */
+
+/* fields: a constant gap, in every context (tab, group, block, row) */
+.render-fields > .field-type + .field-type,
+.render-fields > .field-type + .group-field,
+.render-fields > .field-type + .array-field,
+.render-fields > .field-type + .blocks-field {
+  margin-block-start: calc(var(--base) * 1.2);
+}
+/* a row keeps its own gap between its cells */
+.row__fields > .field-type + .field-type { margin-block-start: 0; }
+/* the label breathes above its input, the help note under it */
+.field-type > .field-label { margin-block-end: calc(var(--base) * 0.3); }
+.field-description { margin-block-start: calc(var(--base) * 0.4); }
+
+/* list and group titles: the same small-caps heading as the section groups, with a rule above,
+   instead of a 20 px title glued to its rows */
+.array-field__header,
+.group-field--top-level > .group-field__header,
+.group-field--within-tab > .group-field__header,
+.blocks-field > .blocks-field__header {
+  margin-block-end: calc(var(--base) * 0.6);
+}
+.array-field__title,
+.group-field__title,
+.blocks-field__header h3 {
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--theme-elevation-600);
+}
+/* groups inside a row (the hero's two buttons): the title only, no rule */
+.render-fields > .array-field,
+.render-fields > .group-field--top-level,
+.render-fields > .group-field--within-tab,
+.render-fields > .blocks-field {
+  padding-block-start: calc(var(--base) * 0.9);
+  border-block-start: 1px solid var(--theme-elevation-150);
+  margin-block-start: calc(var(--base) * 1.5);
+}
+/* groups side by side in a row (the hero's two buttons): the title only, no rule, no offset */
+.row__fields > .group-field {
+  padding-block-start: 0;
+  border-block-start: none;
+  margin-block-start: 0;
+}
+/* a list or a group that opens a panel: no rule at the very top */
+.render-fields > .array-field:first-child,
+.render-fields > .group-field--top-level:first-child,
+.render-fields > .group-field--within-tab:first-child,
+.render-fields > .blocks-field:first-child {
+  padding-block-start: 0;
+  border-block-start: none;
+  margin-block-start: 0;
+}
+/* the section builder's own titles (Sections, Rangées) keep Payload's size: they name the panel */
+.section-builder .blocks-field__header h3 { text-transform: none; letter-spacing: 0; font-size: 16px; }
+
+/* a checkbox in a row next to labelled inputs: centred on the 40 px input line (label 20 px,
+   gap, half the input minus half the box), not floating at mid-height of the cell */
+.row__fields > .field-type.checkbox,
+.row__fields > .checkbox-field {
+  padding-block-start: calc(30px + var(--base) * 0.3);
+}
+
+/* the rich text editor: a frame like a field, the gutter kept inside it */
+.rich-text-lexical .editor-container {
+  border: 1px solid var(--theme-elevation-150);
+  border-block-start: none;
+  background: var(--theme-input-bg);
+  padding: calc(var(--base) * 0.5) calc(var(--base) * 0.75);
+  min-height: calc(var(--base) * 6);
+}
+.rich-text-lexical .editor-container .ContentEditable__root { min-height: calc(var(--base) * 4); }
+
+/* the content of a block row or a collapsible starts with air under its bar */
+.collapsible__content > .render-fields,
+.blocks-field__row .render-fields--margins-small,
+.array-field__row .render-fields--margins-small {
+  padding-block-start: calc(var(--base) * 0.5);
+}

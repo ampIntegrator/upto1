@@ -2,6 +2,7 @@ import type { Field, GroupField } from 'payload'
 
 import { heroText as t } from '../i18n/admin/blocks'
 
+import { groupHeading } from './groupHeading'
 import { linkGroup, titleField } from './shared'
 
 /**
@@ -40,9 +41,11 @@ export const heroField: GroupField = {
         { label: t.variants.pageNight, value: 'page-night' },
       ],
     },
+    groupHeading({ name: 'groupText', label: t.groups.text, icon: 'text-highlight-3' }),
     { name: 'eyebrow', type: 'text', label: t.fields.eyebrow, localized: true },
     titleField({ name: 'title', required: true }),
     { name: 'lead', type: 'textarea', label: t.fields.lead, localized: true, admin: { rows: 3 } },
+    groupHeading({ name: 'groupButtons', label: t.groups.buttons, icon: 'link' }),
     {
       type: 'row',
       fields: [
@@ -51,6 +54,7 @@ export const heroField: GroupField = {
       ],
     },
     // full-screen media and image page top: background image + overlay
+    groupHeading({ name: 'groupBackground', label: t.groups.background, icon: 'photo', condition: is('media-image', 'page-image', 'media-video') }),
     {
       name: 'image',
       type: 'upload',
@@ -127,6 +131,7 @@ export const heroField: GroupField = {
     // old setting (checkbox), kept hidden so the column is left untouched; replaced by breadcrumbMode
     {name: 'breadcrumb', type: 'checkbox', admin: {hidden: true}},
     // breadcrumb below the page top: site setting, or override for this page
+    groupHeading({ name: 'groupBreadcrumb', label: t.groups.breadcrumb, icon: 'itinerary' }),
     {
       name: 'breadcrumbMode',
       type: 'select',

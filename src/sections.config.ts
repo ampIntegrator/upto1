@@ -19,6 +19,7 @@ import {tabsBlock} from '@/fields/blocks/tabsBlock';
 import {testimonialBlock} from '@/fields/blocks/testimonialBlock';
 import {textBoxBlock} from '@/fields/blocks/textBoxBlock';
 import {createSectionBuilder} from '@/fields/sections/builder';
+import {GROUP_HEADING, groupHeading} from '@/fields/groupHeading';
 import {collectionBlockText} from '@/i18n/admin/blocks';
 import {sectionsText as T} from '@/i18n/admin/sections';
 
@@ -40,13 +41,19 @@ const modeChosen = when('mode', 'light', 'dark', 'media');
 /** A radio shown as colour swatches (name on hover): option value → swatch kind. */
 const swatches = (map: Record<string, string>) => ({Field: {path: '@/fields/SwatchRadio#SwatchRadio', clientProps: {swatches: map}}});
 
+/** the site's heading for a group of settings: the rule, the title and an optional Nucleo icon (src/fields/groupHeading.ts) */
+const group = groupHeading;
+
 /** Background of a section: light, night or media, then the settings of that background. */
 export const orbitaSectionSettings: Field[] = [
+  // the background and its options
+  group({name: 'groupBackground', label: T.settings.groupBackground, icon: 'fill'}),
   // 1. the background (no default value: the question must be asked)
   {
     name: 'mode',
     type: 'radio',
-    label: T.settings.background,
+    // named by its group heading (« Fond de la section »)
+    label: false,
     required: true,
     options: [
       {label: T.settings.backgroundLight, value: 'light'},
@@ -56,7 +63,8 @@ export const orbitaSectionSettings: Field[] = [
     // in words: the colours (swatches) come next, only for a light or night background
     admin: {layout: 'horizontal'},
   },
-  // 2a. light: tint and texture, side by side
+  // 2a. light: the shade and the texture, composed in one preview (BackgroundComposer drives both;
+  // the texture field stays in the form, hidden, so its value is kept and saved)
   {
     type: 'row',
     admin: {condition: when('mode', 'light')},
@@ -64,15 +72,16 @@ export const orbitaSectionSettings: Field[] = [
       {
         name: 'tint',
         type: 'radio',
-        label: T.settings.tint,
+        label: false,
         required: true,
         options: [
           {label: T.settings.tintBody, value: 'body'},
+          {label: T.settings.tintLight, value: 'light'},
           {label: T.settings.tintHighlight, value: 'highlight'},
         ],
         // condition repeated on the field (not only on the row): without it, Payload makes
         // the column required in the database, and a night or media section could no longer be saved
-        admin: {width: '50%', condition: when('mode', 'light'), components: swatches({body: 'body', highlight: 'highlight'})},
+        admin: {width: '100%', condition: when('mode', 'light'), components: {Field: {path: '@/fields/BackgroundComposer#BackgroundComposer'}}},
       },
       {
         name: 'texture',
@@ -85,16 +94,19 @@ export const orbitaSectionSettings: Field[] = [
           {label: T.settings.textureDots, value: 'dots'},
           {label: T.settings.textureLosange, value: 'losange'},
         ],
-        admin: {width: '50%'},
+        admin: {hidden: true},
       },
     ],
   },
+  // the edge line at the top of a light section: its own group
+  group({name: 'groupEdge', label: T.settings.groupEdge, icon: 'table-row-merge-top', condition: when('mode', 'light')}),
   // the edge line at the top of a light section (Nicolas, 21 Sept. 2026: two same-shade backgrounds
   // whose only difference is the texture meet badly without it)
   {
     name: 'edgeTop',
     type: 'radio',
-    label: T.settings.edgeTop,
+    // named by its group heading (« Liseré »)
+    label: false,
     defaultValue: 'auto',
     options: [
       {label: T.settings.edgeTopAuto, value: 'auto'},
@@ -146,6 +158,7 @@ export const sections = createSectionBuilder({
   fieldName: 'sections',
   shared: {collection: 'sections'},
   condition: modeChosen,
+  groupHeading: GROUP_HEADING,
   // « Carousel » thumbnail: a full-width row with a collection already placed (swipe by default)
   presetRows: [{id: 'carousel', label: collectionBlockText.rowPreset, spans: [12], blocks: [COLLECTION_SLUG]}],
 });

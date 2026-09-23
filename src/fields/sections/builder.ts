@@ -26,6 +26,8 @@ export type SectionBuilderOptions = {
   condition?: Condition;
   /** Extra thumbnails that create a row with blocks already placed (the slugs must be in `blocks`). */
   presetRows?: PresetRow[];
+  /** The host's heading component for a group of settings (`path#Export`); without it, the neutral one. */
+  groupHeading?: string;
 };
 
 export type SectionBuilder = {
@@ -39,7 +41,7 @@ export type SectionBuilder = {
   beforeChange: CollectionBeforeChangeHook[];
 };
 
-export function createSectionBuilder({blocks, settings = [], fieldName = 'sections', shared = false, condition, presetRows = []}: SectionBuilderOptions): SectionBuilder {
+export function createSectionBuilder({blocks, settings = [], fieldName = 'sections', shared = false, condition, presetRows = [], groupHeading}: SectionBuilderOptions): SectionBuilder {
   // configuration errors surface at start-up, not in the admin
   const slugs = new Set(blocks.map((b) => b.block.slug));
   for (const p of presetRows) {
@@ -51,7 +53,7 @@ export function createSectionBuilder({blocks, settings = [], fieldName = 'sectio
   const sectionBlock: Block = {
     slug: 'section',
     labels: {singular: T.blocks.section.singular, plural: T.blocks.section.plural},
-    fields: sectionFields({blocks, settings, shareable: Boolean(shared), condition, presetRows}),
+    fields: sectionFields({blocks, settings, shareable: Boolean(shared), condition, presetRows, groupHeading}),
   };
   const sectionBlocks: Block[] = [sectionBlock];
   if (shared) {
@@ -73,7 +75,7 @@ export function createSectionBuilder({blocks, settings = [], fieldName = 'sectio
       // every section folded when the document opens (inside: settings folded, rows open)
       admin: {description: T.blocks.sectionsDescription, initCollapsed: true},
     },
-    sharedFields: sectionFields({blocks, settings, shareable: false, condition, presetRows}),
+    sharedFields: sectionFields({blocks, settings, shareable: false, condition, presetRows, groupHeading}),
     beforeChange: shared ? [shareSectionsHook({fieldName, collection: shared.collection})] : [],
   };
 }

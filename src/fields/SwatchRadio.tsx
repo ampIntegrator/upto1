@@ -14,7 +14,7 @@ import React, {useEffect, useState} from 'react';
 
 import {SILOS, type SiloName} from '@/theme/silos/palettes';
 
-export type SwatchKind = 'body' | 'highlight' | 'night' | 'night-halo';
+export type SwatchKind = 'body' | 'light' | 'highlight' | 'night' | 'night-halo';
 
 /** hex a mixed with hex b, pctA % of a */
 function mix(a: string, b: string, pctA: number): string {
@@ -30,13 +30,17 @@ function swatchBackground(kind: SwatchKind, silo: (typeof SILOS)[SiloName]): str
   switch (kind) {
     case 'body':
       return silo.bg;
-    // highlight at 5 % on the page background, with a strip of the highlight so it reads at swatch size
+    // the silo's primary at 5 % on the page background (--color-background-light)
+    case 'light':
+      return mix(silo.primary, silo.bg, 5);
     case 'highlight':
-      return `linear-gradient(to top, ${silo.highlight} 0 4px, ${mix(silo.highlight, silo.bg, 5)} 4px)`;
+      return mix(silo.highlight, silo.bg, 5);
     case 'night':
       return silo.night;
+    // the site's halo (Section.module.css): the silo's accent glowing from the top centre,
+    // a touch of gold in the bottom right corner
     case 'night-halo':
-      return `radial-gradient(circle at 70% 20%, ${mix(silo.highlight, silo.night, 55)} 0, ${silo.night} 70%)`;
+      return `radial-gradient(80% 130% at 50% -16%, ${mix(silo.primary, silo.night, 30)}, transparent 58%), radial-gradient(70% 120% at 100% 120%, ${mix('#c99016', silo.night, 16)}, transparent 55%), ${silo.night}`;
   }
 }
 
@@ -63,7 +67,7 @@ export function SwatchRadio(props: SwatchRadioProps) {
   return (
     <div className="field-type swatch-radio" style={{marginBottom: 'var(--base)'}}>
       <FieldLabel label={field.label} path={path} required={field.required} />
-      <div role="radiogroup" aria-label={typeof label === 'string' ? label : undefined} style={{display: 'flex', flexWrap: 'wrap', gap: 8}}>
+      <div role="radiogroup" aria-label={typeof label === 'string' ? label : undefined} style={{display: 'flex', gap: 16, width: '100%'}}>
         {options.map((o) => {
           const selected = value === o.value;
           const text = o.label ? String(getTranslation(o.label, i18n)) : String(o.value);
@@ -78,17 +82,18 @@ export function SwatchRadio(props: SwatchRadioProps) {
               title={text}
               disabled={readOnly}
               onClick={() => setValue(o.value)}
+              // the same tile as the background composer's: a thin ring when selected, no pill
               style={{
-                width: 150,
-                height: 50,
+                // the night shades (the only use left): half the row each, 120 px high
+                flex: '1 1 0',
+                minWidth: 0,
+                height: 120,
                 padding: 0,
                 cursor: readOnly ? 'default' : 'pointer',
                 background: swatchBackground(kind, silo),
-                border: '1px solid var(--theme-elevation-200)',
-                borderRadius: selected ? 25 : 0,
-                outline: selected ? '2px solid var(--theme-text)' : 'none',
-                outlineOffset: 2,
-                transition: 'border-radius .2s',
+                border: `1px solid ${selected ? 'var(--theme-text)' : 'var(--theme-elevation-250)'}`,
+                borderRadius: 3,
+                boxShadow: selected ? '0 0 0 2px var(--theme-bg), 0 0 0 3px var(--theme-text)' : 'none',
               }}
             />
           );

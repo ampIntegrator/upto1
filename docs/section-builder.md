@@ -19,18 +19,39 @@ Code, in three layers:
 
 A section has two collapsible panels: **Réglages de la section** and **Rangées**. The **Rangées** panel appears once a background is chosen.
 
-Settings are asked in order: the background first, then only the options for that background.
+Settings are grouped, each group under a small heading with a rule (23 September 2026, at Nicolas's
+request), in this order: **Ancre et sauvegarde**, **Fond de la section** (and the options of the
+chosen background), **Liseré**, **Espaces intérieurs**, **Écarts de la grille**. The headings store
+nothing: `sectionGroup()` (`src/fields/sections/group.ts`) builds a `ui` field whose component is
+the neutral `GroupHeading` or, when the host passes one, its own (here
+`src/fields/SectionGroupHeading.tsx`, which adds a Nucleo icon: `obj-size-increase` for the inner
+spacing, `view-columns` for the gaps). The host gives it through `createSectionBuilder({groupHeading})`.
+
+The same headings structure the densest forms (`groupHeading()` in `src/fields/groupHeading.ts`):
+the text box (Titre, Texte, Disposition), the hero (Texte, Boutons, Fond, Fil d'Ariane), the
+modals (Titre, Affichage, Contenu). Payload caches its client config at start-up: after adding
+such a `ui` field outside a block, restart `pnpm dev`, or the form fails with « Cannot use 'in'
+operator to search for 'hidden' in undefined ».
+
+**Admin rhythm** (`src/app/(payload)/custom.scss`, 23 September 2026): one constant gap between
+fields, room under the help notes and above inputs, list and group titles brought to the group
+heading style (small caps, a rule above) instead of Payload's 20 px titles, checkboxes aligned on
+the input line of their row, the rich text editor framed like a field, air under a block's bar.
+Written against Payload 3.88's class names: check after an update.
+
+The background is asked first: the rest of the section appears once it is chosen.
 
 | Background | Options |
 |---|---|
-| Light (`light`) | Tint: page background or light silo highlight. Texture: none, grid, dots, diamonds |
+| Light (`light`) | Shade and texture chosen in one **background composer** (`src/fields/BackgroundComposer.tsx`, bound to `tint`, driving the hidden `texture` field): a 500 × 160 preview of the composed background in the page's silo, then the shades and the textures as named tiles. Shades: page background (`background-body`), light silo (`background-light`, the silo's primary at 5 %), light highlight (`highlight-light`). Textures: none, grid, dots, diamonds |
 | Dark (`dark`) | Night or night with halo (no texture) |
 | Media (`media`) | Image or video, video poster, black overlay (0–1) |
 
 Then, for every background:
 
+- **Anchor**: optional id for `#anchor` links, next to the sharing checkbox.
+- **Edge line** (light backgrounds only): automatic, always or never.
 - **Top and bottom spacing**: 0 to 160 px in steps of 20 (halved below 640 px).
-- **Anchor**: optional id for `#anchor` links.
 - **Grid gaps**: column gap, row gap and mobile vertical gap (0 to 60 px in steps of 10). "Réglage du site" inherits the defaults from Settings › Mise en page.
 - **Share**: saving with "Enregistrer dans les sections partagées" copies the section into the shared collection and replaces it on the page with a reference.
 

@@ -2,6 +2,12 @@ import {texts} from './languages';
 
 /** Admin texts of the page top (hero) group. */
 export const heroText = texts({
+  groups: {
+    text: {fr: 'Texte', en: 'Text'},
+    buttons: {fr: 'Boutons', en: 'Buttons'},
+    background: {fr: 'Fond', en: 'Background'},
+    breadcrumb: {fr: 'Fil d’Ariane', en: 'Breadcrumb'},
+  },
   label: {fr: 'Haut de page', en: 'Page top'},
   fields: {
     variant: {fr: 'Modèle', en: 'Layout'},
@@ -293,6 +299,11 @@ export const collectionBlockText = texts({
 });
 
 export const textBoxBlockText = texts({
+  groups: {
+    title: {fr: 'Titre', en: 'Title'},
+    text: {fr: 'Texte', en: 'Text'},
+    layout: {fr: 'Disposition', en: 'Layout'},
+  },
   name: {fr: 'Encart texte', en: 'Text box'},
   plural: {fr: 'Encarts texte', en: 'Text boxes'},
   badges: {fr: 'Badges (deux au plus)', en: 'Badges (two at most)'},

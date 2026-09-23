@@ -148,6 +148,9 @@ export const collectionsText = texts({
         fr: 'Une modale à réponse obligatoire a besoin d’au moins un bouton pour être fermée.',
         en: 'A modal with a required answer needs at least one button to be closed.',
       },
+      groupTitle: {fr: 'Titre', en: 'Title'},
+      groupDisplay: {fr: 'Affichage', en: 'Display'},
+      groupBody: {fr: 'Contenu', en: 'Content'},
       body: {fr: 'Contenu', en: 'Content'},
       bodyDescription: {
         fr: 'Texte, liens, listes, tableaux. Le bouton « + » (ou « / ») insère un formulaire où vous voulez.',

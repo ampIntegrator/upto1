@@ -58,8 +58,10 @@ export const fieldsText = texts({
   },
   icon: {
     label: {fr: 'Icône', en: 'Icon'},
+    change: {fr: 'Changer', en: 'Change'},
+    set: {fr: 'Icônes du site', en: 'Site icons'},
     unknown: {fr: ({key}: {key: string}) => `Icône inconnue : ${key}`, en: ({key}: {key: string}) => `Unknown icon: ${key}`},
-    none: {fr: 'aucune', en: 'none'},
+    none: {fr: 'Aucune icône', en: 'No icon'},
     choose: {fr: 'Choisir', en: 'Choose'},
     remove: {fr: 'Retirer', en: 'Remove'},
     drawerTitle: {fr: 'Choisir une icône', en: 'Choose an icon'},
