@@ -46,7 +46,7 @@ export type DialogProps = {
   size?: OrbitaDialogSize;
   /** Light (default) or night. */
   tone?: DialogTone;
-  /** Astryx close behavior: info (default), form, required. */
+  /** Astryx close behavior: info (default), form, required (no Escape, no backdrop, no close button). */
   purpose?: 'info' | 'form' | 'required';
   /** Footer buttons, right-aligned. Without `actions`, no footer. */
   actions?: React.ReactNode;
@@ -88,14 +88,17 @@ export function Dialog({
           {title}
         </Heading>
       </VStack>
-      <IconButton
-        label="Fermer"
-        variant="secondary"
-        icon={<Icon icon={CloseIcon} />}
-        onClick={() => onOpenChange(false)}
-        className={styles.close}
-        style={{flex: '0 0 auto'}}
-      />
+      {/* required: the footer buttons are the only way out, no close button */}
+      {purpose === 'required' ? null : (
+        <IconButton
+          label="Fermer"
+          variant="secondary"
+          icon={<Icon icon={CloseIcon} />}
+          onClick={() => onOpenChange(false)}
+          className={styles.close}
+          style={{flex: '0 0 auto'}}
+        />
+      )}
     </HStack>
   );
 

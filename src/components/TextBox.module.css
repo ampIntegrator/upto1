@@ -20,9 +20,11 @@
 .title[data-size='display-3'] { font-size: var(--text-display-3-size); line-height: var(--text-display-3-leading); font-weight: var(--text-display-3-weight); letter-spacing: -0.02em; }
 .title[data-size='heading-1'] { font-size: var(--text-heading-1-size); line-height: var(--text-heading-1-leading); font-weight: var(--text-heading-1-weight); letter-spacing: -0.015em; }
 .title[data-size='heading-2'] { font-size: var(--text-heading-2-size); line-height: var(--text-heading-2-leading); font-weight: var(--text-heading-2-weight); letter-spacing: -0.01em; }
-/* the diamond separator of the cards, always centred under the title */
-.head { width: 100%; }
-.ornament { flex-direction: row; align-items: center; justify-content: center; gap: 8px; width: 100%; }
+/* the diamond separator of the cards, always centred under the title's text: the head shrinks to
+   the title's width (left, or centred with the content) and the separator centres inside it */
+.head { width: fit-content; max-width: 100%; align-self: flex-start; }
+.root[data-center] .head { align-self: center; }
+.ornament { flex-direction: row; align-items: center; gap: 8px; width: auto; align-self: center; }
 .ornament::before,
 .ornament::after { content: ''; width: 30px; height: 1px; background: var(--color-border-emphasized); }
 .ornament i {

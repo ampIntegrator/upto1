@@ -15,6 +15,10 @@
  *   - Steps: more than one step = Astryx Stepper above the fields, « Retour » / « Continuer » on a
  *     full row, the submit button on the last step only. Each step is validated before moving on,
  *     values are kept when going back, focus moves to the step title. One submission at the end.
+ *   - Buttons: under the fields (split send button), or in an element outside the form
+ *     (`actionsTarget`: a modal's footer, simple buttons only), still driven by the form.
+ *   - Once sent, the root dispatches a `siteform:sent` DOM event (a modal replaces its buttons by
+ *     « Fermer »).
  *   - Sending: `submitAction` (a server action given by the page) receives the form id, the values,
  *     a honeypot and the time the form was shown; the server decides what is spam. After success the confirmation
  *     replaces the form in the card, or the browser goes to `confirmation.href`.
@@ -28,6 +32,7 @@ import {HStack, VStack} from '@astryxdesign/core/Stack';
 import {Step, Stepper} from '@astryxdesign/core/Stepper';
 import {Text} from '@astryxdesign/core/Text';
 import React, {useEffect, useId, useRef, useState} from 'react';
+import {createPortal} from 'react-dom';
 
 import {Button} from './Button';
 import {Chip} from './Chip';
@@ -39,6 +44,9 @@ import {Title} from './TitleTag';
 import {renderTitle} from './TitleText';
 import type {TitleTag} from './title-tags';
 import styles from './SiteForm.module.css';
+
+/** DOM event (bubbling) sent by the form's root once a submission succeeded; `detail.id` = the form's `id` prop */
+export const SITE_FORM_SENT_EVENT = 'siteform:sent';
 
 export type FormFieldWidth = 'half' | 'full';
 type Base = {name: string; label: string; required?: boolean; width?: FormFieldWidth};
@@ -101,6 +109,12 @@ export type SiteFormProps = {
   submitAction: (input: FormSubmitInput) => Promise<FormSubmitResult>;
   confirmation: {type: 'message'; content: React.ReactNode} | {type: 'redirect'; href: string};
   labels?: Partial<FormLabels>;
+  /**
+   * DOM id of an element outside the form that receives its buttons (« Retour », « Continuer »,
+   * the submit button): a modal's footer. The buttons stay driven by the form (a React portal);
+   * a hidden submit button stays in the form so Enter still sends it.
+   */
+  actionsTarget?: string;
 };
 
 /** « * » after a required label, like the text fields (Astryx would add « · Obligatoire »); the
@@ -128,7 +142,7 @@ function fieldError(f: FormField, v: FormValue, l: FormLabels): string | null {
   return null;
 }
 
-export function SiteForm({id, formId, eyebrow, eyebrowStyle = 'eyebrow', title, tag = 'h3', intro, framed = true, steps, submitLabel, submitAction, confirmation, labels}: SiteFormProps) {
+export function SiteForm({id, formId, eyebrow, eyebrowStyle = 'eyebrow', title, tag = 'h3', intro, framed = true, steps, submitLabel, submitAction, confirmation, labels, actionsTarget}: SiteFormProps) {
   const l = {...LABELS, ...labels};
   const all = steps.flatMap((s) => s.fields);
   const [values, setValues] = useState<FormValues>(() => Object.fromEntries(all.map((f) => [f.name, initialValue(f)])));
@@ -140,6 +154,15 @@ export function SiteForm({id, formId, eyebrow, eyebrowStyle = 'eyebrow', title, 
   const startedAt = useRef(0);
   const stepTitle = useRef<HTMLElement>(null);
   const root = useRef<HTMLElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  // the element receiving the buttons (a modal's footer), found once mounted
+  const [target, setTarget] = useState<HTMLElement | null>(null);
+  useEffect(() => {
+    if (!actionsTarget) return;
+    // next frame: the target (rendered after the form, in the modal's footer) is in the DOM
+    const frame = requestAnimationFrame(() => setTarget(document.getElementById(actionsTarget)));
+    return () => cancelAnimationFrame(frame);
+  }, [actionsTarget]);
   // the telephone is a text input with the phone icon (the Astryx TextInput has no tel type)
   const uid = useId();
   const multi = steps.length > 1;
@@ -193,6 +216,8 @@ export function SiteForm({id, formId, eyebrow, eyebrowStyle = 'eyebrow', title, 
           return;
         }
         setStatus('sent');
+        // tells the host (a modal) the form is done: it can offer a « close » button in its place
+        root.current?.dispatchEvent(new CustomEvent(SITE_FORM_SENT_EVENT, {bubbles: true, detail: {id}}));
         requestAnimationFrame(() => root.current?.focus());
         return;
       }
@@ -271,11 +296,24 @@ export function SiteForm({id, formId, eyebrow, eyebrowStyle = 'eyebrow', title, 
   };
 
   const current = steps[step];
+  const label = last ? (status === 'sending' ? l.sending : submitLabel) : l.next;
+  const actions = (
+    <>
+      {multi && step > 0 ? <Button label={l.back} variant="ghost" type="button" onClick={() => goTo(step - 1)} className={styles.button} /> : null}
+      {target ? (
+        // outside the form element (a modal's footer): a simple button, never a split one there;
+        // submits the form through its own handler
+        <Button label={label} variant="primary" type="button" isDisabled={status === 'sending'} onClick={() => formRef.current?.requestSubmit()} className={styles.button} />
+      ) : (
+        <Button label={label} variant="primary" arrow type="submit" isDisabled={status === 'sending'} className={`${styles.button} ${styles.submit}`} />
+      )}
+    </>
+  );
   return (
     <VStack ref={root} tabIndex={-1} className={styles.root} data-framed={framed ? 'true' : undefined}>
       <VStack gap={2} className={styles.card}>
         {heading}
-        <form className={styles.form} onSubmit={submit} noValidate aria-labelledby={title ? undefined : `${uid}-step`} data-steps={steps.length}>
+        <form ref={formRef} className={styles.form} onSubmit={submit} noValidate aria-labelledby={title ? undefined : `${uid}-step`} data-steps={steps.length}>
           {multi ? (
             <VStack className={styles.full}>
               <Stepper activeStep={step} label={l.progress} horizontalOptions={{minimumStepWidth: 112, collapsedVariant: 'withLabel'}}>
@@ -300,10 +338,17 @@ export function SiteForm({id, formId, eyebrow, eyebrowStyle = 'eyebrow', title, 
               <Banner status="error" title={failure} />
             </VStack>
           ) : null}
-          <HStack gap={3} wrap="wrap" vAlign="center" className={`${styles.full} ${styles.actions}`}>
-            {multi && step > 0 ? <Button label={l.back} variant="ghost" type="button" onClick={() => goTo(step - 1)} className={styles.button} /> : null}
-            <Button label={last ? (status === 'sending' ? l.sending : submitLabel) : l.next} variant="primary" arrow type="submit" isDisabled={status === 'sending'} className={`${styles.button} ${styles.submit}`} />
-          </HStack>
+          {target ? (
+            <>
+              {/* the visible buttons are in the modal's footer; this one keeps Enter working */}
+              <button type="submit" className={styles.trap} tabIndex={-1} aria-hidden="true" />
+              {createPortal(actions, target)}
+            </>
+          ) : (
+            <HStack gap={3} wrap="wrap" vAlign="center" className={`${styles.full} ${styles.actions}`}>
+              {actions}
+            </HStack>
+          )}
         </form>
       </VStack>
     </VStack>

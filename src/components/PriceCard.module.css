@@ -1,11 +1,13 @@
-/* PriceCard — single price card (mockups 08, 09). The layout follows the width of the page column. */
+/*
+ * PriceCard — single price card (mockups 08, 09). It fills its column: the column is the only
+ * width authority (the mockups' 900 px cap and centring are gone). Under 720 px of column the
+ * two internal columns stack.
+ */
 .host { width: 100%; container-type: inline-size; }
 .card {
   display: grid;
   grid-template-columns: 1.4fr 1fr;
   width: 100%;
-  max-width: 900px;
-  margin-inline: auto;
   background: light-dark(var(--color-background-surface), var(--color-background-card));
   border: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.12));
   overflow: hidden;
@@ -23,7 +25,7 @@
 .period { font-size: 14px; color: var(--color-text-disabled); }
 .mention { font-size: 12px; text-align: center; color: var(--color-text-disabled); }
 @container (max-width: 719px) {
-  .card { grid-template-columns: minmax(0, 1fr); max-width: 600px; }
+  .card { grid-template-columns: minmax(0, 1fr); }
   .side { order: -1; }
 }
 @media (max-width: 639px) { .detail, .side { padding: 24px; } }

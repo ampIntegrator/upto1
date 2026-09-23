@@ -5,8 +5,9 @@
  * PriceCard — the single price card (mockups 08 and 09 « Un prix »): on the left the offer
  * details (eyebrow, dense CheckList with struck-through values, « Valeur totale » line), on the
  * right on a muted background the price (Price 84 px), the full-width split button, the note
- * and the guarantee Callout. 900 px max, two columns 1.4 / 1; when its page column is
- * under 720 px, a single column with the price first (container query). Night via the Section.
+ * and the guarantee Callout. It fills its column (no cap: the column decides), two columns
+ * 1.4 / 1; when its page column is under 720 px, a single column with the price first
+ * (container query). Night via the Section.
  */
 import {HStack, VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
