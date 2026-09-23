@@ -63,7 +63,8 @@ export const orbitaSectionSettings: Field[] = [
     // in words: the colours (swatches) come next, only for a light or night background
     admin: {layout: 'horizontal'},
   },
-  // 2a. light: tint and texture, side by side
+  // 2a. light: the shade and the texture, composed in one preview (BackgroundComposer drives both;
+  // the texture field stays in the form, hidden, so its value is kept and saved)
   {
     type: 'row',
     admin: {condition: when('mode', 'light')},
@@ -71,7 +72,7 @@ export const orbitaSectionSettings: Field[] = [
       {
         name: 'tint',
         type: 'radio',
-        label: T.settings.tint,
+        label: false,
         required: true,
         options: [
           {label: T.settings.tintBody, value: 'body'},
@@ -80,7 +81,7 @@ export const orbitaSectionSettings: Field[] = [
         ],
         // condition repeated on the field (not only on the row): without it, Payload makes
         // the column required in the database, and a night or media section could no longer be saved
-        admin: {width: '50%', condition: when('mode', 'light'), components: swatches({body: 'body', light: 'light', highlight: 'highlight'})},
+        admin: {width: '100%', condition: when('mode', 'light'), components: {Field: {path: '@/fields/BackgroundComposer#BackgroundComposer'}}},
       },
       {
         name: 'texture',
@@ -93,7 +94,7 @@ export const orbitaSectionSettings: Field[] = [
           {label: T.settings.textureDots, value: 'dots'},
           {label: T.settings.textureLosange, value: 'losange'},
         ],
-        admin: {width: '50%'},
+        admin: {hidden: true},
       },
     ],
   },

@@ -33,9 +33,8 @@ function swatchBackground(kind: SwatchKind, silo: (typeof SILOS)[SiloName]): str
     // the silo's primary at 5 % on the page background (--color-background-light)
     case 'light':
       return mix(silo.primary, silo.bg, 5);
-    // highlight at 5 % on the page background, with a strip of the highlight so it reads at swatch size
     case 'highlight':
-      return `linear-gradient(to top, ${silo.highlight} 0 4px, ${mix(silo.highlight, silo.bg, 5)} 4px)`;
+      return mix(silo.highlight, silo.bg, 5);
     case 'night':
       return silo.night;
     case 'night-halo':
@@ -81,17 +80,16 @@ export function SwatchRadio(props: SwatchRadioProps) {
               title={text}
               disabled={readOnly}
               onClick={() => setValue(o.value)}
+              // the same tile as the background composer's: a thin ring when selected, no pill
               style={{
-                width: 150,
-                height: 50,
+                width: 120,
+                height: 48,
                 padding: 0,
                 cursor: readOnly ? 'default' : 'pointer',
                 background: swatchBackground(kind, silo),
-                border: '1px solid var(--theme-elevation-200)',
-                borderRadius: selected ? 25 : 0,
-                outline: selected ? '2px solid var(--theme-text)' : 'none',
-                outlineOffset: 2,
-                transition: 'border-radius .2s',
+                border: `1px solid ${selected ? 'var(--theme-text)' : 'var(--theme-elevation-250)'}`,
+                borderRadius: 3,
+                boxShadow: selected ? '0 0 0 2px var(--theme-bg), 0 0 0 3px var(--theme-text)' : 'none',
               }}
             />
           );

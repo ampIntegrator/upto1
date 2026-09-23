@@ -1,5 +1,6 @@
 import { SectionGroupHeading as SectionGroupHeading_516db130f92e5851f578df53b6aaa2cf } from '@/fields/SectionGroupHeading'
 import { IconPicker as IconPicker_8bfb3e3bce55055cefcbdba58b426cf6 } from '@/fields/IconPicker'
+import { BackgroundComposer as BackgroundComposer_184663dbb823c9178f52bc18003617b9 } from '@/fields/BackgroundComposer'
 import { SwatchRadio as SwatchRadio_0db4766985603351e805e768f67fbd0c } from '@/fields/SwatchRadio'
 import { BlockNameField as BlockNameField_4061162db6db9be055e809ce229cfb8b } from '@/fields/sections/BlockNameField'
 import { RscEntryLexicalCell as RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
@@ -48,6 +49,7 @@ import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } f
 export const importMap = {
   "@/fields/SectionGroupHeading#SectionGroupHeading": SectionGroupHeading_516db130f92e5851f578df53b6aaa2cf,
   "@/fields/IconPicker#IconPicker": IconPicker_8bfb3e3bce55055cefcbdba58b426cf6,
+  "@/fields/BackgroundComposer#BackgroundComposer": BackgroundComposer_184663dbb823c9178f52bc18003617b9,
   "@/fields/SwatchRadio#SwatchRadio": SwatchRadio_0db4766985603351e805e768f67fbd0c,
   "@/fields/sections/BlockNameField#BlockNameField": BlockNameField_4061162db6db9be055e809ce229cfb8b,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
