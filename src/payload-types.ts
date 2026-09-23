@@ -247,6 +247,15 @@ export interface Page {
   sections?:
     | (
         | {
+            /**
+             * Identifier for an #anchor link: lowercase letters, digits, hyphens.
+             */
+            anchor?: string | null;
+            /**
+             * On save, the section is copied to “Shared sections” and the page references it.
+             */
+            saveAsShared?: boolean | null;
+            sharedTitle?: string | null;
             mode: 'light' | 'dark' | 'media';
             tint?: ('body' | 'highlight') | null;
             texture?: ('none' | 'grid' | 'dots' | 'losange') | null;
@@ -262,21 +271,12 @@ export interface Page {
             overlay?: number | null;
             spacingTop?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
             spacingBottom?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
-            /**
-             * Identifier for an #anchor link: lowercase letters, digits, hyphens.
-             */
-            anchor?: string | null;
             gapX?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
             gapY?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
             /**
              * Below 768 px, between all stacked blocks.
              */
             gapYMobile?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
-            /**
-             * On save, the section is copied to “Shared sections” and the page references it.
-             */
-            saveAsShared?: boolean | null;
-            sharedTitle?: string | null;
             /**
              * Each row splits the width into columns whose widths add up to 12. A column can stay empty. Below 768 px, columns go full width, in the section’s mobile order (phone button); empty columns are hidden there.
              */
@@ -1939,6 +1939,10 @@ export interface Form {
 export interface Section {
   id: number;
   title: string;
+  /**
+   * Identifier for an #anchor link: lowercase letters, digits, hyphens.
+   */
+  anchor?: string | null;
   mode: 'light' | 'dark' | 'media';
   tint?: ('body' | 'highlight') | null;
   texture?: ('none' | 'grid' | 'dots' | 'losange') | null;
@@ -1954,10 +1958,6 @@ export interface Section {
   overlay?: number | null;
   spacingTop?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
   spacingBottom?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
-  /**
-   * Identifier for an #anchor link: lowercase letters, digits, hyphens.
-   */
-  anchor?: string | null;
   gapX?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
   gapY?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
   /**
@@ -3277,6 +3277,9 @@ export interface PagesSelect<T extends boolean = true> {
         section?:
           | T
           | {
+              anchor?: T;
+              saveAsShared?: T;
+              sharedTitle?: T;
               mode?: T;
               tint?: T;
               texture?: T;
@@ -3289,12 +3292,9 @@ export interface PagesSelect<T extends boolean = true> {
               overlay?: T;
               spacingTop?: T;
               spacingBottom?: T;
-              anchor?: T;
               gapX?: T;
               gapY?: T;
               gapYMobile?: T;
-              saveAsShared?: T;
-              sharedTitle?: T;
               rows?:
                 | T
                 | {
@@ -4036,6 +4036,7 @@ export interface PagesSelect<T extends boolean = true> {
  */
 export interface SectionsSelect<T extends boolean = true> {
   title?: T;
+  anchor?: T;
   mode?: T;
   tint?: T;
   texture?: T;
@@ -4048,7 +4049,6 @@ export interface SectionsSelect<T extends boolean = true> {
   overlay?: T;
   spacingTop?: T;
   spacingBottom?: T;
-  anchor?: T;
   gapX?: T;
   gapY?: T;
   gapYMobile?: T;

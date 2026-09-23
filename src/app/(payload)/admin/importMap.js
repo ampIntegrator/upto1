@@ -1,4 +1,5 @@
 import { IconPicker as IconPicker_8bfb3e3bce55055cefcbdba58b426cf6 } from '@/fields/IconPicker'
+import { SectionGroupHeading as SectionGroupHeading_516db130f92e5851f578df53b6aaa2cf } from '@/fields/SectionGroupHeading'
 import { SwatchRadio as SwatchRadio_0db4766985603351e805e768f67fbd0c } from '@/fields/SwatchRadio'
 import { BlockNameField as BlockNameField_4061162db6db9be055e809ce229cfb8b } from '@/fields/sections/BlockNameField'
 import { RscEntryLexicalCell as RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
@@ -23,6 +24,7 @@ import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 }
 import { SiloPicker as SiloPicker_1515c7fdb18058117363e43d30ea829f } from '@/fields/SiloPicker'
 import { PreviewLayoutMenu as PreviewLayoutMenu_8bc0db9cc336073992886dac05ab50e1 } from '@/fields/PreviewLayoutMenu'
 import { ViewOnSiteButton as ViewOnSiteButton_49045659f5ae3e3086787cae8762c95f } from '@/fields/ViewOnSiteButton'
+import { GroupHeading as GroupHeading_ac78f512e9389f1d44ac2119ef98c786 } from '@/fields/sections/GroupHeading'
 import { BlocksFeatureClient as BlocksFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { HorizontalRuleFeatureClient as HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { UploadFeatureClient as UploadFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
@@ -46,6 +48,7 @@ import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } f
 /** @type import('payload').ImportMap */
 export const importMap = {
   "@/fields/IconPicker#IconPicker": IconPicker_8bfb3e3bce55055cefcbdba58b426cf6,
+  "@/fields/SectionGroupHeading#SectionGroupHeading": SectionGroupHeading_516db130f92e5851f578df53b6aaa2cf,
   "@/fields/SwatchRadio#SwatchRadio": SwatchRadio_0db4766985603351e805e768f67fbd0c,
   "@/fields/sections/BlockNameField#BlockNameField": BlockNameField_4061162db6db9be055e809ce229cfb8b,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
@@ -70,6 +73,7 @@ export const importMap = {
   "@/fields/SiloPicker#SiloPicker": SiloPicker_1515c7fdb18058117363e43d30ea829f,
   "@/fields/PreviewLayoutMenu#PreviewLayoutMenu": PreviewLayoutMenu_8bc0db9cc336073992886dac05ab50e1,
   "@/fields/ViewOnSiteButton#ViewOnSiteButton": ViewOnSiteButton_49045659f5ae3e3086787cae8762c95f,
+  "@/fields/sections/GroupHeading#GroupHeading": GroupHeading_ac78f512e9389f1d44ac2119ef98c786,
   "@payloadcms/richtext-lexical/client#BlocksFeatureClient": BlocksFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#HorizontalRuleFeatureClient": HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#UploadFeatureClient": UploadFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,

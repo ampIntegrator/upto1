@@ -17,6 +17,12 @@ export const sectionsText = texts({
   },
   settings: {
     collapsible: {fr: 'Réglages de la section', en: 'Section settings'},
+    // headings of the setting groups (a rule and a title, nothing stored)
+    groupAnchor: {fr: 'Ancre et sauvegarde', en: 'Anchor and saving'},
+    groupBackground: {fr: 'Fond de la section', en: 'Section background'},
+    groupEdge: {fr: 'Liseré', en: 'Edge line'},
+    groupSpacing: {fr: 'Espaces intérieurs', en: 'Inner spacing'},
+    groupGaps: {fr: 'Écarts de la grille', en: 'Grid gaps'},
     background: {fr: 'Fond', en: 'Background'},
     backgroundLight: {fr: 'Clair', en: 'Light'},
     backgroundDark: {fr: 'Nuit', en: 'Night'},

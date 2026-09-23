@@ -1,13 +1,14 @@
 import {getTranslation} from '@payloadcms/translations';
 import type {Block, Condition, Field, PayloadRequest} from 'payload';
 
-import {tr} from '@/i18n/admin/languages';
+import {type Text, tr} from '@/i18n/admin/languages';
 import {sectionsText as T} from '@/i18n/admin/sections';
 
 import {BLOCK_NAME_MAX} from './blockName';
 import {type ContentBlock, labelMap, maxSpanMap, minSpanMap} from './contentBlock';
 import {EMPTY_SLUG, emptyBlock} from './emptyBlock';
 import {SECTION_GAP_OPTIONS, SITE_GAP} from './gaps';
+import {sectionGroup} from './group';
 import {DEFAULT_SPACING, type PresetRow, SPACING_OPTIONS, SPAN_OPTIONS, toSpan} from './grid';
 import {rowWidthError, tooNarrowError, tooWideError} from './validation';
 
@@ -37,6 +38,8 @@ export type SectionFieldsOptions = {
   condition?: Condition;
   /** Thumbnails that create a row with blocks already placed (builder option). */
   presetRows?: PresetRow[];
+  /** The host's group heading component (`path#Export`); without it, the neutral one. */
+  groupHeading?: string;
 };
 
 const getByPath = (data: unknown, path: (number | string)[]): unknown => path.reduce<unknown>((o, k) => (o && typeof o === 'object' ? (o as Record<string, unknown>)[String(k)] : undefined), data);
@@ -138,29 +141,48 @@ export function rowsField(blocks: ContentBlock[], condition?: Condition, presetR
 }
 
 /**
- * A section's fields, in two framed blocks: « Section settings » (the host's settings
- * first, then spacing, anchor, gaps and sharing), then the rows.
+ * A section's fields, in two framed blocks: « Section settings », then the rows. The settings are
+ * grouped, each group under a heading with a rule (`sectionGroup`, presentation only): the anchor
+ * and the sharing, the host's settings (its own headings, options.settings), then the spacing and
+ * the gaps. `groupHeading`: the host's heading component (an icon before the title).
  */
-export function sectionFields({blocks, settings = [], shareable = false, condition, presetRows = []}: SectionFieldsOptions): Field[] {
+export function sectionFields({blocks, settings = [], shareable = false, condition, presetRows = [], groupHeading}: SectionFieldsOptions): Field[] {
+  const group = (o: {name: string; label: Text; icon?: string; first?: boolean}) => sectionGroup({...o, component: groupHeading, condition});
+  const anchorField: Field = {
+    name: 'anchor',
+    type: 'text',
+    label: T.settings.anchor,
+    admin: {width: shareable ? '34%' : '100%', description: T.settings.anchorDescription},
+    validate: (value: unknown, {req}: {req: PayloadRequest}) => !value || (typeof value === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)) || tr(T.validation.anchor, req.i18n?.language),
+  };
   const common: Field[] = [
+    // the anchor and, on a page's section, the sharing
+    group({name: 'groupAnchor', label: T.settings.groupAnchor, first: true}),
+    {
+      type: 'row',
+      admin: {condition},
+      fields: shareable
+        ? [
+            anchorField,
+            {name: 'saveAsShared', type: 'checkbox', label: T.settings.saveAsShared, defaultValue: false, admin: {width: '33%', description: T.settings.saveAsSharedDescription}},
+            {name: 'sharedTitle', type: 'text', label: T.settings.sharedTitle, admin: {width: '33%', condition: whenChecked('saveAsShared')}},
+          ]
+        : [anchorField],
+    },
+    // the host's settings, with their own group headings (background, edge line…)
     ...settings,
-    // spacing and anchor
+    // inner spacing, above and below the section
+    group({name: 'groupSpacing', label: T.settings.groupSpacing, icon: 'obj-size-increase'}),
     {
       type: 'row',
       admin: {condition},
       fields: [
-        {name: 'spacingTop', type: 'select', label: T.settings.spacingTop, defaultValue: DEFAULT_SPACING, options: SPACING_OPTIONS, admin: {width: '33%'}},
-        {name: 'spacingBottom', type: 'select', label: T.settings.spacingBottom, defaultValue: DEFAULT_SPACING, options: SPACING_OPTIONS, admin: {width: '33%'}},
-        {
-          name: 'anchor',
-          type: 'text',
-          label: T.settings.anchor,
-          admin: {width: '33%', description: T.settings.anchorDescription},
-          validate: (value: unknown, {req}: {req: PayloadRequest}) => !value || (typeof value === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)) || tr(T.validation.anchor, req.i18n?.language),
-        },
+        {name: 'spacingTop', type: 'select', label: T.settings.spacingTop, defaultValue: DEFAULT_SPACING, options: SPACING_OPTIONS, admin: {width: '50%'}},
+        {name: 'spacingBottom', type: 'select', label: T.settings.spacingBottom, defaultValue: DEFAULT_SPACING, options: SPACING_OPTIONS, admin: {width: '50%'}},
       ],
     },
     // grid gaps: inherited from the site setting, unless overridden
+    group({name: 'groupGaps', label: T.settings.groupGaps, icon: 'view-columns'}),
     {
       type: 'row',
       admin: {condition},
@@ -171,16 +193,6 @@ export function sectionFields({blocks, settings = [], shareable = false, conditi
       ],
     },
   ];
-  if (shareable) {
-    common.push({
-      type: 'row',
-      admin: {condition},
-      fields: [
-        {name: 'saveAsShared', type: 'checkbox', label: T.settings.saveAsShared, defaultValue: false, admin: {width: '50%', description: T.settings.saveAsSharedDescription}},
-        {name: 'sharedTitle', type: 'text', label: T.settings.sharedTitle, admin: {width: '50%', condition: whenChecked('saveAsShared')}},
-      ],
-    });
-  }
   return [
     // section settings, framed and collapsible (presentation only: no extra data)
     // closed by default (Nicolas, 17 Sept. 2026): the rows are what editors open a section for

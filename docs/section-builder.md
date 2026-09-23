@@ -19,7 +19,15 @@ Code, in three layers:
 
 A section has two collapsible panels: **Réglages de la section** and **Rangées**. The **Rangées** panel appears once a background is chosen.
 
-Settings are asked in order: the background first, then only the options for that background.
+Settings are grouped, each group under a small heading with a rule (23 September 2026, at Nicolas's
+request), in this order: **Ancre et sauvegarde**, **Fond de la section** (and the options of the
+chosen background), **Liseré**, **Espaces intérieurs**, **Écarts de la grille**. The headings store
+nothing: `sectionGroup()` (`src/fields/sections/group.ts`) builds a `ui` field whose component is
+the neutral `GroupHeading` or, when the host passes one, its own (here
+`src/fields/SectionGroupHeading.tsx`, which adds a Nucleo icon: `obj-size-increase` for the inner
+spacing, `view-columns` for the gaps). The host gives it through `createSectionBuilder({groupHeading})`.
+
+The background is asked first: the rest of the section appears once it is chosen.
 
 | Background | Options |
 |---|---|
@@ -29,8 +37,9 @@ Settings are asked in order: the background first, then only the options for tha
 
 Then, for every background:
 
+- **Anchor**: optional id for `#anchor` links, next to the sharing checkbox.
+- **Edge line** (light backgrounds only): automatic, always or never.
 - **Top and bottom spacing**: 0 to 160 px in steps of 20 (halved below 640 px).
-- **Anchor**: optional id for `#anchor` links.
 - **Grid gaps**: column gap, row gap and mobile vertical gap (0 to 60 px in steps of 10). "Réglage du site" inherits the defaults from Settings › Mise en page.
 - **Share**: saving with "Enregistrer dans les sections partagées" copies the section into the shared collection and replaces it on the page with a reference.
 
