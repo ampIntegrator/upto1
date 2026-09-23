@@ -65,7 +65,7 @@ export function SwatchRadio(props: SwatchRadioProps) {
   return (
     <div className="field-type swatch-radio" style={{marginBottom: 'var(--base)'}}>
       <FieldLabel label={field.label} path={path} required={field.required} />
-      <div role="radiogroup" aria-label={typeof label === 'string' ? label : undefined} style={{display: 'flex', flexWrap: 'wrap', gap: 8}}>
+      <div role="radiogroup" aria-label={typeof label === 'string' ? label : undefined} style={{display: 'flex', gap: 16, width: '100%'}}>
         {options.map((o) => {
           const selected = value === o.value;
           const text = o.label ? String(getTranslation(o.label, i18n)) : String(o.value);
@@ -82,8 +82,9 @@ export function SwatchRadio(props: SwatchRadioProps) {
               onClick={() => setValue(o.value)}
               // the same tile as the background composer's: a thin ring when selected, no pill
               style={{
-                // the night shades (the only use left): 300 × 120, big enough to read the halo
-                width: 300,
+                // the night shades (the only use left): half the row each, 120 px high
+                flex: '1 1 0',
+                minWidth: 0,
                 height: 120,
                 padding: 0,
                 cursor: readOnly ? 'default' : 'pointer',
