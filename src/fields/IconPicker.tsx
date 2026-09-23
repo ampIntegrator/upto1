@@ -74,7 +74,8 @@ export function IconPicker(props: TextFieldClientProps) {
   const label = field.label ? getTranslation(field.label, i18n) : t(fieldsText.icon.label);
 
   return (
-    <div className="field-type">
+    // in a row, a custom field gets no width from Payload: take the whole column (or the row's free share)
+    <div className="field-type" style={{flex: '1 1 0', minWidth: 0, width: '100%'}}>
       <FieldLabel label={label} path={path} required={field.required} />
       <div style={control}>
         <span style={{display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, flex: '0 0 auto', color: Current ? 'var(--theme-text)' : 'var(--theme-elevation-400)'}}>
