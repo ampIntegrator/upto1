@@ -37,8 +37,10 @@ function swatchBackground(kind: SwatchKind, silo: (typeof SILOS)[SiloName]): str
       return mix(silo.highlight, silo.bg, 5);
     case 'night':
       return silo.night;
+    // the site's halo (Section.module.css): the silo's accent glowing from the top centre,
+    // a touch of gold in the bottom right corner
     case 'night-halo':
-      return `radial-gradient(circle at 70% 20%, ${mix(silo.highlight, silo.night, 55)} 0, ${silo.night} 70%)`;
+      return `radial-gradient(80% 130% at 50% -16%, ${mix(silo.primary, silo.night, 30)}, transparent 58%), radial-gradient(70% 120% at 100% 120%, ${mix('#c99016', silo.night, 16)}, transparent 55%), ${silo.night}`;
   }
 }
 
