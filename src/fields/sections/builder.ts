@@ -75,7 +75,7 @@ export function createSectionBuilder({blocks, settings = [], fieldName = 'sectio
       // every section folded when the document opens (inside: settings folded, rows open)
       admin: {description: T.blocks.sectionsDescription, initCollapsed: true},
     },
-    sharedFields: sectionFields({blocks, settings, shareable: false, condition, presetRows}),
+    sharedFields: sectionFields({blocks, settings, shareable: false, condition, presetRows, groupHeading}),
     beforeChange: shared ? [shareSectionsHook({fieldName, collection: shared.collection})] : [],
   };
 }

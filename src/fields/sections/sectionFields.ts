@@ -157,7 +157,7 @@ export function sectionFields({blocks, settings = [], shareable = false, conditi
   };
   const common: Field[] = [
     // the anchor and, on a page's section, the sharing
-    group({name: 'groupAnchor', label: T.settings.groupAnchor, first: true}),
+    group({name: 'groupAnchor', label: T.settings.groupAnchor, icon: 'anchor', first: true}),
     {
       type: 'row',
       admin: {condition},

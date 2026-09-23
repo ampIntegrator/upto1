@@ -49,12 +49,13 @@ const group = (o: {name: string; label: Text; icon?: string; condition?: Conditi
 /** Background of a section: light, night or media, then the settings of that background. */
 export const orbitaSectionSettings: Field[] = [
   // the background and its options
-  group({name: 'groupBackground', label: T.settings.groupBackground}),
+  group({name: 'groupBackground', label: T.settings.groupBackground, icon: 'fill'}),
   // 1. the background (no default value: the question must be asked)
   {
     name: 'mode',
     type: 'radio',
-    label: T.settings.background,
+    // named by its group heading (« Fond de la section »)
+    label: false,
     required: true,
     options: [
       {label: T.settings.backgroundLight, value: 'light'},
@@ -98,13 +99,14 @@ export const orbitaSectionSettings: Field[] = [
     ],
   },
   // the edge line at the top of a light section: its own group
-  group({name: 'groupEdge', label: T.settings.groupEdge, condition: when('mode', 'light')}),
+  group({name: 'groupEdge', label: T.settings.groupEdge, icon: 'table-row-merge-top', condition: when('mode', 'light')}),
   // the edge line at the top of a light section (Nicolas, 21 Sept. 2026: two same-shade backgrounds
   // whose only difference is the texture meet badly without it)
   {
     name: 'edgeTop',
     type: 'radio',
-    label: T.settings.edgeTop,
+    // named by its group heading (« Liseré »)
+    label: false,
     defaultValue: 'auto',
     options: [
       {label: T.settings.edgeTopAuto, value: 'auto'},

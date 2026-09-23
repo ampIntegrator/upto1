@@ -24,7 +24,6 @@ import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 }
 import { SiloPicker as SiloPicker_1515c7fdb18058117363e43d30ea829f } from '@/fields/SiloPicker'
 import { PreviewLayoutMenu as PreviewLayoutMenu_8bc0db9cc336073992886dac05ab50e1 } from '@/fields/PreviewLayoutMenu'
 import { ViewOnSiteButton as ViewOnSiteButton_49045659f5ae3e3086787cae8762c95f } from '@/fields/ViewOnSiteButton'
-import { GroupHeading as GroupHeading_ac78f512e9389f1d44ac2119ef98c786 } from '@/fields/sections/GroupHeading'
 import { BlocksFeatureClient as BlocksFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { HorizontalRuleFeatureClient as HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { UploadFeatureClient as UploadFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
@@ -73,7 +72,6 @@ export const importMap = {
   "@/fields/SiloPicker#SiloPicker": SiloPicker_1515c7fdb18058117363e43d30ea829f,
   "@/fields/PreviewLayoutMenu#PreviewLayoutMenu": PreviewLayoutMenu_8bc0db9cc336073992886dac05ab50e1,
   "@/fields/ViewOnSiteButton#ViewOnSiteButton": ViewOnSiteButton_49045659f5ae3e3086787cae8762c95f,
-  "@/fields/sections/GroupHeading#GroupHeading": GroupHeading_ac78f512e9389f1d44ac2119ef98c786,
   "@payloadcms/richtext-lexical/client#BlocksFeatureClient": BlocksFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#HorizontalRuleFeatureClient": HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#UploadFeatureClient": UploadFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
