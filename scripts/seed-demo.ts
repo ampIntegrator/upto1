@@ -33,6 +33,30 @@ const LOREM = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do e
 const LOREM_2 = 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
 const LOREM_LONG = `${LOREM}\n\n${LOREM_2} Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.`;
 
+/**
+ * Lexical documents written by hand below (doc, textBox, tabs) only carry a type and children:
+ * the site renders them, but the admin editor needs every node complete (« Invalid indent value »
+ * otherwise). Fills the defaults of every rich text found in the data, before saving.
+ */
+function completeLexical(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(completeLexical);
+  if (!value || typeof value !== 'object') return value;
+  const o = value as Record<string, unknown>;
+  if (o.root && typeof o.root === 'object' && (o.root as {type?: unknown}).type === 'root') return {root: completeNode(o.root as Record<string, unknown>)};
+  return Object.fromEntries(Object.entries(o).map(([k, v]) => [k, completeLexical(v)]));
+}
+function completeNode(n: Record<string, unknown>): Record<string, unknown> {
+  const base: Record<string, unknown> = {version: 1, ...n};
+  if (n.type === 'text') return {detail: 0, format: 0, mode: 'normal', style: '', ...base};
+  if (n.type === 'linebreak' || n.type === 'block') return base;
+  const el: Record<string, unknown> = {format: '', indent: 0, direction: 'ltr', ...base};
+  if (n.type === 'paragraph' || n.type === 'heading' || n.type === 'listitem') Object.assign(el, {textFormat: 0, textStyle: '', ...el});
+  if (n.type === 'list') Object.assign(el, {listType: n.listType ?? 'bullet', start: 1, tag: n.listType === 'number' ? 'ol' : 'ul', ...el});
+  if (n.type === 'listitem') Object.assign(el, {value: 1, ...el});
+  if (Array.isArray(n.children)) el.children = (n.children as Record<string, unknown>[]).map(completeNode);
+  return el;
+}
+
 const column = (span: number, block?: Record<string, unknown>) => ({span: String(span), contents: block ? [block] : []});
 const row = (...columns: ReturnType<typeof column>[]) => ({columns});
 type Row = ReturnType<typeof row>;
@@ -270,8 +294,9 @@ async function main() {
   for (const p of pages) {
     const existing = (await payload.find({collection: 'pages', where: {slug: {equals: p.slug}}, limit: 1, depth: 0})).docs[0];
     const data = {title: p.title, slug: p.slug, hero: {variant: 'page-glow', eyebrow: 'Démo', title: p.title, lead: LOREM, breadcrumbMode: 'hide'}, sections: p.sections};
-    if (existing) await payload.update({collection: 'pages', id: existing.id, data: data as never});
-    else await payload.create({collection: 'pages', data: data as never});
+    const complete = completeLexical(data);
+    if (existing) await payload.update({collection: 'pages', id: existing.id, data: complete as never});
+    else await payload.create({collection: 'pages', data: complete as never});
     log(`page « ${p.slug} » ${existing ? 'mise à jour' : 'créée'} : http://localhost:3000/${p.slug}`);
   }
   // 3 · blog: a demo author and a demo post (every prose element and figure)
@@ -313,8 +338,8 @@ async function main() {
     ]),
   };
   const postData = {title: 'Du devis à la facturation : <span>industrialiser</span> le cycle commercial', slug: postSlug, excerpt: 'Entre l’estimation envoyée et le paiement encaissé, le temps se perd. Méthode en trois leviers, chiffres à l’appui.', cover: analyse, coverCaption: 'Un cycle commercial piloté de bout en bout.', author: author.id, category: category?.id, publishedAt: new Date().toISOString(), content};
-  if (oldPost) await payload.update({collection: 'posts', id: oldPost.id, data: postData as never});
-  else await payload.create({collection: 'posts', data: postData as never});
+  if (oldPost) await payload.update({collection: 'posts', id: oldPost.id, data: completeLexical(postData) as never});
+  else await payload.create({collection: 'posts', data: completeLexical(postData) as never});
   const blogSettings = await payload.findGlobal({slug: 'blog', depth: 1});
   log(`article de démo : http://localhost:3000/${blogSettings.slug}/${postSlug}`);
 
@@ -360,8 +385,8 @@ async function main() {
         cardResult: '−68 % délai',
       },
     };
-  if (oldCase) await payload.update({collection: 'case-studies', id: oldCase.id, data: caseData as never});
-  else await payload.create({collection: 'case-studies', data: caseData as never});
+  if (oldCase) await payload.update({collection: 'case-studies', id: oldCase.id, data: completeLexical(caseData) as never});
+  else await payload.create({collection: 'case-studies', data: completeLexical(caseData) as never});
   const portfolio = await payload.findGlobal({slug: 'portfolio', depth: 1});
   log(`réalisation de démo : http://localhost:3000/${portfolio.slug}/${caseSlug}`);
   process.exit(0);

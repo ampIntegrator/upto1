@@ -1,4 +1,4 @@
-import type {Condition, Field} from 'payload';
+import type {Field} from 'payload';
 
 import {buttonGroupBlock} from '@/fields/blocks/buttonGroupBlock';
 import {FIGURE_BLOCKS} from '@/fields/blocks/figureBlocks';
@@ -19,9 +19,8 @@ import {tabsBlock} from '@/fields/blocks/tabsBlock';
 import {testimonialBlock} from '@/fields/blocks/testimonialBlock';
 import {textBoxBlock} from '@/fields/blocks/textBoxBlock';
 import {createSectionBuilder} from '@/fields/sections/builder';
-import {sectionGroup} from '@/fields/sections/group';
+import {GROUP_HEADING, groupHeading} from '@/fields/groupHeading';
 import {collectionBlockText} from '@/i18n/admin/blocks';
-import type {Text} from '@/i18n/admin/languages';
 import {sectionsText as T} from '@/i18n/admin/sections';
 
 /**
@@ -42,9 +41,8 @@ const modeChosen = when('mode', 'light', 'dark', 'media');
 /** A radio shown as colour swatches (name on hover): option value → swatch kind. */
 const swatches = (map: Record<string, string>) => ({Field: {path: '@/fields/SwatchRadio#SwatchRadio', clientProps: {swatches: map}}});
 
-/** the site's heading for a group of settings: the rule, the title and an optional Nucleo icon */
-export const GROUP_HEADING = '@/fields/SectionGroupHeading#SectionGroupHeading';
-const group = (o: {name: string; label: Text; icon?: string; condition?: Condition}) => sectionGroup({...o, component: GROUP_HEADING});
+/** the site's heading for a group of settings: the rule, the title and an optional Nucleo icon (src/fields/groupHeading.ts) */
+const group = groupHeading;
 
 /** Background of a section: light, night or media, then the settings of that background. */
 export const orbitaSectionSettings: Field[] = [

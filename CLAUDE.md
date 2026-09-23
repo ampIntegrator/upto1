@@ -57,6 +57,12 @@ will need a data-dependent `minSpan(data)` on the server (not done yet).
 
 `consignes.md` is Nicolas's own scratch file: read it, never write to it.
 
+Admin forms (23 Sept. 2026): fields grouped under headings with a rule and a Nucleo icon
+(`groupHeading()` in `src/fields/groupHeading.ts`, neutral core in `src/fields/sections/group.ts`),
+vertical rhythm in `src/app/(payload)/custom.scss`. New `ui` fields outside a block need a `pnpm dev`
+restart (Payload caches its client config). Never delete a document open in the admin (seeds update
+in place): the edit view loops and locks SQLite.
+
 Last handoff (tabs, button group, row layouts, done on 17 Sept. 2026): `docs/handoff-2026-09-17.md`.
 It also lists the project rules and known traps: read it before a new column block.
 

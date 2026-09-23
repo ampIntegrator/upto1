@@ -1,6 +1,7 @@
 import type {CollectionConfig} from 'payload';
 
 import {modalButtonFields} from '@/fields/blocks/buttonFields';
+import {groupHeading} from '@/fields/groupHeading';
 import {modalEditor} from '@/fields/editors';
 import {collectionsText as ct} from '@/i18n/admin/collections';
 import {fieldsText} from '@/i18n/admin/fields';
@@ -38,6 +39,7 @@ export const Modals: CollectionConfig = {
   },
   access: {read: () => true},
   fields: [
+    groupHeading({name: 'groupTitle', label: f.groupTitle, icon: 'text-highlight-3', first: true}),
     {
       type: 'row',
       fields: [
@@ -45,6 +47,7 @@ export const Modals: CollectionConfig = {
         {name: 'title', type: 'text', label: f.title, localized: true, required: true, admin: {width: '66%'}},
       ],
     },
+    groupHeading({name: 'groupDisplay', label: f.groupDisplay, icon: 'sliders'}),
     {
       type: 'row',
       fields: [
@@ -87,7 +90,8 @@ export const Modals: CollectionConfig = {
         },
       ],
     },
-    {name: 'body', type: 'richText', label: f.body, localized: true, editor: modalEditor, admin: {description: f.bodyDescription}},
+    groupHeading({name: 'groupBody', label: f.groupBody, icon: 'scroll-text'}),
+    {name: 'body', type: 'richText', label: false, localized: true, editor: modalEditor, admin: {description: f.bodyDescription}},
     {
       name: 'buttons',
       type: 'array',

@@ -27,6 +27,18 @@ the neutral `GroupHeading` or, when the host passes one, its own (here
 `src/fields/SectionGroupHeading.tsx`, which adds a Nucleo icon: `obj-size-increase` for the inner
 spacing, `view-columns` for the gaps). The host gives it through `createSectionBuilder({groupHeading})`.
 
+The same headings structure the densest forms (`groupHeading()` in `src/fields/groupHeading.ts`):
+the text box (Titre, Texte, Disposition), the hero (Texte, Boutons, Fond, Fil d'Ariane), the
+modals (Titre, Affichage, Contenu). Payload caches its client config at start-up: after adding
+such a `ui` field outside a block, restart `pnpm dev`, or the form fails with « Cannot use 'in'
+operator to search for 'hidden' in undefined ».
+
+**Admin rhythm** (`src/app/(payload)/custom.scss`, 23 September 2026): one constant gap between
+fields, room under the help notes and above inputs, list and group titles brought to the group
+heading style (small caps, a rule above) instead of Payload's 20 px titles, checkboxes aligned on
+the input line of their row, the rich text editor framed like a field, air under a block's bar.
+Written against Payload 3.88's class names: check after an update.
+
 The background is asked first: the rest of the section appears once it is chosen.
 
 | Background | Options |

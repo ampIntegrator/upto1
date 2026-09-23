@@ -3,6 +3,7 @@ import type {Block, PayloadRequest} from 'payload';
 
 import {minSpan} from '@/components/content-specs';
 import {columnSpanAt, type ContentBlock} from '@/fields/sections/contentBlock';
+import {groupHeading} from '@/fields/groupHeading';
 import {tr} from '@/i18n/admin/languages';
 import {proseBlockText, textBoxBlockText as t} from '../../i18n/admin/blocks';
 import {tagField} from '../tagField';
@@ -58,6 +59,7 @@ const block: Block = {
         },
       ],
     },
+    groupHeading({name: 'groupTitle', label: t.groups.title, icon: 'text-highlight-3'}),
     {
       type: 'row',
       fields: [
@@ -86,7 +88,8 @@ const block: Block = {
         },
       ],
     },
-    {name: 'content', type: 'richText', label: t.content, localized: true, editor: textBoxEditor, admin: {description: {fr: `${t.contentDescription.fr} ${proseBlockText.tableDescription.fr}`, en: `${t.contentDescription.en} ${proseBlockText.tableDescription.en}`}}},
+    groupHeading({name: 'groupText', label: t.groups.text, icon: 'scroll-text'}),
+    {name: 'content', type: 'richText', label: false, localized: true, editor: textBoxEditor, admin: {description: {fr: `${t.contentDescription.fr} ${proseBlockText.tableDescription.fr}`, en: `${t.contentDescription.en} ${proseBlockText.tableDescription.en}`}}},
     {
       name: 'buttons',
       type: 'array',
@@ -96,6 +99,7 @@ const block: Block = {
       validate: twoAtMost,
       fields: buttonRowFields(),
     },
+    groupHeading({name: 'groupLayout', label: t.groups.layout, icon: 'square-layout-grid-4'}),
     {
       type: 'row',
       fields: [
