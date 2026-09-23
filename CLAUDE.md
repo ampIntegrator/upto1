@@ -76,6 +76,9 @@ being built in the section builder, in a movable window. Brief: `etude-apercu-ra
 It builds on the admin's Live Preview (« Aperçu en direct » and its « Vue » menu, in main since
 17 Sept. 2026): `docs/live-preview.md`.
 
-Handoff ready for Opus (study by Fable, decisions taken on 22 Sept. 2026): links that open a
-modal (« Modales » collection, internal links, `/modale/<slug>` intercepted route):
-`docs/handoff-2026-09-22-modals.md`.
+Modals (done on 22 Sept. 2026): `docs/modals.md` (« Modales » collection, opened over the page by an
+internal link or a button to the anchor `#modale-<slug>`; the page renders the modals it links to,
+closed; free body with an inserted form, form buttons in the footer; buttons everywhere pick their
+target with `linkTarget.ts`: « Adresse » or « Contenu du site »); decisions in `docs/handoff-2026-09-22-modals.md`.
+Internal links of rich texts get their address on the server (`src/lib/links.ts`): use it for any
+new rich text rendered by a client component.

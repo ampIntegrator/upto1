@@ -57,8 +57,8 @@ export const Header: GlobalConfig = {
   fields: [
     {name: 'nav', type: 'blocks', label: headerText.nav, blocks: [LinkBlock, MenuBlock, MegaBlock], maxRows: 6},
     {type: 'row', fields: [
-      linkGroup('login', headerText.login),
-      linkGroup('cta', headerText.cta),
+      linkGroup('login', headerText.login, {plain: true}),
+      linkGroup('cta', headerText.cta, {plain: true}),
     ]},
   ],
 };

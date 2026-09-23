@@ -11,7 +11,8 @@
  * larger text and headings, editorial spacing). Inserted blocks (Lexical BlocksFeature) are
  * rendered by the host through `renderBlock`: RichText knows no site component. Internal
  * links are resolved by the host through `resolveLink` (for instance a post under the blog
- * page); by default « /<slug> ».
+ * page), or carry the address the server wrote on them (`fields.resolvedHref`, rich texts
+ * rendered in client components); by default « /<slug> ».
  */
 import {VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
@@ -44,6 +45,8 @@ type Media = {url?: string | null; alt?: string | null; width?: number | null; h
 
 function linkHref(node: RichTextNode, ctx: Ctx): string {
   const f = node.fields ?? {};
+  // an address written by the server conversion (src/lib/links.ts: text boxes, tabs, modals…)
+  if (f.linkType === 'internal' && typeof f.resolvedHref === 'string') return f.resolvedHref;
   if (f.linkType === 'internal' && f.doc) {
     const resolved = ctx.resolveLink?.({relationTo: f.doc.relationTo, value: f.doc.value});
     if (resolved) return resolved;

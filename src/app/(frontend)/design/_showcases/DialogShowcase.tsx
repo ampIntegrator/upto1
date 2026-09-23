@@ -99,7 +99,7 @@ export default function DialogShowcase() {
 
       <VStack gap={3}>
         <Heading level={3}>Modales du site</Heading>
-        <Text type="body" color="secondary">Les modales écrites dans Payload (« Modales ») s'ouvrent par-dessus la page depuis un lien interne ou un bouton vers /modale/…. Trois cas : une phrase, un texte long à accepter, un formulaire. Boutons du pied simples, style destructif possible.</Text>
+        <Text type="body" color="secondary">Les modales écrites dans Payload (« Modales ») s'ouvrent par-dessus la page depuis un lien interne ou un bouton vers #modale-…. Trois cas : une phrase, un texte long à accepter, un formulaire. Boutons du pied simples, style destructif possible.</Text>
         <Grid columns={{minWidth: 220}} gap={3}>
           {SITE_DEMOS.map((d) => (
             <Card key={d.id} padding={5}>

@@ -45,6 +45,7 @@ import {MEDIA_QUOTE_SLUG} from '@/fields/blocks/mediaQuoteBlock';
 import {TABS_SLUG} from '@/fields/blocks/tabsSlug';
 import {TEXT_BOX_SLUG} from '@/fields/blocks/textBoxSlug';
 import {sections as siteSections} from '@/sections.config';
+import {stampInternalLinks} from '@/lib/links';
 import {hasMobileOrder, mobileRanks} from '@/fields/sections/mobileOrder';
 import {type ColumnSpan, toSpan} from '@/fields/sections/grid';
 import type {NucleoIconKey} from '@/theme/icons/nucleo';
@@ -580,6 +581,8 @@ export async function toSections(blocks: Page['sections'], settings?: Pick<Setti
     else if (b.blockType === 'sharedSection' && b.section && typeof b.section === 'object') sources.push({source: b.section, key});
   });
   sectionsCtx = ctx;
+  // internal links of every rich text (text boxes, tabs… rendered by client components): their address written on them
+  if (ctx.blog && ctx.cases) stampInternalLinks(blocks, {blog: ctx.blog, cases: ctx.cases});
   const list = sources.map((s) => s.source);
   [entryItems, [chosenPosts, chosenCases], chosenForms] = await Promise.all([loadEntryItems(list, ctx), loadChosenEntries(list, ctx), loadChosenForms(list, ctx)]);
   return sources.map((s, i) => ({...toSection(s.source, s.key, site), edgeTop: edgeTop(s.source, sources[i - 1]?.source)}));

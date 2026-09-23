@@ -1,6 +1,25 @@
 # Handoff: links that open a modal (22 September 2026)
 
-> **Status: ready for Opus, nothing built.** Written by Claude Fable for the next session (Claude
+> **Status: done** (Claude Opus, 22 September 2026). Built, migrated (`modals`), tested
+> (`pnpm smoke:modals`, every other smoke test, `test:int`, lint, types) and documented in
+> `docs/modals.md`. What differs from the plan below:
+> - `destructive` was already in the house Button and its showcase: nothing to add. The house
+>   Dialog now hides its close cross when `purpose="required"`.
+> - The slot also needs `@modal/page.tsx` and `@modal/[...catchAll]/page.tsx` (empty): without the
+>   catch-all, a footer button to a page would leave the modal on screen.
+> - Rich texts in text boxes, tabs and key points are rendered by client components, which cannot
+>   take a `resolveLink` function: internal links get their address written on them during the
+>   server conversion instead (`src/lib/links.ts`, `fields.resolvedHref`).
+> - The inserted form lives in the JSON of the rich text: no `modals_rels` table.
+>
+> - **Reworked the same day at Nicolas's request**: the intercepted route changed the page's
+>   address to `/modale/<slug>`, which he found confusing. A modal now opens through an anchor,
+>   `#modale-<slug>`; the page renders the modals it links to, closed (`PageModals`,
+>   `SiteModals`), inside `SitePage` (page silo by construction: `SiloMark` gone). The `@modal`
+>   slot and the intercepted route are gone; `/modale/<slug>` stays for the admin's preview only.
+>   See `docs/modals.md`.
+>
+> **Original status: ready for Opus, nothing built.** Written by Claude Fable for the next session (Claude
 > Opus), from Nicolas's note in `consignes.md` and his answers on 22 September 2026. Every
 > decision is taken (§ Decisions). Read `CLAUDE.md`, `docs/handoff-2026-09-17.md` (project
 > rules and traps) and `docs/forms.md` before touching code. The rules there apply here: French with

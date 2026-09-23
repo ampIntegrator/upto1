@@ -3,6 +3,7 @@ import type {Field, PayloadRequest} from 'payload';
 import {fieldsText} from '@/i18n/admin/fields';
 import {collectionsText as ct} from '@/i18n/admin/collections';
 import {type Text, tr} from '@/i18n/admin/languages';
+import {MODAL_SEGMENT} from '@/lib/modal-paths';
 
 /**
  * The address of a listing (blog, case studies), typed in its settings global: « actualites » puts
@@ -16,7 +17,7 @@ export const LISTING_GLOBALS: {slug: 'blog' | 'portfolio'; name: Text}[] = [
 ];
 
 /** first segments used by the site itself */
-const RESERVED = ['admin', 'api', 'apercu', 'apercus', 'design', 'mise-en-page', 'accueil', 'categorie', 'media', 'fonts', 'next'];
+const RESERVED = ['admin', 'api', 'apercu', 'apercus', 'design', 'mise-en-page', 'accueil', 'categorie', 'media', 'fonts', 'next', MODAL_SEGMENT];
 
 const FORMAT = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -49,10 +50,12 @@ export const listingSlugField = (o: {self: 'blog' | 'portfolio'; label: Text; de
   validate: listingSlugValidate(o.self) as never,
 });
 
-/** A page's slug: the usual format, and not the address of a listing. */
-export const pageSlugValidate = async (value: unknown, {req}: ValidateArgs) => {
+/** A page's slug: the usual format, not the address of a listing, not « modale » at the top level. */
+export const pageSlugValidate = async (value: unknown, {req, siblingData}: ValidateArgs & {siblingData?: {parent?: unknown}}) => {
   const language = req?.i18n?.language;
   if (typeof value !== 'string' || !FORMAT.test(value)) return tr(fieldsText.slug.invalid, language);
+  // a top-level page cannot take the modals' preview address (/modale/<slug> is a site route)
+  if (value === MODAL_SEGMENT && !siblingData?.parent) return tr(fieldsText.slug.reserved, language, {slug: value});
   if (!req?.payload) return true;
   for (const listing of LISTING_GLOBALS) {
     const doc = (await req.payload.findGlobal({slug: listing.slug, depth: 0, req})) as {slug?: string | null};

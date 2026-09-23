@@ -1,8 +1,9 @@
 import type {LivePreviewConfig, PayloadRequest} from 'payload';
+import {modalPath} from '@/lib/modal-paths';
 import {pagePath} from '@/lib/page-paths';
 
 /**
- * Live Preview (Payload, built in): the « Aperçu en direct » tab of pages, posts, case studies and
+ * Live Preview (Payload, built in): the « Aperçu en direct » tab of pages, posts, case studies, modals and
  * the blog and case studies settings shows the site page next to the form, refreshed on each save
  * (server-side mode: the site mounts LivePreviewRefresh, which reloads the route when the admin
  * saves). No drafts: saving publishes, the preview follows.
@@ -17,7 +18,7 @@ async function listingBase(req: PayloadRequest, slug: 'blog' | 'portfolio'): Pro
 }
 
 export const livePreview: LivePreviewConfig & {collections: string[]; globals: string[]} = {
-  collections: ['pages', 'posts', 'case-studies'],
+  collections: ['pages', 'posts', 'case-studies', 'modals'],
   globals: ['blog', 'portfolio'],
   breakpoints: [
     {name: 'mobile', label: 'Mobile', width: 390, height: 844},
@@ -30,6 +31,8 @@ export const livePreview: LivePreviewConfig & {collections: string[]; globals: s
     // a listing's settings: its list, at the address being edited
     if (globalConfig?.slug === 'blog' || globalConfig?.slug === 'portfolio') return slug ? `${base}/${slug}` : null;
     if (collectionConfig?.slug === 'posts') return slug ? `${base}/${await listingBase(req, 'blog')}/${slug}` : null;
+    // a modal: its own address, the modal open over an empty page (no page behind it in the preview)
+    if (collectionConfig?.slug === 'modals') return slug ? `${base}${modalPath(slug)}` : null;
     if (collectionConfig?.slug === 'case-studies') return slug ? `${base}/${await listingBase(req, 'portfolio')}/${slug}` : null;
     // pages: their full address (nested pages, src/lib/page-paths.ts)
     if (!slug) return null;

@@ -7,6 +7,7 @@ import React from 'react';
 
 import {BreadcrumbBand} from '@/components/BreadcrumbBand';
 import {EntryFaq} from '@/components/EntryFaq';
+import {PageModals} from '@/components/PageModals';
 import {PostHeader} from '@/components/PostHeader';
 import {PostLayout} from '@/components/PostLayout';
 import {PostToc} from '@/components/PostToc';
@@ -17,6 +18,7 @@ import {Section} from '@/components/Section';
 import {SitePage} from '@/components/SitePage';
 import {postCard} from '@/lib/cards';
 import {entryFaq} from '@/lib/entries';
+import {stampInternalLinks} from '@/lib/links';
 import {categoryPath, listingPath, plainTitle} from '@/lib/listings';
 import {loadRelated, postHeader} from '@/lib/posts';
 import {getSite, pageSilo, resolveEntryLink, toFooter, toHeader} from '@/lib/site';
@@ -25,6 +27,8 @@ import type {Post} from '@/payload-types';
 
 export async function PostPage({locale, site, post}: {locale: Locale; site: Awaited<ReturnType<typeof getSite>>; post: Post}) {
   const {blog, settings: s} = site;
+  // buttons of the prose figures targeting a content of the site: their address
+  stampInternalLinks(post.content, site);
   const content = post.content as unknown as RichTextDocument | null;
   const category = typeof post.category === 'object' && post.category ? post.category : null;
   const related = await loadRelated(locale, post, blog.relatedCount);
@@ -47,6 +51,7 @@ export async function PostPage({locale, site, post}: {locale: Locale; site: Awai
       </PostLayout>
       <EntryFaq {...blog.faq} items={faq} />
       <RelatedPosts {...blog.related} items={related.map((p) => postCard(p, blog, locale))} more={{label: blog.labels.more, href: listingPath(blog)}} />
+      <PageModals sources={[post.content, post.faq]} locale={locale} />
     </SitePage>
   );
 }

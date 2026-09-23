@@ -13,6 +13,7 @@ import { CaseCategories } from './collections/CaseCategories'
 import { CaseStudies } from './collections/CaseStudies'
 import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
+import { Modals } from './collections/Modals'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Sections } from './collections/Sections'
@@ -67,7 +68,7 @@ export default withoutCollapseMemoryAsync(buildConfig({
     defaultLocale: 'fr',
     fallback: true,
   },
-  collections: [Pages, Sections, Posts, Categories, Authors, CaseStudies, CaseCategories, Media, Users],
+  collections: [Pages, Sections, Modals, Posts, Categories, Authors, CaseStudies, CaseCategories, Media, Users],
   globals: [Settings, Languages, Header, Footer, Blog, Portfolio],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

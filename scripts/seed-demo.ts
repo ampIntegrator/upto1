@@ -1,16 +1,19 @@
 /**
  * Demo pages of the column blocks (pnpm seed:demo): three lorem ipsum pages that use
  * every new block at several widths, with Unsplash images imported into the media
- * library. Re-runnable: the demo pages (slugs demo-*) are deleted and recreated, the
+ * library. Re-runnable: the demo pages (slugs demo-*) are updated in place (never deleted: an
+ * open admin tab would loop), the
  * images are imported once (by file name). Real pages are never touched.
  * Blog: a demo author (« Marie Lefebvre ») and a demo post using every prose element and figure
- * (slug demo-industrialiser-le-cycle-commercial), recreated too. This script never changes the
+ * (slug demo-industrialiser-le-cycle-commercial), updated in place too. This script never changes the
  * settings (the addresses of the blog and the case studies are typed in their settings global).
  * Case studies: the « Vasseur Construction » case study of mockup 23 (slug demo-vasseur-construction)
- * in a « Rénovation » category (created once), recreated too.
+ * in a « Rénovation » category (created once), updated in place too.
  * Forms: « Demander une démo » (mockup 17) and « Parlons de votre projet » (three steps), found by
  * their list title and updated (their submissions are kept), shown on /demo-contenus (anchor
  * « formulaires »).
+ * Modals: « Offre de lancement », « Conditions générales de vente » (answer required) and « Demander une
+ * démo » (the demo form inside), found by slug (demo-*) and updated, linked from /demo-contenus#modales.
  */
 import config from '@payload-config';
 import {mkdtemp, writeFile} from 'node:fs/promises';
@@ -138,6 +141,67 @@ async function main() {
   const [demoForm, stepsForm] = formIds;
   const form = (id: number, opts: Record<string, unknown> = {}) => ({blockType: 'form', form: id, framed: true, showHeading: true, ...opts});
 
+  // 1c · three demo modals (a sentence, terms to accept, a form), updated in place, linked from /demo-contenus#modales
+  type LexNode = Record<string, unknown>;
+  const lexText = (t: string, format = 0): LexNode => ({type: 'text', text: t, format, detail: 0, mode: 'normal', style: '', version: 1});
+  const lexParagraph = (...children: LexNode[]): LexNode => ({type: 'paragraph', format: '', indent: 0, version: 1, direction: 'ltr', textFormat: 0, textStyle: '', children});
+  const lexHeading = (t: string): LexNode => lexParagraph(lexText(t, 1));
+  const lexRoot = (...children: LexNode[]) => ({root: {type: 'root', format: '', indent: 0, version: 1, direction: 'ltr', children}});
+  const lexModalLink = (id: number, label: string): LexNode => ({type: 'link', version: 3, format: '', indent: 0, direction: 'ltr', fields: {linkType: 'internal', doc: {relationTo: 'modals', value: id}, newTab: false}, children: [lexText(label)]});
+  const modalDocs = [
+    {
+      slug: 'demo-offre',
+      title: 'Offre de lancement',
+      size: 'sm',
+      body: lexRoot(lexParagraph(lexText('Jusqu’au 31 octobre, '), lexText('le premier mois est offert', 1), lexText(' sur toutes les formules.'))),
+      buttons: [
+        {label: 'Plus tard', action: 'close', variant: 'ghost'},
+        {label: 'Voir les tarifs', action: 'link', href: '/demo-tarifs', variant: 'primary'},
+      ],
+    },
+    {
+      slug: 'demo-conditions',
+      title: 'Conditions générales de vente',
+      eyebrow: 'Conditions',
+      size: 'lg',
+      dismiss: 'required',
+      body: lexRoot(...Array.from({length: 8}, (_, i) => [lexHeading(`Article ${i + 1}`), lexParagraph(lexText(`${LOREM} ${LOREM_2}`))]).flat()),
+      buttons: [
+        {label: 'Refuser', action: 'close', variant: 'destructive'},
+        {label: 'J’accepte', action: 'close', variant: 'primary'},
+      ],
+    },
+    {
+      slug: 'demo-demande',
+      title: 'Demander une démo',
+      eyebrow: 'Rappel gratuit',
+      size: 'md',
+      body: lexRoot(
+        lexParagraph(lexText('Laissez vos coordonnées, un conseiller vous rappelle sous 24 h ouvrées.')),
+        {type: 'block', version: 2, format: '', fields: {id: 'demoformblock', blockName: '', blockType: 'modalForm', form: demoForm, showHeading: false}},
+        lexParagraph(lexText('Vos données servent uniquement à vous recontacter.')),
+      ),
+    },
+  ];
+  const modalIds: Record<string, number> = {};
+  for (const data of modalDocs) {
+    const found = (await payload.find({collection: 'modals', where: {slug: {equals: data.slug}}, limit: 1, depth: 0})).docs[0];
+    const doc = found ? await payload.update({collection: 'modals', id: found.id, data: data as never}) : await payload.create({collection: 'modals', data: data as never});
+    modalIds[data.slug] = doc.id;
+    log(`modale ${found ? 'mise à jour' : 'créée'} : ${data.title}`);
+  }
+  const modalsBox = {
+    blockType: 'textBox',
+    title: 'Trois modales',
+    titleTag: 'h2',
+    titleSize: 'heading-1',
+    content: lexRoot(
+      lexParagraph(lexText('Un lien interne vers une modale l’ouvre par-dessus la page : '), lexModalLink(modalIds['demo-offre'], 'une phrase'), lexText(', '), lexModalLink(modalIds['demo-conditions'], 'des conditions à accepter'), lexText(' ou '), lexModalLink(modalIds['demo-demande'], 'un formulaire'), lexText('.')),
+      lexParagraph(lexText('Un bouton dont le lien va vers un « Contenu du site » aussi.')),
+    ),
+    buttons: [{label: 'Demander une démo', kind: 'internal', doc: {relationTo: 'modals', value: modalIds['demo-demande']}, shape: 'split', variant: 'primary', size: 'md'}],
+  };
+
   // 2 · the three pages
   const pages = [
     {
@@ -181,6 +245,7 @@ async function main() {
           row(column(7, form(stepsForm)), column(5, media(chantier, '480'))),
           row(column(4, form(demoForm, {showHeading: false})), column(8, text())),
         ], {anchor: 'formulaires', tint: 'highlight'}),
+        light([row(column(6, modalsBox), column(6, media(bureau, '320')))], {anchor: 'modales'}),
         light([row(column(12, mediaQuote(analyse)))]),
       ],
     },
@@ -200,11 +265,14 @@ async function main() {
       ],
     },
   ];
+  // updated in place, never deleted: a demo page open in the admin (with its live preview) would
+  // otherwise reload in a loop and lock the database (seen on 22 September 2026)
   for (const p of pages) {
-    const existing = await payload.find({collection: 'pages', where: {slug: {equals: p.slug}}, limit: 5});
-    for (const doc of existing.docs) await payload.delete({collection: 'pages', id: doc.id});
-    await payload.create({collection: 'pages', data: {title: p.title, slug: p.slug, hero: {variant: 'page-glow', eyebrow: 'Démo', title: p.title, lead: LOREM, breadcrumbMode: 'hide'}, sections: p.sections} as never});
-    log(`page « ${p.slug} » ${existing.docs.length ? 'recréée' : 'créée'} : http://localhost:3000/${p.slug}`);
+    const existing = (await payload.find({collection: 'pages', where: {slug: {equals: p.slug}}, limit: 1, depth: 0})).docs[0];
+    const data = {title: p.title, slug: p.slug, hero: {variant: 'page-glow', eyebrow: 'Démo', title: p.title, lead: LOREM, breadcrumbMode: 'hide'}, sections: p.sections};
+    if (existing) await payload.update({collection: 'pages', id: existing.id, data: data as never});
+    else await payload.create({collection: 'pages', data: data as never});
+    log(`page « ${p.slug} » ${existing ? 'mise à jour' : 'créée'} : http://localhost:3000/${p.slug}`);
   }
   // 3 · blog: a demo author and a demo post (every prose element and figure)
   const tx = (text: string, format = 0) => ({type: 'text', text, format, detail: 0, mode: 'normal', style: '', version: 1});
@@ -221,8 +289,7 @@ async function main() {
   const author = authorFound.docs[0] ?? (await payload.create({collection: 'authors', data: {name: 'Marie Lefebvre', role: 'Responsable produit · Vidomia', photo: bureau} as never}));
   const category = (await payload.find({collection: 'categories', where: {slug: {equals: 'chiffrage'}}, limit: 1})).docs[0] ?? (await payload.find({collection: 'categories', limit: 1})).docs[0];
   const postSlug = 'demo-industrialiser-le-cycle-commercial';
-  const oldPosts = await payload.find({collection: 'posts', where: {slug: {equals: postSlug}}, limit: 5});
-  for (const doc of oldPosts.docs) await payload.delete({collection: 'posts', id: doc.id});
+  const oldPost = (await payload.find({collection: 'posts', where: {slug: {equals: postSlug}}, limit: 1, depth: 0})).docs[0];
   const content = {
     root: el('root', [
       head('h2', 'Le cycle commercial, ce maillon qui fuit'),
@@ -245,18 +312,16 @@ async function main() {
       fig({blockType: 'ctaBand', variant: 'arrow', title: 'Lire le guide du chiffrage en visite', button: {label: 'En savoir plus', href: '#', shape: 'split', variant: 'high', size: 'md'}}),
     ]),
   };
-  await payload.create({
-    collection: 'posts',
-    data: {title: 'Du devis à la facturation : <span>industrialiser</span> le cycle commercial', slug: postSlug, excerpt: 'Entre l’estimation envoyée et le paiement encaissé, le temps se perd. Méthode en trois leviers, chiffres à l’appui.', cover: analyse, coverCaption: 'Un cycle commercial piloté de bout en bout.', author: author.id, category: category?.id, publishedAt: new Date().toISOString(), content} as never,
-  });
+  const postData = {title: 'Du devis à la facturation : <span>industrialiser</span> le cycle commercial', slug: postSlug, excerpt: 'Entre l’estimation envoyée et le paiement encaissé, le temps se perd. Méthode en trois leviers, chiffres à l’appui.', cover: analyse, coverCaption: 'Un cycle commercial piloté de bout en bout.', author: author.id, category: category?.id, publishedAt: new Date().toISOString(), content};
+  if (oldPost) await payload.update({collection: 'posts', id: oldPost.id, data: postData as never});
+  else await payload.create({collection: 'posts', data: postData as never});
   const blogSettings = await payload.findGlobal({slug: 'blog', depth: 1});
   log(`article de démo : http://localhost:3000/${blogSettings.slug}/${postSlug}`);
 
   // 4 · case studies: the « Vasseur Construction » case study of mockup 23, in a « Rénovation » category
   const renovation = (await payload.find({collection: 'case-categories', where: {slug: {equals: 'renovation'}}, limit: 1})).docs[0] ?? (await payload.create({collection: 'case-categories', data: {title: 'Rénovation', slug: 'renovation'}}));
   const caseSlug = 'demo-vasseur-construction';
-  const oldCases = await payload.find({collection: 'case-studies', where: {slug: {equals: caseSlug}}, limit: 5});
-  for (const doc of oldCases.docs) await payload.delete({collection: 'case-studies', id: doc.id});
+  const oldCase = (await payload.find({collection: 'case-studies', where: {slug: {equals: caseSlug}}, limit: 1, depth: 0})).docs[0];
   const story = {
     root: el('root', [
       para(tx('Vasseur Construction signe une centaine de chantiers par an, de la rénovation énergétique au gros œuvre. Mais derrière chaque affaire signée, un même goulot d’étranglement : le chiffrage. Récit d’un déploiement qui a déverrouillé tout le cycle commercial.')),
@@ -281,9 +346,7 @@ async function main() {
       para(tx('Industrialiser le chiffrage ne consiste pas à retirer l’humain de l’équation, mais à le placer là où il crée le plus de valeur.')),
     ]),
   };
-  await payload.create({
-    collection: 'case-studies',
-    data: {
+  const caseData = {
       title: 'Comment Vasseur Construction a <span>divisé par trois</span> son temps de chiffrage',
       slug: caseSlug,
       excerpt: 'Estimer un chantier de rénovation prenait jusqu’à trois jours. En six semaines, l’équipe a ramené ce délai à quelques heures, sans embaucher, sans rogner sur la précision.',
@@ -296,8 +359,9 @@ async function main() {
         results: [{value: '−68 %', label: 'Temps de chiffrage'}, {value: '×2,4', label: 'Devis envoyés'}],
         cardResult: '−68 % délai',
       },
-    } as never,
-  });
+    };
+  if (oldCase) await payload.update({collection: 'case-studies', id: oldCase.id, data: caseData as never});
+  else await payload.create({collection: 'case-studies', data: caseData as never});
   const portfolio = await payload.findGlobal({slug: 'portfolio', depth: 1});
   log(`réalisation de démo : http://localhost:3000/${portfolio.slug}/${caseSlug}`);
   process.exit(0);

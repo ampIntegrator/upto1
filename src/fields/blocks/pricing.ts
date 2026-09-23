@@ -39,7 +39,8 @@ export const featuresField: Field = {
   ],
 };
 
-export const ctaField: Field = linkGroup('cta', t.cta, {required: true});
+/** a factory: the link target inside holds conditions and validators, never shared */
+export const ctaField = (): Field => linkGroup('cta', t.cta, {required: true});
 
 export const mentionField: Field = {name: 'mention', type: 'text', label: t.mention, localized: true};
 

@@ -9,8 +9,10 @@ import React from 'react';
 
 import {BreadcrumbBand} from '@/components/BreadcrumbBand';
 import {Hero} from '@/components/Hero';
+import {PageModals} from '@/components/PageModals';
 import {PageSections} from '@/components/PageSections';
 import {SitePage} from '@/components/SitePage';
+import {stampInternalLinks} from '@/lib/links';
 import {loadPageByPath, missingTarget} from '@/lib/pages';
 import {pagePath} from '@/lib/page-paths';
 import {toSections} from '@/lib/sections';
@@ -39,6 +41,8 @@ export async function PageRoute({segments}: {segments: string[]}) {
   const locale = await getLocale();
   const [page, site] = await Promise.all([loadPageByPath(toPath(segments), locale), getSite(locale)]);
   if (!page) return redirectOrNotFound(segments);
+  // buttons targeting a content of the site (hero…): their address (the sections get it in toSections)
+  stampInternalLinks(page.hero, site);
   const hero = toHero(page, site.settings);
   // full screen: the breadcrumb is a strip below the hero; page top: it is inside the Hero
   const bandBreadcrumb = hero.variant !== 'page' && showBreadcrumb(page, site.settings);
@@ -48,6 +52,8 @@ export async function PageRoute({segments}: {segments: string[]}) {
       <Hero {...hero} />
       {bandBreadcrumb ? <BreadcrumbBand {...breadcrumbProps(page, site.settings)} /> : null}
       <PageSections sections={await toSections(page.sections, site.settings, sectionsContext(locale, site))} />
+      {/* the modals this page links to, closed until their anchor is reached */}
+      <PageModals sources={[page.hero, page.sections]} locale={locale} />
     </SitePage>
   );
 }

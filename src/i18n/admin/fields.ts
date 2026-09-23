@@ -17,6 +17,12 @@ export const fieldsText = texts({
     label: {fr: 'Libellé', en: 'Label'},
     href: {fr: 'Adresse (URL ou ancre)', en: 'Address (URL or anchor)'},
     icon: {fr: 'Icône (optionnelle)', en: 'Icon (optional)'},
+    kind: {fr: 'Lien vers', en: 'Link to'},
+    kindUrl: {fr: 'Adresse', en: 'Address'},
+    kindInternal: {fr: 'Contenu du site', en: 'Site content'},
+    doc: {fr: 'Contenu (page, article, réalisation, modale)', en: 'Content (page, post, case study, modal)'},
+    hrefRequired: {fr: 'Indiquez l’adresse.', en: 'Give the address.'},
+    docRequired: {fr: 'Choisissez le contenu.', en: 'Choose the content.'},
   },
   slug: {
     label: {fr: 'Slug (adresse)', en: 'Slug (address)'},

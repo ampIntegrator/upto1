@@ -14,8 +14,8 @@ import type {HeroProps} from '@/components/Hero';
 import type {SiteFooterData, SiteHeaderData, SiteNavEntry, SiteStrip} from '@/components/site-nav';
 import {loadEntriesByIds, loadLatestEntries} from '@/lib/entries';
 import {loadFormsByIds} from '@/lib/forms-load';
+import {resolveInternalLink} from '@/lib/links';
 import {pageAncestors} from '@/lib/pages';
-import {pagePath} from '@/lib/page-paths';
 import {type BlogConfig, blogConfig, type CasesConfig, casesConfig, entryPath, listingPath, plainTitle} from '@/lib/listings';
 import type {SectionsContext} from '@/lib/sections';
 import type {NucleoIconKey} from '@/theme/icons/nucleo';
@@ -49,18 +49,9 @@ export async function getSite(locale: Locale) {
   return {settings, blog: blogConfig(blog), cases: casesConfig(portfolio), languages, header, footer, posts: posts.docs};
 }
 
-/** An internal link of a rich text (a post, a case study, a page): its address under its listing, or the page's. */
-export function resolveEntryLink(site: {blog: BlogConfig; cases: CasesConfig}, link: {relationTo?: string; value: unknown}): string | undefined {
-  const slug = link.value && typeof link.value === 'object' && 'slug' in link.value ? String((link.value as {slug: unknown}).slug) : null;
-  if (!slug) return undefined;
-  if (link.relationTo === 'posts') return entryPath(site.blog, slug);
-  if (link.relationTo === 'case-studies') return entryPath(site.cases, slug);
-  // a page: its full address (nested pages)
-  if (link.relationTo === 'pages') return pagePath(link.value as {slug?: string; path?: string});
-  return undefined;
-}
+/** An internal link of a rich text (a post, a case study, a modal, a page): its address (src/lib/links.ts). */
+export const resolveEntryLink = resolveInternalLink;
 
-/** What the section conversion needs from the site: locale, the listings (entry URLs, card labels) and their entry loaders. */
 export function sectionsContext(locale: Locale, site: {blog: BlogConfig; cases: CasesConfig}): SectionsContext {
   return {
     locale,
