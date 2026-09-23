@@ -39,6 +39,7 @@
 .section[data-background='paper'] { background-color: var(--color-background-surface); }
 
 /* ---- light background color: light silo highlight (5 %), combines with textures ---- */
+.section[data-tint='light'] { background-color: var(--color-background-light); }
 .section[data-tint='highlight'] { background-color: var(--color-highlight-light); }
 
 /* ---- vertically centered content (text hero 02, page headers) ---- */

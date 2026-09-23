@@ -16,7 +16,9 @@
  *   edge       : gradient edge line at the bottom (on by default for image and video,
  *                available everywhere)
  *   (no veil or halo: the overlay is the only darkening setting)
- *   tint       : light background color: 'body' (page background) | 'highlight' (light silo highlight)
+ *   tint       : light background color: 'body' (page background, --color-background-body) |
+ *                'light' (silo primary at 5 %, --color-background-light) | 'highlight' (silo
+ *                highlight at 5 %, --color-highlight-light)
  *   spacing    : vertical padding 'none' | 'xs' | 'sm' | 'md' | 'lg'
  *   spacingTop / spacingBottom : separate top and bottom, in pixels (0 to 160 in steps of 20 in admin);
  *                override spacing; halved below 640 px
@@ -35,7 +37,7 @@ import styles from './Section.module.css';
 
 export type SectionBackground = 'light' | 'paper' | 'glow' | 'grid' | 'dots' | 'losange' | 'blueprint' | 'night' | 'night-halo' | 'night-beam' | 'image' | 'video';
 export type SectionSpacing = 'none' | 'xs' | 'sm' | 'md' | 'lg';
-export type SectionTint = 'body' | 'highlight';
+export type SectionTint = 'body' | 'light' | 'highlight';
 
 export type SectionProps = {
   background?: SectionBackground;
