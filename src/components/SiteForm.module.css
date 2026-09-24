@@ -1,7 +1,10 @@
 /* SiteForm — one or two columns of fields decided by the column's width (container query). */
 .root { width: 100%; container-type: inline-size; outline: none; }
 .card { width: 100%; }
+/* framed, the box fills its column's height, level with the boxes beside it */
+.root[data-framed] { height: 100%; }
 .root[data-framed] .card {
+  flex: 1 1 auto;
   padding: var(--spacing-12);
   background: var(--color-background-surface);
   border: var(--border-width) solid light-dark(var(--color-border), rgba(255, 255, 255, 0.12));

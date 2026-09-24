@@ -1,4 +1,4 @@
-import type {CollectionConfig} from 'payload';
+import type {CollectionConfig, Field} from 'payload';
 
 import {heroField} from '@/fields/hero';
 import {computePagePath, pageTreeFields, redirectOldPath} from '@/fields/pageTree';
@@ -44,6 +44,7 @@ export const Pages: CollectionConfig = {
     // a page cannot take the address of a listing (blog, case studies)
     {...slugField, validate: pageSlugValidate as never},
     siloField({name: 'silo', fromSettings: true, admin: {position: 'sidebar', description: ct.pages.fields.siloDescription}}),
-    ...pageTreeFields(),
+    // the « Adresse complète » column of the list also carries a « Voir la page » button (new tab)
+    ...pageTreeFields().map((f) => ('name' in f && f.name === 'path' ? {...f, admin: {...f.admin, components: {Cell: '@/fields/ViewOnSiteCell#PagePathCell'}}} as Field : f)),
   ],
 };

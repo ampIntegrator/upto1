@@ -1,7 +1,11 @@
-/* ProcessSteps — steps panel (mockup 03), sized to its column width (container queries). */
-.host { width: 100%; container-type: inline-size; }
+/*
+ * ProcessSteps — steps panel (mockup 03), sized to its column width (container queries). It fills
+ * its column's height too, so that it lines up with the boxes beside it.
+ */
+.host { width: 100%; height: 100%; container-type: inline-size; }
 .panel {
   display: grid;
+  height: 100%;
   grid-template-columns: repeat(var(--steps, 3), minmax(0, 1fr));
   margin: 0;
   padding: 0;

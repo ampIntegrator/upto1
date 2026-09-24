@@ -1,4 +1,4 @@
-import type {CollectionConfig} from 'payload';
+import type {CollectionConfig, Field} from 'payload';
 
 import {postEditor} from '@/fields/blocks/prose';
 import {entryBelowTab} from '@/fields/entryBelow';
@@ -23,7 +23,7 @@ export const CaseStudies: CollectionConfig = {
   admin: {
     // « Vue » menu next to the Live Preview eye (side by side, top / bottom, dialog)
     components: {edit: {beforeDocumentControls: ['@/fields/PreviewLayoutMenu#PreviewLayoutMenu'], PreviewButton: '@/fields/ViewOnSiteButton#ViewOnSiteButton'}},
-    useAsTitle: 'title', group: ct.groups.cases, defaultColumns: ['title', 'category', 'publishedAt'],
+    useAsTitle: 'title', group: ct.groups.cases, defaultColumns: ['title', 'slug', 'category', 'publishedAt'],
     // button that opens the case study on the site in a new tab, under the case studies' address
     preview: (doc, {req}) => entryUrl(req, 'portfolio', doc.slug),
   },
@@ -93,7 +93,8 @@ export const CaseStudies: CollectionConfig = {
         entryBelowTab({collection: 'case-studies', label: ct.caseStudies.tabs.below, description: ct.caseStudies.tabs.belowDescription}),
       ],
     },
-    slugField,
+    // the « Slug » column of the list shows the case study's address with a « Voir la page » button (new tab)
+    {...slugField, admin: {...slugField.admin, components: {...slugField.admin?.components, Cell: {path: '@/fields/ViewEntryCell#ViewEntryCell', serverProps: {listing: 'portfolio'}}}}} as Field,
     {name: 'category', type: 'relationship', relationTo: 'case-categories', label: f.category, required: true, admin: {position: 'sidebar'}},
     {name: 'publishedAt', type: 'date', label: f.publishedAt, required: true, defaultValue: () => new Date().toISOString(), admin: {position: 'sidebar', date: {pickerAppearance: 'dayOnly', displayFormat: 'd MMMM yyyy'}}},
   ],
