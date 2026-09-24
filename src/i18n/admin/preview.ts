@@ -9,4 +9,6 @@ export const previewText = texts({
   dialog: {fr: 'Fenêtre', en: 'Dialog'},
   close: {fr: 'Fermer l’aperçu', en: 'Close the preview'},
   viewOnSite: {fr: 'Voir la page', en: 'View page'},
+  /** heading of the « view » column of the pages list */
+  viewColumn: {fr: 'Voir', en: 'View'},
 });

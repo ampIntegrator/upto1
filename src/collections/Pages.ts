@@ -6,6 +6,7 @@ import {siloField} from '@/fields/siloField';
 import {pageSlugValidate} from '@/fields/listingSlug';
 import {slugField} from '@/fields/shared';
 import {collectionsText as ct} from '@/i18n/admin/collections';
+import {previewText} from '@/i18n/admin/preview';
 import {pagePath} from '@/lib/page-paths';
 import {sections} from '@/sections.config';
 
@@ -21,7 +22,7 @@ export const Pages: CollectionConfig = {
     components: {edit: {beforeDocumentControls: ['@/fields/PreviewLayoutMenu#PreviewLayoutMenu'], PreviewButton: '@/fields/ViewOnSiteButton#ViewOnSiteButton'}},
     useAsTitle: 'title',
     group: ct.groups.site,
-    defaultColumns: ['title', 'path', 'parent', 'updatedAt'],
+    defaultColumns: ['title', 'path', 'parent', 'updatedAt', 'viewOnSite'],
     // « Voir la page » button (ViewOnSiteButton): opens the site page in a new tab
     preview: (doc, {req}) => `${req.protocol}//${req.host}${pagePath(doc as {slug?: string; path?: string})}`,
   },
@@ -45,5 +46,8 @@ export const Pages: CollectionConfig = {
     {...slugField, validate: pageSlugValidate as never},
     siloField({name: 'silo', fromSettings: true, admin: {position: 'sidebar', description: ct.pages.fields.siloDescription}}),
     ...pageTreeFields(),
+    // list view only: a « Voir la page » button per row, opening the site page in a new tab
+    // (nothing in the edit view, where ViewOnSiteButton does the same)
+    {name: 'viewOnSite', type: 'ui', label: previewText.viewColumn, admin: {components: {Cell: '@/fields/ViewOnSiteCell#ViewOnSiteCell'}}},
   ],
 };
