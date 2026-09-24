@@ -33,7 +33,7 @@ const MAX_MARKS = 10;
 /** the indicator actually shown */
 const shownIndicator = (indicator: CarouselIndicator, pages: number): CarouselIndicator => (indicator !== 'none' && pages > MAX_MARKS ? 'numbers' : indicator);
 
-export type CarouselMore = {label: string; href: string};
+export type CarouselMore = {label: string; href: string; newTab?: boolean};
 
 export type CarouselControlsProps = {
   /** current page, from 0 */
@@ -75,7 +75,7 @@ export function CarouselControls({page, pages, onChange, hrefs, indicator = 'seg
       )}
       {withArrows || more ? (
         <HStack gap={3} vAlign="center" className={styles.end}>
-          {more ? <Button label={more.label} href={more.href} variant="primary" /> : null}
+          {more ? <Button label={more.label} href={more.href} newTab={more.newTab} variant="primary" /> : null}
           {withArrows ? (
             <HStack gap={1.5} className={styles.arrows}>
               <IconButton label={l.prev} icon={<ArrowLeftIcon />} variant="ghost" isDisabled={page <= 0} onClick={() => go(page - 1)} className={styles.arrow} />

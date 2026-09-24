@@ -27,7 +27,7 @@ export type PlanCardProps = {
   nameTag?: TitleTag;
   tagline?: string;
   price: {value: string; currency?: string; period?: string};
-  cta: {label: string; href: string};
+  cta: {label: string; href: string; newTab?: boolean};
   featured?: boolean;
   /** label of the featured card (« Populaire ») */
   badge?: string;
@@ -57,7 +57,7 @@ export function PlanCard({name, nameTag = 'p', tagline, price, cta, featured, ba
         <CheckList items={features} density="dense" trailingDivider={false} />
       </VStack>
       <VStack gap={3} className={styles.foot}>
-        <Button variant="primary" size="lg" block arrow={featured} label={cta.label} href={cta.href} className={featured ? undefined : styles.solid} />
+        <Button variant="primary" size="lg" block arrow={featured} label={cta.label} href={cta.href} newTab={cta.newTab} className={featured ? undefined : styles.solid} />
         {mention ? <Text className={styles.mention}>{mention}</Text> : null}
         {guarantee ? <Callout size="sm" title={guarantee.title} titleTag={guarantee.titleTag} text={guarantee.text} /> : null}
       </VStack>

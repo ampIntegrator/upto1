@@ -39,7 +39,7 @@ export function CtaBand({variant = 'icon', iconKey = 'calculator', title, text, 
         <Text className={styles.title}>{title}</Text>
         {text && variant === 'icon' ? <Text className={styles.sub}>{text}</Text> : null}
       </VStack>
-      {button ? <Button label={button.label} href={button.href} variant={button.variant ?? 'high'} size={button.size ?? 'md'} arrow={button.arrow ?? true} iconKey={button.arrow ? undefined : button.iconKey} className={styles.button} /> : null}
+      {button ? <Button label={button.label} href={button.href} newTab={button.newTab} variant={button.variant ?? 'high'} size={button.size ?? 'md'} arrow={button.arrow ?? true} iconKey={button.arrow ? undefined : button.iconKey} className={styles.button} /> : null}
     </HStack>
   );
 }

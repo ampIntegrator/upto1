@@ -28,4 +28,4 @@ export type ModalTone = 'light' | 'night';
 export type ModalPurpose = 'info' | 'form' | 'required';
 export type ModalButtonVariant = 'primary' | 'secondary' | 'ghost' | 'destructive';
 /** a footer button: closes the modal, or goes to an address (a page, another modal's anchor…) */
-export type ModalButton = {label: string; variant: ModalButtonVariant} & ({action: 'close'} | {action: 'link'; href: string});
+export type ModalButton = {label: string; variant: ModalButtonVariant} & ({action: 'close'} | {action: 'link'; href: string; newTab?: boolean});

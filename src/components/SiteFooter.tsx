@@ -29,6 +29,7 @@ import {Button} from './Button';
 import {Card} from './Card';
 import {Container} from './Container';
 import {Field} from './Field';
+import {newTabProps} from './link-target';
 import type {SiteFooterData, SiteStrip} from './site-nav';
 import styles from './SiteFooter.module.css';
 import {renderTitle} from './TitleText';
@@ -86,7 +87,7 @@ function Articles({articles}: {articles: NonNullable<SiteFooterData['articles']>
       <Container gap={4}>
         <HStack hAlign="between" vAlign="center" gap={6}>
           <Text type="eyebrow-mono" className={styles.eyebrow}>{articles.eyebrow}</Text>
-          <Link href={articles.allHref} color="secondary" weight="semibold" isStandalone className={styles.allLink}>
+          <Link href={articles.allHref} isExternalLink={articles.allNewTab} color="secondary" weight="semibold" isStandalone className={styles.allLink}>
             {articles.allLabel}
             <ArrowRightIcon width={16} height={16} />
           </Link>
@@ -123,7 +124,7 @@ function Brand({brand, strip}: {brand: SiteFooterData['brand']; strip?: SiteStri
           {strip.socials.map((s) => {
             const Glyph = NUCLEO_ICONS[s.iconKey];
             return (
-              <a key={s.label} className={styles.social} href={s.href} aria-label={s.label}>
+              <a key={s.label} className={styles.social} href={s.href} {...newTabProps(s.newTab)} aria-label={s.label}>
                 <Glyph width={16} height={16} />
               </a>
             );
@@ -161,7 +162,7 @@ export function SiteFooter({brand, strip, newsletter, articles, columns, legal, 
                     <VStack as="ul" gap={3} className={styles.pile}>
                       {col.links.map((l) => (
                         <li key={l.href + l.label}>
-                          <Link href={l.href} color="secondary" isStandalone className={styles.pileLink}>
+                          <Link href={l.href} isExternalLink={l.newTab} color="secondary" isStandalone className={styles.pileLink}>
                             <ArrowRightIcon width={14} height={14} />
                             {l.label}
                           </Link>
@@ -188,7 +189,7 @@ export function SiteFooter({brand, strip, newsletter, articles, columns, legal, 
               </HStack>
               <HStack gap={6} vAlign="center" wrap="wrap">
                 {legal.links.map((l) => (
-                  <Link key={l.href + l.label} href={l.href} color="secondary" isStandalone className={styles.legalLink}>{l.label}</Link>
+                  <Link key={l.href + l.label} href={l.href} isExternalLink={l.newTab} color="secondary" isStandalone className={styles.legalLink}>{l.label}</Link>
                 ))}
               </HStack>
             </HStack>
