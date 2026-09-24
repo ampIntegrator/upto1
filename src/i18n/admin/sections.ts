@@ -246,6 +246,10 @@ export const sectionsText = texts({
     },
     rowEmpty: {fr: 'Une rangée contient au moins une colonne.', en: 'A row has at least one column.'},
     oneComponent: {fr: 'Un seul composant par colonne.', en: 'Only one component per column.'},
+    hiddenBlock: {
+      fr: ({name}: {name: string}) => `« ${name} » n’est plus proposé dans les colonnes.`,
+      en: ({name}: {name: string}) => `« ${name} » is no longer offered in columns.`,
+    },
     nameTooLong: {
       fr: ({max}: {max: number}) => `Nom affiché trop long : ${max} caractères au plus.`,
       en: ({max}: {max: number}) => `Display name too long: ${max} characters at most.`,
