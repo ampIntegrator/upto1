@@ -1,10 +1,10 @@
 /* CoverCaption — caption over a cover image, bottom right; a 40 % veil on hover only. */
 .caption {
   position: absolute;
-  right: 16px;
-  bottom: 12px;
+  right: 0;
+  bottom: 0;
   z-index: 3;
-  max-width: calc(100% - 32px);
+  max-width: 100%;
   margin: 0;
   padding: 4px 8px;
   font-family: var(--font-family-mono);
