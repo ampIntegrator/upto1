@@ -14,7 +14,10 @@
  *
  * CollapsibleGroup — several linked items: `type="single"` (strict
  * accordion, only one open) or `"multiple"` (independent), stacked or in two
- * columns. Two groups on the same page are independent.
+ * columns. The two columns are independent stacks (items 1, 3, 5… left, 2, 4, 6… right):
+ * opening an item pushes down its own column only, never the one beside it (Nicolas,
+ * 24 Sept. 2026). Under ~860 px of container they merge into one stack, in order.
+ * Two groups on the same page are independent.
  */
 import {Grid} from '@astryxdesign/core/Grid';
 import {VStack} from '@astryxdesign/core/Stack';
@@ -100,12 +103,31 @@ export function CollapsibleGroup({type = 'single', defaultValue, value, onChange
   return (
     <Group.Provider value={ctx}>
       {columns === 2 ? (
-        <Grid columns={{minWidth: 420, max: 2}} rowGap={4} columnGap={6} align="start">
-          {children}
-        </Grid>
+        <TwoColumns>{children}</TwoColumns>
       ) : (
         <VStack gap={4}>{children}</VStack>
       )}
     </Group.Provider>
+  );
+}
+
+/**
+ * Two independent stacks, filled alternately so the reading order stays 1 2 / 3 4 / 5 6, in an
+ * Astryx Grid that gives them one column each from 2 × 420 px (one column under that). At one
+ * column (same breakpoint, container query in the CSS) the stacks dissolve (`display: contents`)
+ * and the items fall back into one stack, ordered by their index.
+ */
+function TwoColumns({children}: {children: React.ReactNode}) {
+  const items = React.Children.toArray(children);
+  const stack = (parity: number) => (
+    <VStack className={styles.column}>
+      {items.map((child, i) => (i % 2 === parity ? <VStack key={i} className={styles.cell} style={{order: i}}>{child}</VStack> : null))}
+    </VStack>
+  );
+  return (
+    <Grid columns={{minWidth: 420, max: 2}} rowGap={4} columnGap={6} align="start" className={styles.columns}>
+      {stack(0)}
+      {stack(1)}
+    </Grid>
   );
 }
