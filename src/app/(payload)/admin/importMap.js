@@ -22,6 +22,7 @@ import { MetaTitleComponent as MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c08
 import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
+import { SlugField as SlugField_95916a33066184e841b929a11d527ad9 } from '@/fields/SlugField'
 import { SiloPicker as SiloPicker_1515c7fdb18058117363e43d30ea829f } from '@/fields/SiloPicker'
 import { PagePathCell as PagePathCell_e11af8b0705500ee950b990904f910bd } from '@/fields/ViewOnSiteCell'
 import { PreviewLayoutMenu as PreviewLayoutMenu_8bc0db9cc336073992886dac05ab50e1 } from '@/fields/PreviewLayoutMenu'
@@ -73,6 +74,7 @@ export const importMap = {
   "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#MetaImageComponent": MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
+  "@/fields/SlugField#SlugField": SlugField_95916a33066184e841b929a11d527ad9,
   "@/fields/SiloPicker#SiloPicker": SiloPicker_1515c7fdb18058117363e43d30ea829f,
   "@/fields/ViewOnSiteCell#PagePathCell": PagePathCell_e11af8b0705500ee950b990904f910bd,
   "@/fields/PreviewLayoutMenu#PreviewLayoutMenu": PreviewLayoutMenu_8bc0db9cc336073992886dac05ab50e1,

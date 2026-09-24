@@ -49,6 +49,8 @@ export const slugField: Field = {
   admin: {
     position: 'sidebar',
     description: fieldsText.slug.description,
+    // written from the title as it is typed, until edited by hand (src/fields/SlugField.tsx)
+    components: { Field: { path: '@/fields/SlugField#SlugField' } },
   },
   validate: (value: unknown, { req }: { req?: { i18n?: { language?: string } } }) =>
     (typeof value === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)) ||

@@ -118,7 +118,7 @@ export const Modals: CollectionConfig = {
       required: true,
       unique: true,
       index: true,
-      admin: {position: 'sidebar', description: f.slugDescription},
+      admin: {position: 'sidebar', description: f.slugDescription, components: {Field: {path: '@/fields/SlugField#SlugField'}}},
       validate: (value: unknown, {req}: {req?: {i18n?: {language?: string}}}) =>
         (typeof value === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)) || tr(fieldsText.slug.invalid, req?.i18n?.language),
     },
