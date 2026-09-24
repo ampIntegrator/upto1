@@ -1,9 +1,11 @@
 'use client';
 
 /**
- * ViewOnSiteCell — cell of the « Voir » column in the pages list: a « Voir la page » button that
- * opens the page on the site in a new tab, so a page can be checked without opening its edit view.
- * The address comes from the row's full `path` (pagePath), like the edit view's ViewOnSiteButton.
+ * ViewOnSiteCell — list views: the site address of a row, followed by a « Voir la page » button
+ * that opens it in a new tab, so an entry can be checked without opening its edit view.
+ * `PagePathCell` sits on the pages' `path` column (the address is the row's own); posts and case
+ * studies use the server-side ViewEntryCell, which renders `ViewOnSiteLink` once it knows their
+ * listing's address.
  */
 import {Button, ExternalLinkIcon} from '@payloadcms/ui';
 import type {DefaultCellComponentProps} from 'payload';
@@ -13,13 +15,23 @@ import {previewText as t} from '@/i18n/admin/preview';
 import {useAdminText} from '@/i18n/admin/useAdminText';
 import {pagePath} from '@/lib/page-paths';
 
-export function ViewOnSiteCell({rowData}: DefaultCellComponentProps) {
+/** the address as text, then the button (a row without an address shows nothing) */
+export function ViewOnSiteLink({href, text}: {href: string | null; text?: string}) {
   const {t: tr} = useAdminText();
+  if (!href) return null;
+  return (
+    <span style={{display: 'inline-flex', alignItems: 'center', gap: 'var(--base)'}}>
+      {text ? <span>{text}</span> : null}
+      <Button el="anchor" url={href} newTab buttonStyle="pill" size="small" margin={false} icon={<ExternalLinkIcon />} iconPosition="right">
+        {tr(t.viewOnSite)}
+      </Button>
+    </span>
+  );
+}
+
+export function PagePathCell({rowData}: DefaultCellComponentProps) {
   const page = rowData as {slug?: string | null; path?: string | null} | undefined;
   if (!page?.slug && !page?.path) return null;
-  return (
-    <Button el="anchor" url={pagePath(page)} newTab buttonStyle="secondary" size="small" margin={false} icon={<ExternalLinkIcon />} iconPosition="right">
-      {tr(t.viewOnSite)}
-    </Button>
-  );
+  const href = pagePath(page);
+  return <ViewOnSiteLink href={href} text={href} />;
 }

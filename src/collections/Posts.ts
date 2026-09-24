@@ -1,4 +1,4 @@
-import type {CollectionConfig} from 'payload';
+import type {CollectionConfig, Field} from 'payload';
 
 import {postEditor} from '@/fields/blocks/prose';
 import {entryBelowTab} from '@/fields/entryBelow';
@@ -17,7 +17,7 @@ export const Posts: CollectionConfig = {
   admin: {
     // « Vue » menu next to the Live Preview eye (side by side, top / bottom, dialog)
     components: {edit: {beforeDocumentControls: ['@/fields/PreviewLayoutMenu#PreviewLayoutMenu'], PreviewButton: '@/fields/ViewOnSiteButton#ViewOnSiteButton'}},
-    useAsTitle: 'title', group: ct.groups.blog, defaultColumns: ['title', 'category', 'author', 'publishedAt'],
+    useAsTitle: 'title', group: ct.groups.blog, defaultColumns: ['title', 'slug', 'category', 'author', 'publishedAt'],
     // button that opens the post on the site in a new tab, under the blog's address
     preview: (doc, {req}) => entryUrl(req, 'blog', doc.slug),
   },
@@ -41,7 +41,8 @@ export const Posts: CollectionConfig = {
         entryBelowTab({collection: 'posts', label: ct.posts.tabs.below, description: ct.posts.tabs.belowDescription}),
       ],
     },
-    slugField,
+    // the « Slug » column of the list shows the post's address with a « Voir la page » button (new tab)
+    {...slugField, admin: {...slugField.admin, components: {Cell: {path: '@/fields/ViewEntryCell#ViewEntryCell', serverProps: {listing: 'blog'}}}}} as Field,
     {name: 'author', type: 'relationship', relationTo: 'authors', label: ct.posts.fields.author, admin: {position: 'sidebar'}},
     {name: 'category', type: 'relationship', relationTo: 'categories', label: ct.posts.fields.category, required: true, admin: {position: 'sidebar'}},
     {name: 'publishedAt', type: 'date', label: ct.posts.fields.publishedAt, required: true, defaultValue: () => new Date().toISOString(), admin: {position: 'sidebar', date: {pickerAppearance: 'dayOnly', displayFormat: 'd MMMM yyyy'}}},
