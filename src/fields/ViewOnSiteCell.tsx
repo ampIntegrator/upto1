@@ -23,7 +23,8 @@ export function ViewOnSiteLink({href, text}: {href: string | null; text?: string
     <span style={{display: 'inline-flex', alignItems: 'center', gap: 'var(--base)'}}>
       {text ? <span>{text}</span> : null}
       <Button el="anchor" url={href} newTab buttonStyle="pill" size="small" margin={false} icon={<ExternalLinkIcon />} iconPosition="right">
-        {tr(t.viewOnSite)}
+        {/* one line even in a narrow cell */}
+        <span style={{whiteSpace: 'nowrap'}}>{tr(t.viewOnSite)}</span>
       </Button>
     </span>
   );
