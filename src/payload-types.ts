@@ -1391,6 +1391,7 @@ export interface Post {
   title: string;
   cover?: (number | null) | Media;
   coverCaption?: string | null;
+  coverCaptionTone?: ('light' | 'dark') | null;
   excerpt?: string | null;
   /**
    * Headings h2 to h4 (the table of contents uses them), lists, quote (a last line « — Name » becomes the attribution), captioned images, tables, and inserted blocks: key points, call-to-action band, stats band, quote card, gallery.
@@ -1505,6 +1506,8 @@ export interface CaseStudy {
   title: string;
   excerpt?: string | null;
   cover?: (number | null) | Media;
+  coverCaption?: string | null;
+  coverCaptionTone?: ('light' | 'dark') | null;
   /**
    * Like a post: headings h2 to h4, lists, quote, captioned images, tables, and inserted blocks (stats band, gallery, key points, quote card, call-to-action band).
    */
@@ -4791,6 +4794,7 @@ export interface PostsSelect<T extends boolean = true> {
   title?: T;
   cover?: T;
   coverCaption?: T;
+  coverCaptionTone?: T;
   excerpt?: T;
   content?: T;
   faq?:
@@ -4854,6 +4858,8 @@ export interface CaseStudiesSelect<T extends boolean = true> {
   title?: T;
   excerpt?: T;
   cover?: T;
+  coverCaption?: T;
+  coverCaptionTone?: T;
   content?: T;
   sheet?:
     | T

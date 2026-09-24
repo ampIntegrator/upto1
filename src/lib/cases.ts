@@ -23,6 +23,8 @@ export function caseHero(c: CaseStudy, cases: CasesConfig): CaseHeroProps {
   const category = categoryOf(c);
   return {
     cover: cover ? {src: cover.src, alt: cover.alt} : undefined,
+    coverCaption: c.coverCaption || undefined,
+    coverCaptionTone: c.coverCaptionTone === 'dark' ? 'dark' : 'light',
     chips: [{label: cases.labels.badge, tone: 'cat'}, ...(category ? [{label: category.title, tone: 'high' as const}] : [])],
     title: c.title,
     lead: c.excerpt || undefined,
