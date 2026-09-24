@@ -42,7 +42,7 @@ export const Posts: CollectionConfig = {
       ],
     },
     // the « Slug » column of the list shows the post's address with a « Voir la page » button (new tab)
-    {...slugField, admin: {...slugField.admin, components: {Cell: {path: '@/fields/ViewEntryCell#ViewEntryCell', serverProps: {listing: 'blog'}}}}} as Field,
+    {...slugField, admin: {...slugField.admin, components: {...slugField.admin?.components, Cell: {path: '@/fields/ViewEntryCell#ViewEntryCell', serverProps: {listing: 'blog'}}}}} as Field,
     {name: 'author', type: 'relationship', relationTo: 'authors', label: ct.posts.fields.author, admin: {position: 'sidebar'}},
     {name: 'category', type: 'relationship', relationTo: 'categories', label: ct.posts.fields.category, required: true, admin: {position: 'sidebar'}},
     {name: 'publishedAt', type: 'date', label: ct.posts.fields.publishedAt, required: true, defaultValue: () => new Date().toISOString(), admin: {position: 'sidebar', date: {pickerAppearance: 'dayOnly', displayFormat: 'd MMMM yyyy'}}},

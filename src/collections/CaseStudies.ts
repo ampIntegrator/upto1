@@ -94,7 +94,7 @@ export const CaseStudies: CollectionConfig = {
       ],
     },
     // the « Slug » column of the list shows the case study's address with a « Voir la page » button (new tab)
-    {...slugField, admin: {...slugField.admin, components: {Cell: {path: '@/fields/ViewEntryCell#ViewEntryCell', serverProps: {listing: 'portfolio'}}}}} as Field,
+    {...slugField, admin: {...slugField.admin, components: {...slugField.admin?.components, Cell: {path: '@/fields/ViewEntryCell#ViewEntryCell', serverProps: {listing: 'portfolio'}}}}} as Field,
     {name: 'category', type: 'relationship', relationTo: 'case-categories', label: f.category, required: true, admin: {position: 'sidebar'}},
     {name: 'publishedAt', type: 'date', label: f.publishedAt, required: true, defaultValue: () => new Date().toISOString(), admin: {position: 'sidebar', date: {pickerAppearance: 'dayOnly', displayFormat: 'd MMMM yyyy'}}},
   ],
