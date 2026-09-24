@@ -1,6 +1,8 @@
 /* PostHeader — top of a post (mockup 18 .post-meta, .post-author, .post-hero). */
 .head { max-width: 1024px; }
 .title { margin: 0; }
+/* the serif accent of the title: Cormorant's small x-height reads smaller than the heading font at the site's 1.1 em */
+.title [data-type='serif'] { font-size: 1.2em; }
 .lead { max-width: 680px; font-size: 18px; line-height: 1.6; color: var(--color-text-secondary); } /* mockup 19 px: even */
 .meta { padding-top: 8px; }
 .name { font-size: 14px; font-weight: var(--font-weight-semibold); color: var(--color-text-primary); line-height: 1.4; }
