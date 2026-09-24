@@ -126,7 +126,7 @@ async function main() {
         mention: 'Vos données restent chez nous — RGPD',
       },
       articlesEnabled: true,
-      articles: {eyebrow: 'En bref', allLabel: 'Tous les articles', allHref: '/blog'},
+      articles: {eyebrow: 'En bref', allLabel: 'Tous les articles', allTarget: {kind: 'url', href: '/blog'}},
       columns: [
         {title: 'Solutions', links: [{label: 'Chiffrage instantané', href: '/chiffrage'}, {label: 'Suivi de chantier', href: '/suivi'}, {label: 'Devis client', href: '/devis'}, {label: 'Tarifs', href: '/tarifs'}]},
         {title: 'Métiers', links: [{label: 'Architectes', href: '/architectes'}, {label: "Maîtres d'œuvre", href: '/maitres-d-oeuvre'}, {label: 'Promoteurs', href: '/promoteurs'}]},

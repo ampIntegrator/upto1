@@ -23,6 +23,7 @@ export const fieldsText = texts({
     doc: {fr: 'Contenu (page, article, réalisation, modale)', en: 'Content (page, post, case study, modal)'},
     hrefRequired: {fr: 'Indiquez l’adresse.', en: 'Give the address.'},
     docRequired: {fr: 'Choisissez le contenu.', en: 'Choose the content.'},
+    newTab: {fr: 'Ouvrir dans un nouvel onglet', en: 'Open in a new tab'},
   },
   slug: {
     label: {fr: 'Slug (adresse)', en: 'Slug (address)'},

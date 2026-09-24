@@ -17,7 +17,7 @@ import {linkTargetFields} from '../linkTarget';
 type Sibling = Record<string, unknown>;
 
 export const buttonRowFields = (): Field[] => {
-  const [kind, href, doc] = linkTargetFields({required: true, kindWidth: '50%'});
+  const [kind, href, doc, newTab] = linkTargetFields({required: true, kindWidth: '50%'});
   return [
   {
     type: 'row',
@@ -28,6 +28,7 @@ export const buttonRowFields = (): Field[] => {
   },
   href,
   doc,
+  newTab,
   {
     type: 'row',
     fields: [
@@ -81,7 +82,7 @@ export const buttonRowFields = (): Field[] => {
  */
 export const modalButtonFields = (): Field[] => {
   const f = ct.modals.fields;
-  const [kind, href, doc] = linkTargetFields({required: true, kindWidth: '50%', when: (s) => s?.action === 'link'});
+  const [kind, href, doc, newTab] = linkTargetFields({required: true, kindWidth: '50%', when: (s) => s?.action === 'link'});
   return [
     {
       type: 'row',
@@ -123,5 +124,6 @@ export const modalButtonFields = (): Field[] => {
     },
     href,
     doc,
+    newTab,
   ];
 };

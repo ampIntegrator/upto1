@@ -60,7 +60,7 @@ type ContentBlock = NonNullable<NonNullable<NonNullable<SectionBlock['rows']>[nu
 export type FaqData = {mode: 'single' | 'multiple'; columns: 1 | 2; firstOpen: boolean; tag: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span'; items: {question: string; answer: string}[]};
 
 /** A collection: identical items side by side, swipe or carousel. */
-export type CollectionData = {layout: 'swipe' | 'carousel'; perView: 2 | 3 | 4; step: 'page' | 'item'; arrows: boolean; indicator: 'segments' | 'dots' | 'numbers' | 'none'; items: ContentData[]; more?: {label: string; href: string}};
+export type CollectionData = {layout: 'swipe' | 'carousel'; perView: 2 | 3 | 4; step: 'page' | 'item'; arrows: boolean; indicator: 'segments' | 'dots' | 'numbers' | 'none'; items: ContentData[]; more?: {label: string; href: string; newTab?: boolean}};
 
 export type ContentData =
   | {type: 'textBox'; textBox: TextBoxProps}
@@ -124,7 +124,7 @@ type CardBlockData = {
   value?: string | null;
   prefix?: string | null;
   suffix?: string | null;
-  cta?: {label?: string | null; href?: string | null} | null;
+  cta?: {label?: string | null; href?: string | null; newTab?: boolean | null} | null;
 };
 
 function toCard(b: CardBlockData): CardProps {
@@ -141,7 +141,7 @@ function toCard(b: CardBlockData): CardProps {
     title: b.title,
     tag: toTitleTag(b.tag, 'h3'),
     text: b.text ?? undefined,
-    cta: v.clickable && b.cta?.label && b.cta?.href ? {label: b.cta.label, href: b.cta.href} : undefined,
+    cta: v.clickable && b.cta?.label && b.cta?.href ? {label: b.cta.label, href: b.cta.href, newTab: b.cta.newTab || undefined} : undefined,
   };
 }
 
@@ -181,7 +181,7 @@ const columnSizes = (span: number): string => `(max-width: 767px) 100vw, (max-wi
 type PricingData = {
   features?: {label?: string | null; end?: string | null}[] | null;
   price?: {value?: string | null; currency?: string | null; period?: string | null} | null;
-  cta?: {label?: string | null; href?: string | null} | null;
+  cta?: {label?: string | null; href?: string | null; newTab?: boolean | null} | null;
   mention?: string | null;
   guarantee?: {title?: string | null; titleTag?: string | null; text?: string | null} | null;
 };
@@ -192,12 +192,12 @@ const FAQ_TAGS = ['h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span'] as const;
 type TestimonialData = {quote: string; name: string; role?: string | null; result?: string | null};
 type CompareCardData = {chipLabel: string; chipTone?: string | null; meta?: string | null; quote: string; items?: {label: string}[] | null; tone?: string | null; featured?: boolean | null};
 /** A button row of the text box or the button group (buttonFields.ts). */
-export type ButtonData = {label: string; href: string; shape?: string | null; variant?: string | null; size?: string | null; iconKey?: string | null};
+export type ButtonData = {label: string; href: string; newTab?: boolean | null; shape?: string | null; variant?: string | null; size?: string | null; iconKey?: string | null};
 const BUTTON_VARIANTS = ['primary', 'high', 'secondary', 'ghost'] as const;
 export function toButton(x: ButtonData): TextBoxButton {
   const variant = (BUTTON_VARIANTS as readonly string[]).includes(x.variant ?? '') ? (x.variant as TextBoxButton['variant']) : 'primary';
   const split = x.shape === 'split';
-  return {label: x.label, href: x.href, arrow: split, variant, size: x.size === 'lg' ? 'lg' : 'md', iconKey: split ? undefined : ((x.iconKey || undefined) as NucleoIconKey | undefined)};
+  return {label: x.label, href: x.href, newTab: x.newTab || undefined, arrow: split, variant, size: x.size === 'lg' ? 'lg' : 'md', iconKey: split ? undefined : ((x.iconKey || undefined) as NucleoIconKey | undefined)};
 }
 
 type ButtonGroupData = {mode?: string | null; width?: string | null; align?: string | null; buttons?: ButtonData[] | null};
@@ -257,7 +257,7 @@ const toGuarantee = (g: PricingData['guarantee']): PriceCardProps['guarantee'] =
 const toPricing = (b: PricingData) => ({
   features: toFeatures(b.features),
   price: {value: b.price?.value ?? '', currency: orUndefined(b.price?.currency), period: orUndefined(b.price?.period)},
-  cta: {label: b.cta?.label ?? '', href: b.cta?.href ?? '#'},
+  cta: {label: b.cta?.label ?? '', href: b.cta?.href ?? '#', newTab: b.cta?.newTab || undefined},
   mention: orUndefined(b.mention),
   guarantee: toGuarantee(b.guarantee),
 });
@@ -320,7 +320,7 @@ function toSteps(b: StepsData): ContentData | null {
   return steps.length ? {type: 'processSteps', steps, tag: toTitleTag(b.tag, 'h3')} : null;
 }
 
-type CollectionBlockData = {id?: string | null; layout?: string | null; perView?: string | null; step?: string | null; arrows?: boolean | null; indicator?: string | null; source?: string | null; items?: ContentBlock[] | null; postsLimit?: number | null; postsCategory?: number | {id: number} | null; postsCta?: string | null; casesLimit?: number | null; casesCategory?: number | {id: number} | null; casesCta?: string | null; moreLink?: string | null; moreLabel?: string | null; moreHref?: string | null};
+type CollectionBlockData = {id?: string | null; layout?: string | null; perView?: string | null; step?: string | null; arrows?: boolean | null; indicator?: string | null; source?: string | null; items?: ContentBlock[] | null; postsLimit?: number | null; postsCategory?: number | {id: number} | null; postsCta?: string | null; casesLimit?: number | null; casesCategory?: number | {id: number} | null; casesCta?: string | null; moreLink?: string | null; moreLabel?: string | null; moreTarget?: {href?: string | null; newTab?: boolean | null} | null};
 
 /** Loads the latest entries of a listing for a collection block (the page gives it, with the locale). */
 export type EntriesLoader<T> = (q: {limit: number; category?: number}) => Promise<T[]>;
@@ -359,7 +359,7 @@ function toCollection(b: CollectionBlockData, entries: EntryItems): ContentData 
 function collectionMore(b: CollectionBlockData): CollectionData['more'] {
   const listing = b.moreLink === 'blog' ? (sectionsCtx.blog ?? blogConfig(null)) : b.moreLink === 'cases' ? (sectionsCtx.cases ?? casesConfig(null)) : null;
   if (listing) return {label: b.moreLabel || listing.labels.more, href: listingPath(listing)};
-  if (b.moreLink === 'custom' && b.moreLabel && b.moreHref) return {label: b.moreLabel, href: b.moreHref};
+  if (b.moreLink === 'custom' && b.moreLabel && b.moreTarget?.href) return {label: b.moreLabel, href: b.moreTarget.href, newTab: b.moreTarget.newTab || undefined};
   return undefined;
 }
 
@@ -421,6 +421,8 @@ async function loadChosenForms(sources: SectionSource[], ctx: SectionsContext): 
     if (id !== null) ids.add(id);
   });
   const forms = ids.size && ctx.formsByIds ? await ctx.formsByIds([...ids]) : [];
+  // the privacy link of a consent box may target a content of the site: its address on `href`
+  if (ctx.blog && ctx.cases) stampInternalLinks(forms, {blog: ctx.blog, cases: ctx.cases});
   return new Map(forms.map((f) => [f.id, f]));
 }
 

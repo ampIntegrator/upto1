@@ -1,5 +1,6 @@
 import type {Block, PayloadRequest} from 'payload';
 
+import {linkTarget} from '../linkTarget';
 import {collectionCapacity, minSpan} from '@/components/content-specs';
 import {columnSpanAt, type ContentBlock} from '@/fields/sections/contentBlock';
 import {tr} from '@/i18n/admin/languages';
@@ -23,6 +24,11 @@ import {testimonialBlock} from './testimonialBlock';
 export const COLLECTION_SLUG = 'collection';
 
 type Sibling = Record<string, unknown>;
+/** a custom « see all » target is given: a typed address, or a chosen content (linkTarget.ts) */
+const hasTarget = (x: unknown): boolean => {
+  const t = (x ?? {}) as {kind?: unknown; href?: unknown; doc?: unknown};
+  return t.kind === 'internal' ? Boolean(t.doc) : typeof t.href === 'string' && t.href.trim() !== '';
+};
 const whenSource = (value: string) => (_d: unknown, s: Sibling) => (s?.source ?? 'manual') === value;
 
 /** the most latest entries a collection shows: beyond, the « see all » button leads to the listing */
@@ -188,11 +194,12 @@ const block: Block = {
           localized: true,
           admin: {width: '33%', condition: whenMore, description: t.moreLabelDescription},
           validate: (value: unknown, {siblingData, req}: {siblingData: Sibling; req: PayloadRequest}) =>
-            siblingData?.moreLink !== 'custom' || (Boolean(value) && Boolean(siblingData?.moreHref)) || tr(t.moreCustomRequired, req.i18n?.language),
+            siblingData?.moreLink !== 'custom' || (Boolean(value) && hasTarget(siblingData?.moreTarget)) || tr(t.moreCustomRequired, req.i18n?.language),
         },
-        {name: 'moreHref', type: 'text', label: t.moreHref, admin: {width: '33%', placeholder: '/contact', condition: (_d, s: Sibling) => s?.moreLink === 'custom'}},
       ],
     },
+    // custom « see all » button: an address or a content of the site, and the new tab box
+    {name: 'moreTarget', type: 'group', label: t.moreHref, admin: {condition: (_d, s: Sibling) => s?.moreLink === 'custom'}, fields: linkTarget()},
   ],
 };
 

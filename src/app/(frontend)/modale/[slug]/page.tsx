@@ -29,7 +29,7 @@ export default async function ModalPage({params}: Params) {
   if (!modal) notFound();
   return (
     <SitePage silo={pageSilo(null, site.settings)} header={toHeader(site.settings, site.header, site.languages, site.blog)} footer={toFooter(site.settings, site.footer, site.posts, locale, site.blog)}>
-      <PageModals sources={[]} locale={locale} initialSlug={slug} closeHref="/" />
+      <PageModals sources={site.modalSources} locale={locale} initialSlug={slug} closeHref="/" />
     </SitePage>
   );
 }

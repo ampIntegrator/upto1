@@ -53,7 +53,7 @@ export async function PageRoute({segments}: {segments: string[]}) {
       {bandBreadcrumb ? <BreadcrumbBand {...breadcrumbProps(page, site.settings)} /> : null}
       <PageSections sections={await toSections(page.sections, site.settings, sectionsContext(locale, site))} />
       {/* the modals this page links to, closed until their anchor is reached */}
-      <PageModals sources={[page.hero, page.sections]} locale={locale} />
+      <PageModals sources={[page.hero, page.sections, ...site.modalSources]} locale={locale} />
     </SitePage>
   );
 }

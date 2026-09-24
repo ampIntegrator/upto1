@@ -1,5 +1,7 @@
 # Handoff — links everywhere: « new tab » and « site content » (24 Sept. 2026)
 
+**Done on 24 Sept. 2026** (one PR for both parts, one pair of migrations); reference doc: `docs/modals.md` › « Link targets ».
+
 Decided with Nicolas on 24 Sept. 2026, after an audit of every link field. Two PRs, `payload`
 branch (components on `astryx` first when a component changes), never a shared config object
 (factories), backup + `pnpm migrate:create` + review + `pnpm migrate` + `generate:types` for any

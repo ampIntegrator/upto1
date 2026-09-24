@@ -39,6 +39,7 @@ export function caseSheet(c: CaseStudy, cases: CasesConfig): CaseSheetProps {
   const own = s?.customDefaults ? s : null;
   const ctaLabel = own?.cta?.label;
   const ctaHref = own?.cta?.href;
+  const ctaNewTab = own?.cta?.newTab || undefined;
   return {
     rows: [
       {label: l.client, value: s?.client ?? '', href: s?.clientUrl || undefined, hrefLabel: s?.client ? `${l.clientLink} · ${s.client}` : undefined},
@@ -48,6 +49,6 @@ export function caseSheet(c: CaseStudy, cases: CasesConfig): CaseSheetProps {
       {label: own?.modulesLabel || l.modules, value: s?.modules ?? ''},
     ],
     results: (s?.results ?? []).slice(0, 2).map((r) => ({value: r.value, label: r.label})),
-    cta: ctaLabel && ctaHref ? {label: ctaLabel, href: ctaHref} : cases.cta,
+    cta: ctaLabel && ctaHref ? {label: ctaLabel, href: ctaHref, newTab: ctaNewTab} : cases.cta,
   };
 }

@@ -3,6 +3,7 @@ import type {GlobalConfig} from 'payload';
 import {iconField} from '@/fields/iconField';
 import {DEFAULT_GAPS, GAP_OPTIONS} from '@/fields/sections/gaps';
 import {siloField} from '@/fields/siloField';
+import {fieldsText} from '@/i18n/admin/fields';
 import {settingsText} from '@/i18n/admin/globals';
 
 /** Site settings: default silo, brand and logo, contact details, networks, layout, languages. */
@@ -48,6 +49,8 @@ export const Settings: GlobalConfig = {
                   {name: 'href', type: 'text', label: settingsText.networks.href, required: true, admin: {width: '60%'}},
                 ]},
                 iconField({name: 'iconKey', label: settingsText.networks.icon, required: true}),
+                // a social network is another site: opened in a new tab by default
+                {name: 'newTab', type: 'checkbox', label: fieldsText.link.newTab, defaultValue: true},
               ],
             },
           ],

@@ -23,7 +23,7 @@ export type FormFieldData =
   | (Base & {type: 'radio'; options: {value: string; label: string}[]; defaultValue?: string})
   | (Base & {type: 'select'; options: {value: string; label: string}[]; defaultValue?: string; multiple?: boolean; searchFrom?: number})
   | (Base & {type: 'checkbox'; defaultValue?: boolean})
-  | (Base & {type: 'consent'; link?: {label: string; href: string}})
+  | (Base & {type: 'consent'; link?: {label: string; href: string; newTab?: boolean}})
   | {type: 'message'; name: string; width: Width; content: RichTextDocument};
 
 export type FormData = {
@@ -52,7 +52,8 @@ function field(b: Block): FormFieldData | null {
   if (b.blockType === STEP_SLUG) return null;
   if (b.blockType === 'message') return b.message ? {type: 'message', name: b.id ?? 'message', width: 'full', content: b.message as unknown as RichTextDocument} : null;
   if (b.blockType === CONSENT_SLUG) {
-    const link = b.privacyHref ? {label: b.privacyLabel || b.privacyHref, href: b.privacyHref} : undefined;
+    const t = b.privacyTarget;
+    const link = t?.href ? {label: b.privacyLabel || t.href, href: t.href, newTab: t.newTab || undefined} : undefined;
     return {type: 'consent', name: b.name, label: b.label, required: true, width: 'full', link};
   }
   const base = {name: b.name, label: b.label || b.name, required: Boolean(b.required)};
