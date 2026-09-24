@@ -27,4 +27,5 @@ const block: Block = {
   ],
 };
 
-export const formBlock: ContentBlock = {block, minSpan: minSpan({type: 'form'}), maxSpan: maxSpan({type: 'form'})};
+/** Fills the row height: framed, its box lines up with the boxes beside it. */
+export const formBlock: ContentBlock = {block, minSpan: minSpan({type: 'form'}), maxSpan: maxSpan({type: 'form'}), fill: true};

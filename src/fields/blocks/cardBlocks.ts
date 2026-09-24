@@ -72,7 +72,8 @@ for (const clickable of [false, true]) {
       imageURL: `/apercus/${slug}.png`,
       fields: [...m.fields, ...COMMON, ...(clickable ? [linkGroup('cta', t.fields.cta, {required: true})] : [])],
     };
-    CARD_BLOCKS.push({block, minSpan: CARD_MIN_SPAN});
+    // fills the row height: cards side by side, or beside another box, share one height
+    CARD_BLOCKS.push({block, minSpan: CARD_MIN_SPAN, fill: true});
   }
 }
 
