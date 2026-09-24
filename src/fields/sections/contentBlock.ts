@@ -15,6 +15,12 @@ export type ContentBlock = {
   maxSpan?: ColumnSpan;
   /** The column stretches to its row's height and the content fills it (cards side by side). */
   fill?: boolean;
+  /**
+   * Kept in the schema (no migration drops its tables, the site still renders it) but neither
+   * offered by the picker nor accepted on save. Replace its existing uses before hiding a block:
+   * a document still holding it can no longer be saved.
+   */
+  hidden?: boolean;
 };
 
 /** Block slug → minimum span, for the admin builder (serialisable client props). */

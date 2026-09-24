@@ -55,9 +55,10 @@ export function rowsField(blocks: ContentBlock[], condition?: Condition, presetR
   const labels = labelMap(blocks);
   const contentBlocks: Block[] = [emptyBlock, ...blocks.map((b) => b.block)];
   const label = (blockType: string, req: PayloadRequest): string => getTranslation(labels[blockType] ?? blockType, req.i18n);
+  const hiddenSlugs = new Set(blocks.filter((b) => b.hidden).map((b) => b.block.slug));
 
-  /** Blocks offered in a column: the empty cell and those whose width range contains the column's. */
-  const blocksForSpan = (span: number): string[] => [EMPTY_SLUG, ...blocks.filter((b) => b.minSpan <= span && span <= (b.maxSpan ?? 12)).map((b) => b.block.slug)];
+  /** Blocks offered in a column: the empty cell and the visible ones whose width range contains the column's. */
+  const blocksForSpan = (span: number): string[] => [EMPTY_SLUG, ...blocks.filter((b) => !b.hidden && b.minSpan <= span && span <= (b.maxSpan ?? 12)).map((b) => b.block.slug)];
 
   /** Column width: the row must add up to 12, and the content must fit in the column, neither too narrow nor too wide. */
   const spanField: Field = {
@@ -127,6 +128,9 @@ export function rowsField(blocks: ContentBlock[], condition?: Condition, presetR
             // explicit message rather than maxRows' generic one
             validate: (value: unknown, {req}: {req: PayloadRequest}) => {
               if (Array.isArray(value) && value.length > 1) return tr(T.validation.oneComponent, req.i18n?.language);
+              // filterOptions only drives the picker: a hidden block is refused on save too
+              const slug = Array.isArray(value) ? (value[0] as {blockType?: unknown} | undefined)?.blockType : undefined;
+              if (typeof slug === 'string' && hiddenSlugs.has(slug)) return tr(T.validation.hiddenBlock, req.i18n?.language, {name: label(slug, req)});
               const name = Array.isArray(value) ? (value[0] as {blockName?: unknown} | undefined)?.blockName : undefined;
               if (typeof name === 'string' && name.length > BLOCK_NAME_MAX) return tr(T.validation.nameTooLong, req.i18n?.language, {max: BLOCK_NAME_MAX});
               return true;
