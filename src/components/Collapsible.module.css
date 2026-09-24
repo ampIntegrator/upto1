@@ -107,3 +107,15 @@
 @media (prefers-reduced-motion: reduce) {
   .content, .icon::before, .icon::after { transition: none; }
 }
+
+/*
+ * Two columns: independent stacks (one grows without moving the other) in an Astryx Grid; the
+ * stacks dissolve into one ordered stack under 864 px (2 × 420 + gap, the grid's own breakpoint).
+ * Doubled selectors: the wrappers are Astryx stacks whose own display would win otherwise.
+ */
+.columns { container-type: inline-size; }
+.column.column { display: contents; }
+.cell.cell { display: flex; flex-direction: column; min-width: 0; }
+@container (min-width: 864px) {
+  .column.column { display: flex; flex-direction: column; gap: var(--spacing-4); min-width: 0; }
+}
