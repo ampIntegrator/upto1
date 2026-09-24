@@ -85,17 +85,27 @@
 /* ---- prose (a post): larger text, editorial headings and spacing ---- */
 .root[data-size='prose'] .paragraph,
 .root[data-size='prose'] .list { font-size: 18px; line-height: 1.7; }
-.root[data-size='prose'] > .paragraph { margin: 0 0 24px; }
-.root[data-size='prose'] > .list { margin: 0 0 24px; }
+/* rhythm: margin-top only (the root is a flex stack, margins do not collapse: a bottom margin
+   would add up with the next top margin), the first element without; below a heading, the
+   heading's own smaller gap; below a figure, a quote, a rule, a table or an inserted block, the
+   same gap as above it (Nicolas, 24 Sept. 2026) */
+.root[data-size='prose'] > .paragraph { margin: 24px 0 0; }
+.root[data-size='prose'] > .list { margin: 24px 0 0; }
 .root[data-size='prose'] em { font-family: var(--font-family-serif); font-size: 1.06em; }
-.root[data-size='prose'] > .heading[data-level='h2'] { margin: 56px 0 18px; font-size: clamp(28px, 3vw, 38px); line-height: 1.08; letter-spacing: -0.022em; }
-.root[data-size='prose'] > .heading[data-level='h3'] { margin: 38px 0 12px; font-size: clamp(20px, 2.2vw, 24px); }
-.root[data-size='prose'] > .heading:is([data-level='h4'], [data-level='h5'], [data-level='h6']) { margin: 30px 0 10px; }
-.root[data-size='prose'] > .heading:first-child { margin-top: 0; }
-.root[data-size='prose'] > .quote { margin: 38px 0; }
+.root[data-size='prose'] > .heading[data-level='h2'] { margin: 56px 0 0; font-size: clamp(28px, 3vw, 38px); line-height: 1.08; letter-spacing: -0.022em; }
+.root[data-size='prose'] > .heading[data-level='h3'] { margin: 38px 0 0; font-size: clamp(20px, 2.2vw, 24px); }
+.root[data-size='prose'] > .heading:is([data-level='h4'], [data-level='h5'], [data-level='h6']) { margin: 30px 0 0; }
+.root[data-size='prose'] > .quote { margin: 38px 0 0; }
 .root[data-size='prose'] > .quote p { font-size: clamp(24px, 2.6vw, 30px); line-height: 1.38; }
-.root[data-size='prose'] > :is(.figure, .tableWrap) { margin: 40px 0; }
-.root[data-size='prose'] > .rule { margin: 40px 0; }
+.root[data-size='prose'] > :is(.figure, .tableWrap) { margin: 40px 0 0; }
+.root[data-size='prose'] > .rule { margin: 40px 0 0; }
 /* inserted blocks (figures) keep the editorial rhythm */
-.root[data-size='prose'] > :not(.paragraph, .list, .heading, .quote, .figure, .tableWrap, .rule, .file) { margin: 40px 0; }
-.root[data-size='prose'] > :last-child { margin-bottom: 0; }
+.root[data-size='prose'] > :not(.paragraph, .list, .heading, .quote, .figure, .tableWrap, .rule, .file) { margin: 40px 0 0; }
+/* below a heading */
+.root[data-size='prose'] > .heading[data-level='h2'] + :not(.heading) { margin-top: 18px; }
+.root[data-size='prose'] > .heading[data-level='h3'] + :not(.heading) { margin-top: 12px; }
+.root[data-size='prose'] > .heading:is([data-level='h4'], [data-level='h5'], [data-level='h6']) + :not(.heading) { margin-top: 10px; }
+/* below a figure, a table, a rule or an inserted block (a quote keeps its 38 px) */
+.root[data-size='prose'] > :is(.figure, .tableWrap, .rule, :not(.paragraph, .list, .heading, .quote, .figure, .tableWrap, .rule, .file)) + :is(.paragraph, .list) { margin-top: 40px; }
+.root[data-size='prose'] > .quote + :is(.paragraph, .list) { margin-top: 38px; }
+.root[data-size='prose'] > :first-child { margin-top: 0; }
