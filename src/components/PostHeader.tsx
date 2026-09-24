@@ -1,7 +1,8 @@
 /**
  * PostHeader — the top of a post (mockup 18): category chip, title (display, serif accent with
  * <span>…</span>), lead, then the meta line: author (square Astryx Avatar, name, role), a
- * divider and the publication date; below, the featured image at 16:7 with its caption.
+ * divider and the publication date; below, the featured image at 16:7 with its caption laid over
+ * its bottom right corner (CoverCaption, white or black text).
  * Placed under the page's breadcrumb band; the page reserves the fixed header's height.
  */
 import {Avatar} from '@astryxdesign/core/Avatar';
@@ -16,6 +17,7 @@ import {Chip} from './Chip';
 import {Container} from './Container';
 import {Section} from './Section';
 import {renderTitle, type TitleText} from './TitleText';
+import {CoverCaption, type CoverCaptionTone} from './CoverCaption';
 import styles from './PostHeader.module.css';
 
 export type PostAuthor = {name: string; role?: string; photo?: {src: string; alt?: string}};
@@ -30,9 +32,11 @@ export type PostHeaderProps = {
   dateLabel?: string;
   cover?: {src: string; alt?: string; width?: number; height?: number};
   coverCaption?: string;
+  /** colour of the caption over the image: light (white, default) or dark (black) */
+  coverCaptionTone?: CoverCaptionTone;
 };
 
-export function PostHeader({category, title, lead, author, date, dateLabel = 'Publié le', cover, coverCaption}: PostHeaderProps) {
+export function PostHeader({category, title, lead, author, date, dateLabel = 'Publié le', cover, coverCaption, coverCaptionTone}: PostHeaderProps) {
   return (
     <Section background="light" spacingTop={48} spacingBottom={0}>
       <Container>
@@ -79,8 +83,8 @@ export function PostHeader({category, title, lead, author, date, dateLabel = 'Pu
           <VStack as="figure" gap={3} className={styles.figure}>
             <VStack className={styles.cover}>
               <Image src={cover.src} alt={cover.alt ?? ''} fill priority sizes="(max-width: 1440px) 100vw, 1360px" className={styles.coverImage} />
+              {coverCaption ? <CoverCaption tone={coverCaptionTone}>{coverCaption}</CoverCaption> : null}
             </VStack>
-            {coverCaption ? <figcaption className={styles.caption}>{coverCaption}</figcaption> : null}
           </VStack>
         ) : null}
       </Container>

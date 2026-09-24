@@ -1,0 +1,21 @@
+/* CoverCaption — caption over a cover image, bottom right; a 40 % veil on hover only. */
+.caption {
+  position: absolute;
+  right: 16px;
+  bottom: 12px;
+  z-index: 3;
+  max-width: calc(100% - 32px);
+  margin: 0;
+  padding: 4px 8px;
+  font-family: var(--font-family-mono);
+  font-size: 14px;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  text-align: right;
+  transition: background-color var(--duration-medium) var(--ease-standard);
+}
+/* fixed white / black: the photo does not follow the theme (same rgba values as the site's veils) */
+.caption[data-tone='light'] { color: rgb(255, 255, 255); }
+.caption[data-tone='dark'] { color: rgb(0, 0, 0); }
+.caption[data-tone='light']:hover { background: rgba(0, 0, 0, 0.4); }
+.caption[data-tone='dark']:hover { background: rgba(255, 255, 255, 0.4); }

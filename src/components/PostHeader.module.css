@@ -12,5 +12,4 @@
 .figure { margin: 32px 0 0; }
 .cover { position: relative; width: 100%; aspect-ratio: 16 / 7; overflow: hidden; border: var(--border-width) solid var(--color-border); background: var(--color-background-surface); }
 .coverImage { object-fit: cover; }
-.caption { font-family: var(--font-family-mono); font-size: 14px; letter-spacing: 0.04em; color: var(--color-text-secondary); }
 @media (max-width: 767px) { .cover { aspect-ratio: 4 / 3; } }

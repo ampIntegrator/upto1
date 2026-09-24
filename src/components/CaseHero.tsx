@@ -15,22 +15,31 @@ import {Chip, type ChipTone} from './Chip';
 import {Container} from './Container';
 import {Section} from './Section';
 import {renderTitle, type TitleText} from './TitleText';
+import {CoverCaption, type CoverCaptionTone} from './CoverCaption';
 import styles from './CaseHero.module.css';
 
 export type CaseHeroProps = {
   cover?: {src: string; alt?: string};
+  /** caption over the cover, bottom right (CoverCaption), white or black text */
+  coverCaption?: string;
+  coverCaptionTone?: CoverCaptionTone;
   chips?: {label: string; tone?: ChipTone}[];
   /** entered title: <span>…</span> = serif accent, line breaks kept (TitleText) */
   title: TitleText;
   lead?: string;
 };
 
-export function CaseHero({cover, chips = [], title, lead}: CaseHeroProps) {
+export function CaseHero({cover, coverCaption, coverCaptionTone, chips = [], title, lead}: CaseHeroProps) {
   return (
     <Section background="night" spacing="none">
       <VStack className={styles.hero}>
         {cover?.src ? <Image src={cover.src} alt={cover.alt ?? ''} fill priority sizes="100vw" className={styles.image} /> : null}
         <i className={styles.veil} aria-hidden="true" />
+        {cover?.src && coverCaption ? (
+          <CoverCaption as="span" tone={coverCaptionTone}>
+            {coverCaption}
+          </CoverCaption>
+        ) : null}
         <VStack className={styles.inner}>
           <Container>
             <VStack gap={5} className={styles.text}>
