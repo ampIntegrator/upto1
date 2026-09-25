@@ -2,7 +2,8 @@
  * CtaBand — the call-to-action band (mockup 18 .prose-cta, captures _blog-cta2/3/4): a night
  * panel, on the left a 48 px framed highlight icon (or a highlight arrow for the one-line
  * variant), the title in 18 px semibold white and an optional supporting line, on the right a
- * site button (split, highlight by default). Stacks below 560 px of width.
+ * simple site button, never split (Nicolas, 25 Sept. 2026: the band already carries an arrow),
+ * highlight by default, with an optional icon. Stacks below 560 px of width.
  */
 import {HStack, VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
@@ -39,7 +40,7 @@ export function CtaBand({variant = 'icon', iconKey = 'calculator', title, text, 
         <Text className={styles.title}>{title}</Text>
         {text && variant === 'icon' ? <Text className={styles.sub}>{text}</Text> : null}
       </VStack>
-      {button ? <Button label={button.label} href={button.href} newTab={button.newTab} variant={button.variant ?? 'high'} size={button.size ?? 'md'} arrow={button.arrow ?? true} iconKey={button.arrow ? undefined : button.iconKey} className={styles.button} /> : null}
+      {button ? <Button label={button.label} href={button.href} newTab={button.newTab} variant={button.variant ?? 'high'} size={button.size ?? 'md'} iconKey={button.iconKey} className={styles.button} /> : null}
     </HStack>
   );
 }
