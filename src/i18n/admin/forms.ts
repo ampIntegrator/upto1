@@ -23,6 +23,7 @@ export const formsText = texts({
   afterDescription: {fr: 'Ce que voit le visiteur une fois le formulaire envoyé : un message à la place du formulaire, ou une autre page.', en: 'What the visitor sees once the form is sent: a message in place of the form, or another page.'},
   emailsDescription: {fr: 'Envoyés à chaque réponse, une fois le service d’envoi configuré (tech lead). En attendant, les réponses sont rangées dans Formulaires › Réponses.', en: 'Sent with every submission once the email service is set up (tech lead). Meanwhile, submissions are stored in Forms › Submissions.'},
   newForm: {fr: 'Nouveau formulaire', en: 'New form'},
+  newPage: {fr: 'Nouvelle page', en: 'New page'},
   newPost: {fr: 'Nouvel article', en: 'New post'},
   newCase: {fr: 'Nouvelle réalisation', en: 'New case study'},
   multiple: {fr: 'Choix multiple (les choix s’affichent en badges dans le champ)', en: 'Several choices (shown as badges in the field)'},
