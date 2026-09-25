@@ -25,10 +25,9 @@ the blog's), Réglages des réalisations (`portfolio` global).
   images, tables, and the figures stats band, gallery, key points, quote card, CTA band).
   Tab « Colonne latérale » (renamed from « Fiche projet » on 18 September 2026, the name was
   unclear): client (required) and its site, location, deployment, modules (free text), two figures
-  (value and label), the card's short result (empty: the first figure's value). Then a
-  « Modifier les valeurs par défaut » box (`customDefaults`): ticked, it shows the row labels and the
-  button that replace the settings' ones on this case study; unticked, the values are kept but
-  ignored (`caseSheet`).
+  (value and label). The row labels and the button always come from the settings (the card's
+  short result and the per-case « Modifier les valeurs par défaut » box were removed on
+  25 September 2026; realisation cards show no result any more).
   Tab « Sous la réalisation »: FAQ and related case studies (automatic, chosen or hidden), as for
   a post. Then SEO. Sidebar: slug, category (required), date. A « Voir la page » button opens the
   case study in a new tab.

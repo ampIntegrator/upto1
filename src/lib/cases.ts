@@ -1,6 +1,6 @@
 /**
  * Case studies data: loaders through the shared entry loaders, a case study as CaseHero and
- * CaseSheet props (labels from the settings, overridden by the case study). Server only.
+ * CaseSheet props (row labels and button from the settings). Server only.
  */
 import type {CaseHeroProps} from '@/components/CaseHero';
 import type {CaseSheetProps} from '@/components/CaseSheet';
@@ -35,20 +35,15 @@ export function caseSheet(c: CaseStudy, cases: CasesConfig): CaseSheetProps {
   const s = c.sheet;
   const l = cases.labels;
   const category = categoryOf(c);
-  // the case study's own labels and button count only when « change the default values » is ticked
-  const own = s?.customDefaults ? s : null;
-  const ctaLabel = own?.cta?.label;
-  const ctaHref = own?.cta?.href;
-  const ctaNewTab = own?.cta?.newTab || undefined;
   return {
     rows: [
       {label: l.client, value: s?.client ?? '', href: s?.clientUrl || undefined, hrefLabel: s?.client ? `${l.clientLink} · ${s.client}` : undefined},
       {label: l.category, value: category?.title ?? ''},
-      {label: own?.locationLabel || l.location, value: s?.location ?? ''},
-      {label: own?.deploymentLabel || l.deployment, value: s?.deployment ?? ''},
-      {label: own?.modulesLabel || l.modules, value: s?.modules ?? ''},
+      {label: l.location, value: s?.location ?? ''},
+      {label: l.deployment, value: s?.deployment ?? ''},
+      {label: l.modules, value: s?.modules ?? ''},
     ],
     results: (s?.results ?? []).slice(0, 2).map((r) => ({value: r.value, label: r.label})),
-    cta: ctaLabel && ctaHref ? {label: ctaLabel, href: ctaHref, newTab: ctaNewTab} : cases.cta,
+    cta: cases.cta,
   };
 }

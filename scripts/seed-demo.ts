@@ -382,7 +382,6 @@ async function main() {
       sheet: {
         client: 'Vasseur Construction', clientUrl: 'https://example.com', location: 'Nantes (44)', deployment: '6 semaines · mars 2025', modules: 'Chiffrage instantané, métré automatique, devis client',
         results: [{value: '−68 %', label: 'Temps de chiffrage'}, {value: '×2,4', label: 'Devis envoyés'}],
-        cardResult: '−68 % délai',
       },
     };
   if (oldCase) await payload.update({collection: 'case-studies', id: oldCase.id, data: completeLexical(caseData) as never});

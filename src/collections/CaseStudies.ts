@@ -3,18 +3,15 @@ import type {CollectionConfig, Field} from 'payload';
 import {postEditor} from '@/fields/blocks/prose';
 import {entryBelowTab} from '@/fields/entryBelow';
 import {entryUrl} from '@/fields/entryUrl';
-import {linkTarget} from '@/fields/linkTarget';
 import {slugField} from '@/fields/shared';
 import {collectionsText as ct} from '@/i18n/admin/collections';
 
 const f = ct.caseStudies.fields;
 
-const whenCustom = (_d: unknown, s: Record<string, unknown>) => Boolean(s?.customDefaults);
-
 /**
  * Case studies (« réalisations », mockups 23 and 24): title, lead, full-width cover, story (the
- * post editor with its figures), fact sheet (text rows with overridable labels, two figures, a
- * button), category and date; optional builder sections under the story. Rendered at
+ * post editor with its figures), fact sheet (text rows and two figures; the row labels and the
+ * button come from the case studies settings), category and date; optional builder sections under the story. Rendered at
  * /<case studies page>/<slug> (Case studies settings), as realisation cards elsewhere.
  */
 export const CaseStudies: CollectionConfig = {
@@ -76,22 +73,6 @@ export const CaseStudies: CollectionConfig = {
                       {name: 'value', type: 'text', label: f.resultValue, required: true, localized: true, admin: {width: '34%'}},
                       {name: 'label', type: 'text', label: f.resultLabel, required: true, localized: true, admin: {width: '66%'}},
                     ]},
-                  ],
-                },
-                {name: 'cardResult', type: 'text', label: f.cardResult, localized: true, admin: {description: f.cardResultDescription}},
-                // row labels and button come from the case studies settings; replaced here only when ticked
-                {name: 'customDefaults', type: 'checkbox', label: f.customDefaults, defaultValue: false, admin: {description: f.customDefaultsDescription}},
-                {type: 'row', admin: {condition: whenCustom}, fields: [
-                  {name: 'locationLabel', type: 'text', label: f.locationLabel, localized: true, admin: {width: '33%', description: f.labelEmpty}},
-                  {name: 'deploymentLabel', type: 'text', label: f.deploymentLabel, localized: true, admin: {width: '33%', description: f.labelEmpty}},
-                  {name: 'modulesLabel', type: 'text', label: f.modulesLabel, localized: true, admin: {width: '34%', description: f.labelEmpty}},
-                ]},
-                {
-                  name: 'cta', type: 'group', label: f.cta,
-                  admin: {description: f.ctaDescription, condition: whenCustom},
-                  fields: [
-                    {name: 'label', type: 'text', label: f.ctaLabel, localized: true},
-                    ...linkTarget(),
                   ],
                 },
               ],

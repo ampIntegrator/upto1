@@ -1579,52 +1579,6 @@ export interface CaseStudy {
           id?: string | null;
         }[]
       | null;
-    /**
-     * Short, right of the category on cards (« −68 % lead time »). Empty: the first figure’s value.
-     */
-    cardResult?: string | null;
-    /**
-     * The row labels and the button come from the Case studies settings. Tick to replace them on this case study only; unticked, your values are kept but the site no longer uses them.
-     */
-    customDefaults?: boolean | null;
-    /**
-     * Empty: the settings one.
-     */
-    locationLabel?: string | null;
-    /**
-     * Empty: the settings one.
-     */
-    deploymentLabel?: string | null;
-    /**
-     * Empty: the settings one.
-     */
-    modulesLabel?: string | null;
-    /**
-     * Empty: the button of the case studies settings. Without a link, no button.
-     */
-    cta?: {
-      label?: string | null;
-      kind?: ('url' | 'internal') | null;
-      href?: string | null;
-      doc?:
-        | ({
-            relationTo: 'pages';
-            value: number | Page;
-          } | null)
-        | ({
-            relationTo: 'posts';
-            value: number | Post;
-          } | null)
-        | ({
-            relationTo: 'case-studies';
-            value: number | CaseStudy;
-          } | null)
-        | ({
-            relationTo: 'modals';
-            value: number | Modal;
-          } | null);
-      newTab?: boolean | null;
-    };
   };
   faq?: {
     show?: boolean | null;
@@ -1660,6 +1614,20 @@ export interface CaseStudy {
   slug: string;
   category: number | CaseCategory;
   publishedAt: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "case-categories".
+ */
+export interface CaseCategory {
+  id: number;
+  title: string;
+  /**
+   * Lowercase letters, digits and hyphens. “accueil” = home page.
+   */
+  slug: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -1730,20 +1698,6 @@ export interface Modal {
     | null;
   /**
    * Lowercase letters, digits and hyphens. The modal’s anchor on a page: #modale-<identifier>.
-   */
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "case-categories".
- */
-export interface CaseCategory {
-  id: number;
-  title: string;
-  /**
-   * Lowercase letters, digits and hyphens. “accueil” = home page.
    */
   slug: string;
   updatedAt: string;
@@ -5016,20 +4970,6 @@ export interface CaseStudiesSelect<T extends boolean = true> {
               label?: T;
               id?: T;
             };
-        cardResult?: T;
-        customDefaults?: T;
-        locationLabel?: T;
-        deploymentLabel?: T;
-        modulesLabel?: T;
-        cta?:
-          | T
-          | {
-              label?: T;
-              kind?: T;
-              href?: T;
-              doc?: T;
-              newTab?: T;
-            };
       };
   faq?:
     | T
@@ -5782,7 +5722,7 @@ export interface Portfolio {
     empty?: string | null;
   };
   /**
-   * Each case study can replace them in its Side column tab (« Change the default values » box).
+   * Shared by every case study.
    */
   sheet?: {
     client?: string | null;
@@ -5793,7 +5733,7 @@ export interface Portfolio {
     clientLink?: string | null;
   };
   /**
-   * Under the figures. Each case study can replace it. Without a link, no button.
+   * Under the figures, the same on every case study. Without a link, no button.
    */
   cta?: {
     label?: string | null;
