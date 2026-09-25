@@ -1,7 +1,7 @@
 /**
  * CaseHero — the top of a case study (mockup 23 .case-hero): the cover full-bleed on night, a
- * night veil darkening towards the bottom, plus an optional flat black overlay (`overlay`, 0 to
- * 80 %, for a light or white cover), and the text centred vertically in the site container: chips (« Étude de cas », category), the h1 with its serif accent (highlight, on
+ * night veil darkening towards the bottom, plus an optional flat black overlay (`overlay`, opacity
+ * 0 to 1, for a light or white cover), and the text centred vertically in the site container: chips (« Étude de cas », category), the h1 with its serif accent (highlight, on
  * dark), the lead. Night section: chips, title and text take their on-dark colours.
  * Placed under the page's breadcrumb band.
  */
@@ -27,7 +27,7 @@ export type CaseHeroProps = {
   /** entered title: <span>…</span> = serif accent, line breaks kept (TitleText) */
   title: TitleText;
   lead?: string;
-  /** flat black layer over the cover, under the text, in percent (0 to 80): darkens a light cover */
+  /** opacity of a flat black layer over the cover, under the text (0 to 1): darkens a light cover */
   overlay?: number;
 };
 
@@ -36,7 +36,7 @@ export function CaseHero({cover, coverCaption, coverCaptionTone, chips = [], tit
     <Section background="night" spacing="none">
       <VStack className={styles.hero}>
         {cover?.src ? <Image src={cover.src} alt={cover.alt ?? ''} fill priority sizes="100vw" className={styles.image} /> : null}
-        <i className={styles.veil} style={{'--overlay': Math.min(Math.max(overlay, 0), 80) / 100} as React.CSSProperties} aria-hidden="true" />
+        <i className={styles.veil} style={{'--overlay': Math.min(Math.max(overlay, 0), 1)} as React.CSSProperties} aria-hidden="true" />
         {cover?.src && coverCaption ? (
           <CoverCaption as="span" tone={coverCaptionTone}>
             {coverCaption}
