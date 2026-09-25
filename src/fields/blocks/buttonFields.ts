@@ -16,7 +16,12 @@ import {linkTargetFields} from '../linkTarget';
  */
 type Sibling = Record<string, unknown>;
 
-export const buttonRowFields = (): Field[] => {
+/**
+ * `split: false`: no split shape (the call-to-action band of posts and case studies, 25 Sept. 2026):
+ * the shape field stays in the schema but hidden, and the icon is always offered.
+ */
+export const buttonRowFields = (o: {split?: boolean} = {}): Field[] => {
+  const split = o.split !== false;
   const [kind, href, doc, newTab] = linkTargetFields({required: true, kindWidth: '50%'});
   return [
   {
@@ -41,7 +46,7 @@ export const buttonRowFields = (): Field[] => {
           {label: t.shapeSimple, value: 'simple'},
           {label: t.shapeSplit, value: 'split'},
         ],
-        admin: {width: '25%'},
+        admin: {width: '25%', hidden: !split},
       },
       {
         name: 'variant',
@@ -68,7 +73,7 @@ export const buttonRowFields = (): Field[] => {
         admin: {width: '25%'},
       },
       // the split button carries its arrow: the icon is offered on simple buttons only
-      iconField({name: 'iconKey', label: t.buttonIcon, admin: {width: '25%', condition: (_d: unknown, s: Sibling) => (s?.shape ?? 'simple') === 'simple'}}),
+      iconField({name: 'iconKey', label: t.buttonIcon, admin: {width: '25%', condition: (_d: unknown, s: Sibling) => !split || (s?.shape ?? 'simple') === 'simple'}}),
     ],
   },
   ];
