@@ -11,8 +11,10 @@ import {CASE_HERO} from './cases.shared';
 export default function CaseHeroShowcase() {
   return (
     <VStack gap={6}>
-      <Text type="body" color="secondary">Le haut d’une réalisation : image à la une en pleine largeur sur fond nuit, voile qui s’assombrit vers le bas, texte calé en bas dans le conteneur du site. Chips « Étude de cas » et catégorie, h1 avec accent serif highlight, chapô. Page complète : Page · réalisation (23).</Text>
+      <Text type="body" color="secondary">Le haut d’une réalisation : image à la une en pleine largeur sur fond nuit, voile qui s’assombrit vers le bas, texte centré verticalement dans le conteneur du site. Chips « Étude de cas » et catégorie, h1 avec accent serif highlight, chapô. Page complète : Page · réalisation (23).</Text>
       <CaseHero {...CASE_HERO} />
+      <Text type="body" color="secondary">Avec un voile noir à 40 % (prop overlay, de 0 à 80 %) : pour une image à la une claire ou très blanche.</Text>
+      <CaseHero {...CASE_HERO} overlay={40} />
     </VStack>
   );
 }
