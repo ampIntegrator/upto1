@@ -8,7 +8,9 @@
   background-color: var(--color-night);
   background-image: radial-gradient(120% 130% at 88% -20%, color-mix(in srgb, var(--color-highlight) 20%, transparent), transparent 60%);
 }
-.cell { flex-direction: column-reverse; padding: 24px 22px; min-width: 0; }
+/* column-reverse puts the label first in the markup but the figure on top; flex-end is then the top:
+   every figure on the same line when a label wraps onto more lines than its neighbours */
+.cell { flex-direction: column-reverse; justify-content: flex-end; padding: 24px 22px; min-width: 0; }
 .cell + .cell { border-left: 1px solid rgba(255, 255, 255, 0.1); }
 .dd { margin: 0; font-family: var(--font-family-heading); font-weight: 800; letter-spacing: -0.03em; line-height: 1; font-size: clamp(30px, 3.6vw, 42px); color: var(--color-highlight); white-space: nowrap; }
 .label { margin-top: 10px; font-family: var(--font-family-mono); font-size: 16px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255, 255, 255, 0.6); line-height: 1.4; } /* mockup 10.5 px: the figures bar label is 16 px */
