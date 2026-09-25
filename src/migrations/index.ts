@@ -50,6 +50,7 @@ import * as migration_20260924_095700_cover_caption from './20260924_095700_cove
 import * as migration_20260924_113404_links_add from './20260924_113404_links_add';
 import * as migration_20260924_113555_links_drop_legacy from './20260924_113555_links_drop_legacy';
 import * as migration_20260925_105024_case_sheet_drop_overrides from './20260925_105024_case_sheet_drop_overrides';
+import * as migration_20260925_110205_case_cover_overlay from './20260925_110205_case_cover_overlay';
 
 export const migrations = [
   {
@@ -310,6 +311,11 @@ export const migrations = [
   {
     up: migration_20260925_105024_case_sheet_drop_overrides.up,
     down: migration_20260925_105024_case_sheet_drop_overrides.down,
-    name: '20260925_105024_case_sheet_drop_overrides'
+    name: '20260925_105024_case_sheet_drop_overrides',
+  },
+  {
+    up: migration_20260925_110205_case_cover_overlay.up,
+    down: migration_20260925_110205_case_cover_overlay.down,
+    name: '20260925_110205_case_cover_overlay'
   },
 ];

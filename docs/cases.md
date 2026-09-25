@@ -21,7 +21,8 @@ the blog's), Réglages des réalisations (`portfolio` global).
 - Tab « Sous les réalisations »: FAQ title and tag, number of related case studies (3 or 4), as
   for the blog (`docs/blog.md`, « Under the post »).
 - **A case study**, tab « Contenu »: title (`<span>` accent), lead (also the default SEO
-  description), full-width cover, story (the post editor: headings, lists, quote, captioned
+  description), full-width cover (with its caption and an optional overlay between the image and
+  the title: opacity 0 to 1, black or the silo colour, `coverOverlay` / `coverOverlayColor`, 25 Sept. 2026), story (the post editor: headings, lists, quote, captioned
   images, tables, and the figures stats band, gallery, key points, quote card, CTA band).
   Tab « Colonne latérale » (renamed from « Fiche projet » on 18 September 2026, the name was
   unclear): client (required) and its site, location, deployment, modules (free text), two figures

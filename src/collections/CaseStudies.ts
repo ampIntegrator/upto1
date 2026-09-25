@@ -45,6 +45,15 @@ export const CaseStudies: CollectionConfig = {
                 {name: 'coverCaptionTone', type: 'radio', label: f.coverCaptionTone, defaultValue: 'light', options: [{label: f.captionLight, value: 'light'}, {label: f.captionDark, value: 'dark'}], admin: {width: '30%', layout: 'horizontal'}},
               ],
             },
+            // flat layer between the cover and the title (CaseHero `overlay`, `overlayColor`): tones down a light
+            // or white cover, in black or in the silo colour (the site settings one for a case study)
+            {
+              type: 'row',
+              fields: [
+                {name: 'coverOverlay', type: 'number', label: f.coverOverlay, min: 0, max: 1, defaultValue: 0, admin: {width: '50%', step: 0.05, description: f.coverOverlayDescription}},
+                {name: 'coverOverlayColor', type: 'radio', label: f.coverOverlayColor, defaultValue: 'black', options: [{label: f.overlayBlack, value: 'black'}, {label: f.overlaySilo, value: 'silo'}], admin: {width: '50%', layout: 'horizontal'}},
+              ],
+            },
             {name: 'content', type: 'richText', label: f.content, localized: true, editor: postEditor, admin: {description: f.contentDescription}},
           ],
         },

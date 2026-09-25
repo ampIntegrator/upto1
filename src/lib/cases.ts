@@ -25,6 +25,8 @@ export function caseHero(c: CaseStudy, cases: CasesConfig): CaseHeroProps {
     cover: cover ? {src: cover.src, alt: cover.alt} : undefined,
     coverCaption: c.coverCaption || undefined,
     coverCaptionTone: c.coverCaptionTone === 'dark' ? 'dark' : 'light',
+    overlay: c.coverOverlay ?? 0,
+    overlayColor: c.coverOverlayColor === 'silo' ? 'silo' : 'black',
     chips: [{label: cases.labels.badge, tone: 'cat'}, ...(category ? [{label: category.title, tone: 'high' as const}] : [])],
     title: c.title,
     lead: c.excerpt || undefined,

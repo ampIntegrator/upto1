@@ -1546,6 +1546,11 @@ export interface CaseStudy {
   coverCaption?: string | null;
   coverCaptionTone?: ('light' | 'dark') | null;
   /**
+   * Opacity of the layer between the image and the title: 0, no layer. Keeps the title and lead readable on a light image.
+   */
+  coverOverlay?: number | null;
+  coverOverlayColor?: ('black' | 'silo') | null;
+  /**
    * Like a post: headings h2 to h4, lists, quote, captioned images, tables, and inserted blocks (stats band, gallery, key points, quote card, call-to-action band).
    */
   content?: {
@@ -4954,6 +4959,8 @@ export interface CaseStudiesSelect<T extends boolean = true> {
   cover?: T;
   coverCaption?: T;
   coverCaptionTone?: T;
+  coverOverlay?: T;
+  coverOverlayColor?: T;
   content?: T;
   sheet?:
     | T
