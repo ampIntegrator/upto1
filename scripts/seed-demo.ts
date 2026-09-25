@@ -126,7 +126,7 @@ async function main() {
         {blockType: 'tel', name: 'telephone', label: 'Téléphone', width: 'half'},
         {blockType: 'select', name: 'metier', label: 'Votre métier', width: 'full', options: METIERS},
         {blockType: 'textarea', name: 'projet', label: 'Votre projet (facultatif)', width: 'full'},
-        {blockType: 'consent', name: 'consentement', label: 'J’accepte d’être recontacté par l’équipe.', privacyLabel: 'Politique de confidentialité', privacyHref: '#'},
+        {blockType: 'consent', name: 'consentement', label: 'J’accepte d’être recontacté par l’équipe.', privacyLabel: 'Politique de confidentialité', privacyTarget: {kind: 'url', href: '#'}},
       ],
     },
     {

@@ -32,8 +32,9 @@ modal), select words, add a link, « Lien interne », collection « Modales », 
 button (hero, text box, button group, CTA band, clickable cards, price CTAs, a case study's CTA,
 a modal's footer), « Lien vers : Contenu du site », collection « Modales », then the modal: the
 same picker as in the texts (see « Link targets » below). A typed address equal to the anchor,
-`#modale-<slug>`, works too. Header and footer: not needed (Nicolas's decision); their links stay
-typed addresses.
+`#modale-<slug>`, works too. Since 24 September 2026 the header, the footer, the case studies'
+default button, the collection's « see all » and the forms' privacy link can open a modal too:
+every page renders the modals its header and footer link to (`site.modalSources`, `PageModals`).
 
 ## Link targets (buttons)
 
@@ -49,10 +50,23 @@ or link field of the site content is a **target** (`src/fields/linkTarget.ts`, a
   (`stampInternalLinks`, page → `pagePath`, post and case study → under their listing, modal →
   its anchor): every renderer keeps reading `href`. A page loads its data with depth 2, enough
   for a target inside a block of a shared section.
-- Used by: `linkGroup` (hero buttons, clickable cards, price CTAs; the header keeps `plain`
-  addresses), `buttonRowFields` (text box, button group, CTA band), `modalButtonFields` (a
-  modal's « Aller à une adresse » buttons), the case study's own CTA. Not the header, the footer,
-  the collection block's « see all » link nor the forms' privacy link.
+- Used by: `linkGroup` (hero buttons, clickable cards, price CTAs, header login and CTA),
+  `buttonRowFields` (text box, button group, CTA band), `modalButtonFields` (a modal's « Aller à
+  une adresse » buttons), the case study's own CTA, and since 24 September 2026 the header (nav
+  links, menu and mega items), the footer (column links, legal links, « Tous les articles »:
+  `allTarget`), the case studies' default button (Réalisations › Réglages), the collection's
+  custom « see all » (`moreTarget`) and the forms' privacy link (`privacyTarget`). Typed addresses
+  only: the settings' socials and phone, a case study's client site, the form-builder redirect.
+- **« Ouvrir dans un nouvel onglet »** (`newTab`, 24 September 2026): a fourth field of every
+  target, hidden when the content is a modal (a modal opens over the page). Rendered as
+  `target="_blank" rel="noopener noreferrer"` (`newTabProps`, src/components/link-target.ts; the
+  site Button's `newTab` prop). The socials have their own box, ticked by default. Astryx dropdown
+  menu items take no target: such an item opens its address on click. Global links (header,
+  footer, case studies' settings) are resolved in `getSite()`.
+- Migrations `links_add` (new columns, the old typed addresses copied; SQLite recreates the header
+  and footer link tables, so their translated labels are kept aside and put back by hand: dropping
+  a table inside the migration transaction deletes its children in cascade, foreign keys cannot be
+  switched off there) and `links_drop_legacy` (`more_href`, `privacy_href`, `articles_all_href`).
 - Migration `link_target`: `kind` columns and the `pages_rels`, `sections_rels`, `modals_rels`
   tables (the chosen contents), `case_studies_rels` extended.
 

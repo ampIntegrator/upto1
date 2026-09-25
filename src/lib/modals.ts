@@ -54,7 +54,7 @@ function toButtons(rows: Modal['buttons']): ModalButton[] {
     if (!b.label) continue;
     const variant = b.variant ?? 'primary';
     if (b.action === 'link') {
-      if (b.href) out.push({label: b.label, variant, action: 'link', href: b.href});
+      if (b.href) out.push({label: b.label, variant, action: 'link', href: b.href, newTab: b.newTab || undefined});
     } else out.push({label: b.label, variant, action: 'close'});
   }
   return out;
@@ -99,7 +99,10 @@ async function toModalData(modal: Modal, locale: Locale, site: LinkSite): Promis
   // forms of the body: loaded once, with their redirect page (like the « Formulaire » column block)
   const blocks = formBlocks(body?.root.children);
   const ids = [...new Set(blocks.map((b) => formId(b.form)).filter((id): id is number => id !== null))];
-  const docs = new Map((await loadFormsByIds(locale, ids)).map((f) => [f.id, f]));
+  const loaded = await loadFormsByIds(locale, ids);
+  // the privacy link of a consent box may target a content of the site: its address on `href`
+  stampInternalLinks(loaded, site);
+  const docs = new Map(loaded.map((f) => [f.id, f]));
   const forms: Record<string, FormData> = {};
   for (const b of blocks) {
     const id = formId(b.form);

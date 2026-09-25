@@ -14,7 +14,7 @@ import type {HeroProps} from '@/components/Hero';
 import type {SiteFooterData, SiteHeaderData, SiteNavEntry, SiteStrip} from '@/components/site-nav';
 import {loadEntriesByIds, loadLatestEntries} from '@/lib/entries';
 import {loadFormsByIds} from '@/lib/forms-load';
-import {resolveInternalLink} from '@/lib/links';
+import {resolveInternalLink, stampInternalLinks} from '@/lib/links';
 import {pageAncestors} from '@/lib/pages';
 import {type BlogConfig, blogConfig, type CasesConfig, casesConfig, entryPath, listingPath, plainTitle} from '@/lib/listings';
 import type {SectionsContext} from '@/lib/sections';
@@ -34,6 +34,8 @@ export async function getLocale(): Promise<Locale> {
 const mediaUrl = (m: Media | number | string | null | undefined): string | undefined => (m && typeof m === 'object' ? (m.url ?? undefined) : undefined);
 const mediaAlt = (m: Media | number | string | null | undefined): string | undefined => (m && typeof m === 'object' ? m.alt : undefined);
 const icon = (k?: string | null): NucleoIconKey | undefined => (k ? (k as NucleoIconKey) : undefined);
+/** a link field (src/fields/linkTarget.ts), its address already resolved → the components' href and newTab */
+const target = (l: {href?: string | null; newTab?: boolean | null}): {href: string; newTab?: boolean} => ({href: l.href ?? '', newTab: l.newTab || undefined});
 
 export async function getSite(locale: Locale) {
   const payload = await getPayload({config});
@@ -46,7 +48,14 @@ export async function getSite(locale: Locale) {
     payload.findGlobal({slug: 'footer', locale, depth: 1}),
     payload.find({collection: 'posts', locale, depth: 1, limit: 3, sort: '-publishedAt'}),
   ]);
-  return {settings, blog: blogConfig(blog), cases: casesConfig(portfolio), languages, header, footer, posts: posts.docs};
+  // links targeting a content of the site (header, footer, the case studies' default button):
+  // their address on `href` (src/lib/links.ts), before casesConfig copies the button
+  stampInternalLinks([header, footer, portfolio], {blog: blogConfig(blog), cases: casesConfig(portfolio)});
+  return {
+    settings, blog: blogConfig(blog), cases: casesConfig(portfolio), languages, header, footer, posts: posts.docs,
+    /** where the site chrome can link to a modal: every page renders those modals too (PageModals) */
+    modalSources: [header, footer, portfolio] as unknown[],
+  };
 }
 
 /** An internal link of a rich text (a post, a case study, a modal, a page): its address (src/lib/links.ts). */
@@ -71,19 +80,19 @@ export function toStrip(s: Settings): SiteStrip {
     email: s.email ? {label: s.email, href: `mailto:${s.email}`} : undefined,
     hours: s.hours ?? undefined,
     address: s.address ?? undefined,
-    socials: (s.socials ?? []).map((x) => ({label: x.label, href: x.href, iconKey: x.iconKey as NucleoIconKey})),
+    socials: (s.socials ?? []).map((x) => ({label: x.label, href: x.href, iconKey: x.iconKey as NucleoIconKey, newTab: Boolean(x.newTab)})),
   };
 }
 
 export function toHeader(s: Settings, h: Header, l: Language, blog: BlogConfig): SiteHeaderData {
   const nav: SiteNavEntry[] = (h.nav ?? []).map((b): SiteNavEntry => {
-    if (b.blockType === 'link') return {kind: 'link', label: b.label, href: b.href};
-    if (b.blockType === 'menu') return {kind: 'menu', label: b.label, items: (b.items ?? []).map((it) => ({title: it.title, description: it.description ?? undefined, iconKey: icon(it.iconKey), href: it.href}))};
+    if (b.blockType === 'link') return {kind: 'link', label: b.label, ...target(b)};
+    if (b.blockType === 'menu') return {kind: 'menu', label: b.label, items: (b.items ?? []).map((it) => ({title: it.title, description: it.description ?? undefined, iconKey: icon(it.iconKey), ...target(it)}))};
     const post = b.featured && typeof b.featured === 'object' ? (b.featured as Post) : null;
     return {
       kind: 'mega',
       label: b.label,
-      groups: (b.groups ?? []).map((g) => ({title: g.title, items: (g.items ?? []).map((it) => ({title: it.title, description: it.description ?? undefined, iconKey: icon(it.iconKey), href: it.href}))})),
+      groups: (b.groups ?? []).map((g) => ({title: g.title, items: (g.items ?? []).map((it) => ({title: it.title, description: it.description ?? undefined, iconKey: icon(it.iconKey), ...target(it)}))})),
       featured: post ? {title: plainTitle(post.title), description: post.excerpt ?? undefined, image: mediaUrl(post.cover), linkLabel: b.featuredLinkLabel || "Lire l'article", linkHref: entryPath(blog, post.slug)} : undefined,
     };
   });
@@ -92,8 +101,8 @@ export function toHeader(s: Settings, h: Header, l: Language, blog: BlogConfig):
     strip: toStrip(s),
     nav,
     actions: {
-      login: h.login?.label && h.login?.href ? {label: h.login.label, href: h.login.href} : undefined,
-      cta: h.cta?.label && h.cta?.href ? {label: h.cta.label, href: h.cta.href} : undefined,
+      login: h.login?.label && h.login?.href ? {label: h.login.label, ...target(h.login)} : undefined,
+      cta: h.cta?.label && h.cta?.href ? {label: h.cta.label, ...target(h.cta)} : undefined,
     },
     languages: (l.languages ?? ['fr']).map((code) => code.toUpperCase()),
   };
@@ -108,11 +117,12 @@ export function toFooter(s: Settings, f: Footer, posts: Post[], locale: Locale, 
     articles: f.articlesEnabled !== false && posts.length ? {
       eyebrow: f.articles?.eyebrow ?? 'En bref',
       allLabel: f.articles?.allLabel ?? 'Tous les articles',
-      allHref: f.articles?.allHref ?? listingPath(blog),
+      allHref: f.articles?.allTarget?.href || listingPath(blog),
+      allNewTab: Boolean(f.articles?.allTarget?.newTab),
       items: posts.map((p) => ({category: typeof p.category === 'object' ? p.category.title : '', title: plainTitle(p.title), date: fmt.format(new Date(p.publishedAt)), href: entryPath(blog, p.slug)})),
     } : undefined,
-    columns: (f.columns ?? []).map((c) => ({title: c.title, links: (c.links ?? []).map((l) => ({label: l.label, href: l.href}))})),
-    legal: {copyright: f.copyright ?? '', line: f.legalLine ?? undefined, links: (f.legalLinks ?? []).map((l) => ({label: l.label, href: l.href}))},
+    columns: (f.columns ?? []).map((c) => ({title: c.title, links: (c.links ?? []).filter((l) => l.href).map((l) => ({label: l.label, ...target(l)}))})),
+    legal: {copyright: f.copyright ?? '', line: f.legalLine ?? undefined, links: (f.legalLinks ?? []).filter((l) => l.href).map((l) => ({label: l.label, ...target(l)}))},
   };
 }
 
@@ -133,7 +143,7 @@ export function breadcrumbProps(page: Page, s: Settings) {
 /** A Payload page's page top → Hero component props. */
 export function toHero(page: Page, s: Settings): HeroProps {
   const h = page.hero;
-  const action = (a?: {label?: string | null; href?: string | null; iconKey?: string | null} | null) => (a?.label && a?.href ? {label: a.label, href: a.href, iconKey: icon(a.iconKey)} : undefined);
+  const action = (a?: {label?: string | null; href?: string | null; newTab?: boolean | null; iconKey?: string | null} | null) => (a?.label && a?.href ? {label: a.label, ...target(a), iconKey: icon(a.iconKey)} : undefined);
   const base = {eyebrow: h.eyebrow ?? undefined, title: h.title, lead: h.lead ?? undefined, primary: action(h.primary), secondary: action(h.secondary)};
   switch (h.variant) {
     case 'media-image':

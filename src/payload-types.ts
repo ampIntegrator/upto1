@@ -194,6 +194,7 @@ export interface Page {
             relationTo: 'modals';
             value: number | Modal;
           } | null);
+      newTab?: boolean | null;
       iconKey?: string | null;
     };
     secondary?: {
@@ -217,6 +218,7 @@ export interface Page {
             relationTo: 'modals';
             value: number | Modal;
           } | null);
+      newTab?: boolean | null;
       iconKey?: string | null;
     };
     image?: (number | null) | Media;
@@ -373,6 +375,7 @@ export interface Page {
                                               relationTo: 'modals';
                                               value: number | Modal;
                                             } | null);
+                                        newTab?: boolean | null;
                                         shape?: ('simple' | 'split') | null;
                                         variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
                                         size?: ('md' | 'lg') | null;
@@ -510,6 +513,7 @@ export interface Page {
                                           relationTo: 'modals';
                                           value: number | Modal;
                                         } | null);
+                                    newTab?: boolean | null;
                                   };
                                   id?: string | null;
                                   blockName?: string | null;
@@ -544,6 +548,7 @@ export interface Page {
                                           relationTo: 'modals';
                                           value: number | Modal;
                                         } | null);
+                                    newTab?: boolean | null;
                                   };
                                   id?: string | null;
                                   blockName?: string | null;
@@ -580,6 +585,7 @@ export interface Page {
                                           relationTo: 'modals';
                                           value: number | Modal;
                                         } | null);
+                                    newTab?: boolean | null;
                                   };
                                   id?: string | null;
                                   blockName?: string | null;
@@ -613,6 +619,7 @@ export interface Page {
                                           relationTo: 'modals';
                                           value: number | Modal;
                                         } | null);
+                                    newTab?: boolean | null;
                                   };
                                   id?: string | null;
                                   blockName?: string | null;
@@ -656,6 +663,7 @@ export interface Page {
                                           relationTo: 'modals';
                                           value: number | Modal;
                                         } | null);
+                                    newTab?: boolean | null;
                                   };
                                   mention?: string | null;
                                   guarantee?: {
@@ -717,6 +725,7 @@ export interface Page {
                                           relationTo: 'modals';
                                           value: number | Modal;
                                         } | null);
+                                    newTab?: boolean | null;
                                   };
                                   mention?: string | null;
                                   guarantee?: {
@@ -873,6 +882,7 @@ export interface Page {
                                               relationTo: 'modals';
                                               value: number | Modal;
                                             } | null);
+                                        newTab?: boolean | null;
                                         shape?: ('simple' | 'split') | null;
                                         variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
                                         size?: ('md' | 'lg') | null;
@@ -946,6 +956,7 @@ export interface Page {
                                           relationTo: 'modals';
                                           value: number | Modal;
                                         } | null);
+                                    newTab?: boolean | null;
                                     shape?: ('simple' | 'split') | null;
                                     variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
                                     size?: ('md' | 'lg') | null;
@@ -1091,6 +1102,7 @@ export interface Page {
                                                     relationTo: 'modals';
                                                     value: number | Modal;
                                                   } | null);
+                                              newTab?: boolean | null;
                                             };
                                             id?: string | null;
                                             blockName?: string | null;
@@ -1125,6 +1137,7 @@ export interface Page {
                                                     relationTo: 'modals';
                                                     value: number | Modal;
                                                   } | null);
+                                              newTab?: boolean | null;
                                             };
                                             id?: string | null;
                                             blockName?: string | null;
@@ -1161,6 +1174,7 @@ export interface Page {
                                                     relationTo: 'modals';
                                                     value: number | Modal;
                                                   } | null);
+                                              newTab?: boolean | null;
                                             };
                                             id?: string | null;
                                             blockName?: string | null;
@@ -1194,6 +1208,7 @@ export interface Page {
                                                     relationTo: 'modals';
                                                     value: number | Modal;
                                                   } | null);
+                                              newTab?: boolean | null;
                                             };
                                             id?: string | null;
                                             blockName?: string | null;
@@ -1263,6 +1278,7 @@ export interface Page {
                                                     relationTo: 'modals';
                                                     value: number | Modal;
                                                   } | null);
+                                              newTab?: boolean | null;
                                             };
                                             mention?: string | null;
                                             guarantee?: {
@@ -1311,7 +1327,28 @@ export interface Page {
                                    * Empty: the settings label (« Voir le blog », « Voir toutes les réalisations »).
                                    */
                                   moreLabel?: string | null;
-                                  moreHref?: string | null;
+                                  moreTarget?: {
+                                    kind?: ('url' | 'internal') | null;
+                                    href?: string | null;
+                                    doc?:
+                                      | ({
+                                          relationTo: 'pages';
+                                          value: number | Page;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'posts';
+                                          value: number | Post;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'case-studies';
+                                          value: number | CaseStudy;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'modals';
+                                          value: number | Modal;
+                                        } | null);
+                                    newTab?: boolean | null;
+                                  };
                                   id?: string | null;
                                   blockName?: string | null;
                                   blockType: 'collection';
@@ -1391,6 +1428,7 @@ export interface Post {
   title: string;
   cover?: (number | null) | Media;
   coverCaption?: string | null;
+  coverCaptionTone?: ('light' | 'dark') | null;
   excerpt?: string | null;
   /**
    * Headings h2 to h4 (the table of contents uses them), lists, quote (a last line « — Name » becomes the attribution), captioned images, tables, and inserted blocks: key points, call-to-action band, stats band, quote card, gallery.
@@ -1505,6 +1543,8 @@ export interface CaseStudy {
   title: string;
   excerpt?: string | null;
   cover?: (number | null) | Media;
+  coverCaption?: string | null;
+  coverCaptionTone?: ('light' | 'dark') | null;
   /**
    * Like a post: headings h2 to h4, lists, quote, captioned images, tables, and inserted blocks (stats band, gallery, key points, quote card, call-to-action band).
    */
@@ -1583,6 +1623,7 @@ export interface CaseStudy {
             relationTo: 'modals';
             value: number | Modal;
           } | null);
+      newTab?: boolean | null;
     };
   };
   faq?: {
@@ -1683,6 +1724,7 @@ export interface Modal {
               relationTo: 'modals';
               value: number | Modal;
             } | null);
+        newTab?: boolean | null;
         id?: string | null;
       }[]
     | null;
@@ -1861,7 +1903,28 @@ export interface Form {
              */
             label: string;
             privacyLabel?: string | null;
-            privacyHref?: string | null;
+            privacyTarget?: {
+              kind?: ('url' | 'internal') | null;
+              href?: string | null;
+              doc?:
+                | ({
+                    relationTo: 'pages';
+                    value: number | Page;
+                  } | null)
+                | ({
+                    relationTo: 'posts';
+                    value: number | Post;
+                  } | null)
+                | ({
+                    relationTo: 'case-studies';
+                    value: number | CaseStudy;
+                  } | null)
+                | ({
+                    relationTo: 'modals';
+                    value: number | Modal;
+                  } | null);
+              newTab?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'consent';
@@ -2059,6 +2122,7 @@ export interface Section {
                                     relationTo: 'modals';
                                     value: number | Modal;
                                   } | null);
+                              newTab?: boolean | null;
                               shape?: ('simple' | 'split') | null;
                               variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
                               size?: ('md' | 'lg') | null;
@@ -2196,6 +2260,7 @@ export interface Section {
                                 relationTo: 'modals';
                                 value: number | Modal;
                               } | null);
+                          newTab?: boolean | null;
                         };
                         id?: string | null;
                         blockName?: string | null;
@@ -2230,6 +2295,7 @@ export interface Section {
                                 relationTo: 'modals';
                                 value: number | Modal;
                               } | null);
+                          newTab?: boolean | null;
                         };
                         id?: string | null;
                         blockName?: string | null;
@@ -2266,6 +2332,7 @@ export interface Section {
                                 relationTo: 'modals';
                                 value: number | Modal;
                               } | null);
+                          newTab?: boolean | null;
                         };
                         id?: string | null;
                         blockName?: string | null;
@@ -2299,6 +2366,7 @@ export interface Section {
                                 relationTo: 'modals';
                                 value: number | Modal;
                               } | null);
+                          newTab?: boolean | null;
                         };
                         id?: string | null;
                         blockName?: string | null;
@@ -2342,6 +2410,7 @@ export interface Section {
                                 relationTo: 'modals';
                                 value: number | Modal;
                               } | null);
+                          newTab?: boolean | null;
                         };
                         mention?: string | null;
                         guarantee?: {
@@ -2403,6 +2472,7 @@ export interface Section {
                                 relationTo: 'modals';
                                 value: number | Modal;
                               } | null);
+                          newTab?: boolean | null;
                         };
                         mention?: string | null;
                         guarantee?: {
@@ -2559,6 +2629,7 @@ export interface Section {
                                     relationTo: 'modals';
                                     value: number | Modal;
                                   } | null);
+                              newTab?: boolean | null;
                               shape?: ('simple' | 'split') | null;
                               variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
                               size?: ('md' | 'lg') | null;
@@ -2632,6 +2703,7 @@ export interface Section {
                                 relationTo: 'modals';
                                 value: number | Modal;
                               } | null);
+                          newTab?: boolean | null;
                           shape?: ('simple' | 'split') | null;
                           variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
                           size?: ('md' | 'lg') | null;
@@ -2777,6 +2849,7 @@ export interface Section {
                                           relationTo: 'modals';
                                           value: number | Modal;
                                         } | null);
+                                    newTab?: boolean | null;
                                   };
                                   id?: string | null;
                                   blockName?: string | null;
@@ -2811,6 +2884,7 @@ export interface Section {
                                           relationTo: 'modals';
                                           value: number | Modal;
                                         } | null);
+                                    newTab?: boolean | null;
                                   };
                                   id?: string | null;
                                   blockName?: string | null;
@@ -2847,6 +2921,7 @@ export interface Section {
                                           relationTo: 'modals';
                                           value: number | Modal;
                                         } | null);
+                                    newTab?: boolean | null;
                                   };
                                   id?: string | null;
                                   blockName?: string | null;
@@ -2880,6 +2955,7 @@ export interface Section {
                                           relationTo: 'modals';
                                           value: number | Modal;
                                         } | null);
+                                    newTab?: boolean | null;
                                   };
                                   id?: string | null;
                                   blockName?: string | null;
@@ -2949,6 +3025,7 @@ export interface Section {
                                           relationTo: 'modals';
                                           value: number | Modal;
                                         } | null);
+                                    newTab?: boolean | null;
                                   };
                                   mention?: string | null;
                                   guarantee?: {
@@ -2997,7 +3074,28 @@ export interface Section {
                          * Empty: the settings label (« Voir le blog », « Voir toutes les réalisations »).
                          */
                         moreLabel?: string | null;
-                        moreHref?: string | null;
+                        moreTarget?: {
+                          kind?: ('url' | 'internal') | null;
+                          href?: string | null;
+                          doc?:
+                            | ({
+                                relationTo: 'pages';
+                                value: number | Page;
+                              } | null)
+                            | ({
+                                relationTo: 'posts';
+                                value: number | Post;
+                              } | null)
+                            | ({
+                                relationTo: 'case-studies';
+                                value: number | CaseStudy;
+                              } | null)
+                            | ({
+                                relationTo: 'modals';
+                                value: number | Modal;
+                              } | null);
+                          newTab?: boolean | null;
+                        };
                         id?: string | null;
                         blockName?: string | null;
                         blockType: 'collection';
@@ -3238,6 +3336,7 @@ export interface PagesSelect<T extends boolean = true> {
               kind?: T;
               href?: T;
               doc?: T;
+              newTab?: T;
               iconKey?: T;
             };
         secondary?:
@@ -3247,6 +3346,7 @@ export interface PagesSelect<T extends boolean = true> {
               kind?: T;
               href?: T;
               doc?: T;
+              newTab?: T;
               iconKey?: T;
             };
         image?: T;
@@ -3344,6 +3444,7 @@ export interface PagesSelect<T extends boolean = true> {
                                             kind?: T;
                                             href?: T;
                                             doc?: T;
+                                            newTab?: T;
                                             shape?: T;
                                             variant?: T;
                                             size?: T;
@@ -3434,6 +3535,7 @@ export interface PagesSelect<T extends boolean = true> {
                                             kind?: T;
                                             href?: T;
                                             doc?: T;
+                                            newTab?: T;
                                           };
                                       id?: T;
                                       blockName?: T;
@@ -3452,6 +3554,7 @@ export interface PagesSelect<T extends boolean = true> {
                                             kind?: T;
                                             href?: T;
                                             doc?: T;
+                                            newTab?: T;
                                           };
                                       id?: T;
                                       blockName?: T;
@@ -3472,6 +3575,7 @@ export interface PagesSelect<T extends boolean = true> {
                                             kind?: T;
                                             href?: T;
                                             doc?: T;
+                                            newTab?: T;
                                           };
                                       id?: T;
                                       blockName?: T;
@@ -3489,6 +3593,7 @@ export interface PagesSelect<T extends boolean = true> {
                                             kind?: T;
                                             href?: T;
                                             doc?: T;
+                                            newTab?: T;
                                           };
                                       id?: T;
                                       blockName?: T;
@@ -3521,6 +3626,7 @@ export interface PagesSelect<T extends boolean = true> {
                                             kind?: T;
                                             href?: T;
                                             doc?: T;
+                                            newTab?: T;
                                           };
                                       mention?: T;
                                       guarantee?:
@@ -3564,6 +3670,7 @@ export interface PagesSelect<T extends boolean = true> {
                                             kind?: T;
                                             href?: T;
                                             doc?: T;
+                                            newTab?: T;
                                           };
                                       mention?: T;
                                       guarantee?:
@@ -3669,6 +3776,7 @@ export interface PagesSelect<T extends boolean = true> {
                                             kind?: T;
                                             href?: T;
                                             doc?: T;
+                                            newTab?: T;
                                             shape?: T;
                                             variant?: T;
                                             size?: T;
@@ -3714,6 +3822,7 @@ export interface PagesSelect<T extends boolean = true> {
                                             kind?: T;
                                             href?: T;
                                             doc?: T;
+                                            newTab?: T;
                                             shape?: T;
                                             variant?: T;
                                             size?: T;
@@ -3836,6 +3945,7 @@ export interface PagesSelect<T extends boolean = true> {
                                                         kind?: T;
                                                         href?: T;
                                                         doc?: T;
+                                                        newTab?: T;
                                                       };
                                                   id?: T;
                                                   blockName?: T;
@@ -3854,6 +3964,7 @@ export interface PagesSelect<T extends boolean = true> {
                                                         kind?: T;
                                                         href?: T;
                                                         doc?: T;
+                                                        newTab?: T;
                                                       };
                                                   id?: T;
                                                   blockName?: T;
@@ -3874,6 +3985,7 @@ export interface PagesSelect<T extends boolean = true> {
                                                         kind?: T;
                                                         href?: T;
                                                         doc?: T;
+                                                        newTab?: T;
                                                       };
                                                   id?: T;
                                                   blockName?: T;
@@ -3891,6 +4003,7 @@ export interface PagesSelect<T extends boolean = true> {
                                                         kind?: T;
                                                         href?: T;
                                                         doc?: T;
+                                                        newTab?: T;
                                                       };
                                                   id?: T;
                                                   blockName?: T;
@@ -3944,6 +4057,7 @@ export interface PagesSelect<T extends boolean = true> {
                                                         kind?: T;
                                                         href?: T;
                                                         doc?: T;
+                                                        newTab?: T;
                                                       };
                                                   mention?: T;
                                                   guarantee?:
@@ -3979,7 +4093,14 @@ export interface PagesSelect<T extends boolean = true> {
                                       casesCta?: T;
                                       moreLink?: T;
                                       moreLabel?: T;
-                                      moreHref?: T;
+                                      moreTarget?:
+                                        | T
+                                        | {
+                                            kind?: T;
+                                            href?: T;
+                                            doc?: T;
+                                            newTab?: T;
+                                          };
                                       id?: T;
                                       blockName?: T;
                                     };
@@ -4101,6 +4222,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                 kind?: T;
                                 href?: T;
                                 doc?: T;
+                                newTab?: T;
                                 shape?: T;
                                 variant?: T;
                                 size?: T;
@@ -4191,6 +4313,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                 kind?: T;
                                 href?: T;
                                 doc?: T;
+                                newTab?: T;
                               };
                           id?: T;
                           blockName?: T;
@@ -4209,6 +4332,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                 kind?: T;
                                 href?: T;
                                 doc?: T;
+                                newTab?: T;
                               };
                           id?: T;
                           blockName?: T;
@@ -4229,6 +4353,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                 kind?: T;
                                 href?: T;
                                 doc?: T;
+                                newTab?: T;
                               };
                           id?: T;
                           blockName?: T;
@@ -4246,6 +4371,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                 kind?: T;
                                 href?: T;
                                 doc?: T;
+                                newTab?: T;
                               };
                           id?: T;
                           blockName?: T;
@@ -4278,6 +4404,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                 kind?: T;
                                 href?: T;
                                 doc?: T;
+                                newTab?: T;
                               };
                           mention?: T;
                           guarantee?:
@@ -4321,6 +4448,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                 kind?: T;
                                 href?: T;
                                 doc?: T;
+                                newTab?: T;
                               };
                           mention?: T;
                           guarantee?:
@@ -4426,6 +4554,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                 kind?: T;
                                 href?: T;
                                 doc?: T;
+                                newTab?: T;
                                 shape?: T;
                                 variant?: T;
                                 size?: T;
@@ -4471,6 +4600,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                 kind?: T;
                                 href?: T;
                                 doc?: T;
+                                newTab?: T;
                                 shape?: T;
                                 variant?: T;
                                 size?: T;
@@ -4593,6 +4723,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                             kind?: T;
                                             href?: T;
                                             doc?: T;
+                                            newTab?: T;
                                           };
                                       id?: T;
                                       blockName?: T;
@@ -4611,6 +4742,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                             kind?: T;
                                             href?: T;
                                             doc?: T;
+                                            newTab?: T;
                                           };
                                       id?: T;
                                       blockName?: T;
@@ -4631,6 +4763,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                             kind?: T;
                                             href?: T;
                                             doc?: T;
+                                            newTab?: T;
                                           };
                                       id?: T;
                                       blockName?: T;
@@ -4648,6 +4781,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                             kind?: T;
                                             href?: T;
                                             doc?: T;
+                                            newTab?: T;
                                           };
                                       id?: T;
                                       blockName?: T;
@@ -4701,6 +4835,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                             kind?: T;
                                             href?: T;
                                             doc?: T;
+                                            newTab?: T;
                                           };
                                       mention?: T;
                                       guarantee?:
@@ -4736,7 +4871,14 @@ export interface SectionsSelect<T extends boolean = true> {
                           casesCta?: T;
                           moreLink?: T;
                           moreLabel?: T;
-                          moreHref?: T;
+                          moreTarget?:
+                            | T
+                            | {
+                                kind?: T;
+                                href?: T;
+                                doc?: T;
+                                newTab?: T;
+                              };
                           id?: T;
                           blockName?: T;
                         };
@@ -4777,6 +4919,7 @@ export interface ModalsSelect<T extends boolean = true> {
         kind?: T;
         href?: T;
         doc?: T;
+        newTab?: T;
         id?: T;
       };
   slug?: T;
@@ -4791,6 +4934,7 @@ export interface PostsSelect<T extends boolean = true> {
   title?: T;
   cover?: T;
   coverCaption?: T;
+  coverCaptionTone?: T;
   excerpt?: T;
   content?: T;
   faq?:
@@ -4854,6 +4998,8 @@ export interface CaseStudiesSelect<T extends boolean = true> {
   title?: T;
   excerpt?: T;
   cover?: T;
+  coverCaption?: T;
+  coverCaptionTone?: T;
   content?: T;
   sheet?:
     | T
@@ -4882,6 +5028,7 @@ export interface CaseStudiesSelect<T extends boolean = true> {
               kind?: T;
               href?: T;
               doc?: T;
+              newTab?: T;
             };
       };
   faq?:
@@ -5123,7 +5270,14 @@ export interface FormsSelect<T extends boolean = true> {
               name?: T;
               label?: T;
               privacyLabel?: T;
-              privacyHref?: T;
+              privacyTarget?:
+                | T
+                | {
+                    kind?: T;
+                    href?: T;
+                    doc?: T;
+                    newTab?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -5240,6 +5394,7 @@ export interface Setting {
         label: string;
         href: string;
         iconKey: string;
+        newTab?: boolean | null;
         id?: string | null;
       }[]
     | null;
@@ -5287,7 +5442,26 @@ export interface Header {
     | (
         | {
             label: string;
-            href: string;
+            kind?: ('url' | 'internal') | null;
+            href?: string | null;
+            doc?:
+              | ({
+                  relationTo: 'pages';
+                  value: number | Page;
+                } | null)
+              | ({
+                  relationTo: 'posts';
+                  value: number | Post;
+                } | null)
+              | ({
+                  relationTo: 'case-studies';
+                  value: number | CaseStudy;
+                } | null)
+              | ({
+                  relationTo: 'modals';
+                  value: number | Modal;
+                } | null);
+            newTab?: boolean | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'link';
@@ -5296,7 +5470,26 @@ export interface Header {
             label: string;
             items: {
               title: string;
-              href: string;
+              kind?: ('url' | 'internal') | null;
+              href?: string | null;
+              doc?:
+                | ({
+                    relationTo: 'pages';
+                    value: number | Page;
+                  } | null)
+                | ({
+                    relationTo: 'posts';
+                    value: number | Post;
+                  } | null)
+                | ({
+                    relationTo: 'case-studies';
+                    value: number | CaseStudy;
+                  } | null)
+                | ({
+                    relationTo: 'modals';
+                    value: number | Modal;
+                  } | null);
+              newTab?: boolean | null;
               description?: string | null;
               iconKey?: string | null;
               id?: string | null;
@@ -5311,7 +5504,26 @@ export interface Header {
               title: string;
               items: {
                 title: string;
-                href: string;
+                kind?: ('url' | 'internal') | null;
+                href?: string | null;
+                doc?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: number | Post;
+                    } | null)
+                  | ({
+                      relationTo: 'case-studies';
+                      value: number | CaseStudy;
+                    } | null)
+                  | ({
+                      relationTo: 'modals';
+                      value: number | Modal;
+                    } | null);
+                newTab?: boolean | null;
                 description?: string | null;
                 iconKey?: string | null;
                 id?: string | null;
@@ -5331,11 +5543,49 @@ export interface Header {
     | null;
   login?: {
     label?: string | null;
+    kind?: ('url' | 'internal') | null;
     href?: string | null;
+    doc?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'case-studies';
+          value: number | CaseStudy;
+        } | null)
+      | ({
+          relationTo: 'modals';
+          value: number | Modal;
+        } | null);
+    newTab?: boolean | null;
   };
   cta?: {
     label?: string | null;
+    kind?: ('url' | 'internal') | null;
     href?: string | null;
+    doc?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'case-studies';
+          value: number | CaseStudy;
+        } | null)
+      | ({
+          relationTo: 'modals';
+          value: number | Modal;
+        } | null);
+    newTab?: boolean | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -5364,7 +5614,28 @@ export interface Footer {
   articles?: {
     eyebrow?: string | null;
     allLabel?: string | null;
-    allHref?: string | null;
+    allTarget?: {
+      kind?: ('url' | 'internal') | null;
+      href?: string | null;
+      doc?:
+        | ({
+            relationTo: 'pages';
+            value: number | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: number | Post;
+          } | null)
+        | ({
+            relationTo: 'case-studies';
+            value: number | CaseStudy;
+          } | null)
+        | ({
+            relationTo: 'modals';
+            value: number | Modal;
+          } | null);
+      newTab?: boolean | null;
+    };
   };
   columns?:
     | {
@@ -5372,7 +5643,26 @@ export interface Footer {
         links?:
           | {
               label: string;
-              href: string;
+              kind?: ('url' | 'internal') | null;
+              href?: string | null;
+              doc?:
+                | ({
+                    relationTo: 'pages';
+                    value: number | Page;
+                  } | null)
+                | ({
+                    relationTo: 'posts';
+                    value: number | Post;
+                  } | null)
+                | ({
+                    relationTo: 'case-studies';
+                    value: number | CaseStudy;
+                  } | null)
+                | ({
+                    relationTo: 'modals';
+                    value: number | Modal;
+                  } | null);
+              newTab?: boolean | null;
               id?: string | null;
             }[]
           | null;
@@ -5384,7 +5674,26 @@ export interface Footer {
   legalLinks?:
     | {
         label: string;
-        href: string;
+        kind?: ('url' | 'internal') | null;
+        href?: string | null;
+        doc?:
+          | ({
+              relationTo: 'pages';
+              value: number | Page;
+            } | null)
+          | ({
+              relationTo: 'posts';
+              value: number | Post;
+            } | null)
+          | ({
+              relationTo: 'case-studies';
+              value: number | CaseStudy;
+            } | null)
+          | ({
+              relationTo: 'modals';
+              value: number | Modal;
+            } | null);
+        newTab?: boolean | null;
         id?: string | null;
       }[]
     | null;
@@ -5488,7 +5797,26 @@ export interface Portfolio {
    */
   cta?: {
     label?: string | null;
+    kind?: ('url' | 'internal') | null;
     href?: string | null;
+    doc?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'case-studies';
+          value: number | CaseStudy;
+        } | null)
+      | ({
+          relationTo: 'modals';
+          value: number | Modal;
+        } | null);
+    newTab?: boolean | null;
   };
   faqEyebrow?: string | null;
   /**
@@ -5540,6 +5868,7 @@ export interface SettingsSelect<T extends boolean = true> {
         label?: T;
         href?: T;
         iconKey?: T;
+        newTab?: T;
         id?: T;
       };
   breadcrumb?:
@@ -5582,7 +5911,10 @@ export interface HeaderSelect<T extends boolean = true> {
           | T
           | {
               label?: T;
+              kind?: T;
               href?: T;
+              doc?: T;
+              newTab?: T;
               id?: T;
               blockName?: T;
             };
@@ -5594,7 +5926,10 @@ export interface HeaderSelect<T extends boolean = true> {
                 | T
                 | {
                     title?: T;
+                    kind?: T;
                     href?: T;
+                    doc?: T;
+                    newTab?: T;
                     description?: T;
                     iconKey?: T;
                     id?: T;
@@ -5614,7 +5949,10 @@ export interface HeaderSelect<T extends boolean = true> {
                       | T
                       | {
                           title?: T;
+                          kind?: T;
                           href?: T;
+                          doc?: T;
+                          newTab?: T;
                           description?: T;
                           iconKey?: T;
                           id?: T;
@@ -5631,13 +5969,19 @@ export interface HeaderSelect<T extends boolean = true> {
     | T
     | {
         label?: T;
+        kind?: T;
         href?: T;
+        doc?: T;
+        newTab?: T;
       };
   cta?:
     | T
     | {
         label?: T;
+        kind?: T;
         href?: T;
+        doc?: T;
+        newTab?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -5665,7 +6009,14 @@ export interface FooterSelect<T extends boolean = true> {
     | {
         eyebrow?: T;
         allLabel?: T;
-        allHref?: T;
+        allTarget?:
+          | T
+          | {
+              kind?: T;
+              href?: T;
+              doc?: T;
+              newTab?: T;
+            };
       };
   columns?:
     | T
@@ -5675,7 +6026,10 @@ export interface FooterSelect<T extends boolean = true> {
           | T
           | {
               label?: T;
+              kind?: T;
               href?: T;
+              doc?: T;
+              newTab?: T;
               id?: T;
             };
         id?: T;
@@ -5686,7 +6040,10 @@ export interface FooterSelect<T extends boolean = true> {
     | T
     | {
         label?: T;
+        kind?: T;
         href?: T;
+        doc?: T;
+        newTab?: T;
         id?: T;
       };
   updatedAt?: T;
@@ -5768,7 +6125,10 @@ export interface PortfolioSelect<T extends boolean = true> {
     | T
     | {
         label?: T;
+        kind?: T;
         href?: T;
+        doc?: T;
+        newTab?: T;
       };
   faqEyebrow?: T;
   faqTitle?: T;

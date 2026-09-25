@@ -88,7 +88,7 @@ async function main() {
           [column(8, {blockType: 'tabs', items: [1, 2, 3, 4, 5, 6].map((i) => ({label: `Onglet smoke ${i}`, content: {root: {type: 'root', children: [{type: 'paragraph', children: [{type: 'text', text: `Panneau smoke ${i}`, format: 0}]}]}}}))}), column(4)],
           [column(12, {blockType: 'collection', layout: 'carousel', perView: '3', step: 'page', indicator: 'dots', arrows: true, source: 'manual', items: Array.from({length: 14}, (_, k) => k + 1).map((i) => ({blockType: 'testimonial', quote: `Citation collection ${i}.`, name: `Témoin collection ${i}`}))})],
           [column(9, {blockType: 'collection', layout: 'swipe', perView: '3', source: 'posts', postsLimit: 3, postsCta: 'Lire l’article', moreLink: 'blog', moreLabel: 'Blog smoke'}), column(3)],
-          [column(3, {blockType: 'caseCard', caseStudy: caseA.id}), column(9, {blockType: 'collection', layout: 'carousel', perView: '3', source: 'cases', casesLimit: 6, casesCategory: caseCategory.id, casesCta: 'Lire l’étude smoke', moreLink: 'custom', moreLabel: 'Tout voir smoke', moreHref: '/contact-smoke'})],
+          [column(3, {blockType: 'caseCard', caseStudy: caseA.id}), column(9, {blockType: 'collection', layout: 'carousel', perView: '3', source: 'cases', casesLimit: 6, casesCategory: caseCategory.id, casesCta: 'Lire l’étude smoke', moreLink: 'custom', moreLabel: 'Tout voir smoke', moreTarget: {kind: 'url', href: '/contact-smoke', newTab: true}})],
           [column(8, {blockType: 'collection', layout: 'swipe', perView: '2', source: 'manual', items: [{blockType: 'caseCard', caseStudy: caseA.id}, {blockType: 'caseCard', caseStudy: caseB.id}]}), column(4)],
         ]),
       ],

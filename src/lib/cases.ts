@@ -23,6 +23,8 @@ export function caseHero(c: CaseStudy, cases: CasesConfig): CaseHeroProps {
   const category = categoryOf(c);
   return {
     cover: cover ? {src: cover.src, alt: cover.alt} : undefined,
+    coverCaption: c.coverCaption || undefined,
+    coverCaptionTone: c.coverCaptionTone === 'dark' ? 'dark' : 'light',
     chips: [{label: cases.labels.badge, tone: 'cat'}, ...(category ? [{label: category.title, tone: 'high' as const}] : [])],
     title: c.title,
     lead: c.excerpt || undefined,
@@ -37,6 +39,7 @@ export function caseSheet(c: CaseStudy, cases: CasesConfig): CaseSheetProps {
   const own = s?.customDefaults ? s : null;
   const ctaLabel = own?.cta?.label;
   const ctaHref = own?.cta?.href;
+  const ctaNewTab = own?.cta?.newTab || undefined;
   return {
     rows: [
       {label: l.client, value: s?.client ?? '', href: s?.clientUrl || undefined, hrefLabel: s?.client ? `${l.clientLink} · ${s.client}` : undefined},
@@ -46,6 +49,6 @@ export function caseSheet(c: CaseStudy, cases: CasesConfig): CaseSheetProps {
       {label: own?.modulesLabel || l.modules, value: s?.modules ?? ''},
     ],
     results: (s?.results ?? []).slice(0, 2).map((r) => ({value: r.value, label: r.label})),
-    cta: ctaLabel && ctaHref ? {label: ctaLabel, href: ctaHref} : cases.cta,
+    cta: ctaLabel && ctaHref ? {label: ctaLabel, href: ctaHref, newTab: ctaNewTab} : cases.cta,
   };
 }

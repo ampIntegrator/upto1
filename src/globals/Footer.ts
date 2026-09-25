@@ -1,14 +1,14 @@
-import type {GlobalConfig} from 'payload';
+import type {Field, GlobalConfig} from 'payload';
 
+import {linkTarget, linkTargetFields} from '@/fields/linkTarget';
 import {titleField} from '@/fields/shared';
 import {footerText, settingsText} from '@/i18n/admin/globals';
 
-const link = [
-  {type: 'row' as const, fields: [
-    {name: 'label', type: 'text' as const, label: footerText.link.label, required: true, localized: true, admin: {width: '50%'}},
-    {name: 'href', type: 'text' as const, label: footerText.link.href, required: true, admin: {width: '50%'}},
-  ]},
-];
+/** A footer link: label, then its target (an address or a content of the site, new tab box). A factory. */
+const link = (): Field[] => {
+  const [kind, href, doc, newTab] = linkTargetFields({required: true, kindWidth: '50%'});
+  return [{type: 'row', fields: [{name: 'label', type: 'text', label: footerText.link.label, required: true, localized: true, admin: {width: '50%'}}, kind]}, href, doc, newTab];
+};
 
 export const Footer: GlobalConfig = {
   slug: 'footer',
@@ -41,10 +41,9 @@ export const Footer: GlobalConfig = {
             {name: 'articlesEnabled', type: 'checkbox', label: footerText.articles.enabled, defaultValue: true},
             {name: 'articles', type: 'group', label: footerText.articles.label, admin: {condition: (_d, s) => s?.articlesEnabled !== false}, fields: [
               {name: 'eyebrow', type: 'text', label: footerText.newsletter.eyebrow, localized: true, defaultValue: 'En bref'},
-              {type: 'row', fields: [
-                {name: 'allLabel', type: 'text', label: footerText.articles.allLabel, localized: true, defaultValue: 'Tous les articles'},
-                {name: 'allHref', type: 'text', label: footerText.link.href, defaultValue: '/blog'},
-              ]},
+              {name: 'allLabel', type: 'text', label: footerText.articles.allLabel, localized: true, defaultValue: 'Tous les articles'},
+              // « Tous les articles »: an address (the blog by default) or a content of the site
+              {name: 'allTarget', type: 'group', label: footerText.link.href, fields: linkTarget().map((f) => ('name' in f && f.name === 'href' ? {...f, defaultValue: '/blog'} : f)) as Field[]},
             ]},
           ],
         },
@@ -55,7 +54,7 @@ export const Footer: GlobalConfig = {
               name: 'columns', type: 'array', label: footerText.columns.label, maxRows: 4, labels: {singular: footerText.columns.singular, plural: footerText.columns.plural},
               fields: [
                 {name: 'title', type: 'text', label: footerText.columns.title, required: true, localized: true},
-                {name: 'links', type: 'array', label: footerText.columns.links, maxRows: 4, labels: {singular: footerText.link.singular, plural: footerText.link.plural}, fields: link},
+                {name: 'links', type: 'array', label: footerText.columns.links, maxRows: 4, labels: {singular: footerText.link.singular, plural: footerText.link.plural}, fields: link()},
               ],
             },
           ],
@@ -65,7 +64,7 @@ export const Footer: GlobalConfig = {
           fields: [
             {name: 'copyright', type: 'text', label: footerText.legal.copyright, localized: true, defaultValue: '© Vidomia'},
             {name: 'legalLine', type: 'text', label: footerText.legal.legalLine},
-            {name: 'legalLinks', type: 'array', label: footerText.legal.legalLinks, maxRows: 4, labels: {singular: footerText.link.singular, plural: footerText.link.plural}, fields: link},
+            {name: 'legalLinks', type: 'array', label: footerText.legal.legalLinks, maxRows: 4, labels: {singular: footerText.link.singular, plural: footerText.link.plural}, fields: link()},
           ],
         },
       ],

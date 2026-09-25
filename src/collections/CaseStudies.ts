@@ -40,6 +40,14 @@ export const CaseStudies: CollectionConfig = {
             {name: 'title', type: 'text', label: f.title, required: true, localized: true, admin: {description: f.titleDescription}},
             {name: 'excerpt', type: 'textarea', label: f.excerpt, localized: true, admin: {rows: 3}},
             {name: 'cover', type: 'upload', relationTo: 'media', label: f.cover},
+            {
+              type: 'row',
+              fields: [
+                {name: 'coverCaption', type: 'text', label: f.coverCaption, localized: true, admin: {width: '70%'}},
+                // colour of the caption laid over the image (CoverCaption): white on a dark photo, black on a light one
+                {name: 'coverCaptionTone', type: 'radio', label: f.coverCaptionTone, defaultValue: 'light', options: [{label: f.captionLight, value: 'light'}, {label: f.captionDark, value: 'dark'}], admin: {width: '30%', layout: 'horizontal'}},
+              ],
+            },
             {name: 'content', type: 'richText', label: f.content, localized: true, editor: postEditor, admin: {description: f.contentDescription}},
           ],
         },

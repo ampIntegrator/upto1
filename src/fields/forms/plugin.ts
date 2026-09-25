@@ -1,6 +1,7 @@
 import {formBuilderPlugin} from '@payloadcms/plugin-form-builder';
 import type {Block, Field, PayloadRequest} from 'payload';
 
+import {linkTarget} from '@/fields/linkTarget';
 import {tagField} from '@/fields/tagField';
 import {collectionsText as ct} from '@/i18n/admin/collections';
 import {formsText as t} from '@/i18n/admin/forms';
@@ -73,9 +74,10 @@ const consentBlock = (): Block => ({
       type: 'row',
       fields: [
         {name: 'privacyLabel', type: 'text', label: t.privacyLabel, localized: true, admin: {width: '50%'}},
-        {name: 'privacyHref', type: 'text', label: t.privacyHref, admin: {width: '50%', placeholder: '/confidentialite'}},
       ],
     },
+    // the privacy policy: an address or a content of the site (a page, a modal…), and the new tab box
+    {name: 'privacyTarget', type: 'group', label: t.privacyHref, fields: linkTarget()},
   ],
 });
 
