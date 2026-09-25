@@ -15,6 +15,8 @@ export default function CaseHeroShowcase() {
       <CaseHero {...CASE_HERO} />
       <Text type="body" color="secondary">Avec un voile noir d’opacité 0,4 (prop overlay, de 0 à 1) : pour une image à la une claire ou très blanche.</Text>
       <CaseHero {...CASE_HERO} overlay={0.4} />
+      <Text type="body" color="secondary">Le même voile dans la couleur du silo (overlayColor="silo"), opacité 0,5.</Text>
+      <CaseHero {...CASE_HERO} overlay={0.5} overlayColor="silo" />
     </VStack>
   );
 }

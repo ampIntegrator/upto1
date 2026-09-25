@@ -10,9 +10,11 @@
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  /* flat black overlay (CaseHero `overlay`, 0 by default) over the night veil */
-  background: linear-gradient(rgba(0, 0, 0, var(--overlay, 0)) 0 0), linear-gradient(180deg, rgba(8, 10, 26, 0.18) 0%, rgba(8, 10, 26, 0.3) 40%, rgba(8, 10, 26, 0.88) 100%);
+  background: linear-gradient(180deg, rgba(8, 10, 26, 0.18) 0%, rgba(8, 10, 26, 0.3) 40%, rgba(8, 10, 26, 0.88) 100%);
 }
+/* flat overlay over the veil, under the text (CaseHero `overlay`, opacity inline): black or the silo colour */
+.overlay { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: rgb(0, 0, 0); }
+.overlay[data-color='silo'] { background: var(--color-accent); }
 .inner { position: relative; z-index: 2; width: 100%; padding-block: 48px; }
 .text { max-width: 940px; }
 .title { margin: 0; }
