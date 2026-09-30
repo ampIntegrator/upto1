@@ -122,7 +122,7 @@ export function SiteModals({items, initialSlug, closeHref, closeLabel = 'Fermer'
         const own = sent[m.slug]
           ? [<Button key="close" label={closeLabel} variant="primary" onClick={close} />]
           : m.buttons.map((b, i) =>
-              b.action === 'close' ? <Button key={i} label={b.label} variant={b.variant} onClick={close} /> : <Button key={i} label={b.label} variant={b.variant} href={b.href} />,
+              b.action === 'close' ? <Button key={i} label={b.label} variant={b.variant} onClick={close} /> : <Button key={i} label={b.label} variant={b.variant} href={b.href} newTab={b.newTab} />,
             );
         // the form's buttons join the footer through a portal into this element (no box of its own)
         const actions =

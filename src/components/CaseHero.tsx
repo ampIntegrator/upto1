@@ -1,7 +1,7 @@
 /**
  * CaseHero — the top of a case study (mockup 23 .case-hero): the cover full-bleed on night, a
- * night veil darkening towards the bottom, and the text aligned to the bottom in the site
- * container: chips (« Étude de cas », category), the h1 with its serif accent (highlight, on
+ * night veil darkening towards the bottom, plus an optional flat overlay (`overlay`, opacity 0 to
+ * 1, black or the silo colour: `overlayColor`), for a light or white cover, and the text centred vertically in the site container: chips (« Étude de cas », category), the h1 with its serif accent (highlight, on
  * dark), the lead. Night section: chips, title and text take their on-dark colours.
  * Placed under the page's breadcrumb band.
  */
@@ -15,22 +15,36 @@ import {Chip, type ChipTone} from './Chip';
 import {Container} from './Container';
 import {Section} from './Section';
 import {renderTitle, type TitleText} from './TitleText';
+import {CoverCaption, type CoverCaptionTone} from './CoverCaption';
 import styles from './CaseHero.module.css';
 
 export type CaseHeroProps = {
   cover?: {src: string; alt?: string};
+  /** caption over the cover, bottom right (CoverCaption), white or black text */
+  coverCaption?: string;
+  coverCaptionTone?: CoverCaptionTone;
   chips?: {label: string; tone?: ChipTone}[];
   /** entered title: <span>…</span> = serif accent, line breaks kept (TitleText) */
   title: TitleText;
   lead?: string;
+  /** opacity of a flat layer over the cover, under the text (0 to 1): tones down a light cover */
+  overlay?: number;
+  /** colour of that layer: black, or the page's silo (accent) colour */
+  overlayColor?: 'black' | 'silo';
 };
 
-export function CaseHero({cover, chips = [], title, lead}: CaseHeroProps) {
+export function CaseHero({cover, coverCaption, coverCaptionTone, chips = [], title, lead, overlay = 0, overlayColor = 'black'}: CaseHeroProps) {
   return (
     <Section background="night" spacing="none">
       <VStack className={styles.hero}>
         {cover?.src ? <Image src={cover.src} alt={cover.alt ?? ''} fill priority sizes="100vw" className={styles.image} /> : null}
         <i className={styles.veil} aria-hidden="true" />
+        {overlay > 0 ? <i className={styles.overlay} data-color={overlayColor} style={{opacity: Math.min(overlay, 1)}} aria-hidden="true" /> : null}
+        {cover?.src && coverCaption ? (
+          <CoverCaption as="span" tone={coverCaptionTone}>
+            {coverCaption}
+          </CoverCaption>
+        ) : null}
         <VStack className={styles.inner}>
           <Container>
             <VStack gap={5} className={styles.text}>

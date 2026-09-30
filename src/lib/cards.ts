@@ -28,16 +28,14 @@ export function postCard(p: Post, blog: BlogConfig, locale: string, ctaLabel?: s
   };
 }
 
-/** A case study as a realisation card: cover, category, short result, title, client · location, link. */
+/** A case study as a realisation card: cover, category, title, client · location, link. */
 export function caseCard(c: CaseStudy, cases: CasesConfig, ctaLabel?: string): CardProps {
   const cover = mediaImage(c.cover);
   const category = typeof c.category === 'object' && c.category ? c.category : null;
-  const result = c.sheet?.cardResult || c.sheet?.results?.[0]?.value || undefined;
   return {
     preset: 'realisation',
     media: cover ? {type: 'image', src: cover.src, alt: cover.alt} : {type: 'none'},
     chip: category ? {label: category.title, tone: 'high'} : undefined,
-    result,
     title: plainTitle(c.title),
     client: c.sheet?.client ? {name: c.sheet.client, location: c.sheet.location || undefined} : undefined,
     cta: {label: ctaLabel || cases.labels.readMore, href: entryPath(cases, c.slug)},

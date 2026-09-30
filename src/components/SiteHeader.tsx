@@ -28,6 +28,7 @@ import React, {useEffect, useState, useSyncExternalStore} from 'react';
 import {ClockIcon, MailIcon, MenuIcon, NUCLEO_ICONS, PhoneIcon, SearchIcon} from '@/theme/icons/nucleo';
 import {Container} from './Container';
 import {Flag} from './Flag';
+import {newTabProps} from './link-target';
 import type {SiteHeaderData, SiteNavEntry, SiteNavLeaf} from './site-nav';
 import styles from './SiteHeader.module.css';
 
@@ -55,6 +56,18 @@ function LeafIcon({iconKey}: {iconKey?: SiteNavLeaf['iconKey']}) {
   return <Glyph width={24} height={24} />;
 }
 
+/** the link element of a nav item that opens in a new tab (Astryx `as`: TopNavMegaMenuItem, SideNavItem) */
+function NewTabAnchor(props: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
+  return <a {...props} {...newTabProps(true)} />;
+}
+
+/**
+ * The target of a dropdown menu item: Astryx TopNavMenu items take neither `target` nor `as`, so an
+ * item opening in a new tab has no href and opens its address on click instead.
+ */
+const menuItemTarget = (it: SiteNavLeaf): {href?: string; onClick?: () => void} =>
+  it.newTab ? {onClick: () => void window.open(it.href, '_blank', 'noopener,noreferrer')} : {href: it.href};
+
 /** true when the current page is one of the entry's sub-items: its label takes the silo colour */
 const holdsCurrent = (e: SiteNavEntry, currentHref?: string): boolean =>
   Boolean(currentHref) && (e.kind === 'menu' ? e.items.some((it) => it.href === currentHref) : e.kind === 'mega' ? e.groups.some((g) => g.items.some((it) => it.href === currentHref)) : false);
@@ -63,11 +76,11 @@ function NavEntries({nav, currentHref}: {nav: SiteNavEntry[]; currentHref?: stri
   return (
     <>
       {nav.map((e) => {
-        if (e.kind === 'link') return <TopNavItem key={e.label} label={e.label} href={e.href} isSelected={e.href === currentHref} />;
+        if (e.kind === 'link') return <TopNavItem key={e.label} label={e.label} href={e.href} {...newTabProps(e.newTab)} isSelected={e.href === currentHref} />;
         if (e.kind === 'menu') {
           return (
             <HStack key={e.label} className={styles.menuWrap} vAlign="stretch" data-current={holdsCurrent(e, currentHref) || undefined}>
-              <TopNavMenu label={e.label} items={e.items.map((it) => ({title: it.title, description: it.description, icon: <LeafIcon iconKey={it.iconKey} />, href: it.href}))} />
+              <TopNavMenu label={e.label} items={e.items.map((it) => ({title: it.title, description: it.description, icon: <LeafIcon iconKey={it.iconKey} />, ...menuItemTarget(it)}))} />
             </HStack>
           );
         }
@@ -81,7 +94,7 @@ function NavEntries({nav, currentHref}: {nav: SiteNavEntry[]; currentHref?: stri
                   <VStack key={g.title} gap={1.5} className={styles.megaGroup}>
                     <Text type="eyebrow" className={styles.megaTitle}>{g.title}</Text>
                     {g.items.map((it) => (
-                      <TopNavMegaMenuItem key={it.title} title={it.title} description={it.description} icon={<LeafIcon iconKey={it.iconKey} />} href={it.href} />
+                      <TopNavMegaMenuItem key={it.title} title={it.title} description={it.description} icon={<LeafIcon iconKey={it.iconKey} />} href={it.href} as={it.newTab ? NewTabAnchor : undefined} />
                     ))}
                   </VStack>
                 ))}
@@ -133,7 +146,7 @@ export function SiteHeader({brand, strip, nav, actions, languages = ['FR'], tone
                   <Text type="tag" className={styles.stripFollow}>Suivez-nous</Text>
                   {strip.socials.map((s) => {
                     const Glyph = NUCLEO_ICONS[s.iconKey];
-                    return <a key={s.label} className={styles.social} href={s.href} aria-label={s.label}><Glyph width={14} height={14} /></a>;
+                    return <a key={s.label} className={styles.social} href={s.href} {...newTabProps(s.newTab)} aria-label={s.label}><Glyph width={14} height={14} /></a>;
                   })}
                 </HStack>
               ) : null}
@@ -158,8 +171,8 @@ export function SiteHeader({brand, strip, nav, actions, languages = ['FR'], tone
                   alignment="end"
                 />
                 <HStack height={26} className={styles.actionsSep}><Divider orientation="vertical" /></HStack>
-                {actions?.login ? <Button label={actions.login.label} href={actions.login.href} variant="ink" size="sm" className={styles.login} /> : null}
-                {actions?.cta ? <Button label={actions.cta.label} href={actions.cta.href} variant="primary" size="sm" className={styles.cta} /> : null}
+                {actions?.login ? <Button label={actions.login.label} href={actions.login.href} {...newTabProps(actions.login.newTab)} variant="ink" size="sm" className={styles.login} /> : null}
+                {actions?.cta ? <Button label={actions.cta.label} href={actions.cta.href} {...newTabProps(actions.cta.newTab)} variant="primary" size="sm" className={styles.cta} /> : null}
                 <IconButton label="Menu" icon={<MenuIcon />} variant="ghost" size="sm" className={styles.burger} onClick={() => setMenuOpen(true)} />
               </HStack>
             }
@@ -170,19 +183,19 @@ export function SiteHeader({brand, strip, nav, actions, languages = ['FR'], tone
       <MobileNav isOpen={menuOpen} onOpenChange={setMenuOpen} header={brand.name}>
         {nav.map((e) =>
           e.kind === 'link' ? (
-            <SideNavItem key={e.label} label={e.label} href={e.href} isSelected={e.href === currentHref} />
+            <SideNavItem key={e.label} label={e.label} href={e.href} as={e.newTab ? NewTabAnchor : undefined} isSelected={e.href === currentHref} />
           ) : (
             <SideNavSection key={e.label} title={e.label}>
               {(e.kind === 'menu' ? e.items : e.groups.flatMap((g) => g.items)).map((it) => (
-                <SideNavItem key={it.title} label={it.title} href={it.href} />
+                <SideNavItem key={it.title} label={it.title} href={it.href} as={it.newTab ? NewTabAnchor : undefined} />
               ))}
             </SideNavSection>
           ),
         )}
         {actions?.login || actions?.cta ? (
           <SideNavSection title="Compte">
-            {actions.login ? <SideNavItem label={actions.login.label} href={actions.login.href} /> : null}
-            {actions.cta ? <SideNavItem label={actions.cta.label} href={actions.cta.href} /> : null}
+            {actions.login ? <SideNavItem label={actions.login.label} href={actions.login.href} as={actions.login.newTab ? NewTabAnchor : undefined} /> : null}
+            {actions.cta ? <SideNavItem label={actions.cta.label} href={actions.cta.href} as={actions.cta.newTab ? NewTabAnchor : undefined} /> : null}
           </SideNavSection>
         ) : null}
       </MobileNav>

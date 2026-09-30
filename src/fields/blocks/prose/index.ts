@@ -51,7 +51,8 @@ export const ctaBandBlock = (): Block => ({
     },
     {name: 'title', type: 'text', label: t.ctaBand.title, localized: true, required: true},
     {name: 'text', type: 'textarea', label: t.ctaBand.text, localized: true, admin: {rows: 2, condition: (_d: unknown, s: Sibling) => (s?.variant ?? 'icon') === 'icon'}},
-    {name: 'button', type: 'group', label: t.ctaBand.button, fields: buttonRowFields()},
+    // a simple button: the band already carries an arrow (no split shape)
+    {name: 'button', type: 'group', label: t.ctaBand.button, fields: buttonRowFields({split: false})},
   ],
 });
 

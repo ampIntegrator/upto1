@@ -37,7 +37,7 @@ export function ButtonGroup({buttons, mode = 'spaced', width = 'natural', align 
   if (!items.length) return null;
   const full = width === 'full';
   const render = (b: TextBoxButton, i: number) => (
-    <Button key={i} label={b.label} href={b.href} variant={b.variant ?? 'primary'} size={b.size ?? 'md'} arrow={b.arrow} iconKey={b.arrow ? undefined : b.iconKey} block={full} />
+    <Button key={i} label={b.label} href={b.href} newTab={b.newTab} variant={b.variant ?? 'primary'} size={b.size ?? 'md'} arrow={b.arrow} iconKey={b.arrow ? undefined : b.iconKey} block={full} />
   );
   return (
     <VStack className={styles.root} data-mode={mode} data-width={width} data-align={align} style={{'--buttons': items.length} as React.CSSProperties}>

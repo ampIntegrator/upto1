@@ -126,7 +126,7 @@ async function main() {
         {blockType: 'tel', name: 'telephone', label: 'Téléphone', width: 'half'},
         {blockType: 'select', name: 'metier', label: 'Votre métier', width: 'full', options: METIERS},
         {blockType: 'textarea', name: 'projet', label: 'Votre projet (facultatif)', width: 'full'},
-        {blockType: 'consent', name: 'consentement', label: 'J’accepte d’être recontacté par l’équipe.', privacyLabel: 'Politique de confidentialité', privacyHref: '#'},
+        {blockType: 'consent', name: 'consentement', label: 'J’accepte d’être recontacté par l’équipe.', privacyLabel: 'Politique de confidentialité', privacyTarget: {kind: 'url', href: '#'}},
       ],
     },
     {
@@ -382,7 +382,6 @@ async function main() {
       sheet: {
         client: 'Vasseur Construction', clientUrl: 'https://example.com', location: 'Nantes (44)', deployment: '6 semaines · mars 2025', modules: 'Chiffrage instantané, métré automatique, devis client',
         results: [{value: '−68 %', label: 'Temps de chiffrage'}, {value: '×2,4', label: 'Devis envoyés'}],
-        cardResult: '−68 % délai',
       },
     };
   if (oldCase) await payload.update({collection: 'case-studies', id: oldCase.id, data: completeLexical(caseData) as never});

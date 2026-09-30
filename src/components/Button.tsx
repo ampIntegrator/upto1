@@ -24,6 +24,7 @@ import React, {useId} from 'react';
 
 import {NUCLEO_GRID} from '@/theme/icons/keys';
 import {ArrowRightIcon, NUCLEO_ICONS, type NucleoIconKey} from '@/theme/icons/nucleo';
+import {newTabProps} from './link-target';
 import styles from './Button.module.css';
 
 export type ButtonProps = Omit<AstryxButtonProps, 'endContent' | 'width' | 'size'> & {
@@ -35,9 +36,11 @@ export type ButtonProps = Omit<AstryxButtonProps, 'endContent' | 'width' | 'size
   block?: boolean;
   /** Leading Nucleo icon, by key (e.g. 'search'). Takes precedence over `icon`. */
   iconKey?: NucleoIconKey;
+  /** Opens `href` in a new tab (target _blank, rel noopener noreferrer). */
+  newTab?: boolean;
 };
 
-export function Button({arrow = false, block = false, iconKey, icon, className, variant = 'primary', size = 'md', ...rest}: ButtonProps) {
+export function Button({arrow = false, block = false, iconKey, icon, className, variant = 'primary', size = 'md', newTab, ...rest}: ButtonProps) {
   const isSecondary = variant === 'secondary';
   const gradId = useId();
   const nucleoIcon = iconKey ? <Icon icon={NUCLEO_ICONS[iconKey]} /> : null;
@@ -78,6 +81,7 @@ export function Button({arrow = false, block = false, iconKey, icon, className, 
   return (
     <AstryxButton
       {...rest}
+      {...newTabProps(newTab)}
       variant={variant}
       size={size}
       icon={leadingIcon}

@@ -212,7 +212,7 @@ export const portfolioText = texts({
   more: {fr: 'Bouton vers les réalisations', en: 'Button to the case studies'},
   badge: {fr: 'Chip du haut de page', en: 'Page top chip'},
   sheet: {fr: 'Libellés de la colonne latérale', en: 'Side column labels'},
-  sheetDescription: {fr: 'Chaque réalisation peut les remplacer dans son onglet Colonne latérale (case « Modifier les valeurs par défaut »).', en: 'Each case study can replace them in its Side column tab (« Change the default values » box).'},
+  sheetDescription: {fr: 'Communs à toutes les réalisations.', en: 'Shared by every case study.'},
   client: {fr: 'Client', en: 'Client'},
   category: {fr: 'Catégorie', en: 'Category'},
   location: {fr: 'Localisation', en: 'Location'},
@@ -220,7 +220,7 @@ export const portfolioText = texts({
   modules: {fr: 'Modules', en: 'Modules'},
   clientLink: {fr: 'Lien du site client (lecteurs d’écran)', en: 'Client site link (screen readers)'},
   cta: {fr: 'Bouton de la colonne latérale', en: 'Side column button'},
-  ctaDescription: {fr: 'Sous les chiffres. Chaque réalisation peut le remplacer. Sans lien, pas de bouton.', en: 'Under the figures. Each case study can replace it. Without a link, no button.'},
+  ctaDescription: {fr: 'Sous les chiffres, le même sur toutes les réalisations. Sans lien, pas de bouton.', en: 'Under the figures, the same on every case study. Without a link, no button.'},
   ctaLabel: {fr: 'Texte', en: 'Label'},
   ctaHref: {fr: 'Lien', en: 'Link'},
 });

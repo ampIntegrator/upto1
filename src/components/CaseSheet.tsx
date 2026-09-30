@@ -20,7 +20,7 @@ export type CaseSheetProps = {
   rows: CaseSheetRow[];
   /** mini results: two at most (mockup 23) */
   results?: {value: string; label: string}[];
-  cta?: {label: string; href: string};
+  cta?: {label: string; href: string; newTab?: boolean};
 };
 
 export function CaseSheet({rows, results = [], cta}: CaseSheetProps) {
@@ -57,7 +57,7 @@ export function CaseSheet({rows, results = [], cta}: CaseSheetProps) {
       ) : null}
       {cta ? (
         <VStack className={styles.cta}>
-          <Button label={cta.label} href={cta.href} variant="primary" arrow block />
+          <Button label={cta.label} href={cta.href} newTab={cta.newTab} variant="primary" arrow block />
         </VStack>
       ) : null}
     </VStack>

@@ -8,6 +8,7 @@ import React from 'react';
 
 import {Hero} from '@/components/Hero';
 import {PostArchive} from '@/components/PostArchive';
+import {PageModals} from '@/components/PageModals';
 import {SitePage} from '@/components/SitePage';
 import type {ListingAdapter, ListingCategory} from '@/lib/listing-pages';
 import {categoryPath, listingPath, pagePath, plainTitle} from '@/lib/listings';
@@ -44,6 +45,8 @@ export async function ListingList({locale, listing, site, page, category}: {loca
         gaps={{x: Number(s.sectionGrid?.gapX ?? 30), y: Number(s.sectionGrid?.gapY ?? 40), yMobile: Number(s.sectionGrid?.gapYMobile ?? 40)}}
         empty={cfg.labels.empty}
       />
+      {/* the modals the header and footer link to */}
+      <PageModals sources={site.modalSources} locale={locale} />
     </SitePage>
   );
 }

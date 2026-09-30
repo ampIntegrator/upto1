@@ -30,5 +30,6 @@ export function postHeader(post: Post, blog: BlogConfig, locale: string): PostHe
     dateLabel: blog.labels.dateLabel,
     cover: media(post.cover),
     coverCaption: post.coverCaption || undefined,
+    coverCaptionTone: post.coverCaptionTone === 'dark' ? 'dark' : 'light',
   };
 }

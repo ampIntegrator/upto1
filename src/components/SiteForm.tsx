@@ -58,7 +58,7 @@ export type FormField =
   /** a dropdown: several choices shown as badges in the field (`multiple`); search from `searchFrom` options (5; 0 = always) */
   | (Base & {type: 'select'; options: {value: string; label: string}[]; defaultValue?: string; multiple?: boolean; searchFrom?: number})
   | (Base & {type: 'checkbox'; defaultValue?: boolean})
-  | (Base & {type: 'consent'; link?: {label: string; href: string}})
+  | (Base & {type: 'consent'; link?: {label: string; href: string; newTab?: boolean}})
   | {type: 'message'; name: string; content: React.ReactNode; width?: FormFieldWidth};
 
 export type FormStep = {title?: string; fields: FormField[]};
@@ -289,7 +289,7 @@ export function SiteForm({id, formId, eyebrow, eyebrowStyle = 'eyebrow', title, 
         return (
           <VStack gap={1}>
             <CheckboxInput label={f.label} value={v === true} onChange={(c) => set(f.name, c)} status={status} />
-            {f.link ? <Link href={f.link.href} className={styles.consentLink}>{f.link.label}</Link> : null}
+            {f.link ? <Link href={f.link.href} isExternalLink={f.link.newTab} className={styles.consentLink}>{f.link.label}</Link> : null}
           </VStack>
         );
     }

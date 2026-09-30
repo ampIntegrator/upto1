@@ -55,7 +55,7 @@ async function main() {
         {blockType: 'textarea', name: 'projet', label: 'Projet texte smoke'},
         {blockType: 'message', message: doc('Message libre smoke.')},
         {blockType: 'stepBreak', title: 'Envoi smoke'},
-        {blockType: 'consent', name: 'consentement', label: 'Consentement smoke', privacyLabel: 'Confidentialité smoke', privacyHref: '/confidentialite'},
+        {blockType: 'consent', name: 'consentement', label: 'Consentement smoke', privacyLabel: 'Confidentialité smoke', privacyTarget: {kind: 'url', href: '/confidentialite'}},
       ],
     } as never,
   });

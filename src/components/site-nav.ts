@@ -4,10 +4,11 @@
  */
 import type {NucleoIconKey} from '@/theme/icons/nucleo';
 
-export type SiteNavLeaf = {title: string; description?: string; iconKey?: NucleoIconKey; href: string};
+/** `newTab` on any link: it opens in a new tab (the « Ouvrir dans un nouvel onglet » box) */
+export type SiteNavLeaf = {title: string; description?: string; iconKey?: NucleoIconKey; href: string; newTab?: boolean};
 
 export type SiteNavEntry =
-  | {kind: 'link'; label: string; href: string}
+  | {kind: 'link'; label: string; href: string; newTab?: boolean}
   | {kind: 'menu'; label: string; items: SiteNavLeaf[]}
   | {
       kind: 'mega';
@@ -22,12 +23,12 @@ export type SiteStrip = {
   hours?: string;
   /** postal address (footer) */
   address?: string;
-  socials?: Array<{label: string; href: string; iconKey: NucleoIconKey}>;
+  socials?: Array<{label: string; href: string; iconKey: NucleoIconKey; newTab?: boolean}>;
 };
 
 export type SiteActions = {
-  login?: {label: string; href: string};
-  cta?: {label: string; href: string};
+  login?: {label: string; href: string; newTab?: boolean};
+  cta?: {label: string; href: string; newTab?: boolean};
 };
 
 export type SiteHeaderData = {
@@ -56,7 +57,7 @@ export type SiteFooterData = {
     buttonLabel: string;
     mention?: string;
   };
-  articles?: {eyebrow: string; allLabel: string; allHref: string; items: SiteFooterArticle[]};
-  columns: Array<{title: string; links: Array<{label: string; href: string}>}>;
-  legal: {copyright: string; line?: string; links: Array<{label: string; href: string}>};
+  articles?: {eyebrow: string; allLabel: string; allHref: string; allNewTab?: boolean; items: SiteFooterArticle[]};
+  columns: Array<{title: string; links: Array<{label: string; href: string; newTab?: boolean}>}>;
+  legal: {copyright: string; line?: string; links: Array<{label: string; href: string; newTab?: boolean}>};
 };

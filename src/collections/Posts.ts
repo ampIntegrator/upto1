@@ -33,7 +33,14 @@ export const Posts: CollectionConfig = {
           fields: [
             {name: 'title', type: 'text', label: ct.posts.fields.title, required: true, localized: true},
             {name: 'cover', type: 'upload', relationTo: 'media', label: ct.posts.fields.cover},
-            {name: 'coverCaption', type: 'text', label: ct.posts.fields.coverCaption, localized: true},
+            {
+              type: 'row',
+              fields: [
+                {name: 'coverCaption', type: 'text', label: ct.posts.fields.coverCaption, localized: true, admin: {width: '70%'}},
+                // colour of the caption laid over the image (CoverCaption): white on a dark photo, black on a light one
+                {name: 'coverCaptionTone', type: 'radio', label: ct.posts.fields.coverCaptionTone, defaultValue: 'light', options: [{label: ct.posts.fields.captionLight, value: 'light'}, {label: ct.posts.fields.captionDark, value: 'dark'}], admin: {width: '30%', layout: 'horizontal'}},
+              ],
+            },
             {name: 'excerpt', type: 'textarea', label: ct.posts.fields.excerpt, localized: true, admin: {rows: 3}},
             {name: 'content', type: 'richText', label: ct.posts.fields.content, localized: true, editor: postEditor, admin: {description: ct.posts.fields.contentDescription}},
           ],

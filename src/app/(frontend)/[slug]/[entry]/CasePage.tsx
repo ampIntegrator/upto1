@@ -51,7 +51,7 @@ export async function CasePage({locale, site, caseStudy}: {locale: Locale; site:
       </PostLayout>
       <EntryFaq {...cases.faq} items={faq} />
       <RelatedPosts {...cases.related} items={related.map((c) => caseCard(c, cases))} more={{label: cases.labels.more, href: listingPath(cases)}} />
-      <PageModals sources={[caseStudy.content, caseStudy.faq]} locale={locale} />
+      <PageModals sources={[caseStudy.content, caseStudy.faq, caseStudy.sheet, ...site.modalSources]} locale={locale} />
     </SitePage>
   );
 }

@@ -1,5 +1,6 @@
 import type {GlobalConfig} from 'payload';
 
+import {linkTarget} from '@/fields/linkTarget';
 import {listingSettingsFields} from '@/fields/listingSettings';
 import {collectionsText as ct} from '@/i18n/admin/collections';
 import {portfolioText as t} from '@/i18n/admin/globals';
@@ -48,10 +49,9 @@ export const Portfolio: GlobalConfig = {
         name: 'cta', type: 'group', label: t.cta,
         admin: {description: t.ctaDescription},
         fields: [
-          {type: 'row', fields: [
-            {name: 'label', type: 'text', label: t.ctaLabel, localized: true, defaultValue: 'Réserver une démo', admin: {width: '50%'}},
-            {name: 'href', type: 'text', label: t.ctaHref, admin: {width: '50%'}},
-          ]},
+          {name: 'label', type: 'text', label: t.ctaLabel, localized: true, defaultValue: 'Réserver une démo'},
+          // an address or a content of the site (a page, a modal…), and the new tab box
+          ...linkTarget(),
         ],
       },
     ],

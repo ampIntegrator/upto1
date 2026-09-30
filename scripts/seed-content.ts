@@ -140,13 +140,13 @@ const CASE_CATEGORIES = [
 ];
 
 const CASES = [
-  {slug: 'atelier-moreau', card: '×2 devis', client: 'Atelier Moreau', title: 'Atelier Moreau <span>double</span> son volume de devis', category: 'renovation', location: 'Lyon (69)', deployment: '4 semaines · janv. 2026', results: [['×2', 'Devis envoyés'], ['−52 %', 'Temps de chiffrage']], date: '2026-09-10'},
-  {slug: 'bati-ouest', card: '+4 pts de marge', client: 'Bâti Ouest', title: 'Bâti Ouest <span>fiabilise</span> ses marges sur le neuf', category: 'construction-neuve', location: 'Rennes (35)', deployment: '8 semaines · nov. 2025', results: [['+4 pts', 'Marge nette'], ['−30 %', 'Écarts de budget']], date: '2026-09-03'},
-  {slug: 'les-jardins-de-loire', card: '40 lots en 1 mois', client: 'Les Jardins de Loire', title: 'Les Jardins de Loire : <span>quarante lots</span> chiffrés en un mois', category: 'promotion', location: 'Tours (37)', deployment: '5 semaines · oct. 2025', results: [['40', 'Lots chiffrés'], ['1 mois', 'Au lieu de trois']], date: '2026-08-27'},
-  {slug: 'cabinet-arcade', card: '−45 % délai', client: 'Cabinet Arcade', title: 'Cabinet Arcade <span>unifie</span> ses estimations', category: 'maitrise-d-oeuvre', location: 'Bordeaux (33)', deployment: '6 semaines · sept. 2025', results: [['−45 %', 'Temps d’estimation'], ['+18 %', 'Missions signées']], date: '2026-08-20'},
-  {slug: 'renov-habitat', card: 'Réponse en 24 h', client: 'Rénov’Habitat', title: 'Rénov’Habitat <span>répond en 24 h</span> à chaque demande', category: 'renovation', location: 'Lille (59)', deployment: '3 semaines · févr. 2026', results: [['24 h', 'Délai de réponse'], ['+27 %', 'Taux de signature']], date: '2026-08-13'},
-  {slug: 'maisons-dauphine', card: '−60 % par devis', client: 'Maisons Dauphine', title: 'Maisons Dauphine <span>standardise</span> ses modèles', category: 'construction-neuve', location: 'Grenoble (38)', deployment: '7 semaines · déc. 2025', results: [['12', 'Modèles paramétrés'], ['−60 %', 'Temps par devis']], date: '2026-08-06'},
-  {slug: 'horizon-promotion', card: '−22 % dépassements', client: 'Horizon Promotion', title: 'Horizon Promotion <span>pilote</span> ses programmes en direct', category: 'promotion', location: 'Marseille (13)', deployment: '10 semaines · sept. 2025', results: [['3', 'Programmes suivis'], ['−22 %', 'Dépassements']], date: '2026-07-30'},
+  {slug: 'atelier-moreau', client: 'Atelier Moreau', title: 'Atelier Moreau <span>double</span> son volume de devis', category: 'renovation', location: 'Lyon (69)', deployment: '4 semaines · janv. 2026', results: [['×2', 'Devis envoyés'], ['−52 %', 'Temps de chiffrage']], date: '2026-09-10'},
+  {slug: 'bati-ouest', client: 'Bâti Ouest', title: 'Bâti Ouest <span>fiabilise</span> ses marges sur le neuf', category: 'construction-neuve', location: 'Rennes (35)', deployment: '8 semaines · nov. 2025', results: [['+4 pts', 'Marge nette'], ['−30 %', 'Écarts de budget']], date: '2026-09-03'},
+  {slug: 'les-jardins-de-loire', client: 'Les Jardins de Loire', title: 'Les Jardins de Loire : <span>quarante lots</span> chiffrés en un mois', category: 'promotion', location: 'Tours (37)', deployment: '5 semaines · oct. 2025', results: [['40', 'Lots chiffrés'], ['1 mois', 'Au lieu de trois']], date: '2026-08-27'},
+  {slug: 'cabinet-arcade', client: 'Cabinet Arcade', title: 'Cabinet Arcade <span>unifie</span> ses estimations', category: 'maitrise-d-oeuvre', location: 'Bordeaux (33)', deployment: '6 semaines · sept. 2025', results: [['−45 %', 'Temps d’estimation'], ['+18 %', 'Missions signées']], date: '2026-08-20'},
+  {slug: 'renov-habitat', client: 'Rénov’Habitat', title: 'Rénov’Habitat <span>répond en 24 h</span> à chaque demande', category: 'renovation', location: 'Lille (59)', deployment: '3 semaines · févr. 2026', results: [['24 h', 'Délai de réponse'], ['+27 %', 'Taux de signature']], date: '2026-08-13'},
+  {slug: 'maisons-dauphine', client: 'Maisons Dauphine', title: 'Maisons Dauphine <span>standardise</span> ses modèles', category: 'construction-neuve', location: 'Grenoble (38)', deployment: '7 semaines · déc. 2025', results: [['12', 'Modèles paramétrés'], ['−60 %', 'Temps par devis']], date: '2026-08-06'},
+  {slug: 'horizon-promotion', client: 'Horizon Promotion', title: 'Horizon Promotion <span>pilote</span> ses programmes en direct', category: 'promotion', location: 'Marseille (13)', deployment: '10 semaines · sept. 2025', results: [['3', 'Programmes suivis'], ['−22 %', 'Dépassements']], date: '2026-07-30'},
 ];
 
 async function main() {
@@ -234,7 +234,6 @@ async function main() {
         client: c.client, clientUrl: 'https://example.com', location: c.location, deployment: c.deployment,
         modules: 'Chiffrage instantané, métré automatique, devis client',
         results: c.results.map(([value, label]) => ({value, label})),
-        cardResult: c.card,
       },
     };
     const found = (await payload.find({collection: 'case-studies', where: {slug: {equals: c.slug}}, limit: 1})).docs[0];

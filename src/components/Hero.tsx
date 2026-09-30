@@ -34,7 +34,7 @@ import {Container} from './Container';
 import {Section, type SectionBackground} from './Section';
 import styles from './Hero.module.css';
 
-export type HeroAction = {label: string; href: string; iconKey?: NucleoIconKey};
+export type HeroAction = {label: string; href: string; newTab?: boolean; iconKey?: NucleoIconKey};
 
 export type HeroProps = {
   variant: 'media' | 'split' | 'page';
@@ -77,8 +77,8 @@ function Actions({primary, secondary, center}: {primary?: HeroAction; secondary?
   if (!primary && !secondary) return null;
   return (
     <HStack gap={3} wrap="wrap" hAlign={center ? 'center' : 'start'}>
-      {primary ? <Button variant="primary" size="lg" arrow label={primary.label} href={primary.href} /> : null}
-      {secondary ? <Button variant="ghost" size="lg" label={secondary.label} href={secondary.href} iconKey={secondary.iconKey} /> : null}
+      {primary ? <Button variant="primary" size="lg" arrow label={primary.label} href={primary.href} newTab={primary.newTab} /> : null}
+      {secondary ? <Button variant="ghost" size="lg" label={secondary.label} href={secondary.href} newTab={secondary.newTab} iconKey={secondary.iconKey} /> : null}
     </HStack>
   );
 }

@@ -20,7 +20,7 @@ import {Title, type TitleTag} from './TitleTag';
 import styles from './TextBox.module.css';
 
 export type TextBoxTitleSize = 'display-1' | 'display-2' | 'display-3' | 'heading-1' | 'heading-2';
-export type TextBoxButton = {label: string; href: string; variant?: 'primary' | 'secondary' | 'ghost' | 'high'; size?: 'md' | 'lg'; arrow?: boolean; iconKey?: NucleoIconKey};
+export type TextBoxButton = {label: string; href: string; newTab?: boolean; variant?: 'primary' | 'secondary' | 'ghost' | 'high'; size?: 'md' | 'lg'; arrow?: boolean; iconKey?: NucleoIconKey};
 
 export type TextBoxProps = {
   badges?: {label: string; tone?: ChipTone}[];
@@ -63,7 +63,7 @@ export function TextBox({badges = [], title, titleTag = 'h2', titleSize = 'headi
         {buttons.length ? (
           <HStack gap={3} wrap="wrap" hAlign={align} className={styles.buttons}>
             {buttons.slice(0, 2).map((b, i) => (
-              <Button key={i} label={b.label} href={b.href} variant={b.variant ?? 'primary'} size={b.size ?? 'md'} arrow={b.arrow} iconKey={b.iconKey} />
+              <Button key={i} label={b.label} href={b.href} newTab={b.newTab} variant={b.variant ?? 'primary'} size={b.size ?? 'md'} arrow={b.arrow} iconKey={b.iconKey} />
             ))}
           </HStack>
         ) : null}

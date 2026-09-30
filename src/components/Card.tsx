@@ -26,6 +26,7 @@ import {IconSquare} from './IconSquare';
 import {Chip, type ChipTone} from './Chip';
 import {Stat} from './Stat';
 import {Title, type TitleTag} from './TitleTag';
+import {newTabProps} from './link-target';
 import styles from './Card.module.css';
 
 export type CardMedia =
@@ -54,7 +55,7 @@ export type CardProps = {
   /** realisation: client and city */
   client?: {name: string; location?: string};
   /** action bar */
-  cta?: {label: string; href: string};
+  cta?: {label: string; href: string; newTab?: boolean};
   style?: React.CSSProperties;
 };
 
@@ -88,7 +89,7 @@ export function Card({preset = 'bloc', media = {type: 'none'}, title, tag, level
 
   // editorial: the title carries the card link, only when there is a call to action
   const titleNode = editorial && cta ? (
-    <NextLink href={cta.href} className={styles.titleLink}>
+    <NextLink href={cta.href} {...newTabProps(cta.newTab)} className={styles.titleLink}>
       {title}
     </NextLink>
   ) : (
@@ -130,7 +131,7 @@ export function Card({preset = 'bloc', media = {type: 'none'}, title, tag, level
         </div>
       </div>
       {cta && showBar ? (
-        <NextLink href={cta.href} className={styles.cta} tabIndex={editorial ? -1 : undefined} aria-hidden={editorial || undefined}>
+        <NextLink href={cta.href} {...newTabProps(cta.newTab)} className={styles.cta} tabIndex={editorial ? -1 : undefined} aria-hidden={editorial || undefined}>
           <span>{cta.label}</span>
           <ArrowRightIcon />
         </NextLink>

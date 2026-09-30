@@ -96,10 +96,10 @@ export type CasesLabels = ListingLabels & {
 };
 export type CasesConfig = ListingConfig<CasesLabels> & {
   /** the fact sheet's default button (overridable on a case study) */
-  cta?: {label: string; href: string};
+  cta?: {label: string; href: string; newTab?: boolean};
 };
 
-type PortfolioDoc = (NonNullable<ListingGlobalDoc> & {sheet?: LabelsDoc; cta?: {label?: string | null; href?: string | null} | null}) | null | undefined;
+type PortfolioDoc = (NonNullable<ListingGlobalDoc> & {sheet?: LabelsDoc; cta?: {label?: string | null; href?: string | null; newTab?: boolean | null} | null}) | null | undefined;
 
 export function casesConfig(doc: PortfolioDoc): CasesConfig {
   const sheet = doc?.sheet ?? {};
@@ -113,7 +113,7 @@ export function casesConfig(doc: PortfolioDoc): CasesConfig {
   });
   const label = doc?.cta?.label;
   const href = doc?.cta?.href;
-  return {...cfg, cta: label && href ? {label, href} : undefined};
+  return {...cfg, cta: label && href ? {label, href, newTab: doc?.cta?.newTab || undefined} : undefined};
 }
 
 /** /<listing address> */

@@ -15,6 +15,8 @@ const block = (fields: Record<string, unknown>) => ({type: 'block', fields});
 
 export const CASE_HERO: CaseHeroProps = {
   cover: {src: IMG('1503387762-592deb58ef4e', 1920), alt: ''},
+  coverCaption: 'Chantier Vasseur, Nantes, 2025.',
+  coverCaptionTone: 'light',
   chips: [{label: 'Étude de cas', tone: 'cat'}, {label: 'Rénovation', tone: 'high'}],
   title: 'Comment Vasseur Construction a <span>divisé par trois</span> son temps de chiffrage',
   lead: 'Estimer un chantier de rénovation prenait jusqu’à trois jours. En six semaines, l’équipe a ramené ce délai à quelques heures, sans embaucher, sans rogner sur la précision.',

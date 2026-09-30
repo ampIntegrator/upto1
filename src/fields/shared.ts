@@ -23,16 +23,16 @@ export function titleField(overrides: Partial<TextareaField> & { name: string })
 
 /**
  * Link: label (translatable) + target (an address, or a content of the site: linkTarget.ts), with
- * optional Nucleo icon. `plain`: a typed address only (the header and footer, kept simple for now).
+ * optional Nucleo icon.
  */
 export function linkGroup(
   name: string,
   label: string | Text,
-  opts: { icon?: boolean; required?: boolean; plain?: boolean } = {},
+  opts: { icon?: boolean; required?: boolean } = {},
 ): GroupField {
   const fields: Field[] = [
     { name: 'label', type: 'text', label: fieldsText.link.label, localized: true, required: opts.required },
-    ...(opts.plain ? [{ name: 'href', type: 'text', label: fieldsText.link.href, required: opts.required } as Field] : linkTarget({ required: opts.required })),
+    ...linkTarget({ required: opts.required }),
   ]
   if (opts.icon) fields.push(iconField({ name: 'iconKey', label: fieldsText.link.icon }))
   return { name, type: 'group', label, fields }

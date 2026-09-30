@@ -51,7 +51,7 @@ export async function PostPage({locale, site, post}: {locale: Locale; site: Awai
       </PostLayout>
       <EntryFaq {...blog.faq} items={faq} />
       <RelatedPosts {...blog.related} items={related.map((p) => postCard(p, blog, locale))} more={{label: blog.labels.more, href: listingPath(blog)}} />
-      <PageModals sources={[post.content, post.faq]} locale={locale} />
+      <PageModals sources={[post.content, post.faq, ...site.modalSources]} locale={locale} />
     </SitePage>
   );
 }

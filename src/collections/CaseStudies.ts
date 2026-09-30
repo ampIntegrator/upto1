@@ -3,18 +3,15 @@ import type {CollectionConfig, Field} from 'payload';
 import {postEditor} from '@/fields/blocks/prose';
 import {entryBelowTab} from '@/fields/entryBelow';
 import {entryUrl} from '@/fields/entryUrl';
-import {linkTarget} from '@/fields/linkTarget';
 import {slugField} from '@/fields/shared';
 import {collectionsText as ct} from '@/i18n/admin/collections';
 
 const f = ct.caseStudies.fields;
 
-const whenCustom = (_d: unknown, s: Record<string, unknown>) => Boolean(s?.customDefaults);
-
 /**
  * Case studies (« réalisations », mockups 23 and 24): title, lead, full-width cover, story (the
- * post editor with its figures), fact sheet (text rows with overridable labels, two figures, a
- * button), category and date; optional builder sections under the story. Rendered at
+ * post editor with its figures), fact sheet (text rows and two figures; the row labels and the
+ * button come from the case studies settings), category and date; optional builder sections under the story. Rendered at
  * /<case studies page>/<slug> (Case studies settings), as realisation cards elsewhere.
  */
 export const CaseStudies: CollectionConfig = {
@@ -40,6 +37,23 @@ export const CaseStudies: CollectionConfig = {
             {name: 'title', type: 'text', label: f.title, required: true, localized: true, admin: {description: f.titleDescription}},
             {name: 'excerpt', type: 'textarea', label: f.excerpt, localized: true, admin: {rows: 3}},
             {name: 'cover', type: 'upload', relationTo: 'media', label: f.cover},
+            {
+              type: 'row',
+              fields: [
+                {name: 'coverCaption', type: 'text', label: f.coverCaption, localized: true, admin: {width: '70%'}},
+                // colour of the caption laid over the image (CoverCaption): white on a dark photo, black on a light one
+                {name: 'coverCaptionTone', type: 'radio', label: f.coverCaptionTone, defaultValue: 'light', options: [{label: f.captionLight, value: 'light'}, {label: f.captionDark, value: 'dark'}], admin: {width: '30%', layout: 'horizontal'}},
+              ],
+            },
+            // flat layer between the cover and the title (CaseHero `overlay`, `overlayColor`): tones down a light
+            // or white cover, in black or in the silo colour (the site settings one for a case study)
+            {
+              type: 'row',
+              fields: [
+                {name: 'coverOverlay', type: 'number', label: f.coverOverlay, min: 0, max: 1, defaultValue: 0, admin: {width: '50%', step: 0.05, description: f.coverOverlayDescription}},
+                {name: 'coverOverlayColor', type: 'radio', label: f.coverOverlayColor, defaultValue: 'black', options: [{label: f.overlayBlack, value: 'black'}, {label: f.overlaySilo, value: 'silo'}], admin: {width: '50%', layout: 'horizontal'}},
+              ],
+            },
             {name: 'content', type: 'richText', label: f.content, localized: true, editor: postEditor, admin: {description: f.contentDescription}},
           ],
         },
@@ -68,22 +82,6 @@ export const CaseStudies: CollectionConfig = {
                       {name: 'value', type: 'text', label: f.resultValue, required: true, localized: true, admin: {width: '34%'}},
                       {name: 'label', type: 'text', label: f.resultLabel, required: true, localized: true, admin: {width: '66%'}},
                     ]},
-                  ],
-                },
-                {name: 'cardResult', type: 'text', label: f.cardResult, localized: true, admin: {description: f.cardResultDescription}},
-                // row labels and button come from the case studies settings; replaced here only when ticked
-                {name: 'customDefaults', type: 'checkbox', label: f.customDefaults, defaultValue: false, admin: {description: f.customDefaultsDescription}},
-                {type: 'row', admin: {condition: whenCustom}, fields: [
-                  {name: 'locationLabel', type: 'text', label: f.locationLabel, localized: true, admin: {width: '33%', description: f.labelEmpty}},
-                  {name: 'deploymentLabel', type: 'text', label: f.deploymentLabel, localized: true, admin: {width: '33%', description: f.labelEmpty}},
-                  {name: 'modulesLabel', type: 'text', label: f.modulesLabel, localized: true, admin: {width: '34%', description: f.labelEmpty}},
-                ]},
-                {
-                  name: 'cta', type: 'group', label: f.cta,
-                  admin: {description: f.ctaDescription, condition: whenCustom},
-                  fields: [
-                    {name: 'label', type: 'text', label: f.ctaLabel, localized: true},
-                    ...linkTarget(),
                   ],
                 },
               ],

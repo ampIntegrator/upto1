@@ -61,7 +61,7 @@ async function main() {
   // 2 · a valid throwaway page with every block
   // throwaway case studies for the case card and the « latest case studies » collection
   const caseCategory = await payload.create({collection: 'case-categories', data: {title: 'Catégorie sections smoke', slug: `zz-smoke-sections-cat-${Date.now()}`}});
-  const caseA = await payload.create({collection: 'case-studies', data: {title: 'Réalisation sections smoke A', slug: `zz-smoke-sections-case-a-${Date.now()}`, category: caseCategory.id, publishedAt: new Date().toISOString(), sheet: {client: 'Client sections smoke', location: 'Lille', cardResult: 'Résultat sections smoke'}} as never});
+  const caseA = await payload.create({collection: 'case-studies', data: {title: 'Réalisation sections smoke A', slug: `zz-smoke-sections-case-a-${Date.now()}`, category: caseCategory.id, publishedAt: new Date().toISOString(), sheet: {client: 'Client sections smoke', location: 'Lille'}} as never});
   const caseB = await payload.create({collection: 'case-studies', data: {title: 'Réalisation sections smoke B', slug: `zz-smoke-sections-case-b-${Date.now()}`, category: caseCategory.id, publishedAt: new Date().toISOString(), sheet: {client: 'Autre client sections', results: [{value: '+9 %', label: 'Gain'}]}} as never});
   const page = await payload.create({
     collection: 'pages',
@@ -88,7 +88,7 @@ async function main() {
           [column(8, {blockType: 'tabs', items: [1, 2, 3, 4, 5, 6].map((i) => ({label: `Onglet smoke ${i}`, content: {root: {type: 'root', children: [{type: 'paragraph', children: [{type: 'text', text: `Panneau smoke ${i}`, format: 0}]}]}}}))}), column(4)],
           [column(12, {blockType: 'collection', layout: 'carousel', perView: '3', step: 'page', indicator: 'dots', arrows: true, source: 'manual', items: Array.from({length: 14}, (_, k) => k + 1).map((i) => ({blockType: 'testimonial', quote: `Citation collection ${i}.`, name: `Témoin collection ${i}`}))})],
           [column(9, {blockType: 'collection', layout: 'swipe', perView: '3', source: 'posts', postsLimit: 3, postsCta: 'Lire l’article', moreLink: 'blog', moreLabel: 'Blog smoke'}), column(3)],
-          [column(3, {blockType: 'caseCard', caseStudy: caseA.id}), column(9, {blockType: 'collection', layout: 'carousel', perView: '3', source: 'cases', casesLimit: 6, casesCategory: caseCategory.id, casesCta: 'Lire l’étude smoke', moreLink: 'custom', moreLabel: 'Tout voir smoke', moreHref: '/contact-smoke'})],
+          [column(3, {blockType: 'caseCard', caseStudy: caseA.id}), column(9, {blockType: 'collection', layout: 'carousel', perView: '3', source: 'cases', casesLimit: 6, casesCategory: caseCategory.id, casesCta: 'Lire l’étude smoke', moreLink: 'custom', moreLabel: 'Tout voir smoke', moreTarget: {kind: 'url', href: '/contact-smoke', newTab: true}})],
           [column(8, {blockType: 'collection', layout: 'swipe', perView: '2', source: 'manual', items: [{blockType: 'caseCard', caseStudy: caseA.id}, {blockType: 'caseCard', caseStudy: caseB.id}]}), column(4)],
         ]),
       ],
@@ -98,7 +98,7 @@ async function main() {
   try {
     const html = await (await fetch(`${BASE}/${slug}`)).text();
     const blogBase = (await payload.findGlobal({slug: 'blog'})).slug || 'blog';
-    for (const marker of ['Valeur totale', 'Question smoke', 'Palier smoke', 'Témoin Smoke', 'APRÈS SMOKE', 'Étape 2', 'data-steps="2"', 'Témoin collection 14', 'data-layout="carousel"', 'Lire l’article', '<h2 class="Collapsible', '<h3 class="astryx-heading', '<h4 class="astryx-heading', '<span class="astryx-heading card', 'Encart smoke', '<strong>gras</strong>', 'Puce smoke', 'Bouton smoke', 'data-framed="true"', 'Sans titre smoke', 'Onglet smoke 6', 'Panneau smoke 6', 'role="tabpanel"', 'Groupe smoke 4', 'Espacé smoke 2', 'data-mode="attached"', 'data-mode="spaced"', 'Surtitre smoke', 'Chapô en-tête smoke', 'Réalisation sections smoke A', 'Réalisation sections smoke B', 'Résultat sections smoke', 'Client sections smoke', 'Lire l’étude smoke', 'Voir l’étude', `/realisations/${caseA.slug}`, 'Blog smoke', `href="/${blogBase}"`, 'Tout voir smoke', 'href="/contact-smoke"']) check(html.includes(marker), `site renders « ${marker} »`);
+    for (const marker of ['Valeur totale', 'Question smoke', 'Palier smoke', 'Témoin Smoke', 'APRÈS SMOKE', 'Étape 2', 'data-steps="2"', 'Témoin collection 14', 'data-layout="carousel"', 'Lire l’article', '<h2 class="Collapsible', '<h3 class="astryx-heading', '<h4 class="astryx-heading', '<span class="astryx-heading card', 'Encart smoke', '<strong>gras</strong>', 'Puce smoke', 'Bouton smoke', 'data-framed="true"', 'Sans titre smoke', 'Onglet smoke 6', 'Panneau smoke 6', 'role="tabpanel"', 'Groupe smoke 4', 'Espacé smoke 2', 'data-mode="attached"', 'data-mode="spaced"', 'Surtitre smoke', 'Chapô en-tête smoke', 'Réalisation sections smoke A', 'Réalisation sections smoke B', 'Client sections smoke', 'Lire l’étude smoke', 'Voir l’étude', `/realisations/${caseA.slug}`, 'Blog smoke', `href="/${blogBase}"`, 'Tout voir smoke', 'href="/contact-smoke"']) check(html.includes(marker), `site renders « ${marker} »`);
     check(!/Unhandled Runtime Error|Build Error/.test(html), 'site page without runtime error');
   } finally {
     await payload.delete({collection: 'pages', id: page.id});
