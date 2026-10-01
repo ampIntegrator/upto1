@@ -275,6 +275,7 @@ export interface Page {
              */
             rows?:
               | {
+                  name?: string | null;
                   columns?:
                     | {
                         span: '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '12';
@@ -1987,6 +1988,7 @@ export interface Section {
    */
   rows?:
     | {
+        name?: string | null;
         columns?:
           | {
               span: '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '12';
@@ -3354,6 +3356,7 @@ export interface PagesSelect<T extends boolean = true> {
               rows?:
                 | T
                 | {
+                    name?: T;
                     columns?:
                       | T
                       | {
@@ -4134,6 +4137,7 @@ export interface SectionsSelect<T extends boolean = true> {
   rows?:
     | T
     | {
+        name?: T;
         columns?:
           | T
           | {

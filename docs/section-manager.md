@@ -42,7 +42,8 @@ Every setting of the first panel shows from the start, before a background is ch
 wait for it (`condition`). Night shades are offered by name (the `SwatchRadio` component is gone).
 In `orbitaSectionSettings`, a group's fields must follow its heading: the dialog cuts the columns at
 the headings (the edge line group comes after every background field for that reason).
-The dashed zones of an empty section have a light translucent background (`--color-background-muted`).
+The dashed zones of an empty section have a light translucent background: a 6 % veil of the text
+colour (the theme's `--color-background-muted` is opaque on light sections and hid the texture).
 
 The background composer (`src/fields/BackgroundComposer.tsx`) lost its preview box on the same day:
 the section itself is visible below.
@@ -55,7 +56,10 @@ still publishes: no drafts).
 1. **Done (1 Oct. 2026).** Dialog, accordions, live preview, width switch. Panel 1 = the section
    settings; panel 3 = a placeholder.
 2. **Rows, done (1 Oct. 2026).** Panel 2 = the layout thumbnails, then the rows as a **line of
-   squares** (240 px wide), left to right = top to bottom in the preview. A square shows the row's
+   squares** (260 × 110 px; the line scrolls sideways when they do not all fit), left to right =
+   top to bottom in the preview. A square carries the row's number, or its name: a click on it
+   to type one, 22 characters at most (`ROW_NAME_MAX`; field `name` of a row, hidden, builder
+   only, migration `20261001_131455_row_name`). A square shows the row's
    split, is dragged sideways to reorder the rows, and carries three buttons, always visible:
    move, duplicate, delete. Inside a square, a column is dragged sideways to change place in its
    row (Alt + arrows at the keyboard): columns are reordered here, not in the preview (Nicolas,

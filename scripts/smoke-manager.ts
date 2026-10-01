@@ -28,7 +28,7 @@ async function main() {
   const email = `zz-manager-${stamp}@example.test`;
   const password = randomBytes(12).toString('hex');
   const user = await payload.create({collection: 'users', data: {email, password, name: 'ZZ smoke'} as never});
-  const section = {blockType: 'section', mode: 'light', tint: 'light', texture: 'grid', rows: [{columns: [{span: '6', contents: [{blockType: 'textBox', title: TITLE, titleTag: 'h2'}]}, {span: '6', contents: []}]}, {columns: [{span: '6', contents: [{blockType: 'textBox', title: SECOND, titleTag: 'h2'}]}, {span: '6', contents: []}]}]};
+  const section = {blockType: 'section', mode: 'light', tint: 'light', texture: 'grid', rows: [{columns: [{span: '6', contents: [{blockType: 'textBox', title: TITLE, titleTag: 'h2'}]}, {span: '6', contents: []}]}, {name: 'Rangée nommée', columns: [{span: '6', contents: [{blockType: 'textBox', title: SECOND, titleTag: 'h2'}]}, {span: '6', contents: []}]}]};
   let page: {id: number} | undefined;
   const {chromium} = await import('@playwright/test');
   const browser = await chromium.launch();
@@ -115,8 +115,22 @@ async function main() {
     const squares = p.locator('.rows-builder__square');
     check((await squares.count()) === 2, 'the two rows show as two squares');
     await p.mouse.move(5, 5);
-    const shape = await squares.first().evaluate((el) => ({width: (el as HTMLElement).offsetWidth, opacity: getComputedStyle(el.querySelector('.rows-builder__actions')!).opacity, buttons: el.querySelectorAll('.rows-builder__actions button').length}));
-    check(shape.width === 240 && shape.opacity === '1' && shape.buttons === 3, `a square is 240 wide and its three buttons are always visible (${shape.width})`);
+    const shape = await squares.first().evaluate((el) => ({width: (el as HTMLElement).offsetWidth, height: (el as HTMLElement).offsetHeight, opacity: getComputedStyle(el.querySelector('.rows-builder__actions')!).opacity, buttons: el.querySelectorAll('.rows-builder__actions button').length}));
+    check(shape.width === 260 && shape.height === 110 && shape.opacity === '1' && shape.buttons === 3, `a square is 260 by 110 and its three buttons are always visible (${shape.width} × ${shape.height})`);
+    // the square's number is its name: a click, a name of 22 characters at most
+    const nameOf = () => squares.nth(0).locator('.rows-builder__square-name').innerText();
+    check((await nameOf()) === '1', 'a square is named by its number at first');
+    check((await squares.nth(1).locator('.rows-builder__square-name').innerText()) === 'Rangée nommée', 'a name stored with the row shows on its square');
+    await squares.nth(0).locator('.rows-builder__square-name').click();
+    const nameInput = squares.nth(0).locator('.rows-builder__square-input');
+    await nameInput.fill('Un nom vraiment beaucoup trop long');
+    check((await nameInput.inputValue()).length === 22, 'the name stops at 22 characters');
+    await nameInput.fill('Bandeau du haut');
+    await nameInput.press('Enter');
+    check((await nameOf()) === 'Bandeau du haut', 'the name typed replaces the number');
+    const line = await p.locator('.rows-builder__rows').evaluate((el) => ({x: getComputedStyle(el).overflowX, wrap: getComputedStyle(el).flexWrap}));
+    check(line.x === 'auto' && line.wrap === 'nowrap', 'the line of squares scrolls sideways rather than wrapping');
+
     // a column dragged sideways inside its square changes place in the row (filled | empty → empty | filled)
     const minis = squares.nth(0).locator('.rows-builder__mini');
     const m0 = (await minis.nth(0).boundingBox())!;
@@ -193,6 +207,8 @@ async function main() {
       const sectionEl = iframe.contentDocument?.querySelector('section');
       return {frame: iframe.clientHeight, section: Math.ceil(sectionEl?.getBoundingClientRect().height ?? 0), composerBox: document.querySelectorAll('.background-composer [aria-hidden="true"]').length};
     });
+    const veil = await blank.getByText('Colonnes', {exact: true}).evaluate((el) => getComputedStyle(el.parentElement as HTMLElement).backgroundColor);
+    check(/rgba\(|color\(srgb .* \/ 0\.0/.test(veil) && !/rgba\(0, 0, 0, 0\)/.test(veil), `the columns zone is translucent on a light section (${veil})`);
     check(fit.section > 0 && fit.frame === fit.section, `the frame is exactly as tall as the section (${fit.frame} / ${fit.section})`);
     check(fit.composerBox === 0, 'no background preview box in the settings');
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-blank.png`});

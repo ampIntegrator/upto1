@@ -132,6 +132,15 @@ export const sectionsText = texts({
       fr: ({n, selected}: {n: number; selected: boolean}) => `Rangée ${n}${selected ? ', sélectionnée' : ''}`,
       en: ({n, selected}: {n: number; selected: boolean}) => `Row ${n}${selected ? ', selected' : ''}`,
     },
+    rowNameEdit: {
+      fr: ({n}: {n: number}) => `Nommer la rangée ${n}`,
+      en: ({n}: {n: number}) => `Name row ${n}`,
+    },
+    rowNameTitle: {
+      fr: ({max}: {max: number}) => `Cliquer pour nommer la rangée (${max} caractères au plus)`,
+      en: ({max}: {max: number}) => `Click to name the row (${max} characters at most)`,
+    },
+    rowNamePlaceholder: {fr: 'Nom de la rangée', en: 'Row name'},
     loading: {fr: 'Chargement…', en: 'Loading…'},
     emptyRow: {fr: 'Sélectionnez cette rangée puis une disposition.', en: 'Select this row, then a layout.'},
     moveRowAria: {

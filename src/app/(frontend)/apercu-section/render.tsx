@@ -21,9 +21,12 @@ import type {SiloName} from '@/theme/index';
 import {OrbitaThemeProvider} from '@/theme/OrbitaThemeProvider';
 import type {StoredPreview} from './store';
 
-/** where the columns will be: a dashed zone with a light translucent background, in a section that has no content yet */
+/**
+ * where the columns will be: a dashed zone with a light translucent background (a veil of the text colour:
+ * the theme's muted background is opaque on light sections and would hide the texture)
+ */
 const slot = (
-  <VStack align="center" justify="center" padding={4} minHeight="calc(var(--spacing-12) * 3)" style={{border: 'var(--border-width) dashed var(--color-border-emphasized)', borderRadius: 'var(--radius-element)', background: 'var(--color-background-muted)'}}>
+  <VStack align="center" justify="center" padding={4} minHeight="calc(var(--spacing-12) * 3)" style={{border: 'var(--border-width) dashed var(--color-border-emphasized)', borderRadius: 'var(--radius-element)', background: 'color-mix(in srgb, var(--color-text-primary) 6%, transparent)'}}>
     <Text color="secondary" justify="center">
       Colonnes
     </Text>

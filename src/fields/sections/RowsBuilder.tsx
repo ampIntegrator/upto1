@@ -8,8 +8,9 @@
  *   - a single strip of layout thumbnails (a rectangle split in the column
  *     proportions): a click replaces the selected row's layout, after confirmation,
  *     a double click adds a row below the selection;
- *   - below, the rows as a line of squares, from left to right = from top to bottom in the
- *     preview; a square shows the row's split; it is dragged left or right to reorder the rows
+ *   - below, the rows as a line of squares (it scrolls sideways when they do not all fit), from
+ *     left to right = from top to bottom in the preview; a square carries the row's number, or
+ *     the name typed in its place (a click on it, 22 characters at most), and shows the row's split; it is dragged left or right to reorder the rows
  *     (mouse, touch or keyboard, sortable.tsx, dnd-kit); three buttons, always visible: move,
  *     duplicate, delete; inside a square, a column is dragged left or right to change place in
  *     its row;
@@ -34,7 +35,7 @@ import {sectionsText as T} from '@/i18n/admin/sections';
 import {useAdminText} from '@/i18n/admin/useAdminText';
 
 import {EMPTY_SLUG} from './emptyBlock';
-import {type ColumnSpan, presetLabel, type PresetRow, ROW_PRESETS, spansKey, toSpan} from './grid';
+import {type ColumnSpan, presetLabel, type PresetRow, ROW_NAME_MAX, ROW_PRESETS, spansKey, toSpan} from './grid';
 import {type SortableHandle, SortableItem, SortableList} from './sortable';
 import {rowWidthError} from './validation';
 
@@ -44,7 +45,7 @@ import './RowsBuilder.scss';
 /** narrow: minimum width required by the content when the column is too narrow, otherwise null */
 /** wide: maximum width allowed by the content when the column is too wide, otherwise null */
 type CellSnapshot = {span: ColumnSpan; contents: string[]; types?: string[]; names?: string[]; filled: boolean; narrow: number | null; wide: number | null; mobileOrder: number | null};
-type RowSnapshot = {ids?: string[]; columns: CellSnapshot[]};
+type RowSnapshot = {ids?: string[]; name?: string; columns: CellSnapshot[]};
 
 const TILE_H = 40;
 const text14: React.CSSProperties = {fontSize: 14, lineHeight: 1.4};
@@ -218,6 +219,63 @@ function MiniCell({cell, index, rowSelected, onOpen, onShift, drag}: {cell: Cell
   );
 }
 
+/**
+ * The name of a row square: its number until it is named. A click turns it into a text input
+ * (ROW_NAME_MAX characters at most); Enter or leaving the input keeps the name, Escape gives up.
+ */
+function RowName({index, name, readOnly, onChange}: {index: number; name: string; readOnly?: boolean; onChange: (name: string) => void}) {
+  const {t} = useAdminText();
+  const [draft, setDraft] = useState<string | null>(null);
+  // the square around drags the row and selects it: none of that from here
+  const quiet = {onMouseDown: (e: React.SyntheticEvent) => e.stopPropagation(), onTouchStart: (e: React.SyntheticEvent) => e.stopPropagation(), onClick: (e: React.SyntheticEvent) => e.stopPropagation()};
+  if (draft !== null) {
+    const keep = () => {
+      onChange(draft.trim().slice(0, ROW_NAME_MAX));
+      setDraft(null);
+    };
+    return (
+      <input
+        {...quiet}
+        className="rows-builder__square-input"
+        type="text"
+        autoFocus
+        value={draft}
+        maxLength={ROW_NAME_MAX}
+        placeholder={t(T.builder.rowNamePlaceholder)}
+        aria-label={t(T.builder.rowNameEdit, {n: index + 1})}
+        onChange={(e) => setDraft(e.target.value)}
+        onBlur={keep}
+        onKeyDown={(e) => {
+          e.stopPropagation();
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            keep();
+          } else if (e.key === 'Escape') {
+            e.preventDefault();
+            setDraft(null);
+          }
+        }}
+      />
+    );
+  }
+  if (readOnly) return <span className="rows-builder__square-name">{name || index + 1}</span>;
+  return (
+    <button
+      {...quiet}
+      type="button"
+      className="rows-builder__square-name"
+      aria-label={t(T.builder.rowNameEdit, {n: index + 1})}
+      title={t(T.builder.rowNameTitle, {max: ROW_NAME_MAX})}
+      onClick={(e) => {
+        e.stopPropagation();
+        setDraft(name);
+      }}
+      onKeyDown={(e) => e.stopPropagation()}>
+      {name || index + 1}
+    </button>
+  );
+}
+
 /** minSpans, maxSpans: block slug → minimum and maximum column width; presetRows: thumbnails with blocks placed (clientProps). */
 export type RowsBuilderProps = ArrayFieldClientProps & {minSpans?: Record<string, number>; maxSpans?: Record<string, number>; presetRows?: PresetRow[]};
 
@@ -262,6 +320,7 @@ export function RowsBuilder(props: RowsBuilderProps) {
       const i = Number(parts[0]);
       if (!Number.isInteger(i)) continue;
       out[i] ??= {columns: []};
+      if (parts[1] === 'name' && parts.length === 2) out[i].name = String(fields[key]?.value ?? '');
       if (parts[1] !== 'columns') continue;
       if (parts.length === 2) {
         out[i].ids = (fields[key]?.rows ?? []).map((row) => row.id);
@@ -287,7 +346,7 @@ export function RowsBuilder(props: RowsBuilderProps) {
         (out[i].columns[j].names ??= [])[Number(parts[4])] = String(fields[key]?.value ?? '');
       }
     }
-    return JSON.stringify(out.map((r) => ({ids: r?.ids ?? [], columns: (r?.columns ?? []).map((c) => {
+    return JSON.stringify(out.map((r) => ({ids: r?.ids ?? [], name: r?.name ?? '', columns: (r?.columns ?? []).map((c) => {
       const span = c?.span ?? 12;
       // width required by the column's component (span registry)
       const need = (c?.types ?? []).reduce((m, t) => Math.max(m, minSpans[t] ?? 0), 0);
@@ -352,6 +411,11 @@ export function RowsBuilder(props: RowsBuilderProps) {
   const moveColumn = (row: number, from: number, to: number) => {
     if (to < 0 || to >= (snapshot[row]?.columns.length ?? 0)) return;
     moveFieldRow({path: `${path}.${row}.columns`, moveFromIndex: from, moveToIndex: to});
+    setModified(true);
+  };
+  const renameRow = (i: number, name: string) => {
+    if (name === (snapshot[i]?.name ?? '')) return;
+    dispatchFields({type: 'UPDATE', path: `${path}.${i}.name`, value: name || null, valid: true});
     setModified(true);
   };
   const duplicate = (i: number) => {
@@ -459,7 +523,7 @@ export function RowsBuilder(props: RowsBuilderProps) {
                   }}
                   style={{transform, transition}}>
                   <div className="rows-builder__square-head">
-                    <span className="rows-builder__square-number">{i + 1}</span>
+                    <RowName index={i} name={snap.name ?? ''} readOnly={readOnly} onChange={(name) => renameRow(i, name)} />
                     {!readOnly ? (
                       <div className="rows-builder__actions" onClick={(e) => e.stopPropagation()}>
                         <button type="button" {...attributes} {...listeners} className="rows-builder__handle" aria-label={t(T.builder.moveRowAria, {n: i + 1})} title={t(T.builder.moveRowTitle)}>
@@ -477,7 +541,7 @@ export function RowsBuilder(props: RowsBuilderProps) {
                   {row.isLoading ? (
                     <p style={{...text14, ...dim, margin: 0}}>{t(T.builder.loading)}</p>
                   ) : snap.columns.length ? (
-                    <div style={{'--rows-builder-cells': spans.map((s) => `${s}fr`).join(' ')} as React.CSSProperties}>
+                    <div className="rows-builder__square-body" style={{'--rows-builder-cells': spans.map((s) => `${s}fr`).join(' ')} as React.CSSProperties}>
                       <SortableList ids={colIds} axis="x" onMove={(from, to) => moveColumn(i, from, to)} className="rows-builder__minis">
                         {snap.columns.map((cell, j) => (
                           <SortableItem key={colIds[j]} id={colIds[j]} disabled={readOnly}>

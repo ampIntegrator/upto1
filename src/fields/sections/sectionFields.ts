@@ -5,6 +5,7 @@ import {type Text, tr} from '@/i18n/admin/languages';
 import {sectionsText as T} from '@/i18n/admin/sections';
 
 import {BLOCK_NAME_MAX} from './blockName';
+import {ROW_NAME_MAX} from './grid';
 import {type ContentBlock, labelMap, maxSpanMap, minSpanMap} from './contentBlock';
 import {EMPTY_SLUG, emptyBlock} from './emptyBlock';
 import {SECTION_GAP_OPTIONS, SITE_GAP} from './gaps';
@@ -108,6 +109,8 @@ export function rowsField(blocks: ContentBlock[], condition?: Condition, presetR
       components: {Field: {path: '@/fields/sections/RowsBuilder#RowsBuilder', clientProps: {minSpans, maxSpans, presetRows}}},
     },
     fields: [
+      // name given to the row in the builder (its square), instead of its number; never shown on the site
+      {name: 'name', type: 'text', maxLength: ROW_NAME_MAX, admin: {hidden: true}},
       {
         name: 'columns',
         type: 'array',

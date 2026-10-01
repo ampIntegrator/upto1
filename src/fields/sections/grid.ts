@@ -73,3 +73,6 @@ export type PresetRow = {id: string; label: string | Record<string, string>; spa
 export const SPACING_VALUES = ['0', '20', '40', '60', '80', '100', '120', '140', '160'] as const;
 export const DEFAULT_SPACING = '80';
 export const SPACING_OPTIONS = SPACING_VALUES.map((v) => ({label: `${v} px`, value: v}));
+
+/** longest name of a row in the builder (it has to fit in the row's square) */
+export const ROW_NAME_MAX = 22;
