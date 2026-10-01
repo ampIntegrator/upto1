@@ -232,6 +232,7 @@ export const sectionsText = texts({
     blocksSoon: {fr: 'Bientôt : la liste des blocs à glisser dans les colonnes. En attendant, un clic sur une case du découpage choisit son bloc.', en: 'Coming soon: the list of blocks to drag into the columns. Meanwhile, click a cell of the layout to choose its block.'},
     preview: {fr: 'Aperçu en direct', en: 'Live preview'},
     width: {fr: 'Largeur de l’aperçu', en: 'Preview width'},
+    widthFull: {fr: 'Pleine largeur', en: 'Full width'},
   },
   drawer: {
     title: {

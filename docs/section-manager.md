@@ -6,13 +6,18 @@ fails, go back to `payload` / `main`.
 
 ## What it is
 
-In a page, a section shows its name and a « Gérer » button. The button opens a full-screen dialog:
+In a page, a section shows its name, a « Gérer » button and, below it, its anchor and (on a page)
+the « save as shared » checkbox: these two stay in the document's form, not in the dialog. The
+button opens a full-screen dialog:
 
 - top, 40 %: the settings, in three horizontal accordions (one open, the others folded to a
-  vertical strip): « Fond et espaces », « Découpage », « Blocs »;
+  vertical strip): « Fond et espaces », « Découpage », « Blocs ». In the first one the groups of
+  settings sit **side by side, one column per group** (background, edge line, inner spacing, grid
+  gaps), so the top part does not scroll down; it scrolls sideways if the columns do not all fit;
 - bottom, 60 %: the live preview of this section alone, rendered by the site, refreshed about
-  400 ms after each change, **without saving**; a width switch (1440, 768, 390), the frame being
-  scaled down when it is wider than the panel. The frame is exactly as tall as the section (it
+  400 ms after each change, **without saving**; a width switch (full width of the panel, as in the browser, then 1440, 768,
+  390; remembered per user, preference `section-preview-width`), the frame being scaled down when
+  it is wider than the panel, and centred in the panel both ways. The frame is exactly as tall as the section (it
   reports its height, `PREVIEW_SIZE`): only the section shows, nothing below it (Nicolas, 1 Oct.).
   A section without content (no row, or only empty columns) shows its background, its top and
   bottom paddings and a dashed zone « Colonnes » where the columns will be (`slot` of
@@ -66,6 +71,11 @@ Site side:
   several instances or serverless, replace it (a table, a cache) before relying on the preview.
 - Payload's drawers opened from the dialog stack above it (the dialog's `z-index` is 100): keep it
   below Payload's drawers.
+- The columns of the first panel: `sectionFields()` gives the dialog the names of the group
+  headings (`groups`); the dialog renders the settings once per group, with the other groups'
+  fields replaced by holes (`byGroup`), so each field keeps the position, hence the path, Payload
+  gave it. `forceRender` is needed: Payload renders fields when they come on screen, and a group
+  whose fields are all hidden by a condition is hidden in CSS (`:has`).
 - Folded panels stay mounted (`hidden`): their fields keep their state. Closing the dialog unmounts
   them; the values stay in the form state.
 - The frame's messages for the editor (empty section, not logged in) are French only.

@@ -249,15 +249,6 @@ export interface Page {
   sections?:
     | (
         | {
-            /**
-             * Identifier for an #anchor link: lowercase letters, digits, hyphens.
-             */
-            anchor?: string | null;
-            /**
-             * On save, the section is copied to “Shared sections” and the page references it.
-             */
-            saveAsShared?: boolean | null;
-            sharedTitle?: string | null;
             mode: 'light' | 'dark' | 'media';
             tint?: ('body' | 'light' | 'highlight') | null;
             texture?: ('none' | 'grid' | 'dots' | 'losange') | null;
@@ -1372,6 +1363,15 @@ export interface Page {
                   id?: string | null;
                 }[]
               | null;
+            /**
+             * Identifier for an #anchor link: lowercase letters, digits, hyphens.
+             */
+            anchor?: string | null;
+            /**
+             * On save, the section is copied to “Shared sections” and the page references it.
+             */
+            saveAsShared?: boolean | null;
+            sharedTitle?: string | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'section';
@@ -1961,10 +1961,6 @@ export interface Form {
 export interface Section {
   id: number;
   title: string;
-  /**
-   * Identifier for an #anchor link: lowercase letters, digits, hyphens.
-   */
-  anchor?: string | null;
   mode: 'light' | 'dark' | 'media';
   tint?: ('body' | 'light' | 'highlight') | null;
   texture?: ('none' | 'grid' | 'dots' | 'losange') | null;
@@ -3078,6 +3074,10 @@ export interface Section {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Identifier for an #anchor link: lowercase letters, digits, hyphens.
+   */
+  anchor?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -3336,9 +3336,6 @@ export interface PagesSelect<T extends boolean = true> {
         section?:
           | T
           | {
-              anchor?: T;
-              saveAsShared?: T;
-              sharedTitle?: T;
               mode?: T;
               tint?: T;
               texture?: T;
@@ -4077,6 +4074,9 @@ export interface PagesSelect<T extends boolean = true> {
                         };
                     id?: T;
                   };
+              anchor?: T;
+              saveAsShared?: T;
+              sharedTitle?: T;
               id?: T;
               blockName?: T;
             };
@@ -4116,7 +4116,6 @@ export interface PagesSelect<T extends boolean = true> {
  */
 export interface SectionsSelect<T extends boolean = true> {
   title?: T;
-  anchor?: T;
   mode?: T;
   tint?: T;
   texture?: T;
@@ -4855,6 +4854,7 @@ export interface SectionsSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  anchor?: T;
   updatedAt?: T;
   createdAt?: T;
 }

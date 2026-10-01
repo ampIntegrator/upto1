@@ -55,6 +55,9 @@ async function main() {
     await p.getByText('Contenu', {exact: true}).first().click();
     const toggle = p.locator('.blocks-field__rows .collapsible__toggle').first();
     if (await toggle.count()) await toggle.click();
+    await p.getByRole('button', {name: /^(Gérer|Manage)$/}).first().waitFor();
+    if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-form.png`});
+    check(await p.locator('input[name="sections.0.anchor"]').isVisible(), 'the anchor is in the page form, at the section level');
     await p.getByRole('button', {name: /^(Gérer|Manage)$/}).first().click();
     const frame = p.frameLocator('.section-preview__frame');
     await frame.getByText(TITLE).waitFor({timeout: 20000});
@@ -62,6 +65,14 @@ async function main() {
 
     const heights = await p.evaluate(() => ({panels: document.querySelector('.section-manager__panels')?.clientHeight ?? 0, preview: document.querySelector('.section-preview')?.clientHeight ?? 0, total: window.innerHeight}));
     check(heights.panels + heights.preview < heights.total && heights.preview > heights.panels, `settings above (${heights.panels}), a taller preview below (${heights.preview}), inside the screen (${heights.total})`);
+
+    const top = await p.evaluate(() => {
+      const el = document.querySelector('.section-manager__panel--open .section-manager__content') as HTMLElement;
+      return {scroll: el.scrollHeight, height: el.clientHeight, groups: [...document.querySelectorAll('.section-manager__group')].filter((g) => (g as HTMLElement).offsetWidth > 0).length, anchor: el.querySelectorAll('input[name$=".anchor"]').length};
+    });
+    check(top.scroll <= top.height, `the settings fit without vertical scroll (${top.scroll} / ${top.height}), in ${top.groups} columns`);
+    check(top.anchor === 0, 'no anchor field in the dialog');
+    if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-settings.png`});
 
     const background = () => frame.locator('section').first().evaluate((el) => getComputedStyle(el).backgroundColor);
     const before = await background();
@@ -98,6 +109,18 @@ async function main() {
     await p.getByRole('button', {name: /^(Gérer|Manage)$/}).nth(1).click();
     const blank = p.frameLocator('.section-preview__frame');
     await blank.getByText('Colonnes', {exact: true}).waitFor({timeout: 20000});
+    await p.getByRole('radio', {name: /Pleine largeur|Full width/}).click();
+    await p.waitForTimeout(1000);
+    const full = await p.evaluate(() => {
+      const stage = document.querySelector('.section-preview__stage') as HTMLElement;
+      const sizer = document.querySelector('.section-preview__sizer') as HTMLElement;
+      const a = stage.getBoundingClientRect();
+      const b = sizer.getBoundingClientRect();
+      return {stage: stage.clientWidth, frame: (document.querySelector('.section-preview__frame') as HTMLElement).clientWidth, above: Math.round(b.top - a.top), below: Math.round(a.bottom - b.bottom)};
+    });
+    check(full.frame === full.stage, `full width: the frame is as wide as the panel (${full.frame})`);
+    check(Math.abs(full.above - full.below) <= 2 && full.above > 0, `the section is centred vertically in the panel (${full.above} above, ${full.below} below)`);
+    if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-full.png`});
     await p.getByRole('radio', {name: /Ordinateur|Desktop/}).click();
     await p.waitForTimeout(1000);
     const fit = await p.evaluate(() => {

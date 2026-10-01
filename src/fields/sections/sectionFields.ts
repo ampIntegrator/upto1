@@ -150,12 +150,12 @@ export function rowsField(blocks: ContentBlock[], condition?: Condition, presetR
 /**
  * A section's fields, in two framed blocks: « Section settings », then the rows, both edited in the
  * « Gérer » dialog (SectionManager). The settings are
- * grouped, each group under a heading with a rule (`sectionGroup`, presentation only): the anchor
- * and the sharing, the host's settings (its own headings, options.settings), then the spacing and
- * the gaps. `groupHeading`: the host's heading component (an icon before the title).
+ * grouped, each group under a heading (`sectionGroup`, presentation only): the host's settings
+ * (its own headings, options.settings), then the spacing and the gaps. The anchor and the sharing
+ * stay in the document's form, under the « Gérer » button. `groupHeading`: the host's heading component (an icon before the title).
  */
 export function sectionFields({blocks, settings = [], shareable = false, condition, presetRows = [], groupHeading, preview}: SectionFieldsOptions): Field[] {
-  const group = (o: {name: string; label: Text; icon?: string; first?: boolean}) => sectionGroup({...o, component: groupHeading, condition});
+  const group = (o: {name: string; label: Text; icon?: string; first?: boolean; always?: boolean}) => sectionGroup({name: o.name, label: o.label, icon: o.icon, first: o.first, component: groupHeading, condition: o.always ? undefined : condition});
   const anchorField: Field = {
     name: 'anchor',
     type: 'text',
@@ -163,12 +163,12 @@ export function sectionFields({blocks, settings = [], shareable = false, conditi
     admin: {width: shareable ? '34%' : '100%', description: T.settings.anchorDescription},
     validate: (value: unknown, {req}: {req: PayloadRequest}) => !value || (typeof value === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)) || tr(T.validation.anchor, req.i18n?.language),
   };
-  const common: Field[] = [
-    // the anchor and, on a page's section, the sharing
-    group({name: 'groupAnchor', label: T.settings.groupAnchor, icon: 'anchor', first: true}),
+  // the anchor and, on a page's section, the sharing: in the document's form, at the section's level
+  // (not in the « Gérer » dialog, Nicolas, 1 Oct. 2026), whatever the background
+  const identity: Field[] = [
+    group({name: 'groupAnchor', label: T.settings.groupAnchor, icon: 'anchor', always: true}),
     {
       type: 'row',
-      admin: {condition},
       fields: shareable
         ? [
             anchorField,
@@ -177,6 +177,8 @@ export function sectionFields({blocks, settings = [], shareable = false, conditi
           ]
         : [anchorField],
     },
+  ];
+  const common: Field[] = [
     // the host's settings, with their own group headings (background, edge line…)
     ...settings,
     // inner spacing, above and below the section
@@ -201,13 +203,15 @@ export function sectionFields({blocks, settings = [], shareable = false, conditi
       ],
     },
   ];
+  // the settings' group headings: the dialog lays each group out as a column
+  const groups = common.flatMap((f) => (f.type === 'ui' ? [f.name] : []));
   return [
     // the « Gérer » dialog (SectionManager, 1 Oct. 2026): an unnamed collapsible wrapping the two framed
     // blocks below, shown as a button in the page; presentation only, the data does not change
     {
       type: 'collapsible',
       label: T.manager.title,
-      admin: {components: {Field: {path: '@/fields/sections/SectionManager#SectionManager', clientProps: {preview}}}},
+      admin: {components: {Field: {path: '@/fields/sections/SectionManager#SectionManager', clientProps: {preview, groups}}}},
       fields: [
         // section settings (the dialog's first panel)
         {type: 'collapsible', label: T.settings.collapsible, fields: common},
@@ -215,5 +219,6 @@ export function sectionFields({blocks, settings = [], shareable = false, conditi
         {type: 'collapsible', label: T.rows.collapsible, admin: {condition}, fields: [rowsField(blocks, condition, presetRows)]},
       ],
     },
+    ...identity,
   ];
 }

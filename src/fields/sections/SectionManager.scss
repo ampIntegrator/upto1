@@ -118,6 +118,47 @@
   padding: var(--base);
 }
 
+// first panel: one column per group of settings, side by side (scrolls sideways when they do not
+// all fit, rather than down)
+.section-manager__groups {
+  display: flex;
+  align-items: stretch;
+  min-height: 100%;
+}
+
+.section-manager__group {
+  flex: 1 1 0;
+  min-width: 300px;
+  padding: 0 var(--base);
+  border-right: 1px solid var(--theme-elevation-150);
+
+  &:first-child {
+    padding-left: 0;
+  }
+
+  &:last-child {
+    padding-right: 0;
+    border-right: 0;
+  }
+
+  // a group whose fields are all hidden by their condition
+  &:not(:has(.render-fields > *)) {
+    display: none;
+  }
+
+  // the group's heading: its rule is the column's border here
+  .render-fields > :first-child {
+    margin-block-start: 0 !important;
+    padding-block-start: 0 !important;
+    border-block-start: 0 !important;
+  }
+
+  // fields of a row: side by side while they fit, wrapping in a narrow column
+  .field-type.row .row__fields > * {
+    flex: 1 1 180px;
+  }
+}
+
 .section-manager__soon {
   margin: 0;
   max-width: 60ch;
@@ -179,15 +220,18 @@
 }
 
 .section-preview__stage {
+  display: flex;
   flex: 1 1 auto;
   min-height: 0;
   overflow: auto;
   background: var(--theme-elevation-100);
 }
 
+// centred both ways while it fits (auto margins: a taller section still scrolls from its top)
 .section-preview__sizer {
   position: relative;
-  margin: 0 auto;
+  flex: 0 0 auto;
+  margin: auto;
   overflow: hidden;
 }
 

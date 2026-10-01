@@ -3,11 +3,14 @@
 /**
  * SectionPreview — the bottom of the « Gérer » dialog: the host's preview page in an iframe, fed
  * with the section's unsaved values (window.postMessage, see preview.ts), about 400 ms after the
- * last change. A width switch (desktop, tablet, mobile): the frame keeps the chosen width and is
- * scaled down to fit the panel when it is wider. The frame is as tall as the section it shows
+ * last change. A width switch (full width of the panel, desktop, tablet, mobile; the choice is
+ * remembered per user): the frame keeps the chosen width and is scaled down to fit the panel when
+ * it is wider. It is centred in the panel, both ways. The frame is as tall as the section it shows
  * (the height it reports): nothing but the section is visible, the panel scrolls when it is taller.
  */
 import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from 'react';
+
+import {usePreferences} from '@payloadcms/ui';
 
 import {sectionsText as T} from '@/i18n/admin/sections';
 import {useAdminText} from '@/i18n/admin/useAdminText';
@@ -15,6 +18,10 @@ import {useAdminText} from '@/i18n/admin/useAdminText';
 import {isPreviewReady, PREVIEW_DATA, type PreviewBreakpoint, type PreviewDataMessage, previewSize} from './preview';
 
 const DEBOUNCE_MS = 400;
+/** « full width »: the frame is as wide as the panel, as in the browser */
+const FULL = 'full';
+/** the last width chosen, remembered per user (Payload preferences) */
+const PREFERENCE = 'section-preview-width';
 
 type Props = {
   url: string;
@@ -32,7 +39,23 @@ export function SectionPreview({url, breakpoints, message}: Props) {
   const [box, setBox] = useState({width: 0, height: 0});
   // height of the rendered section, reported by the frame (0: nothing rendered yet)
   const [content, setContent] = useState(0);
-  const width = breakpoints.find((b) => b.name === bp)?.width ?? breakpoints[0]?.width ?? 1440;
+  const width = bp === FULL ? box.width || 1440 : (breakpoints.find((b) => b.name === bp)?.width ?? breakpoints[0]?.width ?? 1440);
+  const {getPreference, setPreference} = usePreferences();
+  useEffect(() => {
+    let live = true;
+    getPreference<string | undefined>(PREFERENCE)
+      .then((saved) => {
+        if (live && saved && (saved === FULL || breakpoints.some((b) => b.name === saved))) setBp(saved);
+      })
+      .catch(() => undefined);
+    return () => {
+      live = false;
+    };
+  }, [getPreference, breakpoints]);
+  const choose = (name: string) => {
+    setBp(name);
+    void setPreference(PREFERENCE, name);
+  };
   const origin = typeof window === 'undefined' ? '' : new URL(url, window.location.href).origin;
   // one key per frame, in its address (`frame`): the host keeps what each frame was sent apart
   const [src] = useState(() => `${url}${url.includes('?') ? '&' : '?'}frame=${crypto.randomUUID()}`);
@@ -88,8 +111,11 @@ export function SectionPreview({url, breakpoints, message}: Props) {
       <div className="section-preview__bar">
         <span className="section-preview__title">{t(T.manager.preview)}</span>
         <div className="section-preview__widths" role="radiogroup" aria-label={t(T.manager.width)}>
+          <button type="button" role="radio" aria-checked={bp === FULL} className={`section-preview__width${bp === FULL ? ' section-preview__width--active' : ''}`} onClick={() => choose(FULL)}>
+            {t(T.manager.widthFull)}
+          </button>
           {breakpoints.map((b) => (
-            <button key={b.name} type="button" role="radio" aria-checked={b.name === bp} className={`section-preview__width${b.name === bp ? ' section-preview__width--active' : ''}`} onClick={() => setBp(b.name)}>
+            <button key={b.name} type="button" role="radio" aria-checked={b.name === bp} className={`section-preview__width${b.name === bp ? ' section-preview__width--active' : ''}`} onClick={() => choose(b.name)}>
               {t(b.label)} <span className="section-preview__px">{b.width}</span>
             </button>
           ))}

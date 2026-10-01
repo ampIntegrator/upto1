@@ -33,6 +33,8 @@ type Props = {
   permissions?: SanitizedFieldPermissions | SanitizedFieldsPermissions;
   readOnly?: boolean;
   preview?: SectionPreviewOptions;
+  /** names of the settings' group headings: each group is a column of the first panel */
+  groups?: string[];
 };
 
 type PanelKey = 'settings' | 'layout' | 'blocks';
@@ -43,7 +45,22 @@ const innerFields = (field: CollapsibleFieldClient, index: number): ClientField[
   return f && 'fields' in f ? f.fields : [];
 };
 
-export function SectionManager({field, path, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview}: Props) {
+/**
+ * The settings cut at each group heading: one list per group, as long as the whole list, the other
+ * groups' fields left out (null). RenderFields skips the holes and keeps each field's position,
+ * so every field has the path Payload gave it.
+ */
+function byGroup(fields: ClientField[], groups: string[]): ClientField[][] {
+  const out: ClientField[][] = [];
+  fields.forEach((f, i) => {
+    const starts = f.type === 'ui' && groups.includes(f.name);
+    if (starts || out.length === 0) out.push(fields.map(() => null as unknown as ClientField));
+    out[out.length - 1][i] = f;
+  });
+  return out;
+}
+
+export function SectionManager({field, path, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups}: Props) {
   const {t} = useAdminText();
   const {openModal, closeModal, isModalOpen} = useModal();
   const slug = `section-manager-${path}`;
@@ -71,6 +88,7 @@ export function SectionManager({field, path, indexPath, parentPath, parentSchema
             permissions={permissions}
             readOnly={readOnly}
             preview={preview}
+            groups={groups}
             onClose={() => closeModal(slug)}
           />
         ) : null}
@@ -79,12 +97,14 @@ export function SectionManager({field, path, indexPath, parentPath, parentSchema
   );
 }
 
-function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, onClose}: Omit<Props, 'path'> & {onClose: () => void}) {
+function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups = [], onClose}: Omit<Props, 'path'> & {onClose: () => void}) {
   const {t} = useAdminText();
   const [panel, setPanel] = useState<PanelKey>('settings');
-  const render = (index: number) => (
+  // forceRender: Payload renders fields once they are on screen, and an empty group is hidden (SCSS)
+  const render = (index: number, fields: ClientField[] = innerFields(field, index)) => (
     <RenderFields
-      fields={innerFields(field, index)}
+      fields={fields}
+      forceRender
       parentIndexPath={`${indexPath}-${index}`}
       parentPath={parentPath}
       parentSchemaPath={parentSchemaPath}
@@ -92,8 +112,18 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
       readOnly={readOnly}
     />
   );
+  // the settings side by side, one column per group: no vertical scroll in the top part
+  const settings = (
+    <div className="section-manager__groups">
+      {byGroup(innerFields(field, 0), groups).map((fields, i) => (
+        <div key={i} className="section-manager__group">
+          {render(0, fields)}
+        </div>
+      ))}
+    </div>
+  );
   const panels: {key: PanelKey; label: string; content: React.ReactNode}[] = [
-    {key: 'settings', label: t(T.manager.panelSettings), content: render(0)},
+    {key: 'settings', label: t(T.manager.panelSettings), content: settings},
     {key: 'layout', label: t(T.manager.panelLayout), content: render(1)},
     {key: 'blocks', label: t(T.manager.panelBlocks), content: <p className="section-manager__soon">{t(T.manager.blocksSoon)}</p>},
   ];
