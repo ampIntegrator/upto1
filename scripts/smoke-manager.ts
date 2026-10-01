@@ -103,7 +103,7 @@ async function main() {
 
     await p.getByRole('radio', {name: /Mobile/}).click();
     await p.waitForTimeout(500);
-    check((await p.locator('.section-preview__frame').evaluate((el) => (el as HTMLElement).style.width)) === '390px', 'the width switch sets the frame to 390');
+    check((await p.locator('.section-preview__frame').evaluate((el) => (el as HTMLElement).style.width)) === '420px', 'the width switch sets the frame to 420');
 
     // a cell's drawer opens above the dialog; what is typed there reaches the preview
     await p.getByRole('button', {name: /Découpage|Layout/}).click();

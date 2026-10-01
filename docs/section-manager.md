@@ -22,8 +22,8 @@ button opens a full-screen dialog:
 - the accordions slide open sideways (300 ms; a panel's content keeps its full width, the panel
   uncovers it; folded panels are `inert`; no animation with « reduced motion »);
 - bottom, 65 %: the live preview of this section alone, rendered by the site, refreshed about
-  400 ms after each change, **without saving**; a width switch (full width of the panel, as in the browser, then 1440, 768,
-  390; remembered per user, preference `section-preview-width`), the frame being scaled down when
+  400 ms after each change, **without saving**; a width switch, as icons without the figures (full width of the panel, as in the browser, then
+  desktop 1440, tablet 990, mobile 420; remembered per user, preference `section-preview-width`), the frame being scaled down when
   it is wider than the panel, and centred in the panel both ways. The frame is exactly as tall as the section (it
   reports its height, `PREVIEW_SIZE`): only the section shows, nothing below it (Nicolas, 1 Oct.).
   A section without content (no row, or only empty columns) shows its background, its top and

@@ -280,7 +280,12 @@ $slide: 300ms;
 }
 
 .section-preview__width {
-  padding: 4px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  min-height: 30px;
+  padding: 4px 8px;
   border: 1px solid var(--theme-elevation-150);
   border-radius: 4px;
   background: var(--theme-bg);
@@ -299,10 +304,6 @@ $slide: 300ms;
   border-color: var(--theme-elevation-1000);
   background: var(--theme-elevation-1000);
   color: var(--theme-bg);
-}
-
-.section-preview__px {
-  opacity: 0.7;
 }
 
 .section-preview__stage {

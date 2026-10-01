@@ -23,6 +23,32 @@ const FULL = 'full';
 /** the last width chosen, remembered per user (Payload preferences) */
 const PREFERENCE = 'section-preview-width';
 
+/** The width switch's icons (stroke, text colour): the whole panel, a screen, a tablet, a phone. */
+function WidthGlyph({kind}: {kind: 'full' | 'desktop' | 'tablet' | 'mobile'}) {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {kind === 'full' ? (
+        <path d="M2 12h20M6 8l-4 4 4 4M18 8l4 4-4 4" />
+      ) : kind === 'desktop' ? (
+        <>
+          <rect x="2" y="4" width="20" height="12" rx="2" />
+          <path d="M8 20h8M12 16v4" />
+        </>
+      ) : kind === 'tablet' ? (
+        <>
+          <rect x="4" y="2" width="16" height="20" rx="2" />
+          <path d="M11 18h2" />
+        </>
+      ) : (
+        <>
+          <rect x="6" y="2" width="12" height="20" rx="2" />
+          <path d="M11 18h2" />
+        </>
+      )}
+    </svg>
+  );
+}
+
 type Props = {
   url: string;
   breakpoints: PreviewBreakpoint[];
@@ -111,12 +137,12 @@ export function SectionPreview({url, breakpoints, message}: Props) {
       <div className="section-preview__bar">
         <span className="section-preview__title">{t(T.manager.preview)}</span>
         <div className="section-preview__widths" role="radiogroup" aria-label={t(T.manager.width)}>
-          <button type="button" role="radio" aria-checked={bp === FULL} className={`section-preview__width${bp === FULL ? ' section-preview__width--active' : ''}`} onClick={() => choose(FULL)}>
-            {t(T.manager.widthFull)}
+          <button type="button" role="radio" aria-checked={bp === FULL} aria-label={t(T.manager.widthFull)} title={t(T.manager.widthFull)} className={`section-preview__width${bp === FULL ? ' section-preview__width--active' : ''}`} onClick={() => choose(FULL)}>
+            <WidthGlyph kind="full" />
           </button>
           {breakpoints.map((b) => (
-            <button key={b.name} type="button" role="radio" aria-checked={b.name === bp} className={`section-preview__width${b.name === bp ? ' section-preview__width--active' : ''}`} onClick={() => choose(b.name)}>
-              {t(b.label)} <span className="section-preview__px">{b.width}</span>
+            <button key={b.name} type="button" role="radio" aria-checked={b.name === bp} aria-label={t(b.label)} title={t(b.label)} className={`section-preview__width${b.name === bp ? ' section-preview__width--active' : ''}`} onClick={() => choose(b.name)}>
+              {b.icon ? <WidthGlyph kind={b.icon} /> : t(b.label)}
             </button>
           ))}
         </div>

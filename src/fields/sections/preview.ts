@@ -14,7 +14,8 @@ export const PREVIEW_READY = 'section-builder:ready';
 /** preview → admin: the height of what the frame shows, so the admin fits the frame to it */
 export const PREVIEW_SIZE = 'section-builder:size';
 
-export type PreviewBreakpoint = {name: string; label: Text; width: number};
+/** `icon`: the device drawn on the width switch (the label is its tooltip and accessible name) */
+export type PreviewBreakpoint = {name: string; label: Text; width: number; icon?: 'desktop' | 'tablet' | 'mobile'};
 
 export type SectionPreviewOptions = {
   /** address of the host's preview page (same origin as the admin); the frame gets a unique `frame` query parameter */
@@ -40,9 +41,9 @@ export type PreviewDataMessage = {
 };
 
 export const DEFAULT_BREAKPOINTS: PreviewBreakpoint[] = [
-  {name: 'desktop', label: {fr: 'Ordinateur', en: 'Desktop'}, width: 1440},
-  {name: 'tablet', label: {fr: 'Tablette', en: 'Tablet'}, width: 768},
-  {name: 'mobile', label: {fr: 'Mobile', en: 'Mobile'}, width: 390},
+  {name: 'desktop', label: {fr: 'Ordinateur', en: 'Desktop'}, width: 1440, icon: 'desktop'},
+  {name: 'tablet', label: {fr: 'Tablette', en: 'Tablet'}, width: 990, icon: 'tablet'},
+  {name: 'mobile', label: {fr: 'Mobile', en: 'Mobile'}, width: 420, icon: 'mobile'},
 ];
 
 export const isPreviewData = (x: unknown): x is PreviewDataMessage => Boolean(x && typeof x === 'object' && (x as {type?: unknown}).type === PREVIEW_DATA);
