@@ -11,7 +11,7 @@
 }
 .rows-builder__square {
   position: relative;
-  flex: 0 0 200px;
+  flex: 0 0 240px;
   padding: 8px;
   border: 2px solid var(--theme-elevation-200);
   border-radius: 4px;
@@ -49,21 +49,10 @@
   font-weight: 600;
   color: var(--theme-elevation-600);
 }
-/* the three buttons of a square (move, duplicate, delete): shown on hover or focus */
+/* the three buttons of a square: move, duplicate, delete */
 .rows-builder__actions {
   display: flex;
   gap: 4px;
-  opacity: 0;
-  transition: opacity 150ms ease;
-
-  .rows-builder__square:hover &,
-  .rows-builder__square:focus-within &,
-  .rows-builder__square[data-dragging] & {
-    opacity: 1;
-  }
-  @media (hover: none) {
-    opacity: 1;
-  }
 
   > *,
   .btn {
@@ -81,6 +70,7 @@
 /* the row's split: one small cell per column, in the width proportions */
 .rows-builder__minis {
   display: grid;
+  grid-template-columns: var(--rows-builder-cells);
   gap: 4px;
   height: 40px;
 }
@@ -95,7 +85,9 @@
   font-size: 14px;
   font-weight: 600;
   line-height: 1;
-  cursor: pointer;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
 
   &[data-empty] {
     border: 1px dashed var(--theme-elevation-400);
@@ -104,6 +96,11 @@
   }
   &[data-issue] {
     border: 2px solid var(--theme-error-500);
+  }
+  &[data-dragging] {
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
   }
   &:focus-visible {
     outline: 2px solid var(--theme-elevation-1000);

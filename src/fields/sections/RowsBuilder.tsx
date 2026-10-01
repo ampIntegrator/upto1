@@ -10,17 +10,16 @@
  *     a double click adds a row below the selection;
  *   - below, the rows as a line of squares, from left to right = from top to bottom in the
  *     preview; a square shows the row's split; it is dragged left or right to reorder the rows
- *     (mouse, touch or keyboard, sortable.tsx, dnd-kit); on hover (or focus), three buttons:
- *     move, duplicate, delete;
+ *     (mouse, touch or keyboard, sortable.tsx, dnd-kit); three buttons, always visible: move,
+ *     duplicate, delete; inside a square, a column is dragged left or right to change place in
+ *     its row;
  *   - a click on a square selects the row; a click on a column of the selected square opens a
  *     Payload drawer with the column's component and, if there is one, a « Vider la colonne »
  *     button. The form is shared: what is entered in the drawer is already in the page, the page
  *     is saved as usual.
  *
- * Since 1 Oct. 2026 (Nicolas): no full-size column cells here, no column reordering and no
- * « mobile order » dialog; columns will be reordered by dragging them in the preview (desktop
- * order at desktop width, mobile order at mobile width). The stored `mobileOrder` values stay and
- * still apply on the site.
+ * Since 1 Oct. 2026 (Nicolas): no full-size column cells here and no « mobile order » dialog; the
+ * stored `mobileOrder` values stay and still apply on the site.
  *
  * All manipulation goes through Payload's form state (useForm, useFormFields),
  * exactly like its own array field; drawer fields are rendered by
@@ -36,7 +35,7 @@ import {useAdminText} from '@/i18n/admin/useAdminText';
 
 import {EMPTY_SLUG} from './emptyBlock';
 import {type ColumnSpan, presetLabel, type PresetRow, ROW_PRESETS, spansKey, toSpan} from './grid';
-import {SortableItem, SortableList} from './sortable';
+import {type SortableHandle, SortableItem, SortableList} from './sortable';
 import {rowWidthError} from './validation';
 
 import './RowsBuilder.scss';
@@ -172,20 +171,44 @@ function PresetTiles({current, currentTypes, presetRows, onReplace, onAdd, onAdd
   );
 }
 
-/** A column of a row square: its width, filled or empty; a click opens its drawer (once the row is selected). */
-function MiniCell({cell, index, rowSelected, onOpen}: {cell: CellSnapshot; index: number; rowSelected: boolean; onOpen: () => void}) {
+/**
+ * A column of a row square: its width, filled or empty. Dragged left or right, it changes place in
+ * its row (mouse or touch; at the keyboard, Alt + left / right arrow); a click opens its drawer
+ * (once the row is selected).
+ */
+function MiniCell({cell, index, rowSelected, onOpen, onShift, drag}: {cell: CellSnapshot; index: number; rowSelected: boolean; onOpen: () => void; onShift: (by: -1 | 1) => void; drag?: SortableHandle}) {
   const {t} = useAdminText();
   const empty = !cell.filled;
   const issue = cell.narrow ? t(T.builder.narrow, {min: cell.narrow}) : cell.wide ? t(T.builder.wide, {max: cell.wide}) : null;
   const hint = rowSelected ? (empty ? t(T.builder.cellEmptyTitle) : t(T.builder.cellEditTitle, {contents: cell.contents.join(', ')})) : t(T.builder.cellSelectTitle);
+  // pointer listeners only (the keyboard has its own shortcut), kept from the square around: it would drag the row
+  const {onMouseDown, onTouchStart} = (drag?.listeners ?? {}) as {onMouseDown?: (e: React.MouseEvent) => void; onTouchStart?: (e: React.TouchEvent) => void};
   return (
     <button
+      ref={drag?.setNodeRef}
       type="button"
       className="rows-builder__mini"
       data-empty={empty ? 'true' : undefined}
       data-issue={issue ? 'true' : undefined}
+      data-dragging={drag?.isDragging ? 'true' : undefined}
       aria-label={t(T.builder.cellAria, {n: index + 1, span: cell.span, contents: empty ? null : cell.contents.join(', ')})}
-      title={issue ? `${issue} · ${hint}` : hint}
+      title={[issue, hint, drag ? t(T.builder.moveColumnTitle) : null].filter(Boolean).join(' · ')}
+      style={{transform: drag?.transform, transition: drag?.transition}}
+      onMouseDown={(e) => {
+        onMouseDown?.(e);
+        e.stopPropagation();
+      }}
+      onTouchStart={(e) => {
+        onTouchStart?.(e);
+        e.stopPropagation();
+      }}
+      onKeyDown={(e) => {
+        if (drag && e.altKey && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+          e.preventDefault();
+          onShift(e.key === 'ArrowLeft' ? -1 : 1);
+        }
+        e.stopPropagation();
+      }}
       onClick={(e) => {
         e.stopPropagation();
         onOpen();
@@ -326,6 +349,11 @@ export function RowsBuilder(props: RowsBuilderProps) {
     moveFieldRow({path, moveFromIndex: from, moveToIndex: to});
     setSelected(to);
   };
+  const moveColumn = (row: number, from: number, to: number) => {
+    if (to < 0 || to >= (snapshot[row]?.columns.length ?? 0)) return;
+    moveFieldRow({path: `${path}.${row}.columns`, moveFromIndex: from, moveToIndex: to});
+    setModified(true);
+  };
   const duplicate = (i: number) => {
     dispatchFields({type: 'DUPLICATE_ROW', path, rowIndex: i});
     setModified(true);
@@ -406,6 +434,7 @@ export function RowsBuilder(props: RowsBuilderProps) {
           const spans = snap.columns.map((c) => c.span);
           const rowError = row.isLoading ? null : rowWidthError(spans, language);
           const isSelected = selected === i;
+          const colIds = snap.ids?.length === snap.columns.length ? (snap.ids as string[]) : snap.columns.map((_, j) => `${row.id}-${j}`);
           return (
             <SortableItem key={row.id} id={row.id} disabled={readOnly}>
               {({attributes, listeners, setNodeRef, transform, transition, isDragging}) => (
@@ -448,10 +477,14 @@ export function RowsBuilder(props: RowsBuilderProps) {
                   {row.isLoading ? (
                     <p style={{...text14, ...dim, margin: 0}}>{t(T.builder.loading)}</p>
                   ) : snap.columns.length ? (
-                    <div className="rows-builder__minis" style={{gridTemplateColumns: spans.map((s) => `${s}fr`).join(' ')}}>
-                      {snap.columns.map((cell, j) => (
-                        <MiniCell key={j} cell={cell} index={j} rowSelected={isSelected} onOpen={() => (isSelected ? openCell(i, j) : setSelected(i))} />
-                      ))}
+                    <div style={{'--rows-builder-cells': spans.map((s) => `${s}fr`).join(' ')} as React.CSSProperties}>
+                      <SortableList ids={colIds} axis="x" onMove={(from, to) => moveColumn(i, from, to)} className="rows-builder__minis">
+                        {snap.columns.map((cell, j) => (
+                          <SortableItem key={colIds[j]} id={colIds[j]} disabled={readOnly}>
+                            {(handle) => <MiniCell cell={cell} index={j} rowSelected={isSelected} onOpen={() => (isSelected ? openCell(i, j) : setSelected(i))} onShift={(by) => moveColumn(i, j, j + by)} drag={readOnly ? undefined : handle} />}
+                          </SortableItem>
+                        ))}
+                      </SortableList>
                     </div>
                   ) : (
                     <p style={{...text14, ...dim, margin: 0}}>{t(T.builder.emptyRow)}</p>

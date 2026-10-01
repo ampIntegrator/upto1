@@ -55,14 +55,15 @@ still publishes: no drafts).
 1. **Done (1 Oct. 2026).** Dialog, accordions, live preview, width switch. Panel 1 = the section
    settings; panel 3 = a placeholder.
 2. **Rows, done (1 Oct. 2026).** Panel 2 = the layout thumbnails, then the rows as a **line of
-   squares**, left to right = top to bottom in the preview. A square shows the row's split, is
-   dragged sideways to reorder the rows, and shows three buttons on hover: move, duplicate, delete.
-   No full-size column cells, no column reordering and no « mobile order » dialog any more
-   (stored `mobileOrder` values stay and still apply). A click on a column of the selected square
-   still opens its drawer, until the columns are handled in the preview.
-   **Next, in this order (Nicolas):** columns reordered by lateral drag and drop in the preview
-   (desktop order at desktop width, mobile order at mobile width), then the content of the
-   columns (click a column in the preview), then the width warnings.
+   squares** (240 px wide), left to right = top to bottom in the preview. A square shows the row's
+   split, is dragged sideways to reorder the rows, and carries three buttons, always visible:
+   move, duplicate, delete. Inside a square, a column is dragged sideways to change place in its
+   row (Alt + arrows at the keyboard): columns are reordered here, not in the preview (Nicolas,
+   1 Oct.). No full-size column cells and no « mobile order » dialog any more (stored
+   `mobileOrder` values stay and still apply). A click on a column of the selected square still
+   opens its drawer, until the content of the columns is handled.
+   **Next (Nicolas):** the content of the columns, then the width warnings; the mobile order is
+   still to be placed.
 3. Panel 3: block list, drag onto the preview; **only while dragging**, a « not allowed » cursor
    over a column narrower than the block's `minSpan`, and the drop refused. Block fields in the
    top panel.

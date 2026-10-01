@@ -111,15 +111,23 @@ async function main() {
     // a cell's drawer opens above the dialog; what is typed there reaches the preview
     await p.getByRole('button', {name: /Découpage|Layout/}).click();
     // the rows: a line of squares, three buttons on hover, no mobile order button, no full-size cells
+    await p.waitForTimeout(600); // the panel has finished sliding open
     const squares = p.locator('.rows-builder__square');
     check((await squares.count()) === 2, 'the two rows show as two squares');
-    const actionsOpacity = () => squares.first().locator('.rows-builder__actions').evaluate((el) => getComputedStyle(el).opacity);
     await p.mouse.move(5, 5);
-    await p.waitForTimeout(300);
-    const hidden = await actionsOpacity();
-    await squares.first().hover();
-    await p.waitForTimeout(300);
-    check(hidden === '0' && (await actionsOpacity()) === '1' && (await squares.first().locator('.rows-builder__actions button').count()) === 3, 'three buttons appear on a square on hover');
+    const shape = await squares.first().evaluate((el) => ({width: (el as HTMLElement).offsetWidth, opacity: getComputedStyle(el.querySelector('.rows-builder__actions')!).opacity, buttons: el.querySelectorAll('.rows-builder__actions button').length}));
+    check(shape.width === 240 && shape.opacity === '1' && shape.buttons === 3, `a square is 240 wide and its three buttons are always visible (${shape.width})`);
+    // a column dragged sideways inside its square changes place in the row (filled | empty → empty | filled)
+    const minis = squares.nth(0).locator('.rows-builder__mini');
+    const m0 = (await minis.nth(0).boundingBox())!;
+    const m1 = (await minis.nth(1).boundingBox())!;
+    await p.mouse.move(m0.x + m0.width / 2, m0.y + m0.height / 2);
+    await p.mouse.down();
+    await p.mouse.move(m1.x + m1.width / 2 + 10, m0.y + m0.height / 2, {steps: 10});
+    await p.mouse.up();
+    await p.waitForTimeout(600);
+    check((await minis.nth(0).getAttribute('data-empty')) === 'true' && (await minis.nth(1).getAttribute('data-empty')) === null && (await squares.count()) === 2, `dragging a column sideways in its square swaps the columns, the rows stay in place (${await minis.nth(0).getAttribute('data-empty')} / ${await minis.nth(1).getAttribute('data-empty')} / ${await squares.count()})`);
+    if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-columns.png`});
     check((await p.locator('.rows-builder [aria-label*="mobile" i]').count()) === 0, 'no mobile order button');
     // drag the first square to the right: the rows swap, in the preview too
     const titles = () => frame.locator('h2').allInnerTexts();
@@ -143,9 +151,9 @@ async function main() {
     check((await squares.count()) === 2, 'delete removes a square, after confirmation');
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-layout.png`});
     // a click selects the square, a click on one of its columns opens the column's drawer
-    await squares.nth(1).locator('.rows-builder__mini').first().click();
+    await squares.nth(1).locator('.rows-builder__mini:not([data-empty])').first().click();
     await p.waitForTimeout(300);
-    await squares.nth(1).locator('.rows-builder__mini').first().click();
+    await squares.nth(1).locator('.rows-builder__mini:not([data-empty])').first().click();
     const title = p.locator('.drawer input[name$="title"]').first();
     await title.waitFor({timeout: 10000});
     await title.fill(EDITED);
