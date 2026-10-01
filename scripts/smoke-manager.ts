@@ -131,6 +131,41 @@ async function main() {
     check(fit.section > 0 && fit.frame === fit.section, `the frame is exactly as tall as the section (${fit.frame} / ${fit.section})`);
     check(fit.composerBox === 0, 'no background preview box in the settings');
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-blank.png`});
+    // the edge line, automatic: it depends on the section above as it is in the form (« highlight » shade
+    // since the check above, grid texture); this one has dots: no line while the shades differ, a line once they match
+    const edge = () => blank.locator('section[data-edge-top]').count();
+    check((await edge()) === 0, 'automatic edge line: none while the section above has another shade');
+    await p.getByText('Highlight clair', {exact: true}).click();
+    await p.waitForTimeout(2500);
+    check((await edge()) === 1, 'automatic edge line: shown once the shade matches the section above (textures differ)');
+    await p.getByText(/^(Jamais|Never)$/).first().click();
+    await p.waitForTimeout(2500);
+    check((await edge()) === 0, 'edge line « never »: gone from the preview');
+    await p.getByText(/^(Toujours|Always)$/).first().click();
+    await p.waitForTimeout(2500);
+    check((await edge()) === 1, 'edge line « always »: back in the preview');
+    if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-edge.png`});
+
+    // the page's silo, in the dialog's header
+    const swatches = p.locator('.section-manager__fields [role="radio"]');
+    check((await swatches.count()) === 6, 'the six silos are in the header');
+    const tintOf = () => blank.locator('section').first().evaluate((el) => getComputedStyle(el).backgroundColor);
+    const tintBefore = await tintOf();
+    await swatches.nth(2).click();
+    await p.waitForTimeout(2500);
+    check((await tintOf()) !== tintBefore, 'another silo chosen in the header shows in the preview');
+    if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-silo.png`});
+
+    // the accordions slide: a panel is part-way open shortly after the click
+    await p.getByRole('button', {name: /Découpage|Layout/}).click();
+    await p.waitForTimeout(120);
+    const mid = await p.evaluate(() => (document.querySelectorAll('.section-manager__panel')[1] as HTMLElement).offsetWidth);
+    await p.waitForTimeout(500);
+    const end = await p.evaluate(() => (document.querySelectorAll('.section-manager__panel')[1] as HTMLElement).offsetWidth);
+    check(mid > 60 && mid < end, `the panel slides open (${mid} then ${end})`);
+    await p.getByRole('button', {name: /Fond et espaces|Background/}).click();
+    await p.waitForTimeout(500);
+
     await p.getByText(/^(Nuit|Night)$/).first().click();
     await p.waitForTimeout(2500);
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-blank-night.png`});

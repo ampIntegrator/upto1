@@ -39,11 +39,12 @@
   height: 100dvh;
 }
 
+// title on the left, the document's fields in the middle, the close button on the right
 .section-manager__bar {
   flex: 0 0 auto;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: var(--base);
   padding: calc(var(--base) / 2) var(--base);
   border-bottom: 1px solid var(--theme-elevation-150);
@@ -54,20 +55,52 @@
   font-size: 18px;
 }
 
-// the three horizontal accordions: the open one takes the room, the others are vertical strips
+.section-manager__close {
+  justify-self: end;
+}
+
+// a document field in the header: on one line (label, control, value)
+.section-manager__fields {
+  .render-fields {
+    display: flex;
+    align-items: center;
+    gap: var(--base);
+  }
+
+  .field-type {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 !important;
+
+    > * {
+      margin: 0 !important;
+      padding-bottom: 0;
+    }
+  }
+}
+
+// the three horizontal accordions: the open one takes the room, the others are vertical strips;
+// a panel slides open sideways (its content keeps its full width, the panel uncovers it)
+$tab: 44px;
+$slide: 300ms;
+
 .section-manager__panels {
   display: flex;
   flex: 0 0 40%;
   overflow: hidden;
   min-height: 0;
   border-bottom: 1px solid var(--theme-elevation-150);
+  container-type: inline-size;
 }
 
 .section-manager__panel {
   display: flex;
-  flex: 0 0 auto;
+  flex: 0 0 $tab;
   min-width: 0;
+  overflow: hidden;
   border-right: 1px solid var(--theme-elevation-150);
+  transition: flex-grow $slide ease;
 
   &:last-child {
     border-right: 0;
@@ -75,12 +108,12 @@
 }
 
 .section-manager__panel--open {
-  flex: 1 1 auto;
+  flex-grow: 1;
 }
 
 .section-manager__tab {
-  flex: 0 0 auto;
-  width: 44px;
+  flex: 0 0 $tab;
+  width: $tab;
   padding: var(--base) 0;
   border: 0;
   background: var(--theme-elevation-50);
@@ -88,6 +121,7 @@
   font: inherit;
   font-size: 14px;
   cursor: pointer;
+  transition: background-color $slide ease;
 
   &:hover {
     background: var(--theme-elevation-100);
@@ -111,11 +145,28 @@
   white-space: nowrap;
 }
 
+// as wide as an open panel's room (the whole row less the three strips and the two borders), so
+// nothing reflows while the panel slides; a folded panel's content is hidden once it has closed
 .section-manager__content {
-  flex: 1 1 auto;
-  min-width: 0;
+  flex: 0 0 auto;
+  width: calc(100cqw - 3 * #{$tab} - 2px);
   overflow: auto;
   padding: var(--base);
+  visibility: hidden;
+  transition: visibility 0s linear $slide;
+
+  .section-manager__panel--open & {
+    visibility: visible;
+    transition-delay: 0s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-manager__panel,
+  .section-manager__tab,
+  .section-manager__content {
+    transition: none;
+  }
 }
 
 // first panel: one column per group of settings, side by side (scrolls sideways when they do not

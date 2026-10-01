@@ -43,6 +43,8 @@ export type SectionFieldsOptions = {
   groupHeading?: string;
   /** The host's live preview page, shown in the « Gérer » dialog (see preview.ts). */
   preview?: SectionPreviewOptions;
+  /** Top-level fields of the document shown in the dialog's header (the page's colour scheme…); skipped where the document has none. */
+  headerFields?: string[];
 };
 
 const getByPath = (data: unknown, path: (number | string)[]): unknown => path.reduce<unknown>((o, k) => (o && typeof o === 'object' ? (o as Record<string, unknown>)[String(k)] : undefined), data);
@@ -154,7 +156,7 @@ export function rowsField(blocks: ContentBlock[], condition?: Condition, presetR
  * (its own headings, options.settings), then the spacing and the gaps. The anchor and the sharing
  * stay in the document's form, under the « Gérer » button. `groupHeading`: the host's heading component (an icon before the title).
  */
-export function sectionFields({blocks, settings = [], shareable = false, condition, presetRows = [], groupHeading, preview}: SectionFieldsOptions): Field[] {
+export function sectionFields({blocks, settings = [], shareable = false, condition, presetRows = [], groupHeading, preview, headerFields}: SectionFieldsOptions): Field[] {
   const group = (o: {name: string; label: Text; icon?: string; first?: boolean; always?: boolean}) => sectionGroup({name: o.name, label: o.label, icon: o.icon, first: o.first, component: groupHeading, condition: o.always ? undefined : condition});
   const anchorField: Field = {
     name: 'anchor',
@@ -211,7 +213,7 @@ export function sectionFields({blocks, settings = [], shareable = false, conditi
     {
       type: 'collapsible',
       label: T.manager.title,
-      admin: {components: {Field: {path: '@/fields/sections/SectionManager#SectionManager', clientProps: {preview, groups}}}},
+      admin: {components: {Field: {path: '@/fields/sections/SectionManager#SectionManager', clientProps: {preview, groups, headerFields}}}},
       fields: [
         // section settings (the dialog's first panel)
         {type: 'collapsible', label: T.settings.collapsible, fields: common},

@@ -14,6 +14,10 @@ button opens a full-screen dialog:
   vertical strip): « Fond et espaces », « Découpage », « Blocs ». In the first one the groups of
   settings sit **side by side, one column per group** (background, edge line, inner spacing, grid
   gaps), so the top part does not scroll down; it scrolls sideways if the columns do not all fit;
+- header: the title, in the middle the document's fields the host listed (`headerFields`: the
+  page's silo; nothing on a shared section, which has none), the close button;
+- the accordions slide open sideways (300 ms; a panel's content keeps its full width, the panel
+  uncovers it; folded panels are `inert`; no animation with « reduced motion »);
 - bottom, 60 %: the live preview of this section alone, rendered by the site, refreshed about
   400 ms after each change, **without saving**; a width switch (full width of the panel, as in the browser, then 1440, 768,
   390; remembered per user, preference `section-preview-width`), the frame being scaled down when
@@ -22,6 +26,12 @@ button opens a full-screen dialog:
   A section without content (no row, or only empty columns) shows its background, its top and
   bottom paddings and a dashed zone « Colonnes » where the columns will be (`slot` of
   `PageSections`, given by the preview only).
+
+The edge line (« Liseré ») shows in the preview as on the page: the dialog also sends the section
+just above (`above`, from the form, unsaved changes included), which goes through `toSections` but
+is not displayed. So « always » shows the line, « automatic » shows it when the section above is
+light, of the same shade, with another texture, and the first section of a page never has one
+(rule of `edgeTop()` in `src/lib/sections.ts`).
 
 The background composer (`src/fields/BackgroundComposer.tsx`) lost its preview box on the same day:
 the section itself is visible below.

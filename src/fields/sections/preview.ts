@@ -29,6 +29,8 @@ export type PreviewDataMessage = {
   type: typeof PREVIEW_DATA;
   /** the section's values, as stored (relations as IDs) */
   section: Record<string, unknown>;
+  /** the section just above it in the document, when there is one (what the junction between the two depends on) */
+  above?: Record<string, unknown>;
   /** the document's fields listed in `documentFields` */
   document: Record<string, unknown>;
   /** the edited document, when it exists (the host may use it to load relations) */

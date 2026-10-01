@@ -31,6 +31,8 @@ export type SectionBuilderOptions = {
   groupHeading?: string;
   /** The host's live preview page, shown in the « Gérer » dialog (see preview.ts). */
   preview?: SectionPreviewOptions;
+  /** Top-level fields of the document shown in the dialog's header (the page's colour scheme…); skipped where the document has none. */
+  headerFields?: string[];
 };
 
 export type SectionBuilder = {
@@ -44,7 +46,7 @@ export type SectionBuilder = {
   beforeChange: CollectionBeforeChangeHook[];
 };
 
-export function createSectionBuilder({blocks, settings = [], fieldName = 'sections', shared = false, condition, presetRows = [], groupHeading, preview}: SectionBuilderOptions): SectionBuilder {
+export function createSectionBuilder({blocks, settings = [], fieldName = 'sections', shared = false, condition, presetRows = [], groupHeading, preview, headerFields}: SectionBuilderOptions): SectionBuilder {
   // configuration errors surface at start-up, not in the admin
   const slugs = new Set(blocks.map((b) => b.block.slug));
   for (const p of presetRows) {
@@ -56,7 +58,7 @@ export function createSectionBuilder({blocks, settings = [], fieldName = 'sectio
   const sectionBlock: Block = {
     slug: 'section',
     labels: {singular: T.blocks.section.singular, plural: T.blocks.section.plural},
-    fields: sectionFields({blocks, settings, shareable: Boolean(shared), condition, presetRows, groupHeading, preview}),
+    fields: sectionFields({blocks, settings, shareable: Boolean(shared), condition, presetRows, groupHeading, preview, headerFields}),
   };
   const sectionBlocks: Block[] = [sectionBlock];
   if (shared) {
@@ -78,7 +80,7 @@ export function createSectionBuilder({blocks, settings = [], fieldName = 'sectio
       // every section folded when the document opens (inside: settings folded, rows open)
       admin: {description: T.blocks.sectionsDescription, initCollapsed: true},
     },
-    sharedFields: sectionFields({blocks, settings, shareable: false, condition, presetRows, groupHeading, preview}),
+    sharedFields: sectionFields({blocks, settings, shareable: false, condition, presetRows, groupHeading, preview, headerFields}),
     beforeChange: shared ? [shareSectionsHook({fieldName, collection: shared.collection})] : [],
   };
 }

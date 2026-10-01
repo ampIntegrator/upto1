@@ -39,9 +39,12 @@ async function load(input: StoredPreview): Promise<Loaded> {
     // the read operation needs an existing page to address; its stored content is not used
     const id = input.collection === 'pages' && input.id ? input.id : (await payload.find({collection: 'pages', limit: 1, depth: 0, select: {}})).docs[0]?.id;
     if (!id) return 'empty';
-    const section = {...input.section, blockType: 'section'} as NonNullable<Page['sections']>[number];
-    const [page, site] = await Promise.all([payload.findByID({collection: 'pages', id, data: {sections: [section]}, depth: 2, locale}), getSite(locale)]);
-    const sections = await toSections(page.sections, site.settings, sectionsContext(locale, site));
+    type Block = NonNullable<Page['sections']>[number];
+    const section = {...input.section, blockType: 'section'} as Block;
+    // the section above goes through the conversion too (the edge line depends on it), but is not shown
+    const above = input.above ? [{blockType: 'section', ...input.above} as Block] : [];
+    const [page, site] = await Promise.all([payload.findByID({collection: 'pages', id, data: {sections: [...above, section]}, depth: 2, locale}), getSite(locale)]);
+    const sections = (await toSections(page.sections, site.settings, sectionsContext(locale, site))).slice(-1);
     return sections.length ? {sections, silo: pageSilo({silo: input.document?.silo} as Page, site.settings)} : 'empty';
   } catch (e) {
     payload.logger.error({err: e, msg: 'Section preview failed'});

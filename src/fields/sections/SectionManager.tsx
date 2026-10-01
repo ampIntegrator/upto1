@@ -12,7 +12,7 @@
  * (RenderFields) with the paths Payload's own collapsible would give them; their values live in
  * the form state, so closing the dialog loses nothing and the page is saved as usual.
  */
-import {Button, Modal, RenderFields, useDocumentInfo, useForm, useFormFields, useLocale, useModal} from '@payloadcms/ui';
+import {Button, Modal, RenderFields, useConfig, useDocumentInfo, useForm, useFormFields, useLocale, useModal} from '@payloadcms/ui';
 import type {ClientField, CollapsibleFieldClient, SanitizedFieldPermissions, SanitizedFieldsPermissions} from 'payload';
 import React, {useState} from 'react';
 
@@ -35,6 +35,8 @@ type Props = {
   preview?: SectionPreviewOptions;
   /** names of the settings' group headings: each group is a column of the first panel */
   groups?: string[];
+  /** top-level fields of the document shown in the dialog's header */
+  headerFields?: string[];
 };
 
 type PanelKey = 'settings' | 'layout' | 'blocks';
@@ -60,7 +62,7 @@ function byGroup(fields: ClientField[], groups: string[]): ClientField[][] {
   return out;
 }
 
-export function SectionManager({field, path, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups}: Props) {
+export function SectionManager({field, path, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups, headerFields}: Props) {
   const {t} = useAdminText();
   const {openModal, closeModal, isModalOpen} = useModal();
   const slug = `section-manager-${path}`;
@@ -89,6 +91,7 @@ export function SectionManager({field, path, indexPath, parentPath, parentSchema
             readOnly={readOnly}
             preview={preview}
             groups={groups}
+            headerFields={headerFields}
             onClose={() => closeModal(slug)}
           />
         ) : null}
@@ -97,7 +100,7 @@ export function SectionManager({field, path, indexPath, parentPath, parentSchema
   );
 }
 
-function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups = [], onClose}: Omit<Props, 'path'> & {onClose: () => void}) {
+function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups = [], headerFields = [], onClose}: Omit<Props, 'path'> & {onClose: () => void}) {
   const {t} = useAdminText();
   const [panel, setPanel] = useState<PanelKey>('settings');
   // forceRender: Payload renders fields once they are on screen, and an empty group is hidden (SCSS)
@@ -132,9 +135,12 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
     <div className="section-manager__body">
       <header className="section-manager__bar">
         <h2 className="section-manager__title">{t(T.manager.title)}</h2>
-        <Button buttonStyle="primary" margin={false} onClick={onClose}>
-          {t(T.manager.close)}
-        </Button>
+        <DocumentFields names={headerFields} />
+        <div className="section-manager__close">
+          <Button buttonStyle="primary" margin={false} onClick={onClose}>
+            {t(T.manager.close)}
+          </Button>
+        </div>
       </header>
       <div className="section-manager__panels">
         {panels.map((p) => {
@@ -145,8 +151,8 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
               <button type="button" className="section-manager__tab" aria-expanded={active} aria-controls={id} onClick={() => setPanel(p.key)}>
                 <span className="section-manager__tab-label">{p.label}</span>
               </button>
-              {/* folded panels stay mounted (hidden): their fields keep their local state */}
-              <div id={id} className="section-manager__content" hidden={!active}>
+              {/* folded panels stay mounted (inert, clipped): their fields keep their local state, and the panel slides open */}
+              <div id={id} className="section-manager__content" inert={!active}>
                 {p.content}
               </div>
             </section>
@@ -158,6 +164,27 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
   );
 }
 
+/**
+ * Fields of the document itself (not of the section), in the dialog's header: the same form
+ * fields as in the document's own form, rendered a second time here. Nothing where the document
+ * has no such field (a shared section has no colour scheme of its own).
+ */
+function DocumentFields({names}: {names: string[]}) {
+  const {getEntityConfig} = useConfig();
+  const {collectionSlug, globalSlug, docPermissions} = useDocumentInfo();
+  const slug = collectionSlug ?? globalSlug;
+  const entity = collectionSlug ? getEntityConfig({collectionSlug}) : globalSlug ? getEntityConfig({globalSlug}) : null;
+  const fields = ((entity?.fields ?? []) as ClientField[]).filter((f) => 'name' in f && names.includes(f.name));
+  // always there: it keeps the title on the left and the button on the right
+  return <div className="section-manager__fields">{slug && fields.length ? <RenderFields fields={fields} forceRender parentIndexPath="" parentPath="" parentSchemaPath={slug} permissions={docPermissions?.fields ?? true} /> : null}</div>;
+}
+
+/** the section just above `path` in its array (`sections.3` → `sections.2`), or none */
+const pathAbove = (path: string): string | null => {
+  const m = /^(.*)\.(\d+)$/.exec(path);
+  return m && Number(m[2]) > 0 ? `${m[1]}.${Number(m[2]) - 1}` : null;
+};
+
 /** Collects the section's values (and the document fields the host asked for) and feeds the preview. */
 function LivePreview({parentPath, preview}: {parentPath: string; preview: SectionPreviewOptions}) {
   const {getData, getDataByPath} = useForm();
@@ -168,9 +195,11 @@ function LivePreview({parentPath, preview}: {parentPath: string; preview: Sectio
   const message = React.useMemo(() => {
     const data = getData() as Record<string, unknown>;
     const section = (parentPath ? getDataByPath(parentPath) : data) as Record<string, unknown> | undefined;
+    const abovePath = pathAbove(parentPath);
+    const above = abovePath ? (getDataByPath(abovePath) as Record<string, unknown> | undefined) : undefined;
     const document: Record<string, unknown> = {};
     for (const name of preview.documentFields ?? []) document[name] = data?.[name];
-    return {section: section ?? {}, document, id: id ?? undefined, collection: collectionSlug ?? globalSlug ?? undefined, locale: locale?.code};
+    return {section: section ?? {}, above, document, id: id ?? undefined, collection: collectionSlug ?? globalSlug ?? undefined, locale: locale?.code};
     // `version` changes on every edit: it is what triggers the new snapshot
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [version, parentPath, id, collectionSlug, globalSlug, locale?.code]);
