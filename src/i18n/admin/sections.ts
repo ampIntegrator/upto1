@@ -233,6 +233,7 @@ export const sectionsText = texts({
     preview: {fr: 'Aperçu en direct', en: 'Live preview'},
     width: {fr: 'Largeur de l’aperçu', en: 'Preview width'},
     widthFull: {fr: 'Pleine largeur', en: 'Full width'},
+    resize: {fr: 'Ajuster la hauteur des réglages et de l’aperçu (double clic : hauteur d’origine)', en: 'Adjust the height of the settings and of the preview (double click: original height)'},
   },
   drawer: {
     title: {

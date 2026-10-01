@@ -5,16 +5,17 @@
  * 1 Oct. 2026) instead of in the page's form:
  *   - in the page, the section shows only a « Gérer » button (and how many fields need fixing);
  *   - the dialog: settings on top (35 %), in three horizontal accordions (one open, the others
- *     folded to a vertical strip), the live preview below (65 %).
+ *     folded to a vertical strip), the live preview below (65 %); a handle between the two
+ *     shares the height differently (remembered per user).
  *
  * It is the custom component of an unnamed collapsible wrapping the section's two framed blocks
  * (settings, rows), so the data does not change. Its children are rendered by Payload
  * (RenderFields) with the paths Payload's own collapsible would give them; their values live in
  * the form state, so closing the dialog loses nothing and the page is saved as usual.
  */
-import {Button, Modal, RenderFields, useConfig, useDocumentInfo, useForm, useFormFields, useLocale, useModal} from '@payloadcms/ui';
+import {Button, Modal, RenderFields, useConfig, useDocumentInfo, useForm, useFormFields, useLocale, useModal, usePreferences} from '@payloadcms/ui';
 import type {ClientField, CollapsibleFieldClient, SanitizedFieldPermissions, SanitizedFieldsPermissions} from 'payload';
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import {sectionsText as T} from '@/i18n/admin/sections';
 import {useAdminText} from '@/i18n/admin/useAdminText';
@@ -40,6 +41,16 @@ type Props = {
 };
 
 type PanelKey = 'settings' | 'layout' | 'blocks';
+
+/** share of the dialog's height taken by the settings, in %: the default, and how far the handle goes */
+const SPLIT = 35;
+const SPLIT_MIN = 20;
+const SPLIT_MAX = 80;
+const SPLIT_STEP = 2;
+/** the last split chosen, remembered per user (Payload preferences) */
+const SPLIT_PREFERENCE = 'section-manager-split';
+/** kept to a tenth of a percent: the handle follows the pointer smoothly */
+const clampSplit = (n: number) => Math.min(SPLIT_MAX, Math.max(SPLIT_MIN, Math.round(n * 10) / 10));
 
 /** fields of the framed block at `index` (an unnamed collapsible), or none */
 const innerFields = (field: CollapsibleFieldClient, index: number): ClientField[] => {
@@ -103,6 +114,54 @@ export function SectionManager({field, path, indexPath, parentPath, parentSchema
 function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups = [], headerFields = [], onClose}: Omit<Props, 'path'> & {onClose: () => void}) {
   const {t} = useAdminText();
   const [panel, setPanel] = useState<PanelKey>('settings');
+  // the handle between the settings and the preview: drag it (or arrow keys) to share the height
+  const body = useRef<HTMLDivElement>(null);
+  const panelsRef = useRef<HTMLDivElement>(null);
+  const [split, setSplit] = useState(SPLIT);
+  const dragging = useRef(false);
+  const {getPreference, setPreference} = usePreferences();
+  useEffect(() => {
+    let live = true;
+    getPreference<number | undefined>(SPLIT_PREFERENCE)
+      .then((saved) => {
+        if (live && typeof saved === 'number') setSplit(clampSplit(saved));
+      })
+      .catch(() => undefined);
+    return () => {
+      live = false;
+    };
+  }, [getPreference]);
+  const keep = (value: number) => {
+    const next = clampSplit(value);
+    setSplit(next);
+    void setPreference(SPLIT_PREFERENCE, next);
+  };
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    // captured: the moves keep coming while the pointer is over the preview's frame
+    e.currentTarget.setPointerCapture(e.pointerId);
+    dragging.current = true;
+    e.preventDefault();
+  };
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const box = body.current?.getBoundingClientRect();
+    const top = panelsRef.current?.getBoundingClientRect().top;
+    // the settings start under the header: their height is the pointer's distance to their top
+    if (dragging.current && box && box.height > 0 && top !== undefined) setSplit(clampSplit(((e.clientY - top) / box.height) * 100));
+  };
+  const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!dragging.current) return;
+    dragging.current = false;
+    e.currentTarget.releasePointerCapture(e.pointerId);
+    keep(split);
+  };
+  const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'ArrowUp') keep(split - SPLIT_STEP);
+    else if (e.key === 'ArrowDown') keep(split + SPLIT_STEP);
+    else if (e.key === 'Home') keep(SPLIT_MIN);
+    else if (e.key === 'End') keep(SPLIT_MAX);
+    else return;
+    e.preventDefault();
+  };
   // forceRender: Payload renders fields once they are on screen, and an empty group is hidden (SCSS)
   const render = (index: number, fields: ClientField[] = innerFields(field, index)) => (
     <RenderFields
@@ -132,7 +191,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
   ];
 
   return (
-    <div className="section-manager__body">
+    <div ref={body} className="section-manager__body" style={{'--section-manager-split': `${split}%`} as React.CSSProperties}>
       <header className="section-manager__bar">
         <h2 className="section-manager__title">{t(T.manager.title)}</h2>
         <DocumentFields names={headerFields} />
@@ -142,7 +201,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
           </Button>
         </div>
       </header>
-      <div className="section-manager__panels">
+      <div ref={panelsRef} className="section-manager__panels">
         {panels.map((p) => {
           const active = p.key === panel;
           const id = `section-manager-panel-${p.key}`;
@@ -159,6 +218,25 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
           );
         })}
       </div>
+      {preview ? (
+        <div
+          className="section-manager__handle"
+          role="separator"
+          aria-orientation="horizontal"
+          aria-label={t(T.manager.resize)}
+          aria-valuemin={SPLIT_MIN}
+          aria-valuemax={SPLIT_MAX}
+          aria-valuenow={split}
+          title={t(T.manager.resize)}
+          tabIndex={0}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerUp}
+          onDoubleClick={() => keep(SPLIT)}
+          onKeyDown={onKeyDown}
+        />
+      ) : null}
       {preview ? <LivePreview parentPath={parentPath} preview={preview} /> : null}
     </div>
   );

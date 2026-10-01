@@ -82,6 +82,20 @@ async function main() {
     await p.waitForTimeout(3000);
     check((await background()) !== before, 'a new shade shows in the preview without saving');
 
+    // the handle between the settings and the preview
+    const panelsHeight = () => p.evaluate(() => (document.querySelector('.section-manager__panels') as HTMLElement).offsetHeight);
+    const handle = (await p.locator('.section-manager__handle').boundingBox())!;
+    const startHeight = await panelsHeight();
+    await p.mouse.move(handle.x + handle.width / 2, handle.y + handle.height / 2);
+    await p.mouse.down();
+    await p.mouse.move(handle.x + handle.width / 2, handle.y + handle.height / 2 + 150, {steps: 5});
+    await p.mouse.up();
+    const dragged = await panelsHeight();
+    check(Math.abs(dragged - startHeight - 150) <= 2, `dragging the handle 150 down makes the settings taller (${startHeight} → ${dragged})`);
+    await p.locator('.section-manager__handle').dblclick();
+    await p.waitForTimeout(200);
+    check(Math.abs((await panelsHeight()) - startHeight) <= 2, 'a double click on the handle restores the original height');
+
     // first section of the page: « always » shows the edge line in the preview all the same
     await p.getByText(/^(Toujours|Always)$/).first().click();
     await frame.locator('section[data-edge-top]').waitFor({timeout: 10000});

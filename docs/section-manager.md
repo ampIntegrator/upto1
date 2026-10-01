@@ -14,6 +14,9 @@ button opens a full-screen dialog:
   vertical strip): « Fond et espaces », « Découpage », « Blocs ». In the first one the groups of
   settings sit **side by side, one column per group** (background, edge line, inner spacing, grid
   gaps), so the top part does not scroll down; it scrolls sideways if the columns do not all fit;
+- between the two, a handle: drag it (or focus it and use the arrow keys) to share the height
+  differently, from 20 % to 80 % for the settings; a double click restores 35 %; remembered per
+  user (preference `section-manager-split`);
 - header: the title, in the middle the document's fields the host listed (`headerFields`: the
   page's silo; nothing on a shared section, which has none), the close button;
 - the accordions slide open sideways (300 ms; a panel's content keeps its full width, the panel

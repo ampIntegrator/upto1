@@ -31,7 +31,7 @@
   background: var(--theme-bg);
 }
 
-// exactly the viewport: 35 % settings, 65 % preview, each scrolling on its own
+// exactly the viewport: 35 % settings, 65 % preview (the handle between them changes the share), each scrolling on its own
 .section-manager__body {
   display: flex;
   flex-direction: column;
@@ -87,11 +87,41 @@ $slide: 300ms;
 
 .section-manager__panels {
   display: flex;
-  flex: 0 0 35%;
+  flex: 0 0 var(--section-manager-split, 35%);
   overflow: hidden;
   min-height: 0;
-  border-bottom: 1px solid var(--theme-elevation-150);
   container-type: inline-size;
+}
+
+// the handle between the settings and the preview: drag it up or down
+.section-manager__handle {
+  position: relative;
+  flex: 0 0 10px;
+  background: var(--theme-elevation-150);
+  cursor: row-resize;
+  touch-action: none;
+
+  // a short grip in the middle
+  &::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: calc(50% - 20px);
+    width: 40px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--theme-elevation-500);
+  }
+
+  &:hover,
+  &:active {
+    background: var(--theme-elevation-250);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--theme-elevation-1000);
+    outline-offset: -2px;
+  }
 }
 
 .section-manager__panel {
