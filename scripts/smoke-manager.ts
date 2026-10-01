@@ -166,18 +166,51 @@ async function main() {
     await p.waitForTimeout(500);
     check((await squares.count()) === 2, 'delete removes a square, after confirmation');
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-layout.png`});
-    // a click selects the square, a click on one of its columns opens the column's drawer
+    // a click on a column of a square shows its content in the « Contenu » panel
     await squares.nth(1).locator('.rows-builder__mini:not([data-empty])').first().click();
-    await p.waitForTimeout(300);
-    await squares.nth(1).locator('.rows-builder__mini:not([data-empty])').first().click();
-    const title = p.locator('.drawer input[name$="title"]').first();
+    const content = p.locator('.column-content');
+    const head = () => content.locator('.column-content__head').innerText();
+    const title = content.locator('input[name$=".title"]').first();
     await title.waitFor({timeout: 10000});
+    check((await p.locator('.section-manager__panel--open #section-manager-panel-content').count()) === 1 && /2 · col\w+ 2/.test(await head()), `a click on a column of a square opens the content panel on it (${await head()})`);
     await title.fill(EDITED);
     await frame.getByText(EDITED).waitFor({timeout: 10000});
-    check(true, 'a title typed in the column drawer shows in the preview');
-    await p.keyboard.press('Escape');
-    await p.waitForTimeout(500);
-    check(await p.locator('.section-manager__body').isVisible(), 'closing the drawer keeps the dialog open');
+    check(true, 'a title typed in the content panel shows in the preview');
+
+    // in the preview, at desktop width: a text is typed in place
+    await p.getByRole('radio', {name: /Ordinateur|Desktop/}).click();
+    await p.waitForTimeout(800);
+    const heading = frame.getByText(SECOND, {exact: true});
+    await heading.click();
+    await p.waitForTimeout(400);
+    check((await heading.getAttribute('contenteditable')) === 'plaintext-only', 'a click on a title in the preview makes it editable in place');
+    // the caret is where the click was: move it to the end, then type
+    await heading.evaluate((el) => {
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      range.collapse(false);
+      const selection = window.getSelection();
+      selection?.removeAllRanges();
+      selection?.addRange(range);
+    });
+    await p.keyboard.type(' bis');
+    await p.waitForTimeout(400);
+    const typedState = {input: await content.locator('input[name$=".title"]').first().getAttribute('name'), value: await content.locator('input[name$=".title"]').first().inputValue(), shown: await frame.locator('[data-preview-editing]').innerText().catch(() => 'none'), head: await head()};
+    check(typedState.value === `${SECOND} bis` && /rows\.0\.columns\.0\./.test(typedState.input ?? ''), `what is typed in the preview is in the form, and the content panel follows the column (${JSON.stringify(typedState)})`);
+    await p.keyboard.press('Enter');
+    await frame.getByText(`${SECOND} bis`, {exact: true}).waitFor({timeout: 10000});
+    check((await frame.locator('[contenteditable]').count()) === 0, 'Enter ends the typing, the preview keeps the text');
+    // hovering a column shows a pencil: it opens the content panel on that column; so does a double click
+    await p.getByRole('button', {name: /Fond et espaces|Background/}).click();
+    await frame.getByText(EDITED).hover();
+    await frame.getByRole('button', {name: /Modifier le contenu/}).click();
+    await p.waitForTimeout(600);
+    check((await p.locator('.section-manager__panel--open #section-manager-panel-content').count()) === 1 && /2 · col\w+ 2/.test(await head()), `the pencil of a column opens the content panel on it (${await head()})`);
+    if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-content.png`});
+    await frame.getByText('Colonne vide').first().dblclick();
+    await p.waitForTimeout(400);
+    check(/1 · col\w+ 2/.test(await head()) && (await content.locator('.block-library__block').count()) > 10, `a double click on an empty column opens the content panel, which offers the components (${await head()})`);
+    check((await content.locator('.block-library__block[data-block="plan"]').isDisabled()) && !(await content.locator('.block-library__block[data-block="cardTitle"]').isDisabled()), 'components that do not fit the column cannot be picked');
 
     const stored = JSON.stringify((await payload.findByID({collection: 'pages', id: pageId, depth: 0})).sections);
     check(stored.includes(TITLE) && !stored.includes(EDITED), 'nothing was saved by the preview');
@@ -190,7 +223,79 @@ async function main() {
     await p.getByRole('button', {name: /^(Enregistrer et fermer|Save and close)$/}).click();
     await p.locator('.section-manager__body').waitFor({state: 'hidden', timeout: 15000});
     const saved = JSON.stringify((await payload.findByID({collection: 'pages', id: pageId, depth: 0})).sections);
-    check(saved.includes(EDITED) && saved.includes('Bandeau du haut'), '« save and close » saves the page (title and row name) and closes the dialog');
+    check(saved.includes(EDITED) && saved.includes('Bandeau du haut') && saved.includes(`${SECOND} bis`), '« save and close » saves the page (titles, the one typed in the preview, row name) and closes the dialog');
+    // the components panel: thumbnails dragged onto the preview's columns
+    await p.getByRole('button', {name: /^(Gérer|Manage)$/}).first().click();
+    await p.locator('.section-preview__frame').waitFor();
+    const live = p.frameLocator('.section-preview__frame');
+    await live.getByText(EDITED).waitFor({timeout: 20000});
+    await p.getByRole('button', {name: /Composants|Components/}).click();
+    await p.waitForTimeout(600);
+    const thumbs = p.locator('#section-manager-panel-blocks .block-library__block');
+    check((await thumbs.count()) > 10 && (await p.locator('#section-manager-panel-blocks .block-library').evaluate((el) => getComputedStyle(el).overflowX)) === 'auto', `the components show as thumbnails in a line that scrolls sideways (${await thumbs.count()})`);
+    /** centre of a column of the preview, on screen */
+    const columnPoint = async (key: string) => {
+      const iframe = p.locator('.section-preview__frame');
+      const outer = (await iframe.boundingBox())!;
+      const k = outer.width / (await iframe.evaluate((el) => (el as HTMLElement).offsetWidth));
+      const inner = await live.locator(`[data-preview-column="${key}"]`).evaluate((el) => {
+        const r = el.getBoundingClientRect();
+        return {x: r.left + r.width / 2, y: r.top + r.height / 2};
+      });
+      return {x: outer.x + inner.x * k, y: outer.y + inner.y * k};
+    };
+    /** drags a thumbnail to a column; `during` runs while the block is in the air */
+    const dragBlock = async (slug: string, key: string, during?: () => Promise<void>) => {
+      const thumb = p.locator(`#section-manager-panel-blocks .block-library__block[data-block="${slug}"]`);
+      await thumb.scrollIntoViewIfNeeded();
+      const from = (await thumb.boundingBox())!;
+      const to = await columnPoint(key);
+      await p.mouse.move(from.x + from.width / 2, from.y + 20);
+      await p.mouse.down();
+      await p.mouse.move(from.x + from.width / 2 + 10, from.y + 30, {steps: 3});
+      await p.mouse.move(to.x, to.y, {steps: 12});
+      await p.mouse.move(to.x + 2, to.y + 2, {steps: 2});
+      if (during) await during();
+      await p.mouse.up();
+      await p.waitForTimeout(500);
+    };
+    const miniEmpty = (row: number, col: number) => squares.nth(row).locator('.rows-builder__mini').nth(col).getAttribute('data-empty');
+    // a tier (4 columns at most) over a column of 6: refused, the zone is not a drop target
+    let zoneAllowed: string | null = 'unset';
+    await dragBlock('plan', '0-1', async () => {
+      zoneAllowed = await p.locator('.section-preview__zone[data-zone="0-1"]').getAttribute('data-allowed');
+    });
+    check(zoneAllowed === null && (await miniEmpty(0, 1)) === 'true', 'a component too narrow or too wide for a column cannot be dropped on it');
+    // a card on the same column: placed
+    await dragBlock('cardIcon', '0-1', async () => {
+      zoneAllowed = await p.locator('.section-preview__zone[data-zone="0-1"]').getAttribute('data-allowed');
+    });
+    check(zoneAllowed === 'true' && (await miniEmpty(0, 1)) === null, 'a component dropped on an empty column of the preview is placed in it');
+    // another one on the filled column: asked first
+    await dragBlock('cardTitle', '0-1');
+    const confirm = p.locator('.confirmation-modal');
+    check(await confirm.isVisible(), 'dropping on a filled column asks before replacing');
+    await confirm.getByRole('button', {name: /^(Annuler|Cancel)$/}).click();
+    await p.waitForTimeout(300);
+    // the card's icon, clicked in the preview: its field shows beside it
+    await live.locator('[data-preview-column="0-1"] [data-field="iconKey"]').click();
+    const popover = p.locator('.field-popover');
+    await popover.waitFor({timeout: 5000});
+    check((await popover.getByRole('button').count()) >= 2, 'a click on an icon in the preview shows its field beside it');
+    if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-popover.png`});
+    await p.keyboard.press('Escape');
+    await p.waitForTimeout(200);
+    check((await popover.count()) === 0 && (await p.locator('.section-manager__body').isVisible()), 'Escape closes the field, not the dialog');
+    // an Image block without its image: a zone named after it, one click away from the image field
+    await dragBlock('media', '1-0');
+    await live.getByText(/Image · à compléter/).click();
+    await popover.waitFor({timeout: 5000});
+    check(/upload|Image/i.test(await popover.innerText()), 'a click on an Image block without image shows the image field');
+    if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-components.png`});
+    await popover.getByRole('button', {name: /^(Fermer|Close)$/}).click();
+    await p.getByRole('button', {name: /^(Fermer|Close)$/}).first().click();
+    await p.waitForTimeout(500);
+
     // a section without content: its background, its paddings and a dashed zone for the columns, nothing else
     await p.locator('.blocks-field__rows .collapsible__toggle').nth(1).click();
     await p.getByRole('button', {name: /^(Gérer|Manage)$/}).nth(1).click();

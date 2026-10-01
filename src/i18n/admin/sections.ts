@@ -99,7 +99,7 @@ export const sectionsText = texts({
       fr: ({n, span, contents}: {n: number; span: number; contents: string | null}) => `Colonne ${n}, ${span} sur 12, ${contents ?? 'vide'}`,
       en: ({n, span, contents}: {n: number; span: number; contents: string | null}) => `Column ${n}, ${span} of 12, ${contents ?? 'empty'}`,
     },
-    cellEmptyTitle: {fr: 'Vide, cliquer pour remplir', en: 'Empty, click to fill'},
+    cellEmptyTitle: {fr: 'Vide, cliquer pour choisir un composant', en: 'Empty, click to choose a component'},
     cellEditTitle: {
       fr: ({contents}: {contents: string}) => `${contents} · cliquer pour modifier`,
       en: ({contents}: {contents: string}) => `${contents} · click to edit`,
@@ -120,12 +120,12 @@ export const sectionsText = texts({
       en: ({max}: {max: number}) => `Too wide: ${max} columns max.`,
     },
     helpNoSelection: {
-      fr: 'Double clic sur une disposition : ajoute une rangée. Clic sur une rangée : la sélectionne ; ensuite, un clic sur une de ses colonnes l’ouvre, un clic sur une disposition la remplace.',
-      en: 'Double click a layout: adds a row. Click a row: selects it; then clicking one of its columns opens it, clicking a layout replaces it.',
+      fr: 'Double clic sur une disposition : ajoute une rangée. Clic sur une rangée : la sélectionne ; un clic sur une disposition la remplace. Clic sur une colonne d’un carré : ouvre son contenu.',
+      en: 'Double click a layout: adds a row. Click a row: selects it; clicking a layout replaces it. Click a column of a square: opens its content.',
     },
     helpSelected: {
-      fr: ({n}: {n: number}) => `Rangée ${n} sélectionnée. Clic sur une de ses colonnes : l’ouvre. Clic sur une disposition : la remplace (après confirmation). Double clic : ajoute une rangée dessous.`,
-      en: ({n}: {n: number}) => `Row ${n} selected. Click one of its columns: opens it. Click a layout: replaces it (after confirmation). Double click: adds a row below.`,
+      fr: ({n}: {n: number}) => `Rangée ${n} sélectionnée. Clic sur une de ses colonnes : ouvre son contenu. Clic sur une disposition : la remplace (après confirmation). Double clic : ajoute une rangée dessous.`,
+      en: ({n}: {n: number}) => `Row ${n} selected. Click one of its columns: opens its content. Click a layout: replaces it (after confirmation). Double click: adds a row below.`,
     },
     rowHasError: {fr: 'Une rangée contient une erreur : ouvrez ses colonnes.', en: 'A row contains an error: open its columns.'},
     rowAria: {
@@ -238,8 +238,41 @@ export const sectionsText = texts({
     },
     panelSettings: {fr: 'Fond et espaces', en: 'Background and spacing'},
     panelLayout: {fr: 'Découpage', en: 'Layout'},
-    panelBlocks: {fr: 'Blocs', en: 'Blocks'},
-    blocksSoon: {fr: 'Bientôt : la liste des blocs à glisser dans les colonnes. En attendant, un clic sur une case du découpage choisit son bloc.', en: 'Coming soon: the list of blocks to drag into the columns. Meanwhile, click a cell of the layout to choose its block.'},
+    panelBlocks: {fr: 'Composants', en: 'Components'},
+    panelContent: {fr: 'Contenu', en: 'Content'},
+    libraryHint: {
+      fr: 'Glisse un composant sur une colonne de l’aperçu. Le curseur « interdit » signale une colonne trop étroite ou trop large pour lui. Un clic le place dans la colonne sélectionnée.',
+      en: 'Drag a component onto a column of the preview. The “not allowed” cursor marks a column too narrow or too wide for it. A click places it in the selected column.',
+    },
+    libraryMin: {
+      fr: ({min}: {min: number}) => `dès ${min} / 12`,
+      en: ({min}: {min: number}) => `from ${min} / 12`,
+    },
+    libraryRange: {
+      fr: ({min, max}: {min: number; max: number}) => (min === max ? `${min} / 12` : `de ${min} à ${max} / 12`),
+      en: ({min, max}: {min: number; max: number}) => (min === max ? `${min} / 12` : `${min} to ${max} / 12`),
+    },
+    contentNone: {
+      fr: 'Aucune colonne sélectionnée : clique une colonne dans un carré de l’onglet Découpage, ou double-clique une colonne dans l’aperçu.',
+      en: 'No column selected: click a column in a square of the Layout tab, or double-click a column in the preview.',
+    },
+    contentEmpty: {fr: 'Colonne vide : choisis le composant à y placer.', en: 'Empty column: choose the component to place in it.'},
+    contentTitle: {
+      fr: ({row, col, span}: {row: number; col: number; span: number}) => `Rangée ${row} · colonne ${col} · ${span} / 12`,
+      en: ({row, col, span}: {row: number; col: number; span: number}) => `Row ${row} · column ${col} · ${span} / 12`,
+    },
+    replaceHeading: {fr: 'Remplacer le composant ?', en: 'Replace the component?'},
+    replaceBody: {
+      fr: ({from, to}: {from: string; to: string}) => `Cette colonne contient « ${from} ». Le remplacer par « ${to} » efface son contenu.`,
+      en: ({from, to}: {from: string; to: string}) => `This column holds “${from}”. Replacing it with “${to}” erases its content.`,
+    },
+    replace: {fr: 'Remplacer', en: 'Replace'},
+    cancel: {fr: 'Annuler', en: 'Cancel'},
+    fieldClose: {fr: 'Fermer', en: 'Close'},
+    dropZone: {
+      fr: ({row, col}: {row: number; col: number}) => `Rangée ${row}, colonne ${col}`,
+      en: ({row, col}: {row: number; col: number}) => `Row ${row}, column ${col}`,
+    },
     preview: {fr: 'Aperçu en direct', en: 'Live preview'},
     width: {fr: 'Largeur de l’aperçu', en: 'Preview width'},
     widthFull: {fr: 'Pleine largeur', en: 'Full width'},

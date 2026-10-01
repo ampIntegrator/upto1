@@ -15,7 +15,7 @@ import {usePreferences} from '@payloadcms/ui';
 import {sectionsText as T} from '@/i18n/admin/sections';
 import {useAdminText} from '@/i18n/admin/useAdminText';
 
-import {isPreviewReady, PREVIEW_DATA, type PreviewBreakpoint, type PreviewDataMessage, previewSize} from './preview';
+import {isPreviewReady, PREVIEW_DATA, PREVIEW_SELECT, type PreviewBox, type PreviewBreakpoint, type PreviewColumn, type PreviewColumnBox, type PreviewDataMessage, type PreviewEvent, previewEvent, previewLayout, previewSize} from './preview';
 
 const DEBOUNCE_MS = 400;
 /** « full width »: the frame is as wide as the panel, as in the browser */
@@ -53,9 +53,15 @@ type Props = {
   url: string;
   breakpoints: PreviewBreakpoint[];
   message: Omit<PreviewDataMessage, 'type'>;
+  /** the column highlighted in the frame */
+  selected?: PreviewColumn | null;
+  /** what the editor does in the frame; `toScreen` turns a box of the frame into screen pixels */
+  onEvent?: (event: PreviewEvent, toScreen: (box: PreviewBox) => PreviewBox) => void;
+  /** drawn over the frame, in the frame's own pixels (drop zones while a block is dragged); null: nothing */
+  overlay?: (columns: PreviewColumnBox[]) => React.ReactNode;
 };
 
-export function SectionPreview({url, breakpoints, message}: Props) {
+export function SectionPreview({url, breakpoints, message, selected = null, onEvent, overlay}: Props) {
   const {t} = useAdminText();
   const frame = useRef<HTMLIFrameElement>(null);
   const stage = useRef<HTMLDivElement>(null);
@@ -65,6 +71,8 @@ export function SectionPreview({url, breakpoints, message}: Props) {
   const [box, setBox] = useState({width: 0, height: 0});
   // height of the rendered section, reported by the frame (0: nothing rendered yet)
   const [content, setContent] = useState(0);
+  // where the frame draws each column
+  const [columns, setColumns] = useState<PreviewColumnBox[]>([]);
   const width = bp === FULL ? box.width || 1440 : (breakpoints.find((b) => b.name === bp)?.width ?? breakpoints[0]?.width ?? 1440);
   const {getPreference, setPreference} = usePreferences();
   useEffect(() => {
@@ -86,6 +94,12 @@ export function SectionPreview({url, breakpoints, message}: Props) {
   // one key per frame, in its address (`frame`): the host keeps what each frame was sent apart
   const [src] = useState(() => `${url}${url.includes('?') ? '&' : '?'}frame=${crypto.randomUUID()}`);
 
+  // the latest handler, read when a message arrives
+  const handler = useRef(onEvent);
+  useEffect(() => {
+    handler.current = onEvent;
+  }, [onEvent]);
+
   // the frame says it listens: from then on, every snapshot is sent
   useEffect(() => {
     const onMessage = (e: MessageEvent) => {
@@ -93,10 +107,28 @@ export function SectionPreview({url, breakpoints, message}: Props) {
       if (isPreviewReady(e.data)) setReady((n) => n + 1);
       const height = previewSize(e.data);
       if (height !== null) setContent(height);
+      const layout = previewLayout(e.data);
+      if (layout) setColumns(layout);
+      const event = previewEvent(e.data);
+      if (event) {
+        handler.current?.(event, (box) => {
+          // the frame's pixels, scaled, from the frame's corner on screen
+          const rect = frame.current?.getBoundingClientRect();
+          const k = rect && frame.current?.offsetWidth ? rect.width / frame.current.offsetWidth : 1;
+          return {x: (rect?.left ?? 0) + box.x * k, y: (rect?.top ?? 0) + box.y * k, width: box.width * k, height: box.height * k};
+        });
+      }
     };
     window.addEventListener('message', onMessage);
     return () => window.removeEventListener('message', onMessage);
   }, [origin]);
+
+  // the selected column, told to the frame (again each time it starts listening)
+  const row = selected?.row ?? null;
+  const col = selected?.col ?? null;
+  useEffect(() => {
+    if (ready) frame.current?.contentWindow?.postMessage({type: PREVIEW_SELECT, row, col}, origin);
+  }, [ready, row, col, origin]);
 
   // the latest snapshot, read when the timer fires (declared before the effects that send it)
   const latest = useRef(message);
@@ -132,6 +164,8 @@ export function SectionPreview({url, breakpoints, message}: Props) {
   // until the frame reports a height: the panel's
   const height = content > 0 ? content : box.height / scale;
 
+  const zones = overlay?.(columns) ?? null;
+
   return (
     <section className="section-preview" aria-label={t(T.manager.preview)}>
       <div className="section-preview__bar">
@@ -151,6 +185,11 @@ export function SectionPreview({url, breakpoints, message}: Props) {
         {/* the frame's scaled footprint: centres it and gives the panel its scroll height */}
         <div className="section-preview__sizer" style={{width: width * scale, height: height * scale}}>
           <iframe ref={frame} src={src} title={t(T.manager.preview)} className="section-preview__frame" style={{width, height, transform: `scale(${scale})`}} />
+          {zones ? (
+            <div className="section-preview__overlay" style={{width, height, transform: `scale(${scale})`}}>
+              {zones}
+            </div>
+          ) : null}
         </div>
       </div>
     </section>

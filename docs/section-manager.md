@@ -68,11 +68,32 @@ still publishes: no drafts).
    1 Oct.). No full-size column cells and no « mobile order » dialog any more (stored
    `mobileOrder` values stay and still apply). A click on a column of the selected square still
    opens its drawer, until the content of the columns is handled.
-   **Next (Nicolas):** the content of the columns, then the width warnings; the mobile order is
-   still to be placed.
-3. Panel 3: block list, drag onto the preview; **only while dragging**, a « not allowed » cursor
-   over a column narrower than the block's `minSpan`, and the drop refused. Block fields in the
-   top panel.
+3. **Columns' contents, done (1 Oct. 2026).** Four accordions: the third is « Composants », the
+   fourth « Contenu ».
+   - **Composants**: the blocks as thumbnails (the picker images, `public/apercus`) in a line that
+     scrolls sideways. A thumbnail is dragged onto a column of the preview (native drag and drop):
+     while it is in the air the admin draws one zone per column over the frame, from the boxes the
+     frame reported; a column too narrow or too wide for the block is not a drop target, so the
+     browser shows the « not allowed » cursor, **only during the drag**. Dropping on a filled
+     column asks before replacing. A click on a thumbnail places it in the selected column.
+   - **Contenu**: the fields of the selected column's block, one column per group of fields (cut at
+     the block's group headings), scrolling sideways; « Vider la colonne »; an empty column offers
+     the blocks that fit it. It replaces the column drawer. Opened by a click on a column of a
+     square (Découpage), by a double click on a column of the preview, or by the pencil shown on a
+     column of the preview on hover.
+   - **In the preview**: a click selects the column (outlined). On a part a component marked with
+     `data-field`, a text is typed in place (Enter or leaving keeps it, Escape gives up; only when
+     the text shown is the stored value itself, otherwise the content panel opens), an image or an
+     icon shows its own Payload field in a small panel beside it (`FieldPopover`). Links do not
+     navigate. Rich texts are edited in the content panel.
+   - Components marked so far: **cards** (title, text, button label, image, icon), **Image** and
+     **Image with quote** (image, sentence), **text box** (title). To mark another one: put
+     `data-field="<field path in the block>"` on the element whose only child is the text, and
+     `data-field-kind="image"` or `"icon"` on an image or icon (the field must be a top-level
+     field of the block). A block that renders nothing yet (an Image block without image) shows a
+     zone named after it, one click away from its image field.
+   **Next (Nicolas):** the width warnings; the mobile order is still to be placed; marking the
+   other components.
 4. Remove what is left of the old builder.
 5. Editing plain texts in place in the preview (rich text stays in the top panel at first).
 
@@ -84,7 +105,11 @@ Neutral core (`src/fields/sections/`, no site component):
   Payload's `RenderFields`, at the paths Payload's own collapsible would use (`parentIndexPath`
   `<indexPath>-<n>`). Presentation only: **no migration** (checked with `migrate:create --skip-empty`).
 - `SectionPreview.tsx`: the iframe, the debounce, the width switch and the scale.
-- `preview.ts`: the protocol. `PREVIEW_READY` (frame → admin, on each load), `PREVIEW_DATA`
+- `managerContext.ts` (what the dialog shares with the rows builder: the selected column, opening
+  its content), `ColumnContent.tsx` (the content panel), `BlockLibrary.tsx` (the thumbnails),
+  `fieldGroups.ts` (`byGroup`, `only`: rendering a subset of fields at their exact paths).
+- `preview.ts`: the protocol (also `PREVIEW_LAYOUT`, `PREVIEW_SELECT`, `PREVIEW_OPEN`, `PREVIEW_EDIT`,
+  `PREVIEW_PICK`). `PREVIEW_READY` (frame → admin, on each load), `PREVIEW_DATA`
   (admin → frame: the section's values as stored, the document fields the host asked for, the
   document id, collection and locale). Option `preview: {url, documentFields, breakpoints}` of
   `createSectionBuilder`.
@@ -92,12 +117,21 @@ Neutral core (`src/fields/sections/`, no site component):
 Site side:
 - `src/sections.config.ts`: `preview: {url: '/apercu-section', documentFields: ['silo']}`.
 - `src/app/(frontend)/apercu-section/`: `page.tsx` (admin users only), `SectionPreviewFrame.tsx`
-  (listens, calls the action, `router.refresh()`), `actions.ts` (`sendSectionPreview`, checks the
+  (listens, calls the action, `router.refresh()`; hover, selection, pencil, typing in place: while
+  a text is typed the route is not refreshed, the caret would be lost), `actions.ts` (`sendSectionPreview`, checks the
   admin session), `store.ts` (what each frame was sent, in memory, 10 minutes), `render.tsx`
   (`payload.findByID({data, depth: 2})` populates the unsaved IDs, then `toSections` and
   `PageSections` in the page's silo).
 
 ## Traps and limits
+
+- Escape pressed while the keyboard is in the preview's frame does not reach the admin: the field
+  panel takes the focus when it opens, and catches Escape before the dialog (which it would close).
+- A drag started in the admin cannot be followed inside the frame: hence the zones drawn over it.
+- Typing in place relies on the marked element having the text as its only child (React then sets
+  its text content, whatever the browser did inside while typing).
+- In a section with content, empty columns show a « Colonne vide » zone at desktop and tablet
+  widths; on mobile they are hidden, as on the site.
 
 - **A server action cannot return the rendered section**: its client components are not in the
   page's manifest (« Could not find the module … in the React Client Manifest »). Hence the store

@@ -97,7 +97,7 @@
   }
 }
 
-// the three horizontal accordions: the open one takes the room, the others are vertical strips;
+// the four horizontal accordions: the open one takes the room, the others are vertical strips;
 // a panel slides open sideways (its content keeps its full width, the panel uncovers it)
 $tab: 44px;
 $slide: 300ms;
@@ -192,11 +192,11 @@ $slide: 300ms;
   white-space: nowrap;
 }
 
-// as wide as an open panel's room (the whole row less the three strips and the two borders), so
+// as wide as an open panel's room (the whole row less the four strips and the three borders), so
 // nothing reflows while the panel slides; a folded panel's content is hidden once it has closed
 .section-manager__content {
   flex: 0 0 auto;
-  width: calc(100cqw - 3 * #{$tab} - 2px);
+  width: calc(100cqw - 4 * #{$tab} - 3px);
   overflow: auto;
   padding: var(--base);
   visibility: hidden;
@@ -260,6 +260,94 @@ $slide: 300ms;
   .clear-indicator {
     display: none;
   }
+}
+
+// the content panel: the column's name and block, then its fields in columns
+.column-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.column-content__head {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-size: 14px;
+
+  .btn {
+    margin: 0 0 0 auto;
+  }
+}
+
+.column-content .section-manager__groups {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+// the block library: thumbnails in a line that scrolls sideways
+.block-library {
+  display: flex;
+  gap: 12px;
+  margin: 0;
+  padding: 0 0 8px;
+  overflow-x: auto;
+  list-style: none;
+}
+
+.block-library__item {
+  flex: 0 0 160px;
+}
+
+.block-library__block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  padding: 6px;
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: 4px;
+  background: var(--theme-elevation-0);
+  color: var(--theme-elevation-1000);
+  font: inherit;
+  text-align: left;
+  cursor: grab;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--theme-elevation-1000);
+    outline: none;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.block-library__image {
+  display: block;
+  width: 100%;
+  height: 132px;
+  border-radius: 2px;
+  background: var(--theme-elevation-100);
+  object-fit: cover;
+  object-position: top;
+}
+
+.block-library__label {
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.block-library__widths {
+  font-size: 14px;
+  color: var(--theme-elevation-600);
 }
 
 .section-manager__soon {
@@ -345,4 +433,67 @@ $slide: 300ms;
   left: 0;
   border: 0;
   transform-origin: top left;
+}
+
+// over the frame, in the frame's own pixels, while a block is dragged from the library:
+// one zone per column; the browser shows the « not allowed » cursor wherever a drop is refused
+.section-preview__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+}
+
+.section-preview__zone {
+  position: absolute;
+  box-sizing: border-box;
+  border: 2px dashed var(--theme-error-500);
+  background: color-mix(in srgb, var(--theme-error-500) 12%, transparent);
+
+  &[data-allowed] {
+    border-color: var(--theme-success-500);
+    background: color-mix(in srgb, var(--theme-success-500) 12%, transparent);
+  }
+
+  &[data-over] {
+    border-style: solid;
+    background: color-mix(in srgb, var(--theme-success-500) 30%, transparent);
+  }
+}
+
+// a single field shown next to what was clicked in the preview (an image, an icon)
+.field-popover__backdrop {
+  position: fixed;
+  inset: 0;
+}
+
+.field-popover {
+  position: fixed;
+  box-sizing: border-box;
+  width: 380px;
+  max-height: 70vh;
+  padding: 12px;
+  overflow: auto;
+  border: 1px solid var(--theme-elevation-250);
+  border-radius: 4px;
+  background: var(--theme-bg);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+  outline: none;
+
+  .field-type {
+    margin-bottom: 0;
+  }
+}
+
+.field-popover__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-size: 14px;
+
+  .btn {
+    margin: 0;
+  }
 }

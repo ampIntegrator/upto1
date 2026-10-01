@@ -14,20 +14,17 @@
  *     (mouse, touch or keyboard, sortable.tsx, dnd-kit); three buttons, always visible: move,
  *     duplicate, delete; inside a square, a column is dragged left or right to change place in
  *     its row;
- *   - a click on a square selects the row; a click on a column of the selected square opens a
- *     Payload drawer with the column's component and, if there is one, a « Vider la colonne »
- *     button. The form is shared: what is entered in the drawer is already in the page, the page
- *     is saved as usual.
+ *   - a click on a square selects the row; a click on one of its columns shows the column's
+ *     content in the dialog's « Contenu » panel (ColumnContent, through managerContext).
  *
  * Since 1 Oct. 2026 (Nicolas): no full-size column cells here and no « mobile order » dialog; the
  * stored `mobileOrder` values stay and still apply on the site.
  *
  * All manipulation goes through Payload's form state (useForm, useFormFields),
- * exactly like its own array field; drawer fields are rendered by
- * Payload (RenderFields), with the paths and permissions it expects.
+ * exactly like its own array field.
  */
-import {Button, ConfirmationModal, Drawer, RenderFields, useDrawerSlug, useField, useForm, useFormFields, useModal, useTranslation} from '@payloadcms/ui';
-import type {ArrayFieldClient, ArrayFieldClientProps, BlocksFieldClient, ClientBlock, ClientField, SanitizedFieldPermissions, SanitizedFieldsPermissions} from 'payload';
+import {Button, ConfirmationModal, useField, useForm, useFormFields, useModal, useTranslation} from '@payloadcms/ui';
+import type {ArrayFieldClient, ArrayFieldClientProps, BlocksFieldClient, ClientBlock} from 'payload';
 import {getTranslation} from '@payloadcms/translations';
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 
@@ -35,6 +32,7 @@ import {sectionsText as T} from '@/i18n/admin/sections';
 import {useAdminText} from '@/i18n/admin/useAdminText';
 
 import {EMPTY_SLUG} from './emptyBlock';
+import {useManager} from './managerContext';
 import {type ColumnSpan, presetLabel, type PresetRow, ROW_NAME_MAX, ROW_PRESETS, spansKey, toSpan} from './grid';
 import {type SortableHandle, SortableItem, SortableList} from './sortable';
 import {rowWidthError} from './validation';
@@ -174,14 +172,14 @@ function PresetTiles({current, currentTypes, presetRows, onReplace, onAdd, onAdd
 
 /**
  * A column of a row square: its width, filled or empty. Dragged left or right, it changes place in
- * its row (mouse or touch; at the keyboard, Alt + left / right arrow); a click opens its drawer
- * (once the row is selected).
+ * its row (mouse or touch; at the keyboard, Alt + left / right arrow); a click shows its content
+ * in the dialog's « Contenu » panel.
  */
-function MiniCell({cell, index, rowSelected, onOpen, onShift, drag}: {cell: CellSnapshot; index: number; rowSelected: boolean; onOpen: () => void; onShift: (by: -1 | 1) => void; drag?: SortableHandle}) {
+function MiniCell({cell, index, current, onOpen, onShift, drag}: {cell: CellSnapshot; index: number; current: boolean; onOpen: () => void; onShift: (by: -1 | 1) => void; drag?: SortableHandle}) {
   const {t} = useAdminText();
   const empty = !cell.filled;
   const issue = cell.narrow ? t(T.builder.narrow, {min: cell.narrow}) : cell.wide ? t(T.builder.wide, {max: cell.wide}) : null;
-  const hint = rowSelected ? (empty ? t(T.builder.cellEmptyTitle) : t(T.builder.cellEditTitle, {contents: cell.contents.join(', ')})) : t(T.builder.cellSelectTitle);
+  const hint = empty ? t(T.builder.cellEmptyTitle) : t(T.builder.cellEditTitle, {contents: cell.contents.join(', ')});
   // pointer listeners only (the keyboard has its own shortcut), kept from the square around: it would drag the row
   const {onMouseDown, onTouchStart} = (drag?.listeners ?? {}) as {onMouseDown?: (e: React.MouseEvent) => void; onTouchStart?: (e: React.TouchEvent) => void};
   return (
@@ -192,6 +190,7 @@ function MiniCell({cell, index, rowSelected, onOpen, onShift, drag}: {cell: Cell
       data-empty={empty ? 'true' : undefined}
       data-issue={issue ? 'true' : undefined}
       data-dragging={drag?.isDragging ? 'true' : undefined}
+      data-current={current ? 'true' : undefined}
       aria-label={t(T.builder.cellAria, {n: index + 1, span: cell.span, contents: empty ? null : cell.contents.join(', ')})}
       title={[issue, hint, drag ? t(T.builder.moveColumnTitle) : null].filter(Boolean).join(' · ')}
       style={{transform: drag?.transform, transition: drag?.transition}}
@@ -280,7 +279,7 @@ function RowName({index, name, readOnly, onChange}: {index: number; name: string
 export type RowsBuilderProps = ArrayFieldClientProps & {minSpans?: Record<string, number>; maxSpans?: Record<string, number>; presetRows?: PresetRow[]};
 
 export function RowsBuilder(props: RowsBuilderProps) {
-  const {field, path, permissions, readOnly, schemaPath: schemaPathFromProps, minSpans = {}, maxSpans = {}, presetRows = []} = props;
+  const {field, path, readOnly, schemaPath: schemaPathFromProps, minSpans = {}, maxSpans = {}, presetRows = []} = props;
   const schemaPath = schemaPathFromProps ?? field.name;
   const {t, language} = useAdminText();
   const {i18n} = useTranslation();
@@ -301,9 +300,8 @@ export function RowsBuilder(props: RowsBuilderProps) {
 
   const {addFieldRow, dispatchFields, getDataByPath, moveFieldRow, removeFieldRow, setModified} = useForm();
   const {rows = [], errorPaths, showError} = useField<unknown[]>({path});
-  const {openModal, closeModal} = useModal();
-  const drawerSlug = useDrawerSlug(`rows-builder-${path}`);
-  const [open, setOpen] = useState<{row: number; col: number} | null>(null);
+  const {openModal} = useModal();
+  const manager = useManager();
   // selected row: thumbnails act on it; with no selection, they add a row
   const [selected, setSelected] = useState<number | null>(null);
   // destructive action awaiting confirmation: replace the layout or delete a row
@@ -452,26 +450,12 @@ export function RowsBuilder(props: RowsBuilderProps) {
     setPending(null);
   };
 
-  /** empties the column: removes its component (and its name); final once the page is saved */
-  const clearColumn = (row: number, col: number) => {
-    const contentsPath = `${path}.${row}.columns.${col}.contents`;
-    const existing = getDataByPath<unknown[]>(contentsPath);
-    for (let k = (Array.isArray(existing) ? existing.length : 0) - 1; k >= 0; k--) removeFieldRow({path: contentsPath, rowIndex: k});
-    setModified(true);
-  };
-
+  /** a click on a column of a square: its row is selected, its content shows in the dialog's panel */
   const openCell = (row: number, col: number) => {
     setSelected(row);
-    setOpen({row, col});
-    openModal(drawerSlug);
+    manager?.openContent({row, col});
   };
 
-  // drawer permissions: those of a column's subfields (same rule as Payload's array)
-  const rowFieldsPerm: SanitizedFieldsPermissions | undefined = permissions === true ? true : permissions?.fields;
-  const columnsPerm: SanitizedFieldPermissions | undefined = rowFieldsPerm === true ? true : rowFieldsPerm?.columns;
-  const cellPerms = (columnsPerm === true ? true : columnsPerm?.fields) as SanitizedFieldsPermissions;
-
-  const openCellSnapshot = open ? snapshot[open.row]?.columns[open.col] : undefined;
   const rawDescription = field.admin?.description;
   // static description from the config: a string or a Text object (function descriptions are not rendered here)
   const description = typeof rawDescription === 'string' || (rawDescription && typeof rawDescription === 'object') ? getTranslation(rawDescription as Record<string, string> | string, i18n) : undefined;
@@ -545,7 +529,7 @@ export function RowsBuilder(props: RowsBuilderProps) {
                       <SortableList ids={colIds} axis="x" onMove={(from, to) => moveColumn(i, from, to)} className="rows-builder__minis">
                         {snap.columns.map((cell, j) => (
                           <SortableItem key={colIds[j]} id={colIds[j]} disabled={readOnly}>
-                            {(handle) => <MiniCell cell={cell} index={j} rowSelected={isSelected} onOpen={() => (isSelected ? openCell(i, j) : setSelected(i))} onShift={(by) => moveColumn(i, j, j + by)} drag={readOnly ? undefined : handle} />}
+                            {(handle) => <MiniCell cell={cell} index={j} current={manager?.column?.row === i && manager.column.col === j} onOpen={() => openCell(i, j)} onShift={(by) => moveColumn(i, j, j + by)} drag={readOnly ? undefined : handle} />}
                           </SortableItem>
                         ))}
                       </SortableList>
@@ -569,33 +553,6 @@ export function RowsBuilder(props: RowsBuilderProps) {
         onConfirm={onConfirm}
         onCancel={() => setPending(null)}
       />
-
-      {columnsField ? (
-        <Drawer slug={drawerSlug} title={open && openCellSnapshot ? t(T.drawer.title, {row: open.row + 1, col: open.col + 1, span: openCellSnapshot.span}) : t(T.drawer.fallbackTitle)}>
-          {open ? (
-            <div style={{paddingBottom: 'var(--base)'}}>
-              {openCellSnapshot && openCellSnapshot.contents.length > 0 && !readOnly ? (
-                <div style={{marginBottom: 'var(--base)'}}>
-                  <Button buttonStyle="secondary" onClick={() => clearColumn(open.row, open.col)}>
-                    {t(T.drawer.clear)}
-                  </Button>
-                </div>
-              ) : null}
-              <RenderFields
-                fields={columnsField.fields as ClientField[]}
-                parentIndexPath=""
-                parentPath={`${path}.${open.row}.columns.${open.col}`}
-                parentSchemaPath={columnsSchemaPath}
-                permissions={cellPerms}
-                readOnly={readOnly}
-              />
-              <Button buttonStyle="primary" onClick={() => closeModal(drawerSlug)}>
-                {t(T.drawer.close)}
-              </Button>
-            </div>
-          ) : null}
-        </Drawer>
-      ) : null}
     </div>
   );
 }

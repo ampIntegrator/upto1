@@ -5,8 +5,9 @@
  * 1 Oct. 2026) instead of in the page's form:
  *   - in the page, the section shows only a « Gérer » button (and how many fields need fixing);
  *   - the dialog: a header (title, the document's fields the host listed, « save and close » and
- *     « close »), settings on top (35 %), in three horizontal accordions (one open, the others
- *     folded to a vertical strip), the live preview below (65 %); a handle between the two
+ *     « close »), settings on top (35 %), in four horizontal accordions (one open, the others
+ *     folded to a vertical strip): background and spacing, layout, components (the block
+ *     library, dragged onto the preview's columns), content (the selected column's block), the live preview below (65 %); a handle between the two
  *     shares the height differently (remembered per user).
  *
  * It is the custom component of an unnamed collapsible wrapping the section's two framed blocks
@@ -14,14 +15,20 @@
  * (RenderFields) with the paths Payload's own collapsible would give them; their values live in
  * the form state, so closing the dialog loses nothing and the page is saved as usual.
  */
-import {Button, Modal, RenderFields, useConfig, useDocumentInfo, useForm, useFormFields, useFormModified, useLocale, useModal, usePreferences} from '@payloadcms/ui';
-import type {ClientField, CollapsibleFieldClient, SanitizedFieldPermissions, SanitizedFieldsPermissions} from 'payload';
-import React, {useEffect, useRef, useState} from 'react';
+import {getTranslation} from '@payloadcms/translations';
+import {Button, ConfirmationModal, Modal, RenderFields, useConfig, useDocumentInfo, useForm, useFormFields, useFormModified, useLocale, useModal, usePreferences, useTranslation} from '@payloadcms/ui';
+import type {ArrayFieldClient, BlocksFieldClient, ClientBlock, ClientField, CollapsibleFieldClient, SanitizedFieldPermissions, SanitizedFieldsPermissions} from 'payload';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 
 import {sectionsText as T} from '@/i18n/admin/sections';
 import {useAdminText} from '@/i18n/admin/useAdminText';
 
-import {DEFAULT_BREAKPOINTS, type SectionPreviewOptions} from './preview';
+import {BLOCK_DRAG_TYPE, BlockLibrary, type LibraryBlock} from './BlockLibrary';
+import {ColumnContent} from './ColumnContent';
+import {EMPTY_SLUG} from './emptyBlock';
+import {byGroup, only} from './fieldGroups';
+import {ManagerContext} from './managerContext';
+import {DEFAULT_BREAKPOINTS, PREVIEW_EDIT, PREVIEW_OPEN, PREVIEW_PICK, PREVIEW_SELECT, type PreviewBox, type PreviewColumn, type PreviewColumnBox, type PreviewEvent, type SectionPreviewOptions} from './preview';
 import {SectionPreview} from './SectionPreview';
 
 import './SectionManager.scss';
@@ -39,9 +46,13 @@ type Props = {
   groups?: string[];
   /** top-level fields of the document shown in the dialog's header */
   headerFields?: string[];
+  /** block slug → narrowest and widest column it accepts; blocks no longer offered */
+  minSpans?: Record<string, number>;
+  maxSpans?: Record<string, number>;
+  hiddenBlocks?: string[];
 };
 
-type PanelKey = 'settings' | 'layout' | 'blocks';
+type PanelKey = 'settings' | 'layout' | 'blocks' | 'content';
 
 /** share of the dialog's height taken by the settings, in %: the default, and how far the handle goes */
 const SPLIT = 35;
@@ -59,22 +70,7 @@ const innerFields = (field: CollapsibleFieldClient, index: number): ClientField[
   return f && 'fields' in f ? f.fields : [];
 };
 
-/**
- * The settings cut at each group heading: one list per group, as long as the whole list, the other
- * groups' fields left out (null). RenderFields skips the holes and keeps each field's position,
- * so every field has the path Payload gave it.
- */
-function byGroup(fields: ClientField[], groups: string[]): ClientField[][] {
-  const out: ClientField[][] = [];
-  fields.forEach((f, i) => {
-    const starts = f.type === 'ui' && groups.includes(f.name);
-    if (starts || out.length === 0) out.push(fields.map(() => null as unknown as ClientField));
-    out[out.length - 1][i] = f;
-  });
-  return out;
-}
-
-export function SectionManager({field, path, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups, headerFields}: Props) {
+export function SectionManager({field, path, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups, headerFields, minSpans, maxSpans, hiddenBlocks}: Props) {
   const {t} = useAdminText();
   const {openModal, closeModal, isModalOpen} = useModal();
   const slug = `section-manager-${path}`;
@@ -104,6 +100,9 @@ export function SectionManager({field, path, indexPath, parentPath, parentSchema
             preview={preview}
             groups={groups}
             headerFields={headerFields}
+            minSpans={minSpans}
+            maxSpans={maxSpans}
+            hiddenBlocks={hiddenBlocks}
             onClose={() => closeModal(slug)}
           />
         ) : null}
@@ -128,11 +127,11 @@ function BarGlyph({kind}: {kind: 'save' | 'close'}) {
   );
 }
 
-function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups = [], headerFields = [], onClose}: Omit<Props, 'path'> & {onClose: () => void}) {
+function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups = [], headerFields = [], minSpans, maxSpans, hiddenBlocks, onClose}: Omit<Props, 'path'> & {onClose: () => void}) {
   const {t} = useAdminText();
   const [panel, setPanel] = useState<PanelKey>('settings');
   // « save and close »: the document's own save; the dialog stays open when a field is refused
-  const {submit, getFields} = useForm();
+  const {submit, getFields, addFieldRow, removeFieldRow, dispatchFields, getDataByPath, setModified} = useForm();
   const modified = useFormModified();
   const [saving, setSaving] = useState(false);
   const saveAndClose = async () => {
@@ -196,6 +195,150 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
     else return;
     e.preventDefault();
   };
+  // ——— the columns' contents: the block library, the content panel, the preview's events ———
+  const {i18n} = useTranslation();
+  const {openModal} = useModal();
+  const rowsField = innerFields(field, 1).find((f): f is ArrayFieldClient => f.type === 'array' && 'name' in f && f.name === 'rows');
+  const columnsField = rowsField?.fields.find((f): f is ArrayFieldClient => f.type === 'array' && 'name' in f && f.name === 'columns');
+  const contentsField = columnsField?.fields.find((f): f is BlocksFieldClient => f.type === 'blocks' && 'name' in f && f.name === 'contents');
+  const rowsPath = parentPath ? `${parentPath}.rows` : 'rows';
+  const rowsSchemaPath = `${parentSchemaPath}.rows`;
+  const blocks = useMemo(() => (contentsField?.blocks ?? []).filter((b): b is ClientBlock => typeof b !== 'string'), [contentsField]);
+  // the blocks offered: not the empty cell (an empty column is one already), not the hidden ones
+  const library = useMemo<LibraryBlock[]>(
+    () =>
+      blocks
+        .filter((b) => b.slug !== EMPTY_SLUG && !(hiddenBlocks ?? []).includes(b.slug))
+        .map((b) => ({slug: b.slug, label: String(getTranslation(b.labels?.singular ?? b.slug, i18n)), image: b.imageURL, min: minSpans?.[b.slug] ?? 1, max: maxSpans?.[b.slug] ?? 12})),
+    [blocks, hiddenBlocks, i18n, maxSpans, minSpans],
+  );
+  const columnPath = useCallback((at: PreviewColumn) => `${rowsPath}.${at.row}.columns.${at.col}`, [rowsPath]);
+  /** width and block of a column, read from the form; null when the column does not exist */
+  const columnState = useCallback(
+    (at: PreviewColumn): {span: number; blockType: string} | null => {
+      const fields = getFields();
+      const span = fields[`${columnPath(at)}.span`];
+      if (!span) return null;
+      const blockType = String(fields[`${columnPath(at)}.contents.0.blockType`]?.value ?? '');
+      return {span: Number(span.value) || 12, blockType: blockType === EMPTY_SLUG ? '' : blockType};
+    },
+    [columnPath, getFields],
+  );
+  const fitsColumn = useCallback((slug: string, span: number) => (minSpans?.[slug] ?? 1) <= span && span <= (maxSpans?.[slug] ?? 12), [maxSpans, minSpans]);
+
+  // the column shown in the content panel (and outlined in the preview)
+  const [column, setColumn] = useState<PreviewColumn | null>(null);
+  const openContent = useCallback((at: PreviewColumn) => {
+    setColumn(at);
+    setPanel('content');
+  }, []);
+  const manager = useMemo(() => ({column, openContent}), [column, openContent]);
+
+  /** empties the column: removes its block; final once the document is saved */
+  const clearColumn = useCallback(
+    (at: PreviewColumn) => {
+      const contentsPath = `${columnPath(at)}.contents`;
+      const existing = getDataByPath<unknown[]>(contentsPath);
+      for (let k = (Array.isArray(existing) ? existing.length : 0) - 1; k >= 0; k--) removeFieldRow({path: contentsPath, rowIndex: k});
+      setModified(true);
+    },
+    [columnPath, getDataByPath, removeFieldRow, setModified],
+  );
+  const putBlock = useCallback(
+    (at: PreviewColumn, slug: string) => {
+      clearColumn(at);
+      addFieldRow({path: `${columnPath(at)}.contents`, rowIndex: 0, blockType: slug, schemaPath: `${rowsSchemaPath}.columns.contents`});
+      setModified(true);
+      setColumn(at);
+    },
+    [addFieldRow, clearColumn, columnPath, rowsSchemaPath, setModified],
+  );
+  // a block placed on a filled column: asked first
+  const [replacing, setReplacing] = useState<{at: PreviewColumn; slug: string} | null>(null);
+  const confirmSlug = `section-manager-replace-${rowsPath}`;
+  const placeBlock = useCallback(
+    (at: PreviewColumn, slug: string) => {
+      const state = columnState(at);
+      if (!state || !fitsColumn(slug, state.span)) return;
+      if (state.blockType && state.blockType !== slug) {
+        setReplacing({at, slug});
+        openModal(confirmSlug);
+      } else if (!state.blockType) putBlock(at, slug);
+    },
+    [columnState, confirmSlug, fitsColumn, openModal, putBlock],
+  );
+  const labelOf = (slug: string) => library.find((b) => b.slug === slug)?.label ?? slug;
+
+  // the block being dragged from the library: the preview shows where it can be dropped
+  const [dragged, setDragged] = useState<string | null>(null);
+  const dropZones = (boxes: PreviewColumnBox[]) => {
+    if (!dragged) return null;
+    return boxes.map((box) => {
+      const state = columnState(box);
+      const ok = Boolean(state) && fitsColumn(dragged, state?.span ?? 0);
+      return (
+        <div
+          key={`${box.row}-${box.col}`}
+          className="section-preview__zone"
+          data-allowed={ok ? 'true' : undefined}
+          data-zone={`${box.row}-${box.col}`}
+          aria-label={t(T.manager.dropZone, {row: box.row + 1, col: box.col + 1})}
+          style={{left: box.x, top: box.y, width: box.width, height: box.height}}
+          onDragEnter={(e) => {
+            if (ok) e.currentTarget.setAttribute('data-over', 'true');
+          }}
+          onDragLeave={(e) => e.currentTarget.removeAttribute('data-over')}
+          // no preventDefault on a column that cannot take the block: the browser shows the « not allowed » cursor
+          onDragOver={(e) => {
+            if (!ok) return;
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'copy';
+          }}
+          onDrop={(e) => {
+            e.preventDefault();
+            const slug = e.dataTransfer.getData(BLOCK_DRAG_TYPE) || dragged;
+            setDragged(null);
+            if (ok && slug) placeBlock({row: box.row, col: box.col}, slug);
+          }}
+        />
+      );
+    });
+  };
+
+  // an image or an icon clicked in the preview: its own field, shown next to it
+  const [picking, setPicking] = useState<{at: PreviewColumn; field: string; x: number; y: number} | null>(null);
+  const onPreviewEvent = (event: PreviewEvent, toScreen: (box: PreviewBox) => PreviewBox) => {
+    const at = {row: event.row, col: event.col};
+    const state = columnState(at);
+    if (!state) return;
+    if (event.type === PREVIEW_SELECT) return setColumn(at);
+    if (event.type === PREVIEW_OPEN) return openContent(at);
+    const block = blocks.find((b) => b.slug === state.blockType);
+    const path = `${columnPath(at)}.contents.0.${event.field}`;
+    if (event.type === PREVIEW_EDIT) {
+      // only a text field the form knows; anything else is edited in the content panel
+      if (readOnly || !getFields()[path]) return openContent(at);
+      dispatchFields({type: 'UPDATE', path, value: event.value, valid: true});
+      setModified(true);
+      setColumn(at);
+    }
+    if (event.type === PREVIEW_PICK) {
+      if (readOnly || !block?.fields.some((f) => 'name' in f && f.name === event.field)) return openContent(at);
+      const box = toScreen(event.box);
+      setColumn(at);
+      setPicking({at, field: event.field, x: box.x, y: box.y + box.height});
+    }
+  };
+  const pickedBlock = picking ? blocks.find((b) => b.slug === columnState(picking.at)?.blockType) : undefined;
+  const pickedField = pickedBlock?.fields.find((f) => 'name' in f && f.name === picking?.field);
+  const blockPermissions = (slug: string): SanitizedFieldsPermissions => {
+    if (permissions === true || permissions === undefined) return true;
+    type Deep = {fields?: Record<string, Deep>; blocks?: Record<string, Deep>} | true | undefined;
+    const contents = ((permissions as Record<string, Deep>).rows as Exclude<Deep, true | undefined>)?.fields?.columns;
+    const perms = contents === true ? true : (contents?.fields?.contents as Exclude<Deep, true | undefined>)?.blocks?.[slug];
+    return ((perms === true ? true : perms?.fields) ?? true) as SanitizedFieldsPermissions;
+  };
+
   // forceRender: Payload renders fields once they are on screen, and an empty group is hidden (SCSS)
   const render = (index: number, fields: ClientField[] = innerFields(field, index)) => (
     <RenderFields
@@ -211,7 +354,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
   // the settings side by side, one column per group: no vertical scroll in the top part
   const settings = (
     <div className="section-manager__groups">
-      {byGroup(innerFields(field, 0), groups).map((fields, i) => (
+      {byGroup(innerFields(field, 0), (f) => f.type === 'ui' && groups.includes(f.name)).map((fields, i) => (
         <div key={i} className="section-manager__group">
           {render(0, fields)}
         </div>
@@ -221,10 +364,37 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
   const panels: {key: PanelKey; label: string; content: React.ReactNode}[] = [
     {key: 'settings', label: t(T.manager.panelSettings), content: settings},
     {key: 'layout', label: t(T.manager.panelLayout), content: render(1)},
-    {key: 'blocks', label: t(T.manager.panelBlocks), content: <p className="section-manager__soon">{t(T.manager.blocksSoon)}</p>},
+    {
+      key: 'blocks',
+      label: t(T.manager.panelBlocks),
+      content: (
+        <>
+          <p className="section-manager__soon">{t(T.manager.libraryHint)}</p>
+          <BlockLibrary blocks={library} onDrag={readOnly ? undefined : setDragged} onPick={(slug) => (column && !readOnly ? placeBlock(column, slug) : undefined)} />
+        </>
+      ),
+    },
+    {
+      key: 'content',
+      label: t(T.manager.panelContent),
+      content: (
+        <ColumnContent
+          rowsPath={rowsPath}
+          rowsSchemaPath={rowsSchemaPath}
+          column={column}
+          blocks={blocks}
+          library={library}
+          permissions={column ? blockPermissions(columnState(column)?.blockType ?? '') : true}
+          readOnly={readOnly}
+          onPlace={placeBlock}
+          onClear={clearColumn}
+        />
+      ),
+    },
   ];
 
   return (
+    <ManagerContext.Provider value={manager}>
     <div ref={body} className="section-manager__body" style={{'--section-manager-split': `${split}%`} as React.CSSProperties}>
       <header className="section-manager__bar">
         <h2 className="section-manager__title">{t(T.manager.title)}</h2>
@@ -278,8 +448,79 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
           onKeyDown={onKeyDown}
         />
       ) : null}
-      {preview ? <LivePreview parentPath={parentPath} preview={preview} /> : null}
+      {preview ? <LivePreview parentPath={parentPath} preview={preview} selected={column} onEvent={onPreviewEvent} overlay={dropZones} /> : null}
+      {picking && pickedBlock && pickedField ? (
+        <FieldPopover x={picking.x} y={picking.y} title={String(getTranslation(('label' in pickedField && pickedField.label) || picking.field, i18n))} onClose={() => setPicking(null)}>
+          <RenderFields
+            fields={only(pickedBlock.fields as ClientField[], (f) => f === pickedField)}
+            forceRender
+            parentIndexPath=""
+            parentPath={`${columnPath(picking.at)}.contents.0`}
+            parentSchemaPath={`${rowsSchemaPath}.columns.contents.${pickedBlock.slug}`}
+            permissions={blockPermissions(pickedBlock.slug)}
+            readOnly={readOnly}
+          />
+        </FieldPopover>
+      ) : null}
+      <ConfirmationModal
+        modalSlug={confirmSlug}
+        heading={t(T.manager.replaceHeading)}
+        body={replacing ? t(T.manager.replaceBody, {from: labelOf(columnState(replacing.at)?.blockType ?? ''), to: labelOf(replacing.slug)}) : ''}
+        confirmLabel={t(T.manager.replace)}
+        cancelLabel={t(T.manager.cancel)}
+        onConfirm={() => {
+          if (replacing) putBlock(replacing.at, replacing.slug);
+          setReplacing(null);
+        }}
+        onCancel={() => setReplacing(null)}
+      />
     </div>
+    </ManagerContext.Provider>
+  );
+}
+
+/**
+ * A single field of a block, shown next to what was clicked in the preview (an image, an icon):
+ * a small panel at the pointer, closed by its button, Escape or a click beside it.
+ */
+function FieldPopover({x, y, title, onClose, children}: {x: number; y: number; title: string; onClose: () => void; children: React.ReactNode}) {
+  const {t} = useAdminText();
+  const panel = useRef<HTMLDivElement>(null);
+  const [place, setPlace] = useState({left: x, top: y});
+  // kept inside the screen
+  useEffect(() => {
+    const el = panel.current;
+    if (!el) return;
+    const margin = 12;
+    setPlace({left: Math.max(margin, Math.min(x, window.innerWidth - el.offsetWidth - margin)), top: Math.max(margin, Math.min(y + margin, window.innerHeight - el.offsetHeight - margin))});
+  }, [x, y]);
+  // the click was in the preview's frame: bring the keyboard back here (Escape, Tab)
+  useEffect(() => {
+    panel.current?.focus();
+  }, []);
+  useEffect(() => {
+    // captured before the dialog's own Escape: only this panel closes
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      e.stopPropagation();
+      onClose();
+    };
+    window.addEventListener('keydown', onKey, true);
+    return () => window.removeEventListener('keydown', onKey, true);
+  }, [onClose]);
+  return (
+    <>
+      <div className="field-popover__backdrop" onClick={onClose} />
+      <div ref={panel} className="field-popover" role="dialog" aria-label={title} tabIndex={-1} style={place}>
+        <div className="field-popover__head">
+          <strong>{title}</strong>
+          <Button buttonStyle="secondary" size="small" margin={false} onClick={onClose}>
+            {t(T.manager.fieldClose)}
+          </Button>
+        </div>
+        {children}
+      </div>
+    </>
   );
 }
 
@@ -305,7 +546,7 @@ const pathAbove = (path: string): string | null => {
 };
 
 /** Collects the section's values (and the document fields the host asked for) and feeds the preview. */
-function LivePreview({parentPath, preview}: {parentPath: string; preview: SectionPreviewOptions}) {
+function LivePreview({parentPath, preview, selected, onEvent, overlay}: {parentPath: string; preview: SectionPreviewOptions; selected: PreviewColumn | null; onEvent: (event: PreviewEvent, toScreen: (box: PreviewBox) => PreviewBox) => void; overlay: (columns: PreviewColumnBox[]) => React.ReactNode}) {
   const {getData, getDataByPath} = useForm();
   const {id, collectionSlug, globalSlug} = useDocumentInfo();
   const locale = useLocale();
@@ -322,5 +563,5 @@ function LivePreview({parentPath, preview}: {parentPath: string; preview: Sectio
     // `version` changes on every edit: it is what triggers the new snapshot
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [version, parentPath, id, collectionSlug, globalSlug, locale?.code]);
-  return <SectionPreview url={preview.url} breakpoints={preview.breakpoints ?? DEFAULT_BREAKPOINTS} message={message} />;
+  return <SectionPreview url={preview.url} breakpoints={preview.breakpoints ?? DEFAULT_BREAKPOINTS} message={message} selected={selected} onEvent={onEvent} overlay={overlay} />;
 }

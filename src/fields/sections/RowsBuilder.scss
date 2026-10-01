@@ -157,6 +157,11 @@ button.rows-builder__square-name {
   &[data-issue] {
     border: 2px solid var(--theme-error-500);
   }
+  /* the column shown in the content panel */
+  &[data-current] {
+    outline: 2px solid var(--theme-success-500);
+    outline-offset: 1px;
+  }
   &[data-dragging] {
     position: relative;
     z-index: 2;
