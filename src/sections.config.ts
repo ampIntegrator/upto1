@@ -159,6 +159,8 @@ export const sections = createSectionBuilder({
   shared: {collection: 'sections'},
   condition: modeChosen,
   groupHeading: GROUP_HEADING,
+  // the « Gérer » dialog's live preview: the section rendered by the site, in the page's silo
+  preview: {url: '/apercu-section', documentFields: ['silo']},
   // « Carousel » thumbnail: a full-width row with a collection already placed (swipe by default)
   presetRows: [{id: 'carousel', label: collectionBlockText.rowPreset, spans: [12], blocks: [COLLECTION_SLUG]}],
 });

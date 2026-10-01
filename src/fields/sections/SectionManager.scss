@@ -1,0 +1,194 @@
+// SectionManager (« Gérer » dialog): settings on top (40 %), live preview below (60 %).
+// Admin side: Payload's theme variables only.
+
+.section-manager__summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: calc(var(--base) / 2) var(--base);
+
+  .btn {
+    margin: 0;
+  }
+}
+
+.section-manager__hint {
+  font-size: 14px;
+  color: var(--theme-elevation-600);
+}
+
+.section-manager__errors {
+  font-size: 14px;
+  color: var(--theme-error-500);
+}
+
+// full screen, above the admin (Payload's drawers opened from inside stack on top of it)
+.section-manager__modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  background: var(--theme-bg);
+}
+
+// exactly the viewport: 40 % settings, 60 % preview, each scrolling on its own
+.section-manager__body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+}
+
+.section-manager__bar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--base);
+  padding: calc(var(--base) / 2) var(--base);
+  border-bottom: 1px solid var(--theme-elevation-150);
+}
+
+.section-manager__title {
+  margin: 0;
+  font-size: 18px;
+}
+
+// the three horizontal accordions: the open one takes the room, the others are vertical strips
+.section-manager__panels {
+  display: flex;
+  flex: 0 0 40%;
+  overflow: hidden;
+  min-height: 0;
+  border-bottom: 1px solid var(--theme-elevation-150);
+}
+
+.section-manager__panel {
+  display: flex;
+  flex: 0 0 auto;
+  min-width: 0;
+  border-right: 1px solid var(--theme-elevation-150);
+
+  &:last-child {
+    border-right: 0;
+  }
+}
+
+.section-manager__panel--open {
+  flex: 1 1 auto;
+}
+
+.section-manager__tab {
+  flex: 0 0 auto;
+  width: 44px;
+  padding: var(--base) 0;
+  border: 0;
+  background: var(--theme-elevation-50);
+  color: var(--theme-elevation-800);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--theme-elevation-100);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--theme-elevation-1000);
+    outline-offset: -2px;
+  }
+
+  .section-manager__panel--open & {
+    background: var(--theme-elevation-150);
+    color: var(--theme-elevation-1000);
+    font-weight: 600;
+  }
+}
+
+.section-manager__tab-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+}
+
+.section-manager__content {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: auto;
+  padding: var(--base);
+}
+
+.section-manager__soon {
+  margin: 0;
+  max-width: 60ch;
+  font-size: 14px;
+  color: var(--theme-elevation-600);
+}
+
+// live preview
+.section-preview {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 60%;
+  min-height: 0;
+}
+
+.section-preview__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--base);
+  padding: 6px var(--base);
+  background: var(--theme-elevation-50);
+}
+
+.section-preview__title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.section-preview__widths {
+  display: flex;
+  gap: 4px;
+}
+
+.section-preview__width {
+  padding: 4px 10px;
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: 4px;
+  background: var(--theme-bg);
+  color: var(--theme-elevation-800);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--theme-elevation-1000);
+    outline-offset: 2px;
+  }
+}
+
+.section-preview__width--active {
+  border-color: var(--theme-elevation-1000);
+  background: var(--theme-elevation-1000);
+  color: var(--theme-bg);
+}
+
+.section-preview__px {
+  opacity: 0.7;
+}
+
+.section-preview__stage {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--theme-elevation-100);
+}
+
+.section-preview__frame {
+  position: absolute;
+  top: 0;
+  border: 0;
+  transform-origin: top left;
+}

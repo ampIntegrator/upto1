@@ -10,6 +10,7 @@ import {EMPTY_SLUG, emptyBlock} from './emptyBlock';
 import {SECTION_GAP_OPTIONS, SITE_GAP} from './gaps';
 import {sectionGroup} from './group';
 import {DEFAULT_SPACING, type PresetRow, SPACING_OPTIONS, SPAN_OPTIONS, toSpan} from './grid';
+import type {SectionPreviewOptions} from './preview';
 import {rowWidthError, tooNarrowError, tooWideError} from './validation';
 
 /**
@@ -40,6 +41,8 @@ export type SectionFieldsOptions = {
   presetRows?: PresetRow[];
   /** The host's group heading component (`path#Export`); without it, the neutral one. */
   groupHeading?: string;
+  /** The host's live preview page, shown in the « Gérer » dialog (see preview.ts). */
+  preview?: SectionPreviewOptions;
 };
 
 const getByPath = (data: unknown, path: (number | string)[]): unknown => path.reduce<unknown>((o, k) => (o && typeof o === 'object' ? (o as Record<string, unknown>)[String(k)] : undefined), data);
@@ -145,12 +148,13 @@ export function rowsField(blocks: ContentBlock[], condition?: Condition, presetR
 }
 
 /**
- * A section's fields, in two framed blocks: « Section settings », then the rows. The settings are
+ * A section's fields, in two framed blocks: « Section settings », then the rows, both edited in the
+ * « Gérer » dialog (SectionManager). The settings are
  * grouped, each group under a heading with a rule (`sectionGroup`, presentation only): the anchor
  * and the sharing, the host's settings (its own headings, options.settings), then the spacing and
  * the gaps. `groupHeading`: the host's heading component (an icon before the title).
  */
-export function sectionFields({blocks, settings = [], shareable = false, condition, presetRows = [], groupHeading}: SectionFieldsOptions): Field[] {
+export function sectionFields({blocks, settings = [], shareable = false, condition, presetRows = [], groupHeading, preview}: SectionFieldsOptions): Field[] {
   const group = (o: {name: string; label: Text; icon?: string; first?: boolean}) => sectionGroup({...o, component: groupHeading, condition});
   const anchorField: Field = {
     name: 'anchor',
@@ -198,10 +202,18 @@ export function sectionFields({blocks, settings = [], shareable = false, conditi
     },
   ];
   return [
-    // section settings, framed and collapsible (presentation only: no extra data)
-    // closed by default (Nicolas, 17 Sept. 2026): the rows are what editors open a section for
-    {type: 'collapsible', label: T.settings.collapsible, admin: {initCollapsed: true}, fields: common},
-    // the rows, in their own collapsible block (RowsBuilder)
-    {type: 'collapsible', label: T.rows.collapsible, admin: {initCollapsed: false, condition}, fields: [rowsField(blocks, condition, presetRows)]},
+    // the « Gérer » dialog (SectionManager, 1 Oct. 2026): an unnamed collapsible wrapping the two framed
+    // blocks below, shown as a button in the page; presentation only, the data does not change
+    {
+      type: 'collapsible',
+      label: T.manager.title,
+      admin: {components: {Field: {path: '@/fields/sections/SectionManager#SectionManager', clientProps: {preview}}}},
+      fields: [
+        // section settings (the dialog's first panel)
+        {type: 'collapsible', label: T.settings.collapsible, fields: common},
+        // the rows (RowsBuilder, the dialog's second panel)
+        {type: 'collapsible', label: T.rows.collapsible, admin: {condition}, fields: [rowsField(blocks, condition, presetRows)]},
+      ],
+    },
   ];
 }

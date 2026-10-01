@@ -77,10 +77,11 @@ Forms (done on 21 Sept. 2026): `docs/forms.md` (plugin-form-builder, « Formulai
 one or two columns of fields, multi-step, server action, connection points for the tech lead);
 decisions in `docs/handoff-2026-09-21-forms.md`.
 
-Open study (for Claude Fable, analysis only, then a handoff for Opus): a live preview of the row
-being built in the section builder, in a movable window. Brief: `etude-apercu-rangee/README.md`.
-It builds on the admin's Live Preview (« Aperçu en direct » and its « Vue » menu, in main since
-17 Sept. 2026): `docs/live-preview.md`.
+Section manager (trial started on 1 Oct. 2026, branch `previewer`): `docs/section-manager.md`. A section
+is edited in a full-screen « Gérer » dialog: settings on top (40 %, three horizontal accordions), live
+preview of the section below (60 %), refreshed without saving. Stage 1 of 5 done; plan and decisions in
+`etude-apercu-rangee/faisabilite.md` (it replaces the 17 Sept. brief in the same folder). The page-level
+Live Preview (« Aperçu en direct », « Vue » menu) is unchanged: `docs/live-preview.md`.
 
 Modals (done on 22 Sept. 2026): `docs/modals.md` (« Modales » collection, opened over the page by an
 internal link or a button to the anchor `#modale-<slug>`; the page renders the modals it links to,

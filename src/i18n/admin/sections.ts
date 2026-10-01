@@ -217,6 +217,22 @@ export const sectionsText = texts({
     reset: {fr: 'Reprendre l’ordre desktop', en: 'Use the desktop order'},
     close: {fr: 'Fermer', en: 'Close'},
   },
+  manager: {
+    open: {fr: 'Gérer', en: 'Manage'},
+    openDescription: {fr: 'Fond, découpage et blocs de la section, avec l’aperçu en direct.', en: 'Background, layout and blocks of the section, with the live preview.'},
+    title: {fr: 'Gérer la section', en: 'Manage the section'},
+    close: {fr: 'Fermer', en: 'Close'},
+    errors: {
+      fr: ({n}: {n: number}) => (n > 1 ? `${n} champs à corriger` : '1 champ à corriger'),
+      en: ({n}: {n: number}) => (n > 1 ? `${n} fields to fix` : '1 field to fix'),
+    },
+    panelSettings: {fr: 'Fond et espaces', en: 'Background and spacing'},
+    panelLayout: {fr: 'Découpage', en: 'Layout'},
+    panelBlocks: {fr: 'Blocs', en: 'Blocks'},
+    blocksSoon: {fr: 'Bientôt : la liste des blocs à glisser dans les colonnes. En attendant, un clic sur une case du découpage choisit son bloc.', en: 'Coming soon: the list of blocks to drag into the columns. Meanwhile, click a cell of the layout to choose its block.'},
+    preview: {fr: 'Aperçu en direct', en: 'Live preview'},
+    width: {fr: 'Largeur de l’aperçu', en: 'Preview width'},
+  },
   drawer: {
     title: {
       fr: ({row, col, span}: {row: number; col: number; span: number}) => `Rangée ${row} · colonne ${col} · ${span} / 12`,
