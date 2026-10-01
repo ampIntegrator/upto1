@@ -12,7 +12,14 @@ In a page, a section shows its name and a « Gérer » button. The button opens 
   vertical strip): « Fond et espaces », « Découpage », « Blocs »;
 - bottom, 60 %: the live preview of this section alone, rendered by the site, refreshed about
   400 ms after each change, **without saving**; a width switch (1440, 768, 390), the frame being
-  scaled down when it is wider than the panel.
+  scaled down when it is wider than the panel. The frame is exactly as tall as the section (it
+  reports its height, `PREVIEW_SIZE`): only the section shows, nothing below it (Nicolas, 1 Oct.).
+  A section without content (no row, or only empty columns) shows its background, its top and
+  bottom paddings and a dashed zone « Colonnes » where the columns will be (`slot` of
+  `PageSections`, given by the preview only).
+
+The background composer (`src/fields/BackgroundComposer.tsx`) lost its preview box on the same day:
+the section itself is visible below.
 
 Saving is unchanged: the fields live in the page's form, the page is saved as usual (and saving
 still publishes: no drafts).

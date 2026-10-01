@@ -93,10 +93,16 @@ function Content({content, id}: {content: ContentData; id: string}) {
   }
 }
 
-export function PageSections({sections}: {sections: SectionData[]}) {
+/**
+ * `slot`: shown in place of the columns of a section that has no content yet (no row, or only empty
+ * columns). The « Gérer » dialog's preview passes it; the site never does.
+ */
+export function PageSections({sections, slot}: {sections: SectionData[]; slot?: React.ReactNode}) {
   return (
     <>
-      {sections.map((s) => (
+      {sections.map((s) => {
+        const blank = Boolean(slot) && s.rows.every((columns) => columns.every((c) => c.contents.length === 0));
+        return (
         <Section key={s.key} id={s.id} edgeTop={s.edgeTop} background={s.background} tint={s.tint} image={s.image} video={s.video} overlay={s.overlay} spacingTop={s.spacingTop} spacingBottom={s.spacingBottom}>
           <Container>
             <Grid
@@ -104,12 +110,13 @@ export function PageSections({sections}: {sections: SectionData[]}) {
               className="page-grid section-grid"
               align="start"
               style={{'--section-gap-x': `${s.gaps.gapX}px`, '--section-gap-y': `${s.gaps.gapY}px`, '--section-gap-y-mobile': `${s.gaps.gapYMobile}px`} as React.CSSProperties}>
+              {blank && s.rows.every((columns) => columns.length === 0) ? <GridSpan columns={12}>{slot}</GridSpan> : null}
               {s.rows.flatMap((columns, r) =>
                 columns.map((c, i) => (
                   <GridSpan
                     key={`${r}-${i}`}
                     columns={c.span}
-                    data-empty={c.empty ? 'true' : undefined}
+                    data-empty={c.empty && !blank ? 'true' : undefined}
                     style={{gridRow: r + 1, ...(c.stretch ? {alignSelf: 'stretch'} : null), ...(c.mobileRank !== undefined ? {'--mobile-order': c.mobileRank} : null)} as React.CSSProperties}>
                     {c.contents.length ? (
                       <VStack gap={6} style={c.stretch ? {height: '100%'} : undefined}>
@@ -117,6 +124,8 @@ export function PageSections({sections}: {sections: SectionData[]}) {
                           <Content key={j} content={content} id={`${s.key}-${r}-${i}-${j}`} />
                         ))}
                       </VStack>
+                    ) : blank ? (
+                      slot
                     ) : null}
                   </GridSpan>
                 )),
@@ -124,7 +133,8 @@ export function PageSections({sections}: {sections: SectionData[]}) {
             </Grid>
           </Container>
         </Section>
-      ))}
+        );
+      })}
     </>
   );
 }

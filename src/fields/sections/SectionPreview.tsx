@@ -4,14 +4,15 @@
  * SectionPreview — the bottom of the « Gérer » dialog: the host's preview page in an iframe, fed
  * with the section's unsaved values (window.postMessage, see preview.ts), about 400 ms after the
  * last change. A width switch (desktop, tablet, mobile): the frame keeps the chosen width and is
- * scaled down to fit the panel when it is wider.
+ * scaled down to fit the panel when it is wider. The frame is as tall as the section it shows
+ * (the height it reports): nothing but the section is visible, the panel scrolls when it is taller.
  */
 import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from 'react';
 
 import {sectionsText as T} from '@/i18n/admin/sections';
 import {useAdminText} from '@/i18n/admin/useAdminText';
 
-import {isPreviewReady, PREVIEW_DATA, type PreviewBreakpoint, type PreviewDataMessage} from './preview';
+import {isPreviewReady, PREVIEW_DATA, type PreviewBreakpoint, type PreviewDataMessage, previewSize} from './preview';
 
 const DEBOUNCE_MS = 400;
 
@@ -29,6 +30,8 @@ export function SectionPreview({url, breakpoints, message}: Props) {
   const [ready, setReady] = useState(0);
   const [bp, setBp] = useState(breakpoints[0]?.name ?? '');
   const [box, setBox] = useState({width: 0, height: 0});
+  // height of the rendered section, reported by the frame (0: nothing rendered yet)
+  const [content, setContent] = useState(0);
   const width = breakpoints.find((b) => b.name === bp)?.width ?? breakpoints[0]?.width ?? 1440;
   const origin = typeof window === 'undefined' ? '' : new URL(url, window.location.href).origin;
   // one key per frame, in its address (`frame`): the host keeps what each frame was sent apart
@@ -37,7 +40,10 @@ export function SectionPreview({url, breakpoints, message}: Props) {
   // the frame says it listens: from then on, every snapshot is sent
   useEffect(() => {
     const onMessage = (e: MessageEvent) => {
-      if (e.source === frame.current?.contentWindow && e.origin === origin && isPreviewReady(e.data)) setReady((n) => n + 1);
+      if (e.source !== frame.current?.contentWindow || e.origin !== origin) return;
+      if (isPreviewReady(e.data)) setReady((n) => n + 1);
+      const height = previewSize(e.data);
+      if (height !== null) setContent(height);
     };
     window.addEventListener('message', onMessage);
     return () => window.removeEventListener('message', onMessage);
@@ -74,7 +80,8 @@ export function SectionPreview({url, breakpoints, message}: Props) {
   }, []);
 
   const scale = box.width > 0 ? Math.min(1, box.width / width) : 1;
-  const left = Math.max(0, (box.width - width * scale) / 2);
+  // until the frame reports a height: the panel's
+  const height = content > 0 ? content : box.height / scale;
 
   return (
     <section className="section-preview" aria-label={t(T.manager.preview)}>
@@ -89,13 +96,10 @@ export function SectionPreview({url, breakpoints, message}: Props) {
         </div>
       </div>
       <div ref={stage} className="section-preview__stage">
-        <iframe
-          ref={frame}
-          src={src}
-          title={t(T.manager.preview)}
-          className="section-preview__frame"
-          style={{width, height: scale > 0 ? box.height / scale : box.height, left, transform: `scale(${scale})`}}
-        />
+        {/* the frame's scaled footprint: centres it and gives the panel its scroll height */}
+        <div className="section-preview__sizer" style={{width: width * scale, height: height * scale}}>
+          <iframe ref={frame} src={src} title={t(T.manager.preview)} className="section-preview__frame" style={{width, height, transform: `scale(${scale})`}} />
+        </div>
       </div>
     </section>
   );

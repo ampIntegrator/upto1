@@ -3,12 +3,14 @@
  * and a throwaway admin user, both deleted at the end (with their locks and preferences). Never
  * touches a real page. The dev server must be running (pnpm dev).
  *   SMOKE_BASE: server address (default http://localhost:3000)
+ *   SMOKE_SHOTS: a folder for screenshots of the dialog (optional)
  */
 import config from '@payload-config';
 import {randomBytes} from 'node:crypto';
 import {getPayload} from 'payload';
 
 const BASE = process.env.SMOKE_BASE ?? 'http://localhost:3000';
+const SHOTS = process.env.SMOKE_SHOTS;
 const stamp = Date.now();
 const TITLE = 'Un titre d’essai';
 const EDITED = 'Titre modifié en direct';
@@ -26,7 +28,7 @@ async function main() {
   const password = randomBytes(12).toString('hex');
   const user = await payload.create({collection: 'users', data: {email, password, name: 'ZZ smoke'} as never});
   const section = {blockType: 'section', mode: 'light', tint: 'light', texture: 'grid', rows: [{columns: [{span: '6', contents: [{blockType: 'textBox', title: TITLE, titleTag: 'h2'}]}, {span: '6', contents: []}]}]};
-  const page = await payload.create({collection: 'pages', data: {title: 'ZZ smoke Gérer', slug: `zz-smoke-manager-${stamp}`, hero: {variant: 'page-glow', title: 'Smoke'}, sections: [section]} as never});
+  const page = await payload.create({collection: 'pages', data: {title: 'ZZ smoke Gérer', slug: `zz-smoke-manager-${stamp}`, hero: {variant: 'page-glow', title: 'Smoke'}, sections: [section, {blockType: 'section', mode: 'light', tint: 'light', texture: 'dots', rows: []}]} as never});
   const {chromium} = await import('@playwright/test');
   const browser = await chromium.launch();
   try {
@@ -91,6 +93,25 @@ async function main() {
     await p.getByRole('button', {name: /^(Fermer|Close)$/}).first().click();
     await p.waitForTimeout(500);
     check(!(await p.locator('.section-manager__body').isVisible()), 'the dialog closes');
+    // a section without content: its background, its paddings and a dashed zone for the columns, nothing else
+    await p.locator('.blocks-field__rows .collapsible__toggle').nth(1).click();
+    await p.getByRole('button', {name: /^(Gérer|Manage)$/}).nth(1).click();
+    const blank = p.frameLocator('.section-preview__frame');
+    await blank.getByText('Colonnes', {exact: true}).waitFor({timeout: 20000});
+    await p.getByRole('radio', {name: /Ordinateur|Desktop/}).click();
+    await p.waitForTimeout(1000);
+    const fit = await p.evaluate(() => {
+      const iframe = document.querySelector('.section-preview__frame') as HTMLIFrameElement;
+      const sectionEl = iframe.contentDocument?.querySelector('section');
+      return {frame: iframe.clientHeight, section: Math.ceil(sectionEl?.getBoundingClientRect().height ?? 0), composerBox: document.querySelectorAll('.background-composer [aria-hidden="true"]').length};
+    });
+    check(fit.section > 0 && fit.frame === fit.section, `the frame is exactly as tall as the section (${fit.frame} / ${fit.section})`);
+    check(fit.composerBox === 0, 'no background preview box in the settings');
+    if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-blank.png`});
+    await p.getByText(/^(Nuit|Night)$/).first().click();
+    await p.waitForTimeout(2500);
+    if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-blank-night.png`});
+    await p.getByRole('button', {name: /^(Fermer|Close)$/}).first().click();
     check(errors.length === 0, `no page error${errors.length ? `: ${errors[0]}` : ''}`);
   } finally {
     await browser.close();

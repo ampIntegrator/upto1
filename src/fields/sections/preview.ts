@@ -11,6 +11,9 @@ export const PREVIEW_DATA = 'section-builder:data';
 /** preview → admin: the frame is listening (the admin then sends the current values) */
 export const PREVIEW_READY = 'section-builder:ready';
 
+/** preview → admin: the height of what the frame shows, so the admin fits the frame to it */
+export const PREVIEW_SIZE = 'section-builder:size';
+
 export type PreviewBreakpoint = {name: string; label: Text; width: number};
 
 export type SectionPreviewOptions = {
@@ -42,3 +45,8 @@ export const DEFAULT_BREAKPOINTS: PreviewBreakpoint[] = [
 
 export const isPreviewData = (x: unknown): x is PreviewDataMessage => Boolean(x && typeof x === 'object' && (x as {type?: unknown}).type === PREVIEW_DATA);
 export const isPreviewReady = (x: unknown): boolean => Boolean(x && typeof x === 'object' && (x as {type?: unknown}).type === PREVIEW_READY);
+export const previewSize = (x: unknown): number | null => {
+  if (!x || typeof x !== 'object' || (x as {type?: unknown}).type !== PREVIEW_SIZE) return null;
+  const h = (x as {height?: unknown}).height;
+  return typeof h === 'number' && Number.isFinite(h) && h >= 0 ? h : null;
+};

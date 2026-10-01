@@ -179,16 +179,22 @@
 }
 
 .section-preview__stage {
-  position: relative;
   flex: 1 1 auto;
   min-height: 0;
-  overflow: hidden;
+  overflow: auto;
   background: var(--theme-elevation-100);
+}
+
+.section-preview__sizer {
+  position: relative;
+  margin: 0 auto;
+  overflow: hidden;
 }
 
 .section-preview__frame {
   position: absolute;
   top: 0;
+  left: 0;
   border: 0;
   transform-origin: top left;
 }
