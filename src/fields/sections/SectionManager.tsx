@@ -119,6 +119,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
   const panelsRef = useRef<HTMLDivElement>(null);
   const [split, setSplit] = useState(SPLIT);
   const dragging = useRef(false);
+  const grab = useRef(0);
   const {getPreference, setPreference} = usePreferences();
   useEffect(() => {
     let live = true;
@@ -140,13 +141,15 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
     // captured: the moves keep coming while the pointer is over the preview's frame
     e.currentTarget.setPointerCapture(e.pointerId);
     dragging.current = true;
+    // where the handle was grabbed: it does not jump under the pointer
+    grab.current = e.clientY - e.currentTarget.getBoundingClientRect().top;
     e.preventDefault();
   };
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     const box = body.current?.getBoundingClientRect();
     const top = panelsRef.current?.getBoundingClientRect().top;
     // the settings start under the header: their height is the pointer's distance to their top
-    if (dragging.current && box && box.height > 0 && top !== undefined) setSplit(clampSplit(((e.clientY - top) / box.height) * 100));
+    if (dragging.current && box && box.height > 0 && top !== undefined) setSplit(clampSplit(((e.clientY - grab.current - top) / box.height) * 100));
   };
   const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!dragging.current) return;
