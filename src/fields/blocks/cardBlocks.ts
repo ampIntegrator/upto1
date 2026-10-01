@@ -52,6 +52,22 @@ const COMMON: Field[] = [
   {name: 'text', type: 'textarea', label: t.fields.text, localized: true, admin: {rows: 3}},
 ];
 
+/**
+ * Where the card's content sits when the card is taller than it (beside an image card or a tall
+ * block, the cards of a row sharing one height). Not on the image variant: its image is at the top.
+ */
+const V_ALIGN: Field = {
+  name: 'vAlign',
+  type: 'select',
+  label: t.fields.vAlign,
+  defaultValue: 'start',
+  options: [
+    {label: t.fields.vAlignStart, value: 'start'},
+    {label: t.fields.vAlignCenter, value: 'center'},
+    {label: t.fields.vAlignEnd, value: 'end'},
+  ],
+};
+
 /** Builds a Text by computing each admin language's value. */
 const mapText = (build: (lang: keyof Text) => string): Text =>
   Object.fromEntries(ADMIN_LANGUAGE_CODES.map((lang) => [lang, build(lang)])) as Text;
@@ -72,7 +88,7 @@ for (const clickable of [false, true]) {
       slug,
       labels: {singular: label, plural: mapText((lang) => `${label[lang]}${t.pluralSuffix[lang]}`)},
       imageURL: `/apercus/${slug}.png`,
-      fields: [...m.fields, ...COMMON, ...(clickable ? [linkGroup('cta', t.fields.cta, {required: true})] : [])],
+      fields: [...m.fields, ...COMMON, ...(m.kind === 'image' ? [] : [{...V_ALIGN}]), ...(clickable ? [linkGroup('cta', t.fields.cta, {required: true})] : [])],
     };
     // fills the row height: cards side by side, or beside another box, share one height
     // placeholder texts when the card is placed from the builder's library (the image is chosen by the editor)

@@ -52,6 +52,7 @@ import * as migration_20260924_113555_links_drop_legacy from './20260924_113555_
 import * as migration_20260925_105024_case_sheet_drop_overrides from './20260925_105024_case_sheet_drop_overrides';
 import * as migration_20260925_110205_case_cover_overlay from './20260925_110205_case_cover_overlay';
 import * as migration_20261001_131455_row_name from './20261001_131455_row_name';
+import * as migration_20261001_143006_card_valign_collection_gap from './20261001_143006_card_valign_collection_gap';
 
 export const migrations = [
   {
@@ -322,6 +323,11 @@ export const migrations = [
   {
     up: migration_20261001_131455_row_name.up,
     down: migration_20261001_131455_row_name.down,
-    name: '20261001_131455_row_name'
+    name: '20261001_131455_row_name',
+  },
+  {
+    up: migration_20261001_143006_card_valign_collection_gap.up,
+    down: migration_20261001_143006_card_valign_collection_gap.down,
+    name: '20261001_143006_card_valign_collection_gap'
   },
 ];

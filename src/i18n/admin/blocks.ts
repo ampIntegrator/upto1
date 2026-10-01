@@ -70,6 +70,10 @@ export const cardBlockText = texts({
     title: {fr: 'Titre', en: 'Title'},
     text: {fr: 'Texte', en: 'Text'},
     cta: {fr: "Bouton d'action", en: 'Action button'},
+    vAlign: {fr: 'Alignement vertical dans la rangée', en: 'Vertical alignment in the row'},
+    vAlignStart: {fr: 'Haut', en: 'Top'},
+    vAlignCenter: {fr: 'Centre', en: 'Centre'},
+    vAlignEnd: {fr: 'Bas', en: 'Bottom'},
   },
 });
 
@@ -247,6 +251,9 @@ export const collectionBlockText = texts({
   layoutSwipe: {fr: 'Côte à côte, glisser sur mobile', en: 'Side by side, swipe on mobile'},
   layoutCarousel: {fr: 'Carrousel (flèches, indicateur)', en: 'Carousel (arrows, indicator)'},
   perView: {fr: 'Éléments visibles', en: 'Items per view'},
+  itemGap: {fr: 'Écart entre les éléments', en: 'Gap between items'},
+  itemGapRow: {fr: 'Écart de la section', en: 'Section gap'},
+  itemGapDescription: {fr: 'Par défaut, l’écart entre colonnes de la section.', en: 'By default, the section’s gap between columns.'},
   perViewDescription: {fr: '3 au plus sur 8 ou 9 colonnes, 4 sur 12. Deux lignes = deux rangées.', en: '3 at most on 8 or 9 columns, 4 on 12. Two lines = two rows.'},
   step: {fr: 'Défilement', en: 'Scrolling'},
   stepPage: {fr: 'Une page (les éléments visibles)', en: 'One page (the visible items)'},

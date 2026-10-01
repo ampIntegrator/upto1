@@ -214,6 +214,10 @@ async function main() {
     await p.waitForTimeout(600);
     check((await p.locator('.section-manager__panel--open #section-manager-panel-content').count()) === 1 && /2 · col\w+ 2/.test(await head()), `the pencil of a column opens the content panel on it (${await head()})`);
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-content.png`});
+    // the selected column is not outlined in the preview (only the hovered one is, lightly)
+    await p.mouse.move(5, 5);
+    await p.waitForTimeout(300);
+    check((await frame.locator('body > i[aria-hidden="true"]').count()) === 0, 'no outline on the selected column in the preview');
     // an empty column shows its width, and no pencil
     await frame.getByText('6 / 12').first().hover();
     await p.waitForTimeout(300);

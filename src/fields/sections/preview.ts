@@ -17,7 +17,7 @@ export const PREVIEW_SIZE = 'section-builder:size';
 /** `icon`: the device drawn on the width switch (the label is its tooltip and accessible name) */
 /** preview → admin: where each column is drawn in the frame (after each rendering, and when sizes change) */
 export const PREVIEW_LAYOUT = 'section-builder:layout';
-/** both ways: a column is selected (clicked in the preview; chosen in the admin) */
+/** preview → admin: a column was clicked */
 export const PREVIEW_SELECT = 'section-builder:select';
 /** preview → admin: show this column's content panel (double click, pencil, a part that is not edited in place) */
 export const PREVIEW_OPEN = 'section-builder:open';
@@ -102,11 +102,4 @@ export const previewEvent = (x: unknown): PreviewEvent | null => {
   if (e.type === PREVIEW_EDIT && typeof e.field === 'string' && typeof e.value === 'string') return {type: PREVIEW_EDIT, ...at, field: e.field, value: e.value};
   if (e.type === PREVIEW_PICK && typeof e.field === 'string' && isBox(e.box)) return {type: PREVIEW_PICK, ...at, field: e.field, box: e.box};
   return null;
-};
-
-/** the column of a PREVIEW_SELECT message sent to the frame (null: nothing selected), or undefined */
-export const previewSelection = (x: unknown): PreviewColumn | null | undefined => {
-  if (!x || typeof x !== 'object' || (x as {type?: unknown}).type !== PREVIEW_SELECT) return undefined;
-  const {row, col} = x as {row?: unknown; col?: unknown};
-  return isIndex(row) && isIndex(col) ? {row, col} : null;
 };

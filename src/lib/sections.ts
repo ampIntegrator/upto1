@@ -29,7 +29,7 @@ import {POST_CARD_SLUG} from '@/fields/blocks/postCardBlock';
 import {CTA_BAND_SLUG, GALLERY_SLUG, KEY_POINTS_SLUG, QUOTE_CARD_SLUG, STATS_BAND_SLUG} from '@/fields/blocks/prose/slugs';
 import {SECTION_HEADING_SLUG} from '@/fields/blocks/sectionHeadingBlock';
 import {CARD_VARIANTS} from '@/fields/blocks/cardBlocks';
-import {COLLECTION_SLUG} from '@/fields/blocks/collectionBlock';
+import {COLLECTION_SLUG, ROW_GAP} from '@/fields/blocks/collectionBlock';
 import {COMPARE_CARD_SLUG} from '@/fields/blocks/compareCardBlock';
 import {FAQ_SLUG} from '@/fields/blocks/faqBlock';
 import {FORM_SLUG} from '@/fields/blocks/formBlock';
@@ -60,7 +60,7 @@ type ContentBlock = NonNullable<NonNullable<NonNullable<SectionBlock['rows']>[nu
 export type FaqData = {mode: 'single' | 'multiple'; columns: 1 | 2; firstOpen: boolean; tag: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span'; items: {question: string; answer: string}[]};
 
 /** A collection: identical items side by side, swipe or carousel. */
-export type CollectionData = {layout: 'swipe' | 'carousel'; perView: 2 | 3 | 4; step: 'page' | 'item'; arrows: boolean; indicator: 'segments' | 'dots' | 'numbers' | 'none'; items: ContentData[]; more?: {label: string; href: string; newTab?: boolean}};
+export type CollectionData = {gap?: number; layout: 'swipe' | 'carousel'; perView: 2 | 3 | 4; step: 'page' | 'item'; arrows: boolean; indicator: 'segments' | 'dots' | 'numbers' | 'none'; items: ContentData[]; more?: {label: string; href: string; newTab?: boolean}};
 
 export type ContentData =
   | {type: 'textBox'; textBox: TextBoxProps}
@@ -125,6 +125,7 @@ type CardBlockData = {
   prefix?: string | null;
   suffix?: string | null;
   cta?: {label?: string | null; href?: string | null; newTab?: boolean | null} | null;
+  vAlign?: string | null;
 };
 
 function toCard(b: CardBlockData): CardProps {
@@ -141,6 +142,7 @@ function toCard(b: CardBlockData): CardProps {
     title: b.title,
     tag: toTitleTag(b.tag, 'h3'),
     text: b.text ?? undefined,
+    vAlign: b.vAlign === 'center' || b.vAlign === 'end' ? b.vAlign : undefined,
     cta: v.clickable && b.cta?.label && b.cta?.href ? {label: b.cta.label, href: b.cta.href, newTab: b.cta.newTab || undefined} : undefined,
   };
 }
@@ -320,7 +322,7 @@ function toSteps(b: StepsData): ContentData | null {
   return steps.length ? {type: 'processSteps', steps, tag: toTitleTag(b.tag, 'h3')} : null;
 }
 
-type CollectionBlockData = {id?: string | null; layout?: string | null; perView?: string | null; step?: string | null; arrows?: boolean | null; indicator?: string | null; source?: string | null; items?: ContentBlock[] | null; postsLimit?: number | null; postsCategory?: number | {id: number} | null; postsCta?: string | null; casesLimit?: number | null; casesCategory?: number | {id: number} | null; casesCta?: string | null; moreLink?: string | null; moreLabel?: string | null; moreTarget?: {href?: string | null; newTab?: boolean | null} | null};
+type CollectionBlockData = {id?: string | null; itemGap?: string | null; layout?: string | null; perView?: string | null; step?: string | null; arrows?: boolean | null; indicator?: string | null; source?: string | null; items?: ContentBlock[] | null; postsLimit?: number | null; postsCategory?: number | {id: number} | null; postsCta?: string | null; casesLimit?: number | null; casesCategory?: number | {id: number} | null; casesCta?: string | null; moreLink?: string | null; moreLabel?: string | null; moreTarget?: {href?: string | null; newTab?: boolean | null} | null};
 
 /** Loads the latest entries of a listing for a collection block (the page gives it, with the locale). */
 export type EntriesLoader<T> = (q: {limit: number; category?: number}) => Promise<T[]>;
@@ -351,7 +353,8 @@ function toCollection(b: CollectionBlockData, entries: EntryItems): ContentData 
   const perView = Math.min(Math.max(Number(b.perView ?? 3), 2), 4) as 2 | 3 | 4;
   return {
     type: 'collection',
-    collection: {layout: b.layout === 'carousel' ? 'carousel' : 'swipe', perView, step: b.step === 'item' ? 'item' : 'page', arrows: b.arrows !== false, indicator: (b.indicator ?? 'segments') as CollectionData['indicator'], items, more: collectionMore(b)},
+    // the gap set on the collection; without one, the section's gap between columns applies (CSS)
+    collection: {gap: b.itemGap && b.itemGap !== ROW_GAP && Number.isFinite(Number(b.itemGap)) ? Number(b.itemGap) : undefined, layout: b.layout === 'carousel' ? 'carousel' : 'swipe', perView, step: b.step === 'item' ? 'item' : 'page', arrows: b.arrows !== false, indicator: (b.indicator ?? 'segments') as CollectionData['indicator'], items, more: collectionMore(b)},
   };
 }
 

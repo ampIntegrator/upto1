@@ -229,7 +229,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
   );
   const fitsColumn = useCallback((slug: string, span: number) => (minSpans?.[slug] ?? 1) <= span && span <= (maxSpans?.[slug] ?? 12), [maxSpans, minSpans]);
 
-  // the column shown in the content panel (and outlined in the preview)
+  // the column shown in the content panel
   const [column, setColumn] = useState<PreviewColumn | null>(null);
   const openContent = useCallback((at: PreviewColumn) => {
     setColumn(at);
@@ -453,7 +453,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
           onKeyDown={onKeyDown}
         />
       ) : null}
-      {preview ? <LivePreview parentPath={parentPath} preview={preview} selected={column} onEvent={onPreviewEvent} overlay={dropZones} /> : null}
+      {preview ? <LivePreview parentPath={parentPath} preview={preview} onEvent={onPreviewEvent} overlay={dropZones} /> : null}
       {picking && pickedBlock && pickedField ? (
         <FieldPopover x={picking.x} y={picking.y} title={String(getTranslation(('label' in pickedField && pickedField.label) || picking.field, i18n))} onClose={() => setPicking(null)}>
           <RenderFields
@@ -551,7 +551,7 @@ const pathAbove = (path: string): string | null => {
 };
 
 /** Collects the section's values (and the document fields the host asked for) and feeds the preview. */
-function LivePreview({parentPath, preview, selected, onEvent, overlay}: {parentPath: string; preview: SectionPreviewOptions; selected: PreviewColumn | null; onEvent: (event: PreviewEvent, toScreen: (box: PreviewBox) => PreviewBox) => void; overlay: (columns: PreviewColumnBox[]) => React.ReactNode}) {
+function LivePreview({parentPath, preview, onEvent, overlay}: {parentPath: string; preview: SectionPreviewOptions; onEvent: (event: PreviewEvent, toScreen: (box: PreviewBox) => PreviewBox) => void; overlay: (columns: PreviewColumnBox[]) => React.ReactNode}) {
   const {getData, getDataByPath} = useForm();
   const {id, collectionSlug, globalSlug} = useDocumentInfo();
   const locale = useLocale();
@@ -568,5 +568,5 @@ function LivePreview({parentPath, preview, selected, onEvent, overlay}: {parentP
     // `version` changes on every edit: it is what triggers the new snapshot
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [version, parentPath, id, collectionSlug, globalSlug, locale?.code]);
-  return <SectionPreview url={preview.url} breakpoints={preview.breakpoints ?? DEFAULT_BREAKPOINTS} message={message} selected={selected} onEvent={onEvent} overlay={overlay} />;
+  return <SectionPreview url={preview.url} breakpoints={preview.breakpoints ?? DEFAULT_BREAKPOINTS} message={message} onEvent={onEvent} overlay={overlay} />;
 }

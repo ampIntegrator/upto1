@@ -56,12 +56,14 @@ export type CardProps = {
   result?: string;
   /** realisation: client and city */
   client?: {name: string; location?: string};
+  /** bloc: where the content sits in a card taller than it (cards of a row share one height); top by default */
+  vAlign?: 'start' | 'center' | 'end';
   /** action bar */
   cta?: {label: string; href: string; newTab?: boolean};
   style?: React.CSSProperties;
 };
 
-export function Card({preset = 'bloc', media = {type: 'none'}, title, tag, level, accentTitle, text, chip, date, result, client, cta, style}: CardProps) {
+export function Card({preset = 'bloc', media = {type: 'none'}, title, tag, level, accentTitle, text, chip, date, result, client, vAlign = 'start', cta, style}: CardProps) {
   const editorial = preset !== 'bloc';
   // brief: the link goes through the title only, no action bar
   const showBar = Boolean(cta) && preset !== 'brief';
@@ -99,7 +101,7 @@ export function Card({preset = 'bloc', media = {type: 'none'}, title, tag, level
   );
 
   return (
-    <article className={styles.card} data-preset={preset} data-link={cta ? 'true' : undefined} style={style}>
+    <article className={styles.card} data-preset={preset} data-link={cta ? 'true' : undefined} data-valign={vAlign === 'start' ? undefined : vAlign} style={style}>
       <div className={styles.body}>
         {media.type === 'image' ? mediaNode : null}
         <div className={styles.inner}>

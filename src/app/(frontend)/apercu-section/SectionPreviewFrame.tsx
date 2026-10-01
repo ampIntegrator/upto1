@@ -12,7 +12,7 @@
  * Editing, in the columns (`data-preview-column`, set by PageSections):
  *   - hover: the column is outlined and, once it holds a block, a pencil shows in its corner; the
  *     pencil, or a double click, asks the admin for the column's content panel (PREVIEW_OPEN);
- *   - click: selects the column (PREVIEW_SELECT). On a part a component marked with `data-field`:
+ *   - click: selects the column (PREVIEW_SELECT; nothing is drawn on it). On a part a component marked with `data-field`:
  *     a text is typed in place (PREVIEW_EDIT on each keystroke; Enter or leaving keeps it, Escape
  *     gives up), an image or an icon asks the admin to show its field beside it (PREVIEW_PICK).
  *     A text is typed in place only when what is displayed is the stored value, character for
@@ -37,7 +37,6 @@ import {
   type PreviewColumn,
   type PreviewColumnBox,
   type PreviewDataMessage,
-  previewSelection,
 } from '@/fields/sections/preview';
 import {EMPTY_SLUG} from '@/fields/sections/emptyBlock';
 import {EditIcon} from '@/theme/icons/nucleo';
@@ -84,7 +83,6 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
   const waiting = useRef(false);
   const [boxes, setBoxes] = useState<PreviewColumnBox[]>([]);
   const [hover, setHover] = useState<PreviewColumn | null>(null);
-  const [selected, setSelected] = useState<PreviewColumn | null>(null);
   // the columns that hold a block (`row-col`): only those have a content to edit, hence a pencil
   const [filled, setFilled] = useState<string[]>([]);
   // in the admin's iframe (false for a visitor opening the address, and during server rendering)
@@ -95,8 +93,6 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
     if (!frame) return;
     const onMessage = async (e: MessageEvent) => {
       if (e.origin !== window.location.origin || e.source !== window.parent) return;
-      const selection = previewSelection(e.data);
-      if (selection !== undefined) return setSelected(selection);
       if (!isPreviewData(e.data)) return;
       const {type: _type, ...input} = e.data;
       latest.current = input;
@@ -255,22 +251,6 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
 
   const boxOf = (at: PreviewColumn | null) => (at ? boxes.find((b) => same(b, at)) : undefined);
   const hoverBox = boxOf(hover);
-  const selectedBox = boxOf(selected);
-  /** an outline drawn over a column, without taking its clicks */
-  const outline = (box: PreviewColumnBox, kind: 'hover' | 'selected') => (
-    <i
-      aria-hidden="true"
-      style={{
-        position: 'absolute',
-        left: box.x,
-        top: box.y,
-        width: box.width,
-        height: box.height,
-        pointerEvents: 'none',
-        outline: kind === 'selected' ? 'var(--focus-outline-width) solid var(--color-accent)' : 'var(--border-width) dashed var(--color-accent)',
-      }}
-    />
-  );
 
   return (
     <>
@@ -278,8 +258,8 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
       {inFrame ? (
         <>
           <style>{STYLES}</style>
-          {selectedBox ? outline(selectedBox, 'selected') : null}
-          {hoverBox && !same(hover, selected) ? outline(hoverBox, 'hover') : null}
+          {/* the hovered column, lightly outlined; no outline on the selected one (it spoiled the design, Nicolas, 1 Oct. 2026) */}
+          {hoverBox ? <i aria-hidden="true" style={{position: 'absolute', left: hoverBox.x, top: hoverBox.y, width: hoverBox.width, height: hoverBox.height, pointerEvents: 'none', outline: 'var(--border-width) dashed var(--color-accent)'}} /> : null}
           {hoverBox && hover && filled.includes(`${hover.row}-${hover.col}`) ? (
             <VStack data-preview-tool="true" style={{position: 'absolute', left: hoverBox.x + hoverBox.width, top: hoverBox.y, transform: 'translate(-100%, 0)', padding: 'var(--spacing-1)'}}>
               <IconButton label="Modifier le contenu de la colonne" tooltip="Modifier le contenu" icon={<EditIcon />} variant="primary" size="sm" elevation="low" onClick={() => toParent({type: PREVIEW_OPEN, ...hover})} />

@@ -15,7 +15,7 @@ import {usePreferences} from '@payloadcms/ui';
 import {sectionsText as T} from '@/i18n/admin/sections';
 import {useAdminText} from '@/i18n/admin/useAdminText';
 
-import {isPreviewReady, PREVIEW_DATA, PREVIEW_SELECT, type PreviewBox, type PreviewBreakpoint, type PreviewColumn, type PreviewColumnBox, type PreviewDataMessage, type PreviewEvent, previewEvent, previewLayout, previewSize} from './preview';
+import {isPreviewReady, PREVIEW_DATA, type PreviewBox, type PreviewBreakpoint, type PreviewColumnBox, type PreviewDataMessage, type PreviewEvent, previewEvent, previewLayout, previewSize} from './preview';
 
 const DEBOUNCE_MS = 400;
 /** « full width »: the frame is as wide as the panel, as in the browser */
@@ -53,15 +53,13 @@ type Props = {
   url: string;
   breakpoints: PreviewBreakpoint[];
   message: Omit<PreviewDataMessage, 'type'>;
-  /** the column highlighted in the frame */
-  selected?: PreviewColumn | null;
   /** what the editor does in the frame; `toScreen` turns a box of the frame into screen pixels */
   onEvent?: (event: PreviewEvent, toScreen: (box: PreviewBox) => PreviewBox) => void;
   /** drawn over the frame, in the frame's own pixels (drop zones while a block is dragged); null: nothing */
   overlay?: (columns: PreviewColumnBox[]) => React.ReactNode;
 };
 
-export function SectionPreview({url, breakpoints, message, selected = null, onEvent, overlay}: Props) {
+export function SectionPreview({url, breakpoints, message, onEvent, overlay}: Props) {
   const {t} = useAdminText();
   const frame = useRef<HTMLIFrameElement>(null);
   const stage = useRef<HTMLDivElement>(null);
@@ -122,13 +120,6 @@ export function SectionPreview({url, breakpoints, message, selected = null, onEv
     window.addEventListener('message', onMessage);
     return () => window.removeEventListener('message', onMessage);
   }, [origin]);
-
-  // the selected column, told to the frame (again each time it starts listening)
-  const row = selected?.row ?? null;
-  const col = selected?.col ?? null;
-  useEffect(() => {
-    if (ready) frame.current?.contentWindow?.postMessage({type: PREVIEW_SELECT, row, col}, origin);
-  }, [ready, row, col, origin]);
 
   // the latest snapshot, read when the timer fires (declared before the effects that send it)
   const latest = useRef(message);

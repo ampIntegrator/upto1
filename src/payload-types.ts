@@ -447,6 +447,7 @@ export interface Page {
                                    */
                                   tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
                                   id?: string | null;
                                   blockName?: string | null;
                                   blockType: 'cardIcon';
@@ -461,6 +462,7 @@ export interface Page {
                                    */
                                   tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
                                   id?: string | null;
                                   blockName?: string | null;
                                   blockType: 'cardNumber';
@@ -472,6 +474,7 @@ export interface Page {
                                    */
                                   tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
                                   id?: string | null;
                                   blockName?: string | null;
                                   blockType: 'cardTitle';
@@ -519,6 +522,7 @@ export interface Page {
                                    */
                                   tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
                                   cta: {
                                     label: string;
                                     kind?: ('url' | 'internal') | null;
@@ -556,6 +560,7 @@ export interface Page {
                                    */
                                   tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
                                   cta: {
                                     label: string;
                                     kind?: ('url' | 'internal') | null;
@@ -590,6 +595,7 @@ export interface Page {
                                    */
                                   tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
                                   cta: {
                                     label: string;
                                     kind?: ('url' | 'internal') | null;
@@ -998,6 +1004,10 @@ export interface Page {
                                    * 3 at most on 8 or 9 columns, 4 on 12. Two lines = two rows.
                                    */
                                   perView?: ('2' | '3' | '4') | null;
+                                  /**
+                                   * By default, the section’s gap between columns.
+                                   */
+                                  itemGap?: ('row' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
                                   step?: ('page' | 'item') | null;
                                   indicator?: ('segments' | 'dots' | 'numbers' | 'none') | null;
                                   arrows?: boolean | null;
@@ -1036,6 +1046,7 @@ export interface Page {
                                              */
                                             tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                             text?: string | null;
+                                            vAlign?: ('start' | 'center' | 'end') | null;
                                             id?: string | null;
                                             blockName?: string | null;
                                             blockType: 'cardIcon';
@@ -1050,6 +1061,7 @@ export interface Page {
                                              */
                                             tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                             text?: string | null;
+                                            vAlign?: ('start' | 'center' | 'end') | null;
                                             id?: string | null;
                                             blockName?: string | null;
                                             blockType: 'cardNumber';
@@ -1061,6 +1073,7 @@ export interface Page {
                                              */
                                             tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                             text?: string | null;
+                                            vAlign?: ('start' | 'center' | 'end') | null;
                                             id?: string | null;
                                             blockName?: string | null;
                                             blockType: 'cardTitle';
@@ -1108,6 +1121,7 @@ export interface Page {
                                              */
                                             tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                             text?: string | null;
+                                            vAlign?: ('start' | 'center' | 'end') | null;
                                             cta: {
                                               label: string;
                                               kind?: ('url' | 'internal') | null;
@@ -1145,6 +1159,7 @@ export interface Page {
                                              */
                                             tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                             text?: string | null;
+                                            vAlign?: ('start' | 'center' | 'end') | null;
                                             cta: {
                                               label: string;
                                               kind?: ('url' | 'internal') | null;
@@ -1179,6 +1194,7 @@ export interface Page {
                                              */
                                             tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                             text?: string | null;
+                                            vAlign?: ('start' | 'center' | 'end') | null;
                                             cta: {
                                               label: string;
                                               kind?: ('url' | 'internal') | null;
@@ -2159,6 +2175,7 @@ export interface Section {
                          */
                         tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                         text?: string | null;
+                        vAlign?: ('start' | 'center' | 'end') | null;
                         id?: string | null;
                         blockName?: string | null;
                         blockType: 'cardIcon';
@@ -2173,6 +2190,7 @@ export interface Section {
                          */
                         tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                         text?: string | null;
+                        vAlign?: ('start' | 'center' | 'end') | null;
                         id?: string | null;
                         blockName?: string | null;
                         blockType: 'cardNumber';
@@ -2184,6 +2202,7 @@ export interface Section {
                          */
                         tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                         text?: string | null;
+                        vAlign?: ('start' | 'center' | 'end') | null;
                         id?: string | null;
                         blockName?: string | null;
                         blockType: 'cardTitle';
@@ -2231,6 +2250,7 @@ export interface Section {
                          */
                         tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                         text?: string | null;
+                        vAlign?: ('start' | 'center' | 'end') | null;
                         cta: {
                           label: string;
                           kind?: ('url' | 'internal') | null;
@@ -2268,6 +2288,7 @@ export interface Section {
                          */
                         tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                         text?: string | null;
+                        vAlign?: ('start' | 'center' | 'end') | null;
                         cta: {
                           label: string;
                           kind?: ('url' | 'internal') | null;
@@ -2302,6 +2323,7 @@ export interface Section {
                          */
                         tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                         text?: string | null;
+                        vAlign?: ('start' | 'center' | 'end') | null;
                         cta: {
                           label: string;
                           kind?: ('url' | 'internal') | null;
@@ -2710,6 +2732,10 @@ export interface Section {
                          * 3 at most on 8 or 9 columns, 4 on 12. Two lines = two rows.
                          */
                         perView?: ('2' | '3' | '4') | null;
+                        /**
+                         * By default, the section’s gap between columns.
+                         */
+                        itemGap?: ('row' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
                         step?: ('page' | 'item') | null;
                         indicator?: ('segments' | 'dots' | 'numbers' | 'none') | null;
                         arrows?: boolean | null;
@@ -2748,6 +2774,7 @@ export interface Section {
                                    */
                                   tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
                                   id?: string | null;
                                   blockName?: string | null;
                                   blockType: 'cardIcon';
@@ -2762,6 +2789,7 @@ export interface Section {
                                    */
                                   tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
                                   id?: string | null;
                                   blockName?: string | null;
                                   blockType: 'cardNumber';
@@ -2773,6 +2801,7 @@ export interface Section {
                                    */
                                   tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
                                   id?: string | null;
                                   blockName?: string | null;
                                   blockType: 'cardTitle';
@@ -2820,6 +2849,7 @@ export interface Section {
                                    */
                                   tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
                                   cta: {
                                     label: string;
                                     kind?: ('url' | 'internal') | null;
@@ -2857,6 +2887,7 @@ export interface Section {
                                    */
                                   tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
                                   cta: {
                                     label: string;
                                     kind?: ('url' | 'internal') | null;
@@ -2891,6 +2922,7 @@ export interface Section {
                                    */
                                   tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
                                   cta: {
                                     label: string;
                                     kind?: ('url' | 'internal') | null;
@@ -3456,6 +3488,7 @@ export interface PagesSelect<T extends boolean = true> {
                                       title?: T;
                                       tag?: T;
                                       text?: T;
+                                      vAlign?: T;
                                       id?: T;
                                       blockName?: T;
                                     };
@@ -3468,6 +3501,7 @@ export interface PagesSelect<T extends boolean = true> {
                                       title?: T;
                                       tag?: T;
                                       text?: T;
+                                      vAlign?: T;
                                       id?: T;
                                       blockName?: T;
                                     };
@@ -3477,6 +3511,7 @@ export interface PagesSelect<T extends boolean = true> {
                                       title?: T;
                                       tag?: T;
                                       text?: T;
+                                      vAlign?: T;
                                       id?: T;
                                       blockName?: T;
                                     };
@@ -3506,6 +3541,7 @@ export interface PagesSelect<T extends boolean = true> {
                                       title?: T;
                                       tag?: T;
                                       text?: T;
+                                      vAlign?: T;
                                       cta?:
                                         | T
                                         | {
@@ -3527,6 +3563,7 @@ export interface PagesSelect<T extends boolean = true> {
                                       title?: T;
                                       tag?: T;
                                       text?: T;
+                                      vAlign?: T;
                                       cta?:
                                         | T
                                         | {
@@ -3545,6 +3582,7 @@ export interface PagesSelect<T extends boolean = true> {
                                       title?: T;
                                       tag?: T;
                                       text?: T;
+                                      vAlign?: T;
                                       cta?:
                                         | T
                                         | {
@@ -3832,6 +3870,7 @@ export interface PagesSelect<T extends boolean = true> {
                                   | {
                                       layout?: T;
                                       perView?: T;
+                                      itemGap?: T;
                                       step?: T;
                                       indicator?: T;
                                       arrows?: T;
@@ -3866,6 +3905,7 @@ export interface PagesSelect<T extends boolean = true> {
                                                   title?: T;
                                                   tag?: T;
                                                   text?: T;
+                                                  vAlign?: T;
                                                   id?: T;
                                                   blockName?: T;
                                                 };
@@ -3878,6 +3918,7 @@ export interface PagesSelect<T extends boolean = true> {
                                                   title?: T;
                                                   tag?: T;
                                                   text?: T;
+                                                  vAlign?: T;
                                                   id?: T;
                                                   blockName?: T;
                                                 };
@@ -3887,6 +3928,7 @@ export interface PagesSelect<T extends boolean = true> {
                                                   title?: T;
                                                   tag?: T;
                                                   text?: T;
+                                                  vAlign?: T;
                                                   id?: T;
                                                   blockName?: T;
                                                 };
@@ -3916,6 +3958,7 @@ export interface PagesSelect<T extends boolean = true> {
                                                   title?: T;
                                                   tag?: T;
                                                   text?: T;
+                                                  vAlign?: T;
                                                   cta?:
                                                     | T
                                                     | {
@@ -3937,6 +3980,7 @@ export interface PagesSelect<T extends boolean = true> {
                                                   title?: T;
                                                   tag?: T;
                                                   text?: T;
+                                                  vAlign?: T;
                                                   cta?:
                                                     | T
                                                     | {
@@ -3955,6 +3999,7 @@ export interface PagesSelect<T extends boolean = true> {
                                                   title?: T;
                                                   tag?: T;
                                                   text?: T;
+                                                  vAlign?: T;
                                                   cta?:
                                                     | T
                                                     | {
@@ -4237,6 +4282,7 @@ export interface SectionsSelect<T extends boolean = true> {
                           title?: T;
                           tag?: T;
                           text?: T;
+                          vAlign?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -4249,6 +4295,7 @@ export interface SectionsSelect<T extends boolean = true> {
                           title?: T;
                           tag?: T;
                           text?: T;
+                          vAlign?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -4258,6 +4305,7 @@ export interface SectionsSelect<T extends boolean = true> {
                           title?: T;
                           tag?: T;
                           text?: T;
+                          vAlign?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -4287,6 +4335,7 @@ export interface SectionsSelect<T extends boolean = true> {
                           title?: T;
                           tag?: T;
                           text?: T;
+                          vAlign?: T;
                           cta?:
                             | T
                             | {
@@ -4308,6 +4357,7 @@ export interface SectionsSelect<T extends boolean = true> {
                           title?: T;
                           tag?: T;
                           text?: T;
+                          vAlign?: T;
                           cta?:
                             | T
                             | {
@@ -4326,6 +4376,7 @@ export interface SectionsSelect<T extends boolean = true> {
                           title?: T;
                           tag?: T;
                           text?: T;
+                          vAlign?: T;
                           cta?:
                             | T
                             | {
@@ -4613,6 +4664,7 @@ export interface SectionsSelect<T extends boolean = true> {
                       | {
                           layout?: T;
                           perView?: T;
+                          itemGap?: T;
                           step?: T;
                           indicator?: T;
                           arrows?: T;
@@ -4647,6 +4699,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                       title?: T;
                                       tag?: T;
                                       text?: T;
+                                      vAlign?: T;
                                       id?: T;
                                       blockName?: T;
                                     };
@@ -4659,6 +4712,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                       title?: T;
                                       tag?: T;
                                       text?: T;
+                                      vAlign?: T;
                                       id?: T;
                                       blockName?: T;
                                     };
@@ -4668,6 +4722,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                       title?: T;
                                       tag?: T;
                                       text?: T;
+                                      vAlign?: T;
                                       id?: T;
                                       blockName?: T;
                                     };
@@ -4697,6 +4752,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                       title?: T;
                                       tag?: T;
                                       text?: T;
+                                      vAlign?: T;
                                       cta?:
                                         | T
                                         | {
@@ -4718,6 +4774,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                       title?: T;
                                       tag?: T;
                                       text?: T;
+                                      vAlign?: T;
                                       cta?:
                                         | T
                                         | {
@@ -4736,6 +4793,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                       title?: T;
                                       tag?: T;
                                       text?: T;
+                                      vAlign?: T;
                                       cta?:
                                         | T
                                         | {

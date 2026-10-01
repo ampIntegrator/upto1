@@ -62,7 +62,7 @@ function Content({content, id}: {content: ContentData; id: string}) {
       return <ButtonGroup {...content.buttonGroup} />;
     case 'collection':
       return (
-        <Collection layout={content.collection.layout} perView={content.collection.perView} step={content.collection.step} arrows={content.collection.arrows} indicator={content.collection.indicator} more={content.collection.more}>
+        <Collection gap={content.collection.gap} layout={content.collection.layout} perView={content.collection.perView} step={content.collection.step} arrows={content.collection.arrows} indicator={content.collection.indicator} more={content.collection.more}>
           {content.collection.items.map((item, k) => (
             <Content key={k} content={item} id={`${id}-${k}`} />
           ))}

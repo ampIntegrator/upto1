@@ -99,6 +99,12 @@ still publishes: no drafts).
      (« 6 / 12 »; « Colonnes » is for a section without rows) and has no pencil.
    **Next (Nicolas):** the width warnings; the mobile order is still to be placed; marking the
    other components.
+   Also on 1 Oct. 2026, from the trial: a collection's gap between items follows the section's gap
+   between columns (`--section-gap-x`, inherited), unless its own « Écart entre les éléments » is
+   set (`itemGap`, X only); icon, number and title-only cards get « Alignement vertical dans la
+   rangée » (`vAlign`: top, centre, bottom), for a card taller than its content beside an image
+   card or a tall block; the preview draws no outline on the selected column (only a light one on
+   hover, and the pencil). Migration `20261001_143006_card_valign_collection_gap`.
 4. To come: the width warnings, the mobile order, marking the other components for editing in
    place, rich text in place if it is worth it.
 
