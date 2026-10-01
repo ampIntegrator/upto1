@@ -94,8 +94,8 @@ still publishes: no drafts).
      zone named after it, one click away from its image field.
    **Next (Nicolas):** the width warnings; the mobile order is still to be placed; marking the
    other components.
-4. Remove what is left of the old builder.
-5. Editing plain texts in place in the preview (rich text stays in the top panel at first).
+4. To come: the width warnings, the mobile order, marking the other components for editing in
+   place, rich text in place if it is worth it.
 
 ## Files
 
