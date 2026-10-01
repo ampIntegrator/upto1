@@ -32,7 +32,7 @@ export type SectionFieldsOptions = {
   /** Adds the « save to shared sections » checkbox (page block only). */
   shareable?: boolean;
   /**
-   * Shows spacing, gaps, sharing and the rows only when it holds (for instance once a host
+   * Shows the rows only when it holds; every setting is visible from the start (Nicolas, 1 Oct. 2026) (for instance once a host
    * setting is chosen). Note for the database: Payload makes the required fields of the rows
    * nullable when a condition exists above them, so adding or removing it changes the schema.
    */
@@ -184,20 +184,18 @@ export function sectionFields({blocks, settings = [], shareable = false, conditi
     // the host's settings, with their own group headings (background, edge line…)
     ...settings,
     // inner spacing, above and below the section
-    group({name: 'groupSpacing', label: T.settings.groupSpacing, icon: 'obj-size-increase'}),
+    group({name: 'groupSpacing', label: T.settings.groupSpacing, icon: 'obj-size-increase', always: true}),
     {
       type: 'row',
-      admin: {condition},
       fields: [
         {name: 'spacingTop', type: 'select', label: T.settings.spacingTop, defaultValue: DEFAULT_SPACING, options: SPACING_OPTIONS, admin: {width: '50%'}},
         {name: 'spacingBottom', type: 'select', label: T.settings.spacingBottom, defaultValue: DEFAULT_SPACING, options: SPACING_OPTIONS, admin: {width: '50%'}},
       ],
     },
     // grid gaps: inherited from the site setting, unless overridden
-    group({name: 'groupGaps', label: T.settings.groupGaps, icon: 'view-columns'}),
+    group({name: 'groupGaps', label: T.settings.groupGaps, icon: 'view-columns', always: true}),
     {
       type: 'row',
-      admin: {condition},
       fields: [
         {name: 'gapX', type: 'select', label: T.settings.gapX, defaultValue: SITE_GAP, options: SECTION_GAP_OPTIONS, admin: {width: '33%'}},
         {name: 'gapY', type: 'select', label: T.settings.gapY, defaultValue: SITE_GAP, options: SECTION_GAP_OPTIONS, admin: {width: '33%'}},

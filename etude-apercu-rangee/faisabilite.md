@@ -68,8 +68,8 @@ section).
 ## Update, 1 October 2026: the section editor (Nicolas's design, `consignes.md`)
 
 Each section in the admin shows its name and a « Gérer » button. It opens a full-screen dialog:
-top 40 % = settings in three horizontal accordions (side by side, one open, the others folded to
-a strip); bottom 60 % = live preview of this section alone.
+top 40 % (35 % since the first trial) = settings in three horizontal accordions (side by side, one open, the others folded to
+a strip); bottom 60 % (65 %) = live preview of this section alone.
 
 - Accordion 1, background: colour, texture, media, padding, gaps → instant in the preview.
 - Accordion 2, layout: rows, column splits → « add here » zones over the preview.

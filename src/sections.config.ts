@@ -38,9 +38,6 @@ type Sibling = Record<string, unknown>;
 const when = (name: string, ...values: string[]) => (_d: unknown, s: Sibling) => values.includes(String(s?.[name] ?? ''));
 /** Settings are asked in order: the rest of the section appears once a background is chosen. */
 const modeChosen = when('mode', 'light', 'dark', 'media');
-/** A radio shown as colour swatches (name on hover): option value → swatch kind. */
-const swatches = (map: Record<string, string>) => ({Field: {path: '@/fields/SwatchRadio#SwatchRadio', clientProps: {swatches: map}}});
-
 /** the site's heading for a group of settings: the rule, the title and an optional Nucleo icon (src/fields/groupHeading.ts) */
 const group = groupHeading;
 
@@ -98,23 +95,6 @@ export const orbitaSectionSettings: Field[] = [
       },
     ],
   },
-  // the edge line at the top of a light section: its own group
-  group({name: 'groupEdge', label: T.settings.groupEdge, icon: 'table-row-merge-top', condition: when('mode', 'light')}),
-  // the edge line at the top of a light section (Nicolas, 21 Sept. 2026: two same-shade backgrounds
-  // whose only difference is the texture meet badly without it)
-  {
-    name: 'edgeTop',
-    type: 'radio',
-    // named by its group heading (« Liseré »)
-    label: false,
-    defaultValue: 'auto',
-    options: [
-      {label: T.settings.edgeTopAuto, value: 'auto'},
-      {label: T.settings.edgeTopAlways, value: 'always'},
-      {label: T.settings.edgeTopNever, value: 'never'},
-    ],
-    admin: {layout: 'horizontal', condition: when('mode', 'light'), description: T.settings.edgeTopDescription},
-  },
   // 2b. night: the colour, no texture
   {
     name: 'darkStyle',
@@ -125,7 +105,8 @@ export const orbitaSectionSettings: Field[] = [
       {label: T.settings.darkNight, value: 'night'},
       {label: T.settings.darkNightHalo, value: 'night-halo'},
     ],
-    admin: {condition: when('mode', 'dark'), components: swatches({night: 'night', 'night-halo': 'night-halo'})},
+    // by name only (Nicolas, 1 Oct. 2026): the section itself shows below, in the « Gérer » dialog
+    admin: {layout: 'horizontal', condition: when('mode', 'dark')},
   },
   // 2c. media: the type, then the files and the overlay
   {
@@ -149,6 +130,24 @@ export const orbitaSectionSettings: Field[] = [
     ],
   },
   {name: 'overlay', type: 'number', label: T.settings.overlay, min: 0, max: 1, defaultValue: 0.3, admin: {step: 0.05, condition: (_d, s: Sibling) => s?.mode === 'media' && ['image', 'video'].includes(String(s?.mediaType ?? ''))}},
+  // after every background setting: the dialog lays each group out as a column, cut at its heading
+  // the edge line at the top of a light section: its own group
+  group({name: 'groupEdge', label: T.settings.groupEdge, icon: 'table-row-merge-top', condition: when('mode', 'light')}),
+  // the edge line at the top of a light section (Nicolas, 21 Sept. 2026: two same-shade backgrounds
+  // whose only difference is the texture meet badly without it)
+  {
+    name: 'edgeTop',
+    type: 'radio',
+    // named by its group heading (« Liseré »)
+    label: false,
+    defaultValue: 'auto',
+    options: [
+      {label: T.settings.edgeTopAuto, value: 'auto'},
+      {label: T.settings.edgeTopAlways, value: 'always'},
+      {label: T.settings.edgeTopNever, value: 'never'},
+    ],
+    admin: {layout: 'horizontal', condition: when('mode', 'light'), description: T.settings.edgeTopDescription},
+  },
 ];
 
 /** The site's section builder: pages get `sections.field` and `sections.beforeChange`, the shared collection `sections.sharedFields`. */

@@ -10,7 +10,7 @@ In a page, a section shows its name, a « Gérer » button and, below it, its an
 the « save as shared » checkbox: these two stay in the document's form, not in the dialog. The
 button opens a full-screen dialog:
 
-- top, 40 %: the settings, in three horizontal accordions (one open, the others folded to a
+- top, 35 %: the settings, in three horizontal accordions (one open, the others folded to a
   vertical strip): « Fond et espaces », « Découpage », « Blocs ». In the first one the groups of
   settings sit **side by side, one column per group** (background, edge line, inner spacing, grid
   gaps), so the top part does not scroll down; it scrolls sideways if the columns do not all fit;
@@ -18,7 +18,7 @@ button opens a full-screen dialog:
   page's silo; nothing on a shared section, which has none), the close button;
 - the accordions slide open sideways (300 ms; a panel's content keeps its full width, the panel
   uncovers it; folded panels are `inert`; no animation with « reduced motion »);
-- bottom, 60 %: the live preview of this section alone, rendered by the site, refreshed about
+- bottom, 65 %: the live preview of this section alone, rendered by the site, refreshed about
   400 ms after each change, **without saving**; a width switch (full width of the panel, as in the browser, then 1440, 768,
   390; remembered per user, preference `section-preview-width`), the frame being scaled down when
   it is wider than the panel, and centred in the panel both ways. The frame is exactly as tall as the section (it
@@ -30,8 +30,16 @@ button opens a full-screen dialog:
 The edge line (« Liseré ») shows in the preview as on the page: the dialog also sends the section
 just above (`above`, from the form, unsaved changes included), which goes through `toSections` but
 is not displayed. So « always » shows the line, « automatic » shows it when the section above is
-light, of the same shade, with another texture, and the first section of a page never has one
-(rule of `edgeTop()` in `src/lib/sections.ts`).
+light, of the same shade, with another texture (rule of `edgeTop()` in `src/lib/sections.ts`).
+One difference with the page, on purpose (Nicolas, 1 Oct.): on the **first** section, « always »
+shows the line in the preview, although the page draws none there (the page top has its own edge at
+that junction).
+
+Every setting of the first panel shows from the start, before a background is chosen; only the rows
+wait for it (`condition`). Night shades are offered by name (the `SwatchRadio` component is gone).
+In `orbitaSectionSettings`, a group's fields must follow its heading: the dialog cuts the columns at
+the headings (the edge line group comes after every background field for that reason).
+The dashed zones of an empty section have a light translucent background (`--color-background-muted`).
 
 The background composer (`src/fields/BackgroundComposer.tsx`) lost its preview box on the same day:
 the section itself is visible below.

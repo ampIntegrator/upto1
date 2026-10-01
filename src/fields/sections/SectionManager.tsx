@@ -4,8 +4,8 @@
  * SectionManager — the section's fields, edited in a full-screen dialog (« Gérer », Nicolas,
  * 1 Oct. 2026) instead of in the page's form:
  *   - in the page, the section shows only a « Gérer » button (and how many fields need fixing);
- *   - the dialog: settings on top (40 %), in three horizontal accordions (one open, the others
- *     folded to a vertical strip), the live preview below (60 %).
+ *   - the dialog: settings on top (35 %), in three horizontal accordions (one open, the others
+ *     folded to a vertical strip), the live preview below (65 %).
  *
  * It is the custom component of an unnamed collapsible wrapping the section's two framed blocks
  * (settings, rows), so the data does not change. Its children are rendered by Payload

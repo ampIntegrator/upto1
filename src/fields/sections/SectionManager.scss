@@ -1,4 +1,4 @@
-// SectionManager (« Gérer » dialog): settings on top (40 %), live preview below (60 %).
+// SectionManager (« Gérer » dialog): settings on top (35 %), live preview below (65 %).
 // Admin side: Payload's theme variables only.
 
 .section-manager__summary {
@@ -31,7 +31,7 @@
   background: var(--theme-bg);
 }
 
-// exactly the viewport: 40 % settings, 60 % preview, each scrolling on its own
+// exactly the viewport: 35 % settings, 65 % preview, each scrolling on its own
 .section-manager__body {
   display: flex;
   flex-direction: column;
@@ -87,7 +87,7 @@ $slide: 300ms;
 
 .section-manager__panels {
   display: flex;
-  flex: 0 0 40%;
+  flex: 0 0 35%;
   overflow: hidden;
   min-height: 0;
   border-bottom: 1px solid var(--theme-elevation-150);
@@ -206,7 +206,12 @@ $slide: 300ms;
 
   // fields of a row: side by side while they fit, wrapping in a narrow column
   .field-type.row .row__fields > * {
-    flex: 1 1 180px;
+    flex: 1 1 140px;
+  }
+
+  // selects with a default value: no « clear » cross, it would crowd a narrow column
+  .clear-indicator {
+    display: none;
   }
 }
 
@@ -221,7 +226,7 @@ $slide: 300ms;
 .section-preview {
   display: flex;
   flex-direction: column;
-  flex: 1 1 60%;
+  flex: 1 1 65%;
   min-height: 0;
 }
 

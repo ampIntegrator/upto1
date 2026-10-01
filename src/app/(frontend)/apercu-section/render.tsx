@@ -21,9 +21,9 @@ import type {SiloName} from '@/theme/index';
 import {OrbitaThemeProvider} from '@/theme/OrbitaThemeProvider';
 import type {StoredPreview} from './store';
 
-/** where the columns will be: a dashed zone, in a section that has no content yet */
+/** where the columns will be: a dashed zone with a light translucent background, in a section that has no content yet */
 const slot = (
-  <VStack align="center" justify="center" padding={4} minHeight="calc(var(--spacing-12) * 3)" style={{border: 'var(--border-width) dashed var(--color-border-emphasized)', borderRadius: 'var(--radius-element)'}}>
+  <VStack align="center" justify="center" padding={4} minHeight="calc(var(--spacing-12) * 3)" style={{border: 'var(--border-width) dashed var(--color-border-emphasized)', borderRadius: 'var(--radius-element)', background: 'var(--color-background-muted)'}}>
     <Text color="secondary" justify="center">
       Colonnes
     </Text>
@@ -45,6 +45,9 @@ async function load(input: StoredPreview): Promise<Loaded> {
     const above = input.above ? [{blockType: 'section', ...input.above} as Block] : [];
     const [page, site] = await Promise.all([payload.findByID({collection: 'pages', id, data: {sections: [...above, section]}, depth: 2, locale}), getSite(locale)]);
     const sections = (await toSections(page.sections, site.settings, sectionsContext(locale, site))).slice(-1);
+    // « always » on the first section of a page: the page draws no line there (the page top has its own
+    // edge at that junction); the preview shows it, so the setting can be seen whatever the section's place
+    if (!input.above && sections[0] && section.blockType === 'section' && section.mode === 'light' && (section as {edgeTop?: string | null}).edgeTop === 'always') sections[0] = {...sections[0], edgeTop: true};
     return sections.length ? {sections, silo: pageSilo({silo: input.document?.silo} as Page, site.settings)} : 'empty';
   } catch (e) {
     payload.logger.error({err: e, msg: 'Section preview failed'});

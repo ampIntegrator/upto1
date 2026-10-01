@@ -78,8 +78,8 @@ one or two columns of fields, multi-step, server action, connection points for t
 decisions in `docs/handoff-2026-09-21-forms.md`.
 
 Section manager (trial started on 1 Oct. 2026, branch `previewer`): `docs/section-manager.md`. A section
-is edited in a full-screen « Gérer » dialog: settings on top (40 %, three horizontal accordions), live
-preview of the section below (60 %), refreshed without saving. Stage 1 of 5 done; plan and decisions in
+is edited in a full-screen « Gérer » dialog: settings on top (35 %, three horizontal accordions), live
+preview of the section below (65 %), refreshed without saving. Stage 1 of 5 done; plan and decisions in
 `etude-apercu-rangee/faisabilite.md` (it replaces the 17 Sept. brief in the same folder). The page-level
 Live Preview (« Aperçu en direct », « Vue » menu) is unchanged: `docs/live-preview.md`.
 

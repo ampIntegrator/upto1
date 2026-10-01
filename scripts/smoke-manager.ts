@@ -57,7 +57,8 @@ async function main() {
     if (await toggle.count()) await toggle.click();
     await p.getByRole('button', {name: /^(Gérer|Manage)$/}).first().waitFor();
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-form.png`});
-    check(await p.locator('input[name="sections.0.anchor"]').isVisible(), 'the anchor is in the page form, at the section level');
+    // Payload renders a field once it is on screen: wait for it
+    check(await p.locator('input[name="sections.0.anchor"]').waitFor({timeout: 5000}).then(() => true, () => false), 'the anchor is in the page form, at the section level');
     await p.getByRole('button', {name: /^(Gérer|Manage)$/}).first().click();
     const frame = p.frameLocator('.section-preview__frame');
     await frame.getByText(TITLE).waitFor({timeout: 20000});
@@ -70,6 +71,7 @@ async function main() {
       const el = document.querySelector('.section-manager__panel--open .section-manager__content') as HTMLElement;
       return {scroll: el.scrollHeight, height: el.clientHeight, groups: [...document.querySelectorAll('.section-manager__group')].filter((g) => (g as HTMLElement).offsetWidth > 0).length, anchor: el.querySelectorAll('input[name$=".anchor"]').length};
     });
+    check(Math.abs(heights.panels / heights.total - 0.35) < 0.01, 'the settings take 35 % of the screen');
     check(top.scroll <= top.height, `the settings fit without vertical scroll (${top.scroll} / ${top.height}), in ${top.groups} columns`);
     check(top.anchor === 0, 'no anchor field in the dialog');
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-settings.png`});
@@ -79,6 +81,11 @@ async function main() {
     await p.getByText('Highlight clair', {exact: true}).click();
     await p.waitForTimeout(3000);
     check((await background()) !== before, 'a new shade shows in the preview without saving');
+
+    // first section of the page: « always » shows the edge line in the preview all the same
+    await p.getByText(/^(Toujours|Always)$/).first().click();
+    await frame.locator('section[data-edge-top]').waitFor({timeout: 10000});
+    check(true, 'edge line « always » shows on a first section too');
 
     await p.getByRole('radio', {name: /Mobile/}).click();
     await p.waitForTimeout(500);
@@ -168,6 +175,12 @@ async function main() {
 
     await p.getByText(/^(Nuit|Night)$/).first().click();
     await p.waitForTimeout(2500);
+    const night = await p.evaluate(() => {
+      const el = document.querySelector('.section-manager__panel--open .section-manager__content') as HTMLElement;
+      return {text: el.innerText, swatches: el.querySelectorAll('.swatch-radio').length, scroll: el.scrollHeight, height: el.clientHeight, groups: [...el.querySelectorAll('.section-manager__group')].filter((g) => (g as HTMLElement).offsetWidth > 0).length};
+    });
+    check(night.swatches === 0 && /Nuit halo|Night halo|halo/i.test(night.text), 'night shades are offered by name, without swatches');
+    check(night.groups === 3 && night.scroll <= night.height, `night: background, spacing and gaps, no vertical scroll (${night.scroll} / ${night.height})`);
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-blank-night.png`});
     await p.getByRole('button', {name: /^(Fermer|Close)$/}).first().click();
     check(errors.length === 0, `no page error${errors.length ? `: ${errors[0]}` : ''}`);

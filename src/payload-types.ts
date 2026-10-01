@@ -252,16 +252,16 @@ export interface Page {
             mode: 'light' | 'dark' | 'media';
             tint?: ('body' | 'light' | 'highlight') | null;
             texture?: ('none' | 'grid' | 'dots' | 'losange') | null;
-            /**
-             * Marks the junction with the section above. Automatic: only between two light backgrounds of the same shade whose texture changes.
-             */
-            edgeTop?: ('auto' | 'always' | 'never') | null;
             darkStyle?: ('night' | 'night-halo') | null;
             mediaType?: ('image' | 'video') | null;
             image?: (number | null) | Media;
             video?: (number | null) | Media;
             poster?: (number | null) | Media;
             overlay?: number | null;
+            /**
+             * Marks the junction with the section above. Automatic: only between two light backgrounds of the same shade whose texture changes.
+             */
+            edgeTop?: ('auto' | 'always' | 'never') | null;
             spacingTop?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
             spacingBottom?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
             gapX?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
@@ -1964,16 +1964,16 @@ export interface Section {
   mode: 'light' | 'dark' | 'media';
   tint?: ('body' | 'light' | 'highlight') | null;
   texture?: ('none' | 'grid' | 'dots' | 'losange') | null;
-  /**
-   * Marks the junction with the section above. Automatic: only between two light backgrounds of the same shade whose texture changes.
-   */
-  edgeTop?: ('auto' | 'always' | 'never') | null;
   darkStyle?: ('night' | 'night-halo') | null;
   mediaType?: ('image' | 'video') | null;
   image?: (number | null) | Media;
   video?: (number | null) | Media;
   poster?: (number | null) | Media;
   overlay?: number | null;
+  /**
+   * Marks the junction with the section above. Automatic: only between two light backgrounds of the same shade whose texture changes.
+   */
+  edgeTop?: ('auto' | 'always' | 'never') | null;
   spacingTop?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
   spacingBottom?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
   gapX?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
@@ -3339,13 +3339,13 @@ export interface PagesSelect<T extends boolean = true> {
               mode?: T;
               tint?: T;
               texture?: T;
-              edgeTop?: T;
               darkStyle?: T;
               mediaType?: T;
               image?: T;
               video?: T;
               poster?: T;
               overlay?: T;
+              edgeTop?: T;
               spacingTop?: T;
               spacingBottom?: T;
               gapX?: T;
@@ -4119,13 +4119,13 @@ export interface SectionsSelect<T extends boolean = true> {
   mode?: T;
   tint?: T;
   texture?: T;
-  edgeTop?: T;
   darkStyle?: T;
   mediaType?: T;
   image?: T;
   video?: T;
   poster?: T;
   overlay?: T;
+  edgeTop?: T;
   spacingTop?: T;
   spacingBottom?: T;
   gapX?: T;
