@@ -18,7 +18,9 @@ button opens a full-screen dialog:
   differently, from 20 % to 80 % for the settings; a double click restores 35 %; remembered per
   user (preference `section-manager-split`);
 - header: the title, in the middle the document's fields the host listed (`headerFields`: the
-  page's silo; nothing on a shared section, which has none), the close button;
+  page's silo; nothing on a shared section, which has none), then, on the right, « Enregistrer et
+  fermer » (the document's own save; the dialog stays open if a field is refused) and « Fermer »
+  (nothing saved), each with an icon;
 - the accordions slide open sideways (300 ms; a panel's content keeps its full width, the panel
   uncovers it; folded panels are `inert`; no animation with « reduced motion »);
 - bottom, 65 %: the live preview of this section alone, rendered by the site, refreshed about

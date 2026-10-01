@@ -56,7 +56,24 @@
 }
 
 .section-manager__close {
+  display: flex;
   justify-self: end;
+  gap: 8px;
+
+  .btn {
+    margin: 0;
+  }
+
+  // the icon before the label
+  .btn__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.section-manager__glyph {
+  flex: 0 0 auto;
 }
 
 // a document field in the header: on one line (label, control, value)

@@ -124,6 +124,8 @@ async function main() {
     await squares.nth(0).locator('.rows-builder__square-name').click();
     const nameInput = squares.nth(0).locator('.rows-builder__square-input');
     await nameInput.fill('Un nom vraiment beaucoup trop long');
+    const typing = await squares.nth(0).evaluate((el) => ({width: (el as HTMLElement).offsetWidth, height: (el as HTMLElement).offsetHeight, input: (el.querySelector('.rows-builder__square-input') as HTMLElement).offsetHeight}));
+    check(typing.width === 260 && typing.height === 110 && typing.input === 28, `the square keeps its size while its name is typed (${typing.width} × ${typing.height}, input ${typing.input})`);
     check((await nameInput.inputValue()).length === 22, 'the name stops at 22 characters');
     await nameInput.fill('Bandeau du haut');
     await nameInput.press('Enter');
@@ -182,7 +184,13 @@ async function main() {
 
     await p.getByRole('button', {name: /^(Fermer|Close)$/}).first().click();
     await p.waitForTimeout(500);
-    check(!(await p.locator('.section-manager__body').isVisible()), 'the dialog closes');
+    check(!(await p.locator('.section-manager__body').isVisible()), '« close » closes the dialog, nothing saved');
+    // « save and close »: the page is saved, then the dialog closes
+    await p.getByRole('button', {name: /^(Gérer|Manage)$/}).first().click();
+    await p.getByRole('button', {name: /^(Enregistrer et fermer|Save and close)$/}).click();
+    await p.locator('.section-manager__body').waitFor({state: 'hidden', timeout: 15000});
+    const saved = JSON.stringify((await payload.findByID({collection: 'pages', id: pageId, depth: 0})).sections);
+    check(saved.includes(EDITED) && saved.includes('Bandeau du haut'), '« save and close » saves the page (title and row name) and closes the dialog');
     // a section without content: its background, its paddings and a dashed zone for the columns, nothing else
     await p.locator('.blocks-field__rows .collapsible__toggle').nth(1).click();
     await p.getByRole('button', {name: /^(Gérer|Manage)$/}).nth(1).click();

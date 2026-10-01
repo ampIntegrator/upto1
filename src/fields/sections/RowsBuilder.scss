@@ -15,6 +15,9 @@
   flex-direction: column;
   flex: 0 0 260px;
   box-sizing: border-box;
+  /* fixed size: nothing inside (the name being typed, its focus) may stretch the square */
+  width: 260px;
+  min-width: 0;
   height: 110px;
   padding: 8px;
   border: 2px solid var(--theme-elevation-200);
@@ -44,6 +47,7 @@
 .rows-builder__square-head {
   display: flex;
   flex: 0 0 28px;
+  min-width: 0;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
@@ -52,6 +56,7 @@
 /* the row's number, or its name: a click to type one */
 .rows-builder__square-name {
   flex: 0 1 auto;
+  box-sizing: border-box;
   min-width: 28px;
   height: 28px;
   padding: 0 6px;
@@ -79,9 +84,14 @@ button.rows-builder__square-name {
   }
 }
 .rows-builder__square-input {
-  flex: 1 1 auto;
+  flex: 1 1 0;
+  box-sizing: border-box;
+  width: 0;
   min-width: 0;
   height: 28px;
+  /* the focus is the border itself: no ring, no shadow, same box as the name it replaces */
+  outline: none !important;
+  box-shadow: none !important;
   padding: 0 6px;
   margin-left: -6px;
   border: 1px solid var(--theme-elevation-1000);

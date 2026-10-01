@@ -4,7 +4,8 @@
  * SectionManager — the section's fields, edited in a full-screen dialog (« Gérer », Nicolas,
  * 1 Oct. 2026) instead of in the page's form:
  *   - in the page, the section shows only a « Gérer » button (and how many fields need fixing);
- *   - the dialog: settings on top (35 %), in three horizontal accordions (one open, the others
+ *   - the dialog: a header (title, the document's fields the host listed, « save and close » and
+ *     « close »), settings on top (35 %), in three horizontal accordions (one open, the others
  *     folded to a vertical strip), the live preview below (65 %); a handle between the two
  *     shares the height differently (remembered per user).
  *
@@ -13,7 +14,7 @@
  * (RenderFields) with the paths Payload's own collapsible would give them; their values live in
  * the form state, so closing the dialog loses nothing and the page is saved as usual.
  */
-import {Button, Modal, RenderFields, useConfig, useDocumentInfo, useForm, useFormFields, useLocale, useModal, usePreferences} from '@payloadcms/ui';
+import {Button, Modal, RenderFields, useConfig, useDocumentInfo, useForm, useFormFields, useFormModified, useLocale, useModal, usePreferences} from '@payloadcms/ui';
 import type {ClientField, CollapsibleFieldClient, SanitizedFieldPermissions, SanitizedFieldsPermissions} from 'payload';
 import React, {useEffect, useRef, useState} from 'react';
 
@@ -111,9 +112,39 @@ export function SectionManager({field, path, indexPath, parentPath, parentSchema
   );
 }
 
+/** The header buttons' icons (stroke, text colour): a floppy disk, a cross. */
+function BarGlyph({kind}: {kind: 'save' | 'close'}) {
+  return (
+    <svg className="section-manager__glyph" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {kind === 'save' ? (
+        <>
+          <path d="M5 3h11l5 5v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
+          <path d="M7 3v6h8V3M7 21v-7h10v7" />
+        </>
+      ) : (
+        <path d="M6 6l12 12M18 6L6 18" />
+      )}
+    </svg>
+  );
+}
+
 function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups = [], headerFields = [], onClose}: Omit<Props, 'path'> & {onClose: () => void}) {
   const {t} = useAdminText();
   const [panel, setPanel] = useState<PanelKey>('settings');
+  // « save and close »: the document's own save; the dialog stays open when a field is refused
+  const {submit, getFields} = useForm();
+  const modified = useFormModified();
+  const [saving, setSaving] = useState(false);
+  const saveAndClose = async () => {
+    if (!modified) return onClose();
+    setSaving(true);
+    try {
+      await submit();
+      if (!Object.values(getFields()).some((f) => f?.valid === false)) onClose();
+    } finally {
+      setSaving(false);
+    }
+  };
   // the handle between the settings and the preview: drag it (or arrow keys) to share the height
   const body = useRef<HTMLDivElement>(null);
   const panelsRef = useRef<HTMLDivElement>(null);
@@ -199,7 +230,14 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
         <h2 className="section-manager__title">{t(T.manager.title)}</h2>
         <DocumentFields names={headerFields} />
         <div className="section-manager__close">
-          <Button buttonStyle="primary" margin={false} onClick={onClose}>
+          {!readOnly ? (
+            <Button buttonStyle="primary" margin={false} disabled={saving} onClick={saveAndClose}>
+              <BarGlyph kind="save" />
+              {t(T.manager.saveAndClose)}
+            </Button>
+          ) : null}
+          <Button buttonStyle="secondary" margin={false} onClick={onClose}>
+            <BarGlyph kind="close" />
             {t(T.manager.close)}
           </Button>
         </div>
