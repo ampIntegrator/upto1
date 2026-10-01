@@ -10,8 +10,8 @@
  * and where each column is drawn (PREVIEW_LAYOUT).
  *
  * Editing, in the columns (`data-preview-column`, set by PageSections):
- *   - hover: the column is outlined and a pencil shows in its corner; the pencil, or a double
- *     click, asks the admin for the column's content panel (PREVIEW_OPEN);
+ *   - hover: the column is outlined and, once it holds a block, a pencil shows in its corner; the
+ *     pencil, or a double click, asks the admin for the column's content panel (PREVIEW_OPEN);
  *   - click: selects the column (PREVIEW_SELECT). On a part a component marked with `data-field`:
  *     a text is typed in place (PREVIEW_EDIT on each keystroke; Enter or leaving keeps it, Escape
  *     gives up), an image or an icon asks the admin to show its field beside it (PREVIEW_PICK).
@@ -39,6 +39,7 @@ import {
   type PreviewDataMessage,
   previewSelection,
 } from '@/fields/sections/preview';
+import {EMPTY_SLUG} from '@/fields/sections/emptyBlock';
 import {EditIcon} from '@/theme/icons/nucleo';
 import {sendSectionPreview} from './actions';
 
@@ -64,6 +65,13 @@ function storedValue(section: Record<string, unknown> | undefined, at: PreviewCo
   return field.split('.').reduce<unknown>((o, k) => (o && typeof o === 'object' ? (o as Record<string, unknown>)[k] : undefined), block);
 }
 
+/** the columns of the section that hold a block, as `row-col` keys */
+function filledColumns(section: Record<string, unknown>): string[] {
+  type Rows = {columns?: {contents?: {blockType?: string}[]}[]}[];
+  const rows = (Array.isArray(section.rows) ? section.rows : []) as Rows;
+  return rows.flatMap((r, i) => (r.columns ?? []).flatMap((c, j) => (c.contents?.[0]?.blockType && c.contents[0].blockType !== EMPTY_SLUG ? [`${i}-${j}`] : [])));
+}
+
 const noSubscription = () => () => {};
 const same = (a: PreviewColumn | null, b: PreviewColumn | null) => a?.row === b?.row && a?.col === b?.col;
 
@@ -77,6 +85,8 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
   const [boxes, setBoxes] = useState<PreviewColumnBox[]>([]);
   const [hover, setHover] = useState<PreviewColumn | null>(null);
   const [selected, setSelected] = useState<PreviewColumn | null>(null);
+  // the columns that hold a block (`row-col`): only those have a content to edit, hence a pencil
+  const [filled, setFilled] = useState<string[]>([]);
   // in the admin's iframe (false for a visitor opening the address, and during server rendering)
   const inFrame = useSyncExternalStore(noSubscription, () => window.parent !== window, () => false);
 
@@ -90,6 +100,7 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
       if (!isPreviewData(e.data)) return;
       const {type: _type, ...input} = e.data;
       latest.current = input;
+      setFilled(filledColumns(input.section));
       const n = ++last.current;
       const status = await sendSectionPreview(frame, input).catch(() => 'invalid' as const);
       // a newer section is on its way: only its refresh matters
@@ -269,7 +280,7 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
           <style>{STYLES}</style>
           {selectedBox ? outline(selectedBox, 'selected') : null}
           {hoverBox && !same(hover, selected) ? outline(hoverBox, 'hover') : null}
-          {hoverBox && hover ? (
+          {hoverBox && hover && filled.includes(`${hover.row}-${hover.col}`) ? (
             <VStack data-preview-tool="true" style={{position: 'absolute', left: hoverBox.x + hoverBox.width, top: hoverBox.y, transform: 'translate(-100%, 0)', padding: 'var(--spacing-1)'}}>
               <IconButton label="Modifier le contenu de la colonne" tooltip="Modifier le contenu" icon={<EditIcon />} variant="primary" size="sm" elevation="low" onClick={() => toParent({type: PREVIEW_OPEN, ...hover})} />
             </VStack>

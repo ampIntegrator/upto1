@@ -4,8 +4,8 @@
  *      operation on the given data (`findByID` with `data`: the stored page is not read back);
  *   2. the usual conversion (toSections) and rendering (PageSections), in the page's silo; a
  *      column that renders nothing shows a dashed zone: « Colonnes » in a section without rows,
- *      « Colonne vide » in an empty column, the block's name when the block lacks something to
- *      show (an Image block without its image).
+ *      its width (« 6 / 12 ») in an empty column, the block's name when the block lacks something
+ *      to show (an Image block without its image).
  */
 import config from '@payload-config';
 import {EmptyState} from '@astryxdesign/core/EmptyState';
@@ -48,7 +48,7 @@ function Zone({label, tall, field}: {label: string; tall: boolean; field?: strin
   );
 }
 
-type RawColumn = {contents?: {blockType?: string}[] | null};
+type RawColumn = {span?: number | string | null; contents?: {blockType?: string}[] | null};
 type RawRow = {columns?: RawColumn[] | null};
 
 /** The zones of a section's columns, from the section as the admin sent it. */
@@ -59,7 +59,8 @@ function zones(section: Record<string, unknown>): SectionsPreview {
       if (row < 0) return <Zone label="Colonnes" tall />;
       const slug = rows[row]?.columns?.[col]?.contents?.[0]?.blockType;
       const block = slug && slug !== EMPTY_SLUG ? siteSections.blocks.find((b) => b.block.slug === slug)?.block : undefined;
-      if (!block) return <Zone label="Colonne vide" tall={blank} />;
+      // an empty column: its width (« Colonnes » is for the section that has no row yet)
+      if (!block) return <Zone label={`${Number(rows[row]?.columns?.[col]?.span) || 12} / 12`} tall={blank} />;
       // the block is there but shows nothing yet: named, and one click away from its image when that is what it lacks
       const name = block.labels?.singular;
       const label = typeof name === 'string' ? name : name && typeof name === 'object' ? ((name as Record<string, string>).fr ?? block.slug) : block.slug;

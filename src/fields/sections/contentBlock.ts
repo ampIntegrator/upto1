@@ -21,6 +21,12 @@ export type ContentBlock = {
    * a document still holding it can no longer be saved.
    */
   hidden?: boolean;
+  /**
+   * Values the block starts with when it is placed from the builder's library (placeholder texts,
+   * so that it shows at once in the preview), keyed by field path inside the block: `title`,
+   * `cta.label` for a field of a group. Scalars and rich text documents; no array rows.
+   */
+  sample?: Record<string, unknown>;
 };
 
 /** Block slug → minimum span, for the admin builder (serialisable client props). */
@@ -49,3 +55,6 @@ export const staticLabel = (block: Block): string | Record<string, string> => {
 
 /** Block slug → singular label, for client components. */
 export const labelMap = (blocks: readonly ContentBlock[]): Record<string, string | Record<string, string>> => Object.fromEntries(blocks.map((b) => [b.block.slug, staticLabel(b.block)]));
+
+/** Block slug → starting values, for the admin builder (serialisable client props). */
+export const sampleMap = (blocks: readonly ContentBlock[]): Record<string, Record<string, unknown>> => Object.fromEntries(blocks.filter((b) => b.sample).map((b) => [b.block.slug, b.sample as Record<string, unknown>]));

@@ -9,6 +9,8 @@ import config from '@payload-config';
 import {randomBytes} from 'node:crypto';
 import {getPayload} from 'payload';
 
+import {textBoxBlock} from '@/fields/blocks/textBoxBlock';
+
 const BASE = process.env.SMOKE_BASE ?? 'http://localhost:3000';
 const SHOTS = process.env.SMOKE_SHOTS;
 const stamp = Date.now();
@@ -43,6 +45,11 @@ async function main() {
       const image = doc.sections[0]?.rows[0]?.columns[0]?.contents[0]?.image as {url?: string} | number;
       check(typeof image === 'object' && Boolean(image?.url), 'an unsaved image ID is populated with its file');
     } else log('--  no media in the library: population not checked');
+
+    // the placeholder values a block starts with are valid stored values (a text box and its rich text)
+    const sampled = await payload.update({collection: 'pages', id: pageId, data: {sections: [section, {blockType: 'section', mode: 'light', tint: 'light', texture: 'dots', rows: [{columns: [{span: '6', contents: [{blockType: 'textBox', ...textBoxBlock.sample}]}, {span: '6', contents: []}]}]}]} as never}).then(() => true, () => false);
+    check(sampled, 'a block saved with its placeholder values is accepted');
+    await payload.update({collection: 'pages', id: pageId, data: {sections: [section, {blockType: 'section', mode: 'light', tint: 'light', texture: 'dots', rows: []}]} as never});
 
     // 2 · the preview page gives nothing to a visitor
     const anonymous = await (await fetch(`${BASE}/apercu-section?frame=smoke-${stamp}`)).text();
@@ -207,7 +214,11 @@ async function main() {
     await p.waitForTimeout(600);
     check((await p.locator('.section-manager__panel--open #section-manager-panel-content').count()) === 1 && /2 · col\w+ 2/.test(await head()), `the pencil of a column opens the content panel on it (${await head()})`);
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-content.png`});
-    await frame.getByText('Colonne vide').first().dblclick();
+    // an empty column shows its width, and no pencil
+    await frame.getByText('6 / 12').first().hover();
+    await p.waitForTimeout(300);
+    check((await frame.getByRole('button', {name: /Modifier le contenu/}).count()) === 0, 'no pencil on a column without content');
+    await frame.getByText('6 / 12').first().dblclick();
     await p.waitForTimeout(400);
     check(/1 · col\w+ 2/.test(await head()) && (await content.locator('.block-library__block').count()) > 10, `a double click on an empty column opens the content panel, which offers the components (${await head()})`);
     check((await content.locator('.block-library__block[data-block="plan"]').isDisabled()) && !(await content.locator('.block-library__block[data-block="cardTitle"]').isDisabled()), 'components that do not fit the column cannot be picked');
@@ -271,6 +282,8 @@ async function main() {
       zoneAllowed = await p.locator('.section-preview__zone[data-zone="0-1"]').getAttribute('data-allowed');
     });
     check(zoneAllowed === 'true' && (await miniEmpty(0, 1)) === null, 'a component dropped on an empty column of the preview is placed in it');
+    await live.locator('[data-preview-column="0-1"]').getByText('Lorem ipsum dolor', {exact: true}).waitFor({timeout: 10000});
+    check(/Lorem ipsum dolor sit amet/.test(await live.locator('[data-preview-column="0-1"] p').first().innerText()), 'a component placed from the library starts with placeholder texts, shown in the preview');
     // another one on the filled column: asked first
     await dragBlock('cardTitle', '0-1');
     const confirm = p.locator('.confirmation-modal');

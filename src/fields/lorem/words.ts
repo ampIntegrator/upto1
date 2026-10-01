@@ -24,3 +24,26 @@ export function loremWords(count: number): string {
   }
   return out.join(' ');
 }
+
+/** A rich text document (Lexical, as the editors store it) holding one paragraph of `count` words of lorem ipsum. */
+export const loremDocument = (count: number) => ({
+  root: {
+    type: 'root',
+    format: '',
+    indent: 0,
+    version: 1,
+    direction: 'ltr',
+    children: [
+      {
+        type: 'paragraph',
+        format: '',
+        indent: 0,
+        version: 1,
+        direction: 'ltr',
+        textFormat: 0,
+        textStyle: '',
+        children: [{type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: loremWords(count), version: 1}],
+      },
+    ],
+  },
+});

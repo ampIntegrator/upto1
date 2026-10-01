@@ -76,6 +76,10 @@ still publishes: no drafts).
      frame reported; a column too narrow or too wide for the block is not a drop target, so the
      browser shows the « not allowed » cursor, **only during the drag**. Dropping on a filled
      column asks before replacing. A click on a thumbnail places it in the selected column.
+     A block placed this way starts with placeholder texts (lorem ipsum), so it shows at once:
+     `sample` of its `ContentBlock` (field path → value; scalars and rich text documents, no
+     array rows). Declared so far: cards, Image with quote, text box, section heading,
+     testimonial. Images are left to the editor.
    - **Contenu**: the fields of the selected column's block, one column per group of fields (cut at
      the block's group headings), scrolling sideways; « Vider la colonne »; an empty column offers
      the blocks that fit it. It replaces the column drawer. Opened by a click on a column of a
@@ -91,7 +95,8 @@ still publishes: no drafts).
      `data-field="<field path in the block>"` on the element whose only child is the text, and
      `data-field-kind="image"` or `"icon"` on an image or icon (the field must be a top-level
      field of the block). A block that renders nothing yet (an Image block without image) shows a
-     zone named after it, one click away from its image field.
+     zone named after it, one click away from its image field. An empty column shows its width
+     (« 6 / 12 »; « Colonnes » is for a section without rows) and has no pencil.
    **Next (Nicolas):** the width warnings; the mobile order is still to be placed; marking the
    other components.
 4. To come: the width warnings, the mobile order, marking the other components for editing in

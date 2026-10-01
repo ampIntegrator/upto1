@@ -6,6 +6,7 @@ import {cardBlockText as t} from '../../i18n/admin/blocks';
 import {ADMIN_LANGUAGE_CODES, type Text} from '../../i18n/admin/languages';
 import {iconField} from '../iconField';
 import {tagField} from '../tagField';
+import {loremWords} from '../lorem/words';
 import {linkGroup} from '../shared';
 
 /**
@@ -18,9 +19,9 @@ import {linkGroup} from '../shared';
  */
 export type CardMediaKind = 'image' | 'icon' | 'number' | 'title';
 
-const MEDIA: {kind: CardMediaKind; slug: string; label: Text; fields: Field[]}[] = [
+const MEDIA: {kind: CardMediaKind; slug: string; label: Text; fields: Field[]; sample?: Record<string, unknown>}[] = [
   {kind: 'image', slug: 'Image', label: t.media.image, fields: [{name: 'image', type: 'upload', relationTo: 'media', label: t.fields.image, required: true}]},
-  {kind: 'icon', slug: 'Icon', label: t.media.icon, fields: [iconField({name: 'iconKey', label: t.fields.icon, required: true})]},
+  {kind: 'icon', slug: 'Icon', label: t.media.icon, fields: [iconField({name: 'iconKey', label: t.fields.icon, required: true})], sample: {iconKey: 'shield'}},
   {
     kind: 'number',
     slug: 'Number',
@@ -35,6 +36,7 @@ const MEDIA: {kind: CardMediaKind; slug: string; label: Text; fields: Field[]}[]
         ],
       },
     ],
+    sample: {prefix: '+', value: '34', suffix: '%'},
   },
   {kind: 'title', slug: 'Title', label: t.media.title, fields: []},
 ];
@@ -73,7 +75,9 @@ for (const clickable of [false, true]) {
       fields: [...m.fields, ...COMMON, ...(clickable ? [linkGroup('cta', t.fields.cta, {required: true})] : [])],
     };
     // fills the row height: cards side by side, or beside another box, share one height
-    CARD_BLOCKS.push({block, minSpan: CARD_MIN_SPAN, fill: true});
+    // placeholder texts when the card is placed from the builder's library (the image is chosen by the editor)
+    const sample = {...m.sample, title: 'Lorem ipsum dolor', text: loremWords(16), ...(clickable ? {'cta.label': 'Lorem ipsum', 'cta.href': '#'} : null)};
+    CARD_BLOCKS.push({block, minSpan: CARD_MIN_SPAN, fill: true, sample});
   }
 }
 

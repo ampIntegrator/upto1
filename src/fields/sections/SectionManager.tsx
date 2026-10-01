@@ -50,6 +50,8 @@ type Props = {
   minSpans?: Record<string, number>;
   maxSpans?: Record<string, number>;
   hiddenBlocks?: string[];
+  /** block slug → values a block starts with when placed from the library (field path → value) */
+  samples?: Record<string, Record<string, unknown>>;
 };
 
 type PanelKey = 'settings' | 'layout' | 'blocks' | 'content';
@@ -70,7 +72,7 @@ const innerFields = (field: CollapsibleFieldClient, index: number): ClientField[
   return f && 'fields' in f ? f.fields : [];
 };
 
-export function SectionManager({field, path, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups, headerFields, minSpans, maxSpans, hiddenBlocks}: Props) {
+export function SectionManager({field, path, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups, headerFields, minSpans, maxSpans, hiddenBlocks, samples}: Props) {
   const {t} = useAdminText();
   const {openModal, closeModal, isModalOpen} = useModal();
   const slug = `section-manager-${path}`;
@@ -103,6 +105,7 @@ export function SectionManager({field, path, indexPath, parentPath, parentSchema
             minSpans={minSpans}
             maxSpans={maxSpans}
             hiddenBlocks={hiddenBlocks}
+            samples={samples}
             onClose={() => closeModal(slug)}
           />
         ) : null}
@@ -127,7 +130,7 @@ function BarGlyph({kind}: {kind: 'save' | 'close'}) {
   );
 }
 
-function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups = [], headerFields = [], minSpans, maxSpans, hiddenBlocks, onClose}: Omit<Props, 'path'> & {onClose: () => void}) {
+function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups = [], headerFields = [], minSpans, maxSpans, hiddenBlocks, samples, onClose}: Omit<Props, 'path'> & {onClose: () => void}) {
   const {t} = useAdminText();
   const [panel, setPanel] = useState<PanelKey>('settings');
   // « save and close »: the document's own save; the dialog stays open when a field is refused
@@ -247,11 +250,13 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
   const putBlock = useCallback(
     (at: PreviewColumn, slug: string) => {
       clearColumn(at);
-      addFieldRow({path: `${columnPath(at)}.contents`, rowIndex: 0, blockType: slug, schemaPath: `${rowsSchemaPath}.columns.contents`});
+      // the block's placeholder values: it shows at once in the preview, ready to be typed over
+      const subFieldState = Object.fromEntries(Object.entries(samples?.[slug] ?? {}).map(([key, value]) => [key, {value, initialValue: value, valid: true}]));
+      addFieldRow({path: `${columnPath(at)}.contents`, rowIndex: 0, blockType: slug, schemaPath: `${rowsSchemaPath}.columns.contents`, subFieldState});
       setModified(true);
       setColumn(at);
     },
-    [addFieldRow, clearColumn, columnPath, rowsSchemaPath, setModified],
+    [addFieldRow, clearColumn, columnPath, rowsSchemaPath, samples, setModified],
   );
   // a block placed on a filled column: asked first
   const [replacing, setReplacing] = useState<{at: PreviewColumn; slug: string} | null>(null);
