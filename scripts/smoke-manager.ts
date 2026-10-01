@@ -14,6 +14,7 @@ const SHOTS = process.env.SMOKE_SHOTS;
 const stamp = Date.now();
 const TITLE = 'Un titre d’essai';
 const EDITED = 'Titre modifié en direct';
+const SECOND = 'Deuxième rangée';
 
 async function main() {
   const payload = await getPayload({config});
@@ -27,16 +28,18 @@ async function main() {
   const email = `zz-manager-${stamp}@example.test`;
   const password = randomBytes(12).toString('hex');
   const user = await payload.create({collection: 'users', data: {email, password, name: 'ZZ smoke'} as never});
-  const section = {blockType: 'section', mode: 'light', tint: 'light', texture: 'grid', rows: [{columns: [{span: '6', contents: [{blockType: 'textBox', title: TITLE, titleTag: 'h2'}]}, {span: '6', contents: []}]}]};
-  const page = await payload.create({collection: 'pages', data: {title: 'ZZ smoke Gérer', slug: `zz-smoke-manager-${stamp}`, hero: {variant: 'page-glow', title: 'Smoke'}, sections: [section, {blockType: 'section', mode: 'light', tint: 'light', texture: 'dots', rows: []}]} as never});
+  const section = {blockType: 'section', mode: 'light', tint: 'light', texture: 'grid', rows: [{columns: [{span: '6', contents: [{blockType: 'textBox', title: TITLE, titleTag: 'h2'}]}, {span: '6', contents: []}]}, {columns: [{span: '6', contents: [{blockType: 'textBox', title: SECOND, titleTag: 'h2'}]}, {span: '6', contents: []}]}]};
+  let page: {id: number} | undefined;
   const {chromium} = await import('@playwright/test');
   const browser = await chromium.launch();
   try {
+    page = (await payload.create({collection: 'pages', data: {title: 'ZZ smoke Gérer', slug: `zz-smoke-manager-${stamp}`, hero: {variant: 'page-glow', title: 'Smoke'}, sections: [section, {blockType: 'section', mode: 'light', tint: 'light', texture: 'dots', rows: []}]} as never})) as {id: number};
+    const pageId = page.id;
     // 1 · unsaved values are populated by the read operation (an image given as an ID comes back as a document)
     const media = (await payload.find({collection: 'media', limit: 1, depth: 0})).docs[0];
     if (media) {
       const data = {sections: [{...section, rows: [{columns: [{span: '12', contents: [{blockType: 'media', image: media.id}]}]}]}]};
-      const doc = (await payload.findByID({collection: 'pages', id: page.id, data: data as never, depth: 2})) as unknown as {sections: {rows: {columns: {contents: {image: unknown}[]}[]}[]}[]};
+      const doc = (await payload.findByID({collection: 'pages', id: pageId, data: data as never, depth: 2})) as unknown as {sections: {rows: {columns: {contents: {image: unknown}[]}[]}[]}[]};
       const image = doc.sections[0]?.rows[0]?.columns[0]?.contents[0]?.image as {url?: string} | number;
       check(typeof image === 'object' && Boolean(image?.url), 'an unsaved image ID is populated with its file');
     } else log('--  no media in the library: population not checked');
@@ -51,7 +54,7 @@ async function main() {
     const errors: string[] = [];
     p.on('pageerror', (e) => errors.push(e.message));
     await p.request.post(`${BASE}/api/users/login`, {data: {email, password}});
-    await p.goto(`${BASE}/admin/collections/pages/${page.id}`, {waitUntil: 'networkidle'});
+    await p.goto(`${BASE}/admin/collections/pages/${pageId}`, {waitUntil: 'networkidle'});
     await p.getByText('Contenu', {exact: true}).first().click();
     const toggle = p.locator('.blocks-field__rows .collapsible__toggle').first();
     if (await toggle.count()) await toggle.click();
@@ -107,9 +110,42 @@ async function main() {
 
     // a cell's drawer opens above the dialog; what is typed there reaches the preview
     await p.getByRole('button', {name: /Découpage|Layout/}).click();
-    await p.getByText('Encart texte', {exact: true}).first().click();
+    // the rows: a line of squares, three buttons on hover, no mobile order button, no full-size cells
+    const squares = p.locator('.rows-builder__square');
+    check((await squares.count()) === 2, 'the two rows show as two squares');
+    const actionsOpacity = () => squares.first().locator('.rows-builder__actions').evaluate((el) => getComputedStyle(el).opacity);
+    await p.mouse.move(5, 5);
     await p.waitForTimeout(300);
-    await p.getByText('Encart texte', {exact: true}).first().click();
+    const hidden = await actionsOpacity();
+    await squares.first().hover();
+    await p.waitForTimeout(300);
+    check(hidden === '0' && (await actionsOpacity()) === '1' && (await squares.first().locator('.rows-builder__actions button').count()) === 3, 'three buttons appear on a square on hover');
+    check((await p.locator('.rows-builder [aria-label*="mobile" i]').count()) === 0, 'no mobile order button');
+    // drag the first square to the right: the rows swap, in the preview too
+    const titles = () => frame.locator('h2').allInnerTexts();
+    const a = (await squares.nth(0).boundingBox())!;
+    const b = (await squares.nth(1).boundingBox())!;
+    await p.mouse.move(a.x + a.width / 2, a.y + a.height - 6);
+    await p.mouse.down();
+    await p.mouse.move(b.x + b.width / 2 + 20, a.y + a.height - 6, {steps: 12});
+    await p.mouse.up();
+    await p.waitForTimeout(3000);
+    check((await titles())[0] === SECOND, `dragging a square sideways reorders the rows in the preview (${(await titles()).join(' / ')})`);
+    // duplicate, then delete (after confirmation)
+    await squares.nth(0).hover();
+    await squares.nth(0).getByRole('button', {name: /Dupliquer|Duplicate/}).click();
+    await p.waitForTimeout(500);
+    check((await squares.count()) === 3, 'duplicate adds a square');
+    await squares.nth(1).hover();
+    await squares.nth(1).getByRole('button', {name: /Supprimer|Delete/}).click();
+    await p.locator('.confirmation-modal').getByRole('button', {name: /^(Supprimer|Delete)$/}).click();
+    await p.waitForTimeout(500);
+    check((await squares.count()) === 2, 'delete removes a square, after confirmation');
+    if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-layout.png`});
+    // a click selects the square, a click on one of its columns opens the column's drawer
+    await squares.nth(1).locator('.rows-builder__mini').first().click();
+    await p.waitForTimeout(300);
+    await squares.nth(1).locator('.rows-builder__mini').first().click();
     const title = p.locator('.drawer input[name$="title"]').first();
     await title.waitFor({timeout: 10000});
     await title.fill(EDITED);
@@ -119,7 +155,7 @@ async function main() {
     await p.waitForTimeout(500);
     check(await p.locator('.section-manager__body').isVisible(), 'closing the drawer keeps the dialog open');
 
-    const stored = JSON.stringify((await payload.findByID({collection: 'pages', id: page.id, depth: 0})).sections);
+    const stored = JSON.stringify((await payload.findByID({collection: 'pages', id: pageId, depth: 0})).sections);
     check(stored.includes(TITLE) && !stored.includes(EDITED), 'nothing was saved by the preview');
 
     await p.getByRole('button', {name: /^(Fermer|Close)$/}).first().click();
@@ -202,7 +238,7 @@ async function main() {
     await browser.close();
     await payload.delete({collection: 'payload-locked-documents', where: {'user.value': {equals: user.id}}});
     await payload.delete({collection: 'payload-preferences', where: {'user.value': {equals: user.id}}});
-    await payload.delete({collection: 'pages', id: page.id});
+    if (page) await payload.delete({collection: 'pages', id: page.id});
     await payload.delete({collection: 'users', id: user.id});
   }
   log(failures ? `${failures} check(s) failed` : 'All checks passed');

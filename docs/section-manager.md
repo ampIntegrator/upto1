@@ -53,9 +53,16 @@ still publishes: no drafts).
 ## Stages
 
 1. **Done (1 Oct. 2026).** Dialog, accordions, live preview, width switch. Panel 1 = the section
-   settings; panel 2 = the existing rows builder (`RowsBuilder`, a click on a cell still opens its
-   drawer, above the dialog); panel 3 = a placeholder.
-2. Panel 2: « add here » zones drawn over the preview.
+   settings; panel 3 = a placeholder.
+2. **Rows, done (1 Oct. 2026).** Panel 2 = the layout thumbnails, then the rows as a **line of
+   squares**, left to right = top to bottom in the preview. A square shows the row's split, is
+   dragged sideways to reorder the rows, and shows three buttons on hover: move, duplicate, delete.
+   No full-size column cells, no column reordering and no « mobile order » dialog any more
+   (stored `mobileOrder` values stay and still apply). A click on a column of the selected square
+   still opens its drawer, until the columns are handled in the preview.
+   **Next, in this order (Nicolas):** columns reordered by lateral drag and drop in the preview
+   (desktop order at desktop width, mobile order at mobile width), then the content of the
+   columns (click a column in the preview), then the width warnings.
 3. Panel 3: block list, drag onto the preview; **only while dragging**, a « not allowed » cursor
    over a column narrower than the block's `minSpan`, and the drop refused. Block fields in the
    top panel.

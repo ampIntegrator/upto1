@@ -319,3 +319,7 @@ In the order that pays off first:
 5. **Package extraction**: move `src/fields/sections/` to a package, export
    `createSectionBuilder` and a `sectionBuilderPlugin()` wrapper that adds the field and the
    hook to the named collections.
+
+> Since 1 October 2026, on the `previewer` branch, the builder lives in the « Gérer » dialog and
+> its rows are a line of squares: see `docs/section-manager.md`. What this file says about the
+> cells, the column handles and the mobile order dialog describes `main`.

@@ -1,19 +1,74 @@
-/* Section builder (RowsBuilder): rows, cells, handles and the mobile order dialog.
+/* Section builder (RowsBuilder): the line of row squares, their buttons and their handle.
    Loaded by the component itself; Payload theme variables only. */
 
-/* Row builder: side buttons in two lines of two, 32 px squares, vertically centred
-   on the row; their height (2 × 32 + 4) stays below a row's height. */
+/* The rows: a line of squares, from left to right = from top to bottom in the preview;
+   scrolls sideways when there are many. */
+.rows-builder__rows {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+}
+.rows-builder__square {
+  position: relative;
+  flex: 0 0 200px;
+  padding: 8px;
+  border: 2px solid var(--theme-elevation-200);
+  border-radius: 4px;
+  background: var(--theme-elevation-50);
+  cursor: grab;
+  /* no text selection when a drag starts; touch drags instead of scrolling */
+  user-select: none;
+  touch-action: none;
+
+  &[aria-pressed='true'] {
+    border-color: var(--theme-elevation-1000);
+  }
+  &[data-error] {
+    border-color: var(--theme-error-500);
+  }
+  &[data-dragging] {
+    z-index: 2;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    cursor: grabbing;
+  }
+  &:focus-visible {
+    outline: 2px solid var(--theme-elevation-1000);
+    outline-offset: 2px;
+  }
+}
+.rows-builder__square-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 28px;
+  margin-bottom: 6px;
+}
+.rows-builder__square-number {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--theme-elevation-600);
+}
+/* the three buttons of a square (move, duplicate, delete): shown on hover or focus */
 .rows-builder__actions {
-  display: grid;
-  grid-template-columns: repeat(2, 32px);
-  grid-auto-rows: 32px;
+  display: flex;
   gap: 4px;
-  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 150ms ease;
+
+  .rows-builder__square:hover &,
+  .rows-builder__square:focus-within &,
+  .rows-builder__square[data-dragging] & {
+    opacity: 1;
+  }
+  @media (hover: none) {
+    opacity: 1;
+  }
 
   > *,
   .btn {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     margin: 0;
   }
   .btn {
@@ -21,6 +76,38 @@
     align-items: center;
     justify-content: center;
     padding: 0;
+  }
+}
+/* the row's split: one small cell per column, in the width proportions */
+.rows-builder__minis {
+  display: grid;
+  gap: 4px;
+  height: 40px;
+}
+.rows-builder__mini {
+  min-width: 0;
+  padding: 0;
+  border: 1px solid var(--theme-elevation-700);
+  border-radius: 2px;
+  background: var(--theme-elevation-700);
+  color: var(--theme-elevation-0);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+
+  &[data-empty] {
+    border: 1px dashed var(--theme-elevation-400);
+    background: var(--theme-elevation-0);
+    color: var(--theme-elevation-800);
+  }
+  &[data-issue] {
+    border: 2px solid var(--theme-error-500);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--theme-elevation-1000);
+    outline-offset: 2px;
   }
 }
 .rows-builder__handle {
@@ -34,67 +121,4 @@
   background: var(--theme-elevation-100);
   color: var(--theme-elevation-800);
   cursor: grab;
-}
-
-/* Cells of a row: grid with the column proportions (variable set by the row),
-   sortable left or right by their handle. */
-.rows-builder__cells {
-  display: grid;
-  grid-template-columns: var(--rows-builder-cells);
-  gap: 8px;
-}
-.rows-builder__handle--cell {
-  /* no text selection when a drag starts; touch drags instead of scrolling */
-  user-select: none;
-  touch-action: none;
-  position: absolute;
-  top: 4px;
-  left: 6px;
-  width: 24px;
-  height: 20px;
-}
-/* handle of a line in the mobile order dialog */
-.rows-builder__handle--mobile {
-  flex-shrink: 0;
-  width: 28px;
-  height: 26px;
-  user-select: none;
-  touch-action: none;
-}
-.rows-builder__rows {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* "Mobile order" dialog of a section (based on Payload's confirmation modal). */
-.rows-mobile__wrapper {
-  width: min(520px, calc(100vw - 32px));
-  border: 1px solid var(--theme-elevation-150);
-  border-radius: 4px;
-  background: var(--theme-bg);
-}
-.rows-mobile__list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.rows-mobile__item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 8px;
-  border: 1px solid var(--theme-elevation-150);
-  border-radius: 4px;
-
-  .btn {
-    margin: 0;
-  }
-}
-.rows-mobile__item[data-current] {
-  border-color: var(--theme-elevation-600);
-  background: var(--theme-elevation-100);
 }

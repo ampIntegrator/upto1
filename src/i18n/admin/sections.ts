@@ -74,8 +74,8 @@ export const sectionsText = texts({
     singular: {fr: 'Rangée', en: 'Row'},
     plural: {fr: 'Rangées', en: 'Rows'},
     description: {
-      fr: 'Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre mobile de la section (bouton téléphone) ; les colonnes vides y sont masquées.',
-      en: 'Each row splits the width into columns whose widths add up to 12. A column can stay empty. Below 768 px, columns go full width, in the section’s mobile order (phone button); empty columns are hidden there.',
+      fr: 'Chaque rangée découpe la largeur en colonnes dont les largeurs font 12. Une colonne peut rester vide. Sous 768 px, les colonnes passent en pleine largeur, dans l’ordre mobile de la section ; les colonnes vides y sont masquées.',
+      en: 'Each row splits the width into columns whose widths add up to 12. A column can stay empty. Below 768 px, columns go full width, in the section’s mobile order; empty columns are hidden there.',
     },
     columns: {fr: 'Colonnes', en: 'Columns'},
     column: {fr: 'Colonne', en: 'Column'},

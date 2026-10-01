@@ -2,29 +2,31 @@
 
 /**
  * RowsBuilder — the "builder" view of a section's Rows field, replacing
- * Payload's nested accordions.
+ * Payload's nested accordions. Shown in the « Découpage » panel of the « Gérer » dialog, above the
+ * live preview, which is where the rows and their columns are seen at full size.
  *
  *   - a single strip of layout thumbnails (a rectangle split in the column
  *     proportions): a click replaces the selected row's layout, after confirmation,
  *     a double click adds a row below the selection;
- *   - the rows stacked below, reordered by drag and drop (handle); on the side, in
- *     two lines of two: move and duplicate, mobile order and delete; in each cell,
- *     a ⋮⋮ handle drags the column left or right within its row (mouse,
- *     touch or keyboard); rows and columns sorted by the same module (sortable.tsx, dnd-kit);
- *   - a row's phone button opens the mobile order dialog for the whole section:
- *     all its columns, across rows, reordered by drag and drop (handle); the columns of the
- *     clicked row are highlighted (hidden field mobileOrder, see mobileOrder.ts);
- *   - a cell summarises its component (one per column), or « Vide »; a first click selects
- *     the row, a click on a cell of the selected row opens a Payload
- *     drawer with the column's component and, if there is one, a « Vider la colonne » button
- *     (width is no longer set there: it comes from the layouts). The form is shared: what is
- *     entered in the drawer is already in the page, the page is saved as usual.
+ *   - below, the rows as a line of squares, from left to right = from top to bottom in the
+ *     preview; a square shows the row's split; it is dragged left or right to reorder the rows
+ *     (mouse, touch or keyboard, sortable.tsx, dnd-kit); on hover (or focus), three buttons:
+ *     move, duplicate, delete;
+ *   - a click on a square selects the row; a click on a column of the selected square opens a
+ *     Payload drawer with the column's component and, if there is one, a « Vider la colonne »
+ *     button. The form is shared: what is entered in the drawer is already in the page, the page
+ *     is saved as usual.
+ *
+ * Since 1 Oct. 2026 (Nicolas): no full-size column cells here, no column reordering and no
+ * « mobile order » dialog; columns will be reordered by dragging them in the preview (desktop
+ * order at desktop width, mobile order at mobile width). The stored `mobileOrder` values stay and
+ * still apply on the site.
  *
  * All manipulation goes through Payload's form state (useForm, useFormFields),
  * exactly like its own array field; drawer fields are rendered by
  * Payload (RenderFields), with the paths and permissions it expects.
  */
-import {Button, ConfirmationModal, Drawer, Modal, RenderFields, useDrawerSlug, useField, useForm, useFormFields, useModal, useTranslation} from '@payloadcms/ui';
+import {Button, ConfirmationModal, Drawer, RenderFields, useDrawerSlug, useField, useForm, useFormFields, useModal, useTranslation} from '@payloadcms/ui';
 import type {ArrayFieldClient, ArrayFieldClientProps, BlocksFieldClient, ClientBlock, ClientField, SanitizedFieldPermissions, SanitizedFieldsPermissions} from 'payload';
 import {getTranslation} from '@payloadcms/translations';
 import React, {useCallback, useMemo, useRef, useState} from 'react';
@@ -33,9 +35,8 @@ import {sectionsText as T} from '@/i18n/admin/sections';
 import {useAdminText} from '@/i18n/admin/useAdminText';
 
 import {EMPTY_SLUG} from './emptyBlock';
-import {hasMobileOrder, mobileSequence} from './mobileOrder';
 import {type ColumnSpan, presetLabel, type PresetRow, ROW_PRESETS, spansKey, toSpan} from './grid';
-import {type SortableHandle, SortableItem, SortableList} from './sortable';
+import {SortableItem, SortableList} from './sortable';
 import {rowWidthError} from './validation';
 
 import './RowsBuilder.scss';
@@ -49,16 +50,6 @@ type RowSnapshot = {ids?: string[]; columns: CellSnapshot[]};
 const TILE_H = 40;
 const text14: React.CSSProperties = {fontSize: 14, lineHeight: 1.4};
 const dim: React.CSSProperties = {color: 'var(--theme-elevation-600)'};
-
-/** Phone icon (stroke, text colour). */
-function PhoneGlyph() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <rect x="6" y="2" width="12" height="20" rx="2" />
-      <path d="M11 18h2" />
-    </svg>
-  );
-}
 
 /** Layout thumbnail: one rectangle per column, light on dark, in the width proportions, each showing its width (or a label). */
 function Tile({spans, active, labels}: {spans: readonly number[]; active: boolean; labels?: readonly string[]}) {
@@ -181,84 +172,26 @@ function PresetTiles({current, currentTypes, presetRows, onReplace, onAdd, onAdd
   );
 }
 
-/** What a sortable cell receives (sortable.tsx module). */
-type DragProps = SortableHandle;
-
-/** A row cell: handle to drag it left or right, width in a corner, component summary, click to open the drawer. */
-/** rowSelected: the cell's row is selected; otherwise a click only selects it */
-function Cell({cell, index, rowSelected, onOpen, drag}: {cell: CellSnapshot; index: number; rowSelected: boolean; onOpen: () => void; drag?: DragProps}) {
+/** A column of a row square: its width, filled or empty; a click opens its drawer (once the row is selected). */
+function MiniCell({cell, index, rowSelected, onOpen}: {cell: CellSnapshot; index: number; rowSelected: boolean; onOpen: () => void}) {
   const {t} = useAdminText();
   const empty = !cell.filled;
-  const onHandleKeyDown = drag?.listeners.onKeyDown;
+  const issue = cell.narrow ? t(T.builder.narrow, {min: cell.narrow}) : cell.wide ? t(T.builder.wide, {max: cell.wide}) : null;
+  const hint = rowSelected ? (empty ? t(T.builder.cellEmptyTitle) : t(T.builder.cellEditTitle, {contents: cell.contents.join(', ')})) : t(T.builder.cellSelectTitle);
   return (
-    <div
-      ref={drag?.setNodeRef}
-      role="button"
-      tabIndex={0}
+    <button
+      type="button"
+      className="rows-builder__mini"
+      data-empty={empty ? 'true' : undefined}
+      data-issue={issue ? 'true' : undefined}
+      aria-label={t(T.builder.cellAria, {n: index + 1, span: cell.span, contents: empty ? null : cell.contents.join(', ')})}
+      title={issue ? `${issue} · ${hint}` : hint}
       onClick={(e) => {
         e.stopPropagation();
         onOpen();
-      }}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          e.stopPropagation();
-          onOpen();
-        }
-      }}
-      aria-label={t(T.builder.cellAria, {n: index + 1, span: cell.span, contents: empty ? null : cell.contents.join(', ')})}
-      title={rowSelected ? (empty ? t(T.builder.cellEmptyTitle) : t(T.builder.cellEditTitle, {contents: cell.contents.join(', ')})) : t(T.builder.cellSelectTitle)}
-      style={{
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 2,
-        minWidth: 0,
-        minHeight: 72,
-        padding: '26px 8px 8px',
-        textAlign: 'center',
-        cursor: 'pointer',
-        borderRadius: 4,
-        border: cell.narrow || cell.wide ? '2px solid var(--theme-error-500)' : `1px ${empty ? 'dashed' : 'solid'} var(--theme-elevation-${empty ? '300' : '400'})`,
-        background: empty ? 'var(--theme-elevation-50)' : 'var(--theme-elevation-0)',
-        color: 'var(--theme-elevation-1000)',
-        transform: drag?.transform,
-        transition: drag?.transition,
-        zIndex: drag?.isDragging ? 2 : undefined,
-        boxShadow: drag?.isDragging ? '0 6px 20px rgba(0, 0, 0, 0.35)' : undefined,
-        ...text14,
       }}>
-      {drag ? (
-        <button
-          type="button"
-          {...drag.attributes}
-          {...drag.listeners}
-          className="rows-builder__handle rows-builder__handle--cell"
-          aria-label={t(T.builder.moveColumnAria, {n: index + 1})}
-          title={t(T.builder.moveColumnTitle)}
-          onClick={(e) => e.stopPropagation()}
-          onKeyDown={(e) => {
-            onHandleKeyDown?.(e);
-            e.stopPropagation();
-          }}>
-          ⋮⋮
-        </button>
-      ) : null}
-      <span style={{position: 'absolute', top: 4, right: 8, ...dim}}>{cell.span}/12</span>
-      {empty ? (
-        <span style={{...dim, maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>{cell.contents.length ? cell.contents.join(', ') : t(T.builder.empty)}</span>
-      ) : (
-        cell.contents.map((label, k) => (
-          <span key={k} style={{maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
-            {label}
-          </span>
-        ))
-      )}
-      {cell.narrow ? <span style={{color: 'var(--theme-error-500)'}}>{t(T.builder.narrow, {min: cell.narrow})}</span> : null}
-      {cell.wide ? <span style={{color: 'var(--theme-error-500)'}}>{t(T.builder.wide, {max: cell.wide})}</span> : null}
-    </div>
+      {cell.span}
+    </button>
   );
 }
 
@@ -292,9 +225,6 @@ export function RowsBuilder(props: RowsBuilderProps) {
   const [open, setOpen] = useState<{row: number; col: number} | null>(null);
   // selected row: thumbnails act on it; with no selection, they add a row
   const [selected, setSelected] = useState<number | null>(null);
-  // row from which the "mobile order" dialog was opened (highlighted in the list)
-  const [mobileRow, setMobileRow] = useState<number | null>(null);
-  const mobileSlug = `rows-mobile-${path}`;
   // destructive action awaiting confirmation: replace the layout or delete a row
   const [pending, setPending] = useState<{kind: 'replace'; row: number; spans: readonly number[]} | {kind: 'remove'; row: number} | null>(null);
   const confirmSlug = `rows-confirm-${path}`;
@@ -396,10 +326,6 @@ export function RowsBuilder(props: RowsBuilderProps) {
     moveFieldRow({path, moveFromIndex: from, moveToIndex: to});
     setSelected(to);
   };
-  const moveColumn = (row: number, from: number, to: number) => {
-    moveFieldRow({path: `${path}.${row}.columns`, moveFromIndex: from, moveToIndex: to});
-    setModified(true);
-  };
   const duplicate = (i: number) => {
     dispatchFields({type: 'DUPLICATE_ROW', path, rowIndex: i});
     setModified(true);
@@ -432,31 +358,6 @@ export function RowsBuilder(props: RowsBuilderProps) {
     if (pending?.kind === 'replace') setSpans(pending.row, pending.spans);
     if (pending?.kind === 'remove') remove(pending.row);
     setPending(null);
-  };
-
-  /** the section's columns flattened, row by row, for the mobile order */
-  const flatColumns = useMemo(
-    () => snapshot.flatMap((r, row) => r.columns.map((c, col) => ({row, col, span: c.span, contents: c.contents, mobileOrder: c.mobileOrder, empty: !c.filled}))),
-    [snapshot],
-  );
-  /** writes the section's mobile order: position for listed columns, empty for the others */
-  const writeMobileOrder = (sequence: number[] | null) => {
-    flatColumns.forEach((c, k) => {
-      const pos = sequence ? sequence.indexOf(k) : -1;
-      dispatchFields({type: 'UPDATE', path: `${path}.${c.row}.columns.${c.col}.mobileOrder`, value: pos >= 0 ? pos : null, valid: true});
-    });
-    setModified(true);
-  };
-  const moveMobile = (from: number, to: number) => {
-    const sequence = mobileSequence(flatColumns);
-    if (to < 0 || to >= sequence.length) return;
-    const [moved] = sequence.splice(from, 1);
-    sequence.splice(to, 0, moved);
-    writeMobileOrder(sequence);
-  };
-  const openMobile = (row: number) => {
-    setMobileRow(row);
-    openModal(mobileSlug);
   };
 
   /** empties the column: removes its component (and its name); final once the page is saved */
@@ -498,78 +399,69 @@ export function RowsBuilder(props: RowsBuilderProps) {
       ) : null}
       {showError && errorPaths?.length ? <p style={{...text14, color: 'var(--theme-error-500)', margin: '0 0 12px'}}>{t(T.builder.rowHasError)}</p> : null}
 
-      <SortableList ids={rows.map((r) => r.id)} axis="y" onMove={move} className="rows-builder__rows">
+      {/* the rows, from left to right = from top to bottom in the preview */}
+      <SortableList ids={rows.map((r) => r.id)} axis="x" onMove={move} className="rows-builder__rows">
         {rows.map((row, i) => {
           const snap = snapshot[i] ?? {columns: []};
           const spans = snap.columns.map((c) => c.span);
           const rowError = row.isLoading ? null : rowWidthError(spans, language);
           const isSelected = selected === i;
-          const colIds = snap.ids?.length === snap.columns.length ? (snap.ids as string[]) : snap.columns.map((_, j) => `${row.id}-${j}`);
           return (
             <SortableItem key={row.id} id={row.id} disabled={readOnly}>
               {({attributes, listeners, setNodeRef, transform, transition, isDragging}) => (
-                <div ref={setNodeRef} style={{display: 'flex', gap: 8, alignItems: 'center', transform, transition, zIndex: isDragging ? 1 : undefined, position: 'relative'}}>
-                  <div
-                    role="button"
-                    tabIndex={0}
-                    aria-label={t(T.builder.rowAria, {n: i + 1, selected: isSelected})}
-                    aria-pressed={isSelected}
-                    onClick={() => setSelected(isSelected ? null : i)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        setSelected(isSelected ? null : i);
-                      }
-                    }}
-                    style={{
-                      flex: 1,
-                      minWidth: 0,
-                      padding: 10,
-                      borderRadius: 4,
-                      border: `2px solid ${isSelected ? 'var(--theme-elevation-1000)' : 'var(--theme-elevation-200)'}`,
-                      background: 'var(--theme-elevation-50)',
-                      cursor: 'pointer',
-                    }}>
-                    {rowError ? <p style={{...text14, color: 'var(--theme-error-500)', margin: '0 0 8px'}}>{rowError}</p> : null}
-                    {row.isLoading ? (
-                      <p style={{...text14, ...dim, margin: 0}}>{t(T.builder.loading)}</p>
-                    ) : snap.columns.length ? (
-                      <div style={{'--rows-builder-cells': spans.map((s) => `${s}fr`).join(' ')} as React.CSSProperties}>
-                        <SortableList ids={colIds} axis="x" onMove={(from, to) => moveColumn(i, from, to)} className="rows-builder__cells">
-                          {snap.columns.map((cell, j) => (
-                            <SortableItem key={colIds[j]} id={colIds[j]} disabled={readOnly}>
-                              {(handle) => <Cell cell={cell} index={j} rowSelected={isSelected} onOpen={() => (isSelected ? openCell(i, j) : setSelected(i))} drag={readOnly ? undefined : handle} />}
-                            </SortableItem>
-                          ))}
-                        </SortableList>
+                <div
+                  ref={setNodeRef}
+                  {...(readOnly ? null : listeners)}
+                  className="rows-builder__square"
+                  role="button"
+                  tabIndex={0}
+                  aria-label={t(T.builder.rowAria, {n: i + 1, selected: isSelected})}
+                  aria-pressed={isSelected}
+                  data-error={rowError ? 'true' : undefined}
+                  data-dragging={isDragging ? 'true' : undefined}
+                  title={rowError ?? undefined}
+                  onClick={() => setSelected(isSelected ? null : i)}
+                  onKeyDown={(e) => {
+                    if (e.target !== e.currentTarget) return;
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setSelected(isSelected ? null : i);
+                    }
+                  }}
+                  style={{transform, transition}}>
+                  <div className="rows-builder__square-head">
+                    <span className="rows-builder__square-number">{i + 1}</span>
+                    {!readOnly ? (
+                      <div className="rows-builder__actions" onClick={(e) => e.stopPropagation()}>
+                        <button type="button" {...attributes} {...listeners} className="rows-builder__handle" aria-label={t(T.builder.moveRowAria, {n: i + 1})} title={t(T.builder.moveRowTitle)}>
+                          ⋮⋮
+                        </button>
+                        <Button size="small" buttonStyle="pill" onClick={() => duplicate(i)} aria-label={t(T.builder.duplicateAria, {n: i + 1})} tooltip={t(T.builder.duplicate)}>
+                          ⧉
+                        </Button>
+                        <Button size="small" buttonStyle="pill" onClick={() => askRemove(i)} aria-label={t(T.builder.removeAria, {n: i + 1})} tooltip={t(T.builder.remove)}>
+                          ✕
+                        </Button>
                       </div>
-                    ) : (
-                      <p style={{...text14, ...dim, margin: 0}}>{t(T.builder.emptyRow)}</p>
-                    )}
+                    ) : null}
                   </div>
-                  {!readOnly ? (
-                    <div className="rows-builder__actions">
-                      <button type="button" {...attributes} {...listeners} className="rows-builder__handle" aria-label={t(T.builder.moveRowAria, {n: i + 1})} title={t(T.builder.moveRowTitle)}>
-                        ⋮⋮
-                      </button>
-                      <Button size="small" buttonStyle="pill" onClick={() => duplicate(i)} aria-label={t(T.builder.duplicateAria, {n: i + 1})} tooltip={t(T.builder.duplicate)}>
-                        ⧉
-                      </Button>
-                      <Button size="small" buttonStyle="pill" onClick={() => openMobile(i)} aria-label={t(T.builder.mobileOrderAria, {n: i + 1})} tooltip={t(T.builder.mobileOrder)}>
-                        <PhoneGlyph />
-                      </Button>
-                      <Button size="small" buttonStyle="pill" onClick={() => askRemove(i)} aria-label={t(T.builder.removeAria, {n: i + 1})} tooltip={t(T.builder.remove)}>
-                        ✕
-                      </Button>
+                  {row.isLoading ? (
+                    <p style={{...text14, ...dim, margin: 0}}>{t(T.builder.loading)}</p>
+                  ) : snap.columns.length ? (
+                    <div className="rows-builder__minis" style={{gridTemplateColumns: spans.map((s) => `${s}fr`).join(' ')}}>
+                      {snap.columns.map((cell, j) => (
+                        <MiniCell key={j} cell={cell} index={j} rowSelected={isSelected} onOpen={() => (isSelected ? openCell(i, j) : setSelected(i))} />
+                      ))}
                     </div>
-                  ) : null}
+                  ) : (
+                    <p style={{...text14, ...dim, margin: 0}}>{t(T.builder.emptyRow)}</p>
+                  )}
                 </div>
               )}
             </SortableItem>
           );
         })}
       </SortableList>
-
 
       <ConfirmationModal
         modalSlug={confirmSlug}
@@ -580,71 +472,6 @@ export function RowsBuilder(props: RowsBuilderProps) {
         onConfirm={onConfirm}
         onCancel={() => setPending(null)}
       />
-
-      <Modal slug={mobileSlug} className="confirmation-modal rows-mobile">
-        {mobileRow !== null
-          ? (() => {
-              const sequence = mobileSequence(flatColumns);
-              const empties = flatColumns.filter((c) => c.empty);
-              const where = (c: {row: number; col: number; span: number}) => t(T.mobileOrder.where, {row: c.row + 1, col: c.col + 1, span: c.span});
-              return (
-                <div className="confirmation-modal__wrapper rows-mobile__wrapper">
-                  <div className="confirmation-modal__content">
-                    <h2 style={{margin: 0}}>{t(T.mobileOrder.heading)}</h2>
-                    <p style={{...text14, ...dim}}>{t(T.mobileOrder.intro, {n: mobileRow + 1})}</p>
-                  </div>
-                  <SortableList ids={sequence.map((k) => `${flatColumns[k].row}-${flatColumns[k].col}`)} axis="y" onMove={moveMobile} className="rows-mobile__list" role="list">
-                    {sequence.map((k, pos) => {
-                      const c = flatColumns[k];
-                      const id = `${c.row}-${c.col}`;
-                      return (
-                        <SortableItem key={id} id={id}>
-                          {(h) => (
-                            <div
-                              ref={h.setNodeRef}
-                              role="listitem"
-                              className="rows-mobile__item"
-                              data-current={c.row === mobileRow ? 'true' : undefined}
-                              style={{position: 'relative', transform: h.transform, transition: h.transition, zIndex: h.isDragging ? 2 : undefined, background: h.isDragging ? 'var(--theme-bg)' : undefined}}>
-                              <button type="button" {...h.attributes} {...h.listeners} className="rows-builder__handle rows-builder__handle--mobile" aria-label={t(T.mobileOrder.moveAria, {where: where(c)})} title={t(T.mobileOrder.moveTitle)}>
-                                ⋮⋮
-                              </button>
-                              <span style={{...text14, ...dim}}>{pos + 1}</span>
-                              <span style={{...text14, flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
-                                {c.contents.join(', ')}
-                                <span style={dim}> · {where(c)}</span>
-                              </span>
-                            </div>
-                          )}
-                        </SortableItem>
-                      );
-                    })}
-                  </SortableList>
-                  {!sequence.length ? <p style={{...text14, ...dim, margin: 0}}>{t(T.mobileOrder.nothing)}</p> : null}
-                  {empties.length ? (
-                    <ul className="rows-mobile__list">
-                      {empties.map((c) => (
-                        <li key={`${c.row}-${c.col}`} className="rows-mobile__item" style={dim}>
-                          <span style={{...text14, flex: 1}}>
-                            {where(c)} · {t(T.mobileOrder.hidden, {emptyCell: c.contents.length > 0})}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : null}
-                  <div className="confirmation-modal__controls">
-                    <Button size="small" buttonStyle="secondary" disabled={!hasMobileOrder(flatColumns)} onClick={() => writeMobileOrder(null)}>
-                      {t(T.mobileOrder.reset)}
-                    </Button>
-                    <Button size="small" buttonStyle="primary" onClick={() => closeModal(mobileSlug)}>
-                      {t(T.mobileOrder.close)}
-                    </Button>
-                  </div>
-                </div>
-              );
-            })()
-          : null}
-      </Modal>
 
       {columnsField ? (
         <Drawer slug={drawerSlug} title={open && openCellSnapshot ? t(T.drawer.title, {row: open.row + 1, col: open.col + 1, span: openCellSnapshot.span}) : t(T.drawer.fallbackTitle)}>

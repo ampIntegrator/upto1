@@ -271,7 +271,7 @@ export interface Page {
              */
             gapYMobile?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
             /**
-             * Each row splits the width into columns whose widths add up to 12. A column can stay empty. Below 768 px, columns go full width, in the section’s mobile order (phone button); empty columns are hidden there.
+             * Each row splits the width into columns whose widths add up to 12. A column can stay empty. Below 768 px, columns go full width, in the section’s mobile order; empty columns are hidden there.
              */
             rows?:
               | {
@@ -1983,7 +1983,7 @@ export interface Section {
    */
   gapYMobile?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
   /**
-   * Each row splits the width into columns whose widths add up to 12. A column can stay empty. Below 768 px, columns go full width, in the section’s mobile order (phone button); empty columns are hidden there.
+   * Each row splits the width into columns whose widths add up to 12. A column can stay empty. Below 768 px, columns go full width, in the section’s mobile order; empty columns are hidden there.
    */
   rows?:
     | {
