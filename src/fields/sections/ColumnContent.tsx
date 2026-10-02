@@ -2,15 +2,15 @@
 
 /**
  * ColumnContent — the « Contenu » panel of the « Gérer » dialog: the fields of the block held by
- * the selected column, one field per cell, the cells flowing into as many columns as the panel's
- * height needs (scrolling sideways), so that a block with a few fields shows without scrolling
- * down. Only a field taller than the panel (an array of rows, a long rich text) scrolls down. The fields are Payload's own (RenderFields), at the paths its blocks field would give
+ * the selected column, one field per cell, on a grid of columns that fills the panel's width (one
+ * line of cells when they all fit, two otherwise, scrolling sideways beyond), so that a block with
+ * a few fields shows whole, without scrolling down. Only a field taller than the panel (an array of rows, a long rich text) scrolls down. The fields are Payload's own (RenderFields), at the paths its blocks field would give
  * them: what is typed is in the document's form.
  */
 import {getTranslation} from '@payloadcms/translations';
 import {Button, RenderFields, useFormFields, useTranslation} from '@payloadcms/ui';
 import type {ClientBlock, ClientField, SanitizedFieldsPermissions} from 'payload';
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import {sectionsText as T} from '@/i18n/admin/sections';
 import {useAdminText} from '@/i18n/admin/useAdminText';
@@ -23,10 +23,21 @@ import type {PreviewColumn} from './preview';
 /** what RenderFields needs to render some fields at their exact paths */
 type Part = {fields: ClientField[]; path: string; schemaPath: string; permissions: SanitizedFieldsPermissions};
 /** one cell of the flow: a field (after its group heading, if it opens a group), `title`: the name of the group it opens */
-type Cell = {key: string; parts: Part[]; wide: boolean; title?: string};
+/**
+ * `size`: how much of the grid a cell takes. `half`: a short field, two of them fit one above the
+ * other; `full`: a whole column (a field with a description, an upload, a textarea);
+ * `double`: two columns (a rich text, an array of rows).
+ */
+type Cell = {key: string; parts: Part[]; size: 'half' | 'full' | 'double'; title?: string};
 
-/** fields that need room: they get a wider cell */
-const WIDE = new Set(['richText', 'array', 'blocks', 'upload', 'textarea', 'collapsible', 'tabs', 'group', 'row', 'join']);
+/** fields that need two columns, and fields that need a whole column */
+const DOUBLE = new Set(['richText', 'array', 'blocks', 'collapsible', 'tabs', 'group', 'row', 'join']);
+const FULL = new Set(['upload', 'textarea', 'relationship', 'radio', 'code', 'json']);
+const sizeOf = (f: ClientField): Cell['size'] => (DOUBLE.has(f.type) ? 'double' : FULL.has(f.type) || (f.admin as {description?: unknown} | undefined)?.description ? 'full' : 'half');
+
+/** narrowest column of the grid, and the gap between columns, in px (the SCSS uses the same values) */
+const COLUMN_MIN = 260;
+const COLUMN_GAP = 20;
 
 type Deep = {fields?: Record<string, Deep>} | true | undefined;
 const inside = (permissions: SanitizedFieldsPermissions, name: string): SanitizedFieldsPermissions => {
@@ -36,8 +47,8 @@ const inside = (permissions: SanitizedFieldsPermissions, name: string): Sanitize
 };
 
 /**
- * A block's fields as a list of cells, one field per cell, so that they flow into as many short
- * columns as needed instead of one tall one. Rows and groups are opened up when all their fields
+ * A block's fields as a list of cells, one field per cell, placed on a grid of columns (Flow)
+ * instead of one tall column. Rows and groups are opened up when all their fields
  * are named: such a field has the same path (and schema path) rendered on its own as inside its
  * row; a group's fields are rendered at the group's path, the first one under the group's label.
  * Anything else (an array, a rich text, a row holding unnamed fields) stays whole. A group heading
@@ -47,8 +58,8 @@ function cells(fields: ClientField[], path: string, schemaPath: string, permissi
   const out: Cell[] = [];
   let heading: Part | null = null;
   let pendingTitle = title;
-  const push = (key: string, part: Part, wide: boolean) => {
-    out.push({key, parts: heading ? [heading, part] : [part], wide, title: pendingTitle});
+  const push = (key: string, part: Part, size: Cell['size']) => {
+    out.push({key, parts: heading ? [heading, part] : [part], size, title: pendingTitle});
     heading = null;
     pendingTitle = undefined;
   };
@@ -77,9 +88,45 @@ function cells(fields: ClientField[], path: string, schemaPath: string, permissi
       out.push(...nested);
       return;
     }
-    push(key, whole, WIDE.has(f.type));
+    push(key, whole, sizeOf(f));
   });
   return out;
+}
+
+/**
+ * The cells on a grid of equal columns that fills the panel's width:
+ *   - when every cell can have its own column (260 px at least), one cell per column, on one line;
+ *   - otherwise two lines: short fields go two per column, the others keep a whole column, and the
+ *     grid scrolls sideways if it still does not fit.
+ * Only the number of lines depends on the width (CSS grid does the placing: no field is remounted).
+ */
+function Flow({cells: list, readOnly}: {cells: Cell[]; readOnly?: boolean}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(0);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const measure = () => setWidth(el.clientWidth);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+  const fits = Math.max(1, Math.floor((width + COLUMN_GAP) / (COLUMN_MIN + COLUMN_GAP)));
+  const columns = list.reduce((n, c) => n + (c.size === 'double' ? 2 : 1), 0);
+  const lines = width === 0 || columns <= fits ? 1 : 2;
+  return (
+    <div ref={ref} className="column-content__flow" data-lines={lines} style={{gridTemplateRows: `repeat(${lines}, auto)`}}>
+      {list.map((cell) => (
+        <div key={cell.key} className="column-content__cell" data-size={cell.size}>
+          {cell.title ? <p className="column-content__title">{cell.title}</p> : null}
+          {cell.parts.map((part, i) => (
+            <RenderFields key={i} fields={part.fields} forceRender parentIndexPath="" parentPath={part.path} parentSchemaPath={part.schemaPath} permissions={part.permissions} readOnly={readOnly} />
+          ))}
+        </div>
+      ))}
+    </div>
+  );
 }
 
 type Props = {
@@ -121,16 +168,7 @@ export function ColumnContent({rowsPath, rowsSchemaPath, column, blocks, library
         ) : null}
       </div>
       {filled && block ? (
-        <div className="column-content__flow">
-          {cells(block.fields as ClientField[], `${colPath}.contents.0`, `${rowsSchemaPath}.columns.contents.${block.slug}`, permissions ?? true, i18n).map((cell) => (
-            <div key={cell.key} className="column-content__cell" data-wide={cell.wide ? 'true' : undefined}>
-              {cell.title ? <p className="column-content__title">{cell.title}</p> : null}
-              {cell.parts.map((part, i) => (
-                <RenderFields key={i} fields={part.fields} forceRender parentIndexPath="" parentPath={part.path} parentSchemaPath={part.schemaPath} permissions={part.permissions} readOnly={readOnly} />
-              ))}
-            </div>
-          ))}
-        </div>
+        <Flow cells={cells(block.fields as ClientField[], `${colPath}.contents.0`, `${rowsSchemaPath}.columns.contents.${block.slug}`, permissions ?? true, i18n)} readOnly={readOnly} />
       ) : (
         <p className="section-manager__soon">{t(T.manager.contentEmpty)}</p>
       )}

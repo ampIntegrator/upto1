@@ -88,12 +88,14 @@ still publishes: no drafts).
      `sample` of its `ContentBlock` (field path → value; scalars and rich text documents, no
      array rows). Declared so far: cards, Image with quote, text box, section heading,
      testimonial. Images are left to the editor.
-   - **Contenu**: the fields of the selected column's block, **one field per cell, the cells
-     flowing down then into the next column** (scrolling sideways), so a block with a few fields
-     shows without scrolling down (`cells()` in `ColumnContent.tsx`: rows and groups whose fields
-     are all named are opened up, each field rendered at its own path; a group heading goes with
-     the field that follows it). Surveyed on 2 Oct. 2026 at 1920 × 960: of the 24 blocks only the
-     text box scrolls down (its rich text editor is taller than the panel); arrays (FAQ items,
+   - **Contenu**: the fields of the selected column's block, **one field per cell on a grid of
+     equal columns that fills the panel's width** (`Flow` in `ColumnContent.tsx`): one line when
+     every cell can have its own column (260 px at least), otherwise two lines, short fields two
+     per column, the others (a description, an upload, a textarea) a whole column, a rich text or
+     an array two columns; beyond that the grid scrolls sideways. `cells()` opens up rows and
+     groups whose fields are all named (each field rendered at its own path); a group heading goes
+     with the field that follows it. Surveyed on 2 Oct. 2026 at 1920 × 960: of the 24 blocks only
+     the text box scrolls down (its rich text editor is taller than the panel); arrays (FAQ items,
      steps, tabs, buttons, badges) will as soon as they hold rows. « Vider la colonne ». It only
      manages a block's content: for an empty column it says to place a component first (no list
      of components there, Nicolas, 2 Oct. 2026). It replaces the column drawer. Opened by a double click on a column of a

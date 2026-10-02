@@ -356,9 +356,11 @@ async function main() {
     await p.waitForTimeout(700);
     const flow = await p.evaluate(() => {
       const el = document.querySelector('#section-manager-panel-content') as HTMLElement;
-      return {scroll: el.scrollHeight - el.clientHeight, cells: el.querySelectorAll('.column-content__cell').length};
+      const grid = el.querySelector('.column-content__flow') as HTMLElement;
+      const boxes = [...grid.querySelectorAll('.column-content__cell')].filter((c) => (c as HTMLElement).offsetWidth > 0).map((c) => c.getBoundingClientRect());
+      return {scroll: el.scrollHeight - el.clientHeight, cells: boxes.length, lines: new Set(boxes.map((b) => Math.round(b.top))).size, unused: Math.round(grid.getBoundingClientRect().right - Math.max(...boxes.map((b) => b.right)))};
     });
-    check(flow.scroll <= 0 && flow.cells >= 4, `the Image block's fields flow into columns, without vertical scroll (${flow.cells} cells, ${flow.scroll} to scroll)`);
+    check(flow.scroll <= 0 && flow.cells === 4 && flow.lines === 1 && flow.unused === 0, `the Image block's four fields take one column each, on one line, over the panel's full width, without vertical scroll (${JSON.stringify(flow)})`);
     await p.locator('.column-content .react-select').first().click();
     await p.waitForTimeout(500);
     const menu = await p.evaluate(() => {

@@ -282,7 +282,7 @@ $slide: 300ms;
   flex: 0 0 auto;
   align-items: center;
   gap: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
   font-size: 14px;
 
   .btn {
@@ -290,23 +290,30 @@ $slide: 300ms;
   }
 }
 
-// the block's fields: one per cell, flowing down then into the next column (scrolls sideways)
+// the block's fields, one per cell, on a grid of equal columns that fills the width (the number of
+// lines is set by the component: 1 when every cell can have its column, 2 otherwise); columns are
+// 260 px at least and the grid scrolls sideways beyond the panel's width
 .column-content__flow {
-  display: flex;
+  display: grid;
   flex: 1 1 0;
-  flex-flow: column wrap;
-  align-content: flex-start;
-  column-gap: var(--base);
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(260px, 1fr);
+  align-content: start;
+  gap: 8px var(--base);
   min-height: 0;
 }
 
 .column-content__cell {
-  box-sizing: border-box;
-  width: 260px;
-  margin-bottom: 14px;
+  min-width: 0;
 
-  &[data-wide] {
-    width: 420px;
+  // a field that needs a whole column, or two
+  &[data-size='full'],
+  &[data-size='double'] {
+    grid-row: 1 / -1;
+  }
+
+  &[data-size='double'] {
+    grid-column: span 2;
   }
 
   // a cell whose field is hidden by its condition
@@ -330,6 +337,12 @@ $slide: 300ms;
   .clear-indicator {
     display: none;
   }
+}
+
+// Payload's tooltips are laid out even when hidden: at the panel's right edge they would add a
+// sideways scroll for nothing
+.column-content .tooltip:not(.tooltip--show) {
+  display: none;
 }
 
 // the label of a group whose fields were opened up into cells
