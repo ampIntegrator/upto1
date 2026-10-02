@@ -274,7 +274,7 @@ $slide: 300ms;
 .column-content {
   display: flex;
   flex-direction: column;
-  min-height: 100%;
+  height: 100%;
 }
 
 .column-content__head {
@@ -290,9 +290,54 @@ $slide: 300ms;
   }
 }
 
-.column-content .section-manager__groups {
-  flex: 1 1 auto;
+// the block's fields: one per cell, flowing down then into the next column (scrolls sideways)
+.column-content__flow {
+  display: flex;
+  flex: 1 1 0;
+  flex-flow: column wrap;
+  align-content: flex-start;
+  column-gap: var(--base);
   min-height: 0;
+}
+
+.column-content__cell {
+  box-sizing: border-box;
+  width: 260px;
+  margin-bottom: 14px;
+
+  &[data-wide] {
+    width: 420px;
+  }
+
+  // a cell whose field is hidden by its condition
+  &:not(:has(.field-type, p)) {
+    display: none;
+  }
+
+  // the field fills its cell, whatever width its row gave it
+  .field-type {
+    width: 100% !important;
+    margin-bottom: 0;
+  }
+
+  // a group heading opening the cell: its rule is not needed here
+  .render-fields > p:first-child {
+    margin-block-start: 0 !important;
+    padding-block-start: 0 !important;
+    border-block-start: 0 !important;
+  }
+
+  .clear-indicator {
+    display: none;
+  }
+}
+
+// the label of a group whose fields were opened up into cells
+.column-content__title {
+  margin: 0 0 8px;
+  color: var(--theme-elevation-600);
+  font-size: 14px;
+  font-weight: 600;
 }
 
 // the block library: thumbnails in a line that scrolls sideways

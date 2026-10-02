@@ -69,6 +69,9 @@ type PanelKey = 'settings' | 'layout' | 'blocks' | 'content';
  * SPLIT, a share in %, is a safety net while nothing is measured.
  */
 const SPLIT = 35;
+/** a select menu opens upwards when less than this (px) is left under its field; one option's height */
+const MENU_ROOM = 160;
+const MENU_ITEM = 44;
 /** below this content height (px) the layout panel has nothing to fit to */
 const FIT_MIN = 150;
 const SPLIT_MIN = 20;
@@ -181,6 +184,38 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(inner);
+    return () => observer.disconnect();
+  }, []);
+  // Payload's select menus open inside the panel, which is short and clips them: each menu is kept
+  // inside the top part (a shorter list that scrolls, or opened upwards when there is more room above)
+  useEffect(() => {
+    const root = panelsRef.current;
+    if (!root) return;
+    const place = (menu: HTMLElement) => {
+      const list = menu.querySelector<HTMLElement>('.rs__menu-list');
+      const control = menu.parentElement?.querySelector<HTMLElement>('.rs__control');
+      if (!list || !control) return;
+      const bounds = root.getBoundingClientRect();
+      const box = control.getBoundingClientRect();
+      const margin = 16;
+      const below = bounds.bottom - box.bottom - margin;
+      const above = box.top - bounds.top - margin;
+      if (below < MENU_ROOM && above > below) {
+        menu.style.top = 'auto';
+        menu.style.bottom = '100%';
+      }
+      list.style.maxHeight = `${Math.max(Math.max(below, above), MENU_ITEM)}px`;
+    };
+    const observer = new MutationObserver((records) => {
+      for (const record of records) {
+        record.addedNodes.forEach((node) => {
+          if (!(node instanceof HTMLElement)) return;
+          const menu = node.matches('.rs__menu') ? node : node.querySelector<HTMLElement>('.rs__menu');
+          if (menu) place(menu);
+        });
+      }
+    });
+    observer.observe(root, {childList: true, subtree: true});
     return () => observer.disconnect();
   }, []);
   /** the share shown now, in % (the fitted height included) */

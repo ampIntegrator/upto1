@@ -341,6 +341,25 @@ async function main() {
     check(/upload|Image/i.test(await popover.innerText()), 'a click on an Image block without image shows the image field');
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-components.png`});
     await popover.getByRole('button', {name: /^(Fermer|Close)$/}).click();
+    // the Image block in the content panel: its fields flow into columns, nothing to scroll down;
+    // a select's menu stays inside the top part
+    await p.locator('.section-manager__tab[aria-controls="section-manager-panel-content"]').click();
+    await p.waitForTimeout(700);
+    const flow = await p.evaluate(() => {
+      const el = document.querySelector('#section-manager-panel-content') as HTMLElement;
+      return {scroll: el.scrollHeight - el.clientHeight, cells: el.querySelectorAll('.column-content__cell').length};
+    });
+    check(flow.scroll <= 0 && flow.cells >= 4, `the Image block's fields flow into columns, without vertical scroll (${flow.cells} cells, ${flow.scroll} to scroll)`);
+    await p.locator('.column-content .react-select').first().click();
+    await p.waitForTimeout(500);
+    const menu = await p.evaluate(() => {
+      const m = document.querySelector('.column-content .rs__menu') as HTMLElement | null;
+      const panels = document.querySelector('.section-manager__panels') as HTMLElement;
+      return m ? Math.round(panels.getBoundingClientRect().bottom - m.getBoundingClientRect().bottom) : null;
+    });
+    check(menu !== null && menu >= 0, `a select's menu opens inside the top part (${menu} px to spare)`);
+    await p.locator('.column-content .rs__option').first().click();
+    await p.waitForTimeout(300);
     await p.getByRole('button', {name: /^(Fermer|Close)$/}).first().click();
     await p.waitForTimeout(500);
 

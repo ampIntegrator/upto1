@@ -88,9 +88,14 @@ still publishes: no drafts).
      `sample` of its `ContentBlock` (field path → value; scalars and rich text documents, no
      array rows). Declared so far: cards, Image with quote, text box, section heading,
      testimonial. Images are left to the editor.
-   - **Contenu**: the fields of the selected column's block, one column per group of fields (cut at
-     the block's group headings), scrolling sideways; « Vider la colonne »; an empty column offers
-     the blocks that fit it. It replaces the column drawer. Opened by a click on a column of a
+   - **Contenu**: the fields of the selected column's block, **one field per cell, the cells
+     flowing down then into the next column** (scrolling sideways), so a block with a few fields
+     shows without scrolling down (`cells()` in `ColumnContent.tsx`: rows and groups whose fields
+     are all named are opened up, each field rendered at its own path; a group heading goes with
+     the field that follows it). Surveyed on 2 Oct. 2026 at 1920 × 960: of the 24 blocks only the
+     text box scrolls down (its rich text editor is taller than the panel); arrays (FAQ items,
+     steps, tabs, buttons, badges) will as soon as they hold rows. « Vider la colonne »; an empty
+     column offers the blocks that fit it. It replaces the column drawer. Opened by a click on a column of a
      square (Découpage), by a double click on a column of the preview, or by the pencil shown on a
      column of the preview on hover.
    - **In the preview**: a click selects the column (outlined). On a part a component marked with
@@ -160,6 +165,10 @@ Site side:
   rest through `payload`.
 
 ## Traps and limits
+
+- Payload's select menus are not portalled: they open inside the top part, which is short and clips
+  them. The dialog keeps each menu inside it (`MutationObserver` on `.rs__menu`: a shorter list
+  that scrolls, or opened upwards). Class names of Payload 3.88's react-select: check after updates.
 
 - Escape pressed while the keyboard is in the preview's frame does not reach the admin: the field
   panel takes the focus when it opens, and catches Escape before the dialog (which it would close).
