@@ -402,6 +402,33 @@ async function main() {
     check(night.groups === 3 && night.scroll <= night.height, `night: background, spacing and gaps, no vertical scroll (${night.scroll} / ${night.height})`);
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-blank-night.png`});
     await p.getByRole('button', {name: /^(Fermer|Close)$/}).first().click();
+    // a brand-new section: the top part has a usable height before a background is chosen, then
+    // follows the layout panel once the rows exist (the whole square shows, nothing is cut)
+    await p.waitForTimeout(500);
+    await p.getByRole('button', {name: /Ajouter Section|Add Section/}).click();
+    await p.locator('.drawer').getByText('Section', {exact: true}).first().click();
+    await p.waitForTimeout(1500);
+    const manage = p.getByRole('button', {name: /^(Gérer|Manage)$/});
+    if ((await manage.count()) < 3) await p.locator('.blocks-field__rows .collapsible__toggle').nth(2).click();
+    await manage.nth(2).click();
+    await p.waitForTimeout(2000);
+    const fresh = await p.evaluate(() => ({panels: (document.querySelector('.section-manager__panels') as HTMLElement).offsetHeight, total: window.innerHeight}));
+    check(fresh.panels > 250, `a new section opens with a usable top part (${fresh.panels} of ${fresh.total})`);
+    await p.getByText(/^(Clair|Light)$/).first().click();
+    await p.waitForTimeout(1500);
+    await p.getByRole('button', {name: /Découpage|Layout/}).click();
+    await p.waitForTimeout(800);
+    await p.locator('.rows-builder [role="radio"]').nth(3).dblclick();
+    await p.waitForTimeout(1500);
+    const grown = await p.evaluate(() => {
+      const panels = document.querySelector('.section-manager__panels') as HTMLElement;
+      const square = document.querySelector('.rows-builder__square') as HTMLElement | null;
+      const pad = parseFloat(getComputedStyle(document.querySelector('#section-manager-panel-layout') as HTMLElement).paddingBottom);
+      return {square: square ? Math.round(square.getBoundingClientRect().bottom) : -1, bottom: Math.round(panels.getBoundingClientRect().bottom), pad: Math.round(pad)};
+    });
+    check(grown.square > 0 && grown.bottom - grown.square === grown.pad, `after the first row is added, the top part shows the thumbnails and the whole square, nothing below (square ends ${grown.bottom - grown.square} above the edge)`);
+    if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-new-section.png`});
+    await p.getByRole('button', {name: /^(Fermer|Close)$/}).first().click();
     check(errors.length === 0, `no page error${errors.length ? `: ${errors[0]}` : ''}`);
   } finally {
     await browser.close();

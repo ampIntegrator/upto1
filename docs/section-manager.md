@@ -18,7 +18,9 @@ button opens a full-screen dialog:
   differently, from 20 % to 80 % for the settings; a double click goes back to the fitted height;
   remembered per user (preference `section-manager-split-2`). Fitted height: the layout panel's
   content (thumbnails, then the line of squares, nothing below; the line keeps a square's height
-  when there is no row yet). In the first panel each group of settings is centred in that height;
+  when there is no row yet; before a background is chosen the rows are hidden and the default
+  share, 35 %, applies; the height is measured on a wrapper of our own, because Payload replaces
+  the field nodes as they appear). In the first panel each group of settings is centred in that height;
 - header: the title, in the middle the document's fields the host listed (`headerFields`: the
   page's silo; nothing on a shared section, which has none), then, on the right, « Enregistrer et
   fermer » (the document's own save; the dialog stays open if a field is refused) and « Fermer »

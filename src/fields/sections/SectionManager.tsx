@@ -62,6 +62,8 @@ type PanelKey = 'settings' | 'layout' | 'blocks' | 'content';
  * 2 Oct. 2026); SPLIT is used until that is measured. The handle sets another share.
  */
 const SPLIT = 35;
+/** below this content height (px) the layout panel has nothing to fit to */
+const FIT_MIN = 150;
 const SPLIT_MIN = 20;
 const SPLIT_MAX = 80;
 const SPLIT_STEP = 2;
@@ -159,13 +161,16 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
   const [fit, setFit] = useState(0);
   const layoutRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const el = layoutRef.current;
-    const inner = el?.firstElementChild as HTMLElement | null;
-    if (!el || !inner) return;
-    // the content's own height, plus the panel's paddings (the panel itself is stretched)
+    // a wrapper of our own around the layout panel's fields: Payload replaces the nodes inside as
+    // the fields appear (the rows wait for a background), this one stays and follows their height
+    const inner = layoutRef.current;
+    const panel = inner?.parentElement;
+    if (!inner || !panel) return;
     const measure = () => {
-      const style = getComputedStyle(el);
-      setFit(Math.ceil(inner.offsetHeight + parseFloat(style.paddingTop) + parseFloat(style.paddingBottom)));
+      const style = getComputedStyle(panel);
+      const content = inner.offsetHeight;
+      // nothing to show yet (no background chosen): the default share, not a sliver
+      setFit(content < FIT_MIN ? 0 : Math.ceil(content + parseFloat(style.paddingTop) + parseFloat(style.paddingBottom)));
     };
     measure();
     const observer = new ResizeObserver(measure);
@@ -454,8 +459,8 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
                 <span className="section-manager__tab-label">{p.label}</span>
               </button>
               {/* folded panels stay mounted (inert, clipped): their fields keep their local state, and the panel slides open */}
-              <div id={id} ref={p.key === 'layout' ? layoutRef : undefined} className="section-manager__content" inert={!active}>
-                {p.content}
+              <div id={id} className="section-manager__content" inert={!active}>
+                {p.key === 'layout' ? <div ref={layoutRef}>{p.content}</div> : p.content}
               </div>
             </section>
           );
