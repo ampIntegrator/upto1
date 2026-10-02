@@ -396,7 +396,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
     });
   };
 
-  // an image or an icon clicked in the preview: its own field, shown next to it
+  // an image, an icon or a link clicked in the preview: its own field (the link's group: label and target), shown next to it
   const [picking, setPicking] = useState<{at: PreviewColumn; field: string; x: number; y: number} | null>(null);
   const onPreviewEvent = (event: PreviewEvent, toScreen: (box: PreviewBox) => PreviewBox) => {
     const at = {row: event.row, col: event.col};
@@ -571,19 +571,22 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
 }
 
 /**
- * A single field of a block, shown next to what was clicked in the preview (an image, an icon):
+ * A single field of a block, shown next to what was clicked in the preview (an image, an icon, a link):
  * a small panel at the pointer, closed by its button, Escape or a click beside it.
  */
 function FieldPopover({x, y, title, onClose, children}: {x: number; y: number; title: string; onClose: () => void; children: React.ReactNode}) {
   const {t} = useAdminText();
   const panel = useRef<HTMLDivElement>(null);
   const [place, setPlace] = useState({left: x, top: y});
-  // kept inside the screen
+  // kept inside the screen, again each time its content changes size (the field renders after the panel)
   useEffect(() => {
     const el = panel.current;
     if (!el) return;
     const margin = 12;
-    setPlace({left: Math.max(margin, Math.min(x, window.innerWidth - el.offsetWidth - margin)), top: Math.max(margin, Math.min(y + margin, window.innerHeight - el.offsetHeight - margin))});
+    const fit = () => setPlace({left: Math.max(margin, Math.min(x, window.innerWidth - el.offsetWidth - margin)), top: Math.max(margin, Math.min(y + margin, window.innerHeight - el.offsetHeight - margin))});
+    const observer = new ResizeObserver(fit);
+    observer.observe(el);
+    return () => observer.disconnect();
   }, [x, y]);
   // the click was in the preview's frame: bring the keyboard back here (Escape, Tab)
   useEffect(() => {

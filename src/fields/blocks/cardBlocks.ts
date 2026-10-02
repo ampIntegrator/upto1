@@ -96,7 +96,7 @@ for (const clickable of [false, true]) {
     // placeholder texts when the card is placed from the builder's library (the image is chosen by the editor)
     const sample = {...m.sample, title: 'Lorem ipsum dolor', text: loremWords(16), ...(clickable ? {'cta.label': 'Lorem ipsum', 'cta.href': '#'} : null)};
     // the parts of the Card component edited in place in the builder's preview → the block's fields
-    const parts = {title: 'title', text: 'text', action: 'cta.label', image: 'image', icon: 'iconKey'};
+    const parts = {title: 'title', text: 'text', action: 'cta', image: 'image', icon: 'iconKey'};
     CARD_BLOCKS.push({block, minSpan: CARD_MIN_SPAN, maxSpan: CARD_MAX_SPAN, fill: true, sample, parts});
   }
 }

@@ -14,11 +14,12 @@
  *     pencil, or a double click, asks the admin for the column's content panel (PREVIEW_OPEN);
  *   - click: selects the column (PREVIEW_SELECT; nothing is drawn on it). On a part a component marked with `data-part`:
  *     a text is typed in place (PREVIEW_EDIT on each keystroke; Enter or leaving keeps it, Escape
- *     gives up), an image or an icon asks the admin to show its field beside it (PREVIEW_PICK).
+ *     gives up), an image, an icon or a link (a button) asks the admin to show its field beside
+ *     it (PREVIEW_PICK): the image or icon picker, the link's label and target.
  *     Which field of the block a part shows comes with the section (`parts`, declared by the blocks).
  *     A text is typed in place only when what is displayed is the stored value, character for
  *     character; otherwise the content panel opens;
- *   - links do not navigate.
+ *   - links do not navigate: a click on one changes it.
  * While a text is being typed the route is not refreshed (the caret would be lost): it is on leaving.
  */
 import {IconButton} from '@astryxdesign/core/IconButton';
@@ -46,7 +47,7 @@ import {sendSectionPreview} from './actions';
 /** Cursors and the outline of the text being typed: preview only, theme tokens. */
 const STYLES = `
 [data-preview-column] [data-part] { cursor: text; }
-[data-preview-column] [data-part-kind='image'], [data-preview-column] [data-part-kind='icon'] { cursor: pointer; }
+[data-preview-column] [data-part-kind='image'], [data-preview-column] [data-part-kind='icon'], [data-preview-column] [data-part-kind='link'] { cursor: pointer; }
 [data-preview-editing] { outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color); outline-offset: var(--focus-outline-offset); }
 `;
 
@@ -216,7 +217,7 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
       const field = typeof blockType === 'string' ? latest.current?.parts?.[blockType]?.[name] : undefined;
       if (!field) return toParent({type: PREVIEW_OPEN, ...at});
       const kind = part.getAttribute('data-part-kind') ?? 'text';
-      if (kind === 'image' || kind === 'icon') {
+      if (kind === 'image' || kind === 'icon' || kind === 'link') {
         const r = part.getBoundingClientRect();
         return toParent({type: PREVIEW_PICK, ...at, field, box: {x: r.left, y: r.top, width: r.width, height: r.height}});
       }

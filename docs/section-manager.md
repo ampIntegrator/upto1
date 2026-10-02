@@ -108,11 +108,14 @@ still publishes: no drafts).
      the text shown is the stored value itself, otherwise the content panel opens), an image or an
      icon shows its own Payload field in a small panel beside it (`FieldPopover`). Links do not
      navigate. Rich texts are edited in the content panel.
-   - Components marked so far: **cards** (title, text, button label, image, icon), **Image** and
-     **Image with quote** (image, sentence), **text box** (title). To mark another one, two steps,
+   - Components marked so far: **cards** (title, text, image, icon, action link), **Image** and
+     **Image with quote** (image, sentence), **text box** (title, buttons), **button group**
+     (buttons). A link (`data-part-kind="link"`) shows its field in the small panel: the link's
+     group (label, « Adresse » or « Contenu du site », the address or the content, new tab), or
+     the array of buttons. To mark another one, two steps,
      one on each side: the component names its parts in its own words (`data-part="title"` on the
-     element whose only child is the text; `data-part-kind="image"` or `"icon"` on an image or an
-     icon), and the block declares which field each part shows (`parts` of its `ContentBlock`:
+     element whose only child is the text; `data-part-kind="image"`, `"icon"` or `"link"` on an image, an icon
+     or a link), and the block declares which field each part shows (`parts` of its `ContentBlock`:
      `{title: 'title', action: 'cta.label'}`; an image or icon field must be a top-level field). A block that renders nothing yet (an Image block without image) shows a
      zone named after it, one click away from its image field. An empty column shows its width
      (« 6 / 12 »; « Colonnes » is for a section without rows) and has no pencil.

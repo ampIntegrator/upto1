@@ -61,7 +61,7 @@ export function TextBox({badges = [], title, titleTag = 'h2', titleSize = 'headi
         ) : null}
         {isDocument(content) ? <RichText content={content} className={styles.prose} /> : content ? <VStack className={styles.prose}>{content}</VStack> : null}
         {buttons.length ? (
-          <HStack gap={3} wrap="wrap" hAlign={align} className={styles.buttons}>
+          <HStack gap={3} wrap="wrap" hAlign={align} className={styles.buttons} data-part="buttons" data-part-kind="link">
             {buttons.slice(0, 2).map((b, i) => (
               <Button key={i} label={b.label} href={b.href} newTab={b.newTab} variant={b.variant ?? 'primary'} size={b.size ?? 'md'} arrow={b.arrow} iconKey={b.iconKey} />
             ))}

@@ -536,7 +536,7 @@ $slide: 300ms;
 .field-popover {
   position: fixed;
   box-sizing: border-box;
-  width: 380px;
+  width: 420px;
   max-height: 70vh;
   padding: 12px;
   overflow: auto;
@@ -546,8 +546,18 @@ $slide: 300ms;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
   outline: none;
 
+  // one field per line (a link's label, kind, address, new tab)
+  .field-type.row .row__fields > * {
+    flex: 1 1 100%;
+  }
+
   .field-type {
     margin-bottom: 0;
+  }
+
+  .render-fields > .field-type + .field-type,
+  .row__fields > * + * {
+    margin-top: 12px;
   }
 }
 

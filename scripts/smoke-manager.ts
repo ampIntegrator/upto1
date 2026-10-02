@@ -343,8 +343,22 @@ async function main() {
     await p.keyboard.press('Escape');
     await p.waitForTimeout(200);
     check((await popover.count()) === 0 && (await p.locator('.section-manager__body').isVisible()), 'Escape closes the field, not the dialog');
-    // an Image block placed from the library gets an image of the media library; a click on it shows the image field
+    // a clickable card: a click on its link shows the link's fields (label, external address or content of the site)
+    await dragBlock('cardTitleLink', '1-0');
+    const link = live.locator('[data-preview-column="1-0"] [data-part="action"]');
+    await link.waitFor({timeout: 10000});
+    await link.click();
+    await popover.waitFor({timeout: 5000});
+    check((await popover.locator('input[name$=".cta.label"]').count()) === 1 && (await popover.locator('input[name$=".cta.href"]').count()) === 1 && (await popover.locator('.react-select').count()) >= 1, 'a click on a link in the preview shows its label, its kind (address or site content) and its address');
+    await p.waitForTimeout(300);
+    const inScreen = await popover.evaluate((el) => Math.round(window.innerHeight - el.getBoundingClientRect().bottom));
+    check(inScreen >= 0, `the field's panel stays inside the screen (${inScreen} px to spare)`);
+    if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-link.png`});
+    await popover.getByRole('button', {name: /^(Fermer|Close)$/}).click();
+    // an Image block replaces it (asked first), with an image of the media library; a click on it shows the image field
     await dragBlock('media', '1-0');
+    await confirm.getByRole('button', {name: /^(Remplacer|Replace)$/}).click();
+    await p.waitForTimeout(500);
     const placedImage = live.locator('[data-preview-column="1-0"] img');
     const hasMedia = Boolean(media);
     if (hasMedia) {

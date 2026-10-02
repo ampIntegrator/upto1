@@ -16,7 +16,7 @@
  * part of the title (bloc preset). With `cta`, the whole card is clickable and
  * hovering it fills the action bar; without `cta`, no bar and no link.
  * Night: place the card inside a <Theme mode="dark">.
- * `data-part` (bloc preset): names the card's parts (title, text, action, image, icon); the
+ * `data-part` (bloc preset): names the card's parts (title, text, action link, image, icon); the
  * admin's live preview edits them in place (docs/section-manager.md); no effect on the site.
  */
 import {Text} from '@astryxdesign/core/Text';
@@ -135,8 +135,8 @@ export function Card({preset = 'bloc', media = {type: 'none'}, title, tag, level
         </div>
       </div>
       {cta && showBar ? (
-        <NextLink href={cta.href} {...newTabProps(cta.newTab)} className={styles.cta} tabIndex={editorial ? -1 : undefined} aria-hidden={editorial || undefined}>
-          <span data-part={editorial ? undefined : 'action'}>{cta.label}</span>
+        <NextLink href={cta.href} {...newTabProps(cta.newTab)} className={styles.cta} tabIndex={editorial ? -1 : undefined} aria-hidden={editorial || undefined} data-part={editorial ? undefined : 'action'} data-part-kind={editorial ? undefined : 'link'}>
+          <span>{cta.label}</span>
           <ArrowRightIcon />
         </NextLink>
       ) : null}

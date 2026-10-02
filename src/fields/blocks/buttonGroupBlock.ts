@@ -81,4 +81,4 @@ const block: Block = {
 };
 
 /** 6 to 12 columns. */
-export const buttonGroupBlock: ContentBlock = {block, minSpan: 6, maxSpan: 12};
+export const buttonGroupBlock: ContentBlock = {block, minSpan: 6, maxSpan: 12, parts: {buttons: 'buttons'}};
