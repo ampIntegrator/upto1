@@ -174,6 +174,12 @@ Site side:
 
 ## Traps and limits
 
+- **Labels managed centrally are not editable in the preview** (Nicolas, 2 Oct. 2026): the link
+  label of post cards and case study cards (Blog settings, Case studies settings), the « see all »
+  button of a carousel. Their components carry no `data-part` (Card only marks its `bloc` preset,
+  CarouselControls nothing), so a click only selects the column. Keep it so: never mark a part
+  whose text does not come from a field of the block itself.
+
 - Payload's select menus are not portalled: they open inside the top part, which is short and clips
   them. The dialog keeps each menu inside it (`MutationObserver` on `.rs__menu`: a shorter list
   that scrolls, or opened upwards). Class names of Payload 3.88's react-select: check after updates.
