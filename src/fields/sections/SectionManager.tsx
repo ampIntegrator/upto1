@@ -4,8 +4,8 @@
  * SectionManager — the section's fields, edited in a full-screen dialog (« Gérer », Nicolas,
  * 1 Oct. 2026) instead of in the page's form:
  *   - in the page, the section shows only a « Gérer » button (and how many fields need fixing);
- *   - the dialog: a header (title, the document's fields the host listed, « save and close » and
- *     « close »), settings on top (35 %), in four horizontal accordions (one open, the others
+ *   - the dialog: a header (title, the document's fields the host listed, « save », « save and
+ *     close » and « close »), settings on top (35 %), in four horizontal accordions (one open, the others
  *     folded to a vertical strip): background and spacing, layout, components (the block
  *     library, dragged onto the preview's columns), content (the selected column's block), the live preview below (65 %); a handle between the two
  *     shares the height differently (until the dialog is closed).
@@ -148,19 +148,22 @@ function BarGlyph({kind}: {kind: 'save' | 'close'}) {
 function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups = [], headerFields = [], minSpans, maxSpans, hiddenBlocks, samples, presetRows, onClose}: Omit<Props, 'path'> & {onClose: () => void}) {
   const {t} = useAdminText();
   const [panel, setPanel] = useState<PanelKey>('settings');
-  // « save and close »: the document's own save; the dialog stays open when a field is refused
+  // « save » and « save and close »: the document's own save; the dialog stays open when a field is refused
   const {submit, getFields, addFieldRow, removeFieldRow, dispatchFields, getDataByPath, setModified} = useForm();
   const modified = useFormModified();
   const [saving, setSaving] = useState(false);
-  const saveAndClose = async () => {
-    if (!modified) return onClose();
+  /** saves the document; true when no field was refused */
+  const save = async (): Promise<boolean> => {
     setSaving(true);
     try {
       await submit();
-      if (!Object.values(getFields()).some((f) => f?.valid === false)) onClose();
+      return !Object.values(getFields()).some((f) => f?.valid === false);
     } finally {
       setSaving(false);
     }
+  };
+  const saveAndClose = async () => {
+    if (!modified || (await save())) onClose();
   };
   // the handle between the settings and the preview: drag it (or arrow keys) to share the height
   const body = useRef<HTMLDivElement>(null);
@@ -491,6 +494,12 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
         <h2 className="section-manager__title">{t(T.manager.title)}</h2>
         <DocumentFields names={headerFields} />
         <div className="section-manager__close">
+          {!readOnly ? (
+            <Button buttonStyle="secondary" margin={false} disabled={saving || !modified} onClick={() => void save()}>
+              <BarGlyph kind="save" />
+              {t(T.manager.save)}
+            </Button>
+          ) : null}
           {!readOnly ? (
             <Button buttonStyle="primary" margin={false} disabled={saving} onClick={saveAndClose}>
               <BarGlyph kind="save" />

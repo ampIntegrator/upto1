@@ -275,6 +275,11 @@ async function main() {
     check(!(await p.locator('.section-manager__body').isVisible()), '« close » closes the dialog, nothing saved');
     // « save and close »: the page is saved, then the dialog closes
     await p.getByRole('button', {name: /^(Gérer|Manage)$/}).first().click();
+    // « save »: the page is saved, the dialog stays open
+    await p.getByRole('button', {name: /^(Enregistrer|Save)$/}).click();
+    await p.waitForTimeout(2500);
+    const kept = JSON.stringify((await payload.findByID({collection: 'pages', id: pageId, depth: 0})).sections);
+    check(kept.includes(EDITED) && (await p.locator('.section-manager__body').isVisible()), '« save » saves the page and keeps the dialog open');
     await p.getByRole('button', {name: /^(Enregistrer et fermer|Save and close)$/}).click();
     await p.locator('.section-manager__body').waitFor({state: 'hidden', timeout: 15000});
     const saved = JSON.stringify((await payload.findByID({collection: 'pages', id: pageId, depth: 0})).sections);

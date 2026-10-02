@@ -233,6 +233,7 @@ export const sectionsText = texts({
     openDescription: {fr: 'Fond, découpage et blocs de la section, avec l’aperçu en direct.', en: 'Background, layout and blocks of the section, with the live preview.'},
     title: {fr: 'Gérer la section', en: 'Manage the section'},
     close: {fr: 'Fermer', en: 'Close'},
+    save: {fr: 'Enregistrer', en: 'Save'},
     saveAndClose: {fr: 'Enregistrer et fermer', en: 'Save and close'},
     errors: {
       fr: ({n}: {n: number}) => (n > 1 ? `${n} champs à corriger` : '1 champ à corriger'),
