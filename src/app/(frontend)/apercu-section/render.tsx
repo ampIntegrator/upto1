@@ -28,9 +28,9 @@ import type {StoredPreview} from './store';
 /**
  * A dashed zone with a light translucent background (a veil of the text colour: the theme's muted
  * background is opaque on light sections and would hide the texture). `tall`: in a section
- * without content; otherwise it takes its row's height. `field`: the image field a click fills.
+ * without content; otherwise it takes its row's height. `part`: the image part a click fills.
  */
-function Zone({label, tall, field}: {label: string; tall: boolean; field?: string}) {
+function Zone({label, tall, part}: {label: string; tall: boolean; part?: string}) {
   return (
     <VStack
       align="center"
@@ -38,8 +38,8 @@ function Zone({label, tall, field}: {label: string; tall: boolean; field?: strin
       padding={4}
       height={tall ? undefined : '100%'}
       minHeight={tall ? 'calc(var(--spacing-12) * 3)' : 'var(--spacing-12)'}
-      data-field={field}
-      data-field-kind={field ? 'image' : undefined}
+      data-part={part}
+      data-part-kind={part ? 'image' : undefined}
       style={{border: 'var(--border-width) dashed var(--color-border-emphasized)', borderRadius: 'var(--radius-element)', background: 'color-mix(in srgb, var(--color-text-primary) 6%, transparent)'}}>
       <Text color="secondary" justify="center">
         {label}
@@ -58,14 +58,13 @@ function zones(section: Record<string, unknown>): SectionsPreview {
     slot: ({row, col, blank}) => {
       if (row < 0) return <Zone label="Colonnes" tall />;
       const slug = rows[row]?.columns?.[col]?.contents?.[0]?.blockType;
-      const block = slug && slug !== EMPTY_SLUG ? siteSections.blocks.find((b) => b.block.slug === slug)?.block : undefined;
+      const declared = slug && slug !== EMPTY_SLUG ? siteSections.blocks.find((b) => b.block.slug === slug) : undefined;
       // an empty column: its width (« Colonnes » is for the section that has no row yet)
-      if (!block) return <Zone label={`${Number(rows[row]?.columns?.[col]?.span) || 12} / 12`} tall={blank} />;
-      // the block is there but shows nothing yet: named, and one click away from its image when that is what it lacks
-      const name = block.labels?.singular;
-      const label = typeof name === 'string' ? name : name && typeof name === 'object' ? ((name as Record<string, string>).fr ?? block.slug) : block.slug;
-      const image = block.fields.some((f) => f.type === 'upload' && f.name === 'image');
-      return <Zone label={`${label} · à compléter`} tall={blank} field={image ? 'image' : undefined} />;
+      if (!declared) return <Zone label={`${Number(rows[row]?.columns?.[col]?.span) || 12} / 12`} tall={blank} />;
+      // the block is there but shows nothing yet: named, and one click away from its image when it has one to give
+      const name = declared.block.labels?.singular;
+      const label = typeof name === 'string' ? name : name && typeof name === 'object' ? ((name as Record<string, string>).fr ?? declared.block.slug) : declared.block.slug;
+      return <Zone label={`${label} · à compléter`} tall={blank} part={declared.parts?.image ? 'image' : undefined} />;
     },
   };
 }

@@ -118,7 +118,8 @@ export const CONTENT_SPECS: {[T in ContentType]: {label: string; minSpan: (c: Ex
   stat: {label: 'Chiffre clé', minSpan: () => 2},
   checkList: {label: 'Liste à pastilles', minSpan: () => 2},
   callout: {label: 'Encadré', minSpan: () => 3},
-  card: {label: 'Carte', minSpan: () => 3},
+  // a card reads as a card up to 5 columns (Nicolas, 2 Oct. 2026)
+  card: {label: 'Carte', minSpan: () => 3, maxSpan: 5},
   // one testimonial per column, three or four side by side
   testimonialCard: {label: 'Carte témoignage', minSpan: () => 3, maxSpan: 4},
   // two cards before / after on 6, three trades on 4

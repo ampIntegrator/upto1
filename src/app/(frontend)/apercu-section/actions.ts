@@ -17,6 +17,6 @@ export async function sendSectionPreview(frame: string, input: Omit<PreviewDataM
   const payload = await getPayload({config});
   const {user} = await payload.auth({headers: await headers()});
   if (!user) return 'auth';
-  putPreview(frame, {section: input.section, above: input.above && typeof input.above === 'object' ? input.above : undefined, document: input.document ?? {}, id: input.id, collection: input.collection, locale: input.locale});
+  putPreview(frame, {section: input.section, above: input.above && typeof input.above === 'object' ? input.above : undefined, parts: undefined, document: input.document ?? {}, id: input.id, collection: input.collection, locale: input.locale});
   return 'ok';
 }

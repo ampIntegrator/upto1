@@ -7,7 +7,9 @@
   display: flex;
   gap: 10px;
   overflow-x: auto;
-  padding-bottom: 6px;
+  /* the height of a square, even before the first row: the dialog's top part is fitted to this panel
+     and does not jump when a row is added */
+  min-height: 110px;
 }
 .rows-builder__square {
   position: relative;

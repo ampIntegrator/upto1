@@ -10,20 +10,22 @@ In a page, a section shows its name, a « Gérer » button and, below it, its an
 the « save as shared » checkbox: these two stay in the document's form, not in the dialog. The
 button opens a full-screen dialog:
 
-- top, 35 %: the settings, in three horizontal accordions (one open, the others folded to a
+- top (as tall as the layout panel's content by default): the settings, in three horizontal accordions (one open, the others folded to a
   vertical strip): « Fond et espaces », « Découpage », « Blocs ». In the first one the groups of
   settings sit **side by side, one column per group** (background, edge line, inner spacing, grid
   gaps), so the top part does not scroll down; it scrolls sideways if the columns do not all fit;
 - between the two, a handle: drag it (or focus it and use the arrow keys) to share the height
-  differently, from 20 % to 80 % for the settings; a double click restores 35 %; remembered per
-  user (preference `section-manager-split`);
+  differently, from 20 % to 80 % for the settings; a double click goes back to the fitted height;
+  remembered per user (preference `section-manager-split-2`). Fitted height: the layout panel's
+  content (thumbnails, then the line of squares, nothing below; the line keeps a square's height
+  when there is no row yet). In the first panel each group of settings is centred in that height;
 - header: the title, in the middle the document's fields the host listed (`headerFields`: the
   page's silo; nothing on a shared section, which has none), then, on the right, « Enregistrer et
   fermer » (the document's own save; the dialog stays open if a field is refused) and « Fermer »
   (nothing saved), each with an icon;
 - the accordions slide open sideways (300 ms; a panel's content keeps its full width, the panel
   uncovers it; folded panels are `inert`; no animation with « reduced motion »);
-- bottom, 65 %: the live preview of this section alone, rendered by the site, refreshed about
+- bottom (the rest): the live preview of this section alone, rendered by the site, refreshed about
   400 ms after each change, **without saving**; a width switch, as icons without the figures (full width of the panel, as in the browser, then
   desktop 1440, tablet 990, mobile 420; remembered per user, preference `section-preview-width`), the frame being scaled down when
   it is wider than the panel, and centred in the panel both ways. The frame is exactly as tall as the section (it
@@ -86,15 +88,16 @@ still publishes: no drafts).
      square (Découpage), by a double click on a column of the preview, or by the pencil shown on a
      column of the preview on hover.
    - **In the preview**: a click selects the column (outlined). On a part a component marked with
-     `data-field`, a text is typed in place (Enter or leaving keeps it, Escape gives up; only when
+     `data-part`, a text is typed in place (Enter or leaving keeps it, Escape gives up; only when
      the text shown is the stored value itself, otherwise the content panel opens), an image or an
      icon shows its own Payload field in a small panel beside it (`FieldPopover`). Links do not
      navigate. Rich texts are edited in the content panel.
    - Components marked so far: **cards** (title, text, button label, image, icon), **Image** and
-     **Image with quote** (image, sentence), **text box** (title). To mark another one: put
-     `data-field="<field path in the block>"` on the element whose only child is the text, and
-     `data-field-kind="image"` or `"icon"` on an image or icon (the field must be a top-level
-     field of the block). A block that renders nothing yet (an Image block without image) shows a
+     **Image with quote** (image, sentence), **text box** (title). To mark another one, two steps,
+     one on each side: the component names its parts in its own words (`data-part="title"` on the
+     element whose only child is the text; `data-part-kind="image"` or `"icon"` on an image or an
+     icon), and the block declares which field each part shows (`parts` of its `ContentBlock`:
+     `{title: 'title', action: 'cta.label'}`; an image or icon field must be a top-level field). A block that renders nothing yet (an Image block without image) shows a
      zone named after it, one click away from its image field. An empty column shows its width
      (« 6 / 12 »; « Colonnes » is for a section without rows) and has no pencil.
    **Next (Nicolas):** the width warnings; the mobile order is still to be placed; marking the
@@ -105,6 +108,8 @@ still publishes: no drafts).
    rangée » (`vAlign`: top, centre, bottom), for a card taller than its content beside an image
    card or a tall block; the preview draws no outline on the selected column (only a light one on
    hover, and the pencil). Migration `20261001_143006_card_valign_collection_gap`.
+   2 Oct. 2026: cards (the eight variants) take 3 to 5 columns (`content-specs.ts`; no existing
+   card was wider).
 4. To come: the width warnings, the mobile order, marking the other components for editing in
    place, rich text in place if it is worth it.
 
@@ -133,6 +138,20 @@ Site side:
   admin session), `store.ts` (what each frame was sent, in memory, 10 minutes), `render.tsx`
   (`payload.findByID({data, depth: 2})` populates the unsaved IDs, then `toSections` and
   `PageSections` in the page's silo).
+
+## Astryx side, Payload side
+
+- The design system package (Astryx) is not touched. The site's components (`src/components/`) know
+  nothing of Payload: for the builder they only name their parts (`data-part`, their own
+  vocabulary) and take plain props (`vAlign` of Card, `gap` of Collection, `preview` of
+  PageSections). The link with the data is on the Payload side: `parts`, `sample`, `minSpan` /
+  `maxSpan` of each `ContentBlock` (`src/fields/blocks/`), conversion in `src/lib/sections.ts`.
+- The neutral core (`src/fields/sections/`) imports no site component: it talks to the preview
+  through messages (`preview.ts`) and gets everything site-specific as options.
+- This trial branch mixes both sides. When it is merged, split it as usual: the component changes
+  (Card `vAlign` and `data-part`, Collection gap, Media / MediaQuote / TextBox `data-part`, the
+  card's 5 columns in `content-specs.ts`, plus their catalogue showcases) through `astryx`, the
+  rest through `payload`.
 
 ## Traps and limits
 

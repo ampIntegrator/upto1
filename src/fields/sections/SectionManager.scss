@@ -239,6 +239,13 @@ $slide: 300ms;
     border-right: 0;
   }
 
+  // first panel: each group centred in the panel's height
+  .section-manager__groups--centred & {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
   // a group whose fields are all hidden by their condition
   &:not(:has(.render-fields > *)) {
     display: none;
@@ -496,4 +503,9 @@ $slide: 300ms;
   .btn {
     margin: 0;
   }
+}
+
+// the rows builder in the dialog: nothing below its line of squares (the top part is fitted to it)
+.section-manager__content .rows-builder {
+  margin-bottom: 0 !important;
 }

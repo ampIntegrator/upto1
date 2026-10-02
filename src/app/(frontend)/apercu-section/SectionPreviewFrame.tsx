@@ -12,9 +12,10 @@
  * Editing, in the columns (`data-preview-column`, set by PageSections):
  *   - hover: the column is outlined and, once it holds a block, a pencil shows in its corner; the
  *     pencil, or a double click, asks the admin for the column's content panel (PREVIEW_OPEN);
- *   - click: selects the column (PREVIEW_SELECT; nothing is drawn on it). On a part a component marked with `data-field`:
+ *   - click: selects the column (PREVIEW_SELECT; nothing is drawn on it). On a part a component marked with `data-part`:
  *     a text is typed in place (PREVIEW_EDIT on each keystroke; Enter or leaving keeps it, Escape
  *     gives up), an image or an icon asks the admin to show its field beside it (PREVIEW_PICK).
+ *     Which field of the block a part shows comes with the section (`parts`, declared by the blocks).
  *     A text is typed in place only when what is displayed is the stored value, character for
  *     character; otherwise the content panel opens;
  *   - links do not navigate.
@@ -44,8 +45,8 @@ import {sendSectionPreview} from './actions';
 
 /** Cursors and the outline of the text being typed: preview only, theme tokens. */
 const STYLES = `
-[data-preview-column] [data-field] { cursor: text; }
-[data-preview-column] [data-field-kind='image'], [data-preview-column] [data-field-kind='icon'] { cursor: pointer; }
+[data-preview-column] [data-part] { cursor: text; }
+[data-preview-column] [data-part-kind='image'], [data-preview-column] [data-part-kind='icon'] { cursor: pointer; }
 [data-preview-editing] { outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color); outline-offset: var(--focus-outline-offset); }
 `;
 
@@ -207,10 +208,14 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
       const columnEl = target.closest('[data-preview-column]');
       const at = columnOf(columnEl);
       if (!at || editing.current?.contains(target)) return;
-      const part = target.closest<HTMLElement>('[data-field]');
-      const field = part && columnEl?.contains(part) ? part.getAttribute('data-field') : null;
-      if (!part || !field) return toParent({type: PREVIEW_SELECT, ...at});
-      const kind = part.getAttribute('data-field-kind') ?? 'text';
+      // a part the component marked, and the field of the block it shows (the blocks' `parts` map)
+      const part = target.closest<HTMLElement>('[data-part]');
+      const name = part && columnEl?.contains(part) ? part.getAttribute('data-part') : null;
+      if (!part || !name) return toParent({type: PREVIEW_SELECT, ...at});
+      const blockType = storedValue(latest.current?.section, at, 'blockType');
+      const field = typeof blockType === 'string' ? latest.current?.parts?.[blockType]?.[name] : undefined;
+      if (!field) return toParent({type: PREVIEW_OPEN, ...at});
+      const kind = part.getAttribute('data-part-kind') ?? 'text';
       if (kind === 'image' || kind === 'icon') {
         const r = part.getBoundingClientRect();
         return toParent({type: PREVIEW_PICK, ...at, field, box: {x: r.left, y: r.top, width: r.width, height: r.height}});

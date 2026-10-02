@@ -27,6 +27,12 @@ export type ContentBlock = {
    * `cta.label` for a field of a group. Scalars and rich text documents; no array rows.
    */
   sample?: Record<string, unknown>;
+  /**
+   * Parts of the host's component that the builder's preview edits in place → the block's field
+   * each one shows (`{title: 'title', action: 'cta.label'}`). The component marks its parts with
+   * `data-part` (its own vocabulary: it knows nothing of the block); this map is the link.
+   */
+  parts?: Record<string, string>;
 };
 
 /** Block slug → minimum span, for the admin builder (serialisable client props). */
@@ -58,3 +64,6 @@ export const labelMap = (blocks: readonly ContentBlock[]): Record<string, string
 
 /** Block slug → starting values, for the admin builder (serialisable client props). */
 export const sampleMap = (blocks: readonly ContentBlock[]): Record<string, Record<string, unknown>> => Object.fromEntries(blocks.filter((b) => b.sample).map((b) => [b.block.slug, b.sample as Record<string, unknown>]));
+
+/** Block slug → part → field path, for the admin builder (serialisable client props). */
+export const partsMap = (blocks: readonly ContentBlock[]): Record<string, Record<string, string>> => Object.fromEntries(blocks.filter((b) => b.parts).map((b) => [b.block.slug, b.parts as Record<string, string>]));

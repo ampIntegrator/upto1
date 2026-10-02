@@ -30,7 +30,7 @@ async function main() {
   const email = `zz-manager-${stamp}@example.test`;
   const password = randomBytes(12).toString('hex');
   const user = await payload.create({collection: 'users', data: {email, password, name: 'ZZ smoke'} as never});
-  const section = {blockType: 'section', mode: 'light', tint: 'light', texture: 'grid', rows: [{columns: [{span: '6', contents: [{blockType: 'textBox', title: TITLE, titleTag: 'h2'}]}, {span: '6', contents: []}]}, {name: 'Rangée nommée', columns: [{span: '6', contents: [{blockType: 'textBox', title: SECOND, titleTag: 'h2'}]}, {span: '6', contents: []}]}]};
+  const section = {blockType: 'section', mode: 'light', tint: 'light', texture: 'grid', rows: [{columns: [{span: '7', contents: [{blockType: 'textBox', title: TITLE, titleTag: 'h2'}]}, {span: '5', contents: []}]}, {name: 'Rangée nommée', columns: [{span: '7', contents: [{blockType: 'textBox', title: SECOND, titleTag: 'h2'}]}, {span: '5', contents: []}]}]};
   let page: {id: number} | undefined;
   const {chromium} = await import('@playwright/test');
   const browser = await chromium.launch();
@@ -81,7 +81,22 @@ async function main() {
       const el = document.querySelector('.section-manager__panel--open .section-manager__content') as HTMLElement;
       return {scroll: el.scrollHeight, height: el.clientHeight, groups: [...document.querySelectorAll('.section-manager__group')].filter((g) => (g as HTMLElement).offsetWidth > 0).length, anchor: el.querySelectorAll('input[name$=".anchor"]').length};
     });
-    check(Math.abs(heights.panels / heights.total - 0.35) < 0.01, 'the settings take 35 % of the screen');
+    // the top part is as tall as the layout panel's content: the thumbnails, the squares, nothing below
+    const fitted = await p.evaluate(() => {
+      const el = document.querySelector('#section-manager-panel-layout') as HTMLElement;
+      const style = getComputedStyle(el);
+      const squares = el.querySelector('.rows-builder__rows') as HTMLElement;
+      return {content: Math.ceil((el.firstElementChild as HTMLElement).offsetHeight + parseFloat(style.paddingTop) + parseFloat(style.paddingBottom)), below: Math.round(el.getBoundingClientRect().bottom - squares.getBoundingClientRect().bottom - parseFloat(style.paddingBottom))};
+    });
+    check(Math.abs(heights.panels - fitted.content) <= 1 && Math.abs(fitted.below) <= 1, `the top part is fitted to the layout panel: nothing under the squares (${heights.panels} / ${fitted.content}, ${fitted.below} below)`);
+    const centred = await p.evaluate(() => {
+      const group = document.querySelector('#section-manager-panel-settings .section-manager__group') as HTMLElement;
+      const inner = group.firstElementChild as HTMLElement;
+      const a = group.getBoundingClientRect();
+      const b = inner.getBoundingClientRect();
+      return {above: Math.round(b.top - a.top), below: Math.round(a.bottom - b.bottom)};
+    });
+    check(Math.abs(centred.above - centred.below) <= 1, `the settings are centred in the panel's height (${centred.above} above, ${centred.below} below)`);
     check(top.scroll <= top.height, `the settings fit without vertical scroll (${top.scroll} / ${top.height}), in ${top.groups} columns`);
     check(top.anchor === 0, 'no anchor field in the dialog');
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-settings.png`});
@@ -219,10 +234,10 @@ async function main() {
     await p.waitForTimeout(300);
     check((await frame.locator('body > i[aria-hidden="true"]').count()) === 0, 'no outline on the selected column in the preview');
     // an empty column shows its width, and no pencil
-    await frame.getByText('6 / 12').first().hover();
+    await frame.getByText('5 / 12').first().hover();
     await p.waitForTimeout(300);
     check((await frame.getByRole('button', {name: /Modifier le contenu/}).count()) === 0, 'no pencil on a column without content');
-    await frame.getByText('6 / 12').first().dblclick();
+    await frame.getByText('5 / 12').first().dblclick();
     await p.waitForTimeout(400);
     check(/1 · col\w+ 2/.test(await head()) && (await content.locator('.block-library__block').count()) > 10, `a double click on an empty column opens the content panel, which offers the components (${await head()})`);
     check((await content.locator('.block-library__block[data-block="plan"]').isDisabled()) && !(await content.locator('.block-library__block[data-block="cardTitle"]').isDisabled()), 'components that do not fit the column cannot be picked');
@@ -275,7 +290,7 @@ async function main() {
       await p.waitForTimeout(500);
     };
     const miniEmpty = (row: number, col: number) => squares.nth(row).locator('.rows-builder__mini').nth(col).getAttribute('data-empty');
-    // a tier (4 columns at most) over a column of 6: refused, the zone is not a drop target
+    // a tier (4 columns at most) over a column of 5: refused, the zone is not a drop target
     let zoneAllowed: string | null = 'unset';
     await dragBlock('plan', '0-1', async () => {
       zoneAllowed = await p.locator('.section-preview__zone[data-zone="0-1"]').getAttribute('data-allowed');
@@ -295,7 +310,7 @@ async function main() {
     await confirm.getByRole('button', {name: /^(Annuler|Cancel)$/}).click();
     await p.waitForTimeout(300);
     // the card's icon, clicked in the preview: its field shows beside it
-    await live.locator('[data-preview-column="0-1"] [data-field="iconKey"]').click();
+    await live.locator('[data-preview-column="0-1"] [data-part="icon"]').click();
     const popover = p.locator('.field-popover');
     await popover.waitFor({timeout: 5000});
     check((await popover.getByRole('button').count()) >= 2, 'a click on an icon in the preview shows its field beside it');

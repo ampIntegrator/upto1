@@ -64,4 +64,4 @@ const block: Block = {
 };
 
 /** The block as the section builder sees it: at least half the width. */
-export const mediaQuoteBlock: ContentBlock = {block, minSpan: minSpan({type: 'mediaQuote'}), sample: {text: 'Lorem ipsum dolor sit amet.'}};
+export const mediaQuoteBlock: ContentBlock = {block, minSpan: minSpan({type: 'mediaQuote'}), sample: {text: 'Lorem ipsum dolor sit amet.'}, parts: {image: 'image', quote: 'text'}};

@@ -56,13 +56,17 @@ type Props = {
 
 type PanelKey = 'settings' | 'layout' | 'blocks' | 'content';
 
-/** share of the dialog's height taken by the settings, in %: the default, and how far the handle goes */
+/**
+ * Share of the dialog's height taken by the settings, in %. By default the top part is as tall as
+ * the layout panel's content (the layout thumbnails, then the row squares, nothing below: Nicolas,
+ * 2 Oct. 2026); SPLIT is used until that is measured. The handle sets another share.
+ */
 const SPLIT = 35;
 const SPLIT_MIN = 20;
 const SPLIT_MAX = 80;
 const SPLIT_STEP = 2;
 /** the last split chosen, remembered per user (Payload preferences) */
-const SPLIT_PREFERENCE = 'section-manager-split';
+const SPLIT_PREFERENCE = 'section-manager-split-2';
 /** kept to a tenth of a percent: the handle follows the pointer smoothly */
 const clampSplit = (n: number) => Math.min(SPLIT_MAX, Math.max(SPLIT_MIN, Math.round(n * 10) / 10));
 
@@ -150,7 +154,30 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
   // the handle between the settings and the preview: drag it (or arrow keys) to share the height
   const body = useRef<HTMLDivElement>(null);
   const panelsRef = useRef<HTMLDivElement>(null);
-  const [split, setSplit] = useState(SPLIT);
+  // null: fitted to the layout panel's content (`fit`, in px); a number: the share chosen with the handle
+  const [split, setSplit] = useState<number | null>(null);
+  const [fit, setFit] = useState(0);
+  const layoutRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = layoutRef.current;
+    const inner = el?.firstElementChild as HTMLElement | null;
+    if (!el || !inner) return;
+    // the content's own height, plus the panel's paddings (the panel itself is stretched)
+    const measure = () => {
+      const style = getComputedStyle(el);
+      setFit(Math.ceil(inner.offsetHeight + parseFloat(style.paddingTop) + parseFloat(style.paddingBottom)));
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(inner);
+    return () => observer.disconnect();
+  }, []);
+  /** the share shown now, in % (the fitted height included) */
+  const currentSplit = () => {
+    const box = body.current?.getBoundingClientRect();
+    const panels = panelsRef.current?.getBoundingClientRect();
+    return split ?? (box && panels && box.height > 0 ? (panels.height / box.height) * 100 : SPLIT);
+  };
   const dragging = useRef(false);
   const grab = useRef(0);
   const {getPreference, setPreference} = usePreferences();
@@ -165,8 +192,8 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
       live = false;
     };
   }, [getPreference]);
-  const keep = (value: number) => {
-    const next = clampSplit(value);
+  const keep = (value: number | null) => {
+    const next = value === null ? null : clampSplit(value);
     setSplit(next);
     void setPreference(SPLIT_PREFERENCE, next);
   };
@@ -188,11 +215,11 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
     if (!dragging.current) return;
     dragging.current = false;
     e.currentTarget.releasePointerCapture(e.pointerId);
-    keep(split);
+    if (split !== null) keep(split);
   };
   const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === 'ArrowUp') keep(split - SPLIT_STEP);
-    else if (e.key === 'ArrowDown') keep(split + SPLIT_STEP);
+    if (e.key === 'ArrowUp') keep(currentSplit() - SPLIT_STEP);
+    else if (e.key === 'ArrowDown') keep(currentSplit() + SPLIT_STEP);
     else if (e.key === 'Home') keep(SPLIT_MIN);
     else if (e.key === 'End') keep(SPLIT_MAX);
     else return;
@@ -356,9 +383,9 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
       readOnly={readOnly}
     />
   );
-  // the settings side by side, one column per group: no vertical scroll in the top part
+  // the settings side by side, one column per group, each centred in the panel's height: no vertical scroll in the top part
   const settings = (
-    <div className="section-manager__groups">
+    <div className="section-manager__groups section-manager__groups--centred">
       {byGroup(innerFields(field, 0), (f) => f.type === 'ui' && groups.includes(f.name)).map((fields, i) => (
         <div key={i} className="section-manager__group">
           {render(0, fields)}
@@ -400,7 +427,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
 
   return (
     <ManagerContext.Provider value={manager}>
-    <div ref={body} className="section-manager__body" style={{'--section-manager-split': `${split}%`} as React.CSSProperties}>
+    <div ref={body} className="section-manager__body" style={{'--section-manager-split': split !== null ? `${split}%` : fit > 0 ? `${fit}px` : `${SPLIT}%`} as React.CSSProperties}>
       <header className="section-manager__bar">
         <h2 className="section-manager__title">{t(T.manager.title)}</h2>
         <DocumentFields names={headerFields} />
@@ -427,7 +454,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
                 <span className="section-manager__tab-label">{p.label}</span>
               </button>
               {/* folded panels stay mounted (inert, clipped): their fields keep their local state, and the panel slides open */}
-              <div id={id} className="section-manager__content" inert={!active}>
+              <div id={id} ref={p.key === 'layout' ? layoutRef : undefined} className="section-manager__content" inert={!active}>
                 {p.content}
               </div>
             </section>
@@ -442,14 +469,14 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
           aria-label={t(T.manager.resize)}
           aria-valuemin={SPLIT_MIN}
           aria-valuemax={SPLIT_MAX}
-          aria-valuenow={split}
+          aria-valuenow={Math.round(split ?? SPLIT)}
           title={t(T.manager.resize)}
           tabIndex={0}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onPointerCancel={onPointerUp}
-          onDoubleClick={() => keep(SPLIT)}
+          onDoubleClick={() => keep(null)}
           onKeyDown={onKeyDown}
         />
       ) : null}
@@ -564,9 +591,9 @@ function LivePreview({parentPath, preview, onEvent, overlay}: {parentPath: strin
     const above = abovePath ? (getDataByPath(abovePath) as Record<string, unknown> | undefined) : undefined;
     const document: Record<string, unknown> = {};
     for (const name of preview.documentFields ?? []) document[name] = data?.[name];
-    return {section: section ?? {}, above, document, id: id ?? undefined, collection: collectionSlug ?? globalSlug ?? undefined, locale: locale?.code};
+    return {section: section ?? {}, above, parts: preview.parts, document, id: id ?? undefined, collection: collectionSlug ?? globalSlug ?? undefined, locale: locale?.code};
     // `version` changes on every edit: it is what triggers the new snapshot
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [version, parentPath, id, collectionSlug, globalSlug, locale?.code]);
+  }, [version, parentPath, id, collectionSlug, globalSlug, locale?.code, preview.parts]);
   return <SectionPreview url={preview.url} breakpoints={preview.breakpoints ?? DEFAULT_BREAKPOINTS} message={message} onEvent={onEvent} overlay={overlay} />;
 }

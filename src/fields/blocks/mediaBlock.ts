@@ -53,4 +53,4 @@ const block: Block = {
 };
 
 /** The block as the section builder sees it: fills the column from 2 columns wide. */
-export const mediaBlock: ContentBlock = {block, minSpan: minSpan({type: 'image'})};
+export const mediaBlock: ContentBlock = {block, minSpan: minSpan({type: 'image'}), parts: {image: 'image'}};

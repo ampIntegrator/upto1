@@ -33,8 +33,9 @@ export type PreviewBox = {x: number; y: number; width: number; height: number};
 export type PreviewColumnBox = PreviewColumn & PreviewBox;
 
 /**
- * What the editor does in the preview. `field`: the block's field, as the host's components mark it
- * (`data-field="title"`, `data-field="cta.label"`); `box`: the clicked part, in the frame's pixels.
+ * What the editor does in the preview. `field`: the block's field shown by the clicked part (the
+ * host's components mark their parts with `data-part`; the blocks' `parts` map gives the field);
+ * `box`: the clicked part, in the frame's pixels.
  */
 export type PreviewEvent =
   | ({type: typeof PREVIEW_SELECT} & PreviewColumn)
@@ -51,6 +52,8 @@ export type SectionPreviewOptions = {
   documentFields?: string[];
   /** width switch above the preview; the first one is the default */
   breakpoints?: PreviewBreakpoint[];
+  /** block slug → part of the host's component → field of the block (filled by the builder from the blocks' `parts`) */
+  parts?: Record<string, Record<string, string>>;
 };
 
 export type PreviewDataMessage = {
@@ -61,6 +64,8 @@ export type PreviewDataMessage = {
   above?: Record<string, unknown>;
   /** the document's fields listed in `documentFields` */
   document: Record<string, unknown>;
+  /** block slug → part of the host's component (`data-part`) → field of the block: what the frame may edit in place */
+  parts?: Record<string, Record<string, string>>;
   /** the edited document, when it exists (the host may use it to load relations) */
   id?: number | string;
   collection?: string;

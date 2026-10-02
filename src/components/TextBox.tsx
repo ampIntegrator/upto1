@@ -51,7 +51,7 @@ export function TextBox({badges = [], title, titleTag = 'h2', titleSize = 'headi
         ) : null}
         {title ? (
           <VStack gap={4} hAlign={align} className={styles.head}>
-            <Title tag={titleTag} className={styles.title} data-size={titleSize} data-field="title">
+            <Title tag={titleTag} className={styles.title} data-size={titleSize} data-part="title">
               {title}
             </Title>
             <VStack className={styles.ornament} aria-hidden="true">
