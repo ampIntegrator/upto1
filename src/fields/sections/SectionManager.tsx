@@ -57,13 +57,15 @@ type Props = {
 type PanelKey = 'settings' | 'layout' | 'blocks' | 'content';
 
 /**
- * Share of the dialog's height taken by the settings, in %. By default the top part is as tall as
- * the layout panel's content (the layout thumbnails, then the row squares, nothing below: Nicolas,
- * 2 Oct. 2026); SPLIT is used until that is measured. The handle sets another share.
+ * Share of the dialog's height taken by the settings, in %. The top part is never shorter than the
+ * layout panel's content (the layout thumbnails, then the row squares: its minimum height, Nicolas,
+ * 2 Oct. 2026), and that is its height by default; the handle can only make it taller. SPLIT is
+ * used while there is nothing to measure (no background chosen yet).
  */
 const SPLIT = 35;
 /** below this content height (px) the layout panel has nothing to fit to */
 const FIT_MIN = 150;
+/** lowest share the handle asks for; the layout panel's height is the real floor (CSS min-height) */
 const SPLIT_MIN = 20;
 const SPLIT_MAX = 80;
 const SPLIT_STEP = 2;
@@ -432,7 +434,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
 
   return (
     <ManagerContext.Provider value={manager}>
-    <div ref={body} className="section-manager__body" style={{'--section-manager-split': split !== null ? `${split}%` : fit > 0 ? `${fit}px` : `${SPLIT}%`} as React.CSSProperties}>
+    <div ref={body} className="section-manager__body" style={{'--section-manager-split': split !== null ? `${split}%` : fit > 0 ? `${fit}px` : `${SPLIT}%`, '--section-manager-fit': fit > 0 ? `${fit}px` : `${SPLIT}%`} as React.CSSProperties}>
       <header className="section-manager__bar">
         <h2 className="section-manager__title">{t(T.manager.title)}</h2>
         <DocumentFields names={headerFields} />

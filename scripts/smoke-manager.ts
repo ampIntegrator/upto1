@@ -120,6 +120,15 @@ async function main() {
     await p.locator('.section-manager__handle').dblclick();
     await p.waitForTimeout(200);
     check(Math.abs((await panelsHeight()) - startHeight) <= 2, 'a double click on the handle restores the original height');
+    // the layout panel's height is the top part's minimum: dragging the handle up does not go below it
+    const up = (await p.locator('.section-manager__handle').boundingBox())!;
+    await p.mouse.move(up.x + up.width / 2, up.y + up.height / 2);
+    await p.mouse.down();
+    await p.mouse.move(up.x + up.width / 2, up.y - 200, {steps: 5});
+    await p.mouse.up();
+    await p.waitForTimeout(200);
+    check((await panelsHeight()) === startHeight, `the top part cannot be made shorter than the layout panel (${await panelsHeight()} / ${startHeight})`);
+    // … and a share remembered below it does not apply when the dialog is opened again (checked on the second section)
 
     // first section of the page: « always » shows the edge line in the preview all the same
     await p.getByText(/^(Toujours|Always)$/).first().click();

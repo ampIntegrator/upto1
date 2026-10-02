@@ -15,7 +15,8 @@ button opens a full-screen dialog:
   settings sit **side by side, one column per group** (background, edge line, inner spacing, grid
   gaps), so the top part does not scroll down; it scrolls sideways if the columns do not all fit;
 - between the two, a handle: drag it (or focus it and use the arrow keys) to share the height
-  differently, from 20 % to 80 % for the settings; a double click goes back to the fitted height;
+  differently, up to 80 % for the settings and **never below the fitted height, which is the top
+  part's minimum**; a double click goes back to the fitted height;
   remembered per user (preference `section-manager-split-2`). Fitted height: the layout panel's
   content (thumbnails, then the line of squares, nothing below; the line keeps a square's height
   when there is no row yet; before a background is chosen the rows are hidden and the default

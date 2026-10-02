@@ -106,7 +106,8 @@ $slide: 300ms;
   display: flex;
   flex: 0 0 var(--section-manager-split, 35%);
   overflow: hidden;
-  min-height: 0;
+  // never shorter than the layout panel's content, whatever the handle or a remembered share says
+  min-height: var(--section-manager-fit, 0px);
   container-type: inline-size;
 }
 
