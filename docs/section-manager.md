@@ -87,7 +87,8 @@ still publishes: no drafts).
      A block placed this way starts with placeholder texts (lorem ipsum), so it shows at once:
      `sample` of its `ContentBlock` (field path → value; scalars and rich text documents, no
      array rows). Declared so far: cards, Image with quote, text box, section heading,
-     testimonial. Images are left to the editor.
+     testimonial. Each image field of the block (a top-level `upload`) also gets an image of its
+     collection, picked at random by the dialog (REST, images only): the block shows at once.
    - **Contenu**: the fields of the selected column's block, **one field per cell on a grid of
      equal columns that fills the panel's width** (`Flow` in `ColumnContent.tsx`): one line when
      every cell can have its own column (260 px at least), otherwise two lines, short fields two

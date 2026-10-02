@@ -311,16 +311,38 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
     },
     [columnPath, getDataByPath, removeFieldRow, setModified],
   );
+  // the images of each upload collection (ids), fetched once: a block placed from the library gets one at random
+  const {config} = useConfig();
+  const images = useRef<Record<string, Promise<(number | string)[]>>>({});
+  const randomImage = useCallback(
+    async (collection: string): Promise<number | string | undefined> => {
+      images.current[collection] ??= fetch(`${config.serverURL ?? ''}${config.routes.api}/${collection}?depth=0&limit=100&where[mimeType][like]=image/`, {credentials: 'include'})
+        .then((r) => (r.ok ? r.json() : {docs: []}))
+        .then((d: {docs?: {id: number | string}[]}) => (d.docs ?? []).map((doc) => doc.id))
+        .catch(() => []);
+      const ids = await images.current[collection];
+      return ids.length ? ids[Math.floor(Math.random() * ids.length)] : undefined;
+    },
+    [config.routes.api, config.serverURL],
+  );
   const putBlock = useCallback(
-    (at: PreviewColumn, slug: string) => {
+    async (at: PreviewColumn, slug: string) => {
+      // the block's placeholder values: it shows at once in the preview, ready to be typed over;
+      // each of its image fields gets an image of the library, picked at random
+      const values: Record<string, unknown> = {...samples?.[slug]};
+      const uploads = (blocks.find((b) => b.slug === slug)?.fields ?? []).filter((f) => f.type === 'upload' && !f.hasMany && typeof f.relationTo === 'string');
+      for (const f of uploads) {
+        if (f.type !== 'upload' || typeof f.relationTo !== 'string' || values[f.name] !== undefined) continue;
+        const id = await randomImage(f.relationTo);
+        if (id !== undefined) values[f.name] = id;
+      }
       clearColumn(at);
-      // the block's placeholder values: it shows at once in the preview, ready to be typed over
-      const subFieldState = Object.fromEntries(Object.entries(samples?.[slug] ?? {}).map(([key, value]) => [key, {value, initialValue: value, valid: true}]));
+      const subFieldState = Object.fromEntries(Object.entries(values).map(([key, value]) => [key, {value, initialValue: value, valid: true}]));
       addFieldRow({path: `${columnPath(at)}.contents`, rowIndex: 0, blockType: slug, schemaPath: `${rowsSchemaPath}.columns.contents`, subFieldState});
       setModified(true);
       setColumn(at);
     },
-    [addFieldRow, clearColumn, columnPath, rowsSchemaPath, samples, setModified],
+    [addFieldRow, blocks, clearColumn, columnPath, randomImage, rowsSchemaPath, samples, setModified],
   );
   // a block placed on a filled column: asked first
   const [replacing, setReplacing] = useState<{at: PreviewColumn; slug: string} | null>(null);
@@ -332,7 +354,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
       if (state.blockType && state.blockType !== slug) {
         setReplacing({at, slug});
         openModal(confirmSlug);
-      } else if (!state.blockType) putBlock(at, slug);
+      } else if (!state.blockType) void putBlock(at, slug);
     },
     [columnState, confirmSlug, fitsColumn, openModal, putBlock],
   );
@@ -538,7 +560,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
         confirmLabel={t(T.manager.replace)}
         cancelLabel={t(T.manager.cancel)}
         onConfirm={() => {
-          if (replacing) putBlock(replacing.at, replacing.slug);
+          if (replacing) void putBlock(replacing.at, replacing.slug);
           setReplacing(null);
         }}
         onCancel={() => setReplacing(null)}

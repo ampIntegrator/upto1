@@ -343,11 +343,17 @@ async function main() {
     await p.keyboard.press('Escape');
     await p.waitForTimeout(200);
     check((await popover.count()) === 0 && (await p.locator('.section-manager__body').isVisible()), 'Escape closes the field, not the dialog');
-    // an Image block without its image: a zone named after it, one click away from the image field
+    // an Image block placed from the library gets an image of the media library; a click on it shows the image field
     await dragBlock('media', '1-0');
-    await live.getByText(/Image · à compléter/).click();
+    const placedImage = live.locator('[data-preview-column="1-0"] img');
+    const hasMedia = Boolean(media);
+    if (hasMedia) {
+      await placedImage.waitFor({timeout: 10000});
+      check(true, 'an Image block placed from the library shows an image of the media library at once');
+      await live.locator('[data-preview-column="1-0"] [data-part="image"]').click();
+    } else await live.getByText(/Image · à compléter/).click();
     await popover.waitFor({timeout: 5000});
-    check(/upload|Image/i.test(await popover.innerText()), 'a click on an Image block without image shows the image field');
+    check(/upload|Image/i.test(await popover.innerText()), 'a click on the image of an Image block shows the image field');
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-components.png`});
     await popover.getByRole('button', {name: /^(Fermer|Close)$/}).click();
     // the Image block in the content panel: its fields flow into columns, nothing to scroll down;
