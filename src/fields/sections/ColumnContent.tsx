@@ -4,8 +4,7 @@
  * ColumnContent — the « Contenu » panel of the « Gérer » dialog: the fields of the block held by
  * the selected column, one field per cell, the cells flowing into as many columns as the panel's
  * height needs (scrolling sideways), so that a block with a few fields shows without scrolling
- * down. Only a field taller than the panel (an array of rows, a long rich text) scrolls down. An empty column offers the blocks that fit its
- * width. The fields are Payload's own (RenderFields), at the paths its blocks field would give
+ * down. Only a field taller than the panel (an array of rows, a long rich text) scrolls down. The fields are Payload's own (RenderFields), at the paths its blocks field would give
  * them: what is typed is in the document's form.
  */
 import {getTranslation} from '@payloadcms/translations';
@@ -16,7 +15,7 @@ import React from 'react';
 import {sectionsText as T} from '@/i18n/admin/sections';
 import {useAdminText} from '@/i18n/admin/useAdminText';
 
-import {BlockLibrary, type LibraryBlock} from './BlockLibrary';
+import type {LibraryBlock} from './BlockLibrary';
 import {EMPTY_SLUG} from './emptyBlock';
 import {only} from './fieldGroups';
 import type {PreviewColumn} from './preview';
@@ -90,14 +89,14 @@ type Props = {
   column: PreviewColumn | null;
   /** the blocks of the columns' contents field, as Payload gives them to the client */
   blocks: ClientBlock[];
+  /** the blocks offered by the builder: their labels name the column's block */
   library: LibraryBlock[];
   permissions?: SanitizedFieldsPermissions;
   readOnly?: boolean;
-  onPlace: (at: PreviewColumn, slug: string) => void;
   onClear: (at: PreviewColumn) => void;
 };
 
-export function ColumnContent({rowsPath, rowsSchemaPath, column, blocks, library, permissions, readOnly, onPlace, onClear}: Props) {
+export function ColumnContent({rowsPath, rowsSchemaPath, column, blocks, library, permissions, readOnly, onClear}: Props) {
   const {t} = useAdminText();
   const {i18n} = useTranslation();
   const colPath = column ? `${rowsPath}.${column.row}.columns.${column.col}` : '';
@@ -133,10 +132,7 @@ export function ColumnContent({rowsPath, rowsSchemaPath, column, blocks, library
           ))}
         </div>
       ) : (
-        <>
-          <p className="section-manager__soon">{t(T.manager.contentEmpty)}</p>
-          {!readOnly ? <BlockLibrary blocks={library} fits={(b) => b.min <= span && span <= b.max} onPick={(slug) => onPlace(column, slug)} /> : null}
-        </>
+        <p className="section-manager__soon">{t(T.manager.contentEmpty)}</p>
       )}
     </div>
   );

@@ -204,13 +204,16 @@ async function main() {
     await p.waitForTimeout(500);
     check((await squares.count()) === 2, 'delete removes a square, after confirmation');
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-layout.png`});
-    // a click on a column of a square shows its content in the « Contenu » panel
+    // a click on a column of a square selects it; a double click shows its content in the « Contenu » panel
     await squares.nth(1).locator('.rows-builder__mini:not([data-empty])').first().click();
+    await p.waitForTimeout(300);
+    check((await p.locator('.section-manager__panel--open #section-manager-panel-layout').count()) === 1 && (await squares.nth(1).locator('.rows-builder__mini[data-current]').count()) === 1, 'a click on a column of a square selects it, without leaving the layout panel');
+    await squares.nth(1).locator('.rows-builder__mini:not([data-empty])').first().dblclick();
     const content = p.locator('.column-content');
     const head = () => content.locator('.column-content__head').innerText();
     const title = content.locator('input[name$=".title"]').first();
     await title.waitFor({timeout: 10000});
-    check((await p.locator('.section-manager__panel--open #section-manager-panel-content').count()) === 1 && /2 · col\w+ 2/.test(await head()), `a click on a column of a square opens the content panel on it (${await head()})`);
+    check((await p.locator('.section-manager__panel--open #section-manager-panel-content').count()) === 1 && /2 · col\w+ 2/.test(await head()), `a double click on a column of a square opens the content panel on it (${await head()})`);
     await title.fill(EDITED);
     await frame.getByText(EDITED).waitFor({timeout: 10000});
     check(true, 'a title typed in the content panel shows in the preview');
@@ -254,9 +257,15 @@ async function main() {
     await p.waitForTimeout(300);
     check((await frame.getByRole('button', {name: /Modifier le contenu/}).count()) === 0, 'no pencil on a column without content');
     await frame.getByText('5 / 12').first().dblclick();
-    await p.waitForTimeout(400);
-    check(/1 · col\w+ 2/.test(await head()) && (await content.locator('.block-library__block').count()) > 10, `a double click on an empty column opens the content panel, which offers the components (${await head()})`);
-    check((await content.locator('.block-library__block[data-block="plan"]').isDisabled()) && !(await content.locator('.block-library__block[data-block="cardTitle"]').isDisabled()), 'components that do not fit the column cannot be picked');
+    await p.waitForTimeout(700);
+    // an empty column has no content to edit: the components open instead, and the content panel lists none
+    check((await p.locator('.section-manager__panel--open #section-manager-panel-blocks').count()) === 1, 'a double click on an empty column opens the components, not the content panel');
+    await p.locator('#section-manager-panel-blocks .block-library__block[data-block="plan"]').click();
+    await p.waitForTimeout(500);
+    check((await squares.nth(0).locator('.rows-builder__mini').nth(1).getAttribute('data-empty')) === 'true', 'a component that does not fit the selected column is not placed by a click');
+    await p.locator('.section-manager__tab[aria-controls="section-manager-panel-content"]').click();
+    await p.waitForTimeout(600);
+    check((await content.locator('.block-library__block').count()) === 0 && (await content.locator('.column-content__cell').count()) === 0, 'the content panel of an empty column offers no component list');
 
     const stored = JSON.stringify((await payload.findByID({collection: 'pages', id: pageId, depth: 0})).sections);
     check(stored.includes(TITLE) && !stored.includes(EDITED), 'nothing was saved by the preview');

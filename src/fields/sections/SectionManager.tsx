@@ -291,11 +291,15 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
 
   // the column shown in the content panel
   const [column, setColumn] = useState<PreviewColumn | null>(null);
-  const openContent = useCallback((at: PreviewColumn) => {
-    setColumn(at);
-    setPanel('content');
-  }, []);
-  const manager = useMemo(() => ({column, openContent}), [column, openContent]);
+  // the content panel is for a column that holds a block; an empty column needs a component first
+  const openContent = useCallback(
+    (at: PreviewColumn) => {
+      setColumn(at);
+      setPanel(columnState(at)?.blockType ? 'content' : 'blocks');
+    },
+    [columnState],
+  );
+  const manager = useMemo(() => ({column, selectColumn: setColumn, openContent}), [column, openContent]);
 
   /** empties the column: removes its block; final once the document is saved */
   const clearColumn = useCallback(
@@ -452,7 +456,6 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
           library={library}
           permissions={column ? blockPermissions(columnState(column)?.blockType ?? '') : true}
           readOnly={readOnly}
-          onPlace={placeBlock}
           onClear={clearColumn}
         />
       ),

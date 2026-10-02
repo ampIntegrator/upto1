@@ -14,8 +14,9 @@
  *     (mouse, touch or keyboard, sortable.tsx, dnd-kit); three buttons, always visible: move,
  *     duplicate, delete; inside a square, a column is dragged left or right to change place in
  *     its row;
- *   - a click on a square selects the row; a click on one of its columns shows the column's
- *     content in the dialog's « Contenu » panel (ColumnContent, through managerContext).
+ *   - a click on a square selects the row; a click on one of its columns selects the column, a
+ *     double click shows the column's content in the dialog's « Contenu » panel (ColumnContent,
+ *     through managerContext), or the components if the column is empty.
  *
  * Since 1 Oct. 2026 (Nicolas): no full-size column cells here and no « mobile order » dialog; the
  * stored `mobileOrder` values stay and still apply on the site.
@@ -174,10 +175,10 @@ function PresetTiles({current, currentTypes, presetRows, onReplace, onAdd, onAdd
 
 /**
  * A column of a row square: its width, filled or empty. Dragged left or right, it changes place in
- * its row (mouse or touch; at the keyboard, Alt + left / right arrow); a click shows its content
- * in the dialog's « Contenu » panel.
+ * its row (mouse or touch; at the keyboard, Alt + left / right arrow); a click selects it, a
+ * double click (or Enter) shows its content in the dialog's « Contenu » panel.
  */
-function MiniCell({cell, index, current, onOpen, onShift, drag}: {cell: CellSnapshot; index: number; current: boolean; onOpen: () => void; onShift: (by: -1 | 1) => void; drag?: SortableHandle}) {
+function MiniCell({cell, index, current, onSelect, onOpen, onShift, drag}: {cell: CellSnapshot; index: number; current: boolean; onSelect: () => void; onOpen: () => void; onShift: (by: -1 | 1) => void; drag?: SortableHandle}) {
   const {t} = useAdminText();
   const empty = !cell.filled;
   const issue = cell.narrow ? t(T.builder.narrow, {min: cell.narrow}) : cell.wide ? t(T.builder.wide, {max: cell.wide}) : null;
@@ -209,9 +210,18 @@ function MiniCell({cell, index, current, onOpen, onShift, drag}: {cell: CellSnap
           e.preventDefault();
           onShift(e.key === 'ArrowLeft' ? -1 : 1);
         }
+        // Enter: the keyboard's double click (the button's own click, on Space, selects)
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          onOpen();
+        }
         e.stopPropagation();
       }}
       onClick={(e) => {
+        e.stopPropagation();
+        onSelect();
+      }}
+      onDoubleClick={(e) => {
         e.stopPropagation();
         onOpen();
       }}>
@@ -473,7 +483,12 @@ export function RowsBuilder(props: RowsBuilderProps) {
     setPending(null);
   };
 
-  /** a click on a column of a square: its row is selected, its content shows in the dialog's panel */
+  /** a click on a column of a square: its row and the column are selected */
+  const selectCell = (row: number, col: number) => {
+    setSelected(row);
+    manager?.selectColumn({row, col});
+  };
+  /** a double click: its content shows in the dialog's panel (the components, if the column is empty) */
   const openCell = (row: number, col: number) => {
     setSelected(row);
     manager?.openContent({row, col});
@@ -554,7 +569,7 @@ export function RowsBuilder(props: RowsBuilderProps) {
                       <SortableList ids={colIds} axis="x" onMove={(from, to) => moveColumn(i, from, to)} className="rows-builder__minis">
                         {snap.columns.map((cell, j) => (
                           <SortableItem key={colIds[j]} id={colIds[j]} disabled={readOnly}>
-                            {(handle) => <MiniCell cell={cell} index={j} current={manager?.column?.row === i && manager.column.col === j} onOpen={() => openCell(i, j)} onShift={(by) => moveColumn(i, j, j + by)} drag={readOnly ? undefined : handle} />}
+                            {(handle) => <MiniCell cell={cell} index={j} current={manager?.column?.row === i && manager.column.col === j} onSelect={() => selectCell(i, j)} onOpen={() => openCell(i, j)} onShift={(by) => moveColumn(i, j, j + by)} drag={readOnly ? undefined : handle} />}
                           </SortableItem>
                         ))}
                       </SortableList>

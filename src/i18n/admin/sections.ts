@@ -100,10 +100,10 @@ export const sectionsText = texts({
       fr: ({n, span, contents}: {n: number; span: number; contents: string | null}) => `Colonne ${n}, ${span} sur 12, ${contents ?? 'vide'}`,
       en: ({n, span, contents}: {n: number; span: number; contents: string | null}) => `Column ${n}, ${span} of 12, ${contents ?? 'empty'}`,
     },
-    cellEmptyTitle: {fr: 'Vide, cliquer pour choisir un composant', en: 'Empty, click to choose a component'},
+    cellEmptyTitle: {fr: 'Vide · double clic : choisir un composant', en: 'Empty · double click: choose a component'},
     cellEditTitle: {
-      fr: ({contents}: {contents: string}) => `${contents} · cliquer pour modifier`,
-      en: ({contents}: {contents: string}) => `${contents} · click to edit`,
+      fr: ({contents}: {contents: string}) => `${contents} · double clic : modifier le contenu`,
+      en: ({contents}: {contents: string}) => `${contents} · double click: edit the content`,
     },
     cellSelectTitle: {fr: 'Cliquer pour sélectionner la rangée, puis cliquer la colonne pour la modifier', en: 'Click to select the row, then click the column to edit it'},
     moveColumnAria: {
@@ -121,12 +121,12 @@ export const sectionsText = texts({
       en: ({max}: {max: number}) => `Too wide: ${max} columns max.`,
     },
     helpNoSelection: {
-      fr: 'Double clic sur une disposition : ajoute une rangée. Clic sur un carré : sélectionne la rangée. Clic sur une colonne d’un carré : ouvre son contenu.',
-      en: 'Double click a layout: adds a row. Click a square: selects the row. Click a column of a square: opens its content.',
+      fr: 'Double clic sur une disposition : ajoute une rangée. Clic sur un carré : sélectionne la rangée. Double clic sur une colonne d’un carré : ouvre son contenu.',
+      en: 'Double click a layout: adds a row. Click a square: selects the row. Double click a column of a square: opens its content.',
     },
     helpSelected: {
-      fr: ({n}: {n: number}) => `Rangée ${n} sélectionnée. Clic sur une disposition : la remplace. Double clic : ajoute une rangée dessous. Clic sur une colonne : ouvre son contenu.`,
-      en: ({n}: {n: number}) => `Row ${n} selected. Click a layout: replaces it. Double click: adds a row below. Click a column: opens its content.`,
+      fr: ({n}: {n: number}) => `Rangée ${n} sélectionnée. Clic sur une disposition : la remplace. Double clic : ajoute une rangée dessous. Double clic sur une colonne : ouvre son contenu.`,
+      en: ({n}: {n: number}) => `Row ${n} selected. Click a layout: replaces it. Double click: adds a row below. Double click a column: opens its content.`,
     },
     helpUnavailable: {fr: 'Choisis d’abord un fond (onglet Fond et espaces) : les rangées se règlent ensuite ici.', en: 'Choose a background first (Background and spacing tab): the rows are then set here.'},
     rowHasError: {fr: 'Une rangée contient une erreur : ouvrez ses colonnes.', en: 'A row contains an error: open its columns.'},
@@ -255,10 +255,10 @@ export const sectionsText = texts({
       en: ({min, max}: {min: number; max: number}) => (min === max ? `${min} / 12` : `${min} to ${max} / 12`),
     },
     contentNone: {
-      fr: 'Aucune colonne sélectionnée : clique une colonne dans un carré de l’onglet Découpage, ou double-clique une colonne dans l’aperçu.',
-      en: 'No column selected: click a column in a square of the Layout tab, or double-click a column in the preview.',
+      fr: 'Aucun composant à modifier : double-clique une colonne remplie dans un carré de l’onglet Découpage, ou clique le crayon d’une colonne dans l’aperçu.',
+      en: 'No component to edit: double-click a filled column in a square of the Layout tab, or click the pencil of a column in the preview.',
     },
-    contentEmpty: {fr: 'Colonne vide : choisis le composant à y placer.', en: 'Empty column: choose the component to place in it.'},
+    contentEmpty: {fr: 'Cette colonne est vide : place d’abord un composant depuis l’onglet Composants.', en: 'This column is empty: place a component from the Components tab first.'},
     contentTitle: {
       fr: ({row, col, span}: {row: number; col: number; span: number}) => `Rangée ${row} · colonne ${col} · ${span} / 12`,
       en: ({row, col, span}: {row: number; col: number; span: number}) => `Row ${row} · column ${col} · ${span} / 12`,

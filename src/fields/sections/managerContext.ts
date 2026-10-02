@@ -11,7 +11,9 @@ import type {PreviewColumn} from './preview';
 export type ManagerContextValue = {
   /** the column shown in the content panel */
   column: PreviewColumn | null;
-  /** selects a column and opens the content panel on it */
+  /** selects a column, without changing panel */
+  selectColumn: (at: PreviewColumn) => void;
+  /** selects a column and shows what it needs: the content panel when it holds a block, the components when it is empty */
   openContent: (at: PreviewColumn) => void;
 };
 

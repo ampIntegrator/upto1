@@ -94,10 +94,12 @@ still publishes: no drafts).
      are all named are opened up, each field rendered at its own path; a group heading goes with
      the field that follows it). Surveyed on 2 Oct. 2026 at 1920 × 960: of the 24 blocks only the
      text box scrolls down (its rich text editor is taller than the panel); arrays (FAQ items,
-     steps, tabs, buttons, badges) will as soon as they hold rows. « Vider la colonne »; an empty
-     column offers the blocks that fit it. It replaces the column drawer. Opened by a click on a column of a
-     square (Découpage), by a double click on a column of the preview, or by the pencil shown on a
-     column of the preview on hover.
+     steps, tabs, buttons, badges) will as soon as they hold rows. « Vider la colonne ». It only
+     manages a block's content: for an empty column it says to place a component first (no list
+     of components there, Nicolas, 2 Oct. 2026). It replaces the column drawer. Opened by a double click on a column of a
+     square (Découpage; a single click only selects the column), by the pencil shown on a filled
+     column of the preview on hover, or by a double click on it. On an empty column the same
+     gestures open « Composants » instead, the column selected (a click on a thumbnail fills it).
    - **In the preview**: a click selects the column (outlined). On a part a component marked with
      `data-part`, a text is typed in place (Enter or leaving keeps it, Escape gives up; only when
      the text shown is the stored value itself, otherwise the content panel opens), an image or an
