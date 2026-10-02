@@ -199,7 +199,8 @@ $slide: 300ms;
   flex: 0 0 auto;
   width: calc(100cqw - 4 * #{$tab} - 3px);
   overflow: auto;
-  padding: var(--base);
+  // 15 px under the content, before the preview (the top part's height is the layout panel's content plus this)
+  padding: var(--base) var(--base) 15px;
   visibility: hidden;
   transition: visibility 0s linear $slide;
 

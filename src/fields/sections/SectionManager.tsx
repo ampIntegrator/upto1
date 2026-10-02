@@ -8,7 +8,7 @@
  *     « close »), settings on top (35 %), in four horizontal accordions (one open, the others
  *     folded to a vertical strip): background and spacing, layout, components (the block
  *     library, dragged onto the preview's columns), content (the selected column's block), the live preview below (65 %); a handle between the two
- *     shares the height differently (remembered per user).
+ *     shares the height differently (until the dialog is closed).
  *
  * It is the custom component of an unnamed collapsible wrapping the section's two framed blocks
  * (settings, rows), so the data does not change. Its children are rendered by Payload
@@ -16,7 +16,7 @@
  * the form state, so closing the dialog loses nothing and the page is saved as usual.
  */
 import {getTranslation} from '@payloadcms/translations';
-import {Button, ConfirmationModal, Modal, RenderFields, useConfig, useDocumentInfo, useForm, useFormFields, useFormModified, useLocale, useModal, usePreferences, useTranslation} from '@payloadcms/ui';
+import {Button, ConfirmationModal, Modal, RenderFields, useConfig, useDocumentInfo, useForm, useFormFields, useFormModified, useLocale, useModal, useTranslation} from '@payloadcms/ui';
 import type {ArrayFieldClient, BlocksFieldClient, ClientBlock, ClientField, CollapsibleFieldClient, SanitizedFieldPermissions, SanitizedFieldsPermissions} from 'payload';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 
@@ -57,10 +57,11 @@ type Props = {
 type PanelKey = 'settings' | 'layout' | 'blocks' | 'content';
 
 /**
- * Share of the dialog's height taken by the settings, in %. The top part is never shorter than the
- * layout panel's content (the layout thumbnails, then the row squares: its minimum height, Nicolas,
- * 2 Oct. 2026), and that is its height by default; the handle can only make it taller. SPLIT is
- * used while there is nothing to measure (no background chosen yet).
+ * Height of the top part (Nicolas, 2 Oct. 2026): when the dialog opens, exactly the layout panel's
+ * content, in px (the layout thumbnails, the line of row squares, 15 px under it), the preview
+ * taking the rest of the screen. It is also its minimum: the handle only makes it taller, for the
+ * time the dialog is open (nothing is remembered). SPLIT, a share in %, is used while there is
+ * nothing to measure (no background chosen yet) and for what the handle asks.
  */
 const SPLIT = 35;
 /** below this content height (px) the layout panel has nothing to fit to */
@@ -69,8 +70,6 @@ const FIT_MIN = 150;
 const SPLIT_MIN = 20;
 const SPLIT_MAX = 80;
 const SPLIT_STEP = 2;
-/** the last split chosen, remembered per user (Payload preferences) */
-const SPLIT_PREFERENCE = 'section-manager-split-2';
 /** kept to a tenth of a percent: the handle follows the pointer smoothly */
 const clampSplit = (n: number) => Math.min(SPLIT_MAX, Math.max(SPLIT_MIN, Math.round(n * 10) / 10));
 
@@ -187,23 +186,8 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
   };
   const dragging = useRef(false);
   const grab = useRef(0);
-  const {getPreference, setPreference} = usePreferences();
-  useEffect(() => {
-    let live = true;
-    getPreference<number | undefined>(SPLIT_PREFERENCE)
-      .then((saved) => {
-        if (live && typeof saved === 'number') setSplit(clampSplit(saved));
-      })
-      .catch(() => undefined);
-    return () => {
-      live = false;
-    };
-  }, [getPreference]);
-  const keep = (value: number | null) => {
-    const next = value === null ? null : clampSplit(value);
-    setSplit(next);
-    void setPreference(SPLIT_PREFERENCE, next);
-  };
+  // not remembered: the dialog always opens at the layout panel's height
+  const keep = (value: number | null) => setSplit(value === null ? null : clampSplit(value));
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     // captured: the moves keep coming while the pointer is over the preview's frame
     e.currentTarget.setPointerCapture(e.pointerId);

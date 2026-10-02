@@ -86,9 +86,9 @@ async function main() {
       const el = document.querySelector('#section-manager-panel-layout') as HTMLElement;
       const style = getComputedStyle(el);
       const squares = el.querySelector('.rows-builder__rows') as HTMLElement;
-      return {content: Math.ceil((el.firstElementChild as HTMLElement).offsetHeight + parseFloat(style.paddingTop) + parseFloat(style.paddingBottom)), below: Math.round(el.getBoundingClientRect().bottom - squares.getBoundingClientRect().bottom - parseFloat(style.paddingBottom))};
+      return {content: Math.ceil((el.firstElementChild as HTMLElement).offsetHeight + parseFloat(style.paddingTop) + parseFloat(style.paddingBottom)), below: Math.round(el.getBoundingClientRect().bottom - squares.getBoundingClientRect().bottom - parseFloat(style.paddingBottom)), pad: Math.round((document.querySelector('.section-manager__panels') as HTMLElement).getBoundingClientRect().bottom - squares.getBoundingClientRect().bottom)};
     });
-    check(Math.abs(heights.panels - fitted.content) <= 1 && Math.abs(fitted.below) <= 1, `the top part is fitted to the layout panel: nothing under the squares (${heights.panels} / ${fitted.content}, ${fitted.below} below)`);
+    check(Math.abs(heights.panels - fitted.content) <= 1 && Math.abs(fitted.below) <= 1 && fitted.pad === 15, `the top part is exactly the layout panel: thumbnails, squares, 15 px under them (${heights.panels} px, ${fitted.pad} px under the squares)`);
     const centred = await p.evaluate(() => {
       const group = document.querySelector('#section-manager-panel-settings .section-manager__group') as HTMLElement;
       const inner = group.firstElementChild as HTMLElement;
@@ -128,7 +128,7 @@ async function main() {
     await p.mouse.up();
     await p.waitForTimeout(200);
     check((await panelsHeight()) === startHeight, `the top part cannot be made shorter than the layout panel (${await panelsHeight()} / ${startHeight})`);
-    // … and a share remembered below it does not apply when the dialog is opened again (checked on the second section)
+
 
     // first section of the page: « always » shows the edge line in the preview all the same
     await p.getByText(/^(Toujours|Always)$/).first().click();
