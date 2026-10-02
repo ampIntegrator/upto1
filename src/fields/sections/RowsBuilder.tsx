@@ -5,8 +5,8 @@
  * Payload's nested accordions. Shown in the « Découpage » panel of the « Gérer » dialog, above the
  * live preview, which is where the rows and their columns are seen at full size.
  *
- *   - a single strip of layout thumbnails (a rectangle split in the column
- *     proportions): a click replaces the selected row's layout, after confirmation,
+ *   - one line of help (never wrapped), then a single strip of layout thumbnails (a rectangle
+ *     split in the column proportions): a click replaces the selected row's layout, after confirmation,
  *     a double click adds a row below the selection;
  *   - below, the rows as a line of squares (it scrolls sideways when they do not all fit), from
  *     left to right = from top to bottom in the preview; a square carries the row's number, or
@@ -95,7 +95,7 @@ function Tile({spans, active, labels}: {spans: readonly number[]; active: boolea
  * Preset rows (host option) always add a row, with their blocks placed: a click or a double click.
  * current: spans key of the selected row; currentTypes: first block type of each of its columns.
  */
-function PresetTiles({current, currentTypes, presetRows, onReplace, onAdd, onAddPreset}: {current: string; currentTypes: readonly string[]; presetRows: readonly PresetRow[]; onReplace: (spans: readonly number[]) => void; onAdd: (spans: readonly number[]) => void; onAddPreset: (preset: PresetRow) => void}) {
+function PresetTiles({current, currentTypes, presetRows, onReplace, onAdd, onAddPreset, disabled}: {disabled?: boolean; current: string; currentTypes: readonly string[]; presetRows: readonly PresetRow[]; onReplace: (spans: readonly number[]) => void; onAdd: (spans: readonly number[]) => void; onAddPreset: (preset: PresetRow) => void}) {
   const {t} = useAdminText();
   const {i18n} = useTranslation();
   /** the selected row matches a preset row: same widths and the preset's blocks in place */
@@ -143,7 +143,8 @@ function PresetTiles({current, currentTypes, presetRows, onReplace, onAdd, onAdd
             title={t(T.builder.tileTitle, {label})}
             onClick={() => click(spans)}
             onDoubleClick={() => dblClick(spans)}
-            style={{display: 'block', width: '100%', padding: 0, border: 0, background: 'transparent', cursor: 'pointer'}}>
+            disabled={disabled}
+            style={{display: 'block', width: '100%', padding: 0, border: 0, background: 'transparent', cursor: disabled ? 'default' : 'pointer', opacity: disabled ? 0.4 : 1}}>
             <Tile spans={spans} active={active} />
           </button>
         );
@@ -161,7 +162,8 @@ function PresetTiles({current, currentTypes, presetRows, onReplace, onAdd, onAdd
             title={t(T.builder.presetTileTitle, {label})}
             onClick={() => presetClick(p)}
             onDoubleClick={() => presetDblClick(p)}
-            style={{display: 'block', width: '100%', padding: 0, border: 0, background: 'transparent', cursor: 'pointer'}}>
+            disabled={disabled}
+            style={{display: 'block', width: '100%', padding: 0, border: 0, background: 'transparent', cursor: disabled ? 'default' : 'pointer', opacity: disabled ? 0.4 : 1}}>
             <Tile spans={p.spans} active={active} labels={p.spans.map((s, j) => (j === 0 ? label : String(s)))} />
           </button>
         );
@@ -272,6 +274,27 @@ function RowName({index, name, readOnly, onChange}: {index: number; name: string
       onKeyDown={(e) => e.stopPropagation()}>
       {name || index + 1}
     </button>
+  );
+}
+
+/**
+ * The layout panel while the rows are not available yet (the host shows them once a first setting
+ * is chosen): the same line of text, thumbnails and empty line of squares, disabled, so the panel
+ * (and the dialog's top part, which takes its height) is the same before and after.
+ */
+export function RowsBuilderGhost({presetRows = []}: {presetRows?: PresetRow[]}) {
+  const {t} = useAdminText();
+  const nothing = () => undefined;
+  return (
+    <div className="field-type rows-builder">
+      <p className="rows-builder__help" title={t(T.builder.helpUnavailable)}>
+        {t(T.builder.helpUnavailable)}
+      </p>
+      <div style={{marginBottom: 12}}>
+        <PresetTiles disabled current="" currentTypes={[]} presetRows={presetRows} onReplace={nothing} onAdd={nothing} onAddPreset={nothing} />
+      </div>
+      <div className="rows-builder__rows" />
+    </div>
   );
 }
 
@@ -456,24 +479,26 @@ export function RowsBuilder(props: RowsBuilderProps) {
     manager?.openContent({row, col});
   };
 
-  const rawDescription = field.admin?.description;
-  // static description from the config: a string or a Text object (function descriptions are not rendered here)
-  const description = typeof rawDescription === 'string' || (rawDescription && typeof rawDescription === 'object') ? getTranslation(rawDescription as Record<string, string> | string, i18n) : undefined;
   const selectedSpans = selected !== null ? spansKey((snapshot[selected]?.columns ?? []).map((c) => c.span)) : '';
   const selectedTypes = selected !== null ? (snapshot[selected]?.columns ?? []).map((c) => c.types?.[0] ?? '') : [];
 
   return (
     <div className="field-type rows-builder" style={{marginBottom: 'var(--base)'}}>
-      {description ? <p style={{...text14, ...dim, margin: '0 0 12px'}}>{description}</p> : null}
+      {/* one line of text, never wrapped (its full text on hover): the panel keeps one height, which the dialog's top part takes */}
+      {(() => {
+        const failed = Boolean(showError && errorPaths?.length);
+        const line = failed ? t(T.builder.rowHasError) : selected === null ? t(T.builder.helpNoSelection) : t(T.builder.helpSelected, {n: selected + 1});
+        return (
+          <p className="rows-builder__help" data-error={failed ? 'true' : undefined} title={line}>
+            {line}
+          </p>
+        );
+      })()}
       {!readOnly ? (
         <div style={{marginBottom: 12}}>
           <PresetTiles current={selectedSpans} currentTypes={selectedTypes} presetRows={presetRows} onReplace={replaceRow} onAdd={(spans) => addRow(spans)} onAddPreset={(p) => addRow(p.spans, p.blocks)} />
-          <p style={{...text14, ...dim, margin: '8px 0 0'}}>
-            {selected === null ? t(T.builder.helpNoSelection) : t(T.builder.helpSelected, {n: selected + 1})}
-          </p>
         </div>
       ) : null}
-      {showError && errorPaths?.length ? <p style={{...text14, color: 'var(--theme-error-500)', margin: '0 0 12px'}}>{t(T.builder.rowHasError)}</p> : null}
 
       {/* the rows, from left to right = from top to bottom in the preview */}
       <SortableList ids={rows.map((r) => r.id)} axis="x" onMove={move} className="rows-builder__rows">

@@ -214,7 +214,7 @@ export function sectionFields({blocks, settings = [], shareable = false, conditi
     {
       type: 'collapsible',
       label: T.manager.title,
-      admin: {components: {Field: {path: '@/fields/sections/SectionManager#SectionManager', clientProps: {preview: preview ? {...preview, parts: partsMap(blocks)} : undefined, groups, headerFields, minSpans: minSpanMap(blocks), maxSpans: maxSpanMap(blocks), hiddenBlocks: blocks.filter((b) => b.hidden).map((b) => b.block.slug), samples: sampleMap(blocks)}}}},
+      admin: {components: {Field: {path: '@/fields/sections/SectionManager#SectionManager', clientProps: {preview: preview ? {...preview, parts: partsMap(blocks)} : undefined, groups, headerFields, minSpans: minSpanMap(blocks), maxSpans: maxSpanMap(blocks), hiddenBlocks: blocks.filter((b) => b.hidden).map((b) => b.block.slug), samples: sampleMap(blocks), presetRows}}}},
       fields: [
         // section settings (the dialog's first panel)
         {type: 'collapsible', label: T.settings.collapsible, fields: common},

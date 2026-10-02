@@ -26,7 +26,8 @@ export const sectionsText = texts({
     background: {fr: 'Fond', en: 'Background'},
     backgroundLight: {fr: 'Clair', en: 'Light'},
     backgroundDark: {fr: 'Nuit', en: 'Night'},
-    backgroundMedia: {fr: 'Média (image ou vidéo)', en: 'Media (image or video)'},
+    // short: the three choices stay on one line in the dialog's column (the next field asks image or video)
+    backgroundMedia: {fr: 'Média', en: 'Media'},
     tint: {fr: 'Nuance', en: 'Shade'},
     tintBody: {fr: 'Fond de page (background-body)', en: 'Page background (background-body)'},
     tintLight: {fr: 'Silo clair (background-light)', en: 'Light silo (background-light)'},
@@ -120,13 +121,14 @@ export const sectionsText = texts({
       en: ({max}: {max: number}) => `Too wide: ${max} columns max.`,
     },
     helpNoSelection: {
-      fr: 'Double clic sur une disposition : ajoute une rangée. Clic sur une rangée : la sélectionne ; un clic sur une disposition la remplace. Clic sur une colonne d’un carré : ouvre son contenu.',
-      en: 'Double click a layout: adds a row. Click a row: selects it; clicking a layout replaces it. Click a column of a square: opens its content.',
+      fr: 'Double clic sur une disposition : ajoute une rangée. Clic sur un carré : sélectionne la rangée. Clic sur une colonne d’un carré : ouvre son contenu.',
+      en: 'Double click a layout: adds a row. Click a square: selects the row. Click a column of a square: opens its content.',
     },
     helpSelected: {
-      fr: ({n}: {n: number}) => `Rangée ${n} sélectionnée. Clic sur une de ses colonnes : ouvre son contenu. Clic sur une disposition : la remplace (après confirmation). Double clic : ajoute une rangée dessous.`,
-      en: ({n}: {n: number}) => `Row ${n} selected. Click one of its columns: opens its content. Click a layout: replaces it (after confirmation). Double click: adds a row below.`,
+      fr: ({n}: {n: number}) => `Rangée ${n} sélectionnée. Clic sur une disposition : la remplace. Double clic : ajoute une rangée dessous. Clic sur une colonne : ouvre son contenu.`,
+      en: ({n}: {n: number}) => `Row ${n} selected. Click a layout: replaces it. Double click: adds a row below. Click a column: opens its content.`,
     },
+    helpUnavailable: {fr: 'Choisis d’abord un fond (onglet Fond et espaces) : les rangées se règlent ensuite ici.', en: 'Choose a background first (Background and spacing tab): the rows are then set here.'},
     rowHasError: {fr: 'Une rangée contient une erreur : ouvrez ses colonnes.', en: 'A row contains an error: open its columns.'},
     rowAria: {
       fr: ({n, selected}: {n: number; selected: boolean}) => `Rangée ${n}${selected ? ', sélectionnée' : ''}`,

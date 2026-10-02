@@ -27,8 +27,10 @@ import {BLOCK_DRAG_TYPE, BlockLibrary, type LibraryBlock} from './BlockLibrary';
 import {ColumnContent} from './ColumnContent';
 import {EMPTY_SLUG} from './emptyBlock';
 import {byGroup, only} from './fieldGroups';
+import type {PresetRow} from './grid';
 import {ManagerContext} from './managerContext';
 import {DEFAULT_BREAKPOINTS, PREVIEW_EDIT, PREVIEW_OPEN, PREVIEW_PICK, PREVIEW_SELECT, type PreviewBox, type PreviewColumn, type PreviewColumnBox, type PreviewEvent, type SectionPreviewOptions} from './preview';
+import {RowsBuilderGhost} from './RowsBuilder';
 import {SectionPreview} from './SectionPreview';
 
 import './SectionManager.scss';
@@ -52,21 +54,23 @@ type Props = {
   hiddenBlocks?: string[];
   /** block slug → values a block starts with when placed from the library (field path → value) */
   samples?: Record<string, Record<string, unknown>>;
+  /** the host's extra layout thumbnails (shown, disabled, while the rows are not available yet) */
+  presetRows?: PresetRow[];
 };
 
 type PanelKey = 'settings' | 'layout' | 'blocks' | 'content';
 
 /**
- * Height of the top part (Nicolas, 2 Oct. 2026): when the dialog opens, exactly the layout panel's
- * content, in px (the layout thumbnails, the line of row squares, 15 px under it), the preview
- * taking the rest of the screen. It is also its minimum: the handle only makes it taller, for the
- * time the dialog is open (nothing is remembered). SPLIT, a share in %, is used while there is
- * nothing to measure (no background chosen yet) and for what the handle asks.
+ * Height of the top part (Nicolas, 2 Oct. 2026): exactly the layout panel's content, in px (one
+ * line of help, the layout thumbnails, the line of row squares, 15 px under it), the preview
+ * taking the rest of the screen. The same height in every panel and whatever is chosen: the layout
+ * panel never changes height (one unwrapped line of text, a disabled copy while the rows are not
+ * available). Only the handle changes it, for the time the dialog is open (nothing is remembered).
+ * SPLIT, a share in %, is a safety net while nothing is measured.
  */
 const SPLIT = 35;
 /** below this content height (px) the layout panel has nothing to fit to */
 const FIT_MIN = 150;
-/** lowest share the handle asks for; the layout panel's height is the real floor (CSS min-height) */
 const SPLIT_MIN = 20;
 const SPLIT_MAX = 80;
 const SPLIT_STEP = 2;
@@ -79,7 +83,7 @@ const innerFields = (field: CollapsibleFieldClient, index: number): ClientField[
   return f && 'fields' in f ? f.fields : [];
 };
 
-export function SectionManager({field, path, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups, headerFields, minSpans, maxSpans, hiddenBlocks, samples}: Props) {
+export function SectionManager({field, path, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups, headerFields, minSpans, maxSpans, hiddenBlocks, samples, presetRows}: Props) {
   const {t} = useAdminText();
   const {openModal, closeModal, isModalOpen} = useModal();
   const slug = `section-manager-${path}`;
@@ -113,6 +117,7 @@ export function SectionManager({field, path, indexPath, parentPath, parentSchema
             maxSpans={maxSpans}
             hiddenBlocks={hiddenBlocks}
             samples={samples}
+            presetRows={presetRows}
             onClose={() => closeModal(slug)}
           />
         ) : null}
@@ -137,7 +142,7 @@ function BarGlyph({kind}: {kind: 'save' | 'close'}) {
   );
 }
 
-function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups = [], headerFields = [], minSpans, maxSpans, hiddenBlocks, samples, onClose}: Omit<Props, 'path'> & {onClose: () => void}) {
+function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups = [], headerFields = [], minSpans, maxSpans, hiddenBlocks, samples, presetRows, onClose}: Omit<Props, 'path'> & {onClose: () => void}) {
   const {t} = useAdminText();
   const [panel, setPanel] = useState<PanelKey>('settings');
   // « save and close »: the document's own save; the dialog stays open when a field is refused
@@ -233,6 +238,8 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
         .map((b) => ({slug: b.slug, label: String(getTranslation(b.labels?.singular ?? b.slug, i18n)), image: b.imageURL, min: minSpans?.[b.slug] ?? 1, max: maxSpans?.[b.slug] ?? 12})),
     [blocks, hiddenBlocks, i18n, maxSpans, minSpans],
   );
+  // the rows are hidden by the host's condition (no background chosen yet)
+  const rowsHidden = useFormFields(([fields]) => fields[rowsPath]?.passesCondition === false);
   const columnPath = useCallback((at: PreviewColumn) => `${rowsPath}.${at.row}.columns.${at.col}`, [rowsPath]);
   /** width and block of a column, read from the form; null when the column does not exist */
   const columnState = useCallback(
@@ -386,7 +393,8 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
   );
   const panels: {key: PanelKey; label: string; content: React.ReactNode}[] = [
     {key: 'settings', label: t(T.manager.panelSettings), content: settings},
-    {key: 'layout', label: t(T.manager.panelLayout), content: render(1)},
+    // while the rows wait for a first setting, the same panel, disabled: one height before and after
+    {key: 'layout', label: t(T.manager.panelLayout), content: rowsHidden ? <RowsBuilderGhost presetRows={presetRows} /> : render(1)},
     {
       key: 'blocks',
       label: t(T.manager.panelBlocks),
@@ -418,7 +426,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
 
   return (
     <ManagerContext.Provider value={manager}>
-    <div ref={body} className="section-manager__body" style={{'--section-manager-split': split !== null ? `${split}%` : fit > 0 ? `${fit}px` : `${SPLIT}%`, '--section-manager-fit': fit > 0 ? `${fit}px` : `${SPLIT}%`} as React.CSSProperties}>
+    <div ref={body} className="section-manager__body" style={{'--section-manager-split': split !== null ? `${split}%` : fit > 0 ? `${fit}px` : `${SPLIT}%`} as React.CSSProperties}>
       <header className="section-manager__bar">
         <h2 className="section-manager__title">{t(T.manager.title)}</h2>
         <DocumentFields names={headerFields} />

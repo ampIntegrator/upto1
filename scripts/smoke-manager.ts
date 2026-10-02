@@ -96,6 +96,12 @@ async function main() {
       const b = inner.getBoundingClientRect();
       return {above: Math.round(b.top - a.top), below: Math.round(a.bottom - b.bottom)};
     });
+    const help = await p.evaluate(() => {
+      const builder = document.querySelector('#section-manager-panel-layout .rows-builder') as HTMLElement;
+      const line = builder.querySelector('.rows-builder__help') as HTMLElement;
+      return {texts: builder.querySelectorAll(':scope > p').length, height: line.offsetHeight, first: builder.firstElementChild === line};
+    });
+    check(help.texts === 1 && help.height === 20 && help.first, `the layout panel has a single line of text, above the thumbnails (${help.texts} text, ${help.height} px)`);
     check(Math.abs(centred.above - centred.below) <= 1, `the settings are centred in the panel's height (${centred.above} above, ${centred.below} below)`);
     check(top.scroll <= top.height, `the settings fit without vertical scroll (${top.scroll} / ${top.height}), in ${top.groups} columns`);
     check(top.anchor === 0, 'no anchor field in the dialog');
@@ -120,15 +126,16 @@ async function main() {
     await p.locator('.section-manager__handle').dblclick();
     await p.waitForTimeout(200);
     check(Math.abs((await panelsHeight()) - startHeight) <= 2, 'a double click on the handle restores the original height');
-    // the layout panel's height is the top part's minimum: dragging the handle up does not go below it
+    // only the handle changes the height: it can also make the top part shorter
     const up = (await p.locator('.section-manager__handle').boundingBox())!;
     await p.mouse.move(up.x + up.width / 2, up.y + up.height / 2);
     await p.mouse.down();
-    await p.mouse.move(up.x + up.width / 2, up.y - 200, {steps: 5});
+    await p.mouse.move(up.x + up.width / 2, up.y + up.height / 2 - 50, {steps: 5});
     await p.mouse.up();
     await p.waitForTimeout(200);
-    check((await panelsHeight()) === startHeight, `the top part cannot be made shorter than the layout panel (${await panelsHeight()} / ${startHeight})`);
-
+    check(Math.abs((await panelsHeight()) - (startHeight - 50)) <= 2, `dragging the handle 50 up makes the settings shorter (${startHeight} → ${await panelsHeight()})`);
+    await p.locator('.section-manager__handle').dblclick();
+    await p.waitForTimeout(200);
 
     // first section of the page: « always » shows the edge line in the preview all the same
     await p.getByText(/^(Toujours|Always)$/).first().click();
@@ -421,21 +428,34 @@ async function main() {
     if ((await manage.count()) < 3) await p.locator('.blocks-field__rows .collapsible__toggle').nth(2).click();
     await manage.nth(2).click();
     await p.waitForTimeout(2000);
-    const fresh = await p.evaluate(() => ({panels: (document.querySelector('.section-manager__panels') as HTMLElement).offsetHeight, total: window.innerHeight}));
-    check(fresh.panels > 250, `a new section opens with a usable top part (${fresh.panels} of ${fresh.total})`);
-    await p.getByText(/^(Clair|Light)$/).first().click();
+    // the same height before a background is chosen, after, in every panel and once a row exists
+    const topHeight = () => p.evaluate(() => (document.querySelector('.section-manager__panels') as HTMLElement).offsetHeight);
+    const opening = await topHeight();
+    await p.getByRole('button', {name: /Découpage|Layout/}).click();
+    await p.waitForTimeout(600);
+    check((await p.locator('#section-manager-panel-layout .rows-builder [role="radio"]:disabled').count()) > 10, 'before a background is chosen, the layout panel shows its thumbnails, disabled');
+    await p.getByRole('button', {name: /Fond et espaces|Background/}).click();
+    await p.waitForTimeout(600);
+    await p.getByText(/^(Nuit|Night)$/).first().click();
     await p.waitForTimeout(1500);
+    const afterBackground = await topHeight();
     await p.getByRole('button', {name: /Découpage|Layout/}).click();
     await p.waitForTimeout(800);
     await p.locator('.rows-builder [role="radio"]').nth(3).dblclick();
     await p.waitForTimeout(1500);
+    const afterRow = await topHeight();
+    await p.getByRole('button', {name: /Composants|Components/}).click();
+    await p.waitForTimeout(600);
+    const inComponents = await topHeight();
+    check(opening === startHeight && afterBackground === opening && afterRow === opening && inComponents === opening, `the top part keeps one height: new section ${opening}, background chosen ${afterBackground}, first row added ${afterRow}, another panel ${inComponents} (first section ${startHeight})`);
+    await p.getByRole('button', {name: /Découpage|Layout/}).click();
+    await p.waitForTimeout(600);
     const grown = await p.evaluate(() => {
       const panels = document.querySelector('.section-manager__panels') as HTMLElement;
       const square = document.querySelector('.rows-builder__square') as HTMLElement | null;
-      const pad = parseFloat(getComputedStyle(document.querySelector('#section-manager-panel-layout') as HTMLElement).paddingBottom);
-      return {square: square ? Math.round(square.getBoundingClientRect().bottom) : -1, bottom: Math.round(panels.getBoundingClientRect().bottom), pad: Math.round(pad)};
+      return {square: square ? Math.round(square.getBoundingClientRect().bottom) : -1, bottom: Math.round(panels.getBoundingClientRect().bottom)};
     });
-    check(grown.square > 0 && grown.bottom - grown.square === grown.pad, `after the first row is added, the top part shows the thumbnails and the whole square, nothing below (square ends ${grown.bottom - grown.square} above the edge)`);
+    check(grown.square > 0 && grown.bottom - grown.square === 15, `the whole square shows, 15 px above the preview (${grown.bottom - grown.square})`);
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-new-section.png`});
     await p.getByRole('button', {name: /^(Fermer|Close)$/}).first().click();
     check(errors.length === 0, `no page error${errors.length ? `: ${errors[0]}` : ''}`);

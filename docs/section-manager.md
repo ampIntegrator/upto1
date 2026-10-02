@@ -14,15 +14,17 @@ button opens a full-screen dialog:
   vertical strip): « Fond et espaces », « Découpage », « Blocs ». In the first one the groups of
   settings sit **side by side, one column per group** (background, edge line, inner spacing, grid
   gaps), so the top part does not scroll down; it scrolls sideways if the columns do not all fit;
-- the top part's height when the dialog opens: exactly the layout panel's content, in px (the
-  layout thumbnails, the line of row squares, 15 px under it); the preview takes the rest of the
-  screen. It is measured on a wrapper of our own (Payload replaces the field nodes as they appear);
-  the line of squares keeps a square's height when there is no row yet; before a background is
-  chosen the rows are hidden and 35 % applies. In the first panel each group of settings is centred
-  in that height;
-- between the two, a handle: drag it (or focus it and use the arrow keys) to make the top part
-  taller, up to 80 %, **never shorter than its opening height**; a double click goes back to it;
-  nothing is remembered: the dialog always opens at the layout panel's height;
+- the top part's height: exactly the layout panel's content, in px (one line of help, the layout
+  thumbnails, the line of row squares, 15 px under it); the preview takes the rest of the screen.
+  **One height in every panel and whatever is chosen** (Nicolas, 2 Oct. 2026): the layout panel
+  never changes height (its text is a single unwrapped line, full text on hover; the line of
+  squares keeps a square's height without rows; while the rows wait for a background the panel
+  shows a disabled copy of itself, `RowsBuilderGhost`). It is measured on a wrapper of our own
+  (Payload replaces the field nodes as they appear). In the first panel each group of settings is
+  centred in that height;
+- between the two, a handle: drag it (or focus it and use the arrow keys) to change the share, from
+  20 % to 80 % for the settings; a double click goes back to the layout panel's height; nothing is
+  remembered: the dialog always opens at that height;
 - header: the title, in the middle the document's fields the host listed (`headerFields`: the
   page's silo; nothing on a shared section, which has none), then, on the right, « Enregistrer et
   fermer » (the document's own save; the dialog stays open if a field is refused) and « Fermer »

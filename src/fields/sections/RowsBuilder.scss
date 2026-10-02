@@ -186,3 +186,18 @@ button.rows-builder__square-name {
   color: var(--theme-elevation-800);
   cursor: grab;
 }
+
+/* the panel's single line of text: one line whatever the width (full text on hover) */
+.rows-builder__help {
+  margin: 0 0 12px;
+  overflow: hidden;
+  color: var(--theme-elevation-600);
+  font-size: 14px;
+  line-height: 20px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &[data-error] {
+    color: var(--theme-error-500);
+  }
+}

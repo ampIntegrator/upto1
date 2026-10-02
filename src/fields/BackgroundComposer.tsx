@@ -106,7 +106,7 @@ export function BackgroundComposer(props: RadioFieldClientProps) {
     <div className="field-type background-composer" style={{flex: '1 1 0', minWidth: 0, width: '100%'}}>
       {label ? <FieldLabel label={field.label} path={path} required={field.required} /> : null}
       <div style={{display: 'flex', alignItems: 'flex-start', gap: 28, flexWrap: 'wrap'}}>
-        <div style={{display: 'flex', flexDirection: 'column', gap: 18}}>
+        <div style={{display: 'flex', flexDirection: 'column', gap: 8}}>
         <div style={{display: 'flex', flexDirection: 'column', gap: 6}}>
           <p style={legend}>{t(T.settings.tint)}</p>
           <div role="radiogroup" aria-label={t(T.settings.tint)} style={{display: 'flex', gap: 12}}>

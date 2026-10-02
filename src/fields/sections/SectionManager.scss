@@ -106,8 +106,7 @@ $slide: 300ms;
   display: flex;
   flex: 0 0 var(--section-manager-split, 35%);
   overflow: hidden;
-  // never shorter than the layout panel's content, whatever the handle or a remembered share says
-  min-height: var(--section-manager-fit, 0px);
+  min-height: 0;
   container-type: inline-size;
 }
 
@@ -360,9 +359,9 @@ $slide: 300ms;
 }
 
 .section-manager__soon {
-  margin: 0;
-  max-width: 60ch;
+  margin: 0 0 12px;
   font-size: 14px;
+  line-height: 20px;
   color: var(--theme-elevation-600);
 }
 
