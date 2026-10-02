@@ -368,6 +368,7 @@ $slide: 300ms;
 }
 
 .block-library__block {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -387,7 +388,7 @@ $slide: 300ms;
     outline: none;
   }
 
-  &:disabled {
+  &[aria-disabled] {
     opacity: 0.4;
     cursor: not-allowed;
   }

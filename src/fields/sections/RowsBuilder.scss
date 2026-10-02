@@ -30,9 +30,6 @@
   user-select: none;
   touch-action: none;
 
-  &[aria-pressed='true'] {
-    border-color: var(--theme-elevation-1000);
-  }
   &[data-error] {
     border-color: var(--theme-error-500);
   }
@@ -200,4 +197,61 @@ button.rows-builder__square-name {
   &[data-error] {
     color: var(--theme-error-500);
   }
+}
+
+/* a layout thumbnail: dragged onto the line of rows */
+.rows-builder__tile {
+  display: block;
+  user-select: none;
+
+  &:focus-visible {
+    outline: 2px solid var(--theme-elevation-1000);
+    outline-offset: 2px;
+  }
+}
+
+/* the line of rows as the place where layouts are dropped */
+.rows-builder__drop {
+  position: relative;
+  border-radius: 4px;
+
+  &[data-over] {
+    outline: 2px dashed var(--theme-success-500);
+    outline-offset: 2px;
+  }
+}
+/* no row yet: where the first layout goes */
+.rows-builder__empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  border: 1px dashed var(--theme-elevation-400);
+  border-radius: 4px;
+  color: var(--theme-elevation-600);
+  font-size: 14px;
+  pointer-events: none;
+}
+/* where the dragged layout would go: a bar before or after a square, or the square it would replace */
+.rows-builder__square[data-drop='before']::before,
+.rows-builder__square[data-drop='after']::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 2px;
+  background: var(--theme-success-500);
+}
+.rows-builder__square[data-drop='before']::before {
+  left: -8px;
+}
+.rows-builder__square[data-drop='after']::after {
+  right: -8px;
+}
+.rows-builder__square[data-drop='replace'] {
+  border-color: var(--theme-success-500);
+  background: color-mix(in srgb, var(--theme-success-500) 14%, var(--theme-elevation-50));
 }

@@ -65,17 +65,22 @@ still publishes: no drafts).
 
 1. **Done (1 Oct. 2026).** Dialog, accordions, live preview, width switch. Panel 1 = the section
    settings; panel 3 = a placeholder.
-2. **Rows, done (1 Oct. 2026).** Panel 2 = the layout thumbnails, then the rows as a **line of
-   squares** (260 × 110 px; the line scrolls sideways when they do not all fit), left to right =
-   top to bottom in the preview. A square carries the row's number, or its name: a click on it
-   to type one, 22 characters at most (`ROW_NAME_MAX`; field `name` of a row, hidden, builder
-   only, migration `20261001_131455_row_name`). A square shows the row's
-   split, is dragged sideways to reorder the rows, and carries three buttons, always visible:
-   move, duplicate, delete. Inside a square, a column is dragged sideways to change place in its
-   row (Alt + arrows at the keyboard): columns are reordered here, not in the preview (Nicolas,
-   1 Oct.). No full-size column cells and no « mobile order » dialog any more (stored
-   `mobileOrder` values stay and still apply). A click on a column of the selected square still
-   opens its drawer, until the content of the columns is handled.
+2. **Rows, done (1 Oct. 2026; drag and drop of the layouts, 2 Oct.).** Panel 2 = one line of help,
+   the layout thumbnails, then the rows as a **line of squares** (260 × 110 px; the line scrolls
+   sideways when they do not all fit), left to right = top to bottom in the preview.
+   - **Layouts are dragged onto the line of squares** (native drag and drop, `LAYOUT_DRAG_TYPE`):
+     dropped between two squares or at the end, a layout adds a row there (a bar marks the place);
+     dropped on the middle of a square, it replaces that row's layout, after confirmation; a preset
+     row (Carousel) always adds a row. At the keyboard, Enter on a thumbnail adds its row at the
+     end. No click or double click on the thumbnails, no row selection: clicks are for the columns.
+   - A square carries the row's number, or its name (a click on it to type one, 22 characters at
+     most: `ROW_NAME_MAX`; field `name` of a row, hidden, builder only, migration
+     `20261001_131455_row_name`), and three buttons, always visible: move, duplicate, delete. It is
+     dragged sideways to reorder the rows.
+   - Inside a square, a column is dragged sideways to change place in its row (Alt + arrows at the
+     keyboard); a click selects it, a double click (or Enter) opens its content.
+   - No full-size column cells and no « mobile order » dialog any more (stored `mobileOrder`
+     values stay and still apply): the mobile order is still to be placed.
 3. **Columns' contents, done (1 Oct. 2026).** Four accordions: the third is « Composants », the
    fourth « Contenu ».
    - **Composants**: the blocks as thumbnails (the picker images, `public/apercus`) in a line that

@@ -203,6 +203,47 @@ async function main() {
     await p.locator('.confirmation-modal').getByRole('button', {name: /^(Supprimer|Delete)$/}).click();
     await p.waitForTimeout(500);
     check((await squares.count()) === 2, 'delete removes a square, after confirmation');
+    // the layouts are dragged onto the line of rows: no click on them any more
+    const dragLayout = async (layout: string, x: number, y: number, during?: () => Promise<void>) => {
+      const from = (await p.locator(`#section-manager-panel-layout .rows-builder__tile[data-layout="${layout}"]`).first().boundingBox())!;
+      await p.mouse.move(from.x + from.width / 2, from.y + from.height / 2);
+      await p.mouse.down();
+      await p.mouse.move(from.x + from.width / 2 + 8, from.y + from.height / 2 + 12, {steps: 3});
+      await p.mouse.move(x, y, {steps: 10});
+      await p.mouse.move(x + 1, y + 1, {steps: 2});
+      if (during) await during();
+      await p.mouse.up();
+      await p.waitForTimeout(600);
+    };
+    const removeSquare = async (n: number) => {
+      await squares.nth(n).getByRole('button', {name: /Supprimer|Delete/}).click();
+      await p.locator('.confirmation-modal').getByRole('button', {name: /^(Supprimer|Delete)$/}).click();
+      await p.waitForTimeout(500);
+    };
+    await p.locator('#section-manager-panel-layout .rows-builder__tile[data-layout="12"]').first().click();
+    await p.locator('#section-manager-panel-layout .rows-builder__tile[data-layout="12"]').first().dblclick();
+    await p.waitForTimeout(400);
+    check((await squares.count()) === 2 && !(await p.locator('.confirmation-modal').isVisible()), 'a click or a double click on a layout does nothing');
+    const first = (await squares.nth(0).boundingBox())!;
+    let marked: string | null = null;
+    await dragLayout('12', first.x + 12, first.y + first.height / 2, async () => {
+      marked = await squares.nth(0).getAttribute('data-drop');
+    });
+    check(marked === 'before' && (await squares.count()) === 3 && (await squares.nth(0).locator('.rows-builder__mini').count()) === 1, 'a layout dropped before a square adds a row there');
+    await removeSquare(0);
+    const target = (await squares.nth(0).boundingBox())!;
+    await dragLayout('4-4-4', target.x + target.width / 2, target.y + target.height / 2, async () => {
+      marked = await squares.nth(0).getAttribute('data-drop');
+    });
+    const asked = p.locator('.confirmation-modal');
+    check(marked === 'replace' && (await asked.isVisible()), 'a layout dropped on a square asks before replacing its layout');
+    await asked.getByRole('button', {name: /^(Annuler|Cancel)$/}).click();
+    await p.waitForTimeout(300);
+    await p.locator('#section-manager-panel-layout .rows-builder__tile[data-layout="6-6"]').first().focus();
+    await p.keyboard.press('Enter');
+    await p.waitForTimeout(600);
+    check((await squares.count()) === 3 && (await squares.nth(2).locator('.rows-builder__mini').count()) === 2, 'Enter on a layout adds its row at the end');
+    await removeSquare(2);
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-layout.png`});
     // a click on a column of a square selects it; a double click shows its content in the « Contenu » panel
     await squares.nth(1).locator('.rows-builder__mini:not([data-empty])').first().click();
@@ -500,7 +541,7 @@ async function main() {
     const opening = await topHeight();
     await p.getByRole('button', {name: /Découpage|Layout/}).click();
     await p.waitForTimeout(600);
-    check((await p.locator('#section-manager-panel-layout .rows-builder [role="radio"]:disabled').count()) > 10, 'before a background is chosen, the layout panel shows its thumbnails, disabled');
+    check((await p.locator('#section-manager-panel-layout .rows-builder__tile[aria-disabled]').count()) > 10, 'before a background is chosen, the layout panel shows its thumbnails, disabled');
     await p.getByRole('button', {name: /Fond et espaces|Background/}).click();
     await p.waitForTimeout(600);
     await p.getByText(/^(Nuit|Night)$/).first().click();
@@ -508,8 +549,10 @@ async function main() {
     const afterBackground = await topHeight();
     await p.getByRole('button', {name: /Découpage|Layout/}).click();
     await p.waitForTimeout(800);
-    await p.locator('.rows-builder [role="radio"]').nth(3).dblclick();
-    await p.waitForTimeout(1500);
+    check((await p.locator('#section-manager-panel-layout .rows-builder__empty').count()) === 1, 'without a row, the line says where to drop a layout');
+    const emptyLine = (await p.locator('#section-manager-panel-layout .rows-builder__drop').boundingBox())!;
+    await dragLayout('8-2-2', emptyLine.x + 100, emptyLine.y + emptyLine.height / 2);
+    await p.waitForTimeout(900);
     const afterRow = await topHeight();
     await p.getByRole('button', {name: /Composants|Components/}).click();
     await p.waitForTimeout(600);

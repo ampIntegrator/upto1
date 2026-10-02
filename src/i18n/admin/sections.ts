@@ -88,13 +88,9 @@ export const sectionsText = texts({
   },
   builder: {
     layout: {fr: 'Disposition', en: 'Layout'},
-    presetTileTitle: {
-      fr: ({label}: {label: string}) => `${label} · clic ou double clic : ajouter une rangée pleine largeur, contenu déjà posé`,
-      en: ({label}: {label: string}) => `${label} · click or double click: add a full-width row, content already placed`,
-    },
     tileTitle: {
-      fr: ({label}: {label: string}) => `${label} · clic : remplacer la rangée sélectionnée · double clic : ajouter une rangée`,
-      en: ({label}: {label: string}) => `${label} · click: replace the selected row · double click: add a row`,
+      fr: ({label}: {label: string}) => `${label} · à glisser sur la ligne des rangées (Entrée : ajoute la rangée à la fin)`,
+      en: ({label}: {label: string}) => `${label} · drag onto the line of rows (Enter: adds the row at the end)`,
     },
     cellAria: {
       fr: ({n, span, contents}: {n: number; span: number; contents: string | null}) => `Colonne ${n}, ${span} sur 12, ${contents ?? 'vide'}`,
@@ -120,14 +116,11 @@ export const sectionsText = texts({
       fr: ({max}: {max: number}) => `Trop large : ${max} colonnes max.`,
       en: ({max}: {max: number}) => `Too wide: ${max} columns max.`,
     },
-    helpNoSelection: {
-      fr: 'Double clic sur une disposition : ajoute une rangée. Clic sur un carré : sélectionne la rangée. Double clic sur une colonne d’un carré : ouvre son contenu.',
-      en: 'Double click a layout: adds a row. Click a square: selects the row. Double click a column of a square: opens its content.',
+    help: {
+      fr: 'Glisse une disposition sur la ligne du dessous : entre deux rangées ou à la fin, elle ajoute une rangée ; sur une rangée, elle remplace son découpage. Double clic sur une colonne : ouvre son contenu.',
+      en: 'Drag a layout onto the line below: between two rows or at the end it adds a row; on a row it replaces its layout. Double click a column: opens its content.',
     },
-    helpSelected: {
-      fr: ({n}: {n: number}) => `Rangée ${n} sélectionnée. Clic sur une disposition : la remplace. Double clic : ajoute une rangée dessous. Double clic sur une colonne : ouvre son contenu.`,
-      en: ({n}: {n: number}) => `Row ${n} selected. Click a layout: replaces it. Double click: adds a row below. Double click a column: opens its content.`,
-    },
+    dropHere: {fr: 'Dépose une disposition ici', en: 'Drop a layout here'},
     helpUnavailable: {fr: 'Choisis d’abord un fond (onglet Fond et espaces) : les rangées se règlent ensuite ici.', en: 'Choose a background first (Background and spacing tab): the rows are then set here.'},
     rowHasError: {fr: 'Une rangée contient une erreur : ouvrez ses colonnes.', en: 'A row contains an error: open its columns.'},
     rowAria: {

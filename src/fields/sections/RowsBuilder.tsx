@@ -6,15 +6,16 @@
  * live preview, which is where the rows and their columns are seen at full size.
  *
  *   - one line of help (never wrapped), then a single strip of layout thumbnails (a rectangle
- *     split in the column proportions): a click replaces the selected row's layout, after confirmation,
- *     a double click adds a row below the selection;
+ *     split in the column proportions), dragged onto the line of rows: between two squares or at
+ *     the end a thumbnail adds a row there, on a square it replaces that row's layout, after
+ *     confirmation (no click on the thumbnails or the squares: clicks are for the columns);
  *   - below, the rows as a line of squares (it scrolls sideways when they do not all fit), from
  *     left to right = from top to bottom in the preview; a square carries the row's number, or
  *     the name typed in its place (a click on it, 22 characters at most), and shows the row's split; it is dragged left or right to reorder the rows
  *     (mouse, touch or keyboard, sortable.tsx, dnd-kit); three buttons, always visible: move,
  *     duplicate, delete; inside a square, a column is dragged left or right to change place in
  *     its row;
- *   - a click on a square selects the row; a click on one of its columns selects the column, a
+ *   - a click on a column of a square selects the column, a
  *     double click shows the column's content in the dialog's « Contenu » panel (ColumnContent,
  *     through managerContext), or the components if the column is empty.
  *
@@ -34,7 +35,7 @@ import {useAdminText} from '@/i18n/admin/useAdminText';
 
 import {EMPTY_SLUG} from './emptyBlock';
 import {useManager} from './managerContext';
-import {type ColumnSpan, presetLabel, type PresetRow, ROW_NAME_MAX, ROW_PRESETS, spansKey, toSpan} from './grid';
+import {type ColumnSpan, presetLabel, type PresetRow, ROW_NAME_MAX, ROW_PRESETS, rowTotal as rowTotalOf, toSpan} from './grid';
 import {type SortableHandle, SortableItem, SortableList} from './sortable';
 import {rowWidthError} from './validation';
 
@@ -91,83 +92,50 @@ function Tile({spans, active, labels}: {spans: readonly number[]; active: boolea
   );
 }
 
+/** drag data type of a layout thumbnail: `{spans, blocks}` as JSON */
+const LAYOUT_DRAG_TYPE = 'application/x-section-layout';
+type DraggedLayout = {spans: number[]; blocks: (string | null)[]};
+
 /**
- * Thumbnails: a click replaces the selected row's layout, a double click adds a row.
- * Preset rows (host option) always add a row, with their blocks placed: a click or a double click.
- * current: spans key of the selected row; currentTypes: first block type of each of its columns.
+ * The layout thumbnails: each one is dragged onto the line of rows below (dropped between two
+ * squares or at the end it adds a row there, dropped on a square it replaces that row's layout).
+ * At the keyboard, Enter on a thumbnail adds its row at the end. Preset rows (host option) come
+ * with their blocks placed. No click: clicks are for the columns' contents.
  */
-function PresetTiles({current, currentTypes, presetRows, onReplace, onAdd, onAddPreset, disabled}: {disabled?: boolean; current: string; currentTypes: readonly string[]; presetRows: readonly PresetRow[]; onReplace: (spans: readonly number[]) => void; onAdd: (spans: readonly number[]) => void; onAddPreset: (preset: PresetRow) => void}) {
+function PresetTiles({presetRows, onAdd, disabled}: {presetRows: readonly PresetRow[]; onAdd: (layout: DraggedLayout) => void; disabled?: boolean}) {
   const {t} = useAdminText();
   const {i18n} = useTranslation();
-  /** the selected row matches a preset row: same widths and the preset's blocks in place */
-  const matchesPreset = (p: PresetRow) => spansKey(p.spans) === current && p.blocks.every((slug, j) => !slug || currentTypes[j] === slug);
-  const presetActive = presetRows.some(matchesPreset);
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const click = (spans: readonly number[]) => {
-    if (timer.current) clearTimeout(timer.current);
-    timer.current = setTimeout(() => {
-      timer.current = null;
-      onReplace(spans);
-    }, 220);
-  };
-  const dblClick = (spans: readonly number[]) => {
-    if (timer.current) clearTimeout(timer.current);
-    timer.current = null;
-    onAdd(spans);
-  };
-  /** a preset row: click and double click both add one row (the timer swallows the double click's two clicks) */
-  const presetClick = (preset: PresetRow) => {
-    if (timer.current) clearTimeout(timer.current);
-    timer.current = setTimeout(() => {
-      timer.current = null;
-      onAddPreset(preset);
-    }, 220);
-  };
-  const presetDblClick = (preset: PresetRow) => {
-    if (timer.current) clearTimeout(timer.current);
-    timer.current = null;
-    onAddPreset(preset);
-  };
+  const tile = (key: string, label: string, layout: DraggedLayout, labels?: string[]) => (
+    // a div, not a button: Firefox does not drag buttons
+    <div
+      key={key}
+      role="button"
+      tabIndex={disabled ? -1 : 0}
+      aria-disabled={disabled || undefined}
+      aria-label={label}
+      title={disabled ? label : t(T.builder.tileTitle, {label})}
+      className="rows-builder__tile"
+      data-layout={layout.spans.join('-')}
+      draggable={!disabled}
+      onDragStart={(e) => {
+        e.dataTransfer.setData(LAYOUT_DRAG_TYPE, JSON.stringify(layout));
+        e.dataTransfer.effectAllowed = 'copy';
+      }}
+      onKeyDown={(e) => {
+        if (disabled || e.key !== 'Enter') return;
+        e.preventDefault();
+        onAdd(layout);
+      }}
+      style={{opacity: disabled ? 0.4 : 1, cursor: disabled ? 'default' : 'grab'}}>
+      <Tile spans={layout.spans} active={false} labels={labels} />
+    </div>
+  );
   return (
-    <div role="radiogroup" aria-label={t(T.builder.layout)} style={{display: 'grid', gridTemplateColumns: 'repeat(8, minmax(0, 1fr))', gap: 8}}>
-      {ROW_PRESETS.map((spans) => {
-        // active as soon as the widths match, in any order (unless a preset row describes the row better)
-        const active = spansKey(spans) === current && !presetActive;
-        const label = presetLabel(spans);
-        return (
-          <button
-            key={spans.join('-')}
-            type="button"
-            role="radio"
-            aria-checked={active}
-            aria-label={label}
-            title={t(T.builder.tileTitle, {label})}
-            onClick={() => click(spans)}
-            onDoubleClick={() => dblClick(spans)}
-            disabled={disabled}
-            style={{display: 'block', width: '100%', padding: 0, border: 0, background: 'transparent', cursor: disabled ? 'default' : 'pointer', opacity: disabled ? 0.4 : 1}}>
-            <Tile spans={spans} active={active} />
-          </button>
-        );
-      })}
+    <div role="group" aria-label={t(T.builder.layout)} style={{display: 'grid', gridTemplateColumns: 'repeat(8, minmax(0, 1fr))', gap: 8}}>
+      {ROW_PRESETS.map((spans) => tile(spans.join('-'), presetLabel(spans), {spans: [...spans], blocks: []}))}
       {presetRows.map((p) => {
-        const label = getTranslation(p.label, i18n);
-        const active = matchesPreset(p);
-        return (
-          <button
-            key={`preset-${p.id}`}
-            type="button"
-            role="radio"
-            aria-checked={active}
-            aria-label={label}
-            title={t(T.builder.presetTileTitle, {label})}
-            onClick={() => presetClick(p)}
-            onDoubleClick={() => presetDblClick(p)}
-            disabled={disabled}
-            style={{display: 'block', width: '100%', padding: 0, border: 0, background: 'transparent', cursor: disabled ? 'default' : 'pointer', opacity: disabled ? 0.4 : 1}}>
-            <Tile spans={p.spans} active={active} labels={p.spans.map((s, j) => (j === 0 ? label : String(s)))} />
-          </button>
-        );
+        const label = String(getTranslation(p.label, i18n));
+        return tile(`preset-${p.id}`, label, {spans: [...p.spans], blocks: [...p.blocks]}, p.spans.map((x, j) => (j === 0 ? label : String(x))));
       })}
     </div>
   );
@@ -301,7 +269,7 @@ export function RowsBuilderGhost({presetRows = []}: {presetRows?: PresetRow[]}) 
         {t(T.builder.helpUnavailable)}
       </p>
       <div style={{marginBottom: 12}}>
-        <PresetTiles disabled current="" currentTypes={[]} presetRows={presetRows} onReplace={nothing} onAdd={nothing} onAddPreset={nothing} />
+        <PresetTiles disabled presetRows={presetRows} onAdd={nothing} />
       </div>
       <div className="rows-builder__rows" />
     </div>
@@ -335,8 +303,9 @@ export function RowsBuilder(props: RowsBuilderProps) {
   const {rows = [], errorPaths, showError} = useField<unknown[]>({path});
   const {openModal} = useModal();
   const manager = useManager();
-  // selected row: thumbnails act on it; with no selection, they add a row
-  const [selected, setSelected] = useState<number | null>(null);
+  // a layout thumbnail being dragged over the line of rows: where it would go (`index`), or the row it would replace
+  const [drop, setDrop] = useState<{index: number; replace: boolean} | null>(null);
+  const line = useRef<HTMLDivElement>(null);
   // destructive action awaiting confirmation: replace the layout or delete a row
   const [pending, setPending] = useState<{kind: 'replace'; row: number; spans: readonly number[]} | {kind: 'remove'; row: number} | null>(null);
   const confirmSlug = `rows-confirm-${path}`;
@@ -405,40 +374,76 @@ export function RowsBuilder(props: RowsBuilderProps) {
   );
 
   /**
-   * double click: adds a row below the selected row (otherwise at the bottom), which becomes selected.
-   * blocks[j]: slug of a block placed in column j (preset rows); Payload's form state completes its fields.
+   * Adds a row at `index`. blocks[j]: slug of a block placed in column j (preset rows); Payload's
+   * form state completes its fields.
    */
   const addRow = useCallback(
-    (spans: readonly number[], blocks: readonly (string | null)[] = []) => {
-      const index = selected !== null && selected < rows.length ? selected + 1 : rows.length;
+    (index: number, spans: readonly number[], blocks: readonly (string | null)[] = []) => {
       addFieldRow({path, rowIndex: index, schemaPath});
       spans.forEach((s, j) => addFieldRow({path: `${path}.${index}.columns`, rowIndex: j, schemaPath: columnsSchemaPath, subFieldState: {span: {value: String(s), initialValue: String(s), valid: true}}}));
       blocks.forEach((blockType, j) => {
         if (blockType) addFieldRow({path: `${path}.${index}.columns.${j}.contents`, rowIndex: 0, blockType, schemaPath: `${columnsSchemaPath}.contents`});
       });
       setModified(true);
-      setSelected(index);
     },
-    [addFieldRow, columnsSchemaPath, path, rows.length, schemaPath, selected, setModified],
+    [addFieldRow, columnsSchemaPath, path, schemaPath, setModified],
   );
 
-  /** click: replaces the selected row's layout; with no selection, adds a row */
+  /** a layout dropped on a row: replaces its layout, after confirmation (nothing to do if it already has it) */
   const replaceRow = useCallback(
-    (spans: readonly number[]) => {
-      if (selected !== null && selected < rows.length) {
-        const current = (snapshot[selected]?.columns ?? []).map((c) => c.span);
-        if (current.join('|') === spans.join('|')) return; // already this layout: nothing to do
-        setPending({kind: 'replace', row: selected, spans});
-        openModal(confirmSlug);
-      } else addRow(spans);
+    (row: number, spans: readonly number[]) => {
+      const current = (snapshot[row]?.columns ?? []).map((c) => c.span);
+      if (current.join('|') === spans.join('|')) return;
+      setPending({kind: 'replace', row, spans});
+      openModal(confirmSlug);
     },
-    [addRow, confirmSlug, openModal, rows.length, selected, snapshot],
+    [confirmSlug, openModal, snapshot],
   );
 
-  const move = (from: number, to: number) => {
-    moveFieldRow({path, moveFromIndex: from, moveToIndex: to});
-    setSelected(to);
+  /**
+   * Where a dragged layout would land, from the pointer's place over the line of squares: on the
+   * middle half of a square it replaces that row, on its edges or between two squares it is
+   * inserted there, after the last square it goes to the end.
+   */
+  const locate = (x: number): {index: number; replace: boolean} => {
+    const squares = [...(line.current?.querySelectorAll('.rows-builder__square') ?? [])];
+    for (let i = 0; i < squares.length; i++) {
+      const r = squares[i].getBoundingClientRect();
+      if (x < r.left) return {index: i, replace: false};
+      if (x <= r.right) {
+        const at = (x - r.left) / r.width;
+        return at < 0.25 ? {index: i, replace: false} : at > 0.75 ? {index: i + 1, replace: false} : {index: i, replace: true};
+      }
+    }
+    return {index: squares.length, replace: false};
   };
+  const onLayoutOver = (e: React.DragEvent) => {
+    if (readOnly || !e.dataTransfer.types.includes(LAYOUT_DRAG_TYPE)) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+    const next = locate(e.clientX);
+    setDrop((current) => (current && current.index === next.index && current.replace === next.replace ? current : next));
+  };
+  const onLayoutDrop = (e: React.DragEvent) => {
+    const raw = e.dataTransfer.getData(LAYOUT_DRAG_TYPE);
+    setDrop(null);
+    if (readOnly || !raw) return;
+    e.preventDefault();
+    let layout: DraggedLayout;
+    try {
+      layout = JSON.parse(raw) as DraggedLayout;
+    } catch {
+      return;
+    }
+    if (!Array.isArray(layout.spans) || rowTotalOf(layout.spans) !== 12) return;
+    const at = locate(e.clientX);
+    const blocks = Array.isArray(layout.blocks) ? layout.blocks : [];
+    // a preset row comes with its blocks: it is always a new row (after the square it was dropped on)
+    if (at.replace && !blocks.some(Boolean)) replaceRow(at.index, layout.spans);
+    else addRow(at.replace ? at.index + 1 : at.index, layout.spans, blocks);
+  };
+
+  const move = (from: number, to: number) => moveFieldRow({path, moveFromIndex: from, moveToIndex: to});
   const moveColumn = (row: number, from: number, to: number) => {
     if (to < 0 || to >= (snapshot[row]?.columns.length ?? 0)) return;
     moveFieldRow({path: `${path}.${row}.columns`, moveFromIndex: from, moveToIndex: to});
@@ -452,12 +457,8 @@ export function RowsBuilder(props: RowsBuilderProps) {
   const duplicate = (i: number) => {
     dispatchFields({type: 'DUPLICATE_ROW', path, rowIndex: i});
     setModified(true);
-    setSelected(i + 1);
   };
-  const remove = (i: number) => {
-    removeFieldRow({path, rowIndex: i});
-    setSelected(null);
-  };
+  const remove = (i: number) => removeFieldRow({path, rowIndex: i});
   const askRemove = (i: number) => {
     setPending({kind: 'remove', row: i});
     openModal(confirmSlug);
@@ -483,45 +484,38 @@ export function RowsBuilder(props: RowsBuilderProps) {
     setPending(null);
   };
 
-  /** a click on a column of a square: its row and the column are selected */
-  const selectCell = (row: number, col: number) => {
-    setSelected(row);
-    manager?.selectColumn({row, col});
-  };
+  /** a click on a column of a square: the column is selected */
+  const selectCell = (row: number, col: number) => manager?.selectColumn({row, col});
   /** a double click: its content shows in the dialog's panel (the components, if the column is empty) */
-  const openCell = (row: number, col: number) => {
-    setSelected(row);
-    manager?.openContent({row, col});
-  };
-
-  const selectedSpans = selected !== null ? spansKey((snapshot[selected]?.columns ?? []).map((c) => c.span)) : '';
-  const selectedTypes = selected !== null ? (snapshot[selected]?.columns ?? []).map((c) => c.types?.[0] ?? '') : [];
+  const openCell = (row: number, col: number) => manager?.openContent({row, col});
 
   return (
     <div className="field-type rows-builder" style={{marginBottom: 'var(--base)'}}>
       {/* one line of text, never wrapped (its full text on hover): the panel keeps one height, which the dialog's top part takes */}
       {(() => {
         const failed = Boolean(showError && errorPaths?.length);
-        const line = failed ? t(T.builder.rowHasError) : selected === null ? t(T.builder.helpNoSelection) : t(T.builder.helpSelected, {n: selected + 1});
+        const help = failed ? t(T.builder.rowHasError) : t(T.builder.help);
         return (
-          <p className="rows-builder__help" data-error={failed ? 'true' : undefined} title={line}>
-            {line}
+          <p className="rows-builder__help" data-error={failed ? 'true' : undefined} title={help}>
+            {help}
           </p>
         );
       })()}
       {!readOnly ? (
         <div style={{marginBottom: 12}}>
-          <PresetTiles current={selectedSpans} currentTypes={selectedTypes} presetRows={presetRows} onReplace={replaceRow} onAdd={(spans) => addRow(spans)} onAddPreset={(p) => addRow(p.spans, p.blocks)} />
+          <PresetTiles presetRows={presetRows} onAdd={(layout) => addRow(rows.length, layout.spans, layout.blocks)} />
         </div>
       ) : null}
 
-      {/* the rows, from left to right = from top to bottom in the preview */}
+      {/* the rows, from left to right = from top to bottom in the preview; the line is where the layouts are dropped */}
+      <div ref={line} className="rows-builder__drop" data-over={drop ? 'true' : undefined} onDragOver={onLayoutOver} onDragLeave={(e) => (e.currentTarget.contains(e.relatedTarget as Node | null) ? undefined : setDrop(null))} onDrop={onLayoutDrop}>
+      {!rows.length && !readOnly ? <p className="rows-builder__empty">{t(T.builder.dropHere)}</p> : null}
       <SortableList ids={rows.map((r) => r.id)} axis="x" onMove={move} className="rows-builder__rows">
         {rows.map((row, i) => {
           const snap = snapshot[i] ?? {columns: []};
           const spans = snap.columns.map((c) => c.span);
           const rowError = row.isLoading ? null : rowWidthError(spans, language);
-          const isSelected = selected === i;
+          const mark = !drop ? undefined : drop.replace ? (drop.index === i ? 'replace' : undefined) : drop.index === i ? 'before' : drop.index === rows.length && i === rows.length - 1 ? 'after' : undefined;
           const colIds = snap.ids?.length === snap.columns.length ? (snap.ids as string[]) : snap.columns.map((_, j) => `${row.id}-${j}`);
           return (
             <SortableItem key={row.id} id={row.id} disabled={readOnly}>
@@ -530,21 +524,11 @@ export function RowsBuilder(props: RowsBuilderProps) {
                   ref={setNodeRef}
                   {...(readOnly ? null : listeners)}
                   className="rows-builder__square"
-                  role="button"
-                  tabIndex={0}
-                  aria-label={t(T.builder.rowAria, {n: i + 1, selected: isSelected})}
-                  aria-pressed={isSelected}
+                  aria-label={t(T.builder.rowAria, {n: i + 1, selected: false})}
                   data-error={rowError ? 'true' : undefined}
                   data-dragging={isDragging ? 'true' : undefined}
+                  data-drop={mark}
                   title={rowError ?? undefined}
-                  onClick={() => setSelected(isSelected ? null : i)}
-                  onKeyDown={(e) => {
-                    if (e.target !== e.currentTarget) return;
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      setSelected(isSelected ? null : i);
-                    }
-                  }}
                   style={{transform, transition}}>
                   <div className="rows-builder__square-head">
                     <RowName index={i} name={snap.name ?? ''} readOnly={readOnly} onChange={(name) => renameRow(i, name)} />
@@ -583,6 +567,7 @@ export function RowsBuilder(props: RowsBuilderProps) {
           );
         })}
       </SortableList>
+      </div>
 
       <ConfirmationModal
         modalSlug={confirmSlug}

@@ -32,14 +32,21 @@ export function BlockLibrary({blocks, fits, onPick, onDrag}: Props) {
         const widths = b.max < 12 ? t(T.manager.libraryRange, {min: b.min, max: b.max}) : t(T.manager.libraryMin, {min: b.min});
         return (
           <li key={b.slug} className="block-library__item">
-            <button
-              type="button"
+            {/* a div, not a button: Firefox does not drag buttons */}
+            <div
+              role="button"
+              tabIndex={ok ? 0 : -1}
+              aria-disabled={!ok || undefined}
               className="block-library__block"
               data-block={b.slug}
-              disabled={!ok}
               draggable={Boolean(onDrag) && ok}
               title={`${b.label} · ${widths}`}
-              onClick={() => onPick?.(b.slug)}
+              onClick={() => (ok ? onPick?.(b.slug) : undefined)}
+              onKeyDown={(e) => {
+                if (!ok || (e.key !== 'Enter' && e.key !== ' ')) return;
+                e.preventDefault();
+                onPick?.(b.slug);
+              }}
               onDragStart={(e) => {
                 e.dataTransfer.setData(BLOCK_DRAG_TYPE, b.slug);
                 e.dataTransfer.effectAllowed = 'copy';
@@ -51,7 +58,7 @@ export function BlockLibrary({blocks, fits, onPick, onDrag}: Props) {
               {b.image ? <img className="block-library__image" src={b.image} alt="" draggable={false} /> : <span className="block-library__image" />}
               <span className="block-library__label">{b.label}</span>
               <span className="block-library__widths">{widths}</span>
-            </button>
+            </div>
           </li>
         );
       })}
