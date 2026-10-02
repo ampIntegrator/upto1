@@ -347,6 +347,18 @@ async function main() {
     await dragBlock('cardTitleLink', '1-0');
     const link = live.locator('[data-preview-column="1-0"] [data-part="action"]');
     await link.waitFor({timeout: 10000});
+    // its link covers the whole card: a click on the title still edits the title, only the bar opens the link
+    const linkTitle = live.locator('[data-preview-column="1-0"] [data-part="title"]');
+    await linkTitle.click();
+    await p.waitForTimeout(400);
+    check((await linkTitle.getAttribute('contenteditable')) === 'plaintext-only' && (await popover.count()) === 0, 'on a clickable card, a click on the title edits the title, not the link');
+    // a second click in the text being typed moves the caret, the typing goes on
+    await linkTitle.click({position: {x: 4, y: 8}});
+    await p.keyboard.type('X');
+    await p.waitForTimeout(300);
+    check(/X/.test(await linkTitle.innerText()) && (await linkTitle.getAttribute('contenteditable')) === 'plaintext-only', 'a click in the title being typed moves the caret, the typing goes on');
+    await p.keyboard.press('Enter');
+    await p.waitForTimeout(600);
     await link.click();
     await popover.waitFor({timeout: 5000});
     check((await popover.locator('input[name$=".cta.label"]').count()) === 1 && (await popover.locator('input[name$=".cta.href"]').count()) === 1 && (await popover.locator('.react-select').count()) >= 1, 'a click on a link in the preview shows its label, its kind (address or site content) and its address');

@@ -48,6 +48,8 @@ import {sendSectionPreview} from './actions';
 const STYLES = `
 [data-preview-column] [data-part] { cursor: text; }
 [data-preview-column] [data-part-kind='image'], [data-preview-column] [data-part-kind='icon'], [data-preview-column] [data-part-kind='link'] { cursor: pointer; }
+/* a link stretched over its whole card (a pseudo-element) would take every click and keep the caret out of the texts under it */
+[data-preview-column] a::before, [data-preview-column] a::after { pointer-events: none; }
 [data-preview-editing] { outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color); outline-offset: var(--focus-outline-offset); }
 `;
 
@@ -71,6 +73,22 @@ function filledColumns(section: Record<string, unknown>): string[] {
   type Rows = {columns?: {contents?: {blockType?: string}[]}[]}[];
   const rows = (Array.isArray(section.rows) ? section.rows : []) as Rows;
   return rows.flatMap((r, i) => (r.columns ?? []).flatMap((c, j) => (c.contents?.[0]?.blockType && c.contents[0].blockType !== EMPTY_SLUG ? [`${i}-${j}`] : [])));
+}
+
+/**
+ * The marked part under the pointer: the first one, from the top of the stack down, whose own box
+ * holds the point. A clickable card stretches its link over the whole card (a pseudo-element):
+ * the link is on top everywhere, but its own box is only its bar, so a click on the title finds
+ * the title and a click on the bar finds the link.
+ */
+function partAt(x: number, y: number, column: Element): HTMLElement | null {
+  for (const el of document.elementsFromPoint(x, y)) {
+    const part = el.closest<HTMLElement>('[data-part]');
+    if (!part || !column.contains(part)) continue;
+    const r = part.getBoundingClientRect();
+    if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) return part;
+  }
+  return null;
 }
 
 const noSubscription = () => () => {};
@@ -209,9 +227,11 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
       const columnEl = target.closest('[data-preview-column]');
       const at = columnOf(columnEl);
       if (!at || editing.current?.contains(target)) return;
+      // a click that lands on the text already being typed, whatever is drawn over it
+      if (editing.current && columnEl && partAt(e.clientX, e.clientY, columnEl) === editing.current) return;
       // a part the component marked, and the field of the block it shows (the blocks' `parts` map)
-      const part = target.closest<HTMLElement>('[data-part]');
-      const name = part && columnEl?.contains(part) ? part.getAttribute('data-part') : null;
+      const part = columnEl ? partAt(e.clientX, e.clientY, columnEl) : null;
+      const name = part ? part.getAttribute('data-part') : null;
       if (!part || !name) return toParent({type: PREVIEW_SELECT, ...at});
       const blockType = storedValue(latest.current?.section, at, 'blockType');
       const field = typeof blockType === 'string' ? latest.current?.parts?.[blockType]?.[name] : undefined;

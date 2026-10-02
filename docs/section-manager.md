@@ -187,6 +187,10 @@ Site side:
 - Escape pressed while the keyboard is in the preview's frame does not reach the admin: the field
   panel takes the focus when it opens, and catches Escape before the dialog (which it would close).
 - A drag started in the admin cannot be followed inside the frame: hence the zones drawn over it.
+- A clickable card stretches its link over the whole card (a pseudo-element). In the preview these
+  overlays take no pointer event (CSS of the frame), and the frame looks for the marked part whose
+  own box holds the click (`partAt`): the title, the text, the icon are edited as on a plain card,
+  only the link's bar opens the link's fields.
 - Typing in place relies on the marked element having the text as its only child (React then sets
   its text content, whatever the browser did inside while typing).
 - In a section with content, empty columns show a « Colonne vide » zone at desktop and tablet
