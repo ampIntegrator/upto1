@@ -336,8 +336,31 @@ async function main() {
     check((await frame.getByRole('button', {name: /Modifier le contenu/}).count()) === 0, 'no pencil on a column without content');
     await frame.getByText('5 / 12').first().dblclick();
     await p.waitForTimeout(700);
-    // an empty column has no content to edit: the components open instead, and the content panel lists none
-    check((await p.locator('.section-manager__panel--open #section-manager-panel-blocks').count()) === 1, 'a double click on an empty column opens the components, not the content panel');
+    // an empty column has no content to edit: a box lists the components that fit it, one click places one
+    const picker = p.locator('.section-manager__picker-box');
+    await picker.waitFor({timeout: 5000});
+    const offered = await picker.locator('.block-library__block').evaluateAll((els) => els.map((el) => el.getAttribute('data-block') ?? ''));
+    const pickerBox = (await picker.boundingBox())!;
+    check(offered.length > 5 && !offered.includes('plan') && offered.includes('cardTitle') && (await picker.locator('.block-library__guide').count()) === 0 && pickerBox.width > 1400, `a double click on an empty column opens a wide box with the components that fit it (${offered.length}, ${Math.round(pickerBox.width)} px wide)`);
+    if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-picker.png`});
+    await picker.locator('.block-library__block[data-block="cardTitle"]').click();
+    await p.waitForTimeout(800);
+    check((await picker.count()) === 0 && (await squares.nth(0).locator('.rows-builder__mini').nth(1).getAttribute('data-empty')) === null, 'a click on a component of the box places it in the column and closes the box');
+    // from a square of the layout panel too; emptied again for what follows
+    await p.locator('.section-manager__tab[aria-controls="section-manager-panel-content"]').click();
+    await p.waitForTimeout(600);
+    await p.locator('#section-manager-panel-content').getByRole('button', {name: /Vider la colonne|Empty the column|Clear/}).click();
+    await p.waitForTimeout(600);
+    await p.locator('.section-manager__tab[aria-controls="section-manager-panel-layout"]').click();
+    await p.waitForTimeout(600);
+    await squares.nth(0).locator('.rows-builder__mini').nth(1).dblclick();
+    await picker.waitFor({timeout: 5000});
+    check((await p.locator('.section-manager__panel--open #section-manager-panel-layout').count()) === 1, 'a double click on an empty column of a square opens the same box, the layout panel stays open');
+    await picker.getByRole('button', {name: /^(Fermer|Close)$/}).click();
+    await p.waitForTimeout(400);
+    check((await picker.count()) === 0 && (await squares.nth(0).locator('.rows-builder__mini').nth(1).getAttribute('data-empty')) === 'true', 'the box closes without placing anything');
+    await p.locator('.section-manager__tab[aria-controls="section-manager-panel-blocks"]').click();
+    await p.waitForTimeout(600);
     await p.locator('#section-manager-panel-blocks .block-library__block[data-block="plan"]').click();
     await p.waitForTimeout(500);
     check((await squares.nth(0).locator('.rows-builder__mini').nth(1).getAttribute('data-empty')) === 'true', 'a component that does not fit the selected column is not placed by a click');

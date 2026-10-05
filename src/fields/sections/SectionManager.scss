@@ -31,6 +31,52 @@
   background: var(--theme-bg);
 }
 
+// the box that lists the components for an empty column: over the dialog, nearly as wide as the
+// screen (like a confirmation box, wide), its list scrolling down
+.section-manager__picker {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--base) * 2);
+  background: color-mix(in srgb, var(--theme-elevation-1000) 55%, transparent);
+}
+
+.section-manager__picker-box {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  max-height: 100%;
+  padding: var(--base);
+  border-radius: 4px;
+  background: var(--theme-bg);
+  box-shadow: 0 12px 40px rgb(0 0 0 / 35%);
+}
+
+.section-manager__picker-head {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: var(--base);
+  font-size: 14px;
+
+  .btn {
+    margin: 0 0 0 auto;
+  }
+}
+
+.section-manager__picker-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  // (room for the focus ring of the thumbnails at the list's edges)
+  padding: 4px;
+}
+
 // exactly the viewport: 35 % settings, 65 % preview (the handle between them changes the share), each scrolling on its own
 .section-manager__body {
   display: flex;

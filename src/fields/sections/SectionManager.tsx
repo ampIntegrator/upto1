@@ -241,7 +241,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
   };
   // ——— the columns' contents: the block library, the content panel, the preview's events ———
   const {i18n} = useTranslation();
-  const {openModal} = useModal();
+  const {openModal, closeModal, isModalOpen} = useModal();
   const rowsField = innerFields(field, 1).find((f): f is ArrayFieldClient => f.type === 'array' && 'name' in f && f.name === 'rows');
   const columnsField = rowsField?.fields.find((f): f is ArrayFieldClient => f.type === 'array' && 'name' in f && f.name === 'columns');
   const contentsField = columnsField?.fields.find((f): f is BlocksFieldClient => f.type === 'blocks' && 'name' in f && f.name === 'contents');
@@ -274,13 +274,19 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
 
   // the column shown in the content panel
   const [column, setColumn] = useState<PreviewColumn | null>(null);
-  // the content panel is for a column that holds a block; an empty column needs a component first
+  // the content panel is for a column that holds a block; an empty column needs a component first:
+  // a box over the dialog lists the components that fit its width, one click places one
+  const pickSlug = `section-manager-pick-${rowsPath}`;
+  const [choosing, setChoosing] = useState<PreviewColumn | null>(null);
   const openContent = useCallback(
     (at: PreviewColumn) => {
       setColumn(at);
-      setPanel(columnState(at)?.blockType ? 'content' : 'blocks');
+      if (columnState(at)?.blockType) return setPanel('content');
+      if (readOnly) return;
+      setChoosing(at);
+      openModal(pickSlug);
     },
-    [columnState],
+    [columnState, openModal, pickSlug, readOnly],
   );
   const manager = useMemo(() => ({column, selectColumn: setColumn, openContent}), [column, openContent]);
 
@@ -537,6 +543,37 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
           />
         </FieldPopover>
       ) : null}
+      <Modal slug={pickSlug} className="section-manager__picker">
+        {/* (only while the box is open: closed with Escape, it leaves nothing behind) */}
+        {choosing && isModalOpen(pickSlug) ? (
+          <div className="section-manager__picker-box">
+            <div className="section-manager__picker-head">
+              <strong>{t(T.manager.pickTitle)}</strong>
+              <span>{t(T.manager.contentTitle, {row: choosing.row + 1, col: choosing.col + 1, span: columnState(choosing)?.span ?? 12})}</span>
+              <Button buttonStyle="secondary" size="small" margin={false} onClick={() => closeModal(pickSlug)}>
+                {t(T.manager.close)}
+              </Button>
+            </div>
+            {(() => {
+              const span = columnState(choosing)?.span ?? 0;
+              const fitting = library.filter((b) => fitsColumn(b.slug, span));
+              if (!fitting.length) return <p className="section-manager__soon">{t(T.manager.pickNone)}</p>;
+              return (
+                <div className="section-manager__picker-list">
+                  <BlockLibrary
+                    guide={false}
+                    blocks={fitting}
+                    onPick={(slug) => {
+                      void putBlock(choosing, slug);
+                      closeModal(pickSlug);
+                    }}
+                  />
+                </div>
+              );
+            })()}
+          </div>
+        ) : null}
+      </Modal>
       <ConfirmationModal
         modalSlug={confirmSlug}
         heading={t(T.manager.replaceHeading)}

@@ -265,7 +265,9 @@ export const sectionsText = texts({
       fr: 'Aucun composant à modifier : double-clique une colonne remplie dans un carré de l’onglet Découpage, ou clique le crayon d’une colonne dans l’aperçu.',
       en: 'No component to edit: double-click a filled column in a square of the Layout tab, or click the pencil of a column in the preview.',
     },
-    contentEmpty: {fr: 'Cette colonne est vide : place d’abord un composant depuis l’onglet Composants.', en: 'This column is empty: place a component from the Components tab first.'},
+    contentEmpty: {fr: 'Cette colonne est vide : double-clique-la pour choisir un composant, ou glisses-en un depuis l’onglet Composants.', en: 'This column is empty: double-click it to choose a component, or drag one from the Components tab.'},
+    pickTitle: {fr: 'Choisir un composant', en: 'Choose a component'},
+    pickNone: {fr: 'Aucun composant ne tient dans cette largeur : élargis la colonne dans l’onglet Découpage.', en: 'No component fits this width: widen the column in the Layout tab.'},
     contentTitle: {
       fr: ({row, col, span}: {row: number; col: number; span: number}) => `Rangée ${row} · colonne ${col} · ${span} / 12`,
       en: ({row, col, span}: {row: number; col: number; span: number}) => `Row ${row} · column ${col} · ${span} / 12`,

@@ -27,6 +27,8 @@ type Props = {
   fits?: (block: LibraryBlock) => boolean;
   onPick?: (slug: string) => void;
   onDrag?: (slug: string | null) => void;
+  /** the first tile of instructions (not in a list where a click is the only gesture) */
+  guide?: boolean;
 };
 
 /** height and least width of a thumbnail, width of the instructions tile and gap between tiles, in px (as in the stylesheet) */
@@ -35,7 +37,7 @@ const TILE_MIN_WIDTH = 120;
 const GUIDE_WIDTH = 240;
 const GAP = 12;
 
-export function BlockLibrary({blocks, fits, onPick, onDrag}: Props) {
+export function BlockLibrary({blocks, fits, onPick, onDrag, guide = true}: Props) {
   const {t} = useAdminText();
   const list = useRef<HTMLUListElement>(null);
   const [room, setRoom] = useState(0);
@@ -55,8 +57,8 @@ export function BlockLibrary({blocks, fits, onPick, onDrag}: Props) {
     if (!room || blocks.some((b) => b.image && ratios[b.slug] === undefined)) return blocks;
     // (a picture that failed to load has a ratio of 0: its tile is as narrow as a tile gets)
     const widths = blocks.map((b) => Math.max(TILE_MIN_WIDTH, Math.ceil(TILE_HEIGHT * (ratios[b.slug] ?? 0))));
-    return packRows(widths, room, GAP, GUIDE_WIDTH).map((i) => blocks[i]);
-  }, [blocks, ratios, room]);
+    return packRows(widths, room, GAP, guide ? GUIDE_WIDTH : 0).map((i) => blocks[i]);
+  }, [blocks, guide, ratios, room]);
   const sized = (slug: string, img: HTMLImageElement | null, failed = false) => {
     if (!img || ratios[slug] !== undefined || (!failed && !img.naturalHeight)) return;
     const ratio = failed ? 0 : img.naturalWidth / img.naturalHeight;
@@ -65,9 +67,11 @@ export function BlockLibrary({blocks, fits, onPick, onDrag}: Props) {
   return (
     <ul ref={list} className="block-library">
       {/* the instructions, always shown, in the place of a first thumbnail */}
-      <li className="block-library__item">
-        <p className="block-library__guide">{t(T.manager.libraryGuide)}</p>
-      </li>
+      {guide ? (
+        <li className="block-library__item">
+          <p className="block-library__guide">{t(T.manager.libraryGuide)}</p>
+        </li>
+      ) : null}
       {ordered.map((b) => {
         const ok = fits ? fits(b) : true;
         const widths = b.max < 12 ? t(T.manager.libraryRange, {min: b.min, max: b.max}) : t(T.manager.libraryMin, {min: b.min});
