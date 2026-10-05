@@ -23,15 +23,7 @@ import {TEXT_BOX_SLUG} from './textBoxSlug';
 export const PREVIEW_SLUGS: string[] = [EMPTY_SLUG, SECTION_HEADING_SLUG, TEXT_BOX_SLUG, MEDIA_SLUG, MEDIA_QUOTE_SLUG, ...CARD_SLUGS, PRICE_SINGLE_SLUG, PLAN_SLUG, FAQ_SLUG, TESTIMONIAL_SLUG, COMPARE_CARD_SLUG, PROCESS_STEPS_SLUG, TABS_SLUG, BUTTON_GROUP_SLUG, POST_CARD_SLUG, CASE_CARD_SLUG, KEY_POINTS_SLUG, CTA_BAND_SLUG, STATS_BAND_SLUG, QUOTE_CARD_SLUG, GALLERY_SLUG, COLLECTION_SLUG, FORM_SLUG];
 
 /**
- * Stage of a picker preview, in CSS px: every capture is a standard stage or a wide one, both the
- * same height, shot at `scale` (deviceScaleFactor). The component sits centred in it, whole, as
- * large as the stage allows (no padding).
+ * Pixel density of the captures (deviceScaleFactor). A capture is the component alone, edge to
+ * edge, at the width `Apercu.tsx` gives it: every image has its own proportions.
  */
-export const PREVIEW_STAGE = {width: 480, wideWidth: 960, height: 360, scale: 2} as const;
-
-/**
- * Blocks whose preview is landscape: a wide stage (twice the standard width), and a wide
- * thumbnail in the picker (the block declares `previewWide`). Single source for the /apercu route,
- * `pnpm previews:build` and the section builder's library.
- */
-export const WIDE_PREVIEWS: ReadonlySet<string> = new Set([CTA_BAND_SLUG, STATS_BAND_SLUG, GALLERY_SLUG, KEY_POINTS_SLUG, QUOTE_CARD_SLUG, SECTION_HEADING_SLUG, PRICE_SINGLE_SLUG, FAQ_SLUG, PROCESS_STEPS_SLUG, COLLECTION_SLUG, TABS_SLUG, BUTTON_GROUP_SLUG]);
+export const PREVIEW_SCALE = 2;

@@ -83,11 +83,14 @@ still publishes: no drafts).
      values stay and still apply): the mobile order is still to be placed.
 3. **Columns' contents, done (1 Oct. 2026).** Four accordions: the third is « Composants », the
    fourth « Contenu ».
-   - **Composants**: the blocks as thumbnails (the picker images, `public/apercus`) in a line that
-     scrolls sideways. Each thumbnail is the picture alone, shown whole (`background-size: contain`)
-     in a box as high as the panel (it follows the handle): 4:3, or 8:3 for a block declared `previewWide` (the core gets
-     the list as the `wideImages` client prop, like `minSpans`). The block's name and accepted widths
-     show in a label in the middle of the picture on hover and keyboard focus (and are its `aria-label`). A thumbnail is dragged onto a column of the preview (native drag and drop):
+   - **Composants** (redone on 5 Oct. 2026): the blocks as thumbnails (the picker images,
+     `public/apercus`) in rows that wrap; **this panel scrolls down, not sideways** (Nicolas, 5 Oct.
+     2026: the « no vertical scroll in the top part » rule does not apply to this list). Each
+     thumbnail is the picture alone, edge to edge, **220 px high** and as wide as the picture's own
+     proportions make it (an `<img>`: the core knows no format). No line of help above the list. On
+     hover and keyboard focus a black veil (85 %) covers the whole thumbnail and shows the block's
+     name and accepted widths (they are its `aria-label`); the veil goes while the thumbnail is
+     pressed, so the picture that follows the pointer stays clear. A thumbnail is dragged onto a column of the preview (native drag and drop):
      while it is in the air the admin draws one zone per column over the frame, from the boxes the
      frame reported; a column too narrow or too wide for the block is not a drop target, so the
      browser shows the « not allowed » cursor, **only during the drag**. Dropping on a filled

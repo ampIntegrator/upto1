@@ -33,11 +33,6 @@ export type ContentBlock = {
    * `data-part` (its own vocabulary: it knows nothing of the block); this map is the link.
    */
   parts?: Record<string, string>;
-  /**
-   * The block's picker image (`block.imageURL`) is landscape, twice as wide as a standard one for
-   * the same height: the builder's library gives it a wide thumbnail.
-   */
-  previewWide?: boolean;
 };
 
 /** Block slug → minimum span, for the admin builder (serialisable client props). */
@@ -69,9 +64,6 @@ export const labelMap = (blocks: readonly ContentBlock[]): Record<string, string
 
 /** Block slug → starting values, for the admin builder (serialisable client props). */
 export const sampleMap = (blocks: readonly ContentBlock[]): Record<string, Record<string, unknown>> => Object.fromEntries(blocks.filter((b) => b.sample).map((b) => [b.block.slug, b.sample as Record<string, unknown>]));
-
-/** Slugs of the blocks whose picker image is wide, for the admin builder (serialisable client props). */
-export const wideImageList = (blocks: readonly ContentBlock[]): string[] => blocks.filter((b) => b.previewWide).map((b) => b.block.slug);
 
 /** Block slug → part → field path, for the admin builder (serialisable client props). */
 export const partsMap = (blocks: readonly ContentBlock[]): Record<string, Record<string, string>> => Object.fromEntries(blocks.filter((b) => b.parts).map((b) => [b.block.slug, b.parts as Record<string, string>]));

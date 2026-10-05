@@ -36,7 +36,6 @@ import {MEDIA_SLUG} from '@/fields/blocks/mediaBlock';
 import {MEDIA_QUOTE_SLUG} from '@/fields/blocks/mediaQuoteBlock';
 import {PLAN_SLUG} from '@/fields/blocks/planBlock';
 import {POST_CARD_SLUG} from '@/fields/blocks/postCardBlock';
-import {PREVIEW_STAGE, WIDE_PREVIEWS} from '@/fields/blocks/previews';
 import {PRICE_SINGLE_SLUG} from '@/fields/blocks/priceSingleBlock';
 import {PROCESS_STEPS_SLUG} from '@/fields/blocks/processStepsBlock';
 import {CTA_BAND_SLUG, GALLERY_SLUG, KEY_POINTS_SLUG, QUOTE_CARD_SLUG, STATS_BAND_SLUG} from '@/fields/blocks/prose/slugs';
@@ -50,12 +49,13 @@ import {GALLERY} from '../../design/_showcases/post.shared';
 
 /*
  * Demo data of the picker previews: neutral lorem ipsum (the thumbnails show a component's shape,
- * not a message), at realistic lengths, and short enough for each component to fill its stage.
+ * not a message), at realistic lengths.
  */
 const IMG = 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80';
 const PHOTO = 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=96&q=80';
 const TITLE = 'Lorem ipsum dolor';
-const TEXT = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.';
+const SHORT_TEXT = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+const TEXT = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
 
 const t = (text: string, format = 0) => ({type: 'text', text, format});
 const p = (...children: object[]) => ({type: 'paragraph', children});
@@ -66,8 +66,8 @@ const LOREM_DOC = doc(
   p(t('Lorem ipsum dolor sit amet, '), t('consectetur adipiscing elit', 1), t('. Sed do eiusmod tempor.')),
   {type: 'list', listType: 'bullet', children: [li(t('Ut enim ad minim veniam')), li(t('Quis nostrud '), t('exercitation', 1))]},
 );
-const TAB_DOC = doc(p(t('Lorem ipsum dolor sit amet, '), t('consectetur adipiscing elit', 1), t('. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.')));
-const KEY_POINTS_DOC = doc({type: 'list', listType: 'bullet', children: [li(t('Lorem ipsum dolor sit amet, '), t('consectetur adipiscing', 1), t(' elit.')), li(t('Sed do eiusmod tempor incididunt ut labore et dolore.')), li(t('Ut enim ad minim veniam, '), t('quis nostrud', 1), t(' exercitation.'))]});
+const TAB_DOC = doc(p(t('Lorem ipsum dolor sit amet, '), t('consectetur adipiscing elit', 1), t('. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.')), p(t('Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.')));
+const KEY_POINTS_DOC = doc({type: 'list', listType: 'bullet', children: [li(t('Lorem ipsum dolor sit amet, '), t('consectetur adipiscing', 1), t(' elit.')), li(t('Sed do eiusmod tempor incididunt ut labore et dolore.')), li(t('Ut enim ad minim veniam, '), t('quis nostrud', 1), t(' exercitation.')), li(t('Duis aute irure dolor in reprehenderit.'))]});
 
 const TESTIMONIALS = [
   {quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.', name: 'Lorem I.', role: 'Dolor · Sit amet', result: '+ 12 000 €'},
@@ -92,7 +92,7 @@ const PRICE_SINGLE = {
   cta: {label: 'Lorem ipsum dolor', href: '#'},
   mention: 'Lorem ipsum · Dolor sit amet',
 };
-const PLAN = {name: 'Lorem', badge: 'Lorem', featuresLabel: 'Lorem ipsum dolor', tagline: 'Lorem ipsum dolor sit', price: {value: '79'}, cta: {label: 'Lorem ipsum', href: '#'}, featured: true, features: ['Lorem ipsum dolor sit', 'Consectetur adipiscing', 'Sed do eiusmod tempor']};
+const PLAN = {name: 'Lorem', badge: 'Lorem', featuresLabel: 'Lorem ipsum dolor', tagline: 'Lorem ipsum dolor sit', price: {value: '79'}, cta: {label: 'Lorem ipsum', href: '#'}, featured: true, features: ['Lorem ipsum dolor sit', 'Consectetur adipiscing']};
 const COMPARE = {chip: {label: 'LOREM', tone: 'high' as const}, meta: 'Lorem ipsum', quote: '« Lorem ipsum dolor sit amet, consectetur. »', featured: true, items: ['Lorem ipsum dolor sit amet', 'Consectetur adipiscing elit', 'Sed do eiusmod tempor']};
 const STEPS = [
   {title: 'Lorem ipsum', duration: '5 min', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.', checks: ['Ut enim ad minim veniam', 'Quis nostrud exercitation']},
@@ -100,16 +100,25 @@ const STEPS = [
 ];
 
 /**
- * Width at which a component is rendered (CSS px) before it is fitted in its stage (scaled down or
- * up until it touches two facing edges). Default: the stage's width. A component that comes out
- * taller than the stage is rendered wider here, so that it fills more of the stage once fitted.
+ * Frame of a capture: the width the component is rendered at (CSS px; default `DEFAULT_WIDTH`), its
+ * height being its own. `inset`: a component with no surface of its own (bare text, a list) gets a
+ * thin margin of page background, so that its text does not touch the thumbnail's edge. Widths and
+ * demo contents are tuned together so that no thumbnail comes out as a sliver or as a long strip.
  */
-const RENDER_WIDTH: Record<string, number> = {
-  [PRICE_SINGLE_SLUG]: 760,
-  [GALLERY_SLUG]: 800,
-  [PLAN_SLUG]: 640,
-  [TEXT_BOX_SLUG]: 600,
-  [FORM_SLUG]: 600,
+const DEFAULT_WIDTH = 480;
+const FRAME: Record<string, {width?: number; inset?: boolean}> = {
+  [SECTION_HEADING_SLUG]: {width: 640, inset: true},
+  [TEXT_BOX_SLUG]: {width: 560},
+  // (a card with an image is already tall: it keeps the default width and gets a shorter text)
+  ...Object.fromEntries(Object.entries(CARD_VARIANTS).filter(([, v]) => v.media !== 'image').map(([slug]) => [slug, {width: 400}])),
+  [PRICE_SINGLE_SLUG]: {width: 760},
+  [FAQ_SLUG]: {width: 640, inset: true},
+  [PROCESS_STEPS_SLUG]: {width: 640},
+  [TABS_SLUG]: {width: 640},
+  [BUTTON_GROUP_SLUG]: {width: 720, inset: true},
+  [GALLERY_SLUG]: {width: 800, inset: true},
+  [COLLECTION_SLUG]: {width: 960, inset: true},
+  [FORM_SLUG]: {width: 560},
 };
 
 /** Demo data for a card variant. */
@@ -125,7 +134,7 @@ function demoCard(slug: string): CardProps {
     media,
     accentTitle: v.media === 'title',
     title: TITLE,
-    text: TEXT,
+    text: v.media === 'image' ? SHORT_TEXT : TEXT,
     cta: v.clickable ? {label: 'Lorem ipsum', href: '#'} : undefined,
   };
 }
@@ -143,6 +152,7 @@ function demo(slug: string): React.ReactNode {
       return (
         <VStack gap={6}>
           <ButtonGroup mode="attached" label="Lorem" buttons={[{label: 'Lorem ipsum', href: '#', variant: 'secondary', iconKey: 'home'}, {label: 'Dolor sit', href: '#', variant: 'secondary', iconKey: 'calculator'}, {label: 'Amet elit', href: '#', variant: 'secondary', iconKey: 'building'}]} />
+          <ButtonGroup mode="spaced" buttons={[{label: 'Lorem ipsum', href: '#', variant: 'primary'}, {label: 'Dolor sit amet', href: '#', variant: 'secondary'}, {label: 'Consectetur', href: '#', variant: 'secondary'}]} />
           <ButtonGroup mode="spaced" width="full" buttons={[{label: 'Lorem ipsum dolor', href: '#', variant: 'primary', arrow: true}, {label: 'Sit amet', href: '#', variant: 'high', arrow: true}]} />
         </VStack>
       );
@@ -196,11 +206,11 @@ function demo(slug: string): React.ReactNode {
     case KEY_POINTS_SLUG:
       return <KeyPoints eyebrow="Lorem ipsum" content={KEY_POINTS_DOC} />;
     case CTA_BAND_SLUG:
-      return <CtaBand variant="icon" iconKey="calculator" title="Lorem ipsum dolor sit amet" text="Consectetur adipiscing elit, sed do eiusmod tempor." button={{label: 'Lorem ipsum', href: '#', variant: 'high', arrow: true}} />;
+      return <CtaBand variant="icon" iconKey="calculator" title="Lorem ipsum dolor sit amet" text="Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." button={{label: 'Lorem ipsum', href: '#', variant: 'high', arrow: true}} />;
     case STATS_BAND_SLUG:
-      return <StatsBand items={[{value: '−68 %', label: 'Lorem ipsum'}, {value: '×2,4', label: 'Dolor sit amet'}, {value: '+31 %', label: 'Consectetur'}]} />;
+      return <StatsBand items={[{value: '−68 %', label: 'Lorem ipsum'}, {value: '×2,4', label: 'Dolor sit amet'}, {value: '+31 %', label: 'Consectetur'}, {value: '48 h', label: 'Adipiscing elit'}]} />;
     case QUOTE_CARD_SLUG:
-      return <QuoteCard quote="« Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. »" name="Lorem Ipsum" role="Dolor · Sit amet" photo={{src: PHOTO}} />;
+      return <QuoteCard quote="« Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore. »" name="Lorem Ipsum" role="Dolor · Sit amet" photo={{src: PHOTO}} />;
     case GALLERY_SLUG:
       return <Gallery images={GALLERY.slice(1, 3)} wideFirst={false} caption="Lorem ipsum dolor sit amet." />;
     case EMPTY_SLUG:
@@ -216,27 +226,17 @@ function demo(slug: string): React.ReactNode {
 }
 
 /**
- * The stage: a fixed box on the page background (standard or wide, same height) with the component
- * centred in it, rendered at its width then scaled uniformly to fit the stage (no padding).
- * `data-apercu` targets the capture; `data-ready` and `data-scale` are read by `pnpm previews:build`.
+ * The frame: the component alone at its capture width, edge to edge (no stage around it), on the
+ * page background. `data-apercu` targets the capture; `data-ready` is awaited by `pnpm previews:build`.
  */
-function Stage({slug, children}: {slug: string; children: React.ReactNode}) {
-  const wide = WIDE_PREVIEWS.has(slug);
-  const stageWidth = wide ? PREVIEW_STAGE.wideWidth : PREVIEW_STAGE.width;
-  const innerWidth = stageWidth;
-  const innerHeight = PREVIEW_STAGE.height;
-  const width = RENDER_WIDTH[slug] ?? innerWidth;
-  const content = useRef<HTMLElement>(null);
-  const [scale, setScale] = useState(1);
+function Frame({slug, children}: {slug: string; children: React.ReactNode}) {
+  const {width = DEFAULT_WIDTH, inset = false} = FRAME[slug] ?? {};
+  const frame = useRef<HTMLElement>(null);
   const [ready, setReady] = useState(false);
 
   useLayoutEffect(() => {
-    const el = content.current;
+    const el = frame.current;
     if (!el) return;
-    const fit = () => setScale(Math.min(innerWidth / Math.max(el.offsetWidth, el.scrollWidth), innerHeight / Math.max(el.offsetHeight, el.scrollHeight)));
-    fit();
-    const observer = new ResizeObserver(fit);
-    observer.observe(el);
     // ready once the fonts and the images are in (they change the component's size)
     let alive = true;
     const loaded = (img: HTMLImageElement) =>
@@ -249,33 +249,28 @@ function Stage({slug, children}: {slug: string; children: React.ReactNode}) {
     Promise.all([document.fonts.ready, ...images]).then(() =>
       requestAnimationFrame(() =>
         requestAnimationFrame(() => {
-          if (!alive) return;
-          fit();
-          setReady(true);
+          if (alive) setReady(true);
         }),
       ),
     );
     return () => {
       alive = false;
-      observer.disconnect();
     };
-  }, [innerHeight, innerWidth]);
+  }, []);
 
   // (the plan card's badge sits astride its top edge: it gets room, so that it is not cut)
   return (
-    <VStack data-apercu data-ready={ready || undefined} data-scale={scale.toFixed(3)} style={{position: 'relative', width: stageWidth, height: PREVIEW_STAGE.height, overflow: 'hidden', background: 'var(--color-background-body)'}}>
-      <VStack ref={content} style={{position: 'absolute', insetInlineStart: '50%', insetBlockStart: '50%', width, paddingBlockStart: slug === PLAN_SLUG ? 'var(--spacing-3)' : undefined, transform: `translate(-50%, -50%) scale(${scale})`}}>
-        {children}
-      </VStack>
+    <VStack ref={frame} data-apercu data-ready={ready || undefined} style={{boxSizing: 'border-box', width, overflow: 'hidden', padding: inset ? 'var(--spacing-6)' : undefined, paddingBlockStart: slug === PLAN_SLUG ? 'var(--spacing-3)' : undefined, background: 'var(--color-background-body)'}}>
+      {children}
     </VStack>
   );
 }
 
-/** The block alone, centred in its stage on the page background, blue silo, light mode. */
+/** The block alone in its frame, blue silo, light mode. */
 export function Apercu({slug}: {slug: string}) {
   return (
     <OrbitaThemeProvider fixedSilo="blue" initialMode="light">
-      <Stage slug={slug}>{demo(slug)}</Stage>
+      <Frame slug={slug}>{demo(slug)}</Frame>
     </OrbitaThemeProvider>
   );
 }

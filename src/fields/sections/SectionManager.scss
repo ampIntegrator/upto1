@@ -353,52 +353,40 @@ $slide: 300ms;
   font-weight: 600;
 }
 
-// the block library: thumbnails in a line that scrolls sideways. A thumbnail is the block's image
-// alone, whole (contain), in a box as high as the panel: standard (4:3) or wide (8:3, `--wide`)
-.section-manager__content:has(> .block-library) {
-  display: flex;
-  flex-direction: column;
-}
-
+// the block library: rows of thumbnails that wrap; the panel scrolls down. A thumbnail is the
+// block's image alone, edge to edge, 220 px high, as wide as the image's own proportions make it
 .block-library {
   display: flex;
-  flex: 1 1 0;
+  flex-wrap: wrap;
   gap: 12px;
-  min-height: 120px;
   margin: 0;
-  padding: 0 0 8px;
-  overflow-x: auto;
+  padding: 0;
   list-style: none;
 }
 
 .block-library__item {
   flex: 0 0 auto;
-  aspect-ratio: 4 / 3;
-}
-
-.block-library__item--wide {
-  aspect-ratio: 8 / 3;
+  max-width: 100%;
 }
 
 .block-library__block {
   position: relative;
-  box-sizing: border-box;
   display: block;
   overflow: hidden;
-  width: 100%;
-  height: 100%;
+  min-width: 120px;
+  height: 220px;
   border-radius: 4px;
-  background: var(--theme-elevation-50) center / contain no-repeat;
-  // the frame is a shadow drawn over the picture: the picture keeps the box's exact size
-  box-shadow: inset 0 0 0 1px var(--theme-elevation-150);
-  color: var(--theme-elevation-0);
+  background: var(--theme-elevation-50);
+  // a hairline drawn over the picture: a white card stays distinct from the panel
+  outline: 1px solid var(--theme-elevation-150);
+  outline-offset: -1px;
+  color: #fff;
   font: inherit;
   cursor: grab;
 
-  &:hover,
   &:focus-visible {
-    box-shadow: inset 0 0 0 2px var(--theme-elevation-1000);
-    outline: none;
+    outline: 2px solid var(--theme-elevation-1000);
+    outline-offset: 2px;
   }
 
   &[aria-disabled] {
@@ -407,27 +395,34 @@ $slide: 300ms;
   }
 }
 
-// the name and the widths: a label in the middle of the picture, on hover and on keyboard focus
+.block-library__image {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+// the name and the widths: on a black veil over the whole picture, on hover and on keyboard focus
+// (not while the thumbnail is pressed: the picture that follows the pointer in a drag stays clear)
 .block-library__caption {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   box-sizing: border-box;
-  max-width: calc(100% - 16px);
   padding: 8px 12px;
-  border-radius: 4px;
-  background: color-mix(in srgb, var(--theme-elevation-1000) 88%, transparent);
+  background: rgb(0 0 0 / 85%);
   text-align: center;
   opacity: 0;
-  transform: translate(-50%, -50%);
   transition: opacity 120ms ease;
   pointer-events: none;
 
-  .block-library__block:hover &,
-  .block-library__block:focus-visible & {
+  .block-library__block:hover:not(:active) &,
+  .block-library__block:focus-visible:not(:active) & {
     opacity: 1;
   }
 }

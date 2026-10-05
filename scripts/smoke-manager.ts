@@ -333,7 +333,17 @@ async function main() {
     await p.getByRole('button', {name: /Composants|Components/}).click();
     await p.waitForTimeout(600);
     const thumbs = p.locator('#section-manager-panel-blocks .block-library__block');
-    check((await thumbs.count()) > 10 && (await p.locator('#section-manager-panel-blocks .block-library').evaluate((el) => getComputedStyle(el).overflowX)) === 'auto', `the components show as thumbnails in a line that scrolls sideways (${await thumbs.count()})`);
+    const thumbBoxes = await thumbs.evaluateAll((els) => els.map((el) => el.getBoundingClientRect()).map((r) => ({top: r.top, width: r.width, height: r.height})));
+    check(thumbBoxes.length > 10 && thumbBoxes.every((b) => b.height === 220) && new Set(thumbBoxes.map((b) => b.top)).size > 1 && new Set(thumbBoxes.map((b) => Math.round(b.width))).size > 3, `the components show as thumbnails 220 px high, each as wide as its picture, in rows that wrap (${thumbBoxes.length})`);
+    const blocksPanel = p.locator('#section-manager-panel-blocks');
+    check(await blocksPanel.evaluate((el) => el.scrollWidth <= el.clientWidth && el.scrollHeight > el.clientHeight), 'the component list scrolls down, not sideways');
+    check((await blocksPanel.locator('p').count()) === 0, 'no line of help above the thumbnails');
+    await thumbs.first().hover();
+    await p.waitForTimeout(300);
+    const thumbVeil = await thumbs.first().locator('.block-library__caption').evaluate((el) => ({opacity: getComputedStyle(el).opacity, covers: el.getBoundingClientRect().width === el.parentElement!.getBoundingClientRect().width && el.getBoundingClientRect().height === el.parentElement!.getBoundingClientRect().height}));
+    check(thumbVeil.opacity === '1' && thumbVeil.covers, 'on hover a veil covers the whole thumbnail, with the name and the widths');
+    if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-library.png`});
+    await p.mouse.move(0, 0);
     /** centre of a column of the preview, on screen */
     const columnPoint = async (key: string) => {
       const iframe = p.locator('.section-preview__frame');

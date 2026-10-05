@@ -236,10 +236,6 @@ export const sectionsText = texts({
     panelLayout: {fr: 'Découpage', en: 'Layout'},
     panelBlocks: {fr: 'Composants', en: 'Components'},
     panelContent: {fr: 'Contenu', en: 'Content'},
-    libraryHint: {
-      fr: 'Glisse un composant sur une colonne de l’aperçu. Le curseur « interdit » signale une colonne trop étroite ou trop large pour lui. Un clic le place dans la colonne sélectionnée.',
-      en: 'Drag a component onto a column of the preview. The “not allowed” cursor marks a column too narrow or too wide for it. A click places it in the selected column.',
-    },
     libraryMin: {
       fr: ({min}: {min: number}) => `dès ${min} / 12`,
       en: ({min}: {min: number}) => `from ${min} / 12`,

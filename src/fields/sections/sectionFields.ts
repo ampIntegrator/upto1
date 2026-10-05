@@ -6,7 +6,7 @@ import {sectionsText as T} from '@/i18n/admin/sections';
 
 import {BLOCK_NAME_MAX} from './blockName';
 import {ROW_NAME_MAX} from './grid';
-import {type ContentBlock, labelMap, maxSpanMap, minSpanMap, partsMap, sampleMap, wideImageList} from './contentBlock';
+import {type ContentBlock, labelMap, maxSpanMap, minSpanMap, partsMap, sampleMap} from './contentBlock';
 import {EMPTY_SLUG, emptyBlock} from './emptyBlock';
 import {SECTION_GAP_OPTIONS, SITE_GAP} from './gaps';
 import {sectionGroup} from './group';
@@ -214,7 +214,7 @@ export function sectionFields({blocks, settings = [], shareable = false, conditi
     {
       type: 'collapsible',
       label: T.manager.title,
-      admin: {components: {Field: {path: '@/fields/sections/SectionManager#SectionManager', clientProps: {preview: preview ? {...preview, parts: partsMap(blocks)} : undefined, groups, headerFields, minSpans: minSpanMap(blocks), maxSpans: maxSpanMap(blocks), hiddenBlocks: blocks.filter((b) => b.hidden).map((b) => b.block.slug), wideImages: wideImageList(blocks), samples: sampleMap(blocks), presetRows}}}},
+      admin: {components: {Field: {path: '@/fields/sections/SectionManager#SectionManager', clientProps: {preview: preview ? {...preview, parts: partsMap(blocks)} : undefined, groups, headerFields, minSpans: minSpanMap(blocks), maxSpans: maxSpanMap(blocks), hiddenBlocks: blocks.filter((b) => b.hidden).map((b) => b.block.slug), samples: sampleMap(blocks), presetRows}}}},
       fields: [
         // section settings (the dialog's first panel)
         {type: 'collapsible', label: T.settings.collapsible, fields: common},
