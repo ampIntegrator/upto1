@@ -22,25 +22,6 @@
   }
 }
 
-// the component's display name, typed in the head
-.column-content__name {
-  box-sizing: border-box;
-  width: var(--sm-name-width);
-  height: 28px;
-  padding: 0 8px;
-  border: 1px solid var(--theme-elevation-150);
-  border-radius: 4px;
-  background: var(--theme-input-bg);
-  color: var(--theme-elevation-800);
-  font: inherit;
-  font-size: 14px;
-
-  &:focus-visible {
-    border-color: var(--theme-elevation-400);
-    outline: none;
-  }
-}
-
 // the block's fields, one per cell, on a grid of equal tracks that fills the width (the number of
 // lines is set by the component: 1 when every cell fits, 2 otherwise). A track is half a column
 // (96 px at least): a cell takes two, three (a textarea) or four of them; the grid scrolls

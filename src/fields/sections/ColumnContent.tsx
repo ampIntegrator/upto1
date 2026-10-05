@@ -9,7 +9,7 @@
  * them: what is typed is in the document's form.
  */
 import {getTranslation} from '@payloadcms/translations';
-import {Button, RenderFields, useField, useFormFields, useTranslation} from '@payloadcms/ui';
+import {Button, RenderFields, useFormFields, useTranslation} from '@payloadcms/ui';
 import type {ClientBlock, ClientField, SanitizedFieldsPermissions} from 'payload';
 import React, {useEffect, useRef, useState} from 'react';
 
@@ -17,7 +17,6 @@ import {sectionsText as T} from '@/i18n/admin/sections';
 import {useAdminText} from '@/i18n/admin/useAdminText';
 
 import type {LibraryBlock} from './BlockLibrary';
-import {BLOCK_NAME_MAX} from './blockName';
 import {EMPTY_SLUG} from './emptyBlock';
 import {only} from './fieldGroups';
 import type {PreviewColumn} from './preview';
@@ -36,8 +35,10 @@ type Part = {fields: ClientField[]; path: string; schemaPath: string; permission
  * or more, kept side by side at the widths their row gives them). `group`: the cell holds a group's
  * fields, two per line. `below`: the cell's field asks to go under the field before it (a title's
  * tag, `admin.custom.below` set by the host); `stack`: the cell holds such a pair, one under the other.
+ * `when`: path of the group the cell's fields were taken out of: the cell shows only while that
+ * group passes its own condition (Payload hides a group, not the fields rendered outside it).
  */
-type Cell = {key: string; parts: Part[]; size: 'half' | 'full' | 'wide' | 'double' | 'band'; title?: string; group?: boolean; below?: boolean; stack?: boolean; section?: boolean};
+type Cell = {key: string; parts: Part[]; size: 'half' | 'full' | 'wide' | 'double' | 'band'; title?: string; group?: boolean; below?: boolean; stack?: boolean; section?: boolean; when?: string};
 
 /** the host's mark on a field that goes under the field before it, in the same cell (a title's tag) */
 const below = (f: ClientField): boolean => Boolean((f.admin as {custom?: {below?: unknown}} | undefined)?.custom?.below);
@@ -134,7 +135,7 @@ function cells(fields: ClientField[], path: string, schemaPath: string, permissi
           else sets.push({siblings: x.siblings, keep: [x.field]});
         }
         const parts = sets.map((set): Part => ({fields: only(set.siblings, (y) => set.keep.includes(y)), path: `${path}.${f.name}`, schemaPath: `${schemaPath}.${f.name}`, permissions: groupPermissions}));
-        out.push({key, parts: heading ? [heading, ...parts] : parts, size: 'double', title: label, group: true});
+        out.push({key, parts: heading ? [heading, ...parts] : parts, size: 'double', title: label, group: true, when: `${path}.${f.name}`});
         heading = null;
         pendingTitle = undefined;
         return;
@@ -142,7 +143,7 @@ function cells(fields: ClientField[], path: string, schemaPath: string, permissi
       const nested = cells(f.fields, `${path}.${f.name}`, `${schemaPath}.${f.name}`, inside(permissions, f.name), i18n, `${key}-`, label);
       if (nested.length && heading) nested[0] = {...nested[0], parts: [heading, ...nested[0].parts]};
       heading = null;
-      out.push(...nested);
+      out.push(...nested.map((cell) => ({...cell, when: cell.when ?? `${path}.${f.name}`})));
       return;
     }
     push(key, whole, sizeOf(f), below(f));
@@ -204,6 +205,20 @@ function stacked(list: Cell[]): Cell[] {
   return out;
 }
 
+/** One cell of the flow; nothing while the group its fields come from fails its condition. */
+function FlowCell({cell, readOnly}: {cell: Cell; readOnly?: boolean}) {
+  const hidden = useFormFields(([fields]) => Boolean(cell.when) && fields[cell.when as string]?.passesCondition === false);
+  if (hidden) return null;
+  return (
+    <div className="column-content__cell" data-size={cell.size} data-group={cell.group ? 'true' : undefined} data-stack={cell.stack ? 'true' : undefined} data-section={cell.section ? 'true' : undefined}>
+      {cell.title ? <p className="column-content__title">{cell.title}</p> : null}
+      {cell.parts.map((part, i) => (
+        <RenderFields key={i} fields={part.fields} forceRender parentIndexPath="" parentPath={part.path} parentSchemaPath={part.schemaPath} permissions={part.permissions} readOnly={readOnly} />
+      ))}
+    </div>
+  );
+}
+
 /**
  * The cells on a grid of equal tracks (half columns) that fills the panel's width:
  *   - when every cell can have its own tracks, one cell after the other, on one line;
@@ -240,37 +255,9 @@ function Flow({cells: list, readOnly}: {cells: Cell[]; readOnly?: boolean}) {
   return (
     <div ref={ref} className="column-content__flow" data-lines={lines} style={{gridTemplateRows: lines === 2 ? 'auto minmax(0, 1fr)' : 'minmax(0, 1fr)'}}>
       {list.map((cell) => (
-        <div key={cell.key} className="column-content__cell" data-size={cell.size} data-group={cell.group ? 'true' : undefined} data-stack={cell.stack ? 'true' : undefined} data-section={cell.section ? 'true' : undefined}>
-          {cell.title ? <p className="column-content__title">{cell.title}</p> : null}
-          {cell.parts.map((part, i) => (
-            <RenderFields key={i} fields={part.fields} forceRender parentIndexPath="" parentPath={part.path} parentSchemaPath={part.schemaPath} permissions={part.permissions} readOnly={readOnly} />
-          ))}
-        </div>
+        <FlowCell key={cell.key} cell={cell} readOnly={readOnly} />
       ))}
     </div>
-  );
-}
-
-/**
- * The component's display name (« Nom affiché »): Payload's native blockName, shown on the column in
- * the row's square in the place of the component's type. Typed in the panel's head; empty, the type shows.
- */
-function BlockName({path, label, readOnly}: {path: string; label: string; readOnly?: boolean}) {
-  const {t} = useAdminText();
-  const {value, setValue} = useField<string>({path});
-  const name = typeof value === 'string' ? value : '';
-  return (
-    <input
-      className="column-content__name"
-      type="text"
-      value={name}
-      maxLength={BLOCK_NAME_MAX}
-      readOnly={readOnly}
-      placeholder={t(T.drawer.blockName)}
-      aria-label={t(T.drawer.blockName)}
-      title={t(T.drawer.blockNameDescription, {label, length: name.length, max: BLOCK_NAME_MAX})}
-      onChange={(e) => setValue(e.target.value.slice(0, BLOCK_NAME_MAX))}
-    />
   );
 }
 
@@ -306,7 +293,6 @@ export function ColumnContent({rowsPath, rowsSchemaPath, column, blocks, library
       <div className="column-content__head">
         <strong>{t(T.manager.contentTitle, {row: column.row + 1, col: column.col + 1, span})}</strong>
         {filled ? <span>{label}</span> : null}
-        {filled ? <BlockName path={`${colPath}.contents.0.blockName`} label={label ?? blockType} readOnly={readOnly} /> : null}
         {filled && !readOnly ? (
           <Button buttonStyle="secondary" size="small" margin={false} onClick={() => onClear(column)}>
             {t(T.drawer.clear)}

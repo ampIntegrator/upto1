@@ -283,11 +283,6 @@ export const sectionsText = texts({
   },
   drawer: {
     clear: {fr: 'Vider la colonne', en: 'Empty the column'},
-    blockName: {fr: 'Nom affiché', en: 'Display name'},
-    blockNameDescription: {
-      fr: ({label, length, max}: {label: string; length: number; max: number}) => `Remplace « ${label} » dans la case. ${length}/${max} caractères.`,
-      en: ({label, length, max}: {label: string; length: number; max: number}) => `Replaces “${label}” in the cell. ${length}/${max} characters.`,
-    },
   },
   // texts drawn inside the preview frame (the host's preview page), in the admin's language
   preview: {

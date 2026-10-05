@@ -520,16 +520,36 @@ async function main() {
       return {scrollX: el.scrollWidth - el.clientWidth, scrollY: el.scrollHeight - el.clientHeight, columns: new Set(cells.map((c) => Math.round(c.getBoundingClientRect().left))).size, groupFields: group.querySelectorAll('.field-type').length, groupLines: new Set([...group.querySelectorAll('.field-type')].map((f) => Math.round(f.getBoundingClientRect().bottom / 20))).size, ratio: Math.round((text.offsetWidth / short.offsetWidth) * 100) / 100, group: Math.round((group.offsetWidth / short.offsetWidth) * 100) / 100};
     });
     check(card.columns <= 5 && card.groupFields === 4 && card.ratio > 1.3 && card.ratio < 1.8 && card.group > 1.9 && card.scrollX <= 0 && card.scrollY <= 0, `a clickable card's fields take five columns at most, its link in one cell two columns wide, its text a column and a half, nothing to scroll (${JSON.stringify(card)})`);
-    // the display name, typed in the panel's head: it names the column in its square
-    await p.locator('#section-manager-panel-content .column-content__name').fill('Ma carte');
-    await p.waitForTimeout(500);
-    const named = await squares.nth(1).locator('.rows-builder__mini').first().evaluate((el) => `${el.getAttribute('aria-label') ?? ''} ${el.textContent ?? ''}`);
-    check(/Ma carte/.test(named), `the display name typed in the content panel names the column in its square (${named.trim()})`);
-    // Payload's internal class names the builder's styles and scripts rely on (src/fields/sections/_payload.scss,
-    // payloadDom.ts): all in the dialog today; one missing after an upgrade means a rule to review
-    const internals = ['.field-type', '.field-type__wrap', '.field-label', '.field-description', '.render-fields', '.row__fields', '.btn', '.btn__label', '.rs__control', '.rs__value-container', '.checkbox-input', '.radio-input', '.field-label .localized'];
-    const gone = await p.evaluate((list) => list.filter((selector) => !document.querySelector(`.section-manager__body ${selector}`)), internals);
-    check(gone.length === 0, `Payload's internal class names used by the builder are all in the dialog${gone.length ? ` (missing: ${gone.join(', ')})` : ''}`);
+    // a field's description: a bubble while the pointer is on the « i » after its label, and only then
+    // (not on the label's text, not while the field is used: the bubble would cover it)
+    const bubbleShown = () => p.evaluate(() => {
+      const el = document.querySelector('#section-manager-panel-content .field-description');
+      return el ? getComputedStyle(el).opacity === '1' : null;
+    });
+    const spots = await p.evaluate(() => {
+      const field = document.querySelector('#section-manager-panel-content .field-description')!.closest('.field-type')!;
+      const label = field.querySelector('.field-label') as HTMLElement;
+      const range = document.createRange();
+      range.selectNodeContents(label);
+      const text = range.getBoundingClientRect();
+      const control = (field.querySelector('.rs__control, input') as HTMLElement).getBoundingClientRect();
+      return {text: {x: text.left + 4, y: text.top + text.height / 2}, mark: {x: text.right + 6 + parseFloat(getComputedStyle(label, '::after').width) / 2, y: text.top + text.height / 2}, control: {x: control.left + control.width / 2, y: control.top + control.height / 2}};
+    });
+    await p.mouse.move(spots.text.x, spots.text.y);
+    await p.waitForTimeout(300);
+    const onText = await bubbleShown();
+    await p.mouse.click(spots.control.x, spots.control.y);
+    await p.waitForTimeout(300);
+    const inUse = await bubbleShown();
+    // (the select closed by a second click, not Escape: no menu open, Escape would close the dialog)
+    await p.mouse.click(spots.control.x, spots.control.y);
+    await p.waitForTimeout(200);
+    await p.mouse.move(spots.mark.x, spots.mark.y);
+    await p.waitForTimeout(300);
+    const onMark = await bubbleShown();
+    await p.mouse.move(0, 0);
+    check(onText === false && inUse === false && onMark === true, `a field's description shows on its « i » only: not on the label (${onText}), not while the field is used (${inUse}), on the « i » (${onMark})`);
+    check((await p.locator('#section-manager-panel-content .column-content__head input').count()) === 0, 'no display name for a component: rows are named, components are not');
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-card.png`});
     await p.locator('.section-manager__tab[aria-controls="section-manager-panel-blocks"]').click();
     await p.waitForTimeout(700);

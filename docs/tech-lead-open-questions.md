@@ -89,6 +89,6 @@ dialog renders a subset of fields at their exact paths, `fieldGroups.ts`), and P
 
 - Localized rich texts came out empty in the live preview (`flattenLocales: false` on the read
   in `apercu-section/render.tsx`); now covered by the smoke test.
-- The component's display name (« Nom affiché ») had lost its field with the column drawer; it is
-  typed in the head of the « Contenu » panel.
+- The component's display name (« Nom affiché ») had lost its field with the column drawer;
+  decided the same day: components are not named (rows are), the feature is removed from the dialog.
 - The preview frame's own texts go through the FR/EN dictionaries, in the admin's language.

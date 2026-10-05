@@ -47,7 +47,7 @@ import './RowsBuilder.scss';
 /** filled: the column has a real component (an empty cell does not count) */
 /** narrow: minimum width required by the content when the column is too narrow, otherwise null */
 /** wide: maximum width allowed by the content when the column is too wide, otherwise null */
-type CellSnapshot = {span: ColumnSpan; contents: string[]; types?: string[]; names?: string[]; filled: boolean; narrow: number | null; wide: number | null; mobileOrder: number | null};
+type CellSnapshot = {span: ColumnSpan; contents: string[]; types?: string[]; filled: boolean; narrow: number | null; wide: number | null; mobileOrder: number | null};
 type RowSnapshot = {ids?: string[]; name?: string; columns: CellSnapshot[]};
 
 const text14: React.CSSProperties = {fontSize: 14, lineHeight: 1.4};
@@ -341,10 +341,6 @@ export function RowsBuilder(props: RowsBuilderProps) {
         (out[i].columns[j].types ??= [])[k] = blockType;
         if (blockType && blockType !== EMPTY_SLUG) out[i].columns[j].filled = true;
       }
-      // display name chosen in the drawer (native blockName)
-      if (parts[3] === 'contents' && parts[5] === 'blockName' && parts.length === 6) {
-        (out[i].columns[j].names ??= [])[Number(parts[4])] = String(fields[key]?.value ?? '');
-      }
     }
     return JSON.stringify(out.map((r) => ({ids: r?.ids ?? [], name: r?.name ?? '', columns: (r?.columns ?? []).map((c) => {
       const span = c?.span ?? 12;
@@ -352,7 +348,7 @@ export function RowsBuilder(props: RowsBuilderProps) {
       const need = (c?.types ?? []).reduce((m, t) => Math.max(m, minSpans[t] ?? 0), 0);
       // narrowest maximum among the column's contents (12 when none declares one)
       const cap = (c?.types ?? []).reduce((m, t) => Math.min(m, maxSpans[t] ?? 12), 12);
-      return {span, types: (c?.types ?? []).filter(Boolean), contents: (c?.contents ?? []).map((label, k) => c?.names?.[k]?.trim() || label).filter(Boolean), filled: Boolean(c?.filled), narrow: need > span ? need : null, wide: need <= span && span > cap ? cap : null, mobileOrder: c?.mobileOrder ?? null};
+      return {span, types: (c?.types ?? []).filter(Boolean), contents: (c?.contents ?? []).filter(Boolean), filled: Boolean(c?.filled), narrow: need > span ? need : null, wide: need <= span && span > cap ? cap : null, mobileOrder: c?.mobileOrder ?? null};
     })})));
   });
   const snapshot = useMemo<RowSnapshot[]>(() => JSON.parse(snapshotJson) as RowSnapshot[], [snapshotJson]);

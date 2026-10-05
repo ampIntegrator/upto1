@@ -1,5 +1,6 @@
 import type {Block, PayloadRequest} from 'payload';
 
+import {groupHeading} from '../groupHeading';
 import {linkTarget} from '../linkTarget';
 import {collectionCapacity, minSpan} from '@/components/content-specs';
 import {columnSpanAt, type ContentBlock} from '@/fields/sections/contentBlock';
@@ -56,7 +57,9 @@ const block: Block = {
   slug: COLLECTION_SLUG,
   labels: {singular: t.name, plural: t.plural},
   imageURL: `/apercus/${COLLECTION_SLUG}.png`,
+  // three groups under headings: in the section manager each one is a column, its fields one under the other
   fields: [
+    groupHeading({name: 'groupLayout', label: t.groups.layout, icon: 'square-layout-grid-4', first: true}),
     {
       type: 'row',
       fields: [
@@ -127,6 +130,7 @@ const block: Block = {
         {name: 'arrows', type: 'checkbox', label: t.arrows, defaultValue: true, admin: {width: '33%'}},
       ],
     },
+    groupHeading({name: 'groupItems', label: t.groups.items, icon: 'view-columns'}),
     {
       name: 'source',
       type: 'radio',
@@ -183,6 +187,7 @@ const block: Block = {
         {name: 'casesCta', type: 'text', label: t.postsCta, localized: true, admin: {width: '33%'}},
       ],
     },
+    groupHeading({name: 'groupMore', label: t.groups.more, icon: 'link'}),
     {
       type: 'row',
       fields: [

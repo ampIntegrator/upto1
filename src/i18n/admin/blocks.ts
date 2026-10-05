@@ -251,6 +251,12 @@ export const collectionBlockText = texts({
   /** Label of the builder thumbnail that creates a full-width row holding a collection. */
   rowPreset: {fr: 'Carousel', en: 'Carousel'},
   plural: {fr: 'Collections', en: 'Collections'},
+  // headings of the field groups (one column each in the section manager's content panel)
+  groups: {
+    layout: {fr: 'Mise en page', en: 'Layout'},
+    items: {fr: 'Éléments', en: 'Items'},
+    more: {fr: 'Bouton « voir tout »', en: '« See all » button'},
+  },
   layout: {fr: 'Mise en page', en: 'Layout'},
   layoutSwipe: {fr: 'Côte à côte, glisser sur mobile', en: 'Side by side, swipe on mobile'},
   layoutCarousel: {fr: 'Carrousel (flèches, indicateur)', en: 'Carousel (arrows, indicator)'},

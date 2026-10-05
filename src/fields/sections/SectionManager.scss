@@ -332,12 +332,20 @@ $slide: 300ms;
 }
 
 // in the top part a field's description takes no line: an « i » after the label, the text in a
-// bubble while the label is hovered or the field has the keyboard focus (still read by screen readers;
-// a checkbox keeps its line: its label is not where the « i » could go)
+// bubble **while the pointer is on the « i » itself** (not on the label, not while the field has the
+// focus: the bubble covered the field being used, Nicolas, 5 Oct. 2026). Still read by screen
+// readers; a checkbox keeps its line: its label is not where the « i » could go
 .section-manager__panels #{p.$field}:not(#{p.$field-checkbox}):has(> #{p.$field-wrap} > #{p.$field-description}, > #{p.$field-description}) {
   position: relative;
 
+  // the label lets the pointer through, its « i » does not: `:hover` on the label is then true
+  // over the « i » only
+  > #{p.$field-label} {
+    pointer-events: none;
+  }
+
   > #{p.$field-label}::after {
+    pointer-events: auto;
     // (the empty alternative text keeps the mark out of the field's accessible name)
     content: 'i' / '';
     display: inline-flex;
@@ -381,9 +389,7 @@ $slide: 300ms;
   }
 
   &:has(> #{p.$field-label}:hover) > #{p.$field-wrap} > #{p.$field-description},
-  &:has(> #{p.$field-label}:hover) > #{p.$field-description},
-  &:has(> #{p.$field-wrap} :focus-visible) > #{p.$field-wrap} > #{p.$field-description},
-  &:has(:focus-visible) > #{p.$field-description} {
+  &:has(> #{p.$field-label}:hover) > #{p.$field-description} {
     opacity: 1;
     clip-path: none;
   }

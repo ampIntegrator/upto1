@@ -138,6 +138,15 @@ still publishes: no drafts).
      « Disposition ») **gets one column per group**: the heading, then the group's fields one
      under the other as in a plain form, the column scrolling on its own when it is taller than
      the panel (`blockCells`); packed on one line they were unreadable.
+     The collection (carousel) follows the same rule since 5 Oct. 2026: three headings in its
+     block (« Mise en page », « Éléments », « Bouton voir tout »), so three columns that scroll.
+     To reorganise a block whose panel is too packed: add `groupHeading()` fields to it (no
+     database change, a `pnpm dev` restart). A group taken apart into cells shows only while it
+     passes its own condition (`when` of a cell: Payload hides the group, not fields rendered
+     outside it). `pnpm shots:content` captures the panel of every block (`SHOTS_OUT=<folder>`,
+     `SHOTS_ONLY=slug1,slug2`), on a throwaway page.
+     **No display name for a component** (Nicolas, 5 Oct. 2026: rows are named, components are
+     not): the panel has no such field and the squares show the component's type.
      Surveyed on 2 Oct. 2026 at 1920 × 960: of the 24 blocks only
      the text box scrolls down (its rich text editor is taller than the panel); arrays (FAQ items,
      steps, tabs, buttons, badges) will as soon as they hold rows. « Vider la colonne ». It only
