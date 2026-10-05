@@ -539,7 +539,7 @@ async function main() {
       const boxes = [...grid.querySelectorAll('.column-content__cell')].filter((c) => (c as HTMLElement).offsetWidth > 0).map((c) => c.getBoundingClientRect());
       return {scroll: el.scrollHeight - el.clientHeight, cells: boxes.length, lines: new Set(boxes.map((b) => Math.round(b.top))).size, unused: Math.round(grid.getBoundingClientRect().right - Math.max(...boxes.map((b) => b.right)))};
     });
-    check(flow.scroll <= 0 && flow.cells === 4 && flow.lines === 1 && flow.unused === 0, `the Image block's four fields take one column each, on one line, over the panel's full width, without vertical scroll (${JSON.stringify(flow)})`);
+    check(flow.scroll <= 0 && flow.cells === 2 && flow.lines === 1 && flow.unused >= 0, `the Image block's fields take one line (the image, then its three settings side by side in one cell), without vertical scroll (${JSON.stringify(flow)})`);
     await p.locator('.column-content .react-select').first().click();
     await p.waitForTimeout(500);
     const menu = await p.evaluate(() => {

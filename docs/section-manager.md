@@ -118,6 +118,18 @@ still publishes: no drafts).
      first field. A group heading goes with the field that follows it. A field's description is
      an « i » after its label, it no longer widens the cell. A clickable card is four columns
      (icon and title, tag and alignment, text, link).
+     All the column blocks were reviewed on 5 Oct. 2026 at 1920 px (captures of the panel, read by
+     a second model): a row of three short fields or more stays a row, in one cell two columns
+     wide (a number's prefix, value and suffix; a title, its tag and its size); a group may hold
+     a textarea (a whole line of its cell); a list whose rows hold one or two short fields takes
+     a column and a half; a cell that takes the whole height **scrolls on its own** when it holds
+     more than fits (a list with many rows, a rich text); a column is 400 px wide at most (a
+     block with one field does not stretch it across the panel); labels stay on one line (cut
+     with an ellipsis) and the content language (« — Français ») is not shown after them. Keep
+     a field's label short and put its examples in its `description` (the « i »). What still
+     scrolls at 1920 px: the two price blocks sideways (too many fields for two lines), the
+     text box a little downwards (two group headings). Nicolas, 5 Oct.: some scroll is fine,
+     do not force it.
      Surveyed on 2 Oct. 2026 at 1920 × 960: of the 24 blocks only
      the text box scrolls down (its rich text editor is taller than the panel); arrays (FAQ items,
      steps, tabs, buttons, badges) will as soon as they hold rows. « Vider la colonne ». It only

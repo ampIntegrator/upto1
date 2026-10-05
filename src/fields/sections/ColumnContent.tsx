@@ -28,22 +28,38 @@ type Part = {fields: ClientField[]; path: string; schemaPath: string; permission
  * `size`: how much of the grid a cell takes. `half`: a short field, two of them fit one above the
  * other; `full`: a whole column (an upload, a list of choices); `wide`: a column and a half (a
  * textarea: room to read what is typed, without taking two columns); `double`: two columns (a rich
- * text, an array of rows, a group). `group`: the cell holds a group's fields, two per line.
+ * text, an array of rows, a group); `band`: two columns on one line (a row of three short fields
+ * or more, kept side by side at the widths their row gives them). `group`: the cell holds a group's
+ * fields, two per line.
  */
-type Cell = {key: string; parts: Part[]; size: 'half' | 'full' | 'wide' | 'double'; title?: string; group?: boolean};
+type Cell = {key: string; parts: Part[]; size: 'half' | 'full' | 'wide' | 'double' | 'band'; title?: string; group?: boolean};
 
 /** fields that need two columns, a column and a half, or a whole column */
 const DOUBLE = new Set(['richText', 'array', 'blocks', 'collapsible', 'tabs', 'group', 'row', 'join']);
 const WIDE = new Set(['textarea']);
 const FULL = new Set(['upload', 'relationship', 'radio', 'code', 'json']);
-const sizeOf = (f: ClientField): Cell['size'] => (DOUBLE.has(f.type) ? 'double' : WIDE.has(f.type) ? 'wide' : FULL.has(f.type) ? 'full' : 'half');
+/** the fields of a list, with the lists they sit in: rows opened up (a row gives its fields no path of its own) */
+type Leaf = {field: ClientField; siblings: ClientField[]};
+const leaves = (fields: ClientField[]): Leaf[] =>
+  fields.flatMap((f): Leaf[] => (f.admin?.hidden || ('name' in f && f.name === 'id') ? [] : f.type === 'row' && 'fields' in f ? leaves(f.fields) : [{field: f, siblings: fields}]));
+/** an array whose rows hold one or two short fields (a list of features) needs a column and a half, not two */
+const sizeOf = (f: ClientField): Cell['size'] => {
+  if (f.type === 'array' && 'fields' in f) {
+    const inner = leaves(f.fields);
+    if (inner.length <= 2 && inner.every((x) => !DOUBLE.has(x.field.type) && !WIDE.has(x.field.type) && !FULL.has(x.field.type))) return 'wide';
+  }
+  return DOUBLE.has(f.type) ? 'double' : WIDE.has(f.type) ? 'wide' : FULL.has(f.type) ? 'full' : 'half';
+};
 
 /**
  * The grid's tracks are half columns (a column is two tracks and the gap between them), so that a
  * cell can take a column and a half. Tracks taken by each size; narrowest track and gap between
  * tracks, in px (the SCSS uses the same values).
  */
-const TRACKS: Record<Cell['size'], number> = {half: 2, full: 2, wide: 3, double: 4};
+const TRACKS: Record<Cell['size'], number> = {half: 2, full: 2, wide: 3, double: 4, band: 4};
+/** a row of at least this many short fields stays a row, in one cell */
+const BAND_MIN = 3;
+const short = (f: ClientField) => !DOUBLE.has(f.type) && !WIDE.has(f.type) && !FULL.has(f.type);
 const TRACK_MIN = 96;
 const TRACK_GAP = 20;
 /** a group of at most this many short fields stays together, in one cell */
@@ -82,6 +98,11 @@ function cells(fields: ClientField[], path: string, schemaPath: string, permissi
       return;
     }
     const named = 'fields' in f && Array.isArray(f.fields) && f.fields.every((x) => 'name' in x || x.type === 'row');
+    // a row of three short fields or more (a number: prefix, value, suffix) stays together, on one line
+    if (f.type === 'row' && named && leaves(f.fields).length >= BAND_MIN && leaves(f.fields).every((x) => short(x.field))) {
+      push(key, whole, 'band');
+      return;
+    }
     if (f.type === 'row' && named) {
       const nested = cells(f.fields, path, schemaPath, permissions, i18n, `${key}-`, pendingTitle);
       if (nested.length && heading) nested[0] = {...nested[0], parts: [heading, ...nested[0].parts]};
@@ -92,11 +113,12 @@ function cells(fields: ClientField[], path: string, schemaPath: string, permissi
     }
     if (f.type === 'group' && 'name' in f && named) {
       const label = f.label ? String(getTranslation(f.label as Parameters<typeof getTranslation>[0], i18n)) : undefined;
-      const shown = f.fields.filter((x) => !x.admin?.hidden && !('name' in x && x.name === 'id'));
-      // a small group of short fields (a link: label, kind, address, new tab): one cell, its fields two per line
-      if (shown.length <= GROUP_MAX && shown.every((x) => !DOUBLE.has(x.type) && !WIDE.has(x.type))) {
+      const shown = leaves(f.fields);
+      // a small group (a link: label, kind, address, new tab; a price: amount, currency, period): one
+      // cell, its fields two per line (a textarea takes a whole line of the cell)
+      if (shown.length <= GROUP_MAX && shown.every((x) => !DOUBLE.has(x.field.type))) {
         const groupPermissions = inside(permissions, f.name);
-        const parts = shown.map((x): Part => ({fields: only(f.fields, (y) => y === x), path: `${path}.${f.name}`, schemaPath: `${schemaPath}.${f.name}`, permissions: groupPermissions}));
+        const parts = shown.map((x): Part => ({fields: only(x.siblings, (y) => y === x.field), path: `${path}.${f.name}`, schemaPath: `${schemaPath}.${f.name}`, permissions: groupPermissions}));
         out.push({key, parts: heading ? [heading, ...parts] : parts, size: 'double', title: label, group: true});
         heading = null;
         pendingTitle = undefined;
@@ -120,6 +142,8 @@ function cells(fields: ClientField[], path: string, schemaPath: string, permissi
  *     an earlier one), the others keep the whole height, and the grid scrolls sideways if it still
  *     does not fit.
  * Only the number of lines depends on the width (CSS grid does the placing: no field is remounted).
+ * The grid is as high as the panel: a cell that takes the whole height and holds more than fits (a
+ * list with many rows, a long rich text) scrolls on its own, the other fields stay in view.
  */
 function Flow({cells: list, readOnly}: {cells: Cell[]; readOnly?: boolean}) {
   const ref = useRef<HTMLDivElement>(null);
@@ -137,7 +161,7 @@ function Flow({cells: list, readOnly}: {cells: Cell[]; readOnly?: boolean}) {
   const tracks = list.reduce((n, c) => n + TRACKS[c.size], 0);
   const lines = width === 0 || tracks <= fits ? 1 : 2;
   return (
-    <div ref={ref} className="column-content__flow" data-lines={lines} style={{gridTemplateRows: `repeat(${lines}, auto)`}}>
+    <div ref={ref} className="column-content__flow" data-lines={lines} style={{gridTemplateRows: lines === 2 ? 'auto minmax(0, 1fr)' : 'minmax(0, 1fr)'}}>
       {list.map((cell) => (
         <div key={cell.key} className="column-content__cell" data-size={cell.size} data-group={cell.group ? 'true' : undefined}>
           {cell.title ? <p className="column-content__title">{cell.title}</p> : null}

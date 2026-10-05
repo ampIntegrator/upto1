@@ -495,6 +495,9 @@ export interface Page {
                               | {
                                   quote: string;
                                   name: string;
+                                  /**
+                                   * For instance « Broker · Lyon ».
+                                   */
                                   role?: string | null;
                                   result?: string | null;
                                   id?: string | null;
@@ -502,6 +505,9 @@ export interface Page {
                                   blockType: 'testimonial';
                                 }
                               | {
+                                  /**
+                                   * For instance « BEFORE », « AFTER ».
+                                   */
                                   chipLabel: string;
                                   chipTone?: ('accent' | 'high' | 'danger' | 'cat' | 'line') | null;
                                   meta?: string | null;
@@ -526,14 +532,20 @@ export interface Page {
                                   nameTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   tagline?: string | null;
                                   price: {
+                                    /**
+                                     * As displayed: « 79 », « 1,490 ».
+                                     */
                                     value: string;
                                     currency?: string | null;
+                                    /**
+                                     * « / month », « per month · 2.60 € / day ».
+                                     */
                                     period?: string | null;
                                   };
                                   featured?: boolean | null;
                                   badge?: string | null;
                                   /**
-                                   * Empty: the list uses the title above.
+                                   * For instance « Everything in Solo, plus ». Empty: the list uses the title above.
                                    */
                                   inherits?: string | null;
                                   featuresLabel?: string | null;
@@ -593,8 +605,14 @@ export interface Page {
                                   totalValue?: string | null;
                                   priceLabel?: string | null;
                                   price: {
+                                    /**
+                                     * As displayed: « 79 », « 1,490 ».
+                                     */
                                     value: string;
                                     currency?: string | null;
+                                    /**
+                                     * « / month », « per month · 2.60 € / day ».
+                                     */
                                     period?: string | null;
                                   };
                                   cta: {
@@ -1014,6 +1032,9 @@ export interface Page {
                                         | {
                                             quote: string;
                                             name: string;
+                                            /**
+                                             * For instance « Broker · Lyon ».
+                                             */
                                             role?: string | null;
                                             result?: string | null;
                                             id?: string | null;
@@ -1217,6 +1238,9 @@ export interface Page {
                                             blockType: 'cardTitleLink';
                                           }
                                         | {
+                                            /**
+                                             * For instance « BEFORE », « AFTER ».
+                                             */
                                             chipLabel: string;
                                             chipTone?: ('accent' | 'high' | 'danger' | 'cat' | 'line') | null;
                                             meta?: string | null;
@@ -1241,14 +1265,20 @@ export interface Page {
                                             nameTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                             tagline?: string | null;
                                             price: {
+                                              /**
+                                               * As displayed: « 79 », « 1,490 ».
+                                               */
                                               value: string;
                                               currency?: string | null;
+                                              /**
+                                               * « / month », « per month · 2.60 € / day ».
+                                               */
                                               period?: string | null;
                                             };
                                             featured?: boolean | null;
                                             badge?: string | null;
                                             /**
-                                             * Empty: the list uses the title above.
+                                             * For instance « Everything in Solo, plus ». Empty: the list uses the title above.
                                              */
                                             inherits?: string | null;
                                             featuresLabel?: string | null;
@@ -2218,6 +2248,9 @@ export interface Section {
                     | {
                         quote: string;
                         name: string;
+                        /**
+                         * For instance « Broker · Lyon ».
+                         */
                         role?: string | null;
                         result?: string | null;
                         id?: string | null;
@@ -2225,6 +2258,9 @@ export interface Section {
                         blockType: 'testimonial';
                       }
                     | {
+                        /**
+                         * For instance « BEFORE », « AFTER ».
+                         */
                         chipLabel: string;
                         chipTone?: ('accent' | 'high' | 'danger' | 'cat' | 'line') | null;
                         meta?: string | null;
@@ -2249,14 +2285,20 @@ export interface Section {
                         nameTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                         tagline?: string | null;
                         price: {
+                          /**
+                           * As displayed: « 79 », « 1,490 ».
+                           */
                           value: string;
                           currency?: string | null;
+                          /**
+                           * « / month », « per month · 2.60 € / day ».
+                           */
                           period?: string | null;
                         };
                         featured?: boolean | null;
                         badge?: string | null;
                         /**
-                         * Empty: the list uses the title above.
+                         * For instance « Everything in Solo, plus ». Empty: the list uses the title above.
                          */
                         inherits?: string | null;
                         featuresLabel?: string | null;
@@ -2316,8 +2358,14 @@ export interface Section {
                         totalValue?: string | null;
                         priceLabel?: string | null;
                         price: {
+                          /**
+                           * As displayed: « 79 », « 1,490 ».
+                           */
                           value: string;
                           currency?: string | null;
+                          /**
+                           * « / month », « per month · 2.60 € / day ».
+                           */
                           period?: string | null;
                         };
                         cta: {
@@ -2736,6 +2784,9 @@ export interface Section {
                               | {
                                   quote: string;
                                   name: string;
+                                  /**
+                                   * For instance « Broker · Lyon ».
+                                   */
                                   role?: string | null;
                                   result?: string | null;
                                   id?: string | null;
@@ -2939,6 +2990,9 @@ export interface Section {
                                   blockType: 'cardTitleLink';
                                 }
                               | {
+                                  /**
+                                   * For instance « BEFORE », « AFTER ».
+                                   */
                                   chipLabel: string;
                                   chipTone?: ('accent' | 'high' | 'danger' | 'cat' | 'line') | null;
                                   meta?: string | null;
@@ -2963,14 +3017,20 @@ export interface Section {
                                   nameTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   tagline?: string | null;
                                   price: {
+                                    /**
+                                     * As displayed: « 79 », « 1,490 ».
+                                     */
                                     value: string;
                                     currency?: string | null;
+                                    /**
+                                     * « / month », « per month · 2.60 € / day ».
+                                     */
                                     period?: string | null;
                                   };
                                   featured?: boolean | null;
                                   badge?: string | null;
                                   /**
-                                   * Empty: the list uses the title above.
+                                   * For instance « Everything in Solo, plus ». Empty: the list uses the title above.
                                    */
                                   inherits?: string | null;
                                   featuresLabel?: string | null;

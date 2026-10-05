@@ -18,7 +18,7 @@ const block: Block = {
       type: 'row',
       fields: [
         {name: 'name', type: 'text', label: t.personName, required: true, admin: {width: '34%'}},
-        {name: 'role', type: 'text', label: t.role, localized: true, admin: {width: '33%'}},
+        {name: 'role', type: 'text', label: t.role, localized: true, admin: {width: '33%', description: t.roleDescription}},
         {name: 'result', type: 'text', label: t.result, localized: true, admin: {width: '33%'}},
       ],
     },

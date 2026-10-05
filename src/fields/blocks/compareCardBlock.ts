@@ -15,7 +15,7 @@ const block: Block = {
     {
       type: 'row',
       fields: [
-        {name: 'chipLabel', type: 'text', label: t.chipLabel, localized: true, required: true, admin: {width: '40%'}},
+        {name: 'chipLabel', type: 'text', label: t.chipLabel, localized: true, required: true, admin: {width: '40%', description: t.chipLabelDescription}},
         {
           name: 'chipTone',
           type: 'select',

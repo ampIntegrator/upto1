@@ -345,7 +345,8 @@ $slide: 300ms;
   flex: 1 1 0;
   // dense: on two lines, a short field goes under an earlier one rather than alone in a new column
   grid-auto-flow: column dense;
-  grid-auto-columns: minmax(96px, 1fr);
+  // (200 px at most: a block with one or two fields does not stretch them across the panel)
+  grid-auto-columns: minmax(96px, 200px);
   align-content: start;
   gap: 8px var(--base);
   min-height: 0;
@@ -356,10 +357,13 @@ $slide: 300ms;
   min-width: 0;
 
   // a field that needs the whole height: one column, a column and a half, or two
+  // (taller than the panel, it scrolls on its own: the other fields stay in view)
   &[data-size='full'],
   &[data-size='wide'],
   &[data-size='double'] {
     grid-row: 1 / -1;
+    min-height: 0;
+    overflow-y: auto;
   }
 
   &[data-size='wide'] {
@@ -387,6 +391,11 @@ $slide: 300ms;
       margin: 0;
     }
 
+    // a textarea takes a whole line of the group
+    > .render-fields:has(textarea) {
+      grid-column: 1 / -1;
+    }
+
     // a field of the group hidden by its condition leaves no hole
     > .render-fields:not(:has(.field-type)) {
       display: none;
@@ -405,9 +414,57 @@ $slide: 300ms;
   }
 
   // the field fills its cell, whatever width its row gave it
-  .field-type {
+  &:not([data-size='band']) .field-type {
     width: 100% !important;
     margin-bottom: 0;
+  }
+
+  // a row kept as a row: two columns wide, its fields side by side, sharing the width
+  // (the widths their row gives them suit a wide form, not a third of two columns)
+  &[data-size='band'] {
+    grid-column: span 4;
+
+    .row__fields {
+      flex-wrap: nowrap;
+      gap: 10px;
+    }
+
+    .field-type {
+      flex: 1 1 0 !important;
+      width: auto !important;
+      min-width: 0;
+      margin-bottom: 0;
+    }
+
+    // beside choices, a typed text gets twice the room
+    .row__fields:has(> .field-type:not(.text)) > .field-type.text {
+      flex-grow: 2 !important;
+    }
+  }
+
+  // a label stays on one line (a second line would push the field under the panel's bottom edge):
+  // cut with an ellipsis when it is too long, whole in the browser's own tooltip
+  .field-label:not(.checkbox-input *, .radio-input *) {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // a select keeps its arrow on the line of its value
+  .rs__control {
+    flex-wrap: nowrap;
+  }
+
+  .rs__value-container {
+    min-width: 0;
+  }
+
+  // the content's language after each label (« — Français »): it wraps the labels and tells
+  // nothing here, the site has one content language
+  .field-label .localized {
+    display: none;
   }
 
   // a group heading opening the cell: its rule is not needed here

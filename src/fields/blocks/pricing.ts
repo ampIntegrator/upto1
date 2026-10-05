@@ -14,9 +14,9 @@ export const priceGroup: Field = {
     {
       type: 'row',
       fields: [
-        {name: 'value', type: 'text', label: t.priceValue, required: true, admin: {width: '40%'}},
+        {name: 'value', type: 'text', label: t.priceValue, required: true, admin: {width: '40%', description: t.priceValueDescription}},
         {name: 'currency', type: 'text', label: t.priceCurrency, defaultValue: '€', admin: {width: '20%'}},
-        {name: 'period', type: 'text', label: t.pricePeriod, localized: true, admin: {width: '40%'}},
+        {name: 'period', type: 'text', label: t.pricePeriod, localized: true, admin: {width: '40%', description: t.pricePeriodDescription}},
       ],
     },
   ],
