@@ -153,6 +153,8 @@ still publishes: no drafts).
      the text shown is the stored value itself, otherwise the content panel opens), an image or an
      icon shows its own Payload field in a small panel beside it (`FieldPopover`). Links do not
      navigate. Rich texts are edited in the content panel.
+   - Width rule: a clickable card takes 4 columns of 12 at most (Nicolas, 5 Oct. 2026; `CLICKABLE_MAX_SPAN`
+     in `cardBlocks.ts`), a plain card 5.
    - Components marked so far: **cards** (title, text, image, icon, action link), **Image** and
      **Image with quote** (image, sentence), **text box** (title, buttons), **button group**
      (buttons). A link (`data-part-kind="link"`) shows its field in the small panel: the link's

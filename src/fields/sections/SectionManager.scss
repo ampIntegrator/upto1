@@ -38,15 +38,27 @@
   inset: 0;
   z-index: 110;
   display: flex;
+  box-sizing: border-box;
+  width: 100vw;
+  max-width: none;
+  height: 100vh;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
   background: var(--theme-bg);
 }
 
+// (as high as the screen and no more: the list below is what scrolls)
 .section-manager__picker-box {
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
   box-sizing: border-box;
-  width: 100%;
-  height: 100%;
+  min-width: 0;
+  min-height: 0;
   padding: var(--base);
 }
 

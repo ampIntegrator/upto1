@@ -30,7 +30,7 @@ async function main() {
   const email = `zz-manager-${stamp}@example.test`;
   const password = randomBytes(12).toString('hex');
   const user = await payload.create({collection: 'users', data: {email, password, name: 'ZZ smoke'} as never});
-  const section = {blockType: 'section', mode: 'light', tint: 'light', texture: 'grid', rows: [{columns: [{span: '7', contents: [{blockType: 'textBox', title: TITLE, titleTag: 'h2'}]}, {span: '5', contents: []}]}, {name: 'Rangée nommée', columns: [{span: '7', contents: [{blockType: 'textBox', title: SECOND, titleTag: 'h2'}]}, {span: '5', contents: []}]}]};
+  const section = {blockType: 'section', mode: 'light', tint: 'light', texture: 'grid', rows: [{columns: [{span: '8', contents: [{blockType: 'textBox', title: TITLE, titleTag: 'h2'}]}, {span: '4', contents: []}]}, {name: 'Rangée nommée', columns: [{span: '8', contents: [{blockType: 'textBox', title: SECOND, titleTag: 'h2'}]}, {span: '4', contents: []}]}]};
   let page: {id: number} | undefined;
   const {chromium} = await import('@playwright/test');
   const browser = await chromium.launch();
@@ -331,17 +331,17 @@ async function main() {
     await p.waitForTimeout(300);
     check((await frame.locator('body > i[aria-hidden="true"]').count()) === 0, 'no outline on the selected column in the preview');
     // an empty column shows its width, and no pencil
-    await frame.getByText('5 / 12').first().hover();
+    await frame.getByText('4 / 12').first().hover();
     await p.waitForTimeout(300);
     check((await frame.getByRole('button', {name: /Modifier le contenu/}).count()) === 0, 'no pencil on a column without content');
-    await frame.getByText('5 / 12').first().dblclick();
+    await frame.getByText('4 / 12').first().dblclick();
     await p.waitForTimeout(700);
     // an empty column has no content to edit: a box lists the components that fit it, one click places one
     const picker = p.locator('.section-manager__picker-box');
     await picker.waitFor({timeout: 5000});
     const offered = await picker.locator('.block-library__block').evaluateAll((els) => els.map((el) => el.getAttribute('data-block') ?? ''));
     const pickerBox = (await p.locator('.section-manager__picker').boundingBox())!;
-    check(offered.length > 5 && !offered.includes('plan') && offered.includes('cardTitle') && (await picker.locator('.block-library__guide').count()) === 0 && pickerBox.width === 1600 && pickerBox.height === 1000, `a double click on an empty column opens a full-screen box with the components that fit it (${offered.length}, ${Math.round(pickerBox.width)} × ${Math.round(pickerBox.height)})`);
+    check(offered.length > 5 && !offered.includes('sectionHeading') && offered.includes('cardTitle') && (await picker.locator('.block-library__guide').count()) === 0 && pickerBox.width === 1600 && pickerBox.height === 1000, `a double click on an empty column opens a full-screen box with the components that fit it (${offered.length}, ${Math.round(pickerBox.width)} × ${Math.round(pickerBox.height)})`);
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-picker.png`});
     await picker.locator('.block-library__block[data-block="cardTitle"]').click();
     await p.waitForTimeout(800);
@@ -361,7 +361,7 @@ async function main() {
     check((await picker.count()) === 0 && (await squares.nth(0).locator('.rows-builder__mini').nth(1).getAttribute('data-empty')) === 'true', 'the box closes without placing anything');
     await p.locator('.section-manager__tab[aria-controls="section-manager-panel-blocks"]').click();
     await p.waitForTimeout(600);
-    await p.locator('#section-manager-panel-blocks .block-library__block[data-block="plan"]').click();
+    await p.locator('#section-manager-panel-blocks .block-library__block[data-block="sectionHeading"]').click();
     await p.waitForTimeout(500);
     check((await squares.nth(0).locator('.rows-builder__mini').nth(1).getAttribute('data-empty')) === 'true', 'a component that does not fit the selected column is not placed by a click');
     await p.locator('.section-manager__tab[aria-controls="section-manager-panel-content"]').click();
@@ -447,7 +447,7 @@ async function main() {
     const miniEmpty = (row: number, col: number) => squares.nth(row).locator('.rows-builder__mini').nth(col).getAttribute('data-empty');
     // a tier (4 columns at most) over a column of 5: refused, the zone is not a drop target
     let zoneAllowed: string | null = 'unset';
-    await dragBlock('plan', '0-1', async () => {
+    await dragBlock('sectionHeading', '0-1', async () => {
       zoneAllowed = await p.locator('.section-preview__zone[data-zone="0-1"]').getAttribute('data-allowed');
     });
     check(zoneAllowed === null && (await miniEmpty(0, 1)) === 'true', 'a component too narrow or too wide for a column cannot be dropped on it');
