@@ -100,13 +100,16 @@ const STEPS = [
 ];
 
 /**
- * Width at which a component is rendered (CSS px) before it is fitted in its stage, when the
- * stage's inner width would make it too tall (scaled down further) or needlessly stretched.
- * Default: the stage's inner width, which keeps the cards largest (their image has a fixed height).
+ * Width at which a component is rendered (CSS px) before it is fitted in its stage (scaled down or
+ * up until it touches two facing edges). Default: the stage's width. A component that comes out
+ * taller than the stage is rendered wider here, so that it fills more of the stage once fitted.
  */
 const RENDER_WIDTH: Record<string, number> = {
   [PRICE_SINGLE_SLUG]: 760,
   [GALLERY_SLUG]: 800,
+  [PLAN_SLUG]: 640,
+  [TEXT_BOX_SLUG]: 600,
+  [FORM_SLUG]: 600,
 };
 
 /** Demo data for a card variant. */
@@ -214,14 +217,14 @@ function demo(slug: string): React.ReactNode {
 
 /**
  * The stage: a fixed box on the page background (standard or wide, same height) with the component
- * centred in it, rendered at its width then scaled down uniformly when it does not fit (never up).
+ * centred in it, rendered at its width then scaled uniformly to fit the stage (no padding).
  * `data-apercu` targets the capture; `data-ready` and `data-scale` are read by `pnpm previews:build`.
  */
 function Stage({slug, children}: {slug: string; children: React.ReactNode}) {
   const wide = WIDE_PREVIEWS.has(slug);
   const stageWidth = wide ? PREVIEW_STAGE.wideWidth : PREVIEW_STAGE.width;
-  const innerWidth = stageWidth - 2 * PREVIEW_STAGE.padding;
-  const innerHeight = PREVIEW_STAGE.height - 2 * PREVIEW_STAGE.padding;
+  const innerWidth = stageWidth;
+  const innerHeight = PREVIEW_STAGE.height;
   const width = RENDER_WIDTH[slug] ?? innerWidth;
   const content = useRef<HTMLElement>(null);
   const [scale, setScale] = useState(1);
@@ -230,7 +233,7 @@ function Stage({slug, children}: {slug: string; children: React.ReactNode}) {
   useLayoutEffect(() => {
     const el = content.current;
     if (!el) return;
-    const fit = () => setScale(Math.min(1, innerWidth / Math.max(el.offsetWidth, el.scrollWidth), innerHeight / Math.max(el.offsetHeight, el.scrollHeight)));
+    const fit = () => setScale(Math.min(innerWidth / Math.max(el.offsetWidth, el.scrollWidth), innerHeight / Math.max(el.offsetHeight, el.scrollHeight)));
     fit();
     const observer = new ResizeObserver(fit);
     observer.observe(el);
@@ -258,9 +261,10 @@ function Stage({slug, children}: {slug: string; children: React.ReactNode}) {
     };
   }, [innerHeight, innerWidth]);
 
+  // (the plan card's badge sits astride its top edge: it gets room, so that it is not cut)
   return (
     <VStack data-apercu data-ready={ready || undefined} data-scale={scale.toFixed(3)} style={{position: 'relative', width: stageWidth, height: PREVIEW_STAGE.height, overflow: 'hidden', background: 'var(--color-background-body)'}}>
-      <VStack ref={content} style={{position: 'absolute', insetInlineStart: '50%', insetBlockStart: '50%', width, transform: `translate(-50%, -50%) scale(${scale})`}}>
+      <VStack ref={content} style={{position: 'absolute', insetInlineStart: '50%', insetBlockStart: '50%', width, paddingBlockStart: slug === PLAN_SLUG ? 'var(--spacing-3)' : undefined, transform: `translate(-50%, -50%) scale(${scale})`}}>
         {children}
       </VStack>
     </VStack>

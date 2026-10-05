@@ -24,9 +24,10 @@ export const PREVIEW_SLUGS: string[] = [EMPTY_SLUG, SECTION_HEADING_SLUG, TEXT_B
 
 /**
  * Stage of a picker preview, in CSS px: every capture is a standard stage or a wide one, both the
- * same height, shot at `scale` (deviceScaleFactor). The component sits centred in it, whole.
+ * same height, shot at `scale` (deviceScaleFactor). The component sits centred in it, whole, as
+ * large as the stage allows (no padding).
  */
-export const PREVIEW_STAGE = {width: 480, wideWidth: 960, height: 360, padding: 24, scale: 2} as const;
+export const PREVIEW_STAGE = {width: 480, wideWidth: 960, height: 360, scale: 2} as const;
 
 /**
  * Blocks whose preview is landscape: a wide stage (twice the standard width), and a wide

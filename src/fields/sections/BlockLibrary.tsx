@@ -2,9 +2,9 @@
 
 /**
  * BlockLibrary — the content blocks as a line of thumbnails that scrolls sideways: each one is the
- * image the host gave the block, shown whole (contain) in a box of fixed height, standard or wide
+ * image the host gave the block, shown whole (contain) in a box as high as the panel, standard or wide
  * (`wide`: the host declared a landscape image). The block's name and the column widths it accepts
- * show over the picture on hover and on keyboard focus, and are its accessible name. A thumbnail
+ * show in the middle of the picture on hover and on keyboard focus, and are its accessible name. A thumbnail
  * is dragged onto a column of the preview (`onDrag` tells the dialog which block is in the air) or
  * clicked (`onPick`). `fits`: blocks that do not fit are shown dimmed and cannot be picked.
  */
@@ -56,7 +56,7 @@ export function BlockLibrary({blocks, fits, onPick, onDrag}: Props) {
                 onDrag?.(b.slug);
               }}
               onDragEnd={() => onDrag?.(null)}>
-              {/* the name and the widths, over the picture on hover and focus (the aria-label speaks them) */}
+              {/* the name and the widths, in the middle of the picture on hover and focus (the aria-label speaks them) */}
               <span className="block-library__caption" aria-hidden="true">
                 <span className="block-library__label">{b.label}</span>
                 <span className="block-library__widths">{widths}</span>

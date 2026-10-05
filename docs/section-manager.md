@@ -85,9 +85,9 @@ still publishes: no drafts).
    fourth « Contenu ».
    - **Composants**: the blocks as thumbnails (the picker images, `public/apercus`) in a line that
      scrolls sideways. Each thumbnail is the picture alone, shown whole (`background-size: contain`)
-     in a box 180 px high: 240 px wide, or 480 px for a block declared `previewWide` (the core gets
+     in a box as high as the panel (it follows the handle): 4:3, or 8:3 for a block declared `previewWide` (the core gets
      the list as the `wideImages` client prop, like `minSpans`). The block's name and accepted widths
-     show in a band over the picture on hover and keyboard focus (and are its `aria-label`). A thumbnail is dragged onto a column of the preview (native drag and drop):
+     show in a label in the middle of the picture on hover and keyboard focus (and are its `aria-label`). A thumbnail is dragged onto a column of the preview (native drag and drop):
      while it is in the air the admin draws one zone per column over the frame, from the boxes the
      frame reported; a column too narrow or too wide for the block is not a drop target, so the
      browser shows the « not allowed » cursor, **only during the drag**. Dropping on a filled
