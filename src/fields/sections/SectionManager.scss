@@ -1,5 +1,5 @@
-// SectionManager (« Gérer » dialog): settings on top (35 %), live preview below (65 %).
-// Admin side: Payload's theme variables only.
+// SectionManager (« Gérer » dialog): settings on top (280 px when it opens), live preview below.
+// Admin side: Payload's theme variables, and the builder's own (tokens.scss).
 
 .section-manager__summary {
   display: flex;
@@ -151,12 +151,11 @@
 
 // the four horizontal accordions: the open one takes the room, the others are vertical strips;
 // a panel slides open sideways (its content keeps its full width, the panel uncovers it)
-$tab: 44px;
 $slide: 300ms;
 
 .section-manager__panels {
   display: flex;
-  flex: 0 0 var(--section-manager-split, 35%);
+  flex: 0 0 var(--section-manager-split, var(--sm-top-height));
   overflow: hidden;
   min-height: 0;
   container-type: inline-size;
@@ -195,7 +194,7 @@ $slide: 300ms;
 
 .section-manager__panel {
   display: flex;
-  flex: 0 0 $tab;
+  flex: 0 0 var(--sm-tab-width);
   min-width: 0;
   overflow: hidden;
   border-right: 1px solid var(--theme-elevation-150);
@@ -211,8 +210,8 @@ $slide: 300ms;
 }
 
 .section-manager__tab {
-  flex: 0 0 $tab;
-  width: $tab;
+  flex: 0 0 var(--sm-tab-width);
+  width: var(--sm-tab-width);
   padding: var(--base) 0;
   border: 0;
   background: var(--theme-elevation-50);
@@ -248,10 +247,11 @@ $slide: 300ms;
 // nothing reflows while the panel slides; a folded panel's content is hidden once it has closed
 .section-manager__content {
   flex: 0 0 auto;
-  width: calc(100cqw - 4 * #{$tab} - 3px);
+  // (four strips and the three 1 px borders between the panels)
+  width: calc(100cqw - 4 * var(--sm-tab-width) - 3 * 1px);
   overflow: auto;
-  // 15 px at least under the content, before the preview
-  padding: var(--base) var(--base) 15px;
+  // room under the content, before the preview
+  padding: var(--base) var(--base) var(--sm-panel-end);
   visibility: hidden;
   transition: visibility 0s linear $slide;
 
@@ -342,6 +342,25 @@ $slide: 300ms;
   }
 }
 
+// the component's display name, typed in the head
+.column-content__name {
+  box-sizing: border-box;
+  width: var(--sm-name-width);
+  height: 28px;
+  padding: 0 8px;
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: 4px;
+  background: var(--theme-input-bg);
+  color: var(--theme-elevation-800);
+  font: inherit;
+  font-size: 14px;
+
+  &:focus-visible {
+    border-color: var(--theme-elevation-400);
+    outline: none;
+  }
+}
+
 // the block's fields, one per cell, on a grid of equal tracks that fills the width (the number of
 // lines is set by the component: 1 when every cell fits, 2 otherwise). A track is half a column
 // (96 px at least): a cell takes two, three (a textarea) or four of them; the grid scrolls
@@ -352,9 +371,9 @@ $slide: 300ms;
   // dense: on two lines, a short field goes under an earlier one rather than alone in a new column
   grid-auto-flow: column dense;
   // (200 px at most: a block with one or two fields does not stretch them across the panel)
-  grid-auto-columns: minmax(96px, 200px);
+  grid-auto-columns: minmax(var(--sm-track-min), var(--sm-track-max));
   align-content: start;
-  gap: 8px var(--base);
+  gap: 8px var(--sm-track-gap);
   min-height: 0;
 }
 
@@ -518,7 +537,7 @@ $slide: 300ms;
 .block-library {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: var(--sm-thumb-gap);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -533,8 +552,8 @@ $slide: 300ms;
   position: relative;
   display: block;
   overflow: hidden;
-  min-width: 120px;
-  height: 220px;
+  min-width: var(--sm-thumb-min-width);
+  height: var(--sm-thumb-height);
   border-radius: 4px;
   background: var(--theme-elevation-50);
   // a hairline drawn over the picture: a white card stays distinct from the panel
@@ -559,8 +578,8 @@ $slide: 300ms;
   display: flex;
   align-items: center;
   box-sizing: border-box;
-  width: 240px;
-  height: 220px;
+  width: var(--sm-guide-width);
+  height: var(--sm-thumb-height);
   margin: 0;
   padding: 16px;
   border: 1px dashed var(--theme-elevation-400);
@@ -590,8 +609,8 @@ $slide: 300ms;
   justify-content: center;
   box-sizing: border-box;
   padding: 8px 12px;
-  background: rgb(255 255 255 / 90%);
-  color: #000;
+  background: var(--sm-veil);
+  color: var(--sm-veil-text);
   text-align: center;
   opacity: 0;
   transition: opacity 120ms ease;
@@ -746,7 +765,7 @@ $slide: 300ms;
   border: 1px solid var(--theme-elevation-250);
   border-radius: 4px;
   background: var(--theme-bg);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--sm-shadow);
   outline: none;
 
   // one field per line (a link's label, kind, address, new tab)
@@ -789,17 +808,18 @@ $slide: 300ms;
   position: relative;
 
   > .field-label::after {
-    content: 'i';
+    // (the empty alternative text keeps the mark out of the field's accessible name)
+    content: 'i' / '';
     display: inline-flex;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    width: 18px;
-    height: 18px;
+    width: var(--sm-info-size-small);
+    height: var(--sm-info-size-small);
     margin-left: 6px;
     border: 1px solid var(--theme-elevation-400);
     border-radius: 50%;
-    font-size: 12px;
+    font-size: 14px;
     font-style: italic;
     font-weight: 600;
     line-height: 1;
@@ -815,12 +835,12 @@ $slide: 300ms;
     z-index: 5;
     box-sizing: border-box;
     width: max-content;
-    max-width: min(360px, 100%);
+    max-width: min(var(--sm-bubble-width), 100%);
     margin: 0;
     padding: 10px 12px;
     border-radius: 4px;
     background: var(--theme-elevation-1000);
-    box-shadow: 0 6px 20px rgb(0 0 0 / 25%);
+    box-shadow: var(--sm-shadow);
     color: var(--theme-elevation-0);
     font-size: 14px;
     line-height: 20px;

@@ -10,6 +10,7 @@
 import React, {useId, useLayoutEffect, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 
+import './tokens.scss';
 import './InfoBubble.scss';
 
 /** room kept between the bubble and the button, and between the bubble and the window's edges (px) */

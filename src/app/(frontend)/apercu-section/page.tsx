@@ -4,6 +4,9 @@ import {headers} from 'next/headers';
 import {getPayload} from 'payload';
 import React from 'react';
 
+import {tr} from '@/i18n/admin/languages';
+import {sectionsText as T} from '@/i18n/admin/sections';
+
 import {PreviewSection} from './render';
 import {SectionPreviewFrame} from './SectionPreviewFrame';
 import {getPreview, isFrameKey} from './store';
@@ -23,7 +26,7 @@ export default async function Page({searchParams}: {searchParams: Promise<{frame
   const input = user && isFrameKey(frame) ? getPreview(frame) : undefined;
   return (
     <SectionPreviewFrame frame={isFrameKey(frame) ? frame : ''}>
-      {!user ? <EmptyState title="Aperçu réservé à l’admin" description="Reconnecte-toi à l’administration pour voir l’aperçu." /> : input ? <PreviewSection input={input} /> : null}
+      {!user ? <EmptyState title={tr(T.preview.adminOnlyTitle, undefined)} description={tr(T.preview.adminOnlyDescription, undefined)} /> : input ? <PreviewSection input={input} /> : null}
     </SectionPreviewFrame>
   );
 }

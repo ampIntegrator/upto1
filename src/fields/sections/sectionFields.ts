@@ -122,8 +122,6 @@ export function rowsField(blocks: ContentBlock[], condition?: Condition, presetR
           spanField,
           // column position on mobile, set by the builder's "mobile order" dialog
           {name: 'mobileOrder', type: 'number', admin: {hidden: true}},
-          // content display name (native blockName), above the content in the drawer
-          {name: 'blockNameUi', type: 'ui', admin: {components: {Field: {path: '@/fields/sections/BlockNameField#BlockNameField', clientProps: {labels}}}}},
           // a single content per column: a block that stacks title, text and buttons is still one content
           {
             name: 'contents',

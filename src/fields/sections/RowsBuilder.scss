@@ -8,18 +8,18 @@
   gap: 10px;
   overflow-x: auto;
   /* the height of a square, even before the first row: the panel looks the same before and after */
-  min-height: 126px;
+  min-height: var(--sm-square-height);
 }
 .rows-builder__square {
   position: relative;
   display: flex;
   flex-direction: column;
-  flex: 0 0 260px;
+  flex: 0 0 var(--sm-square-width);
   box-sizing: border-box;
   /* fixed size: nothing inside (the name being typed, its focus) may stretch the square */
-  width: 260px;
+  width: var(--sm-square-width);
   min-width: 0;
-  height: 126px;
+  height: var(--sm-square-height);
   padding: 8px;
   border: 2px solid var(--theme-elevation-200);
   border-radius: 4px;
@@ -34,7 +34,7 @@
   }
   &[data-dragging] {
     z-index: 2;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    box-shadow: var(--sm-shadow-drag);
     cursor: grabbing;
   }
   &:focus-visible {
@@ -163,7 +163,7 @@ button.rows-builder__square-name {
   &[data-dragging] {
     position: relative;
     z-index: 2;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    box-shadow: var(--sm-shadow-drag);
   }
   &:focus-visible {
     outline: 2px solid var(--theme-elevation-1000);

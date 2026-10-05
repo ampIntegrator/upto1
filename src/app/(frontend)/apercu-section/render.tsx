@@ -16,6 +16,8 @@ import React from 'react';
 
 import {PageSections, type SectionsPreview} from '@/components/PageSections';
 import {EMPTY_SLUG} from '@/fields/sections/emptyBlock';
+import {type Text as AdminText, tr} from '@/i18n/admin/languages';
+import {sectionsText as T} from '@/i18n/admin/sections';
 import {type SectionData, toSections} from '@/lib/sections';
 import {getSite, pageSilo, sectionsContext} from '@/lib/site';
 import {LOCALES, type Locale} from '@/locales';
@@ -52,19 +54,19 @@ type RawColumn = {span?: number | string | null; contents?: {blockType?: string}
 type RawRow = {columns?: RawColumn[] | null};
 
 /** The zones of a section's columns, from the section as the admin sent it. */
-function zones(section: Record<string, unknown>): SectionsPreview {
+function zones(section: Record<string, unknown>, language: unknown): SectionsPreview {
   const rows = (Array.isArray(section.rows) ? section.rows : []) as RawRow[];
   return {
     slot: ({row, col, blank}) => {
-      if (row < 0) return <Zone label="Colonnes" tall />;
+      if (row < 0) return <Zone label={tr(T.preview.columns, language)} tall />;
       const slug = rows[row]?.columns?.[col]?.contents?.[0]?.blockType;
       const declared = slug && slug !== EMPTY_SLUG ? siteSections.blocks.find((b) => b.block.slug === slug) : undefined;
       // an empty column: its width (« Colonnes » is for the section that has no row yet)
       if (!declared) return <Zone label={`${Number(rows[row]?.columns?.[col]?.span) || 12} / 12`} tall={blank} />;
       // the block is there but shows nothing yet: named, and one click away from its image when it has one to give
       const name = declared.block.labels?.singular;
-      const label = typeof name === 'string' ? name : name && typeof name === 'object' ? ((name as Record<string, string>).fr ?? declared.block.slug) : declared.block.slug;
-      return <Zone label={`${label} · à compléter`} tall={blank} part={declared.parts?.image ? 'image' : undefined} />;
+      const label = typeof name === 'string' ? name : name && typeof name === 'object' ? tr(name as unknown as AdminText, language) : declared.block.slug;
+      return <Zone label={tr(T.preview.toComplete, language, {label})} tall={blank} part={declared.parts?.image ? 'image' : undefined} />;
     },
   };
 }
@@ -80,9 +82,11 @@ async function load(input: StoredPreview): Promise<Loaded> {
     if (!id) return 'empty';
     type Block = NonNullable<Page['sections']>[number];
     const section = {...input.section, blockType: 'section'} as Block;
+    // (`flattenLocales: false`: the form's values are already in one language; flattened again, a
+    // localized rich text, an object, would be read as `{[locale]: …}` and come out empty)
     // the section above goes through the conversion too (the edge line depends on it), but is not shown
     const above = input.above ? [{blockType: 'section', ...input.above} as Block] : [];
-    const [page, site] = await Promise.all([payload.findByID({collection: 'pages', id, data: {sections: [...above, section]}, depth: 2, locale}), getSite(locale)]);
+    const [page, site] = await Promise.all([payload.findByID({collection: 'pages', id, data: {sections: [...above, section]}, depth: 2, locale, flattenLocales: false}), getSite(locale)]);
     const sections = (await toSections(page.sections, site.settings, sectionsContext(locale, site))).slice(-1);
     // « always » on the first section of a page: the page draws no line there (the page top has its own
     // edge at that junction); the preview shows it, so the setting can be seen whatever the section's place
@@ -96,11 +100,11 @@ async function load(input: StoredPreview): Promise<Loaded> {
 
 export async function PreviewSection({input}: {input: StoredPreview}) {
   const loaded = await load(input);
-  if (loaded === 'empty') return <EmptyState title="Rien à afficher pour l’instant" description="Choisis un fond pour la section." />;
-  if (loaded === 'error') return <EmptyState title="L’aperçu n’a pas pu s’afficher" description="Continue la saisie : l’aperçu réessaie à la prochaine modification." />;
+  if (loaded === 'empty') return <EmptyState title={tr(T.preview.emptyTitle, input.language)} description={tr(T.preview.emptyDescription, input.language)} />;
+  if (loaded === 'error') return <EmptyState title={tr(T.preview.errorTitle, input.language)} description={tr(T.preview.errorDescription, input.language)} />;
   return (
     <OrbitaThemeProvider fixedSilo={loaded.silo}>
-      <PageSections sections={loaded.sections} preview={zones(input.section)} />
+      <PageSections sections={loaded.sections} preview={zones(input.section, input.language)} />
     </OrbitaThemeProvider>
   );
 }

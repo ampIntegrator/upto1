@@ -16,6 +16,7 @@ import {sectionsText as T} from '@/i18n/admin/sections';
 import {useAdminText} from '@/i18n/admin/useAdminText';
 
 import {packRows} from './packRows';
+import {token} from './tokens';
 
 /** drag data type of a block thumbnail */
 export const BLOCK_DRAG_TYPE = 'application/x-section-block';
@@ -31,22 +32,25 @@ type Props = {
   guide?: boolean;
 };
 
-/** height and least width of a thumbnail, width of the instructions tile and gap between tiles, in px (as in the stylesheet) */
-const TILE_HEIGHT = 220;
-const TILE_MIN_WIDTH = 120;
-const GUIDE_WIDTH = 240;
-const GAP = 12;
 
 export function BlockLibrary({blocks, fits, onPick, onDrag, guide = true}: Props) {
   const {t} = useAdminText();
   const list = useRef<HTMLUListElement>(null);
+  // the list's width, and the thumbnails' measures (tokens.scss), read with it
   const [room, setRoom] = useState(0);
+  const [sizes, setSizes] = useState({height: 0, min: 0, gap: 0, guide: 0});
   // slug → width / height of its picture, known once it is loaded
   const [ratios, setRatios] = useState<Record<string, number>>({});
   useLayoutEffect(() => {
     const el = list.current;
     if (!el) return;
-    const measure = () => setRoom(el.clientWidth);
+    const measure = () => {
+      setRoom(el.clientWidth);
+      setSizes((s) => {
+        const next = {height: token('thumb-height'), min: token('thumb-min-width'), gap: token('thumb-gap'), guide: token('guide-width')};
+        return next.height === s.height && next.min === s.min && next.gap === s.gap && next.guide === s.guide ? s : next;
+      });
+    };
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(el);
@@ -54,11 +58,11 @@ export function BlockLibrary({blocks, fits, onPick, onDrag, guide = true}: Props
   }, []);
   // rearranged once the list's width and every picture's proportions are known (the host's order until then)
   const ordered = useMemo(() => {
-    if (!room || blocks.some((b) => b.image && ratios[b.slug] === undefined)) return blocks;
+    if (!room || !sizes.height || blocks.some((b) => b.image && ratios[b.slug] === undefined)) return blocks;
     // (a picture that failed to load has a ratio of 0: its tile is as narrow as a tile gets)
-    const widths = blocks.map((b) => Math.max(TILE_MIN_WIDTH, Math.ceil(TILE_HEIGHT * (ratios[b.slug] ?? 0))));
-    return packRows(widths, room, GAP, guide ? GUIDE_WIDTH : 0).map((i) => blocks[i]);
-  }, [blocks, guide, ratios, room]);
+    const widths = blocks.map((b) => Math.max(sizes.min, Math.ceil(sizes.height * (ratios[b.slug] ?? 0))));
+    return packRows(widths, room, sizes.gap, guide ? sizes.guide : 0).map((i) => blocks[i]);
+  }, [blocks, guide, ratios, room, sizes]);
   const sized = (slug: string, img: HTMLImageElement | null, failed = false) => {
     if (!img || ratios[slug] !== undefined || (!failed && !img.naturalHeight)) return;
     const ratio = failed ? 0 : img.naturalWidth / img.naturalHeight;

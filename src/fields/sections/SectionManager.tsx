@@ -33,6 +33,7 @@ import {DEFAULT_BREAKPOINTS, PREVIEW_EDIT, PREVIEW_OPEN, PREVIEW_PICK, PREVIEW_S
 import {RowsBuilderGhost} from './RowsBuilder';
 import {SectionPreview} from './SectionPreview';
 
+import './tokens.scss';
 import './SectionManager.scss';
 
 type Props = {
@@ -62,7 +63,7 @@ type Props = {
 type PanelKey = 'settings' | 'layout' | 'blocks' | 'content';
 
 /**
- * Height of the top part: TOP_HEIGHT px when the dialog opens, the same in every panel and whatever
+ * Height of the top part: 280 px when the dialog opens (`--sm-top-height`, tokens.scss), the same in every panel and whatever
  * is chosen, the preview taking the rest of the screen. The layout panel is built to fit in it (its
  * squares take the height the layouts leave). Only the handle changes it, for the time the dialog
  * is open (nothing is remembered). SPLIT, a share in %, is what the handle falls back on.
@@ -71,8 +72,6 @@ const SPLIT = 35;
 /** a select menu opens upwards when less than this (px) is left under its field; one option's height */
 const MENU_ROOM = 160;
 const MENU_ITEM = 44;
-/** height of the top part when the dialog opens, in px (Nicolas, 5 Oct. 2026) */
-const TOP_HEIGHT = 280;
 const SPLIT_MIN = 20;
 const SPLIT_MAX = 80;
 const SPLIT_STEP = 2;
@@ -167,7 +166,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
   // the handle between the settings and the preview: drag it (or arrow keys) to share the height
   const body = useRef<HTMLDivElement>(null);
   const panelsRef = useRef<HTMLDivElement>(null);
-  // null: the opening height (TOP_HEIGHT, in px); a number: the share chosen with the handle
+  // null: the opening height (the stylesheet's); a number: the share chosen with the handle
   const [split, setSplit] = useState<number | null>(null);
   // Payload's select menus open inside the panel, which is short and clips them: each menu is kept
   // inside the top part (a shorter list that scrolls, or opened upwards when there is more room above)
@@ -209,7 +208,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
   };
   const dragging = useRef(false);
   const grab = useRef(0);
-  // not remembered: the dialog always opens at TOP_HEIGHT
+  // not remembered: the dialog always opens at its opening height
   const keep = (value: number | null) => setSplit(value === null ? null : clampSplit(value));
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     // captured: the moves keep coming while the pointer is over the preview's frame
@@ -470,7 +469,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
 
   return (
     <ManagerContext.Provider value={manager}>
-    <div ref={body} className="section-manager__body" style={{'--section-manager-split': split !== null ? `${split}%` : `${TOP_HEIGHT}px`} as React.CSSProperties}>
+    <div ref={body} className="section-manager__body" style={{'--section-manager-split': split !== null ? `${split}%` : undefined} as React.CSSProperties}>
       <header className="section-manager__bar">
         <h2 className="section-manager__title">{t(T.manager.title)}</h2>
         <DocumentFields names={headerFields} />
@@ -665,6 +664,7 @@ function LivePreview({parentPath, preview, onEvent, overlay}: {parentPath: strin
   const {getData, getDataByPath} = useForm();
   const {id, collectionSlug, globalSlug} = useDocumentInfo();
   const locale = useLocale();
+  const {i18n} = useTranslation();
   // any change of the form: a new snapshot (the preview debounces what it sends)
   const version = useFormFields(([fields]) => fields);
   const message = React.useMemo(() => {
@@ -674,9 +674,9 @@ function LivePreview({parentPath, preview, onEvent, overlay}: {parentPath: strin
     const above = abovePath ? (getDataByPath(abovePath) as Record<string, unknown> | undefined) : undefined;
     const document: Record<string, unknown> = {};
     for (const name of preview.documentFields ?? []) document[name] = data?.[name];
-    return {section: section ?? {}, above, parts: preview.parts, document, id: id ?? undefined, collection: collectionSlug ?? globalSlug ?? undefined, locale: locale?.code};
+    return {section: section ?? {}, above, parts: preview.parts, document, id: id ?? undefined, collection: collectionSlug ?? globalSlug ?? undefined, locale: locale?.code, language: i18n.language};
     // `version` changes on every edit: it is what triggers the new snapshot
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [version, parentPath, id, collectionSlug, globalSlug, locale?.code, preview.parts]);
+  }, [version, parentPath, id, collectionSlug, globalSlug, locale?.code, preview.parts, i18n.language]);
   return <SectionPreview url={preview.url} breakpoints={preview.breakpoints ?? DEFAULT_BREAKPOINTS} message={message} onEvent={onEvent} overlay={overlay} />;
 }

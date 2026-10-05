@@ -64,6 +64,8 @@ export type PreviewDataMessage = {
   above?: Record<string, unknown>;
   /** the document's fields listed in `documentFields` */
   document: Record<string, unknown>;
+  /** the admin's language: the frame's own texts (empty zones, the pencil) follow it */
+  language?: string;
   /** block slug → part of the host's component (`data-part`) → field of the block: what the frame may edit in place */
   parts?: Record<string, Record<string, string>>;
   /** the edited document, when it exists (the host may use it to load relations) */

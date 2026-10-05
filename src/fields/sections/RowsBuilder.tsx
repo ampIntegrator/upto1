@@ -40,6 +40,7 @@ import {type ColumnSpan, presetLabel, type PresetRow, ROW_NAME_MAX, ROW_PRESETS,
 import {type SortableHandle, SortableItem, SortableList} from './sortable';
 import {rowWidthError} from './validation';
 
+import './tokens.scss';
 import './RowsBuilder.scss';
 
 /** filled: the column has a real component (an empty cell does not count) */
@@ -48,7 +49,6 @@ import './RowsBuilder.scss';
 type CellSnapshot = {span: ColumnSpan; contents: string[]; types?: string[]; names?: string[]; filled: boolean; narrow: number | null; wide: number | null; mobileOrder: number | null};
 type RowSnapshot = {ids?: string[]; name?: string; columns: CellSnapshot[]};
 
-const TILE_H = 48;
 const text14: React.CSSProperties = {fontSize: 14, lineHeight: 1.4};
 const dim: React.CSSProperties = {color: 'var(--theme-elevation-600)'};
 
@@ -62,7 +62,7 @@ function Tile({spans, active, labels}: {spans: readonly number[]; active: boolea
         gridTemplateColumns: spans.map((s) => `${s}fr`).join(' '),
         gap: 4,
         width: '100%',
-        height: TILE_H,
+        height: 'var(--sm-layout-tile-height)',
         padding: 4,
         boxSizing: 'border-box',
         borderRadius: 4,

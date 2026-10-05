@@ -9,7 +9,7 @@
  * them: what is typed is in the document's form.
  */
 import {getTranslation} from '@payloadcms/translations';
-import {Button, RenderFields, useFormFields, useTranslation} from '@payloadcms/ui';
+import {Button, RenderFields, useField, useFormFields, useTranslation} from '@payloadcms/ui';
 import type {ClientBlock, ClientField, SanitizedFieldsPermissions} from 'payload';
 import React, {useEffect, useRef, useState} from 'react';
 
@@ -17,9 +17,11 @@ import {sectionsText as T} from '@/i18n/admin/sections';
 import {useAdminText} from '@/i18n/admin/useAdminText';
 
 import type {LibraryBlock} from './BlockLibrary';
+import {BLOCK_NAME_MAX} from './blockName';
 import {EMPTY_SLUG} from './emptyBlock';
 import {only} from './fieldGroups';
 import type {PreviewColumn} from './preview';
+import {token} from './tokens';
 
 /** what RenderFields needs to render some fields at their exact paths */
 type Part = {fields: ClientField[]; path: string; schemaPath: string; permissions: SanitizedFieldsPermissions};
@@ -57,15 +59,13 @@ const sizeOf = (f: ClientField): Cell['size'] => {
 
 /**
  * The grid's tracks are half columns (a column is two tracks and the gap between them), so that a
- * cell can take a column and a half. Tracks taken by each size; narrowest track and gap between
- * tracks, in px (the SCSS uses the same values).
+ * cell can take a column and a half. Tracks taken by each size (the narrowest track and the gap
+ * between tracks are in tokens.scss).
  */
 const TRACKS: Record<Cell['size'], number> = {half: 2, full: 2, wide: 3, double: 4, band: 4};
 /** a row of at least this many short fields stays a row, in one cell */
 const BAND_MIN = 3;
 const short = (f: ClientField) => !DOUBLE.has(f.type) && !WIDE.has(f.type) && !FULL.has(f.type);
-const TRACK_MIN = 96;
-const TRACK_GAP = 20;
 /** a group of at most this many short fields stays together, in one cell */
 const GROUP_MAX = 6;
 
@@ -214,19 +214,27 @@ function stacked(list: Cell[]): Cell[] {
  */
 function Flow({cells: list, readOnly}: {cells: Cell[]; readOnly?: boolean}) {
   const ref = useRef<HTMLDivElement>(null);
+  // the grid's width, counted in tracks (their least width and gap: tokens.scss)
   const [width, setWidth] = useState(0);
+  const [track, setTrack] = useState({min: 0, gap: 0});
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const measure = () => setWidth(el.clientWidth);
+    const measure = () => {
+      setWidth(el.clientWidth);
+      setTrack((s) => {
+        const next = {min: token('track-min'), gap: token('track-gap')};
+        return next.min === s.min && next.gap === s.gap ? s : next;
+      });
+    };
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
-  const fits = Math.max(1, Math.floor((width + TRACK_GAP) / (TRACK_MIN + TRACK_GAP)));
+  const fits = track.min ? Math.max(1, Math.floor((width + track.gap) / (track.min + track.gap))) : 0;
   const tracks = list.reduce((n, c) => n + TRACKS[c.size], 0);
-  const lines = width === 0 || tracks <= fits ? 1 : 2;
+  const lines = width === 0 || fits === 0 || tracks <= fits ? 1 : 2;
   return (
     <div ref={ref} className="column-content__flow" data-lines={lines} style={{gridTemplateRows: lines === 2 ? 'auto minmax(0, 1fr)' : 'minmax(0, 1fr)'}}>
       {list.map((cell) => (
@@ -238,6 +246,29 @@ function Flow({cells: list, readOnly}: {cells: Cell[]; readOnly?: boolean}) {
         </div>
       ))}
     </div>
+  );
+}
+
+/**
+ * The component's display name (« Nom affiché »): Payload's native blockName, shown on the column in
+ * the row's square in the place of the component's type. Typed in the panel's head; empty, the type shows.
+ */
+function BlockName({path, label, readOnly}: {path: string; label: string; readOnly?: boolean}) {
+  const {t} = useAdminText();
+  const {value, setValue} = useField<string>({path});
+  const name = typeof value === 'string' ? value : '';
+  return (
+    <input
+      className="column-content__name"
+      type="text"
+      value={name}
+      maxLength={BLOCK_NAME_MAX}
+      readOnly={readOnly}
+      placeholder={t(T.drawer.blockName)}
+      aria-label={t(T.drawer.blockName)}
+      title={t(T.drawer.blockNameDescription, {label, length: name.length, max: BLOCK_NAME_MAX})}
+      onChange={(e) => setValue(e.target.value.slice(0, BLOCK_NAME_MAX))}
+    />
   );
 }
 
@@ -273,6 +304,7 @@ export function ColumnContent({rowsPath, rowsSchemaPath, column, blocks, library
       <div className="column-content__head">
         <strong>{t(T.manager.contentTitle, {row: column.row + 1, col: column.col + 1, span})}</strong>
         {filled ? <span>{label}</span> : null}
+        {filled ? <BlockName path={`${colPath}.contents.0.blockName`} label={label ?? blockType} readOnly={readOnly} /> : null}
         {filled && !readOnly ? (
           <Button buttonStyle="secondary" size="small" margin={false} onClick={() => onClear(column)}>
             {t(T.drawer.clear)}

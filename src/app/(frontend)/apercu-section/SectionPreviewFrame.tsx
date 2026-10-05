@@ -40,6 +40,8 @@ import {
   type PreviewColumnBox,
   type PreviewDataMessage,
 } from '@/fields/sections/preview';
+import {tr} from '@/i18n/admin/languages';
+import {sectionsText as T} from '@/i18n/admin/sections';
 import {EMPTY_SLUG} from '@/fields/sections/emptyBlock';
 import {EditIcon} from '@/theme/icons/nucleo';
 import {sendSectionPreview} from './actions';
@@ -105,6 +107,8 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
   const [hover, setHover] = useState<PreviewColumn | null>(null);
   // the columns that hold a block (`row-col`): only those have a content to edit, hence a pencil
   const [filled, setFilled] = useState<string[]>([]);
+  // the admin's language, for the frame's own texts (it comes with each section)
+  const [language, setLanguage] = useState<string | undefined>(undefined);
   // in the admin's iframe (false for a visitor opening the address, and during server rendering)
   const inFrame = useSyncExternalStore(noSubscription, () => window.parent !== window, () => false);
 
@@ -117,6 +121,7 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
       const {type: _type, ...input} = e.data;
       latest.current = input;
       setFilled(filledColumns(input.section));
+      setLanguage(input.language);
       const n = ++last.current;
       const status = await sendSectionPreview(frame, input).catch(() => 'invalid' as const);
       // a newer section is on its way: only its refresh matters
@@ -288,7 +293,7 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
           {hoverBox ? <i aria-hidden="true" style={{position: 'absolute', left: hoverBox.x, top: hoverBox.y, width: hoverBox.width, height: hoverBox.height, pointerEvents: 'none', outline: 'var(--border-width) dashed var(--color-accent)'}} /> : null}
           {hoverBox && hover && filled.includes(`${hover.row}-${hover.col}`) ? (
             <VStack data-preview-tool="true" style={{position: 'absolute', left: hoverBox.x + hoverBox.width, top: hoverBox.y, transform: 'translate(-100%, 0)', padding: 'var(--spacing-1)'}}>
-              <IconButton label="Modifier le contenu de la colonne" tooltip="Modifier le contenu" icon={<EditIcon />} variant="primary" size="sm" elevation="low" onClick={() => toParent({type: PREVIEW_OPEN, ...hover})} />
+              <IconButton label={tr(T.preview.editColumn, language)} tooltip={tr(T.preview.editColumnShort, language)} icon={<EditIcon />} variant="primary" size="sm" elevation="low" onClick={() => toParent({type: PREVIEW_OPEN, ...hover})} />
             </VStack>
           ) : null}
         </>

@@ -37,7 +37,6 @@ export const sectionsText = texts({
       fr: 'L’écart entre les colonnes d’une rangée, et entre les rangées. « Réglage du site » reprend la valeur par défaut du site. Écart vertical mobile : sous 768 px, entre tous les blocs empilés.',
       en: 'The gap between the columns of a row, and between the rows. “Site setting” takes the site’s default value. Mobile vertical gap: below 768 px, between all stacked blocks.',
     },
-    background: {fr: 'Fond', en: 'Background'},
     backgroundLight: {fr: 'Clair', en: 'Light'},
     backgroundDark: {fr: 'Nuit', en: 'Night'},
     // short: the three choices stay on one line in the dialog's column (the next field asks image or video)
@@ -47,7 +46,6 @@ export const sectionsText = texts({
     tintLight: {fr: 'Silo clair (background-light)', en: 'Light silo (background-light)'},
     tintHighlight: {fr: 'Highlight clair (highlight-light)', en: 'Light highlight (highlight-light)'},
     texture: {fr: 'Texture', en: 'Texture'},
-    edgeTop: {fr: 'Liseré en haut de la section', en: 'Edge line at the top of the section'},
     edgeTopAuto: {fr: 'Automatique', en: 'Automatic'},
     edgeTopAlways: {fr: 'Toujours', en: 'Always'},
     edgeTopNever: {fr: 'Jamais', en: 'Never'},
@@ -96,7 +94,7 @@ export const sectionsText = texts({
     contents: {fr: 'Contenu', en: 'Content'},
     component: {fr: 'Composant', en: 'Component'},
     components: {fr: 'Composants', en: 'Components'},
-    contentsDescription: {fr: 'Un seul composant par colonne. Pour en changer, videz la colonne puis choisissez-en un autre.', en: 'One component per column. To change it, empty the column and then pick another one.'},
+    contentsDescription: {fr: 'Un seul composant par colonne. Pour en changer, vide la colonne puis choisis-en un autre.', en: 'One component per column. To change it, empty the column and then pick another one.'},
   },
   builder: {
     layout: {fr: 'Disposition', en: 'Layout'},
@@ -113,13 +111,7 @@ export const sectionsText = texts({
       fr: ({contents}: {contents: string}) => `${contents} · double clic : modifier le contenu`,
       en: ({contents}: {contents: string}) => `${contents} · double click: edit the content`,
     },
-    cellSelectTitle: {fr: 'Cliquer pour sélectionner la rangée, puis cliquer la colonne pour la modifier', en: 'Click to select the row, then click the column to edit it'},
-    moveColumnAria: {
-      fr: ({n}: {n: number}) => `Déplacer la colonne ${n}`,
-      en: ({n}: {n: number}) => `Move column ${n}`,
-    },
     moveColumnTitle: {fr: 'Glisser pour déplacer la colonne', en: 'Drag to move the column'},
-    empty: {fr: 'Vide', en: 'Empty'},
     narrow: {
       fr: ({min}: {min: number}) => `Trop étroit : ${min} colonnes min.`,
       en: ({min}: {min: number}) => `Too narrow: ${min} columns min.`,
@@ -135,7 +127,7 @@ export const sectionsText = texts({
     helpLabel: {fr: 'Mode d’emploi', en: 'How it works'},
     dropHere: {fr: 'Dépose une disposition ici', en: 'Drop a layout here'},
     helpUnavailable: {fr: 'Choisis d’abord un fond (onglet Fond et espaces) : les rangées se règlent ensuite ici.', en: 'Choose a background first (Background and spacing tab): the rows are then set here.'},
-    rowHasError: {fr: 'Une rangée contient une erreur : ouvrez ses colonnes.', en: 'A row contains an error: open its columns.'},
+    rowHasError: {fr: 'Une rangée contient une erreur : double-clique ses colonnes pour la corriger.', en: 'A row contains an error: double-click its columns to fix it.'},
     rowAria: {
       fr: ({n, selected}: {n: number; selected: boolean}) => `Rangée ${n}${selected ? ', sélectionnée' : ''}`,
       en: ({n, selected}: {n: number; selected: boolean}) => `Row ${n}${selected ? ', selected' : ''}`,
@@ -150,7 +142,7 @@ export const sectionsText = texts({
     },
     rowNamePlaceholder: {fr: 'Nom de la rangée', en: 'Row name'},
     loading: {fr: 'Chargement…', en: 'Loading…'},
-    emptyRow: {fr: 'Sélectionnez cette rangée puis une disposition.', en: 'Select this row, then a layout.'},
+    emptyRow: {fr: 'Glisse une disposition sur cette rangée.', en: 'Drag a layout onto this row.'},
     moveRowAria: {
       fr: ({n}: {n: number}) => `Déplacer la rangée ${n}`,
       en: ({n}: {n: number}) => `Move row ${n}`,
@@ -213,7 +205,7 @@ export const sectionsText = texts({
   mobileOrder: {
     heading: {fr: 'Ordre mobile de la section', en: 'Section mobile order'},
     intro: {
-      fr: ({n}: {n: number}) => `Sous 768 px, toutes les colonnes de la section s’empilent dans cet ordre, rangées confondues : glissez une ligne par sa poignée pour la déplacer. Les colonnes vides sont masquées. En évidence : la rangée ${n}.`,
+      fr: ({n}: {n: number}) => `Sous 768 px, toutes les colonnes de la section s’empilent dans cet ordre, rangées confondues : glisse une ligne par sa poignée pour la déplacer. Les colonnes vides sont masquées. En évidence : la rangée ${n}.`,
       en: ({n}: {n: number}) => `Below 768 px, all the section’s columns stack in this order, across rows: drag a line by its handle to move it. Empty columns are hidden. Highlighted: row ${n}.`,
     },
     where: {
@@ -290,18 +282,28 @@ export const sectionsText = texts({
     resize: {fr: 'Ajuster la hauteur des réglages et de l’aperçu (double clic : hauteur d’origine)', en: 'Adjust the height of the settings and of the preview (double click: original height)'},
   },
   drawer: {
-    title: {
-      fr: ({row, col, span}: {row: number; col: number; span: number}) => `Rangée ${row} · colonne ${col} · ${span} / 12`,
-      en: ({row, col, span}: {row: number; col: number; span: number}) => `Row ${row} · column ${col} · ${span} / 12`,
-    },
-    fallbackTitle: {fr: 'Colonne', en: 'Column'},
     clear: {fr: 'Vider la colonne', en: 'Empty the column'},
-    close: {fr: 'Fermer', en: 'Close'},
-    blockName: {fr: 'Nom affiché dans le constructeur', en: 'Name shown in the builder'},
+    blockName: {fr: 'Nom affiché', en: 'Display name'},
     blockNameDescription: {
       fr: ({label, length, max}: {label: string; length: number; max: number}) => `Remplace « ${label} » dans la case. ${length}/${max} caractères.`,
       en: ({label, length, max}: {label: string; length: number; max: number}) => `Replaces “${label}” in the cell. ${length}/${max} characters.`,
     },
+  },
+  // texts drawn inside the preview frame (the host's preview page), in the admin's language
+  preview: {
+    columns: {fr: 'Colonnes', en: 'Columns'},
+    toComplete: {
+      fr: ({label}: {label: string}) => `${label} · à compléter`,
+      en: ({label}: {label: string}) => `${label} · to complete`,
+    },
+    emptyTitle: {fr: 'Rien à afficher pour l’instant', en: 'Nothing to show yet'},
+    emptyDescription: {fr: 'Choisis un fond pour la section.', en: 'Choose a background for the section.'},
+    errorTitle: {fr: 'L’aperçu n’a pas pu s’afficher', en: 'The preview could not be shown'},
+    errorDescription: {fr: 'Continue la saisie : l’aperçu réessaie à la prochaine modification.', en: 'Keep typing: the preview tries again at the next change.'},
+    adminOnlyTitle: {fr: 'Aperçu réservé à l’admin', en: 'Preview for the admin only'},
+    adminOnlyDescription: {fr: 'Reconnecte-toi à l’administration pour voir l’aperçu.', en: 'Log in to the admin again to see the preview.'},
+    editColumn: {fr: 'Modifier le contenu de la colonne', en: 'Edit the column’s content'},
+    editColumnShort: {fr: 'Modifier le contenu', en: 'Edit the content'},
   },
   validation: {
     tooNarrow: {
