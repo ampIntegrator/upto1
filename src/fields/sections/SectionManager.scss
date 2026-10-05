@@ -290,30 +290,67 @@ $slide: 300ms;
   }
 }
 
-// the block's fields, one per cell, on a grid of equal columns that fills the width (the number of
-// lines is set by the component: 1 when every cell can have its column, 2 otherwise); columns are
-// 260 px at least and the grid scrolls sideways beyond the panel's width
+// the block's fields, one per cell, on a grid of equal tracks that fills the width (the number of
+// lines is set by the component: 1 when every cell fits, 2 otherwise). A track is half a column
+// (96 px at least): a cell takes two, three (a textarea) or four of them; the grid scrolls
+// sideways beyond the panel's width
 .column-content__flow {
   display: grid;
   flex: 1 1 0;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(260px, 1fr);
+  // dense: on two lines, a short field goes under an earlier one rather than alone in a new column
+  grid-auto-flow: column dense;
+  grid-auto-columns: minmax(96px, 1fr);
   align-content: start;
   gap: 8px var(--base);
   min-height: 0;
 }
 
 .column-content__cell {
+  grid-column: span 2;
   min-width: 0;
 
-  // a field that needs a whole column, or two
+  // a field that needs the whole height: one column, a column and a half, or two
   &[data-size='full'],
+  &[data-size='wide'],
   &[data-size='double'] {
     grid-row: 1 / -1;
   }
 
+  &[data-size='wide'] {
+    grid-column: span 3;
+  }
+
   &[data-size='double'] {
-    grid-column: span 2;
+    grid-column: span 4;
+  }
+
+  // a group (a link): its name, then its fields two per line
+  &[data-group] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-content: start;
+    gap: 8px var(--base);
+
+    > .column-content__title {
+      grid-column: 1 / -1;
+      margin: 0;
+    }
+
+    > .render-fields {
+      min-width: 0;
+      margin: 0;
+    }
+
+    // a field of the group hidden by its condition leaves no hole
+    > .render-fields:not(:has(.field-type)) {
+      display: none;
+    }
+
+    // a checkbox sits on the line of the field beside it
+    > .render-fields:has(> .field-type.checkbox) {
+      align-self: end;
+      padding-bottom: 10px;
+    }
   }
 
   // a cell whose field is hidden by its condition

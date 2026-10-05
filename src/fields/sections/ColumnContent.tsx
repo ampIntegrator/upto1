@@ -2,7 +2,8 @@
 
 /**
  * ColumnContent — the « Contenu » panel of the « Gérer » dialog: the fields of the block held by
- * the selected column, one field per cell, on a grid of columns that fills the panel's width (one
+ * the selected column, one field per cell (a small group, a link for instance, is one cell: its
+ * fields side by side under its name), on a grid of columns that fills the panel's width (one
  * line of cells when they all fit, two otherwise, scrolling sideways beyond), so that a block with
  * a few fields shows whole, without scrolling down. Only a field taller than the panel (an array of rows, a long rich text) scrolls down. The fields are Payload's own (RenderFields), at the paths its blocks field would give
  * them: what is typed is in the document's form.
@@ -25,19 +26,28 @@ type Part = {fields: ClientField[]; path: string; schemaPath: string; permission
 /** one cell of the flow: a field (after its group heading, if it opens a group), `title`: the name of the group it opens */
 /**
  * `size`: how much of the grid a cell takes. `half`: a short field, two of them fit one above the
- * other; `full`: a whole column (a field with a description, an upload, a textarea);
- * `double`: two columns (a rich text, an array of rows).
+ * other; `full`: a whole column (an upload, a list of choices); `wide`: a column and a half (a
+ * textarea: room to read what is typed, without taking two columns); `double`: two columns (a rich
+ * text, an array of rows, a group). `group`: the cell holds a group's fields, two per line.
  */
-type Cell = {key: string; parts: Part[]; size: 'half' | 'full' | 'double'; title?: string};
+type Cell = {key: string; parts: Part[]; size: 'half' | 'full' | 'wide' | 'double'; title?: string; group?: boolean};
 
-/** fields that need two columns, and fields that need a whole column */
+/** fields that need two columns, a column and a half, or a whole column */
 const DOUBLE = new Set(['richText', 'array', 'blocks', 'collapsible', 'tabs', 'group', 'row', 'join']);
-const FULL = new Set(['upload', 'textarea', 'relationship', 'radio', 'code', 'json']);
-const sizeOf = (f: ClientField): Cell['size'] => (DOUBLE.has(f.type) ? 'double' : FULL.has(f.type) || (f.admin as {description?: unknown} | undefined)?.description ? 'full' : 'half');
+const WIDE = new Set(['textarea']);
+const FULL = new Set(['upload', 'relationship', 'radio', 'code', 'json']);
+const sizeOf = (f: ClientField): Cell['size'] => (DOUBLE.has(f.type) ? 'double' : WIDE.has(f.type) ? 'wide' : FULL.has(f.type) ? 'full' : 'half');
 
-/** narrowest column of the grid, and the gap between columns, in px (the SCSS uses the same values) */
-const COLUMN_MIN = 260;
-const COLUMN_GAP = 20;
+/**
+ * The grid's tracks are half columns (a column is two tracks and the gap between them), so that a
+ * cell can take a column and a half. Tracks taken by each size; narrowest track and gap between
+ * tracks, in px (the SCSS uses the same values).
+ */
+const TRACKS: Record<Cell['size'], number> = {half: 2, full: 2, wide: 3, double: 4};
+const TRACK_MIN = 96;
+const TRACK_GAP = 20;
+/** a group of at most this many short fields stays together, in one cell */
+const GROUP_MAX = 6;
 
 type Deep = {fields?: Record<string, Deep>} | true | undefined;
 const inside = (permissions: SanitizedFieldsPermissions, name: string): SanitizedFieldsPermissions => {
@@ -82,6 +92,16 @@ function cells(fields: ClientField[], path: string, schemaPath: string, permissi
     }
     if (f.type === 'group' && 'name' in f && named) {
       const label = f.label ? String(getTranslation(f.label as Parameters<typeof getTranslation>[0], i18n)) : undefined;
+      const shown = f.fields.filter((x) => !x.admin?.hidden && !('name' in x && x.name === 'id'));
+      // a small group of short fields (a link: label, kind, address, new tab): one cell, its fields two per line
+      if (shown.length <= GROUP_MAX && shown.every((x) => !DOUBLE.has(x.type) && !WIDE.has(x.type))) {
+        const groupPermissions = inside(permissions, f.name);
+        const parts = shown.map((x): Part => ({fields: only(f.fields, (y) => y === x), path: `${path}.${f.name}`, schemaPath: `${schemaPath}.${f.name}`, permissions: groupPermissions}));
+        out.push({key, parts: heading ? [heading, ...parts] : parts, size: 'double', title: label, group: true});
+        heading = null;
+        pendingTitle = undefined;
+        return;
+      }
       const nested = cells(f.fields, `${path}.${f.name}`, `${schemaPath}.${f.name}`, inside(permissions, f.name), i18n, `${key}-`, label);
       if (nested.length && heading) nested[0] = {...nested[0], parts: [heading, ...nested[0].parts]};
       heading = null;
@@ -94,10 +114,11 @@ function cells(fields: ClientField[], path: string, schemaPath: string, permissi
 }
 
 /**
- * The cells on a grid of equal columns that fills the panel's width:
- *   - when every cell can have its own column (260 px at least), one cell per column, on one line;
- *   - otherwise two lines: short fields go two per column, the others keep a whole column, and the
- *     grid scrolls sideways if it still does not fit.
+ * The cells on a grid of equal tracks (half columns) that fills the panel's width:
+ *   - when every cell can have its own tracks, one cell after the other, on one line;
+ *   - otherwise two lines: short fields go two per column (a later one fills the place left under
+ *     an earlier one), the others keep the whole height, and the grid scrolls sideways if it still
+ *     does not fit.
  * Only the number of lines depends on the width (CSS grid does the placing: no field is remounted).
  */
 function Flow({cells: list, readOnly}: {cells: Cell[]; readOnly?: boolean}) {
@@ -112,13 +133,13 @@ function Flow({cells: list, readOnly}: {cells: Cell[]; readOnly?: boolean}) {
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
-  const fits = Math.max(1, Math.floor((width + COLUMN_GAP) / (COLUMN_MIN + COLUMN_GAP)));
-  const columns = list.reduce((n, c) => n + (c.size === 'double' ? 2 : 1), 0);
-  const lines = width === 0 || columns <= fits ? 1 : 2;
+  const fits = Math.max(1, Math.floor((width + TRACK_GAP) / (TRACK_MIN + TRACK_GAP)));
+  const tracks = list.reduce((n, c) => n + TRACKS[c.size], 0);
+  const lines = width === 0 || tracks <= fits ? 1 : 2;
   return (
     <div ref={ref} className="column-content__flow" data-lines={lines} style={{gridTemplateRows: `repeat(${lines}, auto)`}}>
       {list.map((cell) => (
-        <div key={cell.key} className="column-content__cell" data-size={cell.size}>
+        <div key={cell.key} className="column-content__cell" data-size={cell.size} data-group={cell.group ? 'true' : undefined}>
           {cell.title ? <p className="column-content__title">{cell.title}</p> : null}
           {cell.parts.map((part, i) => (
             <RenderFields key={i} fields={part.fields} forceRender parentIndexPath="" parentPath={part.path} parentSchemaPath={part.schemaPath} permissions={part.permissions} readOnly={readOnly} />

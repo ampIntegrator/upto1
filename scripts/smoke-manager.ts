@@ -451,7 +451,7 @@ async function main() {
     await p.waitForTimeout(200);
     check((await popover.count()) === 0 && (await p.locator('.section-manager__body').isVisible()), 'Escape closes the field, not the dialog');
     // a clickable card: a click on its link shows the link's fields (label, external address or content of the site)
-    await dragBlock('cardTitleLink', '1-0');
+    await dragBlock('cardIconLink', '1-0');
     const link = live.locator('[data-preview-column="1-0"] [data-part="action"]');
     await link.waitFor({timeout: 10000});
     // its link covers the whole card: a click on the title still edits the title, only the bar opens the link
@@ -474,6 +474,23 @@ async function main() {
     check(inScreen >= 0, `the field's panel stays inside the screen (${inScreen} px to spare)`);
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-link.png`});
     await popover.getByRole('button', {name: /^(Fermer|Close)$/}).click();
+    // the clickable card in the content panel: five columns at most, the link's fields together in
+    // a cell two columns wide, the text a column and a half
+    await p.locator('.section-manager__tab[aria-controls="section-manager-panel-content"]').click();
+    await p.waitForTimeout(700);
+    const card = await p.evaluate(() => {
+      const el = document.querySelector('#section-manager-panel-content') as HTMLElement;
+      const grid = el.querySelector('.column-content__flow') as HTMLElement;
+      const cells = [...grid.querySelectorAll<HTMLElement>('.column-content__cell')].filter((c) => c.offsetWidth > 0);
+      const group = cells.find((c) => c.dataset.group) as HTMLElement;
+      const text = cells.find((c) => c.querySelector('textarea')) as HTMLElement;
+      const short = cells.find((c) => c.dataset.size === 'half') as HTMLElement;
+      return {scrollX: el.scrollWidth - el.clientWidth, scrollY: el.scrollHeight - el.clientHeight, columns: new Set(cells.map((c) => Math.round(c.getBoundingClientRect().left))).size, groupFields: group.querySelectorAll('.field-type').length, groupLines: new Set([...group.querySelectorAll('.field-type')].map((f) => Math.round(f.getBoundingClientRect().bottom / 20))).size, ratio: Math.round((text.offsetWidth / short.offsetWidth) * 100) / 100, group: Math.round((group.offsetWidth / short.offsetWidth) * 100) / 100};
+    });
+    check(card.columns <= 5 && card.groupFields === 4 && card.ratio > 1.3 && card.ratio < 1.8 && card.group > 1.9 && card.scrollX <= 0 && card.scrollY <= 0, `a clickable card's fields take five columns at most, its link in one cell two columns wide, its text a column and a half, nothing to scroll (${JSON.stringify(card)})`);
+    if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-card.png`});
+    await p.locator('.section-manager__tab[aria-controls="section-manager-panel-blocks"]').click();
+    await p.waitForTimeout(700);
     // an Image block replaces it (asked first), with an image of the media library; a click on it shows the image field
     await dragBlock('media', '1-0');
     await confirm.getByRole('button', {name: /^(Remplacer|Replace)$/}).click();
