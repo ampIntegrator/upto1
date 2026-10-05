@@ -458,6 +458,15 @@ async function main() {
     check(zoneAllowed === 'true' && (await miniEmpty(0, 1)) === null, 'a component dropped on an empty column of the preview is placed in it');
     await live.locator('[data-preview-column="0-1"]').getByText('Lorem ipsum dolor', {exact: true}).waitFor({timeout: 10000});
     check(/Lorem ipsum dolor sit amet/.test(await live.locator('[data-preview-column="0-1"] p').first().innerText()), 'a component placed from the library starts with placeholder texts, shown in the preview');
+    // a text box replaces it: its rich text (a localized field) shows in the preview too
+    await dragBlock('textBox', '0-1');
+    await p.locator('.confirmation-modal').getByRole('button', {name: /^(Remplacer|Replace)$/}).click();
+    const richText = await live.locator('[data-preview-column="0-1"]').getByText(/consectetur adipiscing elit/).first().waitFor({timeout: 10000}).then(() => true, () => false);
+    check(richText, 'the rich text of a text box placed from the library shows in the preview');
+    // (the icon card back in the column, for what follows)
+    await dragBlock('cardIcon', '0-1');
+    await p.locator('.confirmation-modal').getByRole('button', {name: /^(Remplacer|Replace)$/}).click();
+    await live.locator('[data-preview-column="0-1"] [data-part="icon"]').waitFor({timeout: 10000});
     // another one on the filled column: asked first
     await dragBlock('cardTitle', '0-1');
     const confirm = p.locator('.confirmation-modal');
@@ -511,6 +520,11 @@ async function main() {
       return {scrollX: el.scrollWidth - el.clientWidth, scrollY: el.scrollHeight - el.clientHeight, columns: new Set(cells.map((c) => Math.round(c.getBoundingClientRect().left))).size, groupFields: group.querySelectorAll('.field-type').length, groupLines: new Set([...group.querySelectorAll('.field-type')].map((f) => Math.round(f.getBoundingClientRect().bottom / 20))).size, ratio: Math.round((text.offsetWidth / short.offsetWidth) * 100) / 100, group: Math.round((group.offsetWidth / short.offsetWidth) * 100) / 100};
     });
     check(card.columns <= 5 && card.groupFields === 4 && card.ratio > 1.3 && card.ratio < 1.8 && card.group > 1.9 && card.scrollX <= 0 && card.scrollY <= 0, `a clickable card's fields take five columns at most, its link in one cell two columns wide, its text a column and a half, nothing to scroll (${JSON.stringify(card)})`);
+    // the display name, typed in the panel's head: it names the column in its square
+    await p.locator('#section-manager-panel-content .column-content__name').fill('Ma carte');
+    await p.waitForTimeout(500);
+    const named = await squares.nth(1).locator('.rows-builder__mini').first().evaluate((el) => `${el.getAttribute('aria-label') ?? ''} ${el.textContent ?? ''}`);
+    check(/Ma carte/.test(named), `the display name typed in the content panel names the column in its square (${named.trim()})`);
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-card.png`});
     await p.locator('.section-manager__tab[aria-controls="section-manager-panel-blocks"]').click();
     await p.waitForTimeout(700);
