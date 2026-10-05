@@ -340,8 +340,8 @@ async function main() {
     const picker = p.locator('.section-manager__picker-box');
     await picker.waitFor({timeout: 5000});
     const offered = await picker.locator('.block-library__block').evaluateAll((els) => els.map((el) => el.getAttribute('data-block') ?? ''));
-    const pickerBox = (await picker.boundingBox())!;
-    check(offered.length > 5 && !offered.includes('plan') && offered.includes('cardTitle') && (await picker.locator('.block-library__guide').count()) === 0 && pickerBox.width > 1400, `a double click on an empty column opens a wide box with the components that fit it (${offered.length}, ${Math.round(pickerBox.width)} px wide)`);
+    const pickerBox = (await p.locator('.section-manager__picker').boundingBox())!;
+    check(offered.length > 5 && !offered.includes('plan') && offered.includes('cardTitle') && (await picker.locator('.block-library__guide').count()) === 0 && pickerBox.width === 1600 && pickerBox.height === 1000, `a double click on an empty column opens a full-screen box with the components that fit it (${offered.length}, ${Math.round(pickerBox.width)} × ${Math.round(pickerBox.height)})`);
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-picker.png`});
     await picker.locator('.block-library__block[data-block="cardTitle"]').click();
     await p.waitForTimeout(800);

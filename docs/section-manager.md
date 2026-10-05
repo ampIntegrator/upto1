@@ -144,8 +144,8 @@ still publishes: no drafts).
      of components there, Nicolas, 2 Oct. 2026). It replaces the column drawer. Opened by a double click on a column of a
      square (Découpage; a single click only selects the column), by the pencil shown on a filled
      column of the preview on hover, or by a double click on it. **On an empty column the double
-     click opens a box over the dialog** (Nicolas, 5 Oct. 2026; nearly as wide as the screen, like a
-     confirmation box): the thumbnails of the components that fit the column's width, and only
+     click opens a box over the dialog** (Nicolas, 5 Oct. 2026; the whole screen, as a
+     confirmation covers it; the same `BlockLibrary` and the same images as the « Composants » panel): the thumbnails of the components that fit the column's width, and only
      those; one click places the component and closes the box, the open panel does not change
      (quick filling from « Découpage », without the « Composants » panel and its drag and drop).
    - **In the preview**: a click selects the column (outlined). On a part a component marked with
