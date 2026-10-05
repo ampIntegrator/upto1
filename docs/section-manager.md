@@ -27,7 +27,8 @@ button opens a full-screen dialog:
   `description` on the fields under it), one at the right of the layout tiles (how to drag a
   layout; an error on a row shows as a red text beside it), and for a block's field that has a
   description (« Contenu » panel) an « i » after its label (CSS at the end of
-  `SectionManager.scss`). The components list explains itself in its first tile (below);
+  `SectionManager.scss`). The frame's own texts (empty zones, the pencil) follow the admin's
+  language: it travels with each section (`language` of the data message). The components list explains itself in its first tile (below);
 - between the two, a handle: drag it (or focus it and use the arrow keys) to change the share, from
   20 % to 80 % for the settings; a double click goes back to the opening height; nothing is
   remembered: the dialog always opens at that height;
@@ -190,6 +191,20 @@ Neutral core (`src/fields/sections/`, no site component):
 - `managerContext.ts` (what the dialog shares with the rows builder: the selected column, opening
   its content), `ColumnContent.tsx` (the content panel), `BlockLibrary.tsx` (the thumbnails),
   `fieldGroups.ts` (`byGroup`, `only`: rendering a subset of fields at their exact paths).
+  Since 5 Oct. 2026 the dialog is cut by area: `LivePreview.tsx` (the form's values → the
+  preview), `FieldPopover.tsx` (one field beside what was clicked), `useSelectMenus.ts` (select
+  menus kept inside the top part), `InfoBubble.tsx`, `packRows.ts`; one stylesheet per component
+  (`SectionManager.scss` the shell, `ColumnContent.scss`, `BlockLibrary.scss`,
+  `SectionPreview.scss`, `FieldPopover.scss`, `InfoBubble.scss`, `RowsBuilder.scss`).
+- **`tokens.scss`: the tool's own variables** (`--sm-*`, on `:root`): every measure (top height,
+  squares, thumbnails, tracks of the content panel, bubbles) and the few colours Payload's theme
+  has no variable for. A size is changed there and nowhere else; the TypeScript that computes
+  with one reads it through `token()` (`tokens.ts`). Even values only, no font under 14 px.
+- **`_payload.scss` and `payloadDom.ts`: the only place where Payload's internal class names are
+  written** (`.field-type`, `.render-fields`, `.rs__control`…), as Sass variables for the
+  stylesheets and constants for the scripts. They have no public contract: after a Payload
+  upgrade, check these two files first; `pnpm smoke:manager` fails when one of the main classes
+  is gone from the dialog.
 - `preview.ts`: the protocol (also `PREVIEW_LAYOUT`, `PREVIEW_SELECT`, `PREVIEW_OPEN`, `PREVIEW_EDIT`,
   `PREVIEW_PICK`). `PREVIEW_READY` (frame → admin, on each load), `PREVIEW_DATA`
   (admin → frame: the section's values as stored, the document fields the host asked for, the

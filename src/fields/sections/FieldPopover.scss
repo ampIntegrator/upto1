@@ -1,0 +1,55 @@
+@use './payload' as p;
+
+// A single field shown beside what was clicked in the preview (FieldPopover.tsx).
+
+// a single field shown next to what was clicked in the preview (an image, an icon)
+.field-popover__backdrop {
+  position: fixed;
+  inset: 0;
+}
+
+.field-popover {
+  position: fixed;
+  box-sizing: border-box;
+  width: 420px;
+  max-height: 70vh;
+  padding: 12px;
+  overflow: auto;
+  border: 1px solid var(--theme-elevation-250);
+  border-radius: 4px;
+  background: var(--theme-bg);
+  box-shadow: var(--sm-shadow);
+  outline: none;
+
+  // one field per line (a link's label, kind, address, new tab)
+  #{p.$field}#{p.$field-row} #{p.$row-fields} > * {
+    flex: 1 1 100%;
+  }
+
+  #{p.$field} {
+    margin-bottom: 0;
+  }
+
+  #{p.$fields} > #{p.$field} + #{p.$field},
+  #{p.$row-fields} > * + * {
+    margin-top: 12px;
+  }
+}
+
+.field-popover__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-size: 14px;
+
+  #{p.$button} {
+    margin: 0;
+  }
+}
+
+// the rows builder in the dialog: nothing below its line of squares
+.section-manager__content .rows-builder {
+  margin-bottom: 0 !important;
+}

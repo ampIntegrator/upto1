@@ -18,6 +18,8 @@ import {useAdminText} from '@/i18n/admin/useAdminText';
 import {packRows} from './packRows';
 import {token} from './tokens';
 
+import './BlockLibrary.scss';
+
 /** drag data type of a block thumbnail */
 export const BLOCK_DRAG_TYPE = 'application/x-section-block';
 

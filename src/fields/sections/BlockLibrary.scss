@@ -1,0 +1,107 @@
+// The component thumbnails (BlockLibrary.tsx): the « Composants » panel and the picker of an empty column.
+
+// the block library: rows of thumbnails that wrap; the panel scrolls down. A thumbnail is the
+// block's image alone, edge to edge, 220 px high, as wide as the image's own proportions make it
+.block-library {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sm-thumb-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.block-library__item {
+  flex: 0 0 auto;
+  max-width: 100%;
+}
+
+.block-library__block {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  min-width: var(--sm-thumb-min-width);
+  height: var(--sm-thumb-height);
+  border-radius: 4px;
+  background: var(--theme-elevation-50);
+  // a hairline drawn over the picture: a white card stays distinct from the panel
+  outline: 1px solid var(--theme-elevation-150);
+  outline-offset: -1px;
+  font: inherit;
+  cursor: grab;
+
+  &:focus-visible {
+    outline: 2px solid var(--theme-elevation-1000);
+    outline-offset: 2px;
+  }
+
+  &[aria-disabled] {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+// the instructions, in the place of a first thumbnail: same height, no picture
+.block-library__guide {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: var(--sm-guide-width);
+  height: var(--sm-thumb-height);
+  margin: 0;
+  padding: 16px;
+  border: 1px dashed var(--theme-elevation-400);
+  border-radius: 4px;
+  color: var(--theme-elevation-800);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.block-library__image {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+// the name and the widths: on a white veil over the whole picture, on hover and on keyboard focus
+// (not while the thumbnail is pressed: the picture that follows the pointer in a drag stays clear)
+.block-library__caption {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  background: var(--sm-veil);
+  color: var(--sm-veil-text);
+  text-align: center;
+  opacity: 0;
+  transition: opacity 120ms ease;
+  pointer-events: none;
+
+  .block-library__block:hover:not(:active) &,
+  .block-library__block:focus-visible:not(:active) & {
+    opacity: 1;
+  }
+}
+
+.block-library__label {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.block-library__widths {
+  font-size: 14px;
+  line-height: 20px;
+  opacity: 0.8;
+}

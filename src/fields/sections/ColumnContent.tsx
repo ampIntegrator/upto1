@@ -23,6 +23,8 @@ import {only} from './fieldGroups';
 import type {PreviewColumn} from './preview';
 import {token} from './tokens';
 
+import './ColumnContent.scss';
+
 /** what RenderFields needs to render some fields at their exact paths */
 type Part = {fields: ClientField[]; path: string; schemaPath: string; permissions: SanitizedFieldsPermissions};
 /** one cell of the flow: a field (after its group heading, if it opens a group), `title`: the name of the group it opens */

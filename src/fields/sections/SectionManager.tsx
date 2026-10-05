@@ -16,9 +16,9 @@
  * the form state, so closing the dialog loses nothing and the page is saved as usual.
  */
 import {getTranslation} from '@payloadcms/translations';
-import {Button, ConfirmationModal, Modal, RenderFields, useConfig, useDocumentInfo, useForm, useFormFields, useFormModified, useLocale, useModal, useTranslation} from '@payloadcms/ui';
+import {Button, ConfirmationModal, Modal, RenderFields, useConfig, useDocumentInfo, useForm, useFormFields, useFormModified, useModal, useTranslation} from '@payloadcms/ui';
 import type {ArrayFieldClient, BlocksFieldClient, ClientBlock, ClientField, CollapsibleFieldClient, SanitizedFieldPermissions, SanitizedFieldsPermissions} from 'payload';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 
 import {sectionsText as T} from '@/i18n/admin/sections';
 import {useAdminText} from '@/i18n/admin/useAdminText';
@@ -29,11 +29,11 @@ import {EMPTY_SLUG} from './emptyBlock';
 import {byGroup, only} from './fieldGroups';
 import type {PresetRow} from './grid';
 import {ManagerContext} from './managerContext';
-import {DEFAULT_BREAKPOINTS, PREVIEW_EDIT, PREVIEW_OPEN, PREVIEW_PICK, PREVIEW_SELECT, type PreviewBox, type PreviewColumn, type PreviewColumnBox, type PreviewEvent, type SectionPreviewOptions} from './preview';
+import {PREVIEW_EDIT, PREVIEW_OPEN, PREVIEW_PICK, PREVIEW_SELECT, type PreviewBox, type PreviewColumn, type PreviewColumnBox, type PreviewEvent, type SectionPreviewOptions} from './preview';
 import {RowsBuilderGhost} from './RowsBuilder';
-import {SectionPreview} from './SectionPreview';
-
-import {PAYLOAD_DOM} from './payloadDom';
+import {FieldPopover} from './FieldPopover';
+import {LivePreview} from './LivePreview';
+import {useSelectMenus} from './useSelectMenus';
 
 import './tokens.scss';
 import './SectionManager.scss';
@@ -71,9 +71,6 @@ type PanelKey = 'settings' | 'layout' | 'blocks' | 'content';
  * is open (nothing is remembered). SPLIT, a share in %, is what the handle falls back on.
  */
 const SPLIT = 35;
-/** a select menu opens upwards when less than this (px) is left under its field; one option's height */
-const MENU_ROOM = 160;
-const MENU_ITEM = 44;
 const SPLIT_MIN = 20;
 const SPLIT_MAX = 80;
 const SPLIT_STEP = 2;
@@ -170,38 +167,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
   const panelsRef = useRef<HTMLDivElement>(null);
   // null: the opening height (the stylesheet's); a number: the share chosen with the handle
   const [split, setSplit] = useState<number | null>(null);
-  // Payload's select menus open inside the panel, which is short and clips them: each menu is kept
-  // inside the top part (a shorter list that scrolls, or opened upwards when there is more room above)
-  useEffect(() => {
-    const root = panelsRef.current;
-    if (!root) return;
-    const place = (menu: HTMLElement) => {
-      const list = menu.querySelector<HTMLElement>(PAYLOAD_DOM.selectMenuList);
-      const control = menu.parentElement?.querySelector<HTMLElement>(PAYLOAD_DOM.selectControl);
-      if (!list || !control) return;
-      const bounds = root.getBoundingClientRect();
-      const box = control.getBoundingClientRect();
-      const margin = 16;
-      const below = bounds.bottom - box.bottom - margin;
-      const above = box.top - bounds.top - margin;
-      if (below < MENU_ROOM && above > below) {
-        menu.style.top = 'auto';
-        menu.style.bottom = '100%';
-      }
-      list.style.maxHeight = `${Math.max(Math.max(below, above), MENU_ITEM)}px`;
-    };
-    const observer = new MutationObserver((records) => {
-      for (const record of records) {
-        record.addedNodes.forEach((node) => {
-          if (!(node instanceof HTMLElement)) return;
-          const menu = node.matches(PAYLOAD_DOM.selectMenu) ? node : node.querySelector<HTMLElement>(PAYLOAD_DOM.selectMenu);
-          if (menu) place(menu);
-        });
-      }
-    });
-    observer.observe(root, {childList: true, subtree: true});
-    return () => observer.disconnect();
-  }, []);
+  useSelectMenus(panelsRef);
   /** the share shown now, in % (the opening height included) */
   const currentSplit = () => {
     const box = body.current?.getBoundingClientRect();
@@ -593,54 +559,6 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
 }
 
 /**
- * A single field of a block, shown next to what was clicked in the preview (an image, an icon, a link):
- * a small panel at the pointer, closed by its button, Escape or a click beside it.
- */
-function FieldPopover({x, y, title, onClose, children}: {x: number; y: number; title: string; onClose: () => void; children: React.ReactNode}) {
-  const {t} = useAdminText();
-  const panel = useRef<HTMLDivElement>(null);
-  const [place, setPlace] = useState({left: x, top: y});
-  // kept inside the screen, again each time its content changes size (the field renders after the panel)
-  useEffect(() => {
-    const el = panel.current;
-    if (!el) return;
-    const margin = 12;
-    const fit = () => setPlace({left: Math.max(margin, Math.min(x, window.innerWidth - el.offsetWidth - margin)), top: Math.max(margin, Math.min(y + margin, window.innerHeight - el.offsetHeight - margin))});
-    const observer = new ResizeObserver(fit);
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [x, y]);
-  // the click was in the preview's frame: bring the keyboard back here (Escape, Tab)
-  useEffect(() => {
-    panel.current?.focus();
-  }, []);
-  useEffect(() => {
-    // captured before the dialog's own Escape: only this panel closes
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key !== 'Escape') return;
-      e.stopPropagation();
-      onClose();
-    };
-    window.addEventListener('keydown', onKey, true);
-    return () => window.removeEventListener('keydown', onKey, true);
-  }, [onClose]);
-  return (
-    <>
-      <div className="field-popover__backdrop" onClick={onClose} />
-      <div ref={panel} className="field-popover" role="dialog" aria-label={title} tabIndex={-1} style={place}>
-        <div className="field-popover__head">
-          <strong>{title}</strong>
-          <Button buttonStyle="secondary" size="small" margin={false} onClick={onClose}>
-            {t(T.manager.fieldClose)}
-          </Button>
-        </div>
-        {children}
-      </div>
-    </>
-  );
-}
-
-/**
  * Fields of the document itself (not of the section), in the dialog's header: the same form
  * fields as in the document's own form, rendered a second time here. Nothing where the document
  * has no such field (a shared section has no colour scheme of its own).
@@ -653,32 +571,4 @@ function DocumentFields({names}: {names: string[]}) {
   const fields = ((entity?.fields ?? []) as ClientField[]).filter((f) => 'name' in f && names.includes(f.name));
   // always there: it keeps the title on the left and the button on the right
   return <div className="section-manager__fields">{slug && fields.length ? <RenderFields fields={fields} forceRender parentIndexPath="" parentPath="" parentSchemaPath={slug} permissions={docPermissions?.fields ?? true} /> : null}</div>;
-}
-
-/** the section just above `path` in its array (`sections.3` → `sections.2`), or none */
-const pathAbove = (path: string): string | null => {
-  const m = /^(.*)\.(\d+)$/.exec(path);
-  return m && Number(m[2]) > 0 ? `${m[1]}.${Number(m[2]) - 1}` : null;
-};
-
-/** Collects the section's values (and the document fields the host asked for) and feeds the preview. */
-function LivePreview({parentPath, preview, onEvent, overlay}: {parentPath: string; preview: SectionPreviewOptions; onEvent: (event: PreviewEvent, toScreen: (box: PreviewBox) => PreviewBox) => void; overlay: (columns: PreviewColumnBox[]) => React.ReactNode}) {
-  const {getData, getDataByPath} = useForm();
-  const {id, collectionSlug, globalSlug} = useDocumentInfo();
-  const locale = useLocale();
-  const {i18n} = useTranslation();
-  // any change of the form: a new snapshot (the preview debounces what it sends)
-  const version = useFormFields(([fields]) => fields);
-  const message = React.useMemo(() => {
-    const data = getData() as Record<string, unknown>;
-    const section = (parentPath ? getDataByPath(parentPath) : data) as Record<string, unknown> | undefined;
-    const abovePath = pathAbove(parentPath);
-    const above = abovePath ? (getDataByPath(abovePath) as Record<string, unknown> | undefined) : undefined;
-    const document: Record<string, unknown> = {};
-    for (const name of preview.documentFields ?? []) document[name] = data?.[name];
-    return {section: section ?? {}, above, parts: preview.parts, document, id: id ?? undefined, collection: collectionSlug ?? globalSlug ?? undefined, locale: locale?.code, language: i18n.language};
-    // `version` changes on every edit: it is what triggers the new snapshot
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [version, parentPath, id, collectionSlug, globalSlug, locale?.code, preview.parts, i18n.language]);
-  return <SectionPreview url={preview.url} breakpoints={preview.breakpoints ?? DEFAULT_BREAKPOINTS} message={message} onEvent={onEvent} overlay={overlay} />;
 }

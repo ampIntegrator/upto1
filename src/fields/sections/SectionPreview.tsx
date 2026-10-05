@@ -17,6 +17,9 @@ import {useAdminText} from '@/i18n/admin/useAdminText';
 
 import {isPreviewReady, PREVIEW_DATA, type PreviewBox, type PreviewBreakpoint, type PreviewColumnBox, type PreviewDataMessage, type PreviewEvent, previewEvent, previewLayout, previewSize} from './preview';
 
+import './tokens.scss';
+import './SectionPreview.scss';
+
 const DEBOUNCE_MS = 400;
 /** « full width »: the frame is as wide as the panel, as in the browser */
 const FULL = 'full';
