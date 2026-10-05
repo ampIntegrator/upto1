@@ -41,7 +41,7 @@ const block: Block = {
     {
       type: 'row',
       fields: [
-        {name: 'tag', type: 'select', label: t.tag, defaultValue: 'h2', options: TAG_OPTIONS, admin: {width: '50%', description: t.tagDescription}},
+        {name: 'tag', type: 'select', label: t.tag, defaultValue: 'h2', options: TAG_OPTIONS, admin: {width: '50%', description: t.tagDescription, custom: {below: true}}},
         {name: 'size', type: 'select', label: t.size, defaultValue: 'display-3', options: SIZE_OPTIONS, admin: {width: '50%'}},
       ],
     },

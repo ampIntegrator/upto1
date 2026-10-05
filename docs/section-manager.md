@@ -127,9 +127,16 @@ still publishes: no drafts).
      block with one field does not stretch it across the panel); labels stay on one line (cut
      with an ellipsis) and the content language (« — Français ») is not shown after them. Keep
      a field's label short and put its examples in its `description` (the « i »). What still
-     scrolls at 1920 px: the two price blocks sideways (too many fields for two lines), the
-     text box a little downwards (two group headings). Nicolas, 5 Oct.: some scroll is fine,
-     do not force it.
+     scrolls at 1920 px: the two price blocks sideways (too many fields for two lines); the
+     rest fits. Nicolas, 5 Oct.: some scroll is fine, do not force it.
+     Two rules from Nicolas the same day. **A title and the choice of its tag go one under the
+     other**, in one cell: the tag field is marked `admin.custom.below` (set by `tagField()`,
+     `below: false` for a tag with no title field just before it; set by hand on the section
+     heading and the image with quote), and a row that holds such a pair is not kept as a row.
+     **A block whose fields sit under group headings** (the text box: « Titre », « Texte »,
+     « Disposition ») **gets one column per group**: the heading, then the group's fields one
+     under the other as in a plain form, the column scrolling on its own when it is taller than
+     the panel (`blockCells`); packed on one line they were unreadable.
      Surveyed on 2 Oct. 2026 at 1920 × 960: of the 24 blocks only
      the text box scrolls down (its rich text editor is taller than the panel); arrays (FAQ items,
      steps, tabs, buttons, badges) will as soon as they hold rows. « Vider la colonne ». It only

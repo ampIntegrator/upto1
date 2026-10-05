@@ -30,9 +30,13 @@ type Part = {fields: ClientField[]; path: string; schemaPath: string; permission
  * textarea: room to read what is typed, without taking two columns); `double`: two columns (a rich
  * text, an array of rows, a group); `band`: two columns on one line (a row of three short fields
  * or more, kept side by side at the widths their row gives them). `group`: the cell holds a group's
- * fields, two per line.
+ * fields, two per line. `below`: the cell's field asks to go under the field before it (a title's
+ * tag, `admin.custom.below` set by the host); `stack`: the cell holds such a pair, one under the other.
  */
-type Cell = {key: string; parts: Part[]; size: 'half' | 'full' | 'wide' | 'double' | 'band'; title?: string; group?: boolean};
+type Cell = {key: string; parts: Part[]; size: 'half' | 'full' | 'wide' | 'double' | 'band'; title?: string; group?: boolean; below?: boolean; stack?: boolean; section?: boolean};
+
+/** the host's mark on a field that goes under the field before it, in the same cell (a title's tag) */
+const below = (f: ClientField): boolean => Boolean((f.admin as {custom?: {below?: unknown}} | undefined)?.custom?.below);
 
 /** fields that need two columns, a column and a half, or a whole column */
 const DOUBLE = new Set(['richText', 'array', 'blocks', 'collapsible', 'tabs', 'group', 'row', 'join']);
@@ -80,16 +84,17 @@ const inside = (permissions: SanitizedFieldsPermissions, name: string): Sanitize
  * Anything else (an array, a rich text, a row holding unnamed fields) stays whole. A group heading
  * (`ui` field) goes in the cell of the field that follows it.
  */
-function cells(fields: ClientField[], path: string, schemaPath: string, permissions: SanitizedFieldsPermissions, i18n: Parameters<typeof getTranslation>[1], prefix = '', title?: string): Cell[] {
+function cells(fields: ClientField[], path: string, schemaPath: string, permissions: SanitizedFieldsPermissions, i18n: Parameters<typeof getTranslation>[1], prefix = '', title?: string, end = fields.length): Cell[] {
   const out: Cell[] = [];
   let heading: Part | null = null;
   let pendingTitle = title;
-  const push = (key: string, part: Part, size: Cell['size']) => {
-    out.push({key, parts: heading ? [heading, part] : [part], size, title: pendingTitle});
+  const push = (key: string, part: Part, size: Cell['size'], flagged = false) => {
+    out.push({key, parts: heading ? [heading, part] : [part], size, title: pendingTitle, below: flagged});
     heading = null;
     pendingTitle = undefined;
   };
   fields.forEach((f, i) => {
+    if (i >= end) return;
     const key = `${prefix}${i}`;
     if (f.admin?.hidden || ('name' in f && (f.name === 'id' || f.name === 'blockName'))) return;
     const whole: Part = {fields: only(fields, (x) => x === f), path, schemaPath, permissions};
@@ -99,7 +104,8 @@ function cells(fields: ClientField[], path: string, schemaPath: string, permissi
     }
     const named = 'fields' in f && Array.isArray(f.fields) && f.fields.every((x) => 'name' in x || x.type === 'row');
     // a row of three short fields or more (a number: prefix, value, suffix) stays together, on one line
-    if (f.type === 'row' && named && leaves(f.fields).length >= BAND_MIN && leaves(f.fields).every((x) => short(x.field))) {
+    // (not a row that holds a title and its tag: those two go one under the other)
+    if (f.type === 'row' && named && leaves(f.fields).length >= BAND_MIN && leaves(f.fields).every((x) => short(x.field) && !below(x.field))) {
       push(key, whole, 'band');
       return;
     }
@@ -118,7 +124,14 @@ function cells(fields: ClientField[], path: string, schemaPath: string, permissi
       // cell, its fields two per line (a textarea takes a whole line of the cell)
       if (shown.length <= GROUP_MAX && shown.every((x) => !DOUBLE.has(x.field.type))) {
         const groupPermissions = inside(permissions, f.name);
-        const parts = shown.map((x): Part => ({fields: only(x.siblings, (y) => y === x.field), path: `${path}.${f.name}`, schemaPath: `${schemaPath}.${f.name}`, permissions: groupPermissions}));
+        // (a field that goes under the one before it shares its part: rendered together, they stack)
+        const sets: {siblings: ClientField[]; keep: ClientField[]}[] = [];
+        for (const x of shown) {
+          const last = sets[sets.length - 1];
+          if (below(x.field) && last && last.siblings === x.siblings) last.keep.push(x.field);
+          else sets.push({siblings: x.siblings, keep: [x.field]});
+        }
+        const parts = sets.map((set): Part => ({fields: only(set.siblings, (y) => set.keep.includes(y)), path: `${path}.${f.name}`, schemaPath: `${schemaPath}.${f.name}`, permissions: groupPermissions}));
         out.push({key, parts: heading ? [heading, ...parts] : parts, size: 'double', title: label, group: true});
         heading = null;
         pendingTitle = undefined;
@@ -130,8 +143,62 @@ function cells(fields: ClientField[], path: string, schemaPath: string, permissi
       out.push(...nested);
       return;
     }
-    push(key, whole, sizeOf(f));
+    push(key, whole, sizeOf(f), below(f));
   });
+  return out;
+}
+
+/**
+ * The cells of a block. A block whose fields sit under group headings (`ui` fields: « Titre »,
+ * « Texte », « Disposition ») gets **one column per group**: the heading, then the group's fields
+ * one under the other, as in a plain form; the column scrolls on its own when the group is taller
+ * than the panel (readable fields rather than a packed line). The fields before the first heading,
+ * and every block without headings, are laid out field by field (`cells`).
+ */
+function blockCells(fields: ClientField[], path: string, schemaPath: string, permissions: SanitizedFieldsPermissions, i18n: Parameters<typeof getTranslation>[1]): Cell[] {
+  const first = fields.findIndex((f) => f.type === 'ui');
+  if (first < 0) return stacked(cells(fields, path, schemaPath, permissions, i18n));
+  const out = stacked(cells(fields, path, schemaPath, permissions, i18n, '', undefined, first));
+  const part = (siblings: ClientField[], f: ClientField): Part => ({fields: only(siblings, (x) => x === f), path, schemaPath, permissions});
+  let cell: Cell | null = null;
+  const sizes: Cell['size'][] = [];
+  const close = () => {
+    if (cell && cell.parts.length > 1) out.push({...cell, size: sizes.includes('double') ? 'double' : sizes.includes('wide') ? 'wide' : 'full'});
+    cell = null;
+    sizes.length = 0;
+  };
+  fields.forEach((f, i) => {
+    if (i < first || f.admin?.hidden || ('name' in f && (f.name === 'id' || f.name === 'blockName'))) return;
+    if (f.type === 'ui') {
+      close();
+      cell = {key: `section-${i}`, parts: [part(fields, f)], size: 'full', section: true};
+      return;
+    }
+    if (!cell) return;
+    // a row's fields one under the other (side by side they would be a third of a column each)
+    if (f.type === 'row' && 'fields' in f && f.fields.every((x) => 'name' in x || x.type === 'row')) {
+      for (const leaf of leaves(f.fields)) {
+        cell.parts.push(part(leaf.siblings, leaf.field));
+        sizes.push(sizeOf(leaf.field));
+      }
+      return;
+    }
+    cell.parts.push(part(fields, f));
+    sizes.push(sizeOf(f));
+  });
+  close();
+  return out;
+}
+
+/** A field marked `below` joins the cell before it (a title, then its tag): one cell, the whole height. */
+function stacked(list: Cell[]): Cell[] {
+  const out: Cell[] = [];
+  for (const cell of list) {
+    const before = out[out.length - 1];
+    if (cell.below && before && !before.group && !before.stack && (before.size === 'half' || before.size === 'wide')) {
+      out[out.length - 1] = {...before, parts: [...before.parts, ...cell.parts], size: before.size === 'half' ? 'full' : before.size, stack: true};
+    } else out.push(cell);
+  }
   return out;
 }
 
@@ -163,7 +230,7 @@ function Flow({cells: list, readOnly}: {cells: Cell[]; readOnly?: boolean}) {
   return (
     <div ref={ref} className="column-content__flow" data-lines={lines} style={{gridTemplateRows: lines === 2 ? 'auto minmax(0, 1fr)' : 'minmax(0, 1fr)'}}>
       {list.map((cell) => (
-        <div key={cell.key} className="column-content__cell" data-size={cell.size} data-group={cell.group ? 'true' : undefined}>
+        <div key={cell.key} className="column-content__cell" data-size={cell.size} data-group={cell.group ? 'true' : undefined} data-stack={cell.stack ? 'true' : undefined} data-section={cell.section ? 'true' : undefined}>
           {cell.title ? <p className="column-content__title">{cell.title}</p> : null}
           {cell.parts.map((part, i) => (
             <RenderFields key={i} fields={part.fields} forceRender parentIndexPath="" parentPath={part.path} parentSchemaPath={part.schemaPath} permissions={part.permissions} readOnly={readOnly} />
@@ -213,7 +280,7 @@ export function ColumnContent({rowsPath, rowsSchemaPath, column, blocks, library
         ) : null}
       </div>
       {filled && block ? (
-        <Flow cells={cells(block.fields as ClientField[], `${colPath}.contents.0`, `${rowsSchemaPath}.columns.contents.${block.slug}`, permissions ?? true, i18n)} readOnly={readOnly} />
+        <Flow cells={blockCells(block.fields as ClientField[], `${colPath}.contents.0`, `${rowsSchemaPath}.columns.contents.${block.slug}`, permissions ?? true, i18n)} readOnly={readOnly} />
       ) : (
         <p className="section-manager__soon">{t(T.manager.contentEmpty)}</p>
       )}

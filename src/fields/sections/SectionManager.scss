@@ -374,6 +374,20 @@ $slide: 300ms;
     grid-column: span 4;
   }
 
+  // a group under its heading: its fields one under the other, the column scrolling on its own
+  &[data-section] > .render-fields + .render-fields {
+    margin-top: 10px;
+  }
+
+  // a title and its tag, one under the other
+  &[data-stack] > .render-fields + .render-fields {
+    margin-top: 8px;
+  }
+
+  [data-group] > .render-fields > .field-type + .field-type {
+    margin-top: 8px;
+  }
+
   // a group (a link): its name, then its fields two per line
   &[data-group] {
     display: grid;

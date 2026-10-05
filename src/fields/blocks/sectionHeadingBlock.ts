@@ -27,7 +27,7 @@ const block: Block = {
           label: t.tag,
           defaultValue: 'h2',
           options: (['h2', 'h3', 'h4'] as const).map((v) => ({label: v, value: v})),
-          admin: {width: '30%', description: t.tagDescription},
+          admin: {width: '30%', description: t.tagDescription, custom: {below: true}},
         },
       ],
     },
