@@ -1,3 +1,5 @@
+@use './payload' as p;
+
 /* Section builder (RowsBuilder): the line of row squares, their buttons and their handle.
    Loaded by the component itself; Payload theme variables only. */
 
@@ -108,12 +110,12 @@ button.rows-builder__square-name {
   gap: 4px;
 
   > *,
-  .btn {
+  #{p.$button} {
     width: 28px;
     height: 28px;
     margin: 0;
   }
-  .btn {
+  #{p.$button} {
     display: inline-flex;
     align-items: center;
     justify-content: center;

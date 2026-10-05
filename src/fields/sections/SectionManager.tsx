@@ -33,6 +33,8 @@ import {DEFAULT_BREAKPOINTS, PREVIEW_EDIT, PREVIEW_OPEN, PREVIEW_PICK, PREVIEW_S
 import {RowsBuilderGhost} from './RowsBuilder';
 import {SectionPreview} from './SectionPreview';
 
+import {PAYLOAD_DOM} from './payloadDom';
+
 import './tokens.scss';
 import './SectionManager.scss';
 
@@ -174,8 +176,8 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
     const root = panelsRef.current;
     if (!root) return;
     const place = (menu: HTMLElement) => {
-      const list = menu.querySelector<HTMLElement>('.rs__menu-list');
-      const control = menu.parentElement?.querySelector<HTMLElement>('.rs__control');
+      const list = menu.querySelector<HTMLElement>(PAYLOAD_DOM.selectMenuList);
+      const control = menu.parentElement?.querySelector<HTMLElement>(PAYLOAD_DOM.selectControl);
       if (!list || !control) return;
       const bounds = root.getBoundingClientRect();
       const box = control.getBoundingClientRect();
@@ -192,7 +194,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
       for (const record of records) {
         record.addedNodes.forEach((node) => {
           if (!(node instanceof HTMLElement)) return;
-          const menu = node.matches('.rs__menu') ? node : node.querySelector<HTMLElement>('.rs__menu');
+          const menu = node.matches(PAYLOAD_DOM.selectMenu) ? node : node.querySelector<HTMLElement>(PAYLOAD_DOM.selectMenu);
           if (menu) place(menu);
         });
       }

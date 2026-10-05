@@ -1,0 +1,33 @@
+// Every class name of Payload's admin that the section builder's stylesheets rely on, in one place.
+// They are internal to @payloadcms/ui (no public contract): after an upgrade, check this list
+// first; `pnpm smoke:manager` fails when one of the main ones is gone from the dialog. What
+// depends on each: a renamed class costs layout only (a description shown in line again, a field
+// at its own width), never data.
+
+// a field: its wrapper, its label, the box around its input, its description
+$field: '.field-type';
+$field-wrap: '.field-type__wrap';
+$field-label: '.field-label';
+$field-description: '.field-description';
+// kinds of field (second class of the wrapper)
+$field-text: '.text';
+$field-row: '.row';
+$field-checkbox: '.checkbox';
+// the content language after a label (« — Français »)
+$label-locale: '.localized';
+// a checkbox and a radio: their inner boxes (their label is inside)
+$checkbox-input: '.checkbox-input';
+$radio-input: '.radio-input';
+// the list RenderFields draws, and the line a row field lays its fields on
+$fields: '.render-fields';
+$row-fields: '.row__fields';
+// a button, and its text
+$button: '.btn';
+$button-label: '.btn__label';
+// a select (react-select): its control, the box of its value, its « clear » cross
+$select-control: '.rs__control';
+$select-value: '.rs__value-container';
+$select-clear: '.clear-indicator';
+// a tooltip, and the class it gets when shown
+$tooltip: '.tooltip';
+$tooltip-shown: '.tooltip--show';

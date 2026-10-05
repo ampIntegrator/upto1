@@ -1,3 +1,5 @@
+@use './payload' as p;
+
 // SectionManager (« Gérer » dialog): settings on top (280 px when it opens), live preview below.
 // Admin side: Payload's theme variables, and the builder's own (tokens.scss).
 
@@ -7,7 +9,7 @@
   align-items: center;
   gap: calc(var(--base) / 2) var(--base);
 
-  .btn {
+  #{p.$button} {
     margin: 0;
   }
 }
@@ -70,7 +72,7 @@
   margin-bottom: var(--base);
   font-size: 14px;
 
-  .btn {
+  #{p.$button} {
     margin: 0 0 0 auto;
   }
 }
@@ -112,12 +114,12 @@
   justify-self: end;
   gap: 8px;
 
-  .btn {
+  #{p.$button} {
     margin: 0;
   }
 
   // the icon before the label
-  .btn__label {
+  #{p.$button-label} {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -130,13 +132,13 @@
 
 // a document field in the header: on one line (label, control, value)
 .section-manager__fields {
-  .render-fields {
+  #{p.$fields} {
     display: flex;
     align-items: center;
     gap: var(--base);
   }
 
-  .field-type {
+  #{p.$field} {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -300,24 +302,24 @@ $slide: 300ms;
   }
 
   // a group whose fields are all hidden by their condition
-  &:not(:has(.render-fields > *)) {
+  &:not(:has(#{p.$fields} > *)) {
     display: none;
   }
 
   // the group's heading: its rule is the column's border here
-  .render-fields > :first-child {
+  #{p.$fields} > :first-child {
     margin-block-start: 0 !important;
     padding-block-start: 0 !important;
     border-block-start: 0 !important;
   }
 
   // fields of a row: side by side while they fit, wrapping in a narrow column
-  .field-type.row .row__fields > * {
+  #{p.$field}#{p.$field-row} #{p.$row-fields} > * {
     flex: 1 1 140px;
   }
 
   // selects with a default value: no « clear » cross, it would crowd a narrow column
-  .clear-indicator {
+  #{p.$select-clear} {
     display: none;
   }
 }
@@ -337,7 +339,7 @@ $slide: 300ms;
   margin-bottom: 6px;
   font-size: 14px;
 
-  .btn {
+  #{p.$button} {
     margin: 0 0 0 auto;
   }
 }
@@ -400,16 +402,16 @@ $slide: 300ms;
   }
 
   // a group under its heading: its fields one under the other, the column scrolling on its own
-  &[data-section] > .render-fields + .render-fields {
+  &[data-section] > #{p.$fields} + #{p.$fields} {
     margin-top: 10px;
   }
 
   // a title and its tag, one under the other
-  &[data-stack] > .render-fields + .render-fields {
+  &[data-stack] > #{p.$fields} + #{p.$fields} {
     margin-top: 8px;
   }
 
-  [data-group] > .render-fields > .field-type + .field-type {
+  [data-group] > #{p.$fields} > #{p.$field} + #{p.$field} {
     margin-top: 8px;
   }
 
@@ -425,35 +427,35 @@ $slide: 300ms;
       margin: 0;
     }
 
-    > .render-fields {
+    > #{p.$fields} {
       min-width: 0;
       margin: 0;
     }
 
     // a textarea takes a whole line of the group
-    > .render-fields:has(textarea) {
+    > #{p.$fields}:has(textarea) {
       grid-column: 1 / -1;
     }
 
     // a field of the group hidden by its condition leaves no hole
-    > .render-fields:not(:has(.field-type)) {
+    > #{p.$fields}:not(:has(#{p.$field})) {
       display: none;
     }
 
     // a checkbox sits on the line of the field beside it
-    > .render-fields:has(> .field-type.checkbox) {
+    > #{p.$fields}:has(> #{p.$field}#{p.$field-checkbox}) {
       align-self: end;
       padding-bottom: 10px;
     }
   }
 
   // a cell whose field is hidden by its condition
-  &:not(:has(.field-type, p)) {
+  &:not(:has(#{p.$field}, p)) {
     display: none;
   }
 
   // the field fills its cell, whatever width its row gave it
-  &:not([data-size='band']) .field-type {
+  &:not([data-size='band']) #{p.$field} {
     width: 100% !important;
     margin-bottom: 0;
   }
@@ -463,12 +465,12 @@ $slide: 300ms;
   &[data-size='band'] {
     grid-column: span 4;
 
-    .row__fields {
+    #{p.$row-fields} {
       flex-wrap: nowrap;
       gap: 10px;
     }
 
-    .field-type {
+    #{p.$field} {
       flex: 1 1 0 !important;
       width: auto !important;
       min-width: 0;
@@ -476,14 +478,14 @@ $slide: 300ms;
     }
 
     // beside choices, a typed text gets twice the room
-    .row__fields:has(> .field-type:not(.text)) > .field-type.text {
+    #{p.$row-fields}:has(> #{p.$field}:not(#{p.$field-text})) > #{p.$field}#{p.$field-text} {
       flex-grow: 2 !important;
     }
   }
 
   // a label stays on one line (a second line would push the field under the panel's bottom edge):
   // cut with an ellipsis when it is too long, whole in the browser's own tooltip
-  .field-label:not(.checkbox-input *, .radio-input *) {
+  #{p.$field-label}:not(#{p.$checkbox-input} *, #{p.$radio-input} *) {
     display: block;
     max-width: 100%;
     overflow: hidden;
@@ -492,35 +494,35 @@ $slide: 300ms;
   }
 
   // a select keeps its arrow on the line of its value
-  .rs__control {
+  #{p.$select-control} {
     flex-wrap: nowrap;
   }
 
-  .rs__value-container {
+  #{p.$select-value} {
     min-width: 0;
   }
 
   // the content's language after each label (« — Français »): it wraps the labels and tells
   // nothing here, the site has one content language
-  .field-label .localized {
+  #{p.$field-label} #{p.$label-locale} {
     display: none;
   }
 
   // a group heading opening the cell: its rule is not needed here
-  .render-fields > p:first-child {
+  #{p.$fields} > p:first-child {
     margin-block-start: 0 !important;
     padding-block-start: 0 !important;
     border-block-start: 0 !important;
   }
 
-  .clear-indicator {
+  #{p.$select-clear} {
     display: none;
   }
 }
 
 // Payload's tooltips are laid out even when hidden: at the panel's right edge they would add a
 // sideways scroll for nothing
-.column-content .tooltip:not(.tooltip--show) {
+.column-content #{p.$tooltip}:not(#{p.$tooltip-shown}) {
   display: none;
 }
 
@@ -769,16 +771,16 @@ $slide: 300ms;
   outline: none;
 
   // one field per line (a link's label, kind, address, new tab)
-  .field-type.row .row__fields > * {
+  #{p.$field}#{p.$field-row} #{p.$row-fields} > * {
     flex: 1 1 100%;
   }
 
-  .field-type {
+  #{p.$field} {
     margin-bottom: 0;
   }
 
-  .render-fields > .field-type + .field-type,
-  .row__fields > * + * {
+  #{p.$fields} > #{p.$field} + #{p.$field},
+  #{p.$row-fields} > * + * {
     margin-top: 12px;
   }
 }
@@ -791,7 +793,7 @@ $slide: 300ms;
   margin-bottom: 12px;
   font-size: 14px;
 
-  .btn {
+  #{p.$button} {
     margin: 0;
   }
 }
@@ -804,10 +806,10 @@ $slide: 300ms;
 // in the top part a field's description takes no line: an « i » after the label, the text in a
 // bubble while the label is hovered or the field has the keyboard focus (still read by screen readers;
 // a checkbox keeps its line: its label is not where the « i » could go)
-.section-manager__panels .field-type:not(.checkbox):has(> .field-type__wrap > .field-description, > .field-description) {
+.section-manager__panels #{p.$field}:not(#{p.$field-checkbox}):has(> #{p.$field-wrap} > #{p.$field-description}, > #{p.$field-description}) {
   position: relative;
 
-  > .field-label::after {
+  > #{p.$field-label}::after {
     // (the empty alternative text keeps the mark out of the field's accessible name)
     content: 'i' / '';
     display: inline-flex;
@@ -827,8 +829,8 @@ $slide: 300ms;
     cursor: help;
   }
 
-  > .field-type__wrap > .field-description,
-  > .field-description {
+  > #{p.$field-wrap} > #{p.$field-description},
+  > #{p.$field-description} {
     position: absolute;
     top: 28px;
     left: 0;
@@ -850,10 +852,10 @@ $slide: 300ms;
     pointer-events: none;
   }
 
-  &:has(> .field-label:hover) > .field-type__wrap > .field-description,
-  &:has(> .field-label:hover) > .field-description,
-  &:has(> .field-type__wrap :focus-visible) > .field-type__wrap > .field-description,
-  &:has(:focus-visible) > .field-description {
+  &:has(> #{p.$field-label}:hover) > #{p.$field-wrap} > #{p.$field-description},
+  &:has(> #{p.$field-label}:hover) > #{p.$field-description},
+  &:has(> #{p.$field-wrap} :focus-visible) > #{p.$field-wrap} > #{p.$field-description},
+  &:has(:focus-visible) > #{p.$field-description} {
     opacity: 1;
     clip-path: none;
   }

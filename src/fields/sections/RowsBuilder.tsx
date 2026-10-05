@@ -35,6 +35,7 @@ import {useAdminText} from '@/i18n/admin/useAdminText';
 
 import {EMPTY_SLUG} from './emptyBlock';
 import {InfoBubble} from './InfoBubble';
+import {PAYLOAD_DOM} from './payloadDom';
 import {useManager} from './managerContext';
 import {type ColumnSpan, presetLabel, type PresetRow, ROW_NAME_MAX, ROW_PRESETS, rowTotal as rowTotalOf, toSpan} from './grid';
 import {type SortableHandle, SortableItem, SortableList} from './sortable';
@@ -265,7 +266,7 @@ export function RowsBuilderGhost({presetRows = []}: {presetRows?: PresetRow[]}) 
   const {t} = useAdminText();
   const nothing = () => undefined;
   return (
-    <div className="field-type rows-builder">
+    <div className={`${PAYLOAD_DOM.field} rows-builder`}>
       <div className="rows-builder__top">
         <PresetTiles disabled presetRows={presetRows} onAdd={nothing} />
         <InfoBubble label={t(T.builder.helpLabel)} text={t(T.builder.helpUnavailable)} />
@@ -489,7 +490,7 @@ export function RowsBuilder(props: RowsBuilderProps) {
   const openCell = (row: number, col: number) => manager?.openContent({row, col});
 
   return (
-    <div className="field-type rows-builder" style={{marginBottom: 'var(--base)'}}>
+    <div className={`${PAYLOAD_DOM.field} rows-builder`} style={{marginBottom: 'var(--base)'}}>
       {/* the layouts, then (no line of help: the panel keeps its height for the squares) an error if any and the « i » that holds the instructions */}
       <div className="rows-builder__top">
         {!readOnly ? <PresetTiles presetRows={presetRows} onAdd={(layout) => addRow(rows.length, layout.spans, layout.blocks)} /> : null}

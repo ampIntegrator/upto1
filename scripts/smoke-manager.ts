@@ -525,6 +525,11 @@ async function main() {
     await p.waitForTimeout(500);
     const named = await squares.nth(1).locator('.rows-builder__mini').first().evaluate((el) => `${el.getAttribute('aria-label') ?? ''} ${el.textContent ?? ''}`);
     check(/Ma carte/.test(named), `the display name typed in the content panel names the column in its square (${named.trim()})`);
+    // Payload's internal class names the builder's styles and scripts rely on (src/fields/sections/_payload.scss,
+    // payloadDom.ts): all in the dialog today; one missing after an upgrade means a rule to review
+    const internals = ['.field-type', '.field-type__wrap', '.field-label', '.field-description', '.render-fields', '.row__fields', '.btn', '.btn__label', '.rs__control', '.rs__value-container', '.checkbox-input', '.radio-input', '.field-label .localized'];
+    const gone = await p.evaluate((list) => list.filter((selector) => !document.querySelector(`.section-manager__body ${selector}`)), internals);
+    check(gone.length === 0, `Payload's internal class names used by the builder are all in the dialog${gone.length ? ` (missing: ${gone.join(', ')})` : ''}`);
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-card.png`});
     await p.locator('.section-manager__tab[aria-controls="section-manager-panel-blocks"]').click();
     await p.waitForTimeout(700);
