@@ -2,62 +2,112 @@
 
 import {VStack} from '@astryxdesign/core/Stack';
 import {Text} from '@astryxdesign/core/Text';
-import React from 'react';
+import React, {useLayoutEffect, useRef, useState} from 'react';
 
 import {ButtonGroup} from '@/components/ButtonGroup';
 import {Card, type CardProps} from '@/components/Card';
-import {SectionHeading} from '@/components/SectionHeading';
-import {GALLERY, renderDemoBlock} from '../../design/_showcases/post.shared';
-import {CTA_BAND_SLUG, GALLERY_SLUG, KEY_POINTS_SLUG, QUOTE_CARD_SLUG, STATS_BAND_SLUG} from '@/fields/blocks/prose/slugs';
 import {Collapsible, CollapsibleGroup} from '@/components/Collapsible';
 import {Collection} from '@/components/Collection';
 import {CompareCard} from '@/components/CompareCard';
+import {CtaBand} from '@/components/CtaBand';
+import {Gallery} from '@/components/Gallery';
+import {KeyPoints} from '@/components/KeyPoints';
 import {Media} from '@/components/Media';
 import {MediaQuote} from '@/components/MediaQuote';
 import {PlanCard} from '@/components/PlanCard';
 import {PriceCard} from '@/components/PriceCard';
 import {ProcessSteps} from '@/components/ProcessSteps';
-import {TestimonialCard} from '@/components/TestimonialCard';
+import {QuoteCard} from '@/components/QuoteCard';
+import type {RichTextDocument, RichTextNode} from '@/components/rich-text';
+import {SectionHeading} from '@/components/SectionHeading';
+import {SiteForm} from '@/components/SiteForm';
+import {StatsBand} from '@/components/StatsBand';
 import {Tabs} from '@/components/Tabs';
+import {TestimonialCard} from '@/components/TestimonialCard';
 import {TextBox} from '@/components/TextBox';
 import {BUTTON_GROUP_SLUG} from '@/fields/blocks/buttonGroupBlock';
 import {CARD_VARIANTS} from '@/fields/blocks/cardBlocks';
 import {CASE_CARD_SLUG} from '@/fields/blocks/caseCardBlock';
-import {POST_CARD_SLUG} from '@/fields/blocks/postCardBlock';
-import {SECTION_HEADING_SLUG} from '@/fields/blocks/sectionHeadingBlock';
 import {COLLECTION_SLUG} from '@/fields/blocks/collectionBlock';
-import {FORM_SLUG} from '@/fields/blocks/formBlock';
-import {SiteForm} from '@/components/SiteForm';
 import {COMPARE_CARD_SLUG} from '@/fields/blocks/compareCardBlock';
 import {FAQ_SLUG} from '@/fields/blocks/faqBlock';
-import {PLAN_SLUG} from '@/fields/blocks/planBlock';
-import {PRICE_SINGLE_SLUG} from '@/fields/blocks/priceSingleBlock';
-import {PROCESS_STEPS_SLUG} from '@/fields/blocks/processStepsBlock';
-import {TESTIMONIAL_SLUG} from '@/fields/blocks/testimonialBlock';
-import {TABS_SLUG} from '@/fields/blocks/tabsSlug';
-import {TEXT_BOX_SLUG} from '@/fields/blocks/textBoxSlug';
-import {EMPTY_SLUG} from '@/fields/sections/emptyBlock';
+import {FORM_SLUG} from '@/fields/blocks/formBlock';
 import {MEDIA_SLUG} from '@/fields/blocks/mediaBlock';
 import {MEDIA_QUOTE_SLUG} from '@/fields/blocks/mediaQuoteBlock';
+import {PLAN_SLUG} from '@/fields/blocks/planBlock';
+import {POST_CARD_SLUG} from '@/fields/blocks/postCardBlock';
+import {PREVIEW_STAGE, WIDE_PREVIEWS} from '@/fields/blocks/previews';
+import {PRICE_SINGLE_SLUG} from '@/fields/blocks/priceSingleBlock';
+import {PROCESS_STEPS_SLUG} from '@/fields/blocks/processStepsBlock';
+import {CTA_BAND_SLUG, GALLERY_SLUG, KEY_POINTS_SLUG, QUOTE_CARD_SLUG, STATS_BAND_SLUG} from '@/fields/blocks/prose/slugs';
+import {SECTION_HEADING_SLUG} from '@/fields/blocks/sectionHeadingBlock';
+import {TABS_SLUG} from '@/fields/blocks/tabsSlug';
+import {TESTIMONIAL_SLUG} from '@/fields/blocks/testimonialBlock';
+import {TEXT_BOX_SLUG} from '@/fields/blocks/textBoxSlug';
+import {EMPTY_SLUG} from '@/fields/sections/emptyBlock';
 import {OrbitaThemeProvider} from '@/theme/OrbitaThemeProvider';
-import {APRES, PLANS, PRICE_SINGLE, PROCESS_STEPS, TESTIMONIALS} from '../../design/_showcases/blocks.shared';
-import {FAQ} from '../../design/_showcases/faq.shared';
-import {LOREM_DOC} from '../../design/_showcases/textbox.shared';
+import {GALLERY} from '../../design/_showcases/post.shared';
 
-/** Wider box for the blocks that need several columns (single price, FAQ, steps). */
-/** the demo post's figures, as they appear in a post */
-const FIGURE_DEMOS: Record<string, Record<string, unknown>> = {
-  [KEY_POINTS_SLUG]: {blockType: 'keyPoints'},
-  [CTA_BAND_SLUG]: {blockType: 'ctaBand', variant: 'icon', iconKey: 'calculator', title: 'Estimez votre gain de temps', text: 'Quelques chiffres suffisent pour projeter l’impact.', button: {label: 'Lancer le calcul', href: '#', variant: 'high', arrow: true}},
-  [STATS_BAND_SLUG]: {blockType: 'statsBand', items: [{value: '−68 %', label: 'Temps de chiffrage'}, {value: '×2,4', label: 'Devis envoyés'}, {value: '+31 %', label: 'Signature'}]},
-  [QUOTE_CARD_SLUG]: {blockType: 'quoteCard', quote: '« En six semaines, on a transformé notre point faible en avantage commercial. »', name: 'Julien Vasseur', role: 'Gérant · Vasseur Construction', photo: {src: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=96&q=80'}},
-  [GALLERY_SLUG]: {blockType: 'gallery', caption: 'Chantier Vasseur, Nantes.', images: GALLERY},
-};
-
-const WIDE = new Set([CTA_BAND_SLUG, STATS_BAND_SLUG, GALLERY_SLUG, KEY_POINTS_SLUG, QUOTE_CARD_SLUG, SECTION_HEADING_SLUG, PRICE_SINGLE_SLUG, FAQ_SLUG, PROCESS_STEPS_SLUG, COLLECTION_SLUG, TABS_SLUG, BUTTON_GROUP_SLUG]);
-
+/*
+ * Demo data of the picker previews: neutral lorem ipsum (the thumbnails show a component's shape,
+ * not a message), at realistic lengths, and short enough for each component to fill its stage.
+ */
 const IMG = 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80';
-const TEXT = 'Une phrase de présentation courte, deux lignes au plus, pour situer le contenu de la carte.';
+const PHOTO = 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=96&q=80';
+const TITLE = 'Lorem ipsum dolor';
+const TEXT = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.';
+
+const t = (text: string, format = 0) => ({type: 'text', text, format});
+const p = (...children: object[]) => ({type: 'paragraph', children});
+const li = (...children: object[]) => ({type: 'listitem', children});
+const doc = (...children: object[]): RichTextDocument => ({root: {children: children as RichTextNode[]}});
+
+const LOREM_DOC = doc(
+  p(t('Lorem ipsum dolor sit amet, '), t('consectetur adipiscing elit', 1), t('. Sed do eiusmod tempor.')),
+  {type: 'list', listType: 'bullet', children: [li(t('Ut enim ad minim veniam')), li(t('Quis nostrud '), t('exercitation', 1))]},
+);
+const TAB_DOC = doc(p(t('Lorem ipsum dolor sit amet, '), t('consectetur adipiscing elit', 1), t('. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.')));
+const KEY_POINTS_DOC = doc({type: 'list', listType: 'bullet', children: [li(t('Lorem ipsum dolor sit amet, '), t('consectetur adipiscing', 1), t(' elit.')), li(t('Sed do eiusmod tempor incididunt ut labore et dolore.')), li(t('Ut enim ad minim veniam, '), t('quis nostrud', 1), t(' exercitation.'))]});
+
+const TESTIMONIALS = [
+  {quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.', name: 'Lorem I.', role: 'Dolor · Sit amet', result: '+ 12 000 €'},
+  {quote: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.', name: 'Ipsum D.', role: 'Amet · Consectetur', result: '× 2'},
+  {quote: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.', name: 'Dolor S.', role: 'Elit · Tempor', result: '+ 28 %'},
+];
+const FAQ = [
+  {q: 'Lorem ipsum dolor sit amet consectetur ?', a: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.'},
+  {q: 'Quis nostrud exercitation ullamco laboris ?', a: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.'},
+];
+const PRICE_SINGLE = {
+  featuresLabel: 'Lorem ipsum dolor',
+  priceLabel: 'Lorem ipsum',
+  features: [
+    {label: 'Lorem ipsum dolor sit', end: '97 €'},
+    {label: 'Consectetur adipiscing', end: '147 €'},
+    {label: 'Sed do eiusmod tempor', end: '47 €'},
+    {label: 'Ut labore et dolore', end: '27 €'},
+  ],
+  total: {label: 'Lorem ipsum', value: '318 € / mois'},
+  price: {value: '79', period: 'lorem ipsum · 2,60 € / dolor'},
+  cta: {label: 'Lorem ipsum dolor', href: '#'},
+  mention: 'Lorem ipsum · Dolor sit amet',
+};
+const PLAN = {name: 'Lorem', badge: 'Lorem', featuresLabel: 'Lorem ipsum dolor', tagline: 'Lorem ipsum dolor sit', price: {value: '79'}, cta: {label: 'Lorem ipsum', href: '#'}, featured: true, features: ['Lorem ipsum dolor sit', 'Consectetur adipiscing', 'Sed do eiusmod tempor']};
+const COMPARE = {chip: {label: 'LOREM', tone: 'high' as const}, meta: 'Lorem ipsum', quote: '« Lorem ipsum dolor sit amet, consectetur. »', featured: true, items: ['Lorem ipsum dolor sit amet', 'Consectetur adipiscing elit', 'Sed do eiusmod tempor']};
+const STEPS = [
+  {title: 'Lorem ipsum', duration: '5 min', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.', checks: ['Ut enim ad minim veniam', 'Quis nostrud exercitation']},
+  {title: 'Dolor sit amet', duration: '48 h', text: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.', checks: ['Excepteur sint occaecat', 'Sunt in culpa qui officia']},
+];
+
+/**
+ * Width at which a component is rendered (CSS px) before it is fitted in its stage, when the
+ * stage's inner width would make it too tall (scaled down further) or needlessly stretched.
+ * Default: the stage's inner width, which keeps the cards largest (their image has a fixed height).
+ */
+const RENDER_WIDTH: Record<string, number> = {
+  [PRICE_SINGLE_SLUG]: 760,
+  [GALLERY_SLUG]: 800,
+};
 
 /** Demo data for a card variant. */
 function demoCard(slug: string): CardProps {
@@ -71,80 +121,157 @@ function demoCard(slug: string): CardProps {
     preset: 'bloc',
     media,
     accentTitle: v.media === 'title',
-    title: 'Titre de la carte',
+    title: TITLE,
     text: TEXT,
-    cta: v.clickable ? {label: 'Découvrir', href: '#'} : undefined,
+    cta: v.clickable ? {label: 'Lorem ipsum', href: '#'} : undefined,
   };
 }
 
-/** The block alone, in a fixed-width box on the page background; data-apercu targets the capture. */
+/** The demo component of a block. */
+function demo(slug: string): React.ReactNode {
+  switch (slug) {
+    case SECTION_HEADING_SLUG:
+      return <SectionHeading eyebrow="Lorem ipsum" title="Lorem ipsum <span>dolor sit amet.</span>" size="display-3" text="Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore." />;
+    case POST_CARD_SLUG:
+      return <Card preset="article" media={{type: 'image', src: IMG, alt: ''}} chip={{label: 'Lorem'}} date="12 septembre 2026" title="Lorem ipsum dolor sit amet, consectetur adipiscing" cta={{label: 'Lorem ipsum', href: '#'}} />;
+    case CASE_CARD_SLUG:
+      return <Card preset="realisation" media={{type: 'image', src: IMG, alt: ''}} chip={{label: 'Lorem', tone: 'high'}} result="−68 % ipsum" title="Lorem ipsum dolor sit amet, consectetur" client={{name: 'Lorem Ipsum', location: 'Dolor (44)'}} cta={{label: 'Lorem ipsum', href: '#'}} />;
+    case BUTTON_GROUP_SLUG:
+      return (
+        <VStack gap={6}>
+          <ButtonGroup mode="attached" label="Lorem" buttons={[{label: 'Lorem ipsum', href: '#', variant: 'secondary', iconKey: 'home'}, {label: 'Dolor sit', href: '#', variant: 'secondary', iconKey: 'calculator'}, {label: 'Amet elit', href: '#', variant: 'secondary', iconKey: 'building'}]} />
+          <ButtonGroup mode="spaced" width="full" buttons={[{label: 'Lorem ipsum dolor', href: '#', variant: 'primary', arrow: true}, {label: 'Sit amet', href: '#', variant: 'high', arrow: true}]} />
+        </VStack>
+      );
+    case TABS_SLUG:
+      return <Tabs items={['Lorem ipsum dolor', 'Sit amet consectetur', 'Adipiscing elit sed'].map((label) => ({label, content: TAB_DOC}))} label="Lorem" />;
+    case TEXT_BOX_SLUG:
+      return <TextBox badges={[{label: 'Lorem', tone: 'high'}]} title={TITLE} titleTag="h2" titleSize="heading-1" content={LOREM_DOC} buttons={[{label: 'Lorem ipsum', href: '#', arrow: true}]} framed />;
+    case FORM_SLUG:
+      return (
+        <SiteForm
+          id="apercu-form"
+          title="Lorem <span>ipsum dolor</span>"
+          steps={[{fields: [{type: 'text', name: 'nom', label: 'Lorem', required: true}, {type: 'email', name: 'email', label: 'Ipsum', required: true}, {type: 'consent', name: 'ok', label: 'Lorem ipsum dolor sit amet.'}]}]}
+          submitLabel="Lorem ipsum"
+          submitAction={async () => ({ok: true})}
+          confirmation={{type: 'message', content: null}}
+        />
+      );
+    case COLLECTION_SLUG:
+      return (
+        <Collection layout="carousel" perView={3} label="Lorem">
+          {TESTIMONIALS.map((item) => (
+            <TestimonialCard key={item.name} {...item} />
+          ))}
+        </Collection>
+      );
+    case PRICE_SINGLE_SLUG:
+      return <PriceCard {...PRICE_SINGLE} />;
+    case PLAN_SLUG:
+      return <PlanCard {...PLAN} />;
+    case FAQ_SLUG:
+      return (
+        <CollapsibleGroup type="single" defaultValue="apercu-0">
+          {FAQ.map((f, i) => (
+            <Collapsible key={i} value={`apercu-${i}`} question={f.q}>
+              <Text type="body">{f.a}</Text>
+            </Collapsible>
+          ))}
+        </CollapsibleGroup>
+      );
+    case TESTIMONIAL_SLUG:
+      return <TestimonialCard {...TESTIMONIALS[0]} />;
+    case COMPARE_CARD_SLUG:
+      return <CompareCard {...COMPARE} />;
+    case PROCESS_STEPS_SLUG:
+      return <ProcessSteps steps={STEPS} />;
+    case MEDIA_QUOTE_SLUG:
+      return <MediaQuote image={{src: IMG, alt: ''}} text="Lorem ipsum." size="display-3" overlay={0.45} minHeight={240} sizes="480px" />;
+    case MEDIA_SLUG:
+      return <Media image={{src: IMG, alt: ''}} minHeight={240} sizes="480px" />;
+    case KEY_POINTS_SLUG:
+      return <KeyPoints eyebrow="Lorem ipsum" content={KEY_POINTS_DOC} />;
+    case CTA_BAND_SLUG:
+      return <CtaBand variant="icon" iconKey="calculator" title="Lorem ipsum dolor sit amet" text="Consectetur adipiscing elit, sed do eiusmod tempor." button={{label: 'Lorem ipsum', href: '#', variant: 'high', arrow: true}} />;
+    case STATS_BAND_SLUG:
+      return <StatsBand items={[{value: '−68 %', label: 'Lorem ipsum'}, {value: '×2,4', label: 'Dolor sit amet'}, {value: '+31 %', label: 'Consectetur'}]} />;
+    case QUOTE_CARD_SLUG:
+      return <QuoteCard quote="« Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. »" name="Lorem Ipsum" role="Dolor · Sit amet" photo={{src: PHOTO}} />;
+    case GALLERY_SLUG:
+      return <Gallery images={GALLERY.slice(1, 3)} wideFirst={false} caption="Lorem ipsum dolor sit amet." />;
+    case EMPTY_SLUG:
+      // empty cell: a dashed placeholder, the height of a card
+      return (
+        <VStack hAlign="center" vAlign="center" style={{minHeight: 'calc(var(--spacing-12) * 5)', border: 'var(--border-width) dashed var(--color-border-emphasized)'}}>
+          <Text type="label" color="secondary">Case vide</Text>
+        </VStack>
+      );
+    default:
+      return <Card {...demoCard(slug)} />;
+  }
+}
+
+/**
+ * The stage: a fixed box on the page background (standard or wide, same height) with the component
+ * centred in it, rendered at its width then scaled down uniformly when it does not fit (never up).
+ * `data-apercu` targets the capture; `data-ready` and `data-scale` are read by `pnpm previews:build`.
+ */
+function Stage({slug, children}: {slug: string; children: React.ReactNode}) {
+  const wide = WIDE_PREVIEWS.has(slug);
+  const stageWidth = wide ? PREVIEW_STAGE.wideWidth : PREVIEW_STAGE.width;
+  const innerWidth = stageWidth - 2 * PREVIEW_STAGE.padding;
+  const innerHeight = PREVIEW_STAGE.height - 2 * PREVIEW_STAGE.padding;
+  const width = RENDER_WIDTH[slug] ?? innerWidth;
+  const content = useRef<HTMLElement>(null);
+  const [scale, setScale] = useState(1);
+  const [ready, setReady] = useState(false);
+
+  useLayoutEffect(() => {
+    const el = content.current;
+    if (!el) return;
+    const fit = () => setScale(Math.min(1, innerWidth / Math.max(el.offsetWidth, el.scrollWidth), innerHeight / Math.max(el.offsetHeight, el.scrollHeight)));
+    fit();
+    const observer = new ResizeObserver(fit);
+    observer.observe(el);
+    // ready once the fonts and the images are in (they change the component's size)
+    let alive = true;
+    const loaded = (img: HTMLImageElement) =>
+      new Promise<void>((done) => {
+        if (img.complete) return done();
+        img.addEventListener('load', () => done(), {once: true});
+        img.addEventListener('error', () => done(), {once: true});
+      });
+    const images = [...el.querySelectorAll('img')].map(loaded);
+    Promise.all([document.fonts.ready, ...images]).then(() =>
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => {
+          if (!alive) return;
+          fit();
+          setReady(true);
+        }),
+      ),
+    );
+    return () => {
+      alive = false;
+      observer.disconnect();
+    };
+  }, [innerHeight, innerWidth]);
+
+  return (
+    <VStack data-apercu data-ready={ready || undefined} data-scale={scale.toFixed(3)} style={{position: 'relative', width: stageWidth, height: PREVIEW_STAGE.height, overflow: 'hidden', background: 'var(--color-background-body)'}}>
+      <VStack ref={content} style={{position: 'absolute', insetInlineStart: '50%', insetBlockStart: '50%', width, transform: `translate(-50%, -50%) scale(${scale})`}}>
+        {children}
+      </VStack>
+    </VStack>
+  );
+}
+
+/** The block alone, centred in its stage on the page background, blue silo, light mode. */
 export function Apercu({slug}: {slug: string}) {
   return (
     <OrbitaThemeProvider fixedSilo="blue" initialMode="light">
-      <VStack data-apercu style={{width: WIDE.has(slug) ? 'var(--apercu-width-wide, 900px)' : 'var(--apercu-width, 360px)', padding: 'var(--spacing-6)', background: 'var(--color-background-body)'}}>
-        {FIGURE_DEMOS[slug] ? (
-          renderDemoBlock({type: 'block', fields: FIGURE_DEMOS[slug]})
-        ) : slug === SECTION_HEADING_SLUG ? (
-          <SectionHeading eyebrow="Le blog" title="Pour continuer <span>sur le sujet.</span>" size="display-3" text="Chiffrage, chantier, métier : ce que nous apprenons avec nos clients." />
-        ) : slug === POST_CARD_SLUG ? (
-          <Card preset="article" media={{type: 'image', src: IMG, alt: ''}} chip={{label: 'Chiffrage'}} date="12 septembre 2026" title="Du devis à la facturation : industrialiser le cycle commercial" cta={{label: 'Lire l’article', href: '#'}} />
-        ) : slug === CASE_CARD_SLUG ? (
-          <Card preset="realisation" media={{type: 'image', src: IMG, alt: ''}} chip={{label: 'Rénovation', tone: 'high'}} result="−68 % délai" title="Vasseur Construction : le chiffrage divisé par trois" client={{name: 'Vasseur Construction', location: 'Nantes (44)'}} cta={{label: 'Voir l’étude', href: '#'}} />
-        ) : slug === BUTTON_GROUP_SLUG ? (
-          <VStack gap={6}>
-            <ButtonGroup mode="attached" label="Profils" buttons={[{label: 'Particuliers', href: '#', variant: 'secondary', iconKey: 'home'}, {label: 'Professionnels', href: '#', variant: 'secondary', iconKey: 'calculator'}, {label: 'Collectivités', href: '#', variant: 'secondary', iconKey: 'building'}]} />
-            <ButtonGroup mode="spaced" width="full" buttons={[{label: 'Demander une démo', href: '#', variant: 'primary', arrow: true}, {label: 'Voir les tarifs', href: '#', variant: 'high', arrow: true}]} />
-          </VStack>
-        ) : slug === TABS_SLUG ? (
-          <Tabs items={['Le standard se perd en route', 'Le reporting est introuvable', 'Les pannes deviennent des incidents'].map((label) => ({label, content: LOREM_DOC}))} label="Situations" />
-        ) : slug === TEXT_BOX_SLUG ? (
-          <TextBox badges={[{label: 'Nouveau', tone: 'high'}]} title="Le chiffrage juste" titleTag="h2" titleSize="heading-1" content={LOREM_DOC} buttons={[{label: 'Commencer', href: '#', arrow: true}]} framed />
-        ) : slug === FORM_SLUG ? (
-          <SiteForm
-            id="apercu-form"
-            title="Demander <span>une démo</span>"
-            steps={[{fields: [{type: 'text', name: 'nom', label: 'Nom', required: true}, {type: 'email', name: 'email', label: 'E-mail', required: true}, {type: 'consent', name: 'ok', label: 'J’accepte d’être recontacté.'}]}]}
-            submitLabel="Envoyer"
-            submitAction={async () => ({ok: true})}
-            confirmation={{type: 'message', content: null}}
-          />
-        ) : slug === COLLECTION_SLUG ? (
-          <Collection layout="carousel" perView={3} label="Témoignages">
-            {TESTIMONIALS.slice(0, 5).map((t) => (
-              <TestimonialCard key={t.name} {...t} />
-            ))}
-          </Collection>
-        ) : slug === PRICE_SINGLE_SLUG ? (
-          <PriceCard {...PRICE_SINGLE} />
-        ) : slug === PLAN_SLUG ? (
-          <PlanCard {...PLANS[1]} />
-        ) : slug === FAQ_SLUG ? (
-          <CollapsibleGroup type="single" defaultValue="apercu-0">
-            {FAQ.slice(0, 3).map((f, i) => (
-              <Collapsible key={i} value={`apercu-${i}`} question={f.q}>
-                <Text type="body">{f.a}</Text>
-              </Collapsible>
-            ))}
-          </CollapsibleGroup>
-        ) : slug === TESTIMONIAL_SLUG ? (
-          <TestimonialCard {...TESTIMONIALS[0]} />
-        ) : slug === COMPARE_CARD_SLUG ? (
-          <CompareCard {...APRES} />
-        ) : slug === PROCESS_STEPS_SLUG ? (
-          <ProcessSteps steps={PROCESS_STEPS.slice(0, 2)} />
-        ) : slug === MEDIA_QUOTE_SLUG ? (
-          <MediaQuote image={{src: IMG, alt: ''}} text="Le chiffrage juste." size="display-3" overlay={0.45} minHeight={240} sizes="360px" />
-        ) : slug === MEDIA_SLUG ? (
-          <Media image={{src: IMG, alt: ''}} minHeight={240} sizes="360px" />
-        ) : slug === EMPTY_SLUG ? (
-          // empty cell: a dashed placeholder, the height of a card
-          <VStack hAlign="center" vAlign="center" style={{minHeight: 'calc(var(--spacing-12) * 6)', border: 'var(--border-width) dashed var(--color-border-emphasized)'}}>
-            <Text type="label" color="secondary">Case vide</Text>
-          </VStack>
-        ) : (
-          <Card {...demoCard(slug)} />
-        )}
-      </VStack>
+      <Stage slug={slug}>{demo(slug)}</Stage>
     </OrbitaThemeProvider>
   );
 }

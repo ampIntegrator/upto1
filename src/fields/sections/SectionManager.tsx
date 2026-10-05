@@ -52,6 +52,8 @@ type Props = {
   minSpans?: Record<string, number>;
   maxSpans?: Record<string, number>;
   hiddenBlocks?: string[];
+  /** blocks whose picker image is wide (a wide thumbnail in the library) */
+  wideImages?: string[];
   /** block slug → values a block starts with when placed from the library (field path → value) */
   samples?: Record<string, Record<string, unknown>>;
   /** the host's extra layout thumbnails (shown, disabled, while the rows are not available yet) */
@@ -86,7 +88,7 @@ const innerFields = (field: CollapsibleFieldClient, index: number): ClientField[
   return f && 'fields' in f ? f.fields : [];
 };
 
-export function SectionManager({field, path, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups, headerFields, minSpans, maxSpans, hiddenBlocks, samples, presetRows}: Props) {
+export function SectionManager({field, path, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups, headerFields, minSpans, maxSpans, hiddenBlocks, wideImages, samples, presetRows}: Props) {
   const {t} = useAdminText();
   const {openModal, closeModal, isModalOpen} = useModal();
   const slug = `section-manager-${path}`;
@@ -119,6 +121,7 @@ export function SectionManager({field, path, indexPath, parentPath, parentSchema
             minSpans={minSpans}
             maxSpans={maxSpans}
             hiddenBlocks={hiddenBlocks}
+            wideImages={wideImages}
             samples={samples}
             presetRows={presetRows}
             onClose={() => closeModal(slug)}
@@ -145,7 +148,7 @@ function BarGlyph({kind}: {kind: 'save' | 'close'}) {
   );
 }
 
-function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups = [], headerFields = [], minSpans, maxSpans, hiddenBlocks, samples, presetRows, onClose}: Omit<Props, 'path'> & {onClose: () => void}) {
+function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups = [], headerFields = [], minSpans, maxSpans, hiddenBlocks, wideImages, samples, presetRows, onClose}: Omit<Props, 'path'> & {onClose: () => void}) {
   const {t} = useAdminText();
   const [panel, setPanel] = useState<PanelKey>('settings');
   // « save » and « save and close »: the document's own save; the dialog stays open when a field is refused
@@ -273,8 +276,8 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
     () =>
       blocks
         .filter((b) => b.slug !== EMPTY_SLUG && !(hiddenBlocks ?? []).includes(b.slug))
-        .map((b) => ({slug: b.slug, label: String(getTranslation(b.labels?.singular ?? b.slug, i18n)), image: b.imageURL, min: minSpans?.[b.slug] ?? 1, max: maxSpans?.[b.slug] ?? 12})),
-    [blocks, hiddenBlocks, i18n, maxSpans, minSpans],
+        .map((b) => ({slug: b.slug, label: String(getTranslation(b.labels?.singular ?? b.slug, i18n)), image: b.imageURL, wide: wideImages?.includes(b.slug), min: minSpans?.[b.slug] ?? 1, max: maxSpans?.[b.slug] ?? 12})),
+    [blocks, hiddenBlocks, i18n, maxSpans, minSpans, wideImages],
   );
   // the rows are hidden by the host's condition (no background chosen yet)
   const rowsHidden = useFormFields(([fields]) => fields[rowsPath]?.passesCondition === false);

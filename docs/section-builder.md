@@ -136,7 +136,9 @@ The block picker only offers blocks whose width range contains the column's (`fi
 
 ### Block picker previews
 
-Each block has a thumbnail in the picker (`imageURL`). They are screenshots of `/apercu/<slug>` (blue silo, demo data) made by `pnpm previews:build` while `pnpm dev` is running.
+Each block has a thumbnail in the picker (`imageURL`). They are screenshots of `/apercu/<slug>` (blue silo, light mode, lorem ipsum demo data) made by `pnpm previews:build` while `pnpm dev` is running (`PREVIEW_ONLY=slug1,slug2` to redo a few).
+
+Two formats only, same height (`PREVIEW_STAGE` in `src/fields/blocks/previews.ts`): a standard stage of 480 × 360 CSS px or a wide one of 960 × 360, captured at 2x (PNG 960 × 720 or 1920 × 720). The component is centred on the page background with a 24 px margin, rendered at the stage's inner width (or a per-slug `RENDER_WIDTH` in `Apercu.tsx`) and scaled down uniformly when it does not fit, never up; the script prints the scale of each. Keep demo contents short (three features, two FAQ items…) so that the scale stays near 1. `WIDE_PREVIEWS` (same file) lists the landscape blocks: it picks the stage, and `src/sections.config.ts` turns it into each block's `previewWide`, which gives it a wide thumbnail in the section manager. Payload's own blocks drawer shows the images whole in 4:3 cells (`custom.scss`).
 
 ## Title tags
 
