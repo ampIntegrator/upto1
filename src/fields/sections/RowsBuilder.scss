@@ -7,9 +7,8 @@
   display: flex;
   gap: 10px;
   overflow-x: auto;
-  /* the height of a square, even before the first row: the dialog's top part is fitted to this panel
-     and does not jump when a row is added */
-  min-height: 110px;
+  /* the height of a square, even before the first row: the panel looks the same before and after */
+  min-height: 126px;
 }
 .rows-builder__square {
   position: relative;
@@ -20,7 +19,7 @@
   /* fixed size: nothing inside (the name being typed, its focus) may stretch the square */
   width: 260px;
   min-width: 0;
-  height: 110px;
+  height: 126px;
   padding: 8px;
   border: 2px solid var(--theme-elevation-200);
   border-radius: 4px;
@@ -184,19 +183,30 @@ button.rows-builder__square-name {
   cursor: grab;
 }
 
-/* the panel's single line of text: one line whatever the width (full text on hover) */
-.rows-builder__help {
-  margin: 0 0 12px;
-  overflow: hidden;
-  color: var(--theme-elevation-600);
-  font-size: 14px;
-  line-height: 20px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+/* above the squares: the layouts, then at the right an error (if any) and the « i » of the instructions */
+.rows-builder__top {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
 
-  &[data-error] {
-    color: var(--theme-error-500);
+  > :first-child {
+    flex: 1 1 auto;
+    min-width: 0;
   }
+
+  > .info-bubble {
+    margin-left: auto;
+  }
+}
+
+.rows-builder__error {
+  flex: 0 0 auto;
+  margin: 0;
+  color: var(--theme-error-500);
+  font-size: 14px;
+  line-height: 24px;
+  white-space: nowrap;
 }
 
 /* a layout thumbnail: dragged onto the line of rows */

@@ -1,0 +1,67 @@
+/* InfoBubble: an « i » button and its bubble. Payload theme variables only. */
+.info-bubble {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+.info-bubble__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid var(--theme-elevation-400);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--theme-elevation-800);
+  font: inherit;
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 600;
+  letter-spacing: normal;
+  line-height: 1;
+  text-transform: none;
+  cursor: help;
+
+  &[data-open] {
+    border-color: var(--theme-elevation-1000);
+    background: var(--theme-elevation-1000);
+    color: var(--theme-elevation-0);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--theme-elevation-1000);
+    outline-offset: 2px;
+  }
+}
+
+.info-bubble__text {
+  position: fixed;
+  top: 0;
+  left: 0;
+  // over the dialog (the bubble is drawn in the page's body)
+  z-index: 1000;
+  box-sizing: border-box;
+  width: max-content;
+  max-width: 360px;
+  padding: 10px 12px;
+  border-radius: 4px;
+  background: var(--theme-elevation-1000);
+  box-shadow: 0 6px 20px rgb(0 0 0 / 25%);
+  color: var(--theme-elevation-0);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  text-align: left;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 120ms ease;
+  pointer-events: none;
+
+  &[data-shown] {
+    visibility: visible;
+    opacity: 1;
+  }
+}

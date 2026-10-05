@@ -10,20 +10,26 @@ In a page, a section shows its name, a « Gérer » button and, below it, its an
 the « save as shared » checkbox: these two stay in the document's form, not in the dialog. The
 button opens a full-screen dialog:
 
-- top (as tall as the layout panel's content by default): the settings, in three horizontal accordions (one open, the others folded to a
+- top (280 px by default): the settings, in three horizontal accordions (one open, the others folded to a
   vertical strip): « Fond et espaces », « Découpage », « Blocs ». In the first one the groups of
   settings sit **side by side, one column per group** (background, edge line, inner spacing, grid
   gaps), so the top part does not scroll down; it scrolls sideways if the columns do not all fit;
-- the top part's height: exactly the layout panel's content, in px (one line of help, the layout
-  thumbnails, the line of row squares, 15 px under it); the preview takes the rest of the screen.
-  **One height in every panel and whatever is chosen** (Nicolas, 2 Oct. 2026): the layout panel
-  never changes height (its text is a single unwrapped line, full text on hover; the line of
-  squares keeps a square's height without rows; while the rows wait for a background the panel
-  shows a disabled copy of itself, `RowsBuilderGhost`). It is measured on a wrapper of our own
-  (Payload replaces the field nodes as they appear). In the first panel each group of settings is
-  centred in that height;
+- the top part's height: **280 px** when the dialog opens (`TOP_HEIGHT`; Nicolas, 5 Oct. 2026), the
+  preview takes the rest of the screen. **One height in every panel and whatever is chosen**
+  (Nicolas, 2 Oct. 2026). The layout panel is built to fit in it: two lines of layout tiles (48 px
+  each), then the line of squares (126 px, which keeps that height without rows; while the rows
+  wait for a background the panel shows a disabled copy of itself, `RowsBuilderGhost`). In the
+  first panel each group of settings is centred in that height;
+- **no line of help anywhere in the top part** (Nicolas, 5 Oct. 2026): instructions wait in an
+  « i » bubble (`InfoBubble.tsx`: hover, keyboard focus or click; Escape closes the bubble only).
+  One « i » beside each group title of « Fond et espaces » (`help` of `sectionGroup` /
+  `groupHeading`: what the group's settings do; write one for every new group, and no
+  `description` on the fields under it), one at the right of the layout tiles (how to drag a
+  layout; an error on a row shows as a red text beside it), and for a block's field that has a
+  description (« Contenu » panel) an « i » after its label (CSS at the end of
+  `SectionManager.scss`). The components list explains itself in its first tile (below);
 - between the two, a handle: drag it (or focus it and use the arrow keys) to change the share, from
-  20 % to 80 % for the settings; a double click goes back to the layout panel's height; nothing is
+  20 % to 80 % for the settings; a double click goes back to the opening height; nothing is
   remembered: the dialog always opens at that height;
 - header: the title, in the middle the document's fields the host listed (`headerFields`: the
   page's silo; nothing on a shared section, which has none), then, on the right, « Enregistrer »
@@ -65,8 +71,8 @@ still publishes: no drafts).
 
 1. **Done (1 Oct. 2026).** Dialog, accordions, live preview, width switch. Panel 1 = the section
    settings; panel 3 = a placeholder.
-2. **Rows, done (1 Oct. 2026; drag and drop of the layouts, 2 Oct.).** Panel 2 = one line of help,
-   the layout thumbnails, then the rows as a **line of squares** (260 × 110 px; the line scrolls
+2. **Rows, done (1 Oct. 2026; drag and drop of the layouts, 2 Oct.).** Panel 2 = the layout
+   thumbnails, then the rows as a **line of squares** (260 × 126 px, their columns 72 px high; the line scrolls
    sideways when they do not all fit), left to right = top to bottom in the preview.
    - **Layouts are dragged onto the line of squares** (native drag and drop, `LAYOUT_DRAG_TYPE`):
      dropped between two squares or at the end, a layout adds a row there (a bar marks the place);
@@ -88,9 +94,9 @@ still publishes: no drafts).
      2026: the « no vertical scroll in the top part » rule does not apply to this list). Each
      thumbnail is the picture alone, edge to edge, **220 px high** and as wide as the picture's own
      proportions make it (an `<img>`: the core knows no format). No line of help above the list. On
-     hover and keyboard focus a black veil (85 %) covers the whole thumbnail and shows the block's
-     name and accepted widths (they are its `aria-label`); the veil goes while the thumbnail is
-     pressed, so the picture that follows the pointer stays clear. A thumbnail is dragged onto a column of the preview (native drag and drop):
+     hover and keyboard focus a white veil (90 %) covers the whole thumbnail and shows the block's
+     name and accepted widths in black (they are its `aria-label`); the veil goes while the thumbnail is
+     pressed, so the picture that follows the pointer stays clear. **The first tile is not a block**: it holds the instructions (drag onto a column, the « not allowed » cursor, a click), always shown. The list follows the host's order (`blocks` of `src/sections.config.ts`: the cards first), rearranged just enough to **fill each row towards the right** (`packRows.ts`: each row starts with the next block, then takes among the ten that follow the set that leaves the least room; recomputed when the panel's width changes). A thumbnail is dragged onto a column of the preview (native drag and drop):
      while it is in the air the admin draws one zone per column over the frame, from the boxes the
      frame reported; a column too narrow or too wide for the block is not a drop target, so the
      browser shows the « not allowed » cursor, **only during the drag**. Dropping on a filled

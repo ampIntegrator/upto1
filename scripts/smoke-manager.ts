@@ -88,7 +88,7 @@ async function main() {
       const squares = el.querySelector('.rows-builder__rows') as HTMLElement;
       return {content: Math.ceil((el.firstElementChild as HTMLElement).offsetHeight + parseFloat(style.paddingTop) + parseFloat(style.paddingBottom)), below: Math.round(el.getBoundingClientRect().bottom - squares.getBoundingClientRect().bottom - parseFloat(style.paddingBottom)), pad: Math.round((document.querySelector('.section-manager__panels') as HTMLElement).getBoundingClientRect().bottom - squares.getBoundingClientRect().bottom)};
     });
-    check(Math.abs(heights.panels - fitted.content) <= 1 && Math.abs(fitted.below) <= 1 && fitted.pad === 15, `the top part is exactly the layout panel: thumbnails, squares, 15 px under them (${heights.panels} px, ${fitted.pad} px under the squares)`);
+    check(heights.panels === 280 && fitted.content <= 280 && fitted.pad >= 15, `the top part is 280 px high and the layout panel fits in it: thumbnails, squares, ${fitted.pad} px under them (content ${fitted.content})`);
     const centred = await p.evaluate(() => {
       const group = document.querySelector('#section-manager-panel-settings .section-manager__group') as HTMLElement;
       const inner = group.firstElementChild as HTMLElement;
@@ -98,14 +98,44 @@ async function main() {
     });
     const help = await p.evaluate(() => {
       const builder = document.querySelector('#section-manager-panel-layout .rows-builder') as HTMLElement;
-      const line = builder.querySelector('.rows-builder__help') as HTMLElement;
-      return {texts: builder.querySelectorAll(':scope > p').length, height: line.offsetHeight, first: builder.firstElementChild === line};
+      return {texts: builder.querySelectorAll(':scope > p').length, bubbles: builder.querySelectorAll('.info-bubble').length, hidden: document.querySelectorAll('.info-bubble__text').length === 0};
     });
-    check(help.texts === 1 && help.height === 20 && help.first, `the layout panel has a single line of text, above the thumbnails (${help.texts} text, ${help.height} px)`);
+    check(help.texts === 0 && help.bubbles === 1 && help.hidden, `the layout panel has no line of help: its instructions wait in an « i » bubble (${help.texts} text, ${help.bubbles} bubble)`);
+    const groupHelps = await p.evaluate(() => {
+      const panel = document.querySelector('#section-manager-panel-settings') as HTMLElement;
+      const shown = [...panel.querySelectorAll('.section-manager__group')].filter((g) => (g as HTMLElement).offsetWidth > 0);
+      return {groups: shown.length, bubbles: shown.filter((g) => g.querySelector('.render-fields > :first-child .info-bubble, p .info-bubble')).length, lines: [...panel.querySelectorAll('.field-description')].filter((el) => getComputedStyle(el).opacity !== '0').length};
+    });
+    check(groupHelps.groups > 0 && groupHelps.bubbles === groupHelps.groups && groupHelps.lines === 0, `every group of settings has an « i » beside its title, and no line of help under a field (${groupHelps.bubbles} / ${groupHelps.groups})`);
     check(Math.abs(centred.above - centred.below) <= 1, `the settings are centred in the panel's height (${centred.above} above, ${centred.below} below)`);
     check(top.scroll <= top.height, `the settings fit without vertical scroll (${top.scroll} / ${top.height}), in ${top.groups} columns`);
     check(top.anchor === 0, 'no anchor field in the dialog');
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-settings.png`});
+    const groupHelp = p.locator('#section-manager-panel-settings .info-bubble__button').nth(2);
+    await groupHelp.hover();
+    await p.waitForTimeout(300);
+    const bubbleOf = (button: typeof groupHelp) => button.evaluate((el) => {
+      const bubble = document.getElementById(el.getAttribute('aria-describedby') ?? '-');
+      if (!bubble) return {visible: false, inside: false};
+      const box = bubble.getBoundingClientRect();
+      return {visible: getComputedStyle(bubble).visibility === 'visible', inside: box.left >= 0 && box.top >= 0 && box.right <= window.innerWidth && box.bottom <= window.innerHeight};
+    });
+    const groupBubble = await bubbleOf(groupHelp);
+    check(groupBubble.visible && groupBubble.inside, 'the « i » of a group of settings shows its help on hover, whole');
+    await p.mouse.move(0, 0);
+    await groupHelp.focus();
+    await p.keyboard.press('Tab');
+    await p.keyboard.press('Shift+Tab');
+    await p.waitForTimeout(200);
+    const focusedBubble = await bubbleOf(groupHelp);
+    await p.keyboard.press('Escape');
+    await p.waitForTimeout(300);
+    check(focusedBubble.visible && !(await bubbleOf(groupHelp)).visible && (await p.locator('.section-manager__panels').count()) === 1, 'at the keyboard the « i » shows its help, and Escape closes the bubble, not the dialog');
+    await groupHelp.hover();
+    await p.waitForTimeout(300);
+    if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-settings-help.png`});
+    await p.mouse.move(0, 0);
+    await p.mouse.move(0, 0);
 
     const background = () => frame.locator('section').first().evaluate((el) => getComputedStyle(el).backgroundColor);
     const before = await background();
@@ -154,7 +184,9 @@ async function main() {
     check((await squares.count()) === 2, 'the two rows show as two squares');
     await p.mouse.move(5, 5);
     const shape = await squares.first().evaluate((el) => ({width: (el as HTMLElement).offsetWidth, height: (el as HTMLElement).offsetHeight, opacity: getComputedStyle(el.querySelector('.rows-builder__actions')!).opacity, buttons: el.querySelectorAll('.rows-builder__actions button').length}));
-    check(shape.width === 260 && shape.height === 110 && shape.opacity === '1' && shape.buttons === 3, `a square is 260 by 110 and its three buttons are always visible (${shape.width} × ${shape.height})`);
+    const miniHeight = await squares.first().locator('.rows-builder__mini').first().evaluate((el) => (el as HTMLElement).offsetHeight);
+    check(miniHeight === 72, `a column in a square is 72 px high (${miniHeight})`);
+    check(shape.width === 260 && shape.height === 126 && shape.opacity === '1' && shape.buttons === 3, `a square is 260 by 126 and its three buttons are always visible (${shape.width} × ${shape.height})`);
     // the square's number is its name: a click, a name of 22 characters at most
     const nameOf = () => squares.nth(0).locator('.rows-builder__square-name').innerText();
     check((await nameOf()) === '1', 'a square is named by its number at first');
@@ -163,7 +195,7 @@ async function main() {
     const nameInput = squares.nth(0).locator('.rows-builder__square-input');
     await nameInput.fill('Un nom vraiment beaucoup trop long');
     const typing = await squares.nth(0).evaluate((el) => ({width: (el as HTMLElement).offsetWidth, height: (el as HTMLElement).offsetHeight, input: (el.querySelector('.rows-builder__square-input') as HTMLElement).offsetHeight}));
-    check(typing.width === 260 && typing.height === 110 && typing.input === 28, `the square keeps its size while its name is typed (${typing.width} × ${typing.height}, input ${typing.input})`);
+    check(typing.width === 260 && typing.height === 126 && typing.input === 28, `the square keeps its size while its name is typed (${typing.width} × ${typing.height}, input ${typing.input})`);
     check((await nameInput.inputValue()).length === 22, 'the name stops at 22 characters');
     await nameInput.fill('Bandeau du haut');
     await nameInput.press('Enter');
@@ -245,6 +277,11 @@ async function main() {
     check((await squares.count()) === 3 && (await squares.nth(2).locator('.rows-builder__mini').count()) === 2, 'Enter on a layout adds its row at the end');
     await removeSquare(2);
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-layout.png`});
+    await p.locator('#section-manager-panel-layout .info-bubble__button').hover();
+    await p.waitForTimeout(300);
+    check((await p.locator('#section-manager-panel-layout .info-bubble__button').evaluate((el) => (document.getElementById(el.getAttribute('aria-describedby') ?? '-')?.textContent ?? '').length > 40)), 'the « i » of the layout panel shows the instructions on hover');
+    if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-layout-help.png`});
+    await p.mouse.move(0, 0);
     // a click on a column of a square selects it; a double click shows its content in the « Contenu » panel
     await squares.nth(1).locator('.rows-builder__mini:not([data-empty])').first().click();
     await p.waitForTimeout(300);
@@ -337,11 +374,25 @@ async function main() {
     check(thumbBoxes.length > 10 && thumbBoxes.every((b) => b.height === 220) && new Set(thumbBoxes.map((b) => b.top)).size > 1 && new Set(thumbBoxes.map((b) => Math.round(b.width))).size > 3, `the components show as thumbnails 220 px high, each as wide as its picture, in rows that wrap (${thumbBoxes.length})`);
     const blocksPanel = p.locator('#section-manager-panel-blocks');
     check(await blocksPanel.evaluate((el) => el.scrollWidth <= el.clientWidth && el.scrollHeight > el.clientHeight), 'the component list scrolls down, not sideways');
-    check((await blocksPanel.locator('p').count()) === 0, 'no line of help above the thumbnails');
+    const guide = await blocksPanel.locator('.block-library > li').first().evaluate((el) => ({guide: Boolean(el.querySelector('.block-library__guide')), height: (el.firstElementChild as HTMLElement).offsetHeight, text: el.textContent ?? ''}));
+    check(guide.guide && guide.height === 220 && /Glisse|Drag/.test(guide.text) && (await blocksPanel.locator(':scope > p').count()) === 0, 'the instructions are the first tile of the list, no line of help above it');
+    const firstBlocks = await thumbs.evaluateAll((els) => els.slice(0, 3).map((el) => el.getAttribute('data-block') ?? ''));
+    check(firstBlocks.every((slug) => /card/i.test(slug)), `the list starts with the cards (${firstBlocks.join(', ')})`);
+    const ends = await thumbs.evaluateAll((els) => {
+      const room = (els[0].closest('.block-library') as HTMLElement).clientWidth;
+      const left = (els[0].closest('.block-library') as HTMLElement).getBoundingClientRect().left;
+      const rows = new Map<number, number>();
+      for (const el of els) {
+        const r = el.getBoundingClientRect();
+        rows.set(r.top, Math.max(rows.get(r.top) ?? 0, r.right - left));
+      }
+      return [...rows.values()].map((right) => Math.round(room - right));
+    });
+    log(`--  room left at the right of each row of thumbnails: ${ends.join(', ')} px`);
     await thumbs.first().hover();
     await p.waitForTimeout(300);
-    const thumbVeil = await thumbs.first().locator('.block-library__caption').evaluate((el) => ({opacity: getComputedStyle(el).opacity, covers: el.getBoundingClientRect().width === el.parentElement!.getBoundingClientRect().width && el.getBoundingClientRect().height === el.parentElement!.getBoundingClientRect().height}));
-    check(thumbVeil.opacity === '1' && thumbVeil.covers, 'on hover a veil covers the whole thumbnail, with the name and the widths');
+    const thumbVeil = await thumbs.first().locator('.block-library__caption').evaluate((el) => ({opacity: getComputedStyle(el).opacity, white: getComputedStyle(el).backgroundColor.replace(/\s/g, '').startsWith('rgba(255,255,255') && getComputedStyle(el).color.replace(/\s/g, '') === 'rgb(0,0,0)', covers: el.getBoundingClientRect().width === el.parentElement!.getBoundingClientRect().width && el.getBoundingClientRect().height === el.parentElement!.getBoundingClientRect().height}));
+    check(thumbVeil.opacity === '1' && thumbVeil.covers && thumbVeil.white, 'on hover a white veil covers the whole thumbnail, with the name and the widths in black');
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-library.png`});
     await p.mouse.move(0, 0);
     /** centre of a column of the preview, on screen */
@@ -575,7 +626,7 @@ async function main() {
       const square = document.querySelector('.rows-builder__square') as HTMLElement | null;
       return {square: square ? Math.round(square.getBoundingClientRect().bottom) : -1, bottom: Math.round(panels.getBoundingClientRect().bottom)};
     });
-    check(grown.square > 0 && grown.bottom - grown.square === 15, `the whole square shows, 15 px above the preview (${grown.bottom - grown.square})`);
+    check(grown.square > 0 && grown.bottom - grown.square >= 15, `the whole square shows, 15 px or more above the preview (${grown.bottom - grown.square})`);
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-new-section.png`});
     await p.getByRole('button', {name: /^(Fermer|Close)$/}).first().click();
     check(errors.length === 0, `no page error${errors.length ? `: ${errors[0]}` : ''}`);

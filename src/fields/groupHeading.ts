@@ -7,4 +7,4 @@ import type {Text} from '@/i18n/admin/languages';
 export const GROUP_HEADING = '@/fields/SectionGroupHeading#SectionGroupHeading';
 
 /** A group heading in any admin form of the site (blocks, hero, collections): stores nothing. */
-export const groupHeading = (o: {name: string; label: Text; icon?: string; condition?: Condition; first?: boolean}): Field => sectionGroup({...o, component: GROUP_HEADING});
+export const groupHeading = (o: {name: string; label: Text; help?: Text; icon?: string; condition?: Condition; first?: boolean}): Field => sectionGroup({...o, component: GROUP_HEADING});

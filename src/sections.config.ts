@@ -44,7 +44,7 @@ const group = groupHeading;
 /** Background of a section: light, night or media, then the settings of that background. */
 export const orbitaSectionSettings: Field[] = [
   // the background and its options
-  group({name: 'groupBackground', label: T.settings.groupBackground, icon: 'fill'}),
+  group({name: 'groupBackground', label: T.settings.groupBackground, help: T.settings.groupBackgroundHelp, icon: 'fill'}),
   // 1. the background (no default value: the question must be asked)
   {
     name: 'mode',
@@ -132,7 +132,7 @@ export const orbitaSectionSettings: Field[] = [
   {name: 'overlay', type: 'number', label: T.settings.overlay, min: 0, max: 1, defaultValue: 0.3, admin: {step: 0.05, condition: (_d, s: Sibling) => s?.mode === 'media' && ['image', 'video'].includes(String(s?.mediaType ?? ''))}},
   // after every background setting: the dialog lays each group out as a column, cut at its heading
   // the edge line at the top of a light section: its own group
-  group({name: 'groupEdge', label: T.settings.groupEdge, icon: 'table-row-merge-top', condition: when('mode', 'light')}),
+  group({name: 'groupEdge', label: T.settings.groupEdge, help: T.settings.groupEdgeHelp, icon: 'table-row-merge-top', condition: when('mode', 'light')}),
   // the edge line at the top of a light section (Nicolas, 21 Sept. 2026: two same-shade backgrounds
   // whose only difference is the texture meet badly without it)
   {
@@ -146,13 +146,14 @@ export const orbitaSectionSettings: Field[] = [
       {label: T.settings.edgeTopAlways, value: 'always'},
       {label: T.settings.edgeTopNever, value: 'never'},
     ],
-    admin: {layout: 'horizontal', condition: when('mode', 'light'), description: T.settings.edgeTopDescription},
+    admin: {layout: 'horizontal', condition: when('mode', 'light')},
   },
 ];
 
 /** The site's section builder: pages get `sections.field` and `sections.beforeChange`, the shared collection `sections.sharedFields`. */
 export const sections = createSectionBuilder({
-  blocks: [sectionHeadingBlock, textBoxBlock, mediaBlock, mediaQuoteBlock, ...CARD_BLOCKS, priceSingleBlock, planBlock, faqBlock, testimonialBlock, compareCardBlock, processStepsBlock, tabsBlock, buttonGroupBlock, postCardBlock, caseCardBlock, ...FIGURE_BLOCKS, collectionBlock, formBlock],
+  // the order of the component list in the section manager: the cards first
+  blocks: [...CARD_BLOCKS, postCardBlock, caseCardBlock, testimonialBlock, compareCardBlock, planBlock, priceSingleBlock, sectionHeadingBlock, textBoxBlock, mediaBlock, mediaQuoteBlock, faqBlock, processStepsBlock, tabsBlock, buttonGroupBlock, ...FIGURE_BLOCKS, collectionBlock, formBlock],
   settings: orbitaSectionSettings,
   fieldName: 'sections',
   shared: {collection: 'sections'},

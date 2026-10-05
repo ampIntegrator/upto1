@@ -5,7 +5,7 @@
  * Payload's nested accordions. Shown in the « Découpage » panel of the « Gérer » dialog, above the
  * live preview, which is where the rows and their columns are seen at full size.
  *
- *   - one line of help (never wrapped), then a single strip of layout thumbnails (a rectangle
+ *   - no line of help (the instructions are in an « i » bubble), a single strip of layout thumbnails (a rectangle
  *     split in the column proportions), dragged onto the line of rows: between two squares or at
  *     the end a thumbnail adds a row there, on a square it replaces that row's layout, after
  *     confirmation (no click on the thumbnails or the squares: clicks are for the columns);
@@ -34,6 +34,7 @@ import {sectionsText as T} from '@/i18n/admin/sections';
 import {useAdminText} from '@/i18n/admin/useAdminText';
 
 import {EMPTY_SLUG} from './emptyBlock';
+import {InfoBubble} from './InfoBubble';
 import {useManager} from './managerContext';
 import {type ColumnSpan, presetLabel, type PresetRow, ROW_NAME_MAX, ROW_PRESETS, rowTotal as rowTotalOf, toSpan} from './grid';
 import {type SortableHandle, SortableItem, SortableList} from './sortable';
@@ -47,7 +48,7 @@ import './RowsBuilder.scss';
 type CellSnapshot = {span: ColumnSpan; contents: string[]; types?: string[]; names?: string[]; filled: boolean; narrow: number | null; wide: number | null; mobileOrder: number | null};
 type RowSnapshot = {ids?: string[]; name?: string; columns: CellSnapshot[]};
 
-const TILE_H = 40;
+const TILE_H = 48;
 const text14: React.CSSProperties = {fontSize: 14, lineHeight: 1.4};
 const dim: React.CSSProperties = {color: 'var(--theme-elevation-600)'};
 
@@ -265,11 +266,9 @@ export function RowsBuilderGhost({presetRows = []}: {presetRows?: PresetRow[]}) 
   const nothing = () => undefined;
   return (
     <div className="field-type rows-builder">
-      <p className="rows-builder__help" title={t(T.builder.helpUnavailable)}>
-        {t(T.builder.helpUnavailable)}
-      </p>
-      <div style={{marginBottom: 12}}>
+      <div className="rows-builder__top">
         <PresetTiles disabled presetRows={presetRows} onAdd={nothing} />
+        <InfoBubble label={t(T.builder.helpLabel)} text={t(T.builder.helpUnavailable)} />
       </div>
       <div className="rows-builder__rows" />
     </div>
@@ -491,21 +490,16 @@ export function RowsBuilder(props: RowsBuilderProps) {
 
   return (
     <div className="field-type rows-builder" style={{marginBottom: 'var(--base)'}}>
-      {/* one line of text, never wrapped (its full text on hover): the panel keeps one height, which the dialog's top part takes */}
-      {(() => {
-        const failed = Boolean(showError && errorPaths?.length);
-        const help = failed ? t(T.builder.rowHasError) : t(T.builder.help);
-        return (
-          <p className="rows-builder__help" data-error={failed ? 'true' : undefined} title={help}>
-            {help}
+      {/* the layouts, then (no line of help: the panel keeps its height for the squares) an error if any and the « i » that holds the instructions */}
+      <div className="rows-builder__top">
+        {!readOnly ? <PresetTiles presetRows={presetRows} onAdd={(layout) => addRow(rows.length, layout.spans, layout.blocks)} /> : null}
+        {showError && errorPaths?.length ? (
+          <p className="rows-builder__error" role="alert">
+            {t(T.builder.rowHasError)}
           </p>
-        );
-      })()}
-      {!readOnly ? (
-        <div style={{marginBottom: 12}}>
-          <PresetTiles presetRows={presetRows} onAdd={(layout) => addRow(rows.length, layout.spans, layout.blocks)} />
-        </div>
-      ) : null}
+        ) : null}
+        {!readOnly ? <InfoBubble label={t(T.builder.helpLabel)} text={t(T.builder.help)} /> : null}
+      </div>
 
       {/* the rows, from left to right = from top to bottom in the preview; the line is where the layouts are dropped */}
       <div ref={line} className="rows-builder__drop" data-over={drop ? 'true' : undefined} onDragOver={onLayoutOver} onDragLeave={(e) => (e.currentTarget.contains(e.relatedTarget as Node | null) ? undefined : setDrop(null))} onDrop={onLayoutDrop}>

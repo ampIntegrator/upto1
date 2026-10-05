@@ -62,19 +62,17 @@ type Props = {
 type PanelKey = 'settings' | 'layout' | 'blocks' | 'content';
 
 /**
- * Height of the top part (Nicolas, 2 Oct. 2026): exactly the layout panel's content, in px (one
- * line of help, the layout thumbnails, the line of row squares, 15 px under it), the preview
- * taking the rest of the screen. The same height in every panel and whatever is chosen: the layout
- * panel never changes height (one unwrapped line of text, a disabled copy while the rows are not
- * available). Only the handle changes it, for the time the dialog is open (nothing is remembered).
- * SPLIT, a share in %, is a safety net while nothing is measured.
+ * Height of the top part: TOP_HEIGHT px when the dialog opens, the same in every panel and whatever
+ * is chosen, the preview taking the rest of the screen. The layout panel is built to fit in it (its
+ * squares take the height the layouts leave). Only the handle changes it, for the time the dialog
+ * is open (nothing is remembered). SPLIT, a share in %, is what the handle falls back on.
  */
 const SPLIT = 35;
 /** a select menu opens upwards when less than this (px) is left under its field; one option's height */
 const MENU_ROOM = 160;
 const MENU_ITEM = 44;
-/** below this content height (px) the layout panel has nothing to fit to */
-const FIT_MIN = 150;
+/** height of the top part when the dialog opens, in px (Nicolas, 5 Oct. 2026) */
+const TOP_HEIGHT = 280;
 const SPLIT_MIN = 20;
 const SPLIT_MAX = 80;
 const SPLIT_STEP = 2;
@@ -169,27 +167,8 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
   // the handle between the settings and the preview: drag it (or arrow keys) to share the height
   const body = useRef<HTMLDivElement>(null);
   const panelsRef = useRef<HTMLDivElement>(null);
-  // null: fitted to the layout panel's content (`fit`, in px); a number: the share chosen with the handle
+  // null: the opening height (TOP_HEIGHT, in px); a number: the share chosen with the handle
   const [split, setSplit] = useState<number | null>(null);
-  const [fit, setFit] = useState(0);
-  const layoutRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    // a wrapper of our own around the layout panel's fields: Payload replaces the nodes inside as
-    // the fields appear (the rows wait for a background), this one stays and follows their height
-    const inner = layoutRef.current;
-    const panel = inner?.parentElement;
-    if (!inner || !panel) return;
-    const measure = () => {
-      const style = getComputedStyle(panel);
-      const content = inner.offsetHeight;
-      // nothing to show yet (no background chosen): the default share, not a sliver
-      setFit(content < FIT_MIN ? 0 : Math.ceil(content + parseFloat(style.paddingTop) + parseFloat(style.paddingBottom)));
-    };
-    measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(inner);
-    return () => observer.disconnect();
-  }, []);
   // Payload's select menus open inside the panel, which is short and clips them: each menu is kept
   // inside the top part (a shorter list that scrolls, or opened upwards when there is more room above)
   useEffect(() => {
@@ -222,7 +201,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
     observer.observe(root, {childList: true, subtree: true});
     return () => observer.disconnect();
   }, []);
-  /** the share shown now, in % (the fitted height included) */
+  /** the share shown now, in % (the opening height included) */
   const currentSplit = () => {
     const box = body.current?.getBoundingClientRect();
     const panels = panelsRef.current?.getBoundingClientRect();
@@ -230,7 +209,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
   };
   const dragging = useRef(false);
   const grab = useRef(0);
-  // not remembered: the dialog always opens at the layout panel's height
+  // not remembered: the dialog always opens at TOP_HEIGHT
   const keep = (value: number | null) => setSplit(value === null ? null : clampSplit(value));
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     // captured: the moves keep coming while the pointer is over the preview's frame
@@ -485,7 +464,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
 
   return (
     <ManagerContext.Provider value={manager}>
-    <div ref={body} className="section-manager__body" style={{'--section-manager-split': split !== null ? `${split}%` : fit > 0 ? `${fit}px` : `${SPLIT}%`} as React.CSSProperties}>
+    <div ref={body} className="section-manager__body" style={{'--section-manager-split': split !== null ? `${split}%` : `${TOP_HEIGHT}px`} as React.CSSProperties}>
       <header className="section-manager__bar">
         <h2 className="section-manager__title">{t(T.manager.title)}</h2>
         <DocumentFields names={headerFields} />
@@ -519,7 +498,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
               </button>
               {/* folded panels stay mounted (inert, clipped): their fields keep their local state, and the panel slides open */}
               <div id={id} className="section-manager__content" inert={!active}>
-                {p.key === 'layout' ? <div ref={layoutRef}>{p.content}</div> : p.content}
+                {p.content}
               </div>
             </section>
           );

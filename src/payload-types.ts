@@ -258,17 +258,11 @@ export interface Page {
             video?: (number | null) | Media;
             poster?: (number | null) | Media;
             overlay?: number | null;
-            /**
-             * Marks the junction with the section above. Automatic: only between two light backgrounds of the same shade whose texture changes.
-             */
             edgeTop?: ('auto' | 'always' | 'never') | null;
             spacingTop?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
             spacingBottom?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
             gapX?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
             gapY?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
-            /**
-             * Below 768 px, between all stacked blocks.
-             */
             gapYMobile?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
             /**
              * Each row splits the width into columns whose widths add up to 12. A column can stay empty. Below 768 px, columns go full width, in the section’s mobile order; empty columns are hidden there.
@@ -289,143 +283,6 @@ export interface Page {
                                   id?: string | null;
                                   blockName?: string | null;
                                   blockType: 'empty';
-                                }
-                              | {
-                                  eyebrow?: string | null;
-                                  /**
-                                   * A word between <span>…</span> is set in accent serif; a line break is kept.
-                                   */
-                                  title: string;
-                                  /**
-                                   * The size does not change.
-                                   */
-                                  tag?: ('h2' | 'h3' | 'h4') | null;
-                                  lead?: string | null;
-                                  align?: ('center' | 'start') | null;
-                                  id?: string | null;
-                                  blockName?: string | null;
-                                  blockType: 'sectionHeading';
-                                }
-                              | {
-                                  badges?:
-                                    | {
-                                        label: string;
-                                        tone?: ('high' | 'accent' | 'cat' | 'danger' | 'line') | null;
-                                        id?: string | null;
-                                      }[]
-                                    | null;
-                                  /**
-                                   * Optional. Empty: no title and no separator.
-                                   */
-                                  title?: string | null;
-                                  /**
-                                   * Structure and SEO only: the look does not change.
-                                   */
-                                  titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                                  /**
-                                   * The two display sizes need 6 columns at least.
-                                   */
-                                  titleSize?:
-                                    ('display-1' | 'display-2' | 'display-3' | 'heading-1' | 'heading-2') | null;
-                                  /**
-                                   * Paragraphs, bold, italic, links, bulleted and numbered lists. A table scrolls horizontally in a narrow column: prefer 6 columns or more.
-                                   */
-                                  content?: {
-                                    root: {
-                                      type: string;
-                                      children: {
-                                        type: any;
-                                        version: number;
-                                        [k: string]: unknown;
-                                      }[];
-                                      direction: ('ltr' | 'rtl') | null;
-                                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                                      indent: number;
-                                      version: number;
-                                    };
-                                    [k: string]: unknown;
-                                  } | null;
-                                  buttons?:
-                                    | {
-                                        label: string;
-                                        kind?: ('url' | 'internal') | null;
-                                        href?: string | null;
-                                        doc?:
-                                          | ({
-                                              relationTo: 'pages';
-                                              value: number | Page;
-                                            } | null)
-                                          | ({
-                                              relationTo: 'posts';
-                                              value: number | Post;
-                                            } | null)
-                                          | ({
-                                              relationTo: 'case-studies';
-                                              value: number | CaseStudy;
-                                            } | null)
-                                          | ({
-                                              relationTo: 'modals';
-                                              value: number | Modal;
-                                            } | null);
-                                        newTab?: boolean | null;
-                                        shape?: ('simple' | 'split') | null;
-                                        variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
-                                        size?: ('md' | 'lg') | null;
-                                        iconKey?: string | null;
-                                        id?: string | null;
-                                      }[]
-                                    | null;
-                                  framed?: boolean | null;
-                                  center?: boolean | null;
-                                  vAlign?: ('start' | 'center' | 'end') | null;
-                                  id?: string | null;
-                                  blockName?: string | null;
-                                  blockType: 'textBox';
-                                }
-                              | {
-                                  /**
-                                   * Alt text is set in the media library. Empty: decorative image.
-                                   */
-                                  image: number | Media;
-                                  /**
-                                   * Only if the row has no other content; otherwise the image takes the row height.
-                                   */
-                                  minHeight?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
-                                  /**
-                                   * Below 768 px, stacked columns.
-                                   */
-                                  minHeightMobile?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
-                                  overlay?: number | null;
-                                  id?: string | null;
-                                  blockName?: string | null;
-                                  blockType: 'media';
-                                }
-                              | {
-                                  /**
-                                   * Alt text is set in the media library. Empty: decorative image.
-                                   */
-                                  image: number | Media;
-                                  text: string;
-                                  /**
-                                   * For structure and SEO; does not change the size.
-                                   */
-                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                                  size?: ('display-1' | 'display-2' | 'display-3' | 'heading-1' | 'heading-2') | null;
-                                  /**
-                                   * Only if the row has no other content; otherwise the image takes the row height.
-                                   */
-                                  minHeight?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
-                                  /**
-                                   * Below 768 px, stacked columns.
-                                   */
-                                  minHeightMobile?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
-                                  /**
-                                   * Adjust to the image so the sentence stays readable.
-                                   */
-                                  overlay?: number | null;
-                                  id?: string | null;
-                                  blockName?: string | null;
-                                  blockType: 'mediaQuote';
                                 }
                               | {
                                   image: number | Media;
@@ -624,57 +481,42 @@ export interface Page {
                                   blockType: 'cardTitleLink';
                                 }
                               | {
-                                  featuresLabel?: string | null;
-                                  features?:
+                                  post: number | Post;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'postCard';
+                                }
+                              | {
+                                  caseStudy: number | CaseStudy;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'caseCard';
+                                }
+                              | {
+                                  quote: string;
+                                  name: string;
+                                  role?: string | null;
+                                  result?: string | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'testimonial';
+                                }
+                              | {
+                                  chipLabel: string;
+                                  chipTone?: ('accent' | 'high' | 'danger' | 'cat' | 'line') | null;
+                                  meta?: string | null;
+                                  quote: string;
+                                  items?:
                                     | {
                                         label: string;
-                                        end?: string | null;
                                         id?: string | null;
                                       }[]
                                     | null;
-                                  totalLabel?: string | null;
-                                  totalValue?: string | null;
-                                  priceLabel?: string | null;
-                                  price: {
-                                    value: string;
-                                    currency?: string | null;
-                                    period?: string | null;
-                                  };
-                                  cta: {
-                                    label: string;
-                                    kind?: ('url' | 'internal') | null;
-                                    href?: string | null;
-                                    doc?:
-                                      | ({
-                                          relationTo: 'pages';
-                                          value: number | Page;
-                                        } | null)
-                                      | ({
-                                          relationTo: 'posts';
-                                          value: number | Post;
-                                        } | null)
-                                      | ({
-                                          relationTo: 'case-studies';
-                                          value: number | CaseStudy;
-                                        } | null)
-                                      | ({
-                                          relationTo: 'modals';
-                                          value: number | Modal;
-                                        } | null);
-                                    newTab?: boolean | null;
-                                  };
-                                  mention?: string | null;
-                                  guarantee?: {
-                                    title?: string | null;
-                                    /**
-                                     * Structure and SEO only: the look does not change.
-                                     */
-                                    titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                                    text?: string | null;
-                                  };
+                                  tone?: ('check' | 'cross') | null;
+                                  featured?: boolean | null;
                                   id?: string | null;
                                   blockName?: string | null;
-                                  blockType: 'priceSingle';
+                                  blockType: 'compareCard';
                                 }
                               | {
                                   name: string;
@@ -739,6 +581,196 @@ export interface Page {
                                   blockType: 'plan';
                                 }
                               | {
+                                  featuresLabel?: string | null;
+                                  features?:
+                                    | {
+                                        label: string;
+                                        end?: string | null;
+                                        id?: string | null;
+                                      }[]
+                                    | null;
+                                  totalLabel?: string | null;
+                                  totalValue?: string | null;
+                                  priceLabel?: string | null;
+                                  price: {
+                                    value: string;
+                                    currency?: string | null;
+                                    period?: string | null;
+                                  };
+                                  cta: {
+                                    label: string;
+                                    kind?: ('url' | 'internal') | null;
+                                    href?: string | null;
+                                    doc?:
+                                      | ({
+                                          relationTo: 'pages';
+                                          value: number | Page;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'posts';
+                                          value: number | Post;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'case-studies';
+                                          value: number | CaseStudy;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'modals';
+                                          value: number | Modal;
+                                        } | null);
+                                    newTab?: boolean | null;
+                                  };
+                                  mention?: string | null;
+                                  guarantee?: {
+                                    title?: string | null;
+                                    /**
+                                     * Structure and SEO only: the look does not change.
+                                     */
+                                    titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                                    text?: string | null;
+                                  };
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'priceSingle';
+                                }
+                              | {
+                                  eyebrow?: string | null;
+                                  /**
+                                   * A word between <span>…</span> is set in accent serif; a line break is kept.
+                                   */
+                                  title: string;
+                                  /**
+                                   * The size does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4') | null;
+                                  lead?: string | null;
+                                  align?: ('center' | 'start') | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'sectionHeading';
+                                }
+                              | {
+                                  badges?:
+                                    | {
+                                        label: string;
+                                        tone?: ('high' | 'accent' | 'cat' | 'danger' | 'line') | null;
+                                        id?: string | null;
+                                      }[]
+                                    | null;
+                                  /**
+                                   * Optional. Empty: no title and no separator.
+                                   */
+                                  title?: string | null;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                                  /**
+                                   * The two display sizes need 6 columns at least.
+                                   */
+                                  titleSize?:
+                                    ('display-1' | 'display-2' | 'display-3' | 'heading-1' | 'heading-2') | null;
+                                  /**
+                                   * Paragraphs, bold, italic, links, bulleted and numbered lists. A table scrolls horizontally in a narrow column: prefer 6 columns or more.
+                                   */
+                                  content?: {
+                                    root: {
+                                      type: string;
+                                      children: {
+                                        type: any;
+                                        version: number;
+                                        [k: string]: unknown;
+                                      }[];
+                                      direction: ('ltr' | 'rtl') | null;
+                                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                                      indent: number;
+                                      version: number;
+                                    };
+                                    [k: string]: unknown;
+                                  } | null;
+                                  buttons?:
+                                    | {
+                                        label: string;
+                                        kind?: ('url' | 'internal') | null;
+                                        href?: string | null;
+                                        doc?:
+                                          | ({
+                                              relationTo: 'pages';
+                                              value: number | Page;
+                                            } | null)
+                                          | ({
+                                              relationTo: 'posts';
+                                              value: number | Post;
+                                            } | null)
+                                          | ({
+                                              relationTo: 'case-studies';
+                                              value: number | CaseStudy;
+                                            } | null)
+                                          | ({
+                                              relationTo: 'modals';
+                                              value: number | Modal;
+                                            } | null);
+                                        newTab?: boolean | null;
+                                        shape?: ('simple' | 'split') | null;
+                                        variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
+                                        size?: ('md' | 'lg') | null;
+                                        iconKey?: string | null;
+                                        id?: string | null;
+                                      }[]
+                                    | null;
+                                  framed?: boolean | null;
+                                  center?: boolean | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'textBox';
+                                }
+                              | {
+                                  /**
+                                   * Alt text is set in the media library. Empty: decorative image.
+                                   */
+                                  image: number | Media;
+                                  /**
+                                   * Only if the row has no other content; otherwise the image takes the row height.
+                                   */
+                                  minHeight?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
+                                  /**
+                                   * Below 768 px, stacked columns.
+                                   */
+                                  minHeightMobile?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
+                                  overlay?: number | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'media';
+                                }
+                              | {
+                                  /**
+                                   * Alt text is set in the media library. Empty: decorative image.
+                                   */
+                                  image: number | Media;
+                                  text: string;
+                                  /**
+                                   * For structure and SEO; does not change the size.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                                  size?: ('display-1' | 'display-2' | 'display-3' | 'heading-1' | 'heading-2') | null;
+                                  /**
+                                   * Only if the row has no other content; otherwise the image takes the row height.
+                                   */
+                                  minHeight?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
+                                  /**
+                                   * Below 768 px, stacked columns.
+                                   */
+                                  minHeightMobile?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
+                                  /**
+                                   * Adjust to the image so the sentence stays readable.
+                                   */
+                                  overlay?: number | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'mediaQuote';
+                                }
+                              | {
                                   mode?: ('single' | 'multiple') | null;
                                   columns?: ('1' | '2') | null;
                                   firstOpen?: boolean | null;
@@ -759,32 +791,6 @@ export interface Page {
                                   id?: string | null;
                                   blockName?: string | null;
                                   blockType: 'faq';
-                                }
-                              | {
-                                  quote: string;
-                                  name: string;
-                                  role?: string | null;
-                                  result?: string | null;
-                                  id?: string | null;
-                                  blockName?: string | null;
-                                  blockType: 'testimonial';
-                                }
-                              | {
-                                  chipLabel: string;
-                                  chipTone?: ('accent' | 'high' | 'danger' | 'cat' | 'line') | null;
-                                  meta?: string | null;
-                                  quote: string;
-                                  items?:
-                                    | {
-                                        label: string;
-                                        id?: string | null;
-                                      }[]
-                                    | null;
-                                  tone?: ('check' | 'cross') | null;
-                                  featured?: boolean | null;
-                                  id?: string | null;
-                                  blockName?: string | null;
-                                  blockType: 'compareCard';
                                 }
                               | {
                                   /**
@@ -891,18 +897,6 @@ export interface Page {
                                   id?: string | null;
                                   blockName?: string | null;
                                   blockType: 'buttonGroup';
-                                }
-                              | {
-                                  post: number | Post;
-                                  id?: string | null;
-                                  blockName?: string | null;
-                                  blockType: 'postCard';
-                                }
-                              | {
-                                  caseStudy: number | CaseStudy;
-                                  id?: string | null;
-                                  blockName?: string | null;
-                                  blockType: 'caseCard';
                                 }
                               | {
                                   eyebrow?: string | null;
@@ -1987,17 +1981,11 @@ export interface Section {
   video?: (number | null) | Media;
   poster?: (number | null) | Media;
   overlay?: number | null;
-  /**
-   * Marks the junction with the section above. Automatic: only between two light backgrounds of the same shade whose texture changes.
-   */
   edgeTop?: ('auto' | 'always' | 'never') | null;
   spacingTop?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
   spacingBottom?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
   gapX?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
   gapY?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
-  /**
-   * Below 768 px, between all stacked blocks.
-   */
   gapYMobile?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
   /**
    * Each row splits the width into columns whose widths add up to 12. A column can stay empty. Below 768 px, columns go full width, in the section’s mobile order; empty columns are hidden there.
@@ -2018,142 +2006,6 @@ export interface Section {
                         id?: string | null;
                         blockName?: string | null;
                         blockType: 'empty';
-                      }
-                    | {
-                        eyebrow?: string | null;
-                        /**
-                         * A word between <span>…</span> is set in accent serif; a line break is kept.
-                         */
-                        title: string;
-                        /**
-                         * The size does not change.
-                         */
-                        tag?: ('h2' | 'h3' | 'h4') | null;
-                        lead?: string | null;
-                        align?: ('center' | 'start') | null;
-                        id?: string | null;
-                        blockName?: string | null;
-                        blockType: 'sectionHeading';
-                      }
-                    | {
-                        badges?:
-                          | {
-                              label: string;
-                              tone?: ('high' | 'accent' | 'cat' | 'danger' | 'line') | null;
-                              id?: string | null;
-                            }[]
-                          | null;
-                        /**
-                         * Optional. Empty: no title and no separator.
-                         */
-                        title?: string | null;
-                        /**
-                         * Structure and SEO only: the look does not change.
-                         */
-                        titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                        /**
-                         * The two display sizes need 6 columns at least.
-                         */
-                        titleSize?: ('display-1' | 'display-2' | 'display-3' | 'heading-1' | 'heading-2') | null;
-                        /**
-                         * Paragraphs, bold, italic, links, bulleted and numbered lists. A table scrolls horizontally in a narrow column: prefer 6 columns or more.
-                         */
-                        content?: {
-                          root: {
-                            type: string;
-                            children: {
-                              type: any;
-                              version: number;
-                              [k: string]: unknown;
-                            }[];
-                            direction: ('ltr' | 'rtl') | null;
-                            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                            indent: number;
-                            version: number;
-                          };
-                          [k: string]: unknown;
-                        } | null;
-                        buttons?:
-                          | {
-                              label: string;
-                              kind?: ('url' | 'internal') | null;
-                              href?: string | null;
-                              doc?:
-                                | ({
-                                    relationTo: 'pages';
-                                    value: number | Page;
-                                  } | null)
-                                | ({
-                                    relationTo: 'posts';
-                                    value: number | Post;
-                                  } | null)
-                                | ({
-                                    relationTo: 'case-studies';
-                                    value: number | CaseStudy;
-                                  } | null)
-                                | ({
-                                    relationTo: 'modals';
-                                    value: number | Modal;
-                                  } | null);
-                              newTab?: boolean | null;
-                              shape?: ('simple' | 'split') | null;
-                              variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
-                              size?: ('md' | 'lg') | null;
-                              iconKey?: string | null;
-                              id?: string | null;
-                            }[]
-                          | null;
-                        framed?: boolean | null;
-                        center?: boolean | null;
-                        vAlign?: ('start' | 'center' | 'end') | null;
-                        id?: string | null;
-                        blockName?: string | null;
-                        blockType: 'textBox';
-                      }
-                    | {
-                        /**
-                         * Alt text is set in the media library. Empty: decorative image.
-                         */
-                        image: number | Media;
-                        /**
-                         * Only if the row has no other content; otherwise the image takes the row height.
-                         */
-                        minHeight?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
-                        /**
-                         * Below 768 px, stacked columns.
-                         */
-                        minHeightMobile?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
-                        overlay?: number | null;
-                        id?: string | null;
-                        blockName?: string | null;
-                        blockType: 'media';
-                      }
-                    | {
-                        /**
-                         * Alt text is set in the media library. Empty: decorative image.
-                         */
-                        image: number | Media;
-                        text: string;
-                        /**
-                         * For structure and SEO; does not change the size.
-                         */
-                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                        size?: ('display-1' | 'display-2' | 'display-3' | 'heading-1' | 'heading-2') | null;
-                        /**
-                         * Only if the row has no other content; otherwise the image takes the row height.
-                         */
-                        minHeight?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
-                        /**
-                         * Below 768 px, stacked columns.
-                         */
-                        minHeightMobile?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
-                        /**
-                         * Adjust to the image so the sentence stays readable.
-                         */
-                        overlay?: number | null;
-                        id?: string | null;
-                        blockName?: string | null;
-                        blockType: 'mediaQuote';
                       }
                     | {
                         image: number | Media;
@@ -2352,57 +2204,42 @@ export interface Section {
                         blockType: 'cardTitleLink';
                       }
                     | {
-                        featuresLabel?: string | null;
-                        features?:
+                        post: number | Post;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'postCard';
+                      }
+                    | {
+                        caseStudy: number | CaseStudy;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'caseCard';
+                      }
+                    | {
+                        quote: string;
+                        name: string;
+                        role?: string | null;
+                        result?: string | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'testimonial';
+                      }
+                    | {
+                        chipLabel: string;
+                        chipTone?: ('accent' | 'high' | 'danger' | 'cat' | 'line') | null;
+                        meta?: string | null;
+                        quote: string;
+                        items?:
                           | {
                               label: string;
-                              end?: string | null;
                               id?: string | null;
                             }[]
                           | null;
-                        totalLabel?: string | null;
-                        totalValue?: string | null;
-                        priceLabel?: string | null;
-                        price: {
-                          value: string;
-                          currency?: string | null;
-                          period?: string | null;
-                        };
-                        cta: {
-                          label: string;
-                          kind?: ('url' | 'internal') | null;
-                          href?: string | null;
-                          doc?:
-                            | ({
-                                relationTo: 'pages';
-                                value: number | Page;
-                              } | null)
-                            | ({
-                                relationTo: 'posts';
-                                value: number | Post;
-                              } | null)
-                            | ({
-                                relationTo: 'case-studies';
-                                value: number | CaseStudy;
-                              } | null)
-                            | ({
-                                relationTo: 'modals';
-                                value: number | Modal;
-                              } | null);
-                          newTab?: boolean | null;
-                        };
-                        mention?: string | null;
-                        guarantee?: {
-                          title?: string | null;
-                          /**
-                           * Structure and SEO only: the look does not change.
-                           */
-                          titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                          text?: string | null;
-                        };
+                        tone?: ('check' | 'cross') | null;
+                        featured?: boolean | null;
                         id?: string | null;
                         blockName?: string | null;
-                        blockType: 'priceSingle';
+                        blockType: 'compareCard';
                       }
                     | {
                         name: string;
@@ -2467,6 +2304,195 @@ export interface Section {
                         blockType: 'plan';
                       }
                     | {
+                        featuresLabel?: string | null;
+                        features?:
+                          | {
+                              label: string;
+                              end?: string | null;
+                              id?: string | null;
+                            }[]
+                          | null;
+                        totalLabel?: string | null;
+                        totalValue?: string | null;
+                        priceLabel?: string | null;
+                        price: {
+                          value: string;
+                          currency?: string | null;
+                          period?: string | null;
+                        };
+                        cta: {
+                          label: string;
+                          kind?: ('url' | 'internal') | null;
+                          href?: string | null;
+                          doc?:
+                            | ({
+                                relationTo: 'pages';
+                                value: number | Page;
+                              } | null)
+                            | ({
+                                relationTo: 'posts';
+                                value: number | Post;
+                              } | null)
+                            | ({
+                                relationTo: 'case-studies';
+                                value: number | CaseStudy;
+                              } | null)
+                            | ({
+                                relationTo: 'modals';
+                                value: number | Modal;
+                              } | null);
+                          newTab?: boolean | null;
+                        };
+                        mention?: string | null;
+                        guarantee?: {
+                          title?: string | null;
+                          /**
+                           * Structure and SEO only: the look does not change.
+                           */
+                          titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                          text?: string | null;
+                        };
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'priceSingle';
+                      }
+                    | {
+                        eyebrow?: string | null;
+                        /**
+                         * A word between <span>…</span> is set in accent serif; a line break is kept.
+                         */
+                        title: string;
+                        /**
+                         * The size does not change.
+                         */
+                        tag?: ('h2' | 'h3' | 'h4') | null;
+                        lead?: string | null;
+                        align?: ('center' | 'start') | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'sectionHeading';
+                      }
+                    | {
+                        badges?:
+                          | {
+                              label: string;
+                              tone?: ('high' | 'accent' | 'cat' | 'danger' | 'line') | null;
+                              id?: string | null;
+                            }[]
+                          | null;
+                        /**
+                         * Optional. Empty: no title and no separator.
+                         */
+                        title?: string | null;
+                        /**
+                         * Structure and SEO only: the look does not change.
+                         */
+                        titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                        /**
+                         * The two display sizes need 6 columns at least.
+                         */
+                        titleSize?: ('display-1' | 'display-2' | 'display-3' | 'heading-1' | 'heading-2') | null;
+                        /**
+                         * Paragraphs, bold, italic, links, bulleted and numbered lists. A table scrolls horizontally in a narrow column: prefer 6 columns or more.
+                         */
+                        content?: {
+                          root: {
+                            type: string;
+                            children: {
+                              type: any;
+                              version: number;
+                              [k: string]: unknown;
+                            }[];
+                            direction: ('ltr' | 'rtl') | null;
+                            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                            indent: number;
+                            version: number;
+                          };
+                          [k: string]: unknown;
+                        } | null;
+                        buttons?:
+                          | {
+                              label: string;
+                              kind?: ('url' | 'internal') | null;
+                              href?: string | null;
+                              doc?:
+                                | ({
+                                    relationTo: 'pages';
+                                    value: number | Page;
+                                  } | null)
+                                | ({
+                                    relationTo: 'posts';
+                                    value: number | Post;
+                                  } | null)
+                                | ({
+                                    relationTo: 'case-studies';
+                                    value: number | CaseStudy;
+                                  } | null)
+                                | ({
+                                    relationTo: 'modals';
+                                    value: number | Modal;
+                                  } | null);
+                              newTab?: boolean | null;
+                              shape?: ('simple' | 'split') | null;
+                              variant?: ('primary' | 'high' | 'secondary' | 'ghost') | null;
+                              size?: ('md' | 'lg') | null;
+                              iconKey?: string | null;
+                              id?: string | null;
+                            }[]
+                          | null;
+                        framed?: boolean | null;
+                        center?: boolean | null;
+                        vAlign?: ('start' | 'center' | 'end') | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'textBox';
+                      }
+                    | {
+                        /**
+                         * Alt text is set in the media library. Empty: decorative image.
+                         */
+                        image: number | Media;
+                        /**
+                         * Only if the row has no other content; otherwise the image takes the row height.
+                         */
+                        minHeight?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
+                        /**
+                         * Below 768 px, stacked columns.
+                         */
+                        minHeightMobile?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
+                        overlay?: number | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'media';
+                      }
+                    | {
+                        /**
+                         * Alt text is set in the media library. Empty: decorative image.
+                         */
+                        image: number | Media;
+                        text: string;
+                        /**
+                         * For structure and SEO; does not change the size.
+                         */
+                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                        size?: ('display-1' | 'display-2' | 'display-3' | 'heading-1' | 'heading-2') | null;
+                        /**
+                         * Only if the row has no other content; otherwise the image takes the row height.
+                         */
+                        minHeight?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
+                        /**
+                         * Below 768 px, stacked columns.
+                         */
+                        minHeightMobile?: ('160' | '240' | '320' | '400' | '480' | '560' | '640') | null;
+                        /**
+                         * Adjust to the image so the sentence stays readable.
+                         */
+                        overlay?: number | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'mediaQuote';
+                      }
+                    | {
                         mode?: ('single' | 'multiple') | null;
                         columns?: ('1' | '2') | null;
                         firstOpen?: boolean | null;
@@ -2487,32 +2513,6 @@ export interface Section {
                         id?: string | null;
                         blockName?: string | null;
                         blockType: 'faq';
-                      }
-                    | {
-                        quote: string;
-                        name: string;
-                        role?: string | null;
-                        result?: string | null;
-                        id?: string | null;
-                        blockName?: string | null;
-                        blockType: 'testimonial';
-                      }
-                    | {
-                        chipLabel: string;
-                        chipTone?: ('accent' | 'high' | 'danger' | 'cat' | 'line') | null;
-                        meta?: string | null;
-                        quote: string;
-                        items?:
-                          | {
-                              label: string;
-                              id?: string | null;
-                            }[]
-                          | null;
-                        tone?: ('check' | 'cross') | null;
-                        featured?: boolean | null;
-                        id?: string | null;
-                        blockName?: string | null;
-                        blockType: 'compareCard';
                       }
                     | {
                         /**
@@ -2619,18 +2619,6 @@ export interface Section {
                         id?: string | null;
                         blockName?: string | null;
                         blockType: 'buttonGroup';
-                      }
-                    | {
-                        post: number | Post;
-                        id?: string | null;
-                        blockName?: string | null;
-                        blockType: 'postCard';
-                      }
-                    | {
-                        caseStudy: number | CaseStudy;
-                        id?: string | null;
-                        blockName?: string | null;
-                        blockType: 'caseCard';
                       }
                     | {
                         eyebrow?: string | null;
@@ -3403,74 +3391,6 @@ export interface PagesSelect<T extends boolean = true> {
                                       id?: T;
                                       blockName?: T;
                                     };
-                                sectionHeading?:
-                                  | T
-                                  | {
-                                      eyebrow?: T;
-                                      title?: T;
-                                      tag?: T;
-                                      lead?: T;
-                                      align?: T;
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                textBox?:
-                                  | T
-                                  | {
-                                      badges?:
-                                        | T
-                                        | {
-                                            label?: T;
-                                            tone?: T;
-                                            id?: T;
-                                          };
-                                      title?: T;
-                                      titleTag?: T;
-                                      titleSize?: T;
-                                      content?: T;
-                                      buttons?:
-                                        | T
-                                        | {
-                                            label?: T;
-                                            kind?: T;
-                                            href?: T;
-                                            doc?: T;
-                                            newTab?: T;
-                                            shape?: T;
-                                            variant?: T;
-                                            size?: T;
-                                            iconKey?: T;
-                                            id?: T;
-                                          };
-                                      framed?: T;
-                                      center?: T;
-                                      vAlign?: T;
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                media?:
-                                  | T
-                                  | {
-                                      image?: T;
-                                      minHeight?: T;
-                                      minHeightMobile?: T;
-                                      overlay?: T;
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                mediaQuote?:
-                                  | T
-                                  | {
-                                      image?: T;
-                                      text?: T;
-                                      tag?: T;
-                                      size?: T;
-                                      minHeight?: T;
-                                      minHeightMobile?: T;
-                                      overlay?: T;
-                                      id?: T;
-                                      blockName?: T;
-                                    };
                                 cardImage?:
                                   | T
                                   | {
@@ -3595,44 +3515,45 @@ export interface PagesSelect<T extends boolean = true> {
                                       id?: T;
                                       blockName?: T;
                                     };
-                                priceSingle?:
+                                postCard?:
                                   | T
                                   | {
-                                      featuresLabel?: T;
-                                      features?:
+                                      post?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                caseCard?:
+                                  | T
+                                  | {
+                                      caseStudy?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                testimonial?:
+                                  | T
+                                  | {
+                                      quote?: T;
+                                      name?: T;
+                                      role?: T;
+                                      result?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                compareCard?:
+                                  | T
+                                  | {
+                                      chipLabel?: T;
+                                      chipTone?: T;
+                                      meta?: T;
+                                      quote?: T;
+                                      items?:
                                         | T
                                         | {
                                             label?: T;
-                                            end?: T;
                                             id?: T;
                                           };
-                                      totalLabel?: T;
-                                      totalValue?: T;
-                                      priceLabel?: T;
-                                      price?:
-                                        | T
-                                        | {
-                                            value?: T;
-                                            currency?: T;
-                                            period?: T;
-                                          };
-                                      cta?:
-                                        | T
-                                        | {
-                                            label?: T;
-                                            kind?: T;
-                                            href?: T;
-                                            doc?: T;
-                                            newTab?: T;
-                                          };
-                                      mention?: T;
-                                      guarantee?:
-                                        | T
-                                        | {
-                                            title?: T;
-                                            titleTag?: T;
-                                            text?: T;
-                                          };
+                                      tone?: T;
+                                      featured?: T;
                                       id?: T;
                                       blockName?: T;
                                     };
@@ -3680,6 +3601,115 @@ export interface PagesSelect<T extends boolean = true> {
                                       id?: T;
                                       blockName?: T;
                                     };
+                                priceSingle?:
+                                  | T
+                                  | {
+                                      featuresLabel?: T;
+                                      features?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            end?: T;
+                                            id?: T;
+                                          };
+                                      totalLabel?: T;
+                                      totalValue?: T;
+                                      priceLabel?: T;
+                                      price?:
+                                        | T
+                                        | {
+                                            value?: T;
+                                            currency?: T;
+                                            period?: T;
+                                          };
+                                      cta?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            kind?: T;
+                                            href?: T;
+                                            doc?: T;
+                                            newTab?: T;
+                                          };
+                                      mention?: T;
+                                      guarantee?:
+                                        | T
+                                        | {
+                                            title?: T;
+                                            titleTag?: T;
+                                            text?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                sectionHeading?:
+                                  | T
+                                  | {
+                                      eyebrow?: T;
+                                      title?: T;
+                                      tag?: T;
+                                      lead?: T;
+                                      align?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                textBox?:
+                                  | T
+                                  | {
+                                      badges?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            tone?: T;
+                                            id?: T;
+                                          };
+                                      title?: T;
+                                      titleTag?: T;
+                                      titleSize?: T;
+                                      content?: T;
+                                      buttons?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            kind?: T;
+                                            href?: T;
+                                            doc?: T;
+                                            newTab?: T;
+                                            shape?: T;
+                                            variant?: T;
+                                            size?: T;
+                                            iconKey?: T;
+                                            id?: T;
+                                          };
+                                      framed?: T;
+                                      center?: T;
+                                      vAlign?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                media?:
+                                  | T
+                                  | {
+                                      image?: T;
+                                      minHeight?: T;
+                                      minHeightMobile?: T;
+                                      overlay?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                mediaQuote?:
+                                  | T
+                                  | {
+                                      image?: T;
+                                      text?: T;
+                                      tag?: T;
+                                      size?: T;
+                                      minHeight?: T;
+                                      minHeightMobile?: T;
+                                      overlay?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
                                 faq?:
                                   | T
                                   | {
@@ -3694,34 +3724,6 @@ export interface PagesSelect<T extends boolean = true> {
                                             answer?: T;
                                             id?: T;
                                           };
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                testimonial?:
-                                  | T
-                                  | {
-                                      quote?: T;
-                                      name?: T;
-                                      role?: T;
-                                      result?: T;
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                compareCard?:
-                                  | T
-                                  | {
-                                      chipLabel?: T;
-                                      chipTone?: T;
-                                      meta?: T;
-                                      quote?: T;
-                                      items?:
-                                        | T
-                                        | {
-                                            label?: T;
-                                            id?: T;
-                                          };
-                                      tone?: T;
-                                      featured?: T;
                                       id?: T;
                                       blockName?: T;
                                     };
@@ -3780,20 +3782,6 @@ export interface PagesSelect<T extends boolean = true> {
                                             iconKey?: T;
                                             id?: T;
                                           };
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                postCard?:
-                                  | T
-                                  | {
-                                      post?: T;
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                caseCard?:
-                                  | T
-                                  | {
-                                      caseStudy?: T;
                                       id?: T;
                                       blockName?: T;
                                     };
@@ -4197,74 +4185,6 @@ export interface SectionsSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
-                    sectionHeading?:
-                      | T
-                      | {
-                          eyebrow?: T;
-                          title?: T;
-                          tag?: T;
-                          lead?: T;
-                          align?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    textBox?:
-                      | T
-                      | {
-                          badges?:
-                            | T
-                            | {
-                                label?: T;
-                                tone?: T;
-                                id?: T;
-                              };
-                          title?: T;
-                          titleTag?: T;
-                          titleSize?: T;
-                          content?: T;
-                          buttons?:
-                            | T
-                            | {
-                                label?: T;
-                                kind?: T;
-                                href?: T;
-                                doc?: T;
-                                newTab?: T;
-                                shape?: T;
-                                variant?: T;
-                                size?: T;
-                                iconKey?: T;
-                                id?: T;
-                              };
-                          framed?: T;
-                          center?: T;
-                          vAlign?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    media?:
-                      | T
-                      | {
-                          image?: T;
-                          minHeight?: T;
-                          minHeightMobile?: T;
-                          overlay?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    mediaQuote?:
-                      | T
-                      | {
-                          image?: T;
-                          text?: T;
-                          tag?: T;
-                          size?: T;
-                          minHeight?: T;
-                          minHeightMobile?: T;
-                          overlay?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
                     cardImage?:
                       | T
                       | {
@@ -4389,44 +4309,45 @@ export interface SectionsSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
-                    priceSingle?:
+                    postCard?:
                       | T
                       | {
-                          featuresLabel?: T;
-                          features?:
+                          post?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    caseCard?:
+                      | T
+                      | {
+                          caseStudy?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    testimonial?:
+                      | T
+                      | {
+                          quote?: T;
+                          name?: T;
+                          role?: T;
+                          result?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    compareCard?:
+                      | T
+                      | {
+                          chipLabel?: T;
+                          chipTone?: T;
+                          meta?: T;
+                          quote?: T;
+                          items?:
                             | T
                             | {
                                 label?: T;
-                                end?: T;
                                 id?: T;
                               };
-                          totalLabel?: T;
-                          totalValue?: T;
-                          priceLabel?: T;
-                          price?:
-                            | T
-                            | {
-                                value?: T;
-                                currency?: T;
-                                period?: T;
-                              };
-                          cta?:
-                            | T
-                            | {
-                                label?: T;
-                                kind?: T;
-                                href?: T;
-                                doc?: T;
-                                newTab?: T;
-                              };
-                          mention?: T;
-                          guarantee?:
-                            | T
-                            | {
-                                title?: T;
-                                titleTag?: T;
-                                text?: T;
-                              };
+                          tone?: T;
+                          featured?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -4474,6 +4395,115 @@ export interface SectionsSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
+                    priceSingle?:
+                      | T
+                      | {
+                          featuresLabel?: T;
+                          features?:
+                            | T
+                            | {
+                                label?: T;
+                                end?: T;
+                                id?: T;
+                              };
+                          totalLabel?: T;
+                          totalValue?: T;
+                          priceLabel?: T;
+                          price?:
+                            | T
+                            | {
+                                value?: T;
+                                currency?: T;
+                                period?: T;
+                              };
+                          cta?:
+                            | T
+                            | {
+                                label?: T;
+                                kind?: T;
+                                href?: T;
+                                doc?: T;
+                                newTab?: T;
+                              };
+                          mention?: T;
+                          guarantee?:
+                            | T
+                            | {
+                                title?: T;
+                                titleTag?: T;
+                                text?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    sectionHeading?:
+                      | T
+                      | {
+                          eyebrow?: T;
+                          title?: T;
+                          tag?: T;
+                          lead?: T;
+                          align?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    textBox?:
+                      | T
+                      | {
+                          badges?:
+                            | T
+                            | {
+                                label?: T;
+                                tone?: T;
+                                id?: T;
+                              };
+                          title?: T;
+                          titleTag?: T;
+                          titleSize?: T;
+                          content?: T;
+                          buttons?:
+                            | T
+                            | {
+                                label?: T;
+                                kind?: T;
+                                href?: T;
+                                doc?: T;
+                                newTab?: T;
+                                shape?: T;
+                                variant?: T;
+                                size?: T;
+                                iconKey?: T;
+                                id?: T;
+                              };
+                          framed?: T;
+                          center?: T;
+                          vAlign?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    media?:
+                      | T
+                      | {
+                          image?: T;
+                          minHeight?: T;
+                          minHeightMobile?: T;
+                          overlay?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    mediaQuote?:
+                      | T
+                      | {
+                          image?: T;
+                          text?: T;
+                          tag?: T;
+                          size?: T;
+                          minHeight?: T;
+                          minHeightMobile?: T;
+                          overlay?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     faq?:
                       | T
                       | {
@@ -4488,34 +4518,6 @@ export interface SectionsSelect<T extends boolean = true> {
                                 answer?: T;
                                 id?: T;
                               };
-                          id?: T;
-                          blockName?: T;
-                        };
-                    testimonial?:
-                      | T
-                      | {
-                          quote?: T;
-                          name?: T;
-                          role?: T;
-                          result?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    compareCard?:
-                      | T
-                      | {
-                          chipLabel?: T;
-                          chipTone?: T;
-                          meta?: T;
-                          quote?: T;
-                          items?:
-                            | T
-                            | {
-                                label?: T;
-                                id?: T;
-                              };
-                          tone?: T;
-                          featured?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -4574,20 +4576,6 @@ export interface SectionsSelect<T extends boolean = true> {
                                 iconKey?: T;
                                 id?: T;
                               };
-                          id?: T;
-                          blockName?: T;
-                        };
-                    postCard?:
-                      | T
-                      | {
-                          post?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    caseCard?:
-                      | T
-                      | {
-                          caseStudy?: T;
                           id?: T;
                           blockName?: T;
                         };

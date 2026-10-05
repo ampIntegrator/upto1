@@ -198,7 +198,7 @@ $slide: 300ms;
   flex: 0 0 auto;
   width: calc(100cqw - 4 * #{$tab} - 3px);
   overflow: auto;
-  // 15 px under the content, before the preview (the top part's height is the layout panel's content plus this)
+  // 15 px at least under the content, before the preview
   padding: var(--base) var(--base) 15px;
   visibility: hidden;
   transition: visibility 0s linear $slide;
@@ -380,7 +380,6 @@ $slide: 300ms;
   // a hairline drawn over the picture: a white card stays distinct from the panel
   outline: 1px solid var(--theme-elevation-150);
   outline-offset: -1px;
-  color: #fff;
   font: inherit;
   cursor: grab;
 
@@ -395,6 +394,22 @@ $slide: 300ms;
   }
 }
 
+// the instructions, in the place of a first thumbnail: same height, no picture
+.block-library__guide {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 240px;
+  height: 220px;
+  margin: 0;
+  padding: 16px;
+  border: 1px dashed var(--theme-elevation-400);
+  border-radius: 4px;
+  color: var(--theme-elevation-800);
+  font-size: 14px;
+  line-height: 20px;
+}
+
 .block-library__image {
   display: block;
   width: auto;
@@ -404,7 +419,7 @@ $slide: 300ms;
   object-position: top;
 }
 
-// the name and the widths: on a black veil over the whole picture, on hover and on keyboard focus
+// the name and the widths: on a white veil over the whole picture, on hover and on keyboard focus
 // (not while the thumbnail is pressed: the picture that follows the pointer in a drag stays clear)
 .block-library__caption {
   position: absolute;
@@ -415,7 +430,8 @@ $slide: 300ms;
   justify-content: center;
   box-sizing: border-box;
   padding: 8px 12px;
-  background: rgb(0 0 0 / 85%);
+  background: rgb(255 255 255 / 90%);
+  color: #000;
   text-align: center;
   opacity: 0;
   transition: opacity 120ms ease;
@@ -601,7 +617,64 @@ $slide: 300ms;
   }
 }
 
-// the rows builder in the dialog: nothing below its line of squares (the top part is fitted to it)
+// the rows builder in the dialog: nothing below its line of squares
 .section-manager__content .rows-builder {
   margin-bottom: 0 !important;
+}
+
+// in the top part a field's description takes no line: an « i » after the label, the text in a
+// bubble while the label is hovered or the field has the keyboard focus (still read by screen readers;
+// a checkbox keeps its line: its label is not where the « i » could go)
+.section-manager__panels .field-type:not(.checkbox):has(> .field-type__wrap > .field-description, > .field-description) {
+  position: relative;
+
+  > .field-label::after {
+    content: 'i';
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 18px;
+    height: 18px;
+    margin-left: 6px;
+    border: 1px solid var(--theme-elevation-400);
+    border-radius: 50%;
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 600;
+    line-height: 1;
+    vertical-align: text-bottom;
+    cursor: help;
+  }
+
+  > .field-type__wrap > .field-description,
+  > .field-description {
+    position: absolute;
+    top: 28px;
+    left: 0;
+    z-index: 5;
+    box-sizing: border-box;
+    width: max-content;
+    max-width: min(360px, 100%);
+    margin: 0;
+    padding: 10px 12px;
+    border-radius: 4px;
+    background: var(--theme-elevation-1000);
+    box-shadow: 0 6px 20px rgb(0 0 0 / 25%);
+    color: var(--theme-elevation-0);
+    font-size: 14px;
+    line-height: 20px;
+    opacity: 0;
+    clip-path: inset(50%);
+    transition: opacity 120ms ease;
+    pointer-events: none;
+  }
+
+  &:has(> .field-label:hover) > .field-type__wrap > .field-description,
+  &:has(> .field-label:hover) > .field-description,
+  &:has(> .field-type__wrap :focus-visible) > .field-type__wrap > .field-description,
+  &:has(:focus-visible) > .field-description {
+    opacity: 1;
+    clip-path: none;
+  }
 }

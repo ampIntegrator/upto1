@@ -160,7 +160,7 @@ export function rowsField(blocks: ContentBlock[], condition?: Condition, presetR
  * stay in the document's form, under the « Gérer » button. `groupHeading`: the host's heading component (an icon before the title).
  */
 export function sectionFields({blocks, settings = [], shareable = false, condition, presetRows = [], groupHeading, preview, headerFields}: SectionFieldsOptions): Field[] {
-  const group = (o: {name: string; label: Text; icon?: string; first?: boolean; always?: boolean}) => sectionGroup({name: o.name, label: o.label, icon: o.icon, first: o.first, component: groupHeading, condition: o.always ? undefined : condition});
+  const group = (o: {name: string; label: Text; help?: Text; icon?: string; first?: boolean; always?: boolean}) => sectionGroup({name: o.name, label: o.label, help: o.help, icon: o.icon, first: o.first, component: groupHeading, condition: o.always ? undefined : condition});
   const anchorField: Field = {
     name: 'anchor',
     type: 'text',
@@ -187,7 +187,7 @@ export function sectionFields({blocks, settings = [], shareable = false, conditi
     // the host's settings, with their own group headings (background, edge line…)
     ...settings,
     // inner spacing, above and below the section
-    group({name: 'groupSpacing', label: T.settings.groupSpacing, icon: 'obj-size-increase', always: true}),
+    group({name: 'groupSpacing', label: T.settings.groupSpacing, help: T.settings.groupSpacingHelp, icon: 'obj-size-increase', always: true}),
     {
       type: 'row',
       fields: [
@@ -196,13 +196,13 @@ export function sectionFields({blocks, settings = [], shareable = false, conditi
       ],
     },
     // grid gaps: inherited from the site setting, unless overridden
-    group({name: 'groupGaps', label: T.settings.groupGaps, icon: 'view-columns', always: true}),
+    group({name: 'groupGaps', label: T.settings.groupGaps, help: T.settings.groupGapsHelp, icon: 'view-columns', always: true}),
     {
       type: 'row',
       fields: [
         {name: 'gapX', type: 'select', label: T.settings.gapX, defaultValue: SITE_GAP, options: SECTION_GAP_OPTIONS, admin: {width: '33%'}},
         {name: 'gapY', type: 'select', label: T.settings.gapY, defaultValue: SITE_GAP, options: SECTION_GAP_OPTIONS, admin: {width: '33%'}},
-        {name: 'gapYMobile', type: 'select', label: T.settings.gapYMobile, defaultValue: SITE_GAP, options: SECTION_GAP_OPTIONS, admin: {width: '33%', description: T.settings.gapYMobileDescription}},
+        {name: 'gapYMobile', type: 'select', label: T.settings.gapYMobile, defaultValue: SITE_GAP, options: SECTION_GAP_OPTIONS, admin: {width: '33%'}},
       ],
     },
   ];
