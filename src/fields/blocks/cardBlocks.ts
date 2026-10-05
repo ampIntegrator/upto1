@@ -78,7 +78,7 @@ const CARD_MIN_SPAN = minSpan({type: 'card'});
 /** Maximum column width of a card (same registry). */
 const CARD_MAX_SPAN = maxSpan({type: 'card'});
 /** A clickable card takes 4 columns of 12 at most (Nicolas, 5 Oct. 2026). */
-const CLICKABLE_MAX_SPAN = 4;
+const CLICKABLE_MAX_SPAN = 4 as const;
 /** block slug → variant (media, clickable) and short label for the admin */
 export const CARD_VARIANTS: Record<string, {media: CardMediaKind; clickable: boolean; label: Text}> = {};
 
@@ -99,7 +99,7 @@ for (const clickable of [false, true]) {
     const sample = {...m.sample, title: 'Lorem ipsum dolor', text: loremWords(16), ...(clickable ? {'cta.label': 'Lorem ipsum', 'cta.href': '#'} : null)};
     // the parts of the Card component edited in place in the builder's preview → the block's fields
     const parts = {title: 'title', text: 'text', action: 'cta', image: 'image', icon: 'iconKey'};
-    CARD_BLOCKS.push({block, minSpan: CARD_MIN_SPAN, maxSpan: clickable ? Math.min(CARD_MAX_SPAN, CLICKABLE_MAX_SPAN) : CARD_MAX_SPAN, fill: true, sample, parts});
+    CARD_BLOCKS.push({block, minSpan: CARD_MIN_SPAN, maxSpan: clickable ? CLICKABLE_MAX_SPAN : CARD_MAX_SPAN, fill: true, sample, parts});
   }
 }
 
