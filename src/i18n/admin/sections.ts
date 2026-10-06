@@ -291,6 +291,7 @@ export const sectionsText = texts({
     errorDescription: {fr: 'Continue la saisie : l’aperçu réessaie à la prochaine modification.', en: 'Keep typing: the preview tries again at the next change.'},
     adminOnlyTitle: {fr: 'Aperçu réservé à l’admin', en: 'Preview for the admin only'},
     adminOnlyDescription: {fr: 'Reconnecte-toi à l’administration pour voir l’aperçu.', en: 'Log in to the admin again to see the preview.'},
+    stale: {fr: 'Aperçu non mis à jour : la dernière modification n’a pas pu être envoyée.', en: 'Preview not updated: the last change could not be sent.'},
     editColumn: {fr: 'Modifier le contenu de la colonne', en: 'Edit the column’s content'},
     editColumnShort: {fr: 'Modifier le contenu', en: 'Edit the content'},
   },

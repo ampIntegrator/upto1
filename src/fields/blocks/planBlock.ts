@@ -22,7 +22,7 @@ const block: Block = {
         {name: 'tagline', type: 'text', label: t.tagline, localized: true, admin: {width: '45%'}},
       ],
     },
-    priceGroup,
+    priceGroup(),
     {
       type: 'row',
       fields: [
@@ -37,10 +37,10 @@ const block: Block = {
         {name: 'featuresLabel', type: 'text', label: t.featuresLabel, localized: true, admin: {width: '50%'}},
       ],
     },
-    featuresField,
+    featuresField(),
     ctaField(),
-    mentionField,
-    guaranteeGroup,
+    mentionField(),
+    guaranteeGroup(),
   ],
 };
 

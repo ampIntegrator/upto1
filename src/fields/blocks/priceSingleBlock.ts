@@ -14,7 +14,7 @@ const block: Block = {
   imageURL: `/apercus/${PRICE_SINGLE_SLUG}.png`,
   fields: [
     {name: 'featuresLabel', type: 'text', label: t.featuresLabel, localized: true},
-    featuresField,
+    featuresField(),
     {
       type: 'row',
       fields: [
@@ -23,10 +23,10 @@ const block: Block = {
       ],
     },
     {name: 'priceLabel', type: 'text', label: t.priceLabel, localized: true},
-    priceGroup,
+    priceGroup(),
     ctaField(),
-    mentionField,
-    guaranteeGroup,
+    mentionField(),
+    guaranteeGroup(),
   ],
 };
 

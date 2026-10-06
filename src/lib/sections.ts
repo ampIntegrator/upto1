@@ -4,6 +4,7 @@
  * in place: same shape, same rules. Admin settings (mode, colour, texture,
  * night style, media) resolve into a single Section component background.
  */
+import {AsyncLocalStorage} from 'node:async_hooks';
 import type {CardProps} from '@/components/Card';
 import type {CompareCardProps} from '@/components/CompareCard';
 import type {MediaProps} from '@/components/Media';
@@ -341,8 +342,8 @@ export type SectionsContext = {
 };
 
 /** A blog post as an article card, a case study as a realisation card. */
-const postContent = (p: Post, ctaLabel?: string): ContentData => ({type: 'card', card: postCard(p, sectionsCtx.blog ?? blogConfig(null), sectionsCtx.locale ?? 'fr', ctaLabel)});
-const caseContent = (c: CaseStudy, ctaLabel?: string): ContentData => ({type: 'card', card: caseCard(c, sectionsCtx.cases ?? casesConfig(null), ctaLabel)});
+const postContent = (p: Post, ctaLabel?: string): ContentData => ({type: 'card', card: postCard(p, current().ctx.blog ?? blogConfig(null), current().ctx.locale ?? 'fr', ctaLabel)});
+const caseContent = (c: CaseStudy, ctaLabel?: string): ContentData => ({type: 'card', card: caseCard(c, current().ctx.cases ?? casesConfig(null), ctaLabel)});
 
 /** Items of the collections fed by a listing, keyed by block id, loaded before the (synchronous) conversion. */
 type EntryItems = Map<string, ContentData[]>;
@@ -360,7 +361,7 @@ function toCollection(b: CollectionBlockData, entries: EntryItems): ContentData 
 
 /** The « see all » button: the blog or the case studies (label from their settings unless typed), or a custom link. */
 function collectionMore(b: CollectionBlockData): CollectionData['more'] {
-  const listing = b.moreLink === 'blog' ? (sectionsCtx.blog ?? blogConfig(null)) : b.moreLink === 'cases' ? (sectionsCtx.cases ?? casesConfig(null)) : null;
+  const listing = b.moreLink === 'blog' ? (current().ctx.blog ?? blogConfig(null)) : b.moreLink === 'cases' ? (current().ctx.cases ?? casesConfig(null)) : null;
   if (listing) return {label: b.moreLabel || listing.labels.more, href: listingPath(listing)};
   if (b.moreLink === 'custom' && b.moreLabel && b.moreTarget?.href) return {label: b.moreLabel, href: b.moreTarget.href, newTab: b.moreTarget.newTab || undefined};
   return undefined;
@@ -398,19 +399,23 @@ async function loadEntryItems(sources: SectionSource[], ctx: SectionsContext): P
   return out;
 }
 
-let entryItems: EntryItems = new Map();
-/** the context of the current conversion (set by toSections) */
-let sectionsCtx: SectionsContext = {};
-/** entries chosen in post cards and case cards, loaded by toSections */
-let chosenPosts = new Map<number, Post>();
-let chosenCases = new Map<number, CaseStudy>();
-let chosenForms = new Map<number, Form>();
+/**
+ * What one conversion needs along the way: its context and the entries it loaded first (listings'
+ * items, the posts, cases and forms chosen in blocks). Kept per call in an AsyncLocalStorage, not
+ * in module variables: conversions run concurrently (a page render, the section manager's preview
+ * at every change) and must not read each other's context (tech lead, 6 Oct. 2026).
+ */
+type Conversion = {ctx: SectionsContext; entryItems: EntryItems; chosenPosts: Map<number, Post>; chosenCases: Map<number, CaseStudy>; chosenForms: Map<number, Form>};
+const conversion = new AsyncLocalStorage<Conversion>();
+const EMPTY_CONVERSION: Conversion = {ctx: {}, entryItems: new Map(), chosenPosts: new Map(), chosenCases: new Map(), chosenForms: new Map()};
+/** the conversion in progress (an empty one outside `toSections`, for a lone converter call) */
+const current = (): Conversion => conversion.getStore() ?? EMPTY_CONVERSION;
 
 type FormBlockData = {id?: string | null; form?: number | Form | null; framed?: boolean | null; showHeading?: boolean | null};
 
 function toForm(b: FormBlockData): ContentData | null {
   const id = refId(b.form as number | {id: number} | null);
-  const doc = (id !== null ? chosenForms.get(id) : undefined) ?? (typeof b.form === 'object' && b.form ? b.form : null);
+  const doc = (id !== null ? current().chosenForms.get(id) : undefined) ?? (typeof b.form === 'object' && b.form ? b.form : null);
   const form = doc ? formData(doc, {id: `form-${b.id ?? doc.id}`, framed: b.framed !== false, showHeading: b.showHeading !== false}) : null;
   return form ? {type: 'form', form} : null;
 }
@@ -434,13 +439,13 @@ type CaseCardData = {caseStudy?: number | CaseStudy | null};
 
 function toPostCard(b: PostCardData): ContentData | null {
   const id = refId(b.post);
-  const doc = (id !== null ? chosenPosts.get(id) : undefined) ?? (typeof b.post === 'object' && b.post ? b.post : null);
+  const doc = (id !== null ? current().chosenPosts.get(id) : undefined) ?? (typeof b.post === 'object' && b.post ? b.post : null);
   return doc ? postContent(doc) : null;
 }
 
 function toCaseCard(b: CaseCardData): ContentData | null {
   const id = refId(b.caseStudy);
-  const doc = (id !== null ? chosenCases.get(id) : undefined) ?? (typeof b.caseStudy === 'object' && b.caseStudy ? b.caseStudy : null);
+  const doc = (id !== null ? current().chosenCases.get(id) : undefined) ?? (typeof b.caseStudy === 'object' && b.caseStudy ? b.caseStudy : null);
   return doc ? caseContent(doc) : null;
 }
 
@@ -491,7 +496,7 @@ function toContent(block: ContentBlock): ContentData | null {
     case PROCESS_STEPS_SLUG:
       return toSteps(block as unknown as StepsData);
     case COLLECTION_SLUG:
-      return toCollection(block as unknown as CollectionBlockData, entryItems);
+      return toCollection(block as unknown as CollectionBlockData, current().entryItems);
     case TEXT_BOX_SLUG:
       return toTextBox(block as unknown as TextBoxData);
     case TABS_SLUG:
@@ -585,10 +590,10 @@ export async function toSections(blocks: Page['sections'], settings?: Pick<Setti
     if (b.blockType === 'section') sources.push({source: b, key});
     else if (b.blockType === 'sharedSection' && b.section && typeof b.section === 'object') sources.push({source: b.section, key});
   });
-  sectionsCtx = ctx;
   // internal links of every rich text (text boxes, tabs… rendered by client components): their address written on them
   if (ctx.blog && ctx.cases) stampInternalLinks(blocks, {blog: ctx.blog, cases: ctx.cases});
   const list = sources.map((s) => s.source);
-  [entryItems, [chosenPosts, chosenCases], chosenForms] = await Promise.all([loadEntryItems(list, ctx), loadChosenEntries(list, ctx), loadChosenForms(list, ctx)]);
-  return sources.map((s, i) => ({...toSection(s.source, s.key, site), edgeTop: edgeTop(s.source, sources[i - 1]?.source)}));
+  const [entryItems, [chosenPosts, chosenCases], chosenForms] = await Promise.all([loadEntryItems(list, ctx), loadChosenEntries(list, ctx), loadChosenForms(list, ctx)]);
+  // the converters read the context and the loaded entries from this call's own store
+  return conversion.run({ctx, entryItems, chosenPosts, chosenCases, chosenForms}, () => sources.map((s, i) => ({...toSection(s.source, s.key, site), edgeTop: edgeTop(s.source, sources[i - 1]?.source)})));
 }

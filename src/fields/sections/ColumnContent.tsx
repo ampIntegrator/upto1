@@ -25,7 +25,7 @@ import {token} from './tokens';
 import './ColumnContent.scss';
 
 /** what RenderFields needs to render some fields at their exact paths */
-type Part = {fields: ClientField[]; path: string; schemaPath: string; permissions: SanitizedFieldsPermissions};
+type Part = {fields: ClientField[]; path: string; schemaPath: string; permissions: SanitizedFieldsPermissions; readOnly?: boolean};
 /** one cell of the flow: a field (after its group heading, if it opens a group), `title`: the name of the group it opens */
 /**
  * `size`: how much of the grid a cell takes. `half`: a short field, two of them fit one above the
@@ -73,10 +73,12 @@ const short = (f: ClientField) => !DOUBLE.has(f.type) && !WIDE.has(f.type) && !F
 const GROUP_MAX = 6;
 
 type Deep = {fields?: Record<string, Deep>} | true | undefined;
-const inside = (permissions: SanitizedFieldsPermissions, name: string): SanitizedFieldsPermissions => {
-  if (permissions === true) return true;
+/** a group's fields' permissions; not found: shown read-only (never editable by default, tech lead, 6 Oct. 2026) */
+const inside = (permissions: SanitizedFieldsPermissions, name: string): {fields: SanitizedFieldsPermissions; readOnly: boolean} => {
+  if (permissions === true) return {fields: true, readOnly: false};
   const group = (permissions as Record<string, Deep>)?.[name];
-  return ((group === true ? true : group?.fields) ?? true) as SanitizedFieldsPermissions;
+  const fields = group === true ? true : group?.fields;
+  return fields === undefined ? {fields: true, readOnly: true} : {fields: fields as SanitizedFieldsPermissions, readOnly: false};
 };
 
 /**
@@ -134,13 +136,14 @@ function cells(fields: ClientField[], path: string, schemaPath: string, permissi
           if (below(x.field) && last && last.siblings === x.siblings) last.keep.push(x.field);
           else sets.push({siblings: x.siblings, keep: [x.field]});
         }
-        const parts = sets.map((set): Part => ({fields: only(set.siblings, (y) => set.keep.includes(y)), path: `${path}.${f.name}`, schemaPath: `${schemaPath}.${f.name}`, permissions: groupPermissions}));
+        const parts = sets.map((set): Part => ({fields: only(set.siblings, (y) => set.keep.includes(y)), path: `${path}.${f.name}`, schemaPath: `${schemaPath}.${f.name}`, permissions: groupPermissions.fields, readOnly: groupPermissions.readOnly || undefined}));
         out.push({key, parts: heading ? [heading, ...parts] : parts, size: 'double', title: label, group: true, when: `${path}.${f.name}`});
         heading = null;
         pendingTitle = undefined;
         return;
       }
-      const nested = cells(f.fields, `${path}.${f.name}`, `${schemaPath}.${f.name}`, inside(permissions, f.name), i18n, `${key}-`, label);
+      const groupPermissions = inside(permissions, f.name);
+      const nested = cells(f.fields, `${path}.${f.name}`, `${schemaPath}.${f.name}`, groupPermissions.fields, i18n, `${key}-`, label).map((cell) => (groupPermissions.readOnly ? {...cell, parts: cell.parts.map((part) => ({...part, readOnly: true}))} : cell));
       if (nested.length && heading) nested[0] = {...nested[0], parts: [heading, ...nested[0].parts]};
       heading = null;
       out.push(...nested.map((cell) => ({...cell, when: cell.when ?? `${path}.${f.name}`})));
@@ -213,7 +216,7 @@ function FlowCell({cell, readOnly}: {cell: Cell; readOnly?: boolean}) {
     <div className="column-content__cell" data-size={cell.size} data-group={cell.group ? 'true' : undefined} data-stack={cell.stack ? 'true' : undefined} data-section={cell.section ? 'true' : undefined}>
       {cell.title ? <p className="column-content__title">{cell.title}</p> : null}
       {cell.parts.map((part, i) => (
-        <RenderFields key={i} fields={part.fields} forceRender parentIndexPath="" parentPath={part.path} parentSchemaPath={part.schemaPath} permissions={part.permissions} readOnly={readOnly} />
+        <RenderFields key={i} fields={part.fields} forceRender parentIndexPath="" parentPath={part.path} parentSchemaPath={part.schemaPath} permissions={part.permissions} readOnly={readOnly || part.readOnly} />
       ))}
     </div>
   );

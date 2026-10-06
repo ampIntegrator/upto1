@@ -7,7 +7,8 @@ import type {PreviewDataMessage} from '@/fields/sections/preview';
 
 export type StoredPreview = Omit<PreviewDataMessage, 'type'> & {at: number};
 
-const TTL_MS = 10 * 60 * 1000;
+/** how long a section stays, in minutes (PREVIEW_TTL_MINUTES in the environment; 10 by default) */
+const TTL_MS = (Number(process.env.PREVIEW_TTL_MINUTES) || 10) * 60 * 1000;
 const holder = globalThis as unknown as {__sectionPreviews?: Map<string, StoredPreview>};
 const store = (holder.__sectionPreviews ??= new Map());
 

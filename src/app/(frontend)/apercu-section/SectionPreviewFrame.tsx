@@ -24,6 +24,7 @@
  */
 import {IconButton} from '@astryxdesign/core/IconButton';
 import {VStack} from '@astryxdesign/core/Stack';
+import {Text} from '@astryxdesign/core/Text';
 import {useRouter} from 'next/navigation';
 import React, {useCallback, useEffect, useRef, useState, useSyncExternalStore} from 'react';
 
@@ -109,6 +110,8 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
   const [filled, setFilled] = useState<string[]>([]);
   // the admin's language, for the frame's own texts (it comes with each section)
   const [language, setLanguage] = useState<string | undefined>(undefined);
+  // the last section could not be kept on the server (too heavy, session lost): the preview is behind
+  const [stale, setStale] = useState(false);
   // in the admin's iframe (false for a visitor opening the address, and during server rendering)
   const inFrame = useSyncExternalStore(noSubscription, () => window.parent !== window, () => false);
 
@@ -125,7 +128,9 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
       const n = ++last.current;
       const status = await sendSectionPreview(frame, input).catch(() => 'invalid' as const);
       // a newer section is on its way: only its refresh matters
-      if (n !== last.current || status === 'invalid') return;
+      if (n !== last.current) return;
+      setStale(status !== 'ok');
+      if (status !== 'ok') return;
       if (editing.current) waiting.current = true;
       else router.refresh();
     };
@@ -289,6 +294,11 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
       {inFrame ? (
         <>
           <style>{STYLES}</style>
+          {stale ? (
+            <VStack data-preview-tool="true" role="status" style={{position: 'fixed', top: 'var(--spacing-2)', right: 'var(--spacing-2)', zIndex: 10, padding: 'var(--spacing-2) var(--spacing-3)', borderRadius: 'var(--radius-element)', background: 'var(--color-background-body)', boxShadow: 'var(--elevation-low)'}}>
+              <Text size="sm" color="secondary">{tr(T.preview.stale, language)}</Text>
+            </VStack>
+          ) : null}
           {/* the hovered column, lightly outlined; no outline on the selected one (it spoiled the design, Nicolas, 1 Oct. 2026) */}
           {hoverBox ? <i aria-hidden="true" style={{position: 'absolute', left: hoverBox.x, top: hoverBox.y, width: hoverBox.width, height: hoverBox.height, pointerEvents: 'none', outline: 'var(--border-width) dashed var(--color-accent)'}} /> : null}
           {hoverBox && hover && filled.includes(`${hover.row}-${hover.col}`) ? (

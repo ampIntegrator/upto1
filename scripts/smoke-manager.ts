@@ -141,6 +141,13 @@ async function main() {
     check(Math.abs(centred.above - centred.below) <= 1, `the settings are centred in the panel's height (${centred.above} above, ${centred.below} below)`);
     check(top.scroll <= top.height, `the settings fit without vertical scroll (${top.scroll} / ${top.height}), in ${top.groups} columns`);
     check(top.anchor === 0, 'no anchor field in the dialog');
+    const duplicatedIds = await p.evaluate(() => {
+      const seen = new Map<string, number>();
+      document.querySelectorAll('[id]').forEach((el) => seen.set(el.id, (seen.get(el.id) ?? 0) + 1));
+      // (nav-toggler is Payload's own, twice in its admin shell whatever we do)
+      return [...seen.entries()].filter(([id, n]) => n > 1 && id !== 'nav-toggler').map(([id]) => id);
+    });
+    check(duplicatedIds.length === 0, `no element id twice in the page while the dialog is open${duplicatedIds.length ? ` (${duplicatedIds.join(', ')})` : ''}`);
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-settings.png`});
     const groupHelp = p.locator('#section-manager-panel-settings .info-bubble__button').nth(2);
     await groupHelp.hover();
@@ -568,17 +575,15 @@ async function main() {
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-card.png`});
     await p.locator('.section-manager__tab[aria-controls="section-manager-panel-blocks"]').click();
     await p.waitForTimeout(700);
-    // an Image block replaces it (asked first), with an image of the media library; a click on it shows the image field
+    // an Image block replaces it (asked first): it starts without an image, the preview draws the placeholder
+    // picture (public/placeholders, no read of the media library); a click on it shows the image field
     await dragBlock('media', '1-0');
     await confirm.getByRole('button', {name: /^(Remplacer|Replace)$/}).click();
     await p.waitForTimeout(500);
-    const placedImage = live.locator('[data-preview-column="1-0"] img');
-    const hasMedia = Boolean(media);
-    if (hasMedia) {
-      await placedImage.waitFor({timeout: 10000});
-      check(true, 'an Image block placed from the library shows an image of the media library at once');
-      await live.locator('[data-preview-column="1-0"] [data-part="image"]').click();
-    } else await live.getByText(/Image · à compléter/).click();
+    const placedImage = live.locator('[data-preview-column="1-0"] [data-part="image"] img');
+    await placedImage.waitFor({timeout: 10000});
+    check(/\/placeholders\/image\.jpg/.test((await placedImage.getAttribute('src')) ?? '') && (await placedImage.evaluate((img) => (img as HTMLImageElement).naturalWidth)) > 0, 'an Image block placed from the library shows the placeholder picture at once');
+    await live.locator('[data-preview-column="1-0"] [data-part="image"]').click();
     await popover.waitFor({timeout: 5000});
     check(/upload|Image/i.test(await popover.innerText()), 'a click on the image of an Image block shows the image field');
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-components.png`});

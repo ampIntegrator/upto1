@@ -18,8 +18,20 @@ export function LivePreview({parentPath, preview, onEvent, overlay}: {parentPath
   const {id, collectionSlug, globalSlug} = useDocumentInfo();
   const locale = useLocale();
   const {i18n} = useTranslation();
-  // any change of the form: a new snapshot (the preview debounces what it sends)
-  const version = useFormFields(([fields]) => fields);
+  // a signature of the section's values (and of the document fields the host asked for): a new
+  // snapshot when it changes, nothing when another part of the document is edited (the selector
+  // runs on every change, the wrapper renders only when the signature differs)
+  const prefix = parentPath ? `${parentPath}.` : '';
+  const watched = preview.documentFields ?? [];
+  const version = useFormFields(([fields]) => {
+    let signature = '';
+    for (const key in fields) {
+      if (!key.startsWith(prefix) && !watched.includes(key)) continue;
+      const value = fields[key]?.value;
+      signature += `${key}=${typeof value === 'object' ? JSON.stringify(value) : String(value)}\u0000`;
+    }
+    return signature;
+  });
   const message = React.useMemo(() => {
     const data = getData() as Record<string, unknown>;
     const section = (parentPath ? getDataByPath(parentPath) : data) as Record<string, unknown> | undefined;

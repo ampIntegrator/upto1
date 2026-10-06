@@ -32,7 +32,20 @@ import type {StoredPreview} from './store';
  * background is opaque on light sections and would hide the texture). `tall`: in a section
  * without content; otherwise it takes its row's height. `part`: the image part a click fills.
  */
+/** the picture a block without its image shows in the preview (public/placeholders; tech lead, 6 Oct. 2026) */
+export const PLACEHOLDER_IMAGE = '/placeholders/image.jpg';
+export const PLACEHOLDER_VIDEO = '/placeholders/video.mp4';
+
 function Zone({label, tall, part}: {label: string; tall: boolean; part?: string}) {
+  // a block waiting for its image: the placeholder picture, one click away from the image field
+  if (part === 'image') {
+    return (
+      <VStack data-part={part} data-part-kind="image" minHeight={tall ? 'calc(var(--spacing-12) * 3)' : 'var(--spacing-12)'} style={{overflow: 'hidden', borderRadius: 'var(--radius-element)'}}>
+        {/* eslint-disable-next-line @next/next/no-img-element -- a static placeholder of the admin's preview */}
+        <img src={PLACEHOLDER_IMAGE} alt={label} style={{display: 'block', width: '100%', height: '100%', objectFit: 'cover'}} />
+      </VStack>
+    );
+  }
   return (
     <VStack
       align="center"
