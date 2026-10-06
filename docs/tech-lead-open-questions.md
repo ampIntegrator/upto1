@@ -138,4 +138,4 @@ dialog renders a subset of fields at their exact paths, `fieldGroups.ts`), and P
      placeholder picture (no more read of the media library). The video is in the project for the
      same use on a video field; nothing uses it yet.
    - Accessibility, mobile order, lint warnings: left as he said.
-   - Big files: `SectionManager.tsx` is 540 lines; not cut further today.
+   - Big files: `SectionManager.tsx` is 570 lines; not cut further today.
