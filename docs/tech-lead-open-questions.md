@@ -1,7 +1,7 @@
 # Open questions for the tech lead
 
 Written on 5 October 2026, after a code review of the `previewer` branch (the « Gérer » dialog of a
-section, `docs/section-manager.md`). The tech lead answered on 6 October (the `=>` lines); what
+section, `docs/sections.md`). The tech lead answered on 6 October (the `=>` lines); what
 was done on his answers the same day is under « Done on the answers » at the end.
 
 ## 1. The live preview keeps its data in the server's memory

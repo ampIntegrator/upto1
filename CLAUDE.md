@@ -35,7 +35,7 @@ MORE CLI:
 `src/fields/sections/` is a neutral core, meant to become a Payload plugin: it knows no
 component, no theme, no media collection. Never import `src/components/` from it. Everything
 site-specific goes through `src/sections.config.ts` and `src/fields/blocks/`. Audit, plan and
-full doc: `docs/section-builder.md`.
+full doc: `docs/sections.md`.
 
 Adding a column component, in this order:
 1. Branch `astryx`: the component in `src/components/`, its showcase in the `/design` catalogue,
@@ -63,28 +63,29 @@ vertical rhythm in `src/app/(payload)/custom.scss`. New `ui` fields outside a bl
 restart (Payload caches its client config). Never delete a document open in the admin (seeds update
 in place): the edit view loops and locks SQLite.
 
-Rules and known traps of the section builder: the last section of `docs/section-builder.md`; read
-it before a new column block.
+Rules and known traps of the section builder: « Rules and traps » in `docs/sections.md`; read it
+before a new column block.
 
-Blog and case studies (done on 17 Sept. 2026): `docs/blog.md` (with the listing code they share)
-and `docs/cases.md`. Trap: never share a field or block config object between a
+Blog and case studies (done on 17 Sept. 2026): `docs/blog-and-cases.md` (with the listing code they
+share). Trap: never share a field or block config object between a
 Lexical editor and a collection (Payload mutates it; tables get dropped): use factories.
 
-Nested pages (done on 21 Sept. 2026): `docs/pages.md` (parent page, full address `path`, 3 levels set
+Nested pages (done on 21 Sept. 2026): `docs/site-content.md` (parent page, full address `path`, 3 levels set
 by `MAX_PAGE_DEPTH`, automatic redirects, routes as dispatchers). Build every page URL with `pagePath()`.
 
-Forms (done on 21 Sept. 2026): `docs/forms.md` (plugin-form-builder, « Formulaire » column block 4 to 12,
+Forms (done on 21 Sept. 2026): `docs/site-content.md` (plugin-form-builder, « Formulaire » column block 4 to 12,
 one or two columns of fields, multi-step, server action, connection points for the tech lead);
-decisions in `docs/forms.md`.
+connection points for the tech lead in the same doc.
 
-Section manager (trial started on 1 Oct. 2026, branch `previewer`): `docs/section-manager.md`. A section
-is edited in a full-screen « Gérer » dialog: settings on top (35 %, four horizontal accordions), live
-preview of the section below (65 %), refreshed without saving. Rows, components (drag onto the preview)
-and contents (panel, and in place in the preview for marked components) are done; plan and decisions in
-`etude-apercu-rangee/faisabilite.md` (it replaces the 17 Sept. brief in the same folder). The page-level
-Live Preview (« Aperçu en direct », « Vue » menu) is unchanged: `docs/live-preview.md`.
+Section manager (trial started on 1 Oct. 2026, branch `previewer`): `docs/sections.md`, part 4. A section
+is edited in a full-screen « Gérer » dialog: settings on top (280 px, four horizontal accordions), live
+preview of the section below, refreshed without saving. Rows, components (drag onto the preview, or a
+double click on an empty column) and contents (panel, and in place in the preview for marked components)
+are done. Payload's page-level Live Preview (« Aperçu en direct », « Vue » menu) is unchanged: same doc, part 6.
+Admin conventions (languages, field groups, help bubbles): `docs/admin.md`. Open points for the tech lead:
+`docs/tech-lead-open-questions.md`.
 
-Modals (done on 22 Sept. 2026): `docs/modals.md` (« Modales » collection, opened over the page by an
+Modals (done on 22 Sept. 2026): `docs/site-content.md` (« Modales » collection, opened over the page by an
 internal link or a button to the anchor `#modale-<slug>`; the page renders the modals it links to,
 closed; free body with an inserted form, form buttons in the footer; buttons everywhere pick their
 target with `linkTarget.ts`: « Adresse » or « Contenu du site »).

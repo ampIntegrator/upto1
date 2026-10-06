@@ -1,4 +1,8 @@
-# Admin languages
+# Admin conventions
+
+The admin's languages, its field groups and its help bubbles: what every admin form of the site follows. (Renamed from admin-languages.md on 6 October 2026.)
+
+## Languages
 
 The Payload admin is available in **French** and **English**. A selector in the header, next to the content language selector, switches the interface language. The choice is stored per browser in Payload's language cookie.
 
@@ -64,3 +68,21 @@ Rules:
 2. Import Payload's translation for it in `src/i18n/admin/payload.ts` (`@payloadcms/translations/languages/<code>`) and add it to `supportedLanguages` and `translations`.
 3. Run `pnpm exec tsc --noEmit`. Every dictionary entry missing the new language is reported. Translate them all.
 4. Run `pnpm generate:importmap` if admin components changed, then check the admin in the new language.
+
+## Field groups and help
+
+- **Groups of fields** sit under a heading with a rule and a Nucleo icon: `groupHeading()` in
+  `src/fields/groupHeading.ts` (neutral core: `sectionGroup` in `src/fields/sections/group.ts`).
+  A group may carry a `help` text, shown in an « i » bubble beside its title: write one for every
+  new group of section settings. Vertical rhythm of the admin forms: `src/app/(payload)/custom.scss`.
+- **Help bubbles**: one component, `InfoBubble` (`src/fields/sections/InfoBubble.tsx`, one
+  stylesheet). An 18 px disc with no border, nothing changes on hover but the bubble, which opens
+  over the « i » with the « i » in its corner; disc and bubble are the theme's inverse (white on
+  the dark admin, black on the light one) (Nicolas, 6 Oct. 2026). Inside the section builder a
+  field's `description` becomes such an « i » glued to its label (`withHelpBubbles`); elsewhere
+  Payload shows its line under the field.
+- **No admin text in code**: every label, help, option and message is in the FR/EN dictionaries
+  of `src/i18n/admin/`; texts are in French and use « tu ».
+- A new `ui` field outside a block needs a `pnpm dev` restart (Payload caches its client config).
+- Never delete a document someone may have open in the admin (seeds update in place): the edit
+  view loops and locks SQLite.

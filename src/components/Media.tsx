@@ -14,7 +14,7 @@
  * Image via next/image in fill mode: screen-adapted sizes, lazy loading,
  * alt text. Square corners. The container must have a height (stretched row or
  * minimum height), otherwise the media is 0 px tall.
- * `data-part`: names the image, for the admin's live preview (docs/section-manager.md).
+ * `data-part`: names the image, for the admin's live preview (docs/sections.md).
  */
 import {VStack} from '@astryxdesign/core/Stack';
 import Image from 'next/image';

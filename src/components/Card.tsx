@@ -17,7 +17,7 @@
  * hovering it fills the action bar; without `cta`, no bar and no link.
  * Night: place the card inside a <Theme mode="dark">.
  * `data-part` (bloc preset): names the card's parts (title, text, action link, image, icon); the
- * admin's live preview edits them in place (docs/section-manager.md); no effect on the site.
+ * admin's live preview edits them in place (docs/sections.md); no effect on the site.
  */
 import {Text} from '@astryxdesign/core/Text';
 import NextLink from 'next/link';
