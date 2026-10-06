@@ -31,7 +31,10 @@ button opens a full-screen dialog:
 - **no line of help anywhere in the top part** (Nicolas, 5 Oct. 2026): instructions wait in an
   « i » bubble (`InfoBubble.tsx`: hover, keyboard focus or click; Escape closes the bubble only).
   **One component for every bubble**, `InfoBubble` (one stylesheet, `InfoBubble.scss`; Nicolas,
-  6 Oct. 2026: never two implementations of the same thing). One « i » beside each group title of
+  6 Oct. 2026: never two implementations of the same thing). Its look (Nicolas, 6 Oct. 2026): an
+  18 px disc with no border, nothing changes on hover but the bubble, which opens over the « i »
+  with the « i » in one of its corners; disc and bubble are the theme's inverse (white with black
+  text on the dark admin, black with white text on the light one). One « i » beside each group title of
   « Fond et espaces » (`help` of `sectionGroup` / `groupHeading`: what the group's settings do;
   write one for every new group), one at the right of the layout tiles (how to drag a layout; an
   error on a row shows as a red text beside it), and **for every field that has a `description`**
