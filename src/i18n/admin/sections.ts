@@ -69,7 +69,7 @@ export const sectionsText = texts({
     gapY: {fr: 'Écart entre rangées', en: 'Row gap'},
     gapYMobile: {fr: 'Écart vertical mobile', en: 'Mobile vertical gap'},
     siteGap: {fr: 'Réglage du site', en: 'Site setting'},
-    saveAsShared: {fr: 'Enregistrer dans les sections partagées', en: 'Save to shared sections'},
+    saveAsShared: {fr: 'Enregistrer', en: 'Save'},
     saveAsSharedDescription: {fr: 'Coché : à l’enregistrement de la page, la section est copiée dans « Sections partagées » sous le nom de la section (son en-tête) et la page y fait référence.', en: 'Checked: when the page is saved, the section is copied to “Shared sections” under the section’s name (its header) and the page refers to it.'},
   },
   rows: {

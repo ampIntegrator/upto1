@@ -7,6 +7,7 @@ import {GRID_COLUMNS, type PresetRow, rowTotal} from './grid';
 import type {SectionPreviewOptions} from './preview';
 import {sectionFields} from './sectionFields';
 import {shareSectionsHook} from './shareSections';
+import {withHelpBubbles} from './helpBubbles';
 
 /**
  * Entry point of the section builder, shaped like the future plugin's options:
@@ -58,7 +59,7 @@ export function createSectionBuilder({blocks, settings = [], fieldName = 'sectio
   const sectionBlock: Block = {
     slug: 'section',
     labels: {singular: T.blocks.section.singular, plural: T.blocks.section.plural},
-    fields: sectionFields({blocks, settings, shareable: shared ? shared.collection : false, condition, presetRows, groupHeading, preview, headerFields}),
+    fields: withHelpBubbles(sectionFields({blocks, settings, shareable: shared ? shared.collection : false, condition, presetRows, groupHeading, preview, headerFields})),
   };
   const sectionBlocks: Block[] = [sectionBlock];
   if (shared) {
@@ -80,7 +81,7 @@ export function createSectionBuilder({blocks, settings = [], fieldName = 'sectio
       // every section folded when the document opens (inside: settings folded, rows open)
       admin: {description: T.blocks.sectionsDescription, initCollapsed: true},
     },
-    sharedFields: sectionFields({blocks, settings, shareable: false, condition, presetRows, groupHeading, preview, headerFields}),
+    sharedFields: withHelpBubbles(sectionFields({blocks, settings, shareable: false, condition, presetRows, groupHeading, preview, headerFields})),
     beforeChange: shared ? [shareSectionsHook({fieldName, collection: shared.collection})] : [],
   };
 }

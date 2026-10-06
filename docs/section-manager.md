@@ -30,12 +30,15 @@ button opens a full-screen dialog:
   first panel each group of settings is centred in that height;
 - **no line of help anywhere in the top part** (Nicolas, 5 Oct. 2026): instructions wait in an
   « i » bubble (`InfoBubble.tsx`: hover, keyboard focus or click; Escape closes the bubble only).
-  One « i » beside each group title of « Fond et espaces » (`help` of `sectionGroup` /
-  `groupHeading`: what the group's settings do; write one for every new group, and no
-  `description` on the fields under it), one at the right of the layout tiles (how to drag a
-  layout; an error on a row shows as a red text beside it), and for a block's field that has a
-  description (« Contenu » panel) an « i » after its label (CSS at the end of
-  `SectionManager.scss`). The frame's own texts (empty zones, the pencil) follow the admin's
+  **One component for every bubble**, `InfoBubble` (one stylesheet, `InfoBubble.scss`; Nicolas,
+  6 Oct. 2026: never two implementations of the same thing). One « i » beside each group title of
+  « Fond et espaces » (`help` of `sectionGroup` / `groupHeading`: what the group's settings do;
+  write one for every new group), one at the right of the layout tiles (how to drag a layout; an
+  error on a row shows as a red text beside it), and **for every field that has a `description`**
+  an « i » glued to its label in the place of Payload's line under the field: `withHelpBubbles`
+  (`helpBubbles.ts`, applied by `createSectionBuilder` to every field of the builder, blocks
+  included) gives such a field the `HelpLabel` label component and a silent description component.
+  A description that is a function stays Payload's line. The frame's own texts (empty zones, the pencil) follow the admin's
   language: it travels with each section (`language` of the data message). The components list explains itself in its first tile (below);
 - between the two, a handle: drag it (or focus it and use the arrow keys) to change the share, from
   20 % to 80 % for the settings; a double click goes back to the opening height; nothing is

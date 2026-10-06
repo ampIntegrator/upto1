@@ -1,6 +1,8 @@
 import { SectionGroupHeading as SectionGroupHeading_516db130f92e5851f578df53b6aaa2cf } from '@/fields/SectionGroupHeading'
 import { IconPicker as IconPicker_8bfb3e3bce55055cefcbdba58b426cf6 } from '@/fields/IconPicker'
 import { BackgroundComposer as BackgroundComposer_184663dbb823c9178f52bc18003617b9 } from '@/fields/BackgroundComposer'
+import { HelpLabel as HelpLabel_45e070fcef391b8b4f9d96a82fb78b6e } from '@/fields/sections/HelpLabel'
+import { NoDescription as NoDescription_45e070fcef391b8b4f9d96a82fb78b6e } from '@/fields/sections/HelpLabel'
 import { RscEntryLexicalCell as RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { RscEntryLexicalField as RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { LexicalDiffComponent as LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
@@ -53,6 +55,8 @@ export const importMap = {
   "@/fields/SectionGroupHeading#SectionGroupHeading": SectionGroupHeading_516db130f92e5851f578df53b6aaa2cf,
   "@/fields/IconPicker#IconPicker": IconPicker_8bfb3e3bce55055cefcbdba58b426cf6,
   "@/fields/BackgroundComposer#BackgroundComposer": BackgroundComposer_184663dbb823c9178f52bc18003617b9,
+  "@/fields/sections/HelpLabel#HelpLabel": HelpLabel_45e070fcef391b8b4f9d96a82fb78b6e,
+  "@/fields/sections/HelpLabel#NoDescription": NoDescription_45e070fcef391b8b4f9d96a82fb78b6e,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalField": RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#LexicalDiffComponent": LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e,

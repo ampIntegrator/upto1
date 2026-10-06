@@ -80,9 +80,9 @@ async function main() {
       const anchor = row?.querySelector('input[name="sections.0.anchor"]')?.closest('.field-type');
       const share = row?.querySelector('.section-share');
       const tops = [button, anchor, share].map((el) => (el ? Math.round(el.getBoundingClientRect().top) : -1));
-      return {row: Boolean(row), hint: document.querySelectorAll('.section-manager__hint').length, bubbles: row?.querySelectorAll('.info-bubble').length, tops, anchorMark: anchor ? getComputedStyle(anchor.querySelector('.field-label')!, '::after').content.includes('i') : false, shareDisabled: Boolean(share?.querySelector('input[disabled], input[readonly]'))};
+      return {row: Boolean(row), hint: document.querySelectorAll('.section-manager__hint').length, bubbles: row?.querySelectorAll('.info-bubble').length, tops, anchorMark: Boolean(anchor?.querySelector('.help-label .info-bubble')), shareDisabled: Boolean(share?.querySelector('input[disabled], input[readonly]'))};
     });
-    check(identity.row && identity.hint === 0 && identity.bubbles === 2 && identity.anchorMark && new Set(identity.tops).size === 1 && identity.tops[0] > 0, `the section's line: « Section » with an « i » over the button, the anchor with an « i », the sharing box, aligned at the top, no line of help (${JSON.stringify(identity)})`);
+    check(identity.row && identity.hint === 0 && identity.bubbles === 3 && identity.anchorMark && new Set(identity.tops).size === 1 && identity.tops[0] > 0, `the section's line: « Section » with an « i » over the button, the anchor with an « i », the sharing box, aligned at the top, no line of help (${JSON.stringify(identity)})`);
     check(identity.shareDisabled, 'a section without a name shows the sharing box, which cannot be checked');
     // the sharing box of a named section can be checked; refused on save when a shared section has that name already
     await p.locator('.blocks-field__rows .collapsible__toggle').nth(1).click();
@@ -551,35 +551,19 @@ async function main() {
       return {scrollX: el.scrollWidth - el.clientWidth, scrollY: el.scrollHeight - el.clientHeight, columns: new Set(cells.map((c) => Math.round(c.getBoundingClientRect().left))).size, groupFields: group.querySelectorAll('.field-type').length, groupLines: new Set([...group.querySelectorAll('.field-type')].map((f) => Math.round(f.getBoundingClientRect().bottom / 20))).size, ratio: Math.round((text.offsetWidth / short.offsetWidth) * 100) / 100, group: Math.round((group.offsetWidth / short.offsetWidth) * 100) / 100};
     });
     check(card.columns <= 5 && card.groupFields === 4 && card.ratio > 1.3 && card.ratio < 1.8 && card.group > 1.9 && card.scrollX <= 0 && card.scrollY <= 0, `a clickable card's fields take five columns at most, its link in one cell two columns wide, its text a column and a half, nothing to scroll (${JSON.stringify(card)})`);
-    // a field's description: a bubble while the pointer is on the « i » after its label, and only then
-    // (not on the label's text, not while the field is used: the bubble would cover it)
-    const bubbleShown = () => p.evaluate(() => {
-      const el = document.querySelector('#section-manager-panel-content .field-description');
-      return el ? getComputedStyle(el).opacity === '1' : null;
-    });
-    const spots = await p.evaluate(() => {
-      const field = document.querySelector('#section-manager-panel-content .field-description')!.closest('.field-type')!;
-      const label = field.querySelector('.field-label') as HTMLElement;
-      const range = document.createRange();
-      range.selectNodeContents(label);
-      const text = range.getBoundingClientRect();
-      const control = (field.querySelector('.rs__control, input') as HTMLElement).getBoundingClientRect();
-      return {text: {x: text.left + 4, y: text.top + text.height / 2}, mark: {x: text.right + 6 + parseFloat(getComputedStyle(label, '::after').width) / 2, y: text.top + text.height / 2}, control: {x: control.left + control.width / 2, y: control.top + control.height / 2}};
-    });
-    await p.mouse.move(spots.text.x, spots.text.y);
+    // a field's description: an « i » after its label (the one bubble of the builder), no line under the field
+    const described = await p.evaluate(() => ({marks: document.querySelectorAll('#section-manager-panel-content .help-label .info-bubble__button').length, lines: document.querySelectorAll('#section-manager-panel-content .field-description').length}));
+    const mark = p.locator('#section-manager-panel-content .help-label .info-bubble__button').first();
+    await mark.hover();
     await p.waitForTimeout(300);
-    const onText = await bubbleShown();
-    await p.mouse.click(spots.control.x, spots.control.y);
-    await p.waitForTimeout(300);
-    const inUse = await bubbleShown();
-    // (the select closed by a second click, not Escape: no menu open, Escape would close the dialog)
-    await p.mouse.click(spots.control.x, spots.control.y);
-    await p.waitForTimeout(200);
-    await p.mouse.move(spots.mark.x, spots.mark.y);
-    await p.waitForTimeout(300);
-    const onMark = await bubbleShown();
+    const markBubble = await bubbleOf(mark);
     await p.mouse.move(0, 0);
-    check(onText === false && inUse === false && onMark === true, `a field's description shows on its « i » only: not on the label (${onText}), not while the field is used (${inUse}), on the « i » (${onMark})`);
+    check(described.marks > 0 && described.lines === 0 && markBubble.visible, `a field's description is an « i » after its label, no line under the field (${described.marks} « i », ${described.lines} line)`);
+    // Payload's internal class names the builder's styles and scripts rely on (src/fields/sections/_payload.scss,
+    // payloadDom.ts): all in the dialog today; one missing after an upgrade means a rule to review
+    const internals = ['.field-type', '.field-type__wrap', '.field-label', '.render-fields', '.row__fields', '.btn', '.btn__label', '.rs__control', '.rs__value-container', '.checkbox-input', '.radio-input'];
+    const gone = await p.evaluate((list) => list.filter((selector) => !document.querySelector(`.section-manager__body ${selector}`)), internals);
+    check(gone.length === 0, `Payload's internal class names used by the builder are all in the dialog${gone.length ? ` (missing: ${gone.join(', ')})` : ''}`);
     check((await p.locator('#section-manager-panel-content .column-content__head input').count()) === 0, 'no display name for a component: rows are named, components are not');
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-card.png`});
     await p.locator('.section-manager__tab[aria-controls="section-manager-panel-blocks"]').click();

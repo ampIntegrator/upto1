@@ -4,11 +4,10 @@
 // depends on each: a renamed class costs layout only (a description shown in line again, a field
 // at its own width), never data.
 
-// a field: its wrapper, its label, the box around its input, its description
+// a field: its wrapper, its label, the box around its input
 $field: '.field-type';
 $field-wrap: '.field-type__wrap';
 $field-label: '.field-label';
-$field-description: '.field-description';
 // kinds of field (second class of the wrapper)
 $field-text: '.text';
 $field-row: '.row';
