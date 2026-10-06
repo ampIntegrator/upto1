@@ -16,6 +16,7 @@ import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0
 import { ParagraphFeatureClient as ParagraphFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { RowsBuilder as RowsBuilder_dd50ec209b50fe76207de513e3d57a2a } from '@/fields/sections/RowsBuilder'
 import { SectionManager as SectionManager_2f28c0d24c15dbe3e22efa3b2098df50 } from '@/fields/sections/SectionManager'
+import { ShareField as ShareField_17b89ffe86cf01d02c0120075f61de55 } from '@/fields/sections/ShareField'
 import { OverviewComponent as OverviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { MetaTitleComponent as MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
@@ -67,6 +68,7 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#ParagraphFeatureClient": ParagraphFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@/fields/sections/RowsBuilder#RowsBuilder": RowsBuilder_dd50ec209b50fe76207de513e3d57a2a,
   "@/fields/sections/SectionManager#SectionManager": SectionManager_2f28c0d24c15dbe3e22efa3b2098df50,
+  "@/fields/sections/ShareField#ShareField": ShareField_17b89ffe86cf01d02c0120075f61de55,
   "@payloadcms/plugin-seo/client#OverviewComponent": OverviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#MetaTitleComponent": MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860,

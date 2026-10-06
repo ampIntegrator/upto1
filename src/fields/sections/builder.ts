@@ -58,7 +58,7 @@ export function createSectionBuilder({blocks, settings = [], fieldName = 'sectio
   const sectionBlock: Block = {
     slug: 'section',
     labels: {singular: T.blocks.section.singular, plural: T.blocks.section.plural},
-    fields: sectionFields({blocks, settings, shareable: Boolean(shared), condition, presetRows, groupHeading, preview, headerFields}),
+    fields: sectionFields({blocks, settings, shareable: shared ? shared.collection : false, condition, presetRows, groupHeading, preview, headerFields}),
   };
   const sectionBlocks: Block[] = [sectionBlock];
   if (shared) {

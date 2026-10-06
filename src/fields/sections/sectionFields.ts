@@ -23,7 +23,6 @@ import {rowWidthError, tooNarrowError, tooWideError} from './validation';
  */
 
 type Sibling = Record<string, unknown>;
-const whenChecked = (name: string) => (_d: unknown, s: Sibling) => Boolean(s?.[name]);
 
 export type SectionFieldsOptions = {
   /** Content blocks offered in a column (the empty cell is always there, first). */
@@ -31,7 +30,8 @@ export type SectionFieldsOptions = {
   /** Host fields shown at the top of « Section settings » (background, etc.). */
   settings?: Field[];
   /** Adds the « save to shared sections » checkbox (page block only). */
-  shareable?: boolean;
+  /** the shared sections' collection, when a page's section may be saved there */
+  shareable?: string | false;
   /**
    * Shows the rows only when it holds; every setting is visible from the start (Nicolas, 1 Oct. 2026) (for instance once a host
    * setting is chosen). Note for the database: Payload makes the required fields of the rows
@@ -163,24 +163,20 @@ export function sectionFields({blocks, settings = [], shareable = false, conditi
     name: 'anchor',
     type: 'text',
     label: T.settings.anchor,
-    admin: {width: shareable ? '34%' : '100%', description: T.settings.anchorDescription},
+    admin: {description: T.settings.anchorDescription},
     validate: (value: unknown, {req}: {req: PayloadRequest}) => !value || (typeof value === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)) || tr(T.validation.anchor, req.i18n?.language),
   };
-  // the anchor and, on a page's section, the sharing: in the document's form, at the section's level
-  // (not in the « Gérer » dialog, Nicolas, 1 Oct. 2026), whatever the background
-  const identity: Field[] = [
-    group({name: 'groupAnchor', label: T.settings.groupAnchor, icon: 'anchor', always: true}),
-    {
-      type: 'row',
-      fields: shareable
-        ? [
-            anchorField,
-            {name: 'saveAsShared', type: 'checkbox', label: T.settings.saveAsShared, defaultValue: false, admin: {width: '33%', description: T.settings.saveAsSharedDescription}},
-            {name: 'sharedTitle', type: 'text', label: T.settings.sharedTitle, admin: {width: '33%', condition: whenChecked('saveAsShared')}},
-          ]
-        : [anchorField],
-    },
-  ];
+  // on a page's section, the sharing: a box that can be checked once the section has a name (its
+  // header, Payload's blockName): the shared section takes that name (Nicolas, 6 Oct. 2026); checked
+  // without a name, or with the name of an existing shared section, the save is refused (the checks
+  // are in `shareSectionsHook`, which runs before Payload validates the fields)
+  const shareField: Field = {
+    name: 'saveAsShared',
+    type: 'checkbox',
+    label: T.settings.saveAsShared,
+    defaultValue: false,
+    admin: {components: {Field: {path: '@/fields/sections/ShareField#ShareField'}}},
+  };
   const common: Field[] = [
     // the host's settings, with their own group headings (background, edge line…)
     ...settings,
@@ -207,19 +203,28 @@ export function sectionFields({blocks, settings = [], shareable = false, conditi
   // the settings' group headings: the dialog lays each group out as a column
   const groups = common.flatMap((f) => (f.type === 'ui' ? [f.name] : []));
   return [
-    // the « Gérer » dialog (SectionManager, 1 Oct. 2026): an unnamed collapsible wrapping the two framed
-    // blocks below, shown as a button in the page; presentation only, the data does not change
+    // one line in the document's form (Nicolas, 6 Oct. 2026): the « Gérer » button, the anchor and,
+    // on a page's section, the sharing box; their explanations in « i » bubbles, no line of help
     {
-      type: 'collapsible',
-      label: T.manager.title,
-      admin: {components: {Field: {path: '@/fields/sections/SectionManager#SectionManager', clientProps: {preview: preview ? {...preview, parts: partsMap(blocks)} : undefined, groups, headerFields, minSpans: minSpanMap(blocks), maxSpans: maxSpanMap(blocks), hiddenBlocks: blocks.filter((b) => b.hidden).map((b) => b.block.slug), samples: sampleMap(blocks), presetRows}}}},
+      type: 'row',
+      admin: {className: 'section-identity'},
       fields: [
-        // section settings (the dialog's first panel)
-        {type: 'collapsible', label: T.settings.collapsible, fields: common},
-        // the rows (RowsBuilder, the dialog's second panel)
-        {type: 'collapsible', label: T.rows.collapsible, admin: {condition}, fields: [rowsField(blocks, condition, presetRows)]},
+        // the « Gérer » dialog (SectionManager, 1 Oct. 2026): an unnamed collapsible wrapping the two framed
+        // blocks below, shown as a button in the page; presentation only, the data does not change
+        {
+          type: 'collapsible',
+          label: T.manager.title,
+          admin: {components: {Field: {path: '@/fields/sections/SectionManager#SectionManager', clientProps: {preview: preview ? {...preview, parts: partsMap(blocks)} : undefined, groups, headerFields, minSpans: minSpanMap(blocks), maxSpans: maxSpanMap(blocks), hiddenBlocks: blocks.filter((b) => b.hidden).map((b) => b.block.slug), samples: sampleMap(blocks), presetRows}}}},
+          fields: [
+            // section settings (the dialog's first panel)
+            {type: 'collapsible', label: T.settings.collapsible, fields: common},
+            // the rows (RowsBuilder, the dialog's second panel)
+            {type: 'collapsible', label: T.rows.collapsible, admin: {condition}, fields: [rowsField(blocks, condition, presetRows)]},
+          ],
+        },
+        anchorField,
+        ...(shareable ? [shareField] : []),
       ],
     },
-    ...identity,
   ];
 }

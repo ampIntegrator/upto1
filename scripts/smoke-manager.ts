@@ -17,6 +17,8 @@ const stamp = Date.now();
 const TITLE = 'Un titre d’essai';
 const EDITED = 'Titre modifié en direct';
 const SECOND = 'Deuxième rangée';
+/** name of the throwaway page's second section, and of a throwaway shared section (the same, on purpose) */
+const SHARED_NAME = `ZZ smoke partagée ${Date.now()}`;
 
 async function main() {
   const payload = await getPayload({config});
@@ -35,8 +37,9 @@ async function main() {
   const {chromium} = await import('@playwright/test');
   const browser = await chromium.launch();
   try {
-    page = (await payload.create({collection: 'pages', data: {title: 'ZZ smoke Gérer', slug: `zz-smoke-manager-${stamp}`, hero: {variant: 'page-glow', title: 'Smoke'}, sections: [section, {blockType: 'section', mode: 'light', tint: 'light', texture: 'dots', rows: []}]} as never})) as {id: number};
+    page = (await payload.create({collection: 'pages', data: {title: 'ZZ smoke Gérer', slug: `zz-smoke-manager-${stamp}`, hero: {variant: 'page-glow', title: 'Smoke'}, sections: [section, {blockType: 'section', blockName: SHARED_NAME, mode: 'light', tint: 'light', texture: 'dots', rows: []}]} as never})) as {id: number};
     const pageId = page.id;
+    await payload.create({collection: 'sections', data: {title: SHARED_NAME, mode: 'light', tint: 'light', texture: 'grid', rows: []} as never});
     // 1 · unsaved values are populated by the read operation (an image given as an ID comes back as a document)
     const media = (await payload.find({collection: 'media', limit: 1, depth: 0})).docs[0];
     if (media) {
@@ -49,7 +52,7 @@ async function main() {
     // the placeholder values a block starts with are valid stored values (a text box and its rich text)
     const sampled = await payload.update({collection: 'pages', id: pageId, data: {sections: [section, {blockType: 'section', mode: 'light', tint: 'light', texture: 'dots', rows: [{columns: [{span: '6', contents: [{blockType: 'textBox', ...textBoxBlock.sample}]}, {span: '6', contents: []}]}]}]} as never}).then(() => true, () => false);
     check(sampled, 'a block saved with its placeholder values is accepted');
-    await payload.update({collection: 'pages', id: pageId, data: {sections: [section, {blockType: 'section', mode: 'light', tint: 'light', texture: 'dots', rows: []}]} as never});
+    await payload.update({collection: 'pages', id: pageId, data: {sections: [section, {blockType: 'section', blockName: SHARED_NAME, mode: 'light', tint: 'light', texture: 'dots', rows: []}]} as never});
 
     // 2 · the preview page gives nothing to a visitor
     const anonymous = await (await fetch(`${BASE}/apercu-section?frame=smoke-${stamp}`)).text();
@@ -69,6 +72,34 @@ async function main() {
     if (SHOTS) await p.screenshot({path: `${SHOTS}/manager-form.png`});
     // Payload renders a field once it is on screen: wait for it
     check(await p.locator('input[name="sections.0.anchor"]').waitFor({timeout: 5000}).then(() => true, () => false), 'the anchor is in the page form, at the section level');
+    // the section's line in the page form: « Section » with its « i » over the button, the anchor with its
+    // « i », the sharing box; the same structure, aligned at the top, no line of help
+    const identity = await p.evaluate(() => {
+      const row = document.querySelector('.section-identity');
+      const button = row?.querySelector('.section-manager__summary');
+      const anchor = row?.querySelector('input[name="sections.0.anchor"]')?.closest('.field-type');
+      const share = row?.querySelector('.section-share');
+      const tops = [button, anchor, share].map((el) => (el ? Math.round(el.getBoundingClientRect().top) : -1));
+      return {row: Boolean(row), hint: document.querySelectorAll('.section-manager__hint').length, bubbles: row?.querySelectorAll('.info-bubble').length, tops, anchorMark: anchor ? getComputedStyle(anchor.querySelector('.field-label')!, '::after').content.includes('i') : false, shareDisabled: Boolean(share?.querySelector('input[disabled], input[readonly]'))};
+    });
+    check(identity.row && identity.hint === 0 && identity.bubbles === 2 && identity.anchorMark && new Set(identity.tops).size === 1 && identity.tops[0] > 0, `the section's line: « Section » with an « i » over the button, the anchor with an « i », the sharing box, aligned at the top, no line of help (${JSON.stringify(identity)})`);
+    check(identity.shareDisabled, 'a section without a name shows the sharing box, which cannot be checked');
+    // the sharing box of a named section can be checked; refused on save when a shared section has that name already
+    await p.locator('.blocks-field__rows .collapsible__toggle').nth(1).click();
+    const shareBox = p.locator('#field-sections__1__saveAsShared');
+    const shareClick = p.locator('.section-share').nth(1).locator('.checkbox-input');
+    await shareClick.waitFor({timeout: 5000});
+    await shareBox.click({force: true});
+    await p.waitForTimeout(300);
+    check(await shareBox.isChecked(), `a named section offers a sharing box that can be checked (disabled: ${await shareBox.evaluate((el) => (el as HTMLInputElement).disabled)})`);
+    await p.getByRole('button', {name: /^(Sauvegarder|Save)$/}).first().click();
+    await p.waitForTimeout(2500);
+    const taken = await p.evaluate(() => /s’appelle déjà|already named/.test(document.body.innerText));
+    const sharedCount = (await payload.count({collection: 'sections', where: {title: {equals: SHARED_NAME}}})).totalDocs;
+    check(taken && sharedCount === 1, `a name a shared section already has is refused on save, nothing is created (${sharedCount} shared section of that name)`);
+    await shareBox.click({force: true});
+    await p.locator('.blocks-field__rows .collapsible__toggle').nth(1).click();
+    await p.waitForTimeout(300);
     await p.getByRole('button', {name: /^(Gérer|Manage)$/}).first().click();
     const frame = p.frameLocator('.section-preview__frame');
     await frame.getByText(TITLE).waitFor({timeout: 20000});
@@ -714,6 +745,7 @@ async function main() {
     await payload.delete({collection: 'payload-locked-documents', where: {'user.value': {equals: user.id}}});
     await payload.delete({collection: 'payload-preferences', where: {'user.value': {equals: user.id}}});
     if (page) await payload.delete({collection: 'pages', id: page.id});
+    await payload.delete({collection: 'sections', where: {title: {equals: SHARED_NAME}}});
     await payload.delete({collection: 'users', id: user.id});
   }
   log(failures ? `${failures} check(s) failed` : 'All checks passed');

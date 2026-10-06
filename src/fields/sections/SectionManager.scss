@@ -1,22 +1,127 @@
 @use './payload' as p;
 
+// a field's description takes no line: an « i » after the label, the text in a bubble **while the
+// pointer is on the « i » itself** (not on the label, not while the field has the focus: the bubble
+// covered the field being used, Nicolas, 5 Oct. 2026). Still read by screen readers; a checkbox
+// keeps its line: its label is not where the « i » could go
+@mixin description-bubbles {
+  #{p.$field}:not(#{p.$field-checkbox}):has(> #{p.$field-wrap} > #{p.$field-description}, > #{p.$field-description}) {
+  position: relative;
+
+  // the label lets the pointer through, its « i » does not: `:hover` on the label is then true
+  // over the « i » only
+  > #{p.$field-label} {
+    pointer-events: none;
+  }
+
+  > #{p.$field-label}::after {
+    pointer-events: auto;
+    // (the empty alternative text keeps the mark out of the field's accessible name)
+    content: 'i' / '';
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: var(--sm-info-size-small);
+    height: var(--sm-info-size-small);
+    margin-left: 6px;
+    border: 1px solid var(--theme-elevation-400);
+    border-radius: 50%;
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 600;
+    line-height: 1;
+    vertical-align: text-bottom;
+    cursor: help;
+  }
+
+  > #{p.$field-wrap} > #{p.$field-description},
+  > #{p.$field-description} {
+    position: absolute;
+    top: 28px;
+    left: 0;
+    z-index: 5;
+    box-sizing: border-box;
+    width: max-content;
+    max-width: min(var(--sm-bubble-width), 100%);
+    margin: 0;
+    padding: 10px 12px;
+    border-radius: 4px;
+    background: var(--theme-elevation-1000);
+    box-shadow: var(--sm-shadow);
+    color: var(--theme-elevation-0);
+    font-size: 14px;
+    line-height: 20px;
+    opacity: 0;
+    clip-path: inset(50%);
+    transition: opacity 120ms ease;
+    pointer-events: none;
+  }
+
+  &:has(> #{p.$field-label}:hover) > #{p.$field-wrap} > #{p.$field-description},
+  &:has(> #{p.$field-label}:hover) > #{p.$field-description} {
+    opacity: 1;
+    clip-path: none;
+  }
+  }
+}
+
 // SectionManager (« Gérer » dialog): settings on top (280 px when it opens), live preview below.
 // Admin side: Payload's theme variables, and the builder's own (tokens.scss).
 
 .section-manager__summary {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: calc(var(--base) / 2) var(--base);
-
-  #{p.$button} {
-    margin: 0;
-  }
+  flex-direction: column;
 }
 
-.section-manager__hint {
+// a title with its « i » over the button, like a field's label (Payload's own spacing under it)
+.section-manager__summary-label,
+.section-share__label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 calc(var(--base) * 0.3);
   font-size: 14px;
-  color: var(--theme-elevation-600);
+  line-height: 20px;
+}
+
+.section-manager__summary-row {
+  display: flex;
+  align-items: center;
+  gap: var(--base);
+  // the button as tall as a text input beside it
+  min-height: calc(var(--base) * 2);
+}
+
+.section-share__error {
+  margin: 4px 0 0;
+  color: var(--theme-error-500);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.section-share #{p.$checkbox-input} {
+  min-height: calc(var(--base) * 2);
+  align-items: center;
+}
+
+// the section's line in the document's form: the button, the anchor, the sharing box, side by side,
+// each a title with its « i » over its field, aligned at the top
+.section-identity > #{p.$row-fields} {
+  align-items: flex-start;
+
+  > #{p.$field} {
+    flex: 1 1 0;
+    margin-bottom: 0;
+  }
+
+  // the collapsible that holds the dialog shows as the button alone; the sharing box is a box
+  > #{p.$field}:first-child,
+  > #{p.$field}:last-child:not(:first-child) {
+    flex: 0 0 auto;
+  }
+
+  @include description-bubbles;
 }
 
 .section-manager__errors {
@@ -331,66 +436,7 @@ $slide: 300ms;
   color: var(--theme-elevation-600);
 }
 
-// in the top part a field's description takes no line: an « i » after the label, the text in a
-// bubble **while the pointer is on the « i » itself** (not on the label, not while the field has the
-// focus: the bubble covered the field being used, Nicolas, 5 Oct. 2026). Still read by screen
-// readers; a checkbox keeps its line: its label is not where the « i » could go
-.section-manager__panels #{p.$field}:not(#{p.$field-checkbox}):has(> #{p.$field-wrap} > #{p.$field-description}, > #{p.$field-description}) {
-  position: relative;
-
-  // the label lets the pointer through, its « i » does not: `:hover` on the label is then true
-  // over the « i » only
-  > #{p.$field-label} {
-    pointer-events: none;
-  }
-
-  > #{p.$field-label}::after {
-    pointer-events: auto;
-    // (the empty alternative text keeps the mark out of the field's accessible name)
-    content: 'i' / '';
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    width: var(--sm-info-size-small);
-    height: var(--sm-info-size-small);
-    margin-left: 6px;
-    border: 1px solid var(--theme-elevation-400);
-    border-radius: 50%;
-    font-size: 14px;
-    font-style: italic;
-    font-weight: 600;
-    line-height: 1;
-    vertical-align: text-bottom;
-    cursor: help;
-  }
-
-  > #{p.$field-wrap} > #{p.$field-description},
-  > #{p.$field-description} {
-    position: absolute;
-    top: 28px;
-    left: 0;
-    z-index: 5;
-    box-sizing: border-box;
-    width: max-content;
-    max-width: min(var(--sm-bubble-width), 100%);
-    margin: 0;
-    padding: 10px 12px;
-    border-radius: 4px;
-    background: var(--theme-elevation-1000);
-    box-shadow: var(--sm-shadow);
-    color: var(--theme-elevation-0);
-    font-size: 14px;
-    line-height: 20px;
-    opacity: 0;
-    clip-path: inset(50%);
-    transition: opacity 120ms ease;
-    pointer-events: none;
-  }
-
-  &:has(> #{p.$field-label}:hover) > #{p.$field-wrap} > #{p.$field-description},
-  &:has(> #{p.$field-label}:hover) > #{p.$field-description} {
-    opacity: 1;
-    clip-path: none;
-  }
+// in the dialog's top part
+.section-manager__panels {
+  @include description-bubbles;
 }

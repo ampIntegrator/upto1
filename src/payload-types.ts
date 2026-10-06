@@ -1408,11 +1408,7 @@ export interface Page {
              * Identifier for an #anchor link: lowercase letters, digits, hyphens.
              */
             anchor?: string | null;
-            /**
-             * On save, the section is copied to “Shared sections” and the page references it.
-             */
             saveAsShared?: boolean | null;
-            sharedTitle?: string | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'section';
@@ -4172,7 +4168,6 @@ export interface PagesSelect<T extends boolean = true> {
                   };
               anchor?: T;
               saveAsShared?: T;
-              sharedTitle?: T;
               id?: T;
               blockName?: T;
             };

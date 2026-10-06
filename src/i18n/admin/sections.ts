@@ -18,7 +18,6 @@ export const sectionsText = texts({
   settings: {
     collapsible: {fr: 'Réglages de la section', en: 'Section settings'},
     // headings of the setting groups (a rule and a title, nothing stored)
-    groupAnchor: {fr: 'Ancre et sauvegarde', en: 'Anchor and saving'},
     groupBackground: {fr: 'Fond de la section', en: 'Section background'},
     groupEdge: {fr: 'Liseré', en: 'Edge line'},
     groupSpacing: {fr: 'Espaces intérieurs', en: 'Inner spacing'},
@@ -71,13 +70,7 @@ export const sectionsText = texts({
     gapYMobile: {fr: 'Écart vertical mobile', en: 'Mobile vertical gap'},
     siteGap: {fr: 'Réglage du site', en: 'Site setting'},
     saveAsShared: {fr: 'Enregistrer dans les sections partagées', en: 'Save to shared sections'},
-    saveAsSharedDescription: {fr: 'À l’enregistrement, la section est copiée dans « Sections partagées » et la page y fait référence.', en: 'On save, the section is copied to “Shared sections” and the page references it.'},
-    sharedTitle: {fr: 'Nom de la section partagée', en: 'Shared section name'},
-    /** Title of a section saved as shared without a name. */
-    sharedDefaultTitle: {
-      fr: ({page, n}: {page: string | null; n: number}) => `${page ?? 'Page'} · section ${n}`,
-      en: ({page, n}: {page: string | null; n: number}) => `${page ?? 'Page'} · section ${n}`,
-    },
+    saveAsSharedDescription: {fr: 'Coché : à l’enregistrement de la page, la section est copiée dans « Sections partagées » sous le nom de la section (son en-tête) et la page y fait référence.', en: 'Checked: when the page is saved, the section is copied to “Shared sections” under the section’s name (its header) and the page refers to it.'},
   },
   rows: {
     collapsible: {fr: 'Rangées', en: 'Rows'},
@@ -230,6 +223,7 @@ export const sectionsText = texts({
     open: {fr: 'Gérer', en: 'Manage'},
     openDescription: {fr: 'Fond, découpage et blocs de la section, avec l’aperçu en direct.', en: 'Background, layout and blocks of the section, with the live preview.'},
     title: {fr: 'Gérer la section', en: 'Manage the section'},
+    summaryLabel: {fr: 'Section', en: 'Section'},
     close: {fr: 'Fermer', en: 'Close'},
     save: {fr: 'Enregistrer', en: 'Save'},
     saveAndClose: {fr: 'Enregistrer et fermer', en: 'Save and close'},
@@ -301,6 +295,11 @@ export const sectionsText = texts({
     editColumnShort: {fr: 'Modifier le contenu', en: 'Edit the content'},
   },
   validation: {
+    sharedNameTaken: {
+      fr: ({name}: {name: string}) => `Une section partagée s’appelle déjà « ${name} » : renomme la section.`,
+      en: ({name}: {name: string}) => `A shared section is already named “${name}”: rename the section.`,
+    },
+    sharedNeedsName: {fr: 'Nomme la section (son en-tête) pour l’enregistrer dans les sections partagées.', en: 'Name the section (its header) to save it to the shared sections.'},
     tooNarrow: {
       fr: ({block, min, span}: {block: string; min: number; span: number}) => `« ${block} » a besoin d'au moins ${min} colonnes ; cette colonne en fait ${span}.`,
       en: ({block, min, span}: {block: string; min: number; span: number}) => `“${block}” needs at least ${min} columns; this column has ${span}.`,

@@ -32,6 +32,7 @@ import {ManagerContext} from './managerContext';
 import {PREVIEW_EDIT, PREVIEW_OPEN, PREVIEW_PICK, PREVIEW_SELECT, type PreviewBox, type PreviewColumn, type PreviewColumnBox, type PreviewEvent, type SectionPreviewOptions} from './preview';
 import {RowsBuilderGhost} from './RowsBuilder';
 import {FieldPopover} from './FieldPopover';
+import {InfoBubble} from './InfoBubble';
 import {LivePreview} from './LivePreview';
 import {useSelectMenus} from './useSelectMenus';
 
@@ -75,6 +76,9 @@ const SPLIT_MIN = 20;
 const SPLIT_MAX = 80;
 const SPLIT_STEP = 2;
 /** kept to a tenth of a percent: the handle follows the pointer smoothly */
+/** the section's own path, without the `_index-…` of the row the field sits in */
+const sectionPath = (parentPath: string): string => parentPath.replace(/(\._index-[\d-]+)+$/, '');
+
 const clampSplit = (n: number) => Math.min(SPLIT_MAX, Math.max(SPLIT_MIN, Math.round(n * 10) / 10));
 
 /** fields of the framed block at `index` (an unnamed collapsible), or none */
@@ -83,9 +87,11 @@ const innerFields = (field: CollapsibleFieldClient, index: number): ClientField[
   return f && 'fields' in f ? f.fields : [];
 };
 
-export function SectionManager({field, path, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, groups, headerFields, minSpans, maxSpans, hiddenBlocks, samples, presetRows}: Props) {
+export function SectionManager({field, path, indexPath, parentPath: givenParentPath, parentSchemaPath, permissions, readOnly, preview, groups, headerFields, minSpans, maxSpans, hiddenBlocks, samples, presetRows}: Props) {
   const {t} = useAdminText();
   const {openModal, closeModal, isModalOpen} = useModal();
+  // the section's path: inside a row, Payload adds the row's index to the parent path (`sections.0._index-0`)
+  const parentPath = sectionPath(givenParentPath);
   const slug = `section-manager-${path}`;
   const prefix = parentPath ? `${parentPath}.` : '';
   // invalid fields of the section (after a save attempt): shown next to the button, the fields being hidden
@@ -94,12 +100,18 @@ export function SectionManager({field, path, indexPath, parentPath, parentSchema
 
   return (
     <div className="section-manager">
+      {/* same structure as the fields beside it: a title with its « i », then the button */}
       <div className="section-manager__summary">
-        <Button buttonStyle="secondary" onClick={() => openModal(slug)}>
-          {t(T.manager.open)}
-        </Button>
-        <span className="section-manager__hint">{t(T.manager.openDescription)}</span>
-        {errors > 0 ? <span className="section-manager__errors">{t(T.manager.errors, {n: errors})}</span> : null}
+        <p className="section-manager__summary-label">
+          {t(T.manager.summaryLabel)}
+          <InfoBubble label={t(T.builder.helpLabel)} text={t(T.manager.openDescription)} align="start" />
+        </p>
+        <div className="section-manager__summary-row">
+          <Button buttonStyle="secondary" margin={false} onClick={() => openModal(slug)}>
+            {t(T.manager.open)}
+          </Button>
+          {errors > 0 ? <span className="section-manager__errors">{t(T.manager.errors, {n: errors})}</span> : null}
+        </div>
       </div>
       <Modal slug={slug} className="section-manager__modal" closeOnBlur={false}>
         {open ? (

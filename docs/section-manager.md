@@ -7,7 +7,15 @@ fails, go back to `payload` / `main`.
 ## What it is
 
 In a page, a section shows its name, a « Gérer » button and, below it, its anchor and (on a page)
-the « save as shared » checkbox: these two stay in the document's form, not in the dialog. The
+the « save as shared » box: these stay in the document's form, not in the dialog, **on one line**
+(Nicolas, 6 Oct. 2026; row `section-identity`): « Section » with its « i » over the « Gérer » button,
+the anchor with its « i », the sharing box with its « i » (`ShareField.tsx`); the same structure for
+the three, aligned at the top, no line of help. **The shared section takes the section's name**
+(its header, Payload's blockName; the `sharedTitle` field is gone, migration
+`20261006_082539_shared_section_named_by_block`): without a name the box cannot be checked and its
+« i » says why; on save, `shareSectionsHook` refuses a section without a name or whose name a shared
+section already has (a `ValidationError` on the box, shown under it: the checks cannot be a field's
+`validate`, Payload validates after this hook). The
 button opens a full-screen dialog:
 
 - top (280 px by default): the settings, in three horizontal accordions (one open, the others folded to a
