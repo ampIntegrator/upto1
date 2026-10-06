@@ -1,6 +1,6 @@
 # Forms
 
-Built on 21 September 2026 from the handoff `docs/handoff-2026-09-21-forms.md` (decisions taken with
+Built on 21 September 2026 from a handoff brief (removed on 6 October 2026, its decisions are in this document) (decisions taken with
 Nicolas). Mockup: `Orbita/orbita/17-forms.html` (fields, states, « Demander une démo » card).
 
 ## Admin

@@ -1,6 +1,6 @@
 # Case studies (« réalisations »)
 
-Built on 17 September 2026 from the handoff `docs/handoff-2026-09-17-cases.md` (decisions taken
+Built on 17 September 2026 from a handoff brief (removed on 6 October 2026, its decisions are in this document) (decisions taken
 with Nicolas). Mockups: `Orbita/orbita/23-portfolioPost.html` (a case study),
 `24-portfolioCards.html` (the realisation card). Same logic as the blog (`docs/blog.md`), with the
 shared listing code described there.

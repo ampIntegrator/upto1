@@ -1,6 +1,6 @@
 # Modals
 
-Built on 22 September 2026 from the handoff `docs/handoff-2026-09-22-modals.md` (decisions taken with
+Built on 22 September 2026 from a handoff brief (removed on 6 October 2026, its decisions are in this document) (decisions taken with
 Nicolas). A modal is content written once in the admin and opened over any page, without leaving it
 nor changing its address (an anchor, `#modale-<slug>`).
 

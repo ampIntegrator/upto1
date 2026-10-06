@@ -325,3 +325,36 @@ In the order that pays off first:
 > Since 1 October 2026, on the `previewer` branch, the builder lives in the « Gérer » dialog and
 > its rows are a line of squares: see `docs/section-manager.md`. What this file says about the
 > cells, the column handles and the mobile order dialog describes `main`.
+
+## Rules and traps (from the 17 September 2026 handoff, kept here when the handoffs were removed on 6 October 2026)
+
+- **Three layers.** `src/fields/sections/` is the neutral section builder (future Payload
+  plugin: grid, rows, columns, mobile order, drag and drop, validation). It knows no
+  component, no theme, no media collection and never imports `src/components/`. The site's
+  choices live in `src/sections.config.ts` (section settings, block list, row condition)
+  and `src/fields/blocks/` (one `ContentBlock = {block, minSpan, maxSpan?, fill?}` per
+  block). Rendering: `src/lib/sections.ts` (Payload data → props, async) and
+  `src/components/PageSections.tsx` (Astryx components).
+- **Tests.** Never on a real page. `pnpm smoke:sections` (dev server running) creates a
+  throwaway page with every block, checks the width rules and the site rendering, then
+  deletes it: extend it with every new block. `pnpm test:int`, `pnpm run lint` (0 errors),
+  `pnpm exec tsc --noEmit`. `pnpm seed:demo` recreates the three demo pages
+  (`/demo-tarifs`, `/demo-contenus`, `/demo-etapes`): add the new blocks there too.
+- **Picker previews.** `PREVIEW_SLUGS` in `src/fields/blocks/previews.ts`, one demo per
+  slug in `src/app/(frontend)/apercu/[slug]/Apercu.tsx`, then `pnpm previews:build`.
+- **Known traps.** A block file that imports `@payloadcms/richtext-lexical` (server) must
+  never be imported by client code: keep its slug in a separate module (see
+  `textBoxSlug.ts`), otherwise Next fails with « Can't resolve 'fs' ». Payload's database
+  adapter reads `admin.condition` on array / block / group fields to make required columns
+  nullable: do not remove the `condition` of the `rows` field. The dev server (started by
+  Nicolas) sometimes keeps a stale server render for a catalogue route after a component
+  change: a hydration error on one `/design/composants/*` route only means restart
+  `pnpm dev`, not a bug.
+- **Titles.** Every title field comes with the shared `tagField` (h2 to h6, p or span) and
+  the component renders it through `Title` (`src/components/TitleTag.tsx`): the tag never
+  changes the look.
+- **Widths.** Minimum and maximum spans come from the catalogue's registry,
+  `src/components/content-specs.ts` (`minSpan`, `maxSpan`, capacity tables such as
+  `stepsCapacity`), tested in `tests/int/content-specs.int.spec.ts`. A block whose
+  capacity depends on its data validates its own field against `columnSpanAt(data, path)`
+  with an explicit FR/EN message (see `processStepsBlock.ts`, `collectionBlock.ts`).

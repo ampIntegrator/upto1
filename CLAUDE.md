@@ -63,11 +63,11 @@ vertical rhythm in `src/app/(payload)/custom.scss`. New `ui` fields outside a bl
 restart (Payload caches its client config). Never delete a document open in the admin (seeds update
 in place): the edit view loops and locks SQLite.
 
-Last handoff (tabs, button group, row layouts, done on 17 Sept. 2026): `docs/handoff-2026-09-17.md`.
-It also lists the project rules and known traps: read it before a new column block.
+Rules and known traps of the section builder: the last section of `docs/section-builder.md`; read
+it before a new column block.
 
 Blog and case studies (done on 17 Sept. 2026): `docs/blog.md` (with the listing code they share)
-and `docs/cases.md`; decisions in `docs/handoff-2026-09-17-blog.md` and `-cases.md`. Trap: never share a field or block config object between a
+and `docs/cases.md`. Trap: never share a field or block config object between a
 Lexical editor and a collection (Payload mutates it; tables get dropped): use factories.
 
 Nested pages (done on 21 Sept. 2026): `docs/pages.md` (parent page, full address `path`, 3 levels set
@@ -75,7 +75,7 @@ by `MAX_PAGE_DEPTH`, automatic redirects, routes as dispatchers). Build every pa
 
 Forms (done on 21 Sept. 2026): `docs/forms.md` (plugin-form-builder, « Formulaire » column block 4 to 12,
 one or two columns of fields, multi-step, server action, connection points for the tech lead);
-decisions in `docs/handoff-2026-09-21-forms.md`.
+decisions in `docs/forms.md`.
 
 Section manager (trial started on 1 Oct. 2026, branch `previewer`): `docs/section-manager.md`. A section
 is edited in a full-screen « Gérer » dialog: settings on top (35 %, four horizontal accordions), live
@@ -87,6 +87,6 @@ Live Preview (« Aperçu en direct », « Vue » menu) is unchanged: `docs/live-
 Modals (done on 22 Sept. 2026): `docs/modals.md` (« Modales » collection, opened over the page by an
 internal link or a button to the anchor `#modale-<slug>`; the page renders the modals it links to,
 closed; free body with an inserted form, form buttons in the footer; buttons everywhere pick their
-target with `linkTarget.ts`: « Adresse » or « Contenu du site »); decisions in `docs/handoff-2026-09-22-modals.md`.
+target with `linkTarget.ts`: « Adresse » or « Contenu du site »).
 Internal links of rich texts get their address on the server (`src/lib/links.ts`): use it for any
 new rich text rendered by a client component.

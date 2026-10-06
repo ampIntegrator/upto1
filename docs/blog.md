@@ -1,6 +1,6 @@
 # Blog
 
-Built on 17 September 2026 from the handoff `docs/handoff-2026-09-17-blog.md` (decisions and
+Built on 17 September 2026 from a handoff brief (removed on 6 October 2026, its decisions are in this document) (decisions and
 mockup references). Mockups: `Orbita/orbita/18-blogPost.html` (post), `19-blogCards.html` (cards).
 
 ## The blog page
