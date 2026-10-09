@@ -1,8 +1,8 @@
 import { SectionGroupHeading as SectionGroupHeading_516db130f92e5851f578df53b6aaa2cf } from '@/fields/SectionGroupHeading'
 import { IconPicker as IconPicker_8bfb3e3bce55055cefcbdba58b426cf6 } from '@/fields/IconPicker'
 import { BackgroundComposer as BackgroundComposer_184663dbb823c9178f52bc18003617b9 } from '@/fields/BackgroundComposer'
-import { SwatchRadio as SwatchRadio_0db4766985603351e805e768f67fbd0c } from '@/fields/SwatchRadio'
-import { BlockNameField as BlockNameField_4061162db6db9be055e809ce229cfb8b } from '@/fields/sections/BlockNameField'
+import { HelpLabel as HelpLabel_45e070fcef391b8b4f9d96a82fb78b6e } from '@/fields/sections/HelpLabel'
+import { NoDescription as NoDescription_45e070fcef391b8b4f9d96a82fb78b6e } from '@/fields/sections/HelpLabel'
 import { RscEntryLexicalCell as RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { RscEntryLexicalField as RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { LexicalDiffComponent as LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
@@ -17,6 +17,8 @@ import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { ParagraphFeatureClient as ParagraphFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { RowsBuilder as RowsBuilder_dd50ec209b50fe76207de513e3d57a2a } from '@/fields/sections/RowsBuilder'
+import { SectionManager as SectionManager_2f28c0d24c15dbe3e22efa3b2098df50 } from '@/fields/sections/SectionManager'
+import { ShareField as ShareField_17b89ffe86cf01d02c0120075f61de55 } from '@/fields/sections/ShareField'
 import { OverviewComponent as OverviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { MetaTitleComponent as MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
@@ -53,8 +55,8 @@ export const importMap = {
   "@/fields/SectionGroupHeading#SectionGroupHeading": SectionGroupHeading_516db130f92e5851f578df53b6aaa2cf,
   "@/fields/IconPicker#IconPicker": IconPicker_8bfb3e3bce55055cefcbdba58b426cf6,
   "@/fields/BackgroundComposer#BackgroundComposer": BackgroundComposer_184663dbb823c9178f52bc18003617b9,
-  "@/fields/SwatchRadio#SwatchRadio": SwatchRadio_0db4766985603351e805e768f67fbd0c,
-  "@/fields/sections/BlockNameField#BlockNameField": BlockNameField_4061162db6db9be055e809ce229cfb8b,
+  "@/fields/sections/HelpLabel#HelpLabel": HelpLabel_45e070fcef391b8b4f9d96a82fb78b6e,
+  "@/fields/sections/HelpLabel#NoDescription": NoDescription_45e070fcef391b8b4f9d96a82fb78b6e,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalField": RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#LexicalDiffComponent": LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e,
@@ -69,6 +71,8 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#ParagraphFeatureClient": ParagraphFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@/fields/sections/RowsBuilder#RowsBuilder": RowsBuilder_dd50ec209b50fe76207de513e3d57a2a,
+  "@/fields/sections/SectionManager#SectionManager": SectionManager_2f28c0d24c15dbe3e22efa3b2098df50,
+  "@/fields/sections/ShareField#ShareField": ShareField_17b89ffe86cf01d02c0120075f61de55,
   "@payloadcms/plugin-seo/client#OverviewComponent": OverviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#MetaTitleComponent": MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860,

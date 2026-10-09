@@ -9,7 +9,7 @@
  *   3. required fields, email format, consent;
  *   4. stored in « Réponses » (form-submissions) through the local API: the collection refuses
  *      creation over REST (src/fields/forms/plugin.ts). The plugin then sends the form's emails
- *      through Payload's email adapter, configured by the tech lead (docs/forms.md).
+ *      through Payload's email adapter, configured by the tech lead (docs/site-content.md).
  * Internal errors are logged, never returned.
  */
 import config from '@payload-config';

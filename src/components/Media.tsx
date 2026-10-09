@@ -14,6 +14,7 @@
  * Image via next/image in fill mode: screen-adapted sizes, lazy loading,
  * alt text. Square corners. The container must have a height (stretched row or
  * minimum height), otherwise the media is 0 px tall.
+ * `data-part`: names the image, for the admin's live preview (docs/sections.md).
  */
 import {VStack} from '@astryxdesign/core/Stack';
 import Image from 'next/image';
@@ -39,7 +40,7 @@ export function Media({image, minHeight, minHeightMobile, overlay = 0, sizes = D
   } as React.CSSProperties;
   const opacity = Math.min(1, Math.max(0, overlay));
   return (
-    <VStack className={styles.root} style={vars}>
+    <VStack className={styles.root} style={vars} data-part="image" data-part-kind="image">
       <Image src={image.src} alt={image.alt ?? ''} fill sizes={sizes} className={styles.image} />
       {opacity > 0 ? <i className={styles.overlay} style={{opacity}} aria-hidden="true" /> : null}
       {children != null ? (

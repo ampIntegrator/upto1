@@ -41,7 +41,7 @@ const block: Block = {
     {
       type: 'row',
       fields: [
-        {name: 'tag', type: 'select', label: t.tag, defaultValue: 'h2', options: TAG_OPTIONS, admin: {width: '50%', description: t.tagDescription}},
+        {name: 'tag', type: 'select', label: t.tag, defaultValue: 'h2', options: TAG_OPTIONS, admin: {width: '50%', description: t.tagDescription, custom: {below: true}}},
         {name: 'size', type: 'select', label: t.size, defaultValue: 'display-3', options: SIZE_OPTIONS, admin: {width: '50%'}},
       ],
     },
@@ -64,4 +64,4 @@ const block: Block = {
 };
 
 /** The block as the section builder sees it: at least half the width. */
-export const mediaQuoteBlock: ContentBlock = {block, minSpan: minSpan({type: 'mediaQuote'})};
+export const mediaQuoteBlock: ContentBlock = {block, minSpan: minSpan({type: 'mediaQuote'}), sample: {text: 'Lorem ipsum dolor sit amet.'}, parts: {image: 'image', quote: 'text'}};

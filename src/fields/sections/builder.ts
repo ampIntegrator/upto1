@@ -4,8 +4,10 @@ import {sectionsText as T} from '@/i18n/admin/sections';
 
 import type {ContentBlock} from './contentBlock';
 import {GRID_COLUMNS, type PresetRow, rowTotal} from './grid';
+import type {SectionPreviewOptions} from './preview';
 import {sectionFields} from './sectionFields';
 import {shareSectionsHook} from './shareSections';
+import {withHelpBubbles} from './helpBubbles';
 
 /**
  * Entry point of the section builder, shaped like the future plugin's options:
@@ -28,6 +30,10 @@ export type SectionBuilderOptions = {
   presetRows?: PresetRow[];
   /** The host's heading component for a group of settings (`path#Export`); without it, the neutral one. */
   groupHeading?: string;
+  /** The host's live preview page, shown in the « Gérer » dialog (see preview.ts). */
+  preview?: SectionPreviewOptions;
+  /** Top-level fields of the document shown in the dialog's header (the page's colour scheme…); skipped where the document has none. */
+  headerFields?: string[];
 };
 
 export type SectionBuilder = {
@@ -41,7 +47,7 @@ export type SectionBuilder = {
   beforeChange: CollectionBeforeChangeHook[];
 };
 
-export function createSectionBuilder({blocks, settings = [], fieldName = 'sections', shared = false, condition, presetRows = [], groupHeading}: SectionBuilderOptions): SectionBuilder {
+export function createSectionBuilder({blocks, settings = [], fieldName = 'sections', shared = false, condition, presetRows = [], groupHeading, preview, headerFields}: SectionBuilderOptions): SectionBuilder {
   // configuration errors surface at start-up, not in the admin
   const slugs = new Set(blocks.map((b) => b.block.slug));
   for (const p of presetRows) {
@@ -53,7 +59,7 @@ export function createSectionBuilder({blocks, settings = [], fieldName = 'sectio
   const sectionBlock: Block = {
     slug: 'section',
     labels: {singular: T.blocks.section.singular, plural: T.blocks.section.plural},
-    fields: sectionFields({blocks, settings, shareable: Boolean(shared), condition, presetRows, groupHeading}),
+    fields: withHelpBubbles(sectionFields({blocks, settings, shareable: shared ? shared.collection : false, condition, presetRows, groupHeading, preview, headerFields})),
   };
   const sectionBlocks: Block[] = [sectionBlock];
   if (shared) {
@@ -75,7 +81,7 @@ export function createSectionBuilder({blocks, settings = [], fieldName = 'sectio
       // every section folded when the document opens (inside: settings folded, rows open)
       admin: {description: T.blocks.sectionsDescription, initCollapsed: true},
     },
-    sharedFields: sectionFields({blocks, settings, shareable: false, condition, presetRows, groupHeading}),
+    sharedFields: withHelpBubbles(sectionFields({blocks, settings, shareable: false, condition, presetRows, groupHeading, preview, headerFields})),
     beforeChange: shared ? [shareSectionsHook({fieldName, collection: shared.collection})] : [],
   };
 }

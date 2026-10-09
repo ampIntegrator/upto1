@@ -26,6 +26,9 @@
   flex: 1 1 auto;
   padding: var(--spacing-6);
 }
+/* content centred or at the bottom of a card taller than it (vAlign) */
+.card[data-valign='center'] .inner { justify-content: center; }
+.card[data-valign='end'] .inner { justify-content: flex-end; }
 .card[data-preset='article'] .inner,
 .card[data-preset='realisation'] .inner { padding: 16px 20px 12px; }
 /* brief: no frame or background, the container (footer) handles the layout */

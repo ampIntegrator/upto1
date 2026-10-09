@@ -16,6 +16,8 @@
  * part of the title (bloc preset). With `cta`, the whole card is clickable and
  * hovering it fills the action bar; without `cta`, no bar and no link.
  * Night: place the card inside a <Theme mode="dark">.
+ * `data-part` (bloc preset): names the card's parts (title, text, action link, image, icon); the
+ * admin's live preview edits them in place (docs/sections.md); no effect on the site.
  */
 import {Text} from '@astryxdesign/core/Text';
 import NextLink from 'next/link';
@@ -54,12 +56,14 @@ export type CardProps = {
   result?: string;
   /** realisation: client and city */
   client?: {name: string; location?: string};
+  /** bloc: where the content sits in a card taller than it (cards of a row share one height); top by default */
+  vAlign?: 'start' | 'center' | 'end';
   /** action bar */
   cta?: {label: string; href: string; newTab?: boolean};
   style?: React.CSSProperties;
 };
 
-export function Card({preset = 'bloc', media = {type: 'none'}, title, tag, level, accentTitle, text, chip, date, result, client, cta, style}: CardProps) {
+export function Card({preset = 'bloc', media = {type: 'none'}, title, tag, level, accentTitle, text, chip, date, result, client, vAlign = 'start', cta, style}: CardProps) {
   const editorial = preset !== 'bloc';
   // brief: the link goes through the title only, no action bar
   const showBar = Boolean(cta) && preset !== 'brief';
@@ -72,10 +76,10 @@ export function Card({preset = 'bloc', media = {type: 'none'}, title, tag, level
             <img src={media.src} alt={media.alt ?? ''} loading="lazy" />
           </div>
         ) : (
-          <div className={styles.img} role={media.alt ? 'img' : undefined} aria-label={media.alt} style={{backgroundImage: `url("${media.src}")`}} />
+          <div className={styles.img} role={media.alt ? 'img' : undefined} aria-label={media.alt} style={{backgroundImage: `url("${media.src}")`}} data-part="image" data-part-kind="image" />
         );
       case 'icon':
-        return <div className={styles.iconMedia}><IconSquare iconKey={media.iconKey} size={64} iconSize={28} /></div>;
+        return <div className={styles.iconMedia} data-part="icon" data-part-kind="icon"><IconSquare iconKey={media.iconKey} size={64} iconSize={28} /></div>;
       case 'number':
         return (
           <div className={styles.numberMedia}>
@@ -97,7 +101,7 @@ export function Card({preset = 'bloc', media = {type: 'none'}, title, tag, level
   );
 
   return (
-    <article className={styles.card} data-preset={preset} data-link={cta ? 'true' : undefined} style={style}>
+    <article className={styles.card} data-preset={preset} data-link={cta ? 'true' : undefined} data-valign={vAlign === 'start' ? undefined : vAlign} style={style}>
       <div className={styles.body}>
         {media.type === 'image' ? mediaNode : null}
         <div className={styles.inner}>
@@ -109,7 +113,7 @@ export function Card({preset = 'bloc', media = {type: 'none'}, title, tag, level
               {preset === 'realisation' && result ? <Text type="result">{result}</Text> : null}
             </div>
           ) : null}
-          <Title tag={tag ?? (level === 4 ? 'h4' : 'h3')} type="card" color={accentTitle && !editorial ? 'accent' : 'primary'} className={styles.title}>
+          <Title tag={tag ?? (level === 4 ? 'h4' : 'h3')} type="card" color={accentTitle && !editorial ? 'accent' : 'primary'} className={styles.title} data-part={editorial ? undefined : 'title'}>
             {titleNode}
           </Title>
           {!editorial ? (
@@ -117,7 +121,7 @@ export function Card({preset = 'bloc', media = {type: 'none'}, title, tag, level
               <i />
             </div>
           ) : null}
-          {text ? <p className={styles.text}>{text}</p> : null}
+          {text ? <p className={styles.text} data-part={editorial ? undefined : 'text'}>{text}</p> : null}
           {preset === 'brief' && date ? <Text type="date" className={styles.briefDate}>{date}</Text> : null}
           {preset === 'realisation' && client ? (
             <div className={styles.client}>
@@ -131,7 +135,7 @@ export function Card({preset = 'bloc', media = {type: 'none'}, title, tag, level
         </div>
       </div>
       {cta && showBar ? (
-        <NextLink href={cta.href} {...newTabProps(cta.newTab)} className={styles.cta} tabIndex={editorial ? -1 : undefined} aria-hidden={editorial || undefined}>
+        <NextLink href={cta.href} {...newTabProps(cta.newTab)} className={styles.cta} tabIndex={editorial ? -1 : undefined} aria-hidden={editorial || undefined} data-part={editorial ? undefined : 'action'} data-part-kind={editorial ? undefined : 'link'}>
           <span>{cta.label}</span>
           <ArrowRightIcon />
         </NextLink>

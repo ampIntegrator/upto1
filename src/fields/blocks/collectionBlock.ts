@@ -1,8 +1,10 @@
 import type {Block, PayloadRequest} from 'payload';
 
+import {groupHeading} from '../groupHeading';
 import {linkTarget} from '../linkTarget';
 import {collectionCapacity, minSpan} from '@/components/content-specs';
 import {columnSpanAt, type ContentBlock} from '@/fields/sections/contentBlock';
+import {GAP_OPTIONS} from '@/fields/sections/gaps';
 import {tr} from '@/i18n/admin/languages';
 import {collectionBlockText as t} from '../../i18n/admin/blocks';
 import {CARD_BLOCKS} from './cardBlocks';
@@ -22,6 +24,8 @@ import {testimonialBlock} from './testimonialBlock';
  * to the blog, the case studies or any link.
  */
 export const COLLECTION_SLUG = 'collection';
+/** « item gap » value: the section's gap between columns */
+export const ROW_GAP = 'row';
 
 type Sibling = Record<string, unknown>;
 /** a custom « see all » target is given: a typed address, or a chosen content (linkTarget.ts) */
@@ -53,7 +57,9 @@ const block: Block = {
   slug: COLLECTION_SLUG,
   labels: {singular: t.name, plural: t.plural},
   imageURL: `/apercus/${COLLECTION_SLUG}.png`,
+  // three groups under headings: in the section manager each one is a column, its fields one under the other
   fields: [
+    groupHeading({name: 'groupLayout', label: t.groups.layout, icon: 'square-layout-grid-4', first: true}),
     {
       type: 'row',
       fields: [
@@ -66,7 +72,7 @@ const block: Block = {
             {label: t.layoutSwipe, value: 'swipe'},
             {label: t.layoutCarousel, value: 'carousel'},
           ],
-          admin: {width: '50%'},
+          admin: {width: '34%'},
         },
         {
           name: 'perView',
@@ -74,13 +80,22 @@ const block: Block = {
           label: t.perView,
           defaultValue: '3',
           options: ['2', '3', '4'].map((v) => ({label: v, value: v})),
-          admin: {width: '50%', description: t.perViewDescription},
+          admin: {width: '33%', description: t.perViewDescription},
           validate: (value: unknown, {data, path, req}: {data: unknown; path: (number | string)[]; req: PayloadRequest}) => {
             const perView = Number(value ?? 3);
             const span = columnSpanAt(data, path);
             const capacity = collectionCapacity(span);
             return perView <= capacity || tr(t.tooMany, req.i18n?.language, {perView, capacity, span});
           },
+        },
+        // gap between items (X only): the section's gap between columns, unless set here
+        {
+          name: 'itemGap',
+          type: 'select',
+          label: t.itemGap,
+          defaultValue: ROW_GAP,
+          options: [{label: t.itemGapRow, value: ROW_GAP}, ...GAP_OPTIONS],
+          admin: {width: '33%', description: t.itemGapDescription},
         },
       ],
     },
@@ -115,6 +130,7 @@ const block: Block = {
         {name: 'arrows', type: 'checkbox', label: t.arrows, defaultValue: true, admin: {width: '33%'}},
       ],
     },
+    groupHeading({name: 'groupItems', label: t.groups.items, icon: 'view-columns'}),
     {
       name: 'source',
       type: 'radio',
@@ -171,6 +187,7 @@ const block: Block = {
         {name: 'casesCta', type: 'text', label: t.postsCta, localized: true, admin: {width: '33%'}},
       ],
     },
+    groupHeading({name: 'groupMore', label: t.groups.more, icon: 'link'}),
     {
       type: 'row',
       fields: [

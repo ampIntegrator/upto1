@@ -249,41 +249,27 @@ export interface Page {
   sections?:
     | (
         | {
-            /**
-             * Identifier for an #anchor link: lowercase letters, digits, hyphens.
-             */
-            anchor?: string | null;
-            /**
-             * On save, the section is copied to “Shared sections” and the page references it.
-             */
-            saveAsShared?: boolean | null;
-            sharedTitle?: string | null;
             mode: 'light' | 'dark' | 'media';
             tint?: ('body' | 'light' | 'highlight') | null;
             texture?: ('none' | 'grid' | 'dots' | 'losange') | null;
-            /**
-             * Marks the junction with the section above. Automatic: only between two light backgrounds of the same shade whose texture changes.
-             */
-            edgeTop?: ('auto' | 'always' | 'never') | null;
             darkStyle?: ('night' | 'night-halo') | null;
             mediaType?: ('image' | 'video') | null;
             image?: (number | null) | Media;
             video?: (number | null) | Media;
             poster?: (number | null) | Media;
             overlay?: number | null;
+            edgeTop?: ('auto' | 'always' | 'never') | null;
             spacingTop?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
             spacingBottom?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
             gapX?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
             gapY?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
-            /**
-             * Below 768 px, between all stacked blocks.
-             */
             gapYMobile?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
             /**
-             * Each row splits the width into columns whose widths add up to 12. A column can stay empty. Below 768 px, columns go full width, in the section’s mobile order (phone button); empty columns are hidden there.
+             * Each row splits the width into columns whose widths add up to 12. A column can stay empty. Below 768 px, columns go full width, in the section’s mobile order; empty columns are hidden there.
              */
             rows?:
               | {
+                  name?: string | null;
                   columns?:
                     | {
                         span: '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '12';
@@ -297,6 +283,373 @@ export interface Page {
                                   id?: string | null;
                                   blockName?: string | null;
                                   blockType: 'empty';
+                                }
+                              | {
+                                  image: number | Media;
+                                  title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                                  text?: string | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'cardImage';
+                                }
+                              | {
+                                  iconKey: string;
+                                  title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                                  text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'cardIcon';
+                                }
+                              | {
+                                  prefix?: string | null;
+                                  value: string;
+                                  suffix?: string | null;
+                                  title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                                  text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'cardNumber';
+                                }
+                              | {
+                                  title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                                  text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'cardTitle';
+                                }
+                              | {
+                                  image: number | Media;
+                                  title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                                  text?: string | null;
+                                  cta: {
+                                    label: string;
+                                    kind?: ('url' | 'internal') | null;
+                                    href?: string | null;
+                                    doc?:
+                                      | ({
+                                          relationTo: 'pages';
+                                          value: number | Page;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'posts';
+                                          value: number | Post;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'case-studies';
+                                          value: number | CaseStudy;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'modals';
+                                          value: number | Modal;
+                                        } | null);
+                                    newTab?: boolean | null;
+                                  };
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'cardImageLink';
+                                }
+                              | {
+                                  iconKey: string;
+                                  title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                                  text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
+                                  cta: {
+                                    label: string;
+                                    kind?: ('url' | 'internal') | null;
+                                    href?: string | null;
+                                    doc?:
+                                      | ({
+                                          relationTo: 'pages';
+                                          value: number | Page;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'posts';
+                                          value: number | Post;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'case-studies';
+                                          value: number | CaseStudy;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'modals';
+                                          value: number | Modal;
+                                        } | null);
+                                    newTab?: boolean | null;
+                                  };
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'cardIconLink';
+                                }
+                              | {
+                                  prefix?: string | null;
+                                  value: string;
+                                  suffix?: string | null;
+                                  title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                                  text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
+                                  cta: {
+                                    label: string;
+                                    kind?: ('url' | 'internal') | null;
+                                    href?: string | null;
+                                    doc?:
+                                      | ({
+                                          relationTo: 'pages';
+                                          value: number | Page;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'posts';
+                                          value: number | Post;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'case-studies';
+                                          value: number | CaseStudy;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'modals';
+                                          value: number | Modal;
+                                        } | null);
+                                    newTab?: boolean | null;
+                                  };
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'cardNumberLink';
+                                }
+                              | {
+                                  title: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                                  text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
+                                  cta: {
+                                    label: string;
+                                    kind?: ('url' | 'internal') | null;
+                                    href?: string | null;
+                                    doc?:
+                                      | ({
+                                          relationTo: 'pages';
+                                          value: number | Page;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'posts';
+                                          value: number | Post;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'case-studies';
+                                          value: number | CaseStudy;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'modals';
+                                          value: number | Modal;
+                                        } | null);
+                                    newTab?: boolean | null;
+                                  };
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'cardTitleLink';
+                                }
+                              | {
+                                  post: number | Post;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'postCard';
+                                }
+                              | {
+                                  caseStudy: number | CaseStudy;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'caseCard';
+                                }
+                              | {
+                                  quote: string;
+                                  name: string;
+                                  /**
+                                   * For instance « Broker · Lyon ».
+                                   */
+                                  role?: string | null;
+                                  result?: string | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'testimonial';
+                                }
+                              | {
+                                  /**
+                                   * For instance « BEFORE », « AFTER ».
+                                   */
+                                  chipLabel: string;
+                                  chipTone?: ('accent' | 'high' | 'danger' | 'cat' | 'line') | null;
+                                  meta?: string | null;
+                                  quote: string;
+                                  items?:
+                                    | {
+                                        label: string;
+                                        id?: string | null;
+                                      }[]
+                                    | null;
+                                  tone?: ('check' | 'cross') | null;
+                                  featured?: boolean | null;
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'compareCard';
+                                }
+                              | {
+                                  name: string;
+                                  /**
+                                   * Structure and SEO only: the look does not change.
+                                   */
+                                  nameTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                                  tagline?: string | null;
+                                  price: {
+                                    /**
+                                     * As displayed: « 79 », « 1,490 ».
+                                     */
+                                    value: string;
+                                    currency?: string | null;
+                                    /**
+                                     * « / month », « per month · 2.60 € / day ».
+                                     */
+                                    period?: string | null;
+                                  };
+                                  featured?: boolean | null;
+                                  badge?: string | null;
+                                  /**
+                                   * For instance « Everything in Solo, plus ». Empty: the list uses the title above.
+                                   */
+                                  inherits?: string | null;
+                                  featuresLabel?: string | null;
+                                  features?:
+                                    | {
+                                        label: string;
+                                        end?: string | null;
+                                        id?: string | null;
+                                      }[]
+                                    | null;
+                                  cta: {
+                                    label: string;
+                                    kind?: ('url' | 'internal') | null;
+                                    href?: string | null;
+                                    doc?:
+                                      | ({
+                                          relationTo: 'pages';
+                                          value: number | Page;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'posts';
+                                          value: number | Post;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'case-studies';
+                                          value: number | CaseStudy;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'modals';
+                                          value: number | Modal;
+                                        } | null);
+                                    newTab?: boolean | null;
+                                  };
+                                  mention?: string | null;
+                                  guarantee?: {
+                                    title?: string | null;
+                                    /**
+                                     * Structure and SEO only: the look does not change.
+                                     */
+                                    titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                                    text?: string | null;
+                                  };
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'plan';
+                                }
+                              | {
+                                  featuresLabel?: string | null;
+                                  features?:
+                                    | {
+                                        label: string;
+                                        end?: string | null;
+                                        id?: string | null;
+                                      }[]
+                                    | null;
+                                  totalLabel?: string | null;
+                                  totalValue?: string | null;
+                                  priceLabel?: string | null;
+                                  price: {
+                                    /**
+                                     * As displayed: « 79 », « 1,490 ».
+                                     */
+                                    value: string;
+                                    currency?: string | null;
+                                    /**
+                                     * « / month », « per month · 2.60 € / day ».
+                                     */
+                                    period?: string | null;
+                                  };
+                                  cta: {
+                                    label: string;
+                                    kind?: ('url' | 'internal') | null;
+                                    href?: string | null;
+                                    doc?:
+                                      | ({
+                                          relationTo: 'pages';
+                                          value: number | Page;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'posts';
+                                          value: number | Post;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'case-studies';
+                                          value: number | CaseStudy;
+                                        } | null)
+                                      | ({
+                                          relationTo: 'modals';
+                                          value: number | Modal;
+                                        } | null);
+                                    newTab?: boolean | null;
+                                  };
+                                  mention?: string | null;
+                                  guarantee?: {
+                                    title?: string | null;
+                                    /**
+                                     * Structure and SEO only: the look does not change.
+                                     */
+                                    titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                                    text?: string | null;
+                                  };
+                                  id?: string | null;
+                                  blockName?: string | null;
+                                  blockType: 'priceSingle';
                                 }
                               | {
                                   eyebrow?: string | null;
@@ -436,311 +789,6 @@ export interface Page {
                                   blockType: 'mediaQuote';
                                 }
                               | {
-                                  image: number | Media;
-                                  title: string;
-                                  /**
-                                   * Structure and SEO only: the look does not change.
-                                   */
-                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                                  text?: string | null;
-                                  id?: string | null;
-                                  blockName?: string | null;
-                                  blockType: 'cardImage';
-                                }
-                              | {
-                                  iconKey: string;
-                                  title: string;
-                                  /**
-                                   * Structure and SEO only: the look does not change.
-                                   */
-                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                                  text?: string | null;
-                                  id?: string | null;
-                                  blockName?: string | null;
-                                  blockType: 'cardIcon';
-                                }
-                              | {
-                                  prefix?: string | null;
-                                  value: string;
-                                  suffix?: string | null;
-                                  title: string;
-                                  /**
-                                   * Structure and SEO only: the look does not change.
-                                   */
-                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                                  text?: string | null;
-                                  id?: string | null;
-                                  blockName?: string | null;
-                                  blockType: 'cardNumber';
-                                }
-                              | {
-                                  title: string;
-                                  /**
-                                   * Structure and SEO only: the look does not change.
-                                   */
-                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                                  text?: string | null;
-                                  id?: string | null;
-                                  blockName?: string | null;
-                                  blockType: 'cardTitle';
-                                }
-                              | {
-                                  image: number | Media;
-                                  title: string;
-                                  /**
-                                   * Structure and SEO only: the look does not change.
-                                   */
-                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                                  text?: string | null;
-                                  cta: {
-                                    label: string;
-                                    kind?: ('url' | 'internal') | null;
-                                    href?: string | null;
-                                    doc?:
-                                      | ({
-                                          relationTo: 'pages';
-                                          value: number | Page;
-                                        } | null)
-                                      | ({
-                                          relationTo: 'posts';
-                                          value: number | Post;
-                                        } | null)
-                                      | ({
-                                          relationTo: 'case-studies';
-                                          value: number | CaseStudy;
-                                        } | null)
-                                      | ({
-                                          relationTo: 'modals';
-                                          value: number | Modal;
-                                        } | null);
-                                    newTab?: boolean | null;
-                                  };
-                                  id?: string | null;
-                                  blockName?: string | null;
-                                  blockType: 'cardImageLink';
-                                }
-                              | {
-                                  iconKey: string;
-                                  title: string;
-                                  /**
-                                   * Structure and SEO only: the look does not change.
-                                   */
-                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                                  text?: string | null;
-                                  cta: {
-                                    label: string;
-                                    kind?: ('url' | 'internal') | null;
-                                    href?: string | null;
-                                    doc?:
-                                      | ({
-                                          relationTo: 'pages';
-                                          value: number | Page;
-                                        } | null)
-                                      | ({
-                                          relationTo: 'posts';
-                                          value: number | Post;
-                                        } | null)
-                                      | ({
-                                          relationTo: 'case-studies';
-                                          value: number | CaseStudy;
-                                        } | null)
-                                      | ({
-                                          relationTo: 'modals';
-                                          value: number | Modal;
-                                        } | null);
-                                    newTab?: boolean | null;
-                                  };
-                                  id?: string | null;
-                                  blockName?: string | null;
-                                  blockType: 'cardIconLink';
-                                }
-                              | {
-                                  prefix?: string | null;
-                                  value: string;
-                                  suffix?: string | null;
-                                  title: string;
-                                  /**
-                                   * Structure and SEO only: the look does not change.
-                                   */
-                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                                  text?: string | null;
-                                  cta: {
-                                    label: string;
-                                    kind?: ('url' | 'internal') | null;
-                                    href?: string | null;
-                                    doc?:
-                                      | ({
-                                          relationTo: 'pages';
-                                          value: number | Page;
-                                        } | null)
-                                      | ({
-                                          relationTo: 'posts';
-                                          value: number | Post;
-                                        } | null)
-                                      | ({
-                                          relationTo: 'case-studies';
-                                          value: number | CaseStudy;
-                                        } | null)
-                                      | ({
-                                          relationTo: 'modals';
-                                          value: number | Modal;
-                                        } | null);
-                                    newTab?: boolean | null;
-                                  };
-                                  id?: string | null;
-                                  blockName?: string | null;
-                                  blockType: 'cardNumberLink';
-                                }
-                              | {
-                                  title: string;
-                                  /**
-                                   * Structure and SEO only: the look does not change.
-                                   */
-                                  tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                                  text?: string | null;
-                                  cta: {
-                                    label: string;
-                                    kind?: ('url' | 'internal') | null;
-                                    href?: string | null;
-                                    doc?:
-                                      | ({
-                                          relationTo: 'pages';
-                                          value: number | Page;
-                                        } | null)
-                                      | ({
-                                          relationTo: 'posts';
-                                          value: number | Post;
-                                        } | null)
-                                      | ({
-                                          relationTo: 'case-studies';
-                                          value: number | CaseStudy;
-                                        } | null)
-                                      | ({
-                                          relationTo: 'modals';
-                                          value: number | Modal;
-                                        } | null);
-                                    newTab?: boolean | null;
-                                  };
-                                  id?: string | null;
-                                  blockName?: string | null;
-                                  blockType: 'cardTitleLink';
-                                }
-                              | {
-                                  featuresLabel?: string | null;
-                                  features?:
-                                    | {
-                                        label: string;
-                                        end?: string | null;
-                                        id?: string | null;
-                                      }[]
-                                    | null;
-                                  totalLabel?: string | null;
-                                  totalValue?: string | null;
-                                  priceLabel?: string | null;
-                                  price: {
-                                    value: string;
-                                    currency?: string | null;
-                                    period?: string | null;
-                                  };
-                                  cta: {
-                                    label: string;
-                                    kind?: ('url' | 'internal') | null;
-                                    href?: string | null;
-                                    doc?:
-                                      | ({
-                                          relationTo: 'pages';
-                                          value: number | Page;
-                                        } | null)
-                                      | ({
-                                          relationTo: 'posts';
-                                          value: number | Post;
-                                        } | null)
-                                      | ({
-                                          relationTo: 'case-studies';
-                                          value: number | CaseStudy;
-                                        } | null)
-                                      | ({
-                                          relationTo: 'modals';
-                                          value: number | Modal;
-                                        } | null);
-                                    newTab?: boolean | null;
-                                  };
-                                  mention?: string | null;
-                                  guarantee?: {
-                                    title?: string | null;
-                                    /**
-                                     * Structure and SEO only: the look does not change.
-                                     */
-                                    titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                                    text?: string | null;
-                                  };
-                                  id?: string | null;
-                                  blockName?: string | null;
-                                  blockType: 'priceSingle';
-                                }
-                              | {
-                                  name: string;
-                                  /**
-                                   * Structure and SEO only: the look does not change.
-                                   */
-                                  nameTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                                  tagline?: string | null;
-                                  price: {
-                                    value: string;
-                                    currency?: string | null;
-                                    period?: string | null;
-                                  };
-                                  featured?: boolean | null;
-                                  badge?: string | null;
-                                  /**
-                                   * Empty: the list uses the title above.
-                                   */
-                                  inherits?: string | null;
-                                  featuresLabel?: string | null;
-                                  features?:
-                                    | {
-                                        label: string;
-                                        end?: string | null;
-                                        id?: string | null;
-                                      }[]
-                                    | null;
-                                  cta: {
-                                    label: string;
-                                    kind?: ('url' | 'internal') | null;
-                                    href?: string | null;
-                                    doc?:
-                                      | ({
-                                          relationTo: 'pages';
-                                          value: number | Page;
-                                        } | null)
-                                      | ({
-                                          relationTo: 'posts';
-                                          value: number | Post;
-                                        } | null)
-                                      | ({
-                                          relationTo: 'case-studies';
-                                          value: number | CaseStudy;
-                                        } | null)
-                                      | ({
-                                          relationTo: 'modals';
-                                          value: number | Modal;
-                                        } | null);
-                                    newTab?: boolean | null;
-                                  };
-                                  mention?: string | null;
-                                  guarantee?: {
-                                    title?: string | null;
-                                    /**
-                                     * Structure and SEO only: the look does not change.
-                                     */
-                                    titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                                    text?: string | null;
-                                  };
-                                  id?: string | null;
-                                  blockName?: string | null;
-                                  blockType: 'plan';
-                                }
-                              | {
                                   mode?: ('single' | 'multiple') | null;
                                   columns?: ('1' | '2') | null;
                                   firstOpen?: boolean | null;
@@ -761,32 +809,6 @@ export interface Page {
                                   id?: string | null;
                                   blockName?: string | null;
                                   blockType: 'faq';
-                                }
-                              | {
-                                  quote: string;
-                                  name: string;
-                                  role?: string | null;
-                                  result?: string | null;
-                                  id?: string | null;
-                                  blockName?: string | null;
-                                  blockType: 'testimonial';
-                                }
-                              | {
-                                  chipLabel: string;
-                                  chipTone?: ('accent' | 'high' | 'danger' | 'cat' | 'line') | null;
-                                  meta?: string | null;
-                                  quote: string;
-                                  items?:
-                                    | {
-                                        label: string;
-                                        id?: string | null;
-                                      }[]
-                                    | null;
-                                  tone?: ('check' | 'cross') | null;
-                                  featured?: boolean | null;
-                                  id?: string | null;
-                                  blockName?: string | null;
-                                  blockType: 'compareCard';
                                 }
                               | {
                                   /**
@@ -895,18 +917,6 @@ export interface Page {
                                   blockType: 'buttonGroup';
                                 }
                               | {
-                                  post: number | Post;
-                                  id?: string | null;
-                                  blockName?: string | null;
-                                  blockType: 'postCard';
-                                }
-                              | {
-                                  caseStudy: number | CaseStudy;
-                                  id?: string | null;
-                                  blockName?: string | null;
-                                  blockType: 'caseCard';
-                                }
-                              | {
                                   eyebrow?: string | null;
                                   /**
                                    * A bulleted list, with bold and links.
@@ -1006,6 +1016,10 @@ export interface Page {
                                    * 3 at most on 8 or 9 columns, 4 on 12. Two lines = two rows.
                                    */
                                   perView?: ('2' | '3' | '4') | null;
+                                  /**
+                                   * By default, the section’s gap between columns.
+                                   */
+                                  itemGap?: ('row' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
                                   step?: ('page' | 'item') | null;
                                   indicator?: ('segments' | 'dots' | 'numbers' | 'none') | null;
                                   arrows?: boolean | null;
@@ -1018,6 +1032,9 @@ export interface Page {
                                         | {
                                             quote: string;
                                             name: string;
+                                            /**
+                                             * For instance « Broker · Lyon ».
+                                             */
                                             role?: string | null;
                                             result?: string | null;
                                             id?: string | null;
@@ -1044,6 +1061,7 @@ export interface Page {
                                              */
                                             tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                             text?: string | null;
+                                            vAlign?: ('start' | 'center' | 'end') | null;
                                             id?: string | null;
                                             blockName?: string | null;
                                             blockType: 'cardIcon';
@@ -1058,6 +1076,7 @@ export interface Page {
                                              */
                                             tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                             text?: string | null;
+                                            vAlign?: ('start' | 'center' | 'end') | null;
                                             id?: string | null;
                                             blockName?: string | null;
                                             blockType: 'cardNumber';
@@ -1069,6 +1088,7 @@ export interface Page {
                                              */
                                             tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                             text?: string | null;
+                                            vAlign?: ('start' | 'center' | 'end') | null;
                                             id?: string | null;
                                             blockName?: string | null;
                                             blockType: 'cardTitle';
@@ -1116,6 +1136,7 @@ export interface Page {
                                              */
                                             tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                             text?: string | null;
+                                            vAlign?: ('start' | 'center' | 'end') | null;
                                             cta: {
                                               label: string;
                                               kind?: ('url' | 'internal') | null;
@@ -1153,6 +1174,7 @@ export interface Page {
                                              */
                                             tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                             text?: string | null;
+                                            vAlign?: ('start' | 'center' | 'end') | null;
                                             cta: {
                                               label: string;
                                               kind?: ('url' | 'internal') | null;
@@ -1187,6 +1209,7 @@ export interface Page {
                                              */
                                             tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                             text?: string | null;
+                                            vAlign?: ('start' | 'center' | 'end') | null;
                                             cta: {
                                               label: string;
                                               kind?: ('url' | 'internal') | null;
@@ -1215,6 +1238,9 @@ export interface Page {
                                             blockType: 'cardTitleLink';
                                           }
                                         | {
+                                            /**
+                                             * For instance « BEFORE », « AFTER ».
+                                             */
                                             chipLabel: string;
                                             chipTone?: ('accent' | 'high' | 'danger' | 'cat' | 'line') | null;
                                             meta?: string | null;
@@ -1239,14 +1265,20 @@ export interface Page {
                                             nameTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                             tagline?: string | null;
                                             price: {
+                                              /**
+                                               * As displayed: « 79 », « 1,490 ».
+                                               */
                                               value: string;
                                               currency?: string | null;
+                                              /**
+                                               * « / month », « per month · 2.60 € / day ».
+                                               */
                                               period?: string | null;
                                             };
                                             featured?: boolean | null;
                                             badge?: string | null;
                                             /**
-                                             * Empty: the list uses the title above.
+                                             * For instance « Everything in Solo, plus ». Empty: the list uses the title above.
                                              */
                                             inherits?: string | null;
                                             featuresLabel?: string | null;
@@ -1372,6 +1404,11 @@ export interface Page {
                   id?: string | null;
                 }[]
               | null;
+            /**
+             * Identifier for an #anchor link: lowercase letters, digits, hyphens.
+             */
+            anchor?: string | null;
+            saveAsShared?: boolean | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'section';
@@ -1961,36 +1998,27 @@ export interface Form {
 export interface Section {
   id: number;
   title: string;
-  /**
-   * Identifier for an #anchor link: lowercase letters, digits, hyphens.
-   */
-  anchor?: string | null;
   mode: 'light' | 'dark' | 'media';
   tint?: ('body' | 'light' | 'highlight') | null;
   texture?: ('none' | 'grid' | 'dots' | 'losange') | null;
-  /**
-   * Marks the junction with the section above. Automatic: only between two light backgrounds of the same shade whose texture changes.
-   */
-  edgeTop?: ('auto' | 'always' | 'never') | null;
   darkStyle?: ('night' | 'night-halo') | null;
   mediaType?: ('image' | 'video') | null;
   image?: (number | null) | Media;
   video?: (number | null) | Media;
   poster?: (number | null) | Media;
   overlay?: number | null;
+  edgeTop?: ('auto' | 'always' | 'never') | null;
   spacingTop?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
   spacingBottom?: ('0' | '20' | '40' | '60' | '80' | '100' | '120' | '140' | '160') | null;
   gapX?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
   gapY?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
-  /**
-   * Below 768 px, between all stacked blocks.
-   */
   gapYMobile?: ('site' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
   /**
-   * Each row splits the width into columns whose widths add up to 12. A column can stay empty. Below 768 px, columns go full width, in the section’s mobile order (phone button); empty columns are hidden there.
+   * Each row splits the width into columns whose widths add up to 12. A column can stay empty. Below 768 px, columns go full width, in the section’s mobile order; empty columns are hidden there.
    */
   rows?:
     | {
+        name?: string | null;
         columns?:
           | {
               span: '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '12';
@@ -2004,6 +2032,373 @@ export interface Section {
                         id?: string | null;
                         blockName?: string | null;
                         blockType: 'empty';
+                      }
+                    | {
+                        image: number | Media;
+                        title: string;
+                        /**
+                         * Structure and SEO only: the look does not change.
+                         */
+                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                        text?: string | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'cardImage';
+                      }
+                    | {
+                        iconKey: string;
+                        title: string;
+                        /**
+                         * Structure and SEO only: the look does not change.
+                         */
+                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                        text?: string | null;
+                        vAlign?: ('start' | 'center' | 'end') | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'cardIcon';
+                      }
+                    | {
+                        prefix?: string | null;
+                        value: string;
+                        suffix?: string | null;
+                        title: string;
+                        /**
+                         * Structure and SEO only: the look does not change.
+                         */
+                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                        text?: string | null;
+                        vAlign?: ('start' | 'center' | 'end') | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'cardNumber';
+                      }
+                    | {
+                        title: string;
+                        /**
+                         * Structure and SEO only: the look does not change.
+                         */
+                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                        text?: string | null;
+                        vAlign?: ('start' | 'center' | 'end') | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'cardTitle';
+                      }
+                    | {
+                        image: number | Media;
+                        title: string;
+                        /**
+                         * Structure and SEO only: the look does not change.
+                         */
+                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                        text?: string | null;
+                        cta: {
+                          label: string;
+                          kind?: ('url' | 'internal') | null;
+                          href?: string | null;
+                          doc?:
+                            | ({
+                                relationTo: 'pages';
+                                value: number | Page;
+                              } | null)
+                            | ({
+                                relationTo: 'posts';
+                                value: number | Post;
+                              } | null)
+                            | ({
+                                relationTo: 'case-studies';
+                                value: number | CaseStudy;
+                              } | null)
+                            | ({
+                                relationTo: 'modals';
+                                value: number | Modal;
+                              } | null);
+                          newTab?: boolean | null;
+                        };
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'cardImageLink';
+                      }
+                    | {
+                        iconKey: string;
+                        title: string;
+                        /**
+                         * Structure and SEO only: the look does not change.
+                         */
+                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                        text?: string | null;
+                        vAlign?: ('start' | 'center' | 'end') | null;
+                        cta: {
+                          label: string;
+                          kind?: ('url' | 'internal') | null;
+                          href?: string | null;
+                          doc?:
+                            | ({
+                                relationTo: 'pages';
+                                value: number | Page;
+                              } | null)
+                            | ({
+                                relationTo: 'posts';
+                                value: number | Post;
+                              } | null)
+                            | ({
+                                relationTo: 'case-studies';
+                                value: number | CaseStudy;
+                              } | null)
+                            | ({
+                                relationTo: 'modals';
+                                value: number | Modal;
+                              } | null);
+                          newTab?: boolean | null;
+                        };
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'cardIconLink';
+                      }
+                    | {
+                        prefix?: string | null;
+                        value: string;
+                        suffix?: string | null;
+                        title: string;
+                        /**
+                         * Structure and SEO only: the look does not change.
+                         */
+                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                        text?: string | null;
+                        vAlign?: ('start' | 'center' | 'end') | null;
+                        cta: {
+                          label: string;
+                          kind?: ('url' | 'internal') | null;
+                          href?: string | null;
+                          doc?:
+                            | ({
+                                relationTo: 'pages';
+                                value: number | Page;
+                              } | null)
+                            | ({
+                                relationTo: 'posts';
+                                value: number | Post;
+                              } | null)
+                            | ({
+                                relationTo: 'case-studies';
+                                value: number | CaseStudy;
+                              } | null)
+                            | ({
+                                relationTo: 'modals';
+                                value: number | Modal;
+                              } | null);
+                          newTab?: boolean | null;
+                        };
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'cardNumberLink';
+                      }
+                    | {
+                        title: string;
+                        /**
+                         * Structure and SEO only: the look does not change.
+                         */
+                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                        text?: string | null;
+                        vAlign?: ('start' | 'center' | 'end') | null;
+                        cta: {
+                          label: string;
+                          kind?: ('url' | 'internal') | null;
+                          href?: string | null;
+                          doc?:
+                            | ({
+                                relationTo: 'pages';
+                                value: number | Page;
+                              } | null)
+                            | ({
+                                relationTo: 'posts';
+                                value: number | Post;
+                              } | null)
+                            | ({
+                                relationTo: 'case-studies';
+                                value: number | CaseStudy;
+                              } | null)
+                            | ({
+                                relationTo: 'modals';
+                                value: number | Modal;
+                              } | null);
+                          newTab?: boolean | null;
+                        };
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'cardTitleLink';
+                      }
+                    | {
+                        post: number | Post;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'postCard';
+                      }
+                    | {
+                        caseStudy: number | CaseStudy;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'caseCard';
+                      }
+                    | {
+                        quote: string;
+                        name: string;
+                        /**
+                         * For instance « Broker · Lyon ».
+                         */
+                        role?: string | null;
+                        result?: string | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'testimonial';
+                      }
+                    | {
+                        /**
+                         * For instance « BEFORE », « AFTER ».
+                         */
+                        chipLabel: string;
+                        chipTone?: ('accent' | 'high' | 'danger' | 'cat' | 'line') | null;
+                        meta?: string | null;
+                        quote: string;
+                        items?:
+                          | {
+                              label: string;
+                              id?: string | null;
+                            }[]
+                          | null;
+                        tone?: ('check' | 'cross') | null;
+                        featured?: boolean | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'compareCard';
+                      }
+                    | {
+                        name: string;
+                        /**
+                         * Structure and SEO only: the look does not change.
+                         */
+                        nameTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                        tagline?: string | null;
+                        price: {
+                          /**
+                           * As displayed: « 79 », « 1,490 ».
+                           */
+                          value: string;
+                          currency?: string | null;
+                          /**
+                           * « / month », « per month · 2.60 € / day ».
+                           */
+                          period?: string | null;
+                        };
+                        featured?: boolean | null;
+                        badge?: string | null;
+                        /**
+                         * For instance « Everything in Solo, plus ». Empty: the list uses the title above.
+                         */
+                        inherits?: string | null;
+                        featuresLabel?: string | null;
+                        features?:
+                          | {
+                              label: string;
+                              end?: string | null;
+                              id?: string | null;
+                            }[]
+                          | null;
+                        cta: {
+                          label: string;
+                          kind?: ('url' | 'internal') | null;
+                          href?: string | null;
+                          doc?:
+                            | ({
+                                relationTo: 'pages';
+                                value: number | Page;
+                              } | null)
+                            | ({
+                                relationTo: 'posts';
+                                value: number | Post;
+                              } | null)
+                            | ({
+                                relationTo: 'case-studies';
+                                value: number | CaseStudy;
+                              } | null)
+                            | ({
+                                relationTo: 'modals';
+                                value: number | Modal;
+                              } | null);
+                          newTab?: boolean | null;
+                        };
+                        mention?: string | null;
+                        guarantee?: {
+                          title?: string | null;
+                          /**
+                           * Structure and SEO only: the look does not change.
+                           */
+                          titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                          text?: string | null;
+                        };
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'plan';
+                      }
+                    | {
+                        featuresLabel?: string | null;
+                        features?:
+                          | {
+                              label: string;
+                              end?: string | null;
+                              id?: string | null;
+                            }[]
+                          | null;
+                        totalLabel?: string | null;
+                        totalValue?: string | null;
+                        priceLabel?: string | null;
+                        price: {
+                          /**
+                           * As displayed: « 79 », « 1,490 ».
+                           */
+                          value: string;
+                          currency?: string | null;
+                          /**
+                           * « / month », « per month · 2.60 € / day ».
+                           */
+                          period?: string | null;
+                        };
+                        cta: {
+                          label: string;
+                          kind?: ('url' | 'internal') | null;
+                          href?: string | null;
+                          doc?:
+                            | ({
+                                relationTo: 'pages';
+                                value: number | Page;
+                              } | null)
+                            | ({
+                                relationTo: 'posts';
+                                value: number | Post;
+                              } | null)
+                            | ({
+                                relationTo: 'case-studies';
+                                value: number | CaseStudy;
+                              } | null)
+                            | ({
+                                relationTo: 'modals';
+                                value: number | Modal;
+                              } | null);
+                          newTab?: boolean | null;
+                        };
+                        mention?: string | null;
+                        guarantee?: {
+                          title?: string | null;
+                          /**
+                           * Structure and SEO only: the look does not change.
+                           */
+                          titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
+                          text?: string | null;
+                        };
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'priceSingle';
                       }
                     | {
                         eyebrow?: string | null;
@@ -2142,311 +2537,6 @@ export interface Section {
                         blockType: 'mediaQuote';
                       }
                     | {
-                        image: number | Media;
-                        title: string;
-                        /**
-                         * Structure and SEO only: the look does not change.
-                         */
-                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                        text?: string | null;
-                        id?: string | null;
-                        blockName?: string | null;
-                        blockType: 'cardImage';
-                      }
-                    | {
-                        iconKey: string;
-                        title: string;
-                        /**
-                         * Structure and SEO only: the look does not change.
-                         */
-                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                        text?: string | null;
-                        id?: string | null;
-                        blockName?: string | null;
-                        blockType: 'cardIcon';
-                      }
-                    | {
-                        prefix?: string | null;
-                        value: string;
-                        suffix?: string | null;
-                        title: string;
-                        /**
-                         * Structure and SEO only: the look does not change.
-                         */
-                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                        text?: string | null;
-                        id?: string | null;
-                        blockName?: string | null;
-                        blockType: 'cardNumber';
-                      }
-                    | {
-                        title: string;
-                        /**
-                         * Structure and SEO only: the look does not change.
-                         */
-                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                        text?: string | null;
-                        id?: string | null;
-                        blockName?: string | null;
-                        blockType: 'cardTitle';
-                      }
-                    | {
-                        image: number | Media;
-                        title: string;
-                        /**
-                         * Structure and SEO only: the look does not change.
-                         */
-                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                        text?: string | null;
-                        cta: {
-                          label: string;
-                          kind?: ('url' | 'internal') | null;
-                          href?: string | null;
-                          doc?:
-                            | ({
-                                relationTo: 'pages';
-                                value: number | Page;
-                              } | null)
-                            | ({
-                                relationTo: 'posts';
-                                value: number | Post;
-                              } | null)
-                            | ({
-                                relationTo: 'case-studies';
-                                value: number | CaseStudy;
-                              } | null)
-                            | ({
-                                relationTo: 'modals';
-                                value: number | Modal;
-                              } | null);
-                          newTab?: boolean | null;
-                        };
-                        id?: string | null;
-                        blockName?: string | null;
-                        blockType: 'cardImageLink';
-                      }
-                    | {
-                        iconKey: string;
-                        title: string;
-                        /**
-                         * Structure and SEO only: the look does not change.
-                         */
-                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                        text?: string | null;
-                        cta: {
-                          label: string;
-                          kind?: ('url' | 'internal') | null;
-                          href?: string | null;
-                          doc?:
-                            | ({
-                                relationTo: 'pages';
-                                value: number | Page;
-                              } | null)
-                            | ({
-                                relationTo: 'posts';
-                                value: number | Post;
-                              } | null)
-                            | ({
-                                relationTo: 'case-studies';
-                                value: number | CaseStudy;
-                              } | null)
-                            | ({
-                                relationTo: 'modals';
-                                value: number | Modal;
-                              } | null);
-                          newTab?: boolean | null;
-                        };
-                        id?: string | null;
-                        blockName?: string | null;
-                        blockType: 'cardIconLink';
-                      }
-                    | {
-                        prefix?: string | null;
-                        value: string;
-                        suffix?: string | null;
-                        title: string;
-                        /**
-                         * Structure and SEO only: the look does not change.
-                         */
-                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                        text?: string | null;
-                        cta: {
-                          label: string;
-                          kind?: ('url' | 'internal') | null;
-                          href?: string | null;
-                          doc?:
-                            | ({
-                                relationTo: 'pages';
-                                value: number | Page;
-                              } | null)
-                            | ({
-                                relationTo: 'posts';
-                                value: number | Post;
-                              } | null)
-                            | ({
-                                relationTo: 'case-studies';
-                                value: number | CaseStudy;
-                              } | null)
-                            | ({
-                                relationTo: 'modals';
-                                value: number | Modal;
-                              } | null);
-                          newTab?: boolean | null;
-                        };
-                        id?: string | null;
-                        blockName?: string | null;
-                        blockType: 'cardNumberLink';
-                      }
-                    | {
-                        title: string;
-                        /**
-                         * Structure and SEO only: the look does not change.
-                         */
-                        tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                        text?: string | null;
-                        cta: {
-                          label: string;
-                          kind?: ('url' | 'internal') | null;
-                          href?: string | null;
-                          doc?:
-                            | ({
-                                relationTo: 'pages';
-                                value: number | Page;
-                              } | null)
-                            | ({
-                                relationTo: 'posts';
-                                value: number | Post;
-                              } | null)
-                            | ({
-                                relationTo: 'case-studies';
-                                value: number | CaseStudy;
-                              } | null)
-                            | ({
-                                relationTo: 'modals';
-                                value: number | Modal;
-                              } | null);
-                          newTab?: boolean | null;
-                        };
-                        id?: string | null;
-                        blockName?: string | null;
-                        blockType: 'cardTitleLink';
-                      }
-                    | {
-                        featuresLabel?: string | null;
-                        features?:
-                          | {
-                              label: string;
-                              end?: string | null;
-                              id?: string | null;
-                            }[]
-                          | null;
-                        totalLabel?: string | null;
-                        totalValue?: string | null;
-                        priceLabel?: string | null;
-                        price: {
-                          value: string;
-                          currency?: string | null;
-                          period?: string | null;
-                        };
-                        cta: {
-                          label: string;
-                          kind?: ('url' | 'internal') | null;
-                          href?: string | null;
-                          doc?:
-                            | ({
-                                relationTo: 'pages';
-                                value: number | Page;
-                              } | null)
-                            | ({
-                                relationTo: 'posts';
-                                value: number | Post;
-                              } | null)
-                            | ({
-                                relationTo: 'case-studies';
-                                value: number | CaseStudy;
-                              } | null)
-                            | ({
-                                relationTo: 'modals';
-                                value: number | Modal;
-                              } | null);
-                          newTab?: boolean | null;
-                        };
-                        mention?: string | null;
-                        guarantee?: {
-                          title?: string | null;
-                          /**
-                           * Structure and SEO only: the look does not change.
-                           */
-                          titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                          text?: string | null;
-                        };
-                        id?: string | null;
-                        blockName?: string | null;
-                        blockType: 'priceSingle';
-                      }
-                    | {
-                        name: string;
-                        /**
-                         * Structure and SEO only: the look does not change.
-                         */
-                        nameTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                        tagline?: string | null;
-                        price: {
-                          value: string;
-                          currency?: string | null;
-                          period?: string | null;
-                        };
-                        featured?: boolean | null;
-                        badge?: string | null;
-                        /**
-                         * Empty: the list uses the title above.
-                         */
-                        inherits?: string | null;
-                        featuresLabel?: string | null;
-                        features?:
-                          | {
-                              label: string;
-                              end?: string | null;
-                              id?: string | null;
-                            }[]
-                          | null;
-                        cta: {
-                          label: string;
-                          kind?: ('url' | 'internal') | null;
-                          href?: string | null;
-                          doc?:
-                            | ({
-                                relationTo: 'pages';
-                                value: number | Page;
-                              } | null)
-                            | ({
-                                relationTo: 'posts';
-                                value: number | Post;
-                              } | null)
-                            | ({
-                                relationTo: 'case-studies';
-                                value: number | CaseStudy;
-                              } | null)
-                            | ({
-                                relationTo: 'modals';
-                                value: number | Modal;
-                              } | null);
-                          newTab?: boolean | null;
-                        };
-                        mention?: string | null;
-                        guarantee?: {
-                          title?: string | null;
-                          /**
-                           * Structure and SEO only: the look does not change.
-                           */
-                          titleTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
-                          text?: string | null;
-                        };
-                        id?: string | null;
-                        blockName?: string | null;
-                        blockType: 'plan';
-                      }
-                    | {
                         mode?: ('single' | 'multiple') | null;
                         columns?: ('1' | '2') | null;
                         firstOpen?: boolean | null;
@@ -2467,32 +2557,6 @@ export interface Section {
                         id?: string | null;
                         blockName?: string | null;
                         blockType: 'faq';
-                      }
-                    | {
-                        quote: string;
-                        name: string;
-                        role?: string | null;
-                        result?: string | null;
-                        id?: string | null;
-                        blockName?: string | null;
-                        blockType: 'testimonial';
-                      }
-                    | {
-                        chipLabel: string;
-                        chipTone?: ('accent' | 'high' | 'danger' | 'cat' | 'line') | null;
-                        meta?: string | null;
-                        quote: string;
-                        items?:
-                          | {
-                              label: string;
-                              id?: string | null;
-                            }[]
-                          | null;
-                        tone?: ('check' | 'cross') | null;
-                        featured?: boolean | null;
-                        id?: string | null;
-                        blockName?: string | null;
-                        blockType: 'compareCard';
                       }
                     | {
                         /**
@@ -2601,18 +2665,6 @@ export interface Section {
                         blockType: 'buttonGroup';
                       }
                     | {
-                        post: number | Post;
-                        id?: string | null;
-                        blockName?: string | null;
-                        blockType: 'postCard';
-                      }
-                    | {
-                        caseStudy: number | CaseStudy;
-                        id?: string | null;
-                        blockName?: string | null;
-                        blockType: 'caseCard';
-                      }
-                    | {
                         eyebrow?: string | null;
                         /**
                          * A bulleted list, with bold and links.
@@ -2712,6 +2764,10 @@ export interface Section {
                          * 3 at most on 8 or 9 columns, 4 on 12. Two lines = two rows.
                          */
                         perView?: ('2' | '3' | '4') | null;
+                        /**
+                         * By default, the section’s gap between columns.
+                         */
+                        itemGap?: ('row' | '0' | '10' | '20' | '30' | '40' | '50' | '60') | null;
                         step?: ('page' | 'item') | null;
                         indicator?: ('segments' | 'dots' | 'numbers' | 'none') | null;
                         arrows?: boolean | null;
@@ -2724,6 +2780,9 @@ export interface Section {
                               | {
                                   quote: string;
                                   name: string;
+                                  /**
+                                   * For instance « Broker · Lyon ».
+                                   */
                                   role?: string | null;
                                   result?: string | null;
                                   id?: string | null;
@@ -2750,6 +2809,7 @@ export interface Section {
                                    */
                                   tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
                                   id?: string | null;
                                   blockName?: string | null;
                                   blockType: 'cardIcon';
@@ -2764,6 +2824,7 @@ export interface Section {
                                    */
                                   tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
                                   id?: string | null;
                                   blockName?: string | null;
                                   blockType: 'cardNumber';
@@ -2775,6 +2836,7 @@ export interface Section {
                                    */
                                   tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
                                   id?: string | null;
                                   blockName?: string | null;
                                   blockType: 'cardTitle';
@@ -2822,6 +2884,7 @@ export interface Section {
                                    */
                                   tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
                                   cta: {
                                     label: string;
                                     kind?: ('url' | 'internal') | null;
@@ -2859,6 +2922,7 @@ export interface Section {
                                    */
                                   tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
                                   cta: {
                                     label: string;
                                     kind?: ('url' | 'internal') | null;
@@ -2893,6 +2957,7 @@ export interface Section {
                                    */
                                   tag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   text?: string | null;
+                                  vAlign?: ('start' | 'center' | 'end') | null;
                                   cta: {
                                     label: string;
                                     kind?: ('url' | 'internal') | null;
@@ -2921,6 +2986,9 @@ export interface Section {
                                   blockType: 'cardTitleLink';
                                 }
                               | {
+                                  /**
+                                   * For instance « BEFORE », « AFTER ».
+                                   */
                                   chipLabel: string;
                                   chipTone?: ('accent' | 'high' | 'danger' | 'cat' | 'line') | null;
                                   meta?: string | null;
@@ -2945,14 +3013,20 @@ export interface Section {
                                   nameTag?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span') | null;
                                   tagline?: string | null;
                                   price: {
+                                    /**
+                                     * As displayed: « 79 », « 1,490 ».
+                                     */
                                     value: string;
                                     currency?: string | null;
+                                    /**
+                                     * « / month », « per month · 2.60 € / day ».
+                                     */
                                     period?: string | null;
                                   };
                                   featured?: boolean | null;
                                   badge?: string | null;
                                   /**
-                                   * Empty: the list uses the title above.
+                                   * For instance « Everything in Solo, plus ». Empty: the list uses the title above.
                                    */
                                   inherits?: string | null;
                                   featuresLabel?: string | null;
@@ -3078,6 +3152,10 @@ export interface Section {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Identifier for an #anchor link: lowercase letters, digits, hyphens.
+   */
+  anchor?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -3336,19 +3414,16 @@ export interface PagesSelect<T extends boolean = true> {
         section?:
           | T
           | {
-              anchor?: T;
-              saveAsShared?: T;
-              sharedTitle?: T;
               mode?: T;
               tint?: T;
               texture?: T;
-              edgeTop?: T;
               darkStyle?: T;
               mediaType?: T;
               image?: T;
               video?: T;
               poster?: T;
               overlay?: T;
+              edgeTop?: T;
               spacingTop?: T;
               spacingBottom?: T;
               gapX?: T;
@@ -3357,6 +3432,7 @@ export interface PagesSelect<T extends boolean = true> {
               rows?:
                 | T
                 | {
+                    name?: T;
                     columns?:
                       | T
                       | {
@@ -3368,6 +3444,257 @@ export interface PagesSelect<T extends boolean = true> {
                                 empty?:
                                   | T
                                   | {
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                cardImage?:
+                                  | T
+                                  | {
+                                      image?: T;
+                                      title?: T;
+                                      tag?: T;
+                                      text?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                cardIcon?:
+                                  | T
+                                  | {
+                                      iconKey?: T;
+                                      title?: T;
+                                      tag?: T;
+                                      text?: T;
+                                      vAlign?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                cardNumber?:
+                                  | T
+                                  | {
+                                      prefix?: T;
+                                      value?: T;
+                                      suffix?: T;
+                                      title?: T;
+                                      tag?: T;
+                                      text?: T;
+                                      vAlign?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                cardTitle?:
+                                  | T
+                                  | {
+                                      title?: T;
+                                      tag?: T;
+                                      text?: T;
+                                      vAlign?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                cardImageLink?:
+                                  | T
+                                  | {
+                                      image?: T;
+                                      title?: T;
+                                      tag?: T;
+                                      text?: T;
+                                      cta?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            kind?: T;
+                                            href?: T;
+                                            doc?: T;
+                                            newTab?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                cardIconLink?:
+                                  | T
+                                  | {
+                                      iconKey?: T;
+                                      title?: T;
+                                      tag?: T;
+                                      text?: T;
+                                      vAlign?: T;
+                                      cta?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            kind?: T;
+                                            href?: T;
+                                            doc?: T;
+                                            newTab?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                cardNumberLink?:
+                                  | T
+                                  | {
+                                      prefix?: T;
+                                      value?: T;
+                                      suffix?: T;
+                                      title?: T;
+                                      tag?: T;
+                                      text?: T;
+                                      vAlign?: T;
+                                      cta?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            kind?: T;
+                                            href?: T;
+                                            doc?: T;
+                                            newTab?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                cardTitleLink?:
+                                  | T
+                                  | {
+                                      title?: T;
+                                      tag?: T;
+                                      text?: T;
+                                      vAlign?: T;
+                                      cta?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            kind?: T;
+                                            href?: T;
+                                            doc?: T;
+                                            newTab?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                postCard?:
+                                  | T
+                                  | {
+                                      post?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                caseCard?:
+                                  | T
+                                  | {
+                                      caseStudy?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                testimonial?:
+                                  | T
+                                  | {
+                                      quote?: T;
+                                      name?: T;
+                                      role?: T;
+                                      result?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                compareCard?:
+                                  | T
+                                  | {
+                                      chipLabel?: T;
+                                      chipTone?: T;
+                                      meta?: T;
+                                      quote?: T;
+                                      items?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            id?: T;
+                                          };
+                                      tone?: T;
+                                      featured?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                plan?:
+                                  | T
+                                  | {
+                                      name?: T;
+                                      nameTag?: T;
+                                      tagline?: T;
+                                      price?:
+                                        | T
+                                        | {
+                                            value?: T;
+                                            currency?: T;
+                                            period?: T;
+                                          };
+                                      featured?: T;
+                                      badge?: T;
+                                      inherits?: T;
+                                      featuresLabel?: T;
+                                      features?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            end?: T;
+                                            id?: T;
+                                          };
+                                      cta?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            kind?: T;
+                                            href?: T;
+                                            doc?: T;
+                                            newTab?: T;
+                                          };
+                                      mention?: T;
+                                      guarantee?:
+                                        | T
+                                        | {
+                                            title?: T;
+                                            titleTag?: T;
+                                            text?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                priceSingle?:
+                                  | T
+                                  | {
+                                      featuresLabel?: T;
+                                      features?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            end?: T;
+                                            id?: T;
+                                          };
+                                      totalLabel?: T;
+                                      totalValue?: T;
+                                      priceLabel?: T;
+                                      price?:
+                                        | T
+                                        | {
+                                            value?: T;
+                                            currency?: T;
+                                            period?: T;
+                                          };
+                                      cta?:
+                                        | T
+                                        | {
+                                            label?: T;
+                                            kind?: T;
+                                            href?: T;
+                                            doc?: T;
+                                            newTab?: T;
+                                          };
+                                      mention?: T;
+                                      guarantee?:
+                                        | T
+                                        | {
+                                            title?: T;
+                                            titleTag?: T;
+                                            text?: T;
+                                          };
                                       id?: T;
                                       blockName?: T;
                                     };
@@ -3439,209 +3766,6 @@ export interface PagesSelect<T extends boolean = true> {
                                       id?: T;
                                       blockName?: T;
                                     };
-                                cardImage?:
-                                  | T
-                                  | {
-                                      image?: T;
-                                      title?: T;
-                                      tag?: T;
-                                      text?: T;
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                cardIcon?:
-                                  | T
-                                  | {
-                                      iconKey?: T;
-                                      title?: T;
-                                      tag?: T;
-                                      text?: T;
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                cardNumber?:
-                                  | T
-                                  | {
-                                      prefix?: T;
-                                      value?: T;
-                                      suffix?: T;
-                                      title?: T;
-                                      tag?: T;
-                                      text?: T;
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                cardTitle?:
-                                  | T
-                                  | {
-                                      title?: T;
-                                      tag?: T;
-                                      text?: T;
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                cardImageLink?:
-                                  | T
-                                  | {
-                                      image?: T;
-                                      title?: T;
-                                      tag?: T;
-                                      text?: T;
-                                      cta?:
-                                        | T
-                                        | {
-                                            label?: T;
-                                            kind?: T;
-                                            href?: T;
-                                            doc?: T;
-                                            newTab?: T;
-                                          };
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                cardIconLink?:
-                                  | T
-                                  | {
-                                      iconKey?: T;
-                                      title?: T;
-                                      tag?: T;
-                                      text?: T;
-                                      cta?:
-                                        | T
-                                        | {
-                                            label?: T;
-                                            kind?: T;
-                                            href?: T;
-                                            doc?: T;
-                                            newTab?: T;
-                                          };
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                cardNumberLink?:
-                                  | T
-                                  | {
-                                      prefix?: T;
-                                      value?: T;
-                                      suffix?: T;
-                                      title?: T;
-                                      tag?: T;
-                                      text?: T;
-                                      cta?:
-                                        | T
-                                        | {
-                                            label?: T;
-                                            kind?: T;
-                                            href?: T;
-                                            doc?: T;
-                                            newTab?: T;
-                                          };
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                cardTitleLink?:
-                                  | T
-                                  | {
-                                      title?: T;
-                                      tag?: T;
-                                      text?: T;
-                                      cta?:
-                                        | T
-                                        | {
-                                            label?: T;
-                                            kind?: T;
-                                            href?: T;
-                                            doc?: T;
-                                            newTab?: T;
-                                          };
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                priceSingle?:
-                                  | T
-                                  | {
-                                      featuresLabel?: T;
-                                      features?:
-                                        | T
-                                        | {
-                                            label?: T;
-                                            end?: T;
-                                            id?: T;
-                                          };
-                                      totalLabel?: T;
-                                      totalValue?: T;
-                                      priceLabel?: T;
-                                      price?:
-                                        | T
-                                        | {
-                                            value?: T;
-                                            currency?: T;
-                                            period?: T;
-                                          };
-                                      cta?:
-                                        | T
-                                        | {
-                                            label?: T;
-                                            kind?: T;
-                                            href?: T;
-                                            doc?: T;
-                                            newTab?: T;
-                                          };
-                                      mention?: T;
-                                      guarantee?:
-                                        | T
-                                        | {
-                                            title?: T;
-                                            titleTag?: T;
-                                            text?: T;
-                                          };
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                plan?:
-                                  | T
-                                  | {
-                                      name?: T;
-                                      nameTag?: T;
-                                      tagline?: T;
-                                      price?:
-                                        | T
-                                        | {
-                                            value?: T;
-                                            currency?: T;
-                                            period?: T;
-                                          };
-                                      featured?: T;
-                                      badge?: T;
-                                      inherits?: T;
-                                      featuresLabel?: T;
-                                      features?:
-                                        | T
-                                        | {
-                                            label?: T;
-                                            end?: T;
-                                            id?: T;
-                                          };
-                                      cta?:
-                                        | T
-                                        | {
-                                            label?: T;
-                                            kind?: T;
-                                            href?: T;
-                                            doc?: T;
-                                            newTab?: T;
-                                          };
-                                      mention?: T;
-                                      guarantee?:
-                                        | T
-                                        | {
-                                            title?: T;
-                                            titleTag?: T;
-                                            text?: T;
-                                          };
-                                      id?: T;
-                                      blockName?: T;
-                                    };
                                 faq?:
                                   | T
                                   | {
@@ -3656,34 +3780,6 @@ export interface PagesSelect<T extends boolean = true> {
                                             answer?: T;
                                             id?: T;
                                           };
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                testimonial?:
-                                  | T
-                                  | {
-                                      quote?: T;
-                                      name?: T;
-                                      role?: T;
-                                      result?: T;
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                compareCard?:
-                                  | T
-                                  | {
-                                      chipLabel?: T;
-                                      chipTone?: T;
-                                      meta?: T;
-                                      quote?: T;
-                                      items?:
-                                        | T
-                                        | {
-                                            label?: T;
-                                            id?: T;
-                                          };
-                                      tone?: T;
-                                      featured?: T;
                                       id?: T;
                                       blockName?: T;
                                     };
@@ -3742,20 +3838,6 @@ export interface PagesSelect<T extends boolean = true> {
                                             iconKey?: T;
                                             id?: T;
                                           };
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                postCard?:
-                                  | T
-                                  | {
-                                      post?: T;
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                caseCard?:
-                                  | T
-                                  | {
-                                      caseStudy?: T;
                                       id?: T;
                                       blockName?: T;
                                     };
@@ -3832,6 +3914,7 @@ export interface PagesSelect<T extends boolean = true> {
                                   | {
                                       layout?: T;
                                       perView?: T;
+                                      itemGap?: T;
                                       step?: T;
                                       indicator?: T;
                                       arrows?: T;
@@ -3866,6 +3949,7 @@ export interface PagesSelect<T extends boolean = true> {
                                                   title?: T;
                                                   tag?: T;
                                                   text?: T;
+                                                  vAlign?: T;
                                                   id?: T;
                                                   blockName?: T;
                                                 };
@@ -3878,6 +3962,7 @@ export interface PagesSelect<T extends boolean = true> {
                                                   title?: T;
                                                   tag?: T;
                                                   text?: T;
+                                                  vAlign?: T;
                                                   id?: T;
                                                   blockName?: T;
                                                 };
@@ -3887,6 +3972,7 @@ export interface PagesSelect<T extends boolean = true> {
                                                   title?: T;
                                                   tag?: T;
                                                   text?: T;
+                                                  vAlign?: T;
                                                   id?: T;
                                                   blockName?: T;
                                                 };
@@ -3916,6 +4002,7 @@ export interface PagesSelect<T extends boolean = true> {
                                                   title?: T;
                                                   tag?: T;
                                                   text?: T;
+                                                  vAlign?: T;
                                                   cta?:
                                                     | T
                                                     | {
@@ -3937,6 +4024,7 @@ export interface PagesSelect<T extends boolean = true> {
                                                   title?: T;
                                                   tag?: T;
                                                   text?: T;
+                                                  vAlign?: T;
                                                   cta?:
                                                     | T
                                                     | {
@@ -3955,6 +4043,7 @@ export interface PagesSelect<T extends boolean = true> {
                                                   title?: T;
                                                   tag?: T;
                                                   text?: T;
+                                                  vAlign?: T;
                                                   cta?:
                                                     | T
                                                     | {
@@ -4077,6 +4166,8 @@ export interface PagesSelect<T extends boolean = true> {
                         };
                     id?: T;
                   };
+              anchor?: T;
+              saveAsShared?: T;
               id?: T;
               blockName?: T;
             };
@@ -4116,17 +4207,16 @@ export interface PagesSelect<T extends boolean = true> {
  */
 export interface SectionsSelect<T extends boolean = true> {
   title?: T;
-  anchor?: T;
   mode?: T;
   tint?: T;
   texture?: T;
-  edgeTop?: T;
   darkStyle?: T;
   mediaType?: T;
   image?: T;
   video?: T;
   poster?: T;
   overlay?: T;
+  edgeTop?: T;
   spacingTop?: T;
   spacingBottom?: T;
   gapX?: T;
@@ -4135,6 +4225,7 @@ export interface SectionsSelect<T extends boolean = true> {
   rows?:
     | T
     | {
+        name?: T;
         columns?:
           | T
           | {
@@ -4146,6 +4237,257 @@ export interface SectionsSelect<T extends boolean = true> {
                     empty?:
                       | T
                       | {
+                          id?: T;
+                          blockName?: T;
+                        };
+                    cardImage?:
+                      | T
+                      | {
+                          image?: T;
+                          title?: T;
+                          tag?: T;
+                          text?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    cardIcon?:
+                      | T
+                      | {
+                          iconKey?: T;
+                          title?: T;
+                          tag?: T;
+                          text?: T;
+                          vAlign?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    cardNumber?:
+                      | T
+                      | {
+                          prefix?: T;
+                          value?: T;
+                          suffix?: T;
+                          title?: T;
+                          tag?: T;
+                          text?: T;
+                          vAlign?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    cardTitle?:
+                      | T
+                      | {
+                          title?: T;
+                          tag?: T;
+                          text?: T;
+                          vAlign?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    cardImageLink?:
+                      | T
+                      | {
+                          image?: T;
+                          title?: T;
+                          tag?: T;
+                          text?: T;
+                          cta?:
+                            | T
+                            | {
+                                label?: T;
+                                kind?: T;
+                                href?: T;
+                                doc?: T;
+                                newTab?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    cardIconLink?:
+                      | T
+                      | {
+                          iconKey?: T;
+                          title?: T;
+                          tag?: T;
+                          text?: T;
+                          vAlign?: T;
+                          cta?:
+                            | T
+                            | {
+                                label?: T;
+                                kind?: T;
+                                href?: T;
+                                doc?: T;
+                                newTab?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    cardNumberLink?:
+                      | T
+                      | {
+                          prefix?: T;
+                          value?: T;
+                          suffix?: T;
+                          title?: T;
+                          tag?: T;
+                          text?: T;
+                          vAlign?: T;
+                          cta?:
+                            | T
+                            | {
+                                label?: T;
+                                kind?: T;
+                                href?: T;
+                                doc?: T;
+                                newTab?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    cardTitleLink?:
+                      | T
+                      | {
+                          title?: T;
+                          tag?: T;
+                          text?: T;
+                          vAlign?: T;
+                          cta?:
+                            | T
+                            | {
+                                label?: T;
+                                kind?: T;
+                                href?: T;
+                                doc?: T;
+                                newTab?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    postCard?:
+                      | T
+                      | {
+                          post?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    caseCard?:
+                      | T
+                      | {
+                          caseStudy?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    testimonial?:
+                      | T
+                      | {
+                          quote?: T;
+                          name?: T;
+                          role?: T;
+                          result?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    compareCard?:
+                      | T
+                      | {
+                          chipLabel?: T;
+                          chipTone?: T;
+                          meta?: T;
+                          quote?: T;
+                          items?:
+                            | T
+                            | {
+                                label?: T;
+                                id?: T;
+                              };
+                          tone?: T;
+                          featured?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    plan?:
+                      | T
+                      | {
+                          name?: T;
+                          nameTag?: T;
+                          tagline?: T;
+                          price?:
+                            | T
+                            | {
+                                value?: T;
+                                currency?: T;
+                                period?: T;
+                              };
+                          featured?: T;
+                          badge?: T;
+                          inherits?: T;
+                          featuresLabel?: T;
+                          features?:
+                            | T
+                            | {
+                                label?: T;
+                                end?: T;
+                                id?: T;
+                              };
+                          cta?:
+                            | T
+                            | {
+                                label?: T;
+                                kind?: T;
+                                href?: T;
+                                doc?: T;
+                                newTab?: T;
+                              };
+                          mention?: T;
+                          guarantee?:
+                            | T
+                            | {
+                                title?: T;
+                                titleTag?: T;
+                                text?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    priceSingle?:
+                      | T
+                      | {
+                          featuresLabel?: T;
+                          features?:
+                            | T
+                            | {
+                                label?: T;
+                                end?: T;
+                                id?: T;
+                              };
+                          totalLabel?: T;
+                          totalValue?: T;
+                          priceLabel?: T;
+                          price?:
+                            | T
+                            | {
+                                value?: T;
+                                currency?: T;
+                                period?: T;
+                              };
+                          cta?:
+                            | T
+                            | {
+                                label?: T;
+                                kind?: T;
+                                href?: T;
+                                doc?: T;
+                                newTab?: T;
+                              };
+                          mention?: T;
+                          guarantee?:
+                            | T
+                            | {
+                                title?: T;
+                                titleTag?: T;
+                                text?: T;
+                              };
                           id?: T;
                           blockName?: T;
                         };
@@ -4217,209 +4559,6 @@ export interface SectionsSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
-                    cardImage?:
-                      | T
-                      | {
-                          image?: T;
-                          title?: T;
-                          tag?: T;
-                          text?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    cardIcon?:
-                      | T
-                      | {
-                          iconKey?: T;
-                          title?: T;
-                          tag?: T;
-                          text?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    cardNumber?:
-                      | T
-                      | {
-                          prefix?: T;
-                          value?: T;
-                          suffix?: T;
-                          title?: T;
-                          tag?: T;
-                          text?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    cardTitle?:
-                      | T
-                      | {
-                          title?: T;
-                          tag?: T;
-                          text?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    cardImageLink?:
-                      | T
-                      | {
-                          image?: T;
-                          title?: T;
-                          tag?: T;
-                          text?: T;
-                          cta?:
-                            | T
-                            | {
-                                label?: T;
-                                kind?: T;
-                                href?: T;
-                                doc?: T;
-                                newTab?: T;
-                              };
-                          id?: T;
-                          blockName?: T;
-                        };
-                    cardIconLink?:
-                      | T
-                      | {
-                          iconKey?: T;
-                          title?: T;
-                          tag?: T;
-                          text?: T;
-                          cta?:
-                            | T
-                            | {
-                                label?: T;
-                                kind?: T;
-                                href?: T;
-                                doc?: T;
-                                newTab?: T;
-                              };
-                          id?: T;
-                          blockName?: T;
-                        };
-                    cardNumberLink?:
-                      | T
-                      | {
-                          prefix?: T;
-                          value?: T;
-                          suffix?: T;
-                          title?: T;
-                          tag?: T;
-                          text?: T;
-                          cta?:
-                            | T
-                            | {
-                                label?: T;
-                                kind?: T;
-                                href?: T;
-                                doc?: T;
-                                newTab?: T;
-                              };
-                          id?: T;
-                          blockName?: T;
-                        };
-                    cardTitleLink?:
-                      | T
-                      | {
-                          title?: T;
-                          tag?: T;
-                          text?: T;
-                          cta?:
-                            | T
-                            | {
-                                label?: T;
-                                kind?: T;
-                                href?: T;
-                                doc?: T;
-                                newTab?: T;
-                              };
-                          id?: T;
-                          blockName?: T;
-                        };
-                    priceSingle?:
-                      | T
-                      | {
-                          featuresLabel?: T;
-                          features?:
-                            | T
-                            | {
-                                label?: T;
-                                end?: T;
-                                id?: T;
-                              };
-                          totalLabel?: T;
-                          totalValue?: T;
-                          priceLabel?: T;
-                          price?:
-                            | T
-                            | {
-                                value?: T;
-                                currency?: T;
-                                period?: T;
-                              };
-                          cta?:
-                            | T
-                            | {
-                                label?: T;
-                                kind?: T;
-                                href?: T;
-                                doc?: T;
-                                newTab?: T;
-                              };
-                          mention?: T;
-                          guarantee?:
-                            | T
-                            | {
-                                title?: T;
-                                titleTag?: T;
-                                text?: T;
-                              };
-                          id?: T;
-                          blockName?: T;
-                        };
-                    plan?:
-                      | T
-                      | {
-                          name?: T;
-                          nameTag?: T;
-                          tagline?: T;
-                          price?:
-                            | T
-                            | {
-                                value?: T;
-                                currency?: T;
-                                period?: T;
-                              };
-                          featured?: T;
-                          badge?: T;
-                          inherits?: T;
-                          featuresLabel?: T;
-                          features?:
-                            | T
-                            | {
-                                label?: T;
-                                end?: T;
-                                id?: T;
-                              };
-                          cta?:
-                            | T
-                            | {
-                                label?: T;
-                                kind?: T;
-                                href?: T;
-                                doc?: T;
-                                newTab?: T;
-                              };
-                          mention?: T;
-                          guarantee?:
-                            | T
-                            | {
-                                title?: T;
-                                titleTag?: T;
-                                text?: T;
-                              };
-                          id?: T;
-                          blockName?: T;
-                        };
                     faq?:
                       | T
                       | {
@@ -4434,34 +4573,6 @@ export interface SectionsSelect<T extends boolean = true> {
                                 answer?: T;
                                 id?: T;
                               };
-                          id?: T;
-                          blockName?: T;
-                        };
-                    testimonial?:
-                      | T
-                      | {
-                          quote?: T;
-                          name?: T;
-                          role?: T;
-                          result?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    compareCard?:
-                      | T
-                      | {
-                          chipLabel?: T;
-                          chipTone?: T;
-                          meta?: T;
-                          quote?: T;
-                          items?:
-                            | T
-                            | {
-                                label?: T;
-                                id?: T;
-                              };
-                          tone?: T;
-                          featured?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -4520,20 +4631,6 @@ export interface SectionsSelect<T extends boolean = true> {
                                 iconKey?: T;
                                 id?: T;
                               };
-                          id?: T;
-                          blockName?: T;
-                        };
-                    postCard?:
-                      | T
-                      | {
-                          post?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    caseCard?:
-                      | T
-                      | {
-                          caseStudy?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -4610,6 +4707,7 @@ export interface SectionsSelect<T extends boolean = true> {
                       | {
                           layout?: T;
                           perView?: T;
+                          itemGap?: T;
                           step?: T;
                           indicator?: T;
                           arrows?: T;
@@ -4644,6 +4742,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                       title?: T;
                                       tag?: T;
                                       text?: T;
+                                      vAlign?: T;
                                       id?: T;
                                       blockName?: T;
                                     };
@@ -4656,6 +4755,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                       title?: T;
                                       tag?: T;
                                       text?: T;
+                                      vAlign?: T;
                                       id?: T;
                                       blockName?: T;
                                     };
@@ -4665,6 +4765,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                       title?: T;
                                       tag?: T;
                                       text?: T;
+                                      vAlign?: T;
                                       id?: T;
                                       blockName?: T;
                                     };
@@ -4694,6 +4795,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                       title?: T;
                                       tag?: T;
                                       text?: T;
+                                      vAlign?: T;
                                       cta?:
                                         | T
                                         | {
@@ -4715,6 +4817,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                       title?: T;
                                       tag?: T;
                                       text?: T;
+                                      vAlign?: T;
                                       cta?:
                                         | T
                                         | {
@@ -4733,6 +4836,7 @@ export interface SectionsSelect<T extends boolean = true> {
                                       title?: T;
                                       tag?: T;
                                       text?: T;
+                                      vAlign?: T;
                                       cta?:
                                         | T
                                         | {
@@ -4855,6 +4959,7 @@ export interface SectionsSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  anchor?: T;
   updatedAt?: T;
   createdAt?: T;
 }

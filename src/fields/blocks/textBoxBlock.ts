@@ -6,6 +6,7 @@ import {columnSpanAt, type ContentBlock} from '@/fields/sections/contentBlock';
 import {groupHeading} from '@/fields/groupHeading';
 import {tr} from '@/i18n/admin/languages';
 import {proseBlockText, textBoxBlockText as t} from '../../i18n/admin/blocks';
+import {loremDocument} from '../lorem/words';
 import {tagField} from '../tagField';
 import {buttonRowFields} from './buttonFields';
 
@@ -123,4 +124,4 @@ const block: Block = {
 };
 
 /** 3 to 9 columns; fills the row height so boxes side by side align. */
-export const textBoxBlock: ContentBlock = {block, minSpan: 3, maxSpan: 9, fill: true};
+export const textBoxBlock: ContentBlock = {block, minSpan: 3, maxSpan: 9, fill: true, sample: {title: 'Lorem ipsum dolor sit amet', content: loremDocument(40)}, parts: {title: 'title', buttons: 'buttons'}};

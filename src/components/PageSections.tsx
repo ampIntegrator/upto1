@@ -62,7 +62,7 @@ function Content({content, id}: {content: ContentData; id: string}) {
       return <ButtonGroup {...content.buttonGroup} />;
     case 'collection':
       return (
-        <Collection layout={content.collection.layout} perView={content.collection.perView} step={content.collection.step} arrows={content.collection.arrows} indicator={content.collection.indicator} more={content.collection.more}>
+        <Collection gap={content.collection.gap} layout={content.collection.layout} perView={content.collection.perView} step={content.collection.step} arrows={content.collection.arrows} indicator={content.collection.indicator} more={content.collection.more}>
           {content.collection.items.map((item, k) => (
             <Content key={k} content={item} id={`${id}-${k}`} />
           ))}
@@ -93,38 +93,62 @@ function Content({content, id}: {content: ContentData; id: string}) {
   }
 }
 
-export function PageSections({sections}: {sections: SectionData[]}) {
+/** The « Gérer » dialog's preview (never the site): what stands in a column that renders nothing. */
+export type SectionsPreview = {
+  /**
+   * `row`, `col`: the column (row -1: a section without any row); `blank`: the whole section has
+   * no content yet (its zones are taller, and stay visible on mobile).
+   */
+  slot: (at: {row: number; col: number; blank: boolean}) => React.ReactNode;
+};
+
+/**
+ * `preview`: each column carries its place (`data-preview-column="row-col"`) and a column without
+ * content shows the preview's slot, stretched to its row's height.
+ */
+export function PageSections({sections, preview}: {sections: SectionData[]; preview?: SectionsPreview}) {
   return (
     <>
-      {sections.map((s) => (
-        <Section key={s.key} id={s.id} edgeTop={s.edgeTop} background={s.background} tint={s.tint} image={s.image} video={s.video} overlay={s.overlay} spacingTop={s.spacingTop} spacingBottom={s.spacingBottom}>
-          <Container>
-            <Grid
-              columns={12}
-              className="page-grid section-grid"
-              align="start"
-              style={{'--section-gap-x': `${s.gaps.gapX}px`, '--section-gap-y': `${s.gaps.gapY}px`, '--section-gap-y-mobile': `${s.gaps.gapYMobile}px`} as React.CSSProperties}>
-              {s.rows.flatMap((columns, r) =>
-                columns.map((c, i) => (
-                  <GridSpan
-                    key={`${r}-${i}`}
-                    columns={c.span}
-                    data-empty={c.empty ? 'true' : undefined}
-                    style={{gridRow: r + 1, ...(c.stretch ? {alignSelf: 'stretch'} : null), ...(c.mobileRank !== undefined ? {'--mobile-order': c.mobileRank} : null)} as React.CSSProperties}>
-                    {c.contents.length ? (
-                      <VStack gap={6} style={c.stretch ? {height: '100%'} : undefined}>
-                        {c.contents.map((content, j) => (
-                          <Content key={j} content={content} id={`${s.key}-${r}-${i}-${j}`} />
-                        ))}
-                      </VStack>
-                    ) : null}
-                  </GridSpan>
-                )),
-              )}
-            </Grid>
-          </Container>
-        </Section>
-      ))}
+      {sections.map((s) => {
+        const blank = Boolean(preview) && s.rows.every((columns) => columns.every((c) => c.contents.length === 0));
+        return (
+          <Section key={s.key} id={s.id} edgeTop={s.edgeTop} background={s.background} tint={s.tint} image={s.image} video={s.video} overlay={s.overlay} spacingTop={s.spacingTop} spacingBottom={s.spacingBottom}>
+            <Container>
+              <Grid
+                columns={12}
+                className="page-grid section-grid"
+                align="start"
+                style={{'--section-gap-x': `${s.gaps.gapX}px`, '--section-gap-y': `${s.gaps.gapY}px`, '--section-gap-y-mobile': `${s.gaps.gapYMobile}px`} as React.CSSProperties}>
+                {preview && s.rows.every((columns) => columns.length === 0) ? <GridSpan columns={12}>{preview.slot({row: -1, col: 0, blank: true})}</GridSpan> : null}
+                {s.rows.flatMap((columns, r) =>
+                  columns.map((c, i) => {
+                    const slot = preview && !c.contents.length ? preview.slot({row: r, col: i, blank}) : null;
+                    const stretch = c.stretch || Boolean(slot);
+                    return (
+                      <GridSpan
+                        key={`${r}-${i}`}
+                        columns={c.span}
+                        data-empty={c.empty && !blank ? 'true' : undefined}
+                        data-preview-column={preview ? `${r}-${i}` : undefined}
+                        style={{gridRow: r + 1, ...(stretch ? {alignSelf: 'stretch'} : null), ...(c.mobileRank !== undefined ? {'--mobile-order': c.mobileRank} : null)} as React.CSSProperties}>
+                        {c.contents.length ? (
+                          <VStack gap={6} style={c.stretch ? {height: '100%'} : undefined}>
+                            {c.contents.map((content, j) => (
+                              <Content key={j} content={content} id={`${s.key}-${r}-${i}-${j}`} />
+                            ))}
+                          </VStack>
+                        ) : (
+                          slot
+                        )}
+                      </GridSpan>
+                    );
+                  }),
+                )}
+              </Grid>
+            </Container>
+          </Section>
+        );
+      })}
     </>
   );
 }

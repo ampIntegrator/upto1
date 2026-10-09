@@ -1,0 +1,105 @@
+// The live preview under the settings (SectionPreview.tsx): its bar, its frame, the drop zones.
+
+// live preview
+.section-preview {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 65%;
+  min-height: 0;
+}
+
+.section-preview__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--base);
+  padding: 6px var(--base);
+  background: var(--theme-elevation-50);
+}
+
+.section-preview__title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.section-preview__widths {
+  display: flex;
+  gap: 4px;
+}
+
+.section-preview__width {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  min-height: 30px;
+  padding: 4px 8px;
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: 4px;
+  background: var(--theme-bg);
+  color: var(--theme-elevation-800);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--theme-elevation-1000);
+    outline-offset: 2px;
+  }
+}
+
+.section-preview__width--active {
+  border-color: var(--theme-elevation-1000);
+  background: var(--theme-elevation-1000);
+  color: var(--theme-bg);
+}
+
+.section-preview__stage {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  background: var(--theme-elevation-100);
+}
+
+// centred both ways while it fits (auto margins: a taller section still scrolls from its top)
+.section-preview__sizer {
+  position: relative;
+  flex: 0 0 auto;
+  margin: auto;
+  overflow: hidden;
+}
+
+.section-preview__frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 0;
+  transform-origin: top left;
+}
+
+// over the frame, in the frame's own pixels, while a block is dragged from the library:
+// one zone per column; the browser shows the « not allowed » cursor wherever a drop is refused
+.section-preview__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+}
+
+.section-preview__zone {
+  position: absolute;
+  box-sizing: border-box;
+  border: 2px dashed var(--theme-error-500);
+  background: color-mix(in srgb, var(--theme-error-500) 12%, transparent);
+
+  &[data-allowed] {
+    border-color: var(--theme-success-500);
+    background: color-mix(in srgb, var(--theme-success-500) 12%, transparent);
+  }
+
+  &[data-over] {
+    border-style: solid;
+    background: color-mix(in srgb, var(--theme-success-500) 30%, transparent);
+  }
+}

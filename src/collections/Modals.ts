@@ -24,7 +24,7 @@ function hasFormBlock(value: unknown): boolean {
  * text (the link editor's « Lien interne », collection Modales) or a button whose address is the
  * modal's anchor, #modale-<slug>; /modale/<slug> is its own page, for the admin's preview. A title, an eyebrow, a width (the site Dialog's sm / md / lg), a tone, how it
  * closes, a free body (text with forms inserted anywhere) and up to two footer buttons. The silo
- * is the page's. Site side: docs/modals.md.
+ * is the page's. Site side: docs/site-content.md.
  */
 export const Modals: CollectionConfig = {
   slug: 'modals',

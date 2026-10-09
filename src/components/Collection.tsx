@@ -14,6 +14,8 @@
  * `more`: a « see all » button (the blog, the case studies, any link) in the controls, left of
  * the arrows; in the swipe layout it is shown at every width, alone on the right.
  *
+ * Gap between items: the section's gap between columns, unless `gap` sets another one.
+ *
  * Items per view follow the column width (container queries): `perView` from 800 px
  * (a column of 8 is about 880 px wide), 2 between 520 and 800 px, 1 with a peek below. Equal-height items. No auto-advance,
  * no loop (Astryx rules).
@@ -36,6 +38,8 @@ export type CollectionProps = {
   indicator?: CarouselIndicator;
   /** accessible label of the region */
   label?: string;
+  /** gap between items, in px; by default the section's gap between columns (24 px outside a section) */
+  gap?: number;
   /** « see all » button in the controls */
   more?: CarouselMore;
   children: React.ReactNode[];
@@ -49,7 +53,7 @@ function perViewNow(el: HTMLElement | null, perView: number): number {
   return perView;
 }
 
-export function Collection({layout = 'swipe', perView = 3, step = 'page', arrows = true, indicator = 'segments', label = 'Collection', more, children}: CollectionProps) {
+export function Collection({layout = 'swipe', perView = 3, step = 'page', arrows = true, indicator = 'segments', label = 'Collection', gap, more, children}: CollectionProps) {
   const handle = useRef<CarouselHandle>(null);
   const root = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState<number>(perView);
@@ -68,7 +72,7 @@ export function Collection({layout = 'swipe', perView = 3, step = 'page', arrows
   const {page, pages, go} = useCarouselPages(root, handle, items.length, visible, step);
   const swipe = layout === 'swipe';
   return (
-    <VStack gap={6} className={styles.root} data-layout={layout} data-per-view={perView}>
+    <VStack gap={6} className={styles.root} data-layout={layout} data-per-view={perView} style={gap != null ? ({'--collection-gap': `${gap}px`} as React.CSSProperties) : undefined}>
       <Carousel ref={root} handleRef={handle} hasSnap hasButtons={false} hasEdgeFade={swipe} gap={0} aria-label={label}>
         {items.map((item, i) => (
           <VStack key={i} className={styles.slide} data-slide>

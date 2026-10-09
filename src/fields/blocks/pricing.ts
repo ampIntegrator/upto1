@@ -4,9 +4,12 @@ import {linkGroup} from '../shared';
 import {tagField} from '../tagField';
 import {priceSingleBlockText as t} from '../../i18n/admin/blocks';
 
-/** Fields shared by the single price and the tier: the price, the feature list, the guarantee. */
+/**
+ * Fields shared by the single price and the tier: the price, the feature list, the guarantee.
+ * Factories, never shared objects (Payload mutates the configs it is given; tech lead, 6 Oct. 2026).
+ */
 
-export const priceGroup: Field = {
+export const priceGroup = (): Field => ({
   name: 'price',
   type: 'group',
   label: t.price,
@@ -14,15 +17,15 @@ export const priceGroup: Field = {
     {
       type: 'row',
       fields: [
-        {name: 'value', type: 'text', label: t.priceValue, required: true, admin: {width: '40%'}},
+        {name: 'value', type: 'text', label: t.priceValue, required: true, admin: {width: '40%', description: t.priceValueDescription}},
         {name: 'currency', type: 'text', label: t.priceCurrency, defaultValue: '€', admin: {width: '20%'}},
-        {name: 'period', type: 'text', label: t.pricePeriod, localized: true, admin: {width: '40%'}},
+        {name: 'period', type: 'text', label: t.pricePeriod, localized: true, admin: {width: '40%', description: t.pricePeriodDescription}},
       ],
     },
   ],
-};
+});
 
-export const featuresField: Field = {
+export const featuresField = (): Field => ({
   name: 'features',
   type: 'array',
   label: t.features,
@@ -37,14 +40,14 @@ export const featuresField: Field = {
       ],
     },
   ],
-};
+});
 
 /** a factory: the link target inside holds conditions and validators, never shared */
 export const ctaField = (): Field => linkGroup('cta', t.cta, {required: true});
 
-export const mentionField: Field = {name: 'mention', type: 'text', label: t.mention, localized: true};
+export const mentionField = (): Field => ({name: 'mention', type: 'text', label: t.mention, localized: true});
 
-export const guaranteeGroup: Field = {
+export const guaranteeGroup = (): Field => ({
   name: 'guarantee',
   type: 'group',
   label: t.guarantee,
@@ -58,4 +61,4 @@ export const guaranteeGroup: Field = {
     },
     {name: 'text', type: 'textarea', label: t.guaranteeText, localized: true, admin: {rows: 2}},
   ],
-};
+});

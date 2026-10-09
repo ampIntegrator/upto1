@@ -24,7 +24,8 @@ describe('registre des emprises', () => {
     expect([minSpan({type: 'collapsibleGroup'}), maxSpan({type: 'collapsibleGroup'})]).toEqual([6, 9]);
     expect([minSpan({type: 'testimonialCard'}), maxSpan({type: 'testimonialCard'})]).toEqual([3, 4]);
     expect([minSpan({type: 'compareCard'}), maxSpan({type: 'compareCard'})]).toEqual([3, 6]);
-    expect(maxSpan({type: 'card'})).toBe(12);
+    // a card: 3 to 5 columns (2 Oct. 2026)
+    expect([minSpan({type: 'card'}), maxSpan({type: 'card'})]).toEqual([3, 5]);
   });
 
   it('étapes : 1 sur 4 et 5, 2 sur 6 et 7, 3 sur 8 et 9, 4 sur 12', () => {

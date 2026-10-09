@@ -2,30 +2,31 @@
 
 /**
  * RowsBuilder — the "builder" view of a section's Rows field, replacing
- * Payload's nested accordions.
+ * Payload's nested accordions. Shown in the « Découpage » panel of the « Gérer » dialog, above the
+ * live preview, which is where the rows and their columns are seen at full size.
  *
- *   - a single strip of layout thumbnails (a rectangle split in the column
- *     proportions): a click replaces the selected row's layout, after confirmation,
- *     a double click adds a row below the selection;
- *   - the rows stacked below, reordered by drag and drop (handle); on the side, in
- *     two lines of two: move and duplicate, mobile order and delete; in each cell,
- *     a ⋮⋮ handle drags the column left or right within its row (mouse,
- *     touch or keyboard); rows and columns sorted by the same module (sortable.tsx, dnd-kit);
- *   - a row's phone button opens the mobile order dialog for the whole section:
- *     all its columns, across rows, reordered by drag and drop (handle); the columns of the
- *     clicked row are highlighted (hidden field mobileOrder, see mobileOrder.ts);
- *   - a cell summarises its component (one per column), or « Vide »; a first click selects
- *     the row, a click on a cell of the selected row opens a Payload
- *     drawer with the column's component and, if there is one, a « Vider la colonne » button
- *     (width is no longer set there: it comes from the layouts). The form is shared: what is
- *     entered in the drawer is already in the page, the page is saved as usual.
+ *   - no line of help (the instructions are in an « i » bubble), a single strip of layout thumbnails (a rectangle
+ *     split in the column proportions), dragged onto the line of rows: between two squares or at
+ *     the end a thumbnail adds a row there, on a square it replaces that row's layout, after
+ *     confirmation (no click on the thumbnails or the squares: clicks are for the columns);
+ *   - below, the rows as a line of squares (it scrolls sideways when they do not all fit), from
+ *     left to right = from top to bottom in the preview; a square carries the row's number, or
+ *     the name typed in its place (a click on it, 22 characters at most), and shows the row's split; it is dragged left or right to reorder the rows
+ *     (mouse, touch or keyboard, sortable.tsx, dnd-kit); three buttons, always visible: move,
+ *     duplicate, delete; inside a square, a column is dragged left or right to change place in
+ *     its row;
+ *   - a click on a column of a square selects the column, a
+ *     double click shows the column's content in the dialog's « Contenu » panel (ColumnContent,
+ *     through managerContext), or the components if the column is empty.
+ *
+ * Since 1 Oct. 2026 (Nicolas): no full-size column cells here and no « mobile order » dialog; the
+ * stored `mobileOrder` values stay and still apply on the site.
  *
  * All manipulation goes through Payload's form state (useForm, useFormFields),
- * exactly like its own array field; drawer fields are rendered by
- * Payload (RenderFields), with the paths and permissions it expects.
+ * exactly like its own array field.
  */
-import {Button, ConfirmationModal, Drawer, Modal, RenderFields, useDrawerSlug, useField, useForm, useFormFields, useModal, useTranslation} from '@payloadcms/ui';
-import type {ArrayFieldClient, ArrayFieldClientProps, BlocksFieldClient, ClientBlock, ClientField, SanitizedFieldPermissions, SanitizedFieldsPermissions} from 'payload';
+import {Button, ConfirmationModal, useField, useForm, useFormFields, useModal, useTranslation} from '@payloadcms/ui';
+import type {ArrayFieldClient, ArrayFieldClientProps, BlocksFieldClient, ClientBlock} from 'payload';
 import {getTranslation} from '@payloadcms/translations';
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 
@@ -33,32 +34,24 @@ import {sectionsText as T} from '@/i18n/admin/sections';
 import {useAdminText} from '@/i18n/admin/useAdminText';
 
 import {EMPTY_SLUG} from './emptyBlock';
-import {hasMobileOrder, mobileSequence} from './mobileOrder';
-import {type ColumnSpan, presetLabel, type PresetRow, ROW_PRESETS, spansKey, toSpan} from './grid';
+import {InfoBubble} from './InfoBubble';
+import {PAYLOAD_DOM} from './payloadDom';
+import {useManager} from './managerContext';
+import {type ColumnSpan, presetLabel, type PresetRow, ROW_NAME_MAX, ROW_PRESETS, rowTotal as rowTotalOf, toSpan} from './grid';
 import {type SortableHandle, SortableItem, SortableList} from './sortable';
 import {rowWidthError} from './validation';
 
+import './tokens.scss';
 import './RowsBuilder.scss';
 
 /** filled: the column has a real component (an empty cell does not count) */
 /** narrow: minimum width required by the content when the column is too narrow, otherwise null */
 /** wide: maximum width allowed by the content when the column is too wide, otherwise null */
-type CellSnapshot = {span: ColumnSpan; contents: string[]; types?: string[]; names?: string[]; filled: boolean; narrow: number | null; wide: number | null; mobileOrder: number | null};
-type RowSnapshot = {ids?: string[]; columns: CellSnapshot[]};
+type CellSnapshot = {span: ColumnSpan; contents: string[]; types?: string[]; filled: boolean; narrow: number | null; wide: number | null; mobileOrder: number | null};
+type RowSnapshot = {ids?: string[]; name?: string; columns: CellSnapshot[]};
 
-const TILE_H = 40;
 const text14: React.CSSProperties = {fontSize: 14, lineHeight: 1.4};
 const dim: React.CSSProperties = {color: 'var(--theme-elevation-600)'};
-
-/** Phone icon (stroke, text colour). */
-function PhoneGlyph() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <rect x="6" y="2" width="12" height="20" rx="2" />
-      <path d="M11 18h2" />
-    </svg>
-  );
-}
 
 /** Layout thumbnail: one rectangle per column, light on dark, in the width proportions, each showing its width (or a label). */
 function Tile({spans, active, labels}: {spans: readonly number[]; active: boolean; labels?: readonly string[]}) {
@@ -70,7 +63,7 @@ function Tile({spans, active, labels}: {spans: readonly number[]; active: boolea
         gridTemplateColumns: spans.map((s) => `${s}fr`).join(' '),
         gap: 4,
         width: '100%',
-        height: TILE_H,
+        height: 'var(--sm-layout-tile-height)',
         padding: 4,
         boxSizing: 'border-box',
         borderRadius: 4,
@@ -101,163 +94,184 @@ function Tile({spans, active, labels}: {spans: readonly number[]; active: boolea
   );
 }
 
+/** drag data type of a layout thumbnail: `{spans, blocks}` as JSON */
+const LAYOUT_DRAG_TYPE = 'application/x-section-layout';
+type DraggedLayout = {spans: number[]; blocks: (string | null)[]};
+
 /**
- * Thumbnails: a click replaces the selected row's layout, a double click adds a row.
- * Preset rows (host option) always add a row, with their blocks placed: a click or a double click.
- * current: spans key of the selected row; currentTypes: first block type of each of its columns.
+ * The layout thumbnails: each one is dragged onto the line of rows below (dropped between two
+ * squares or at the end it adds a row there, dropped on a square it replaces that row's layout).
+ * At the keyboard, Enter on a thumbnail adds its row at the end. Preset rows (host option) come
+ * with their blocks placed. No click: clicks are for the columns' contents.
  */
-function PresetTiles({current, currentTypes, presetRows, onReplace, onAdd, onAddPreset}: {current: string; currentTypes: readonly string[]; presetRows: readonly PresetRow[]; onReplace: (spans: readonly number[]) => void; onAdd: (spans: readonly number[]) => void; onAddPreset: (preset: PresetRow) => void}) {
+function PresetTiles({presetRows, onAdd, disabled}: {presetRows: readonly PresetRow[]; onAdd: (layout: DraggedLayout) => void; disabled?: boolean}) {
   const {t} = useAdminText();
   const {i18n} = useTranslation();
-  /** the selected row matches a preset row: same widths and the preset's blocks in place */
-  const matchesPreset = (p: PresetRow) => spansKey(p.spans) === current && p.blocks.every((slug, j) => !slug || currentTypes[j] === slug);
-  const presetActive = presetRows.some(matchesPreset);
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const click = (spans: readonly number[]) => {
-    if (timer.current) clearTimeout(timer.current);
-    timer.current = setTimeout(() => {
-      timer.current = null;
-      onReplace(spans);
-    }, 220);
-  };
-  const dblClick = (spans: readonly number[]) => {
-    if (timer.current) clearTimeout(timer.current);
-    timer.current = null;
-    onAdd(spans);
-  };
-  /** a preset row: click and double click both add one row (the timer swallows the double click's two clicks) */
-  const presetClick = (preset: PresetRow) => {
-    if (timer.current) clearTimeout(timer.current);
-    timer.current = setTimeout(() => {
-      timer.current = null;
-      onAddPreset(preset);
-    }, 220);
-  };
-  const presetDblClick = (preset: PresetRow) => {
-    if (timer.current) clearTimeout(timer.current);
-    timer.current = null;
-    onAddPreset(preset);
-  };
+  const tile = (key: string, label: string, layout: DraggedLayout, labels?: string[]) => (
+    // a div, not a button: Firefox does not drag buttons
+    <div
+      key={key}
+      role="button"
+      tabIndex={disabled ? -1 : 0}
+      aria-disabled={disabled || undefined}
+      aria-label={label}
+      title={disabled ? label : t(T.builder.tileTitle, {label})}
+      className="rows-builder__tile"
+      data-layout={layout.spans.join('-')}
+      draggable={!disabled}
+      onDragStart={(e) => {
+        e.dataTransfer.setData(LAYOUT_DRAG_TYPE, JSON.stringify(layout));
+        e.dataTransfer.effectAllowed = 'copy';
+      }}
+      onKeyDown={(e) => {
+        if (disabled || e.key !== 'Enter') return;
+        e.preventDefault();
+        onAdd(layout);
+      }}
+      style={{opacity: disabled ? 0.4 : 1, cursor: disabled ? 'default' : 'grab'}}>
+      <Tile spans={layout.spans} active={false} labels={labels} />
+    </div>
+  );
   return (
-    <div role="radiogroup" aria-label={t(T.builder.layout)} style={{display: 'grid', gridTemplateColumns: 'repeat(8, minmax(0, 1fr))', gap: 8}}>
-      {ROW_PRESETS.map((spans) => {
-        // active as soon as the widths match, in any order (unless a preset row describes the row better)
-        const active = spansKey(spans) === current && !presetActive;
-        const label = presetLabel(spans);
-        return (
-          <button
-            key={spans.join('-')}
-            type="button"
-            role="radio"
-            aria-checked={active}
-            aria-label={label}
-            title={t(T.builder.tileTitle, {label})}
-            onClick={() => click(spans)}
-            onDoubleClick={() => dblClick(spans)}
-            style={{display: 'block', width: '100%', padding: 0, border: 0, background: 'transparent', cursor: 'pointer'}}>
-            <Tile spans={spans} active={active} />
-          </button>
-        );
-      })}
+    <div role="group" aria-label={t(T.builder.layout)} style={{display: 'grid', gridTemplateColumns: 'repeat(8, minmax(0, 1fr))', gap: 8}}>
+      {ROW_PRESETS.map((spans) => tile(spans.join('-'), presetLabel(spans), {spans: [...spans], blocks: []}))}
       {presetRows.map((p) => {
-        const label = getTranslation(p.label, i18n);
-        const active = matchesPreset(p);
-        return (
-          <button
-            key={`preset-${p.id}`}
-            type="button"
-            role="radio"
-            aria-checked={active}
-            aria-label={label}
-            title={t(T.builder.presetTileTitle, {label})}
-            onClick={() => presetClick(p)}
-            onDoubleClick={() => presetDblClick(p)}
-            style={{display: 'block', width: '100%', padding: 0, border: 0, background: 'transparent', cursor: 'pointer'}}>
-            <Tile spans={p.spans} active={active} labels={p.spans.map((s, j) => (j === 0 ? label : String(s)))} />
-          </button>
-        );
+        const label = String(getTranslation(p.label, i18n));
+        return tile(`preset-${p.id}`, label, {spans: [...p.spans], blocks: [...p.blocks]}, p.spans.map((x, j) => (j === 0 ? label : String(x))));
       })}
     </div>
   );
 }
 
-/** What a sortable cell receives (sortable.tsx module). */
-type DragProps = SortableHandle;
-
-/** A row cell: handle to drag it left or right, width in a corner, component summary, click to open the drawer. */
-/** rowSelected: the cell's row is selected; otherwise a click only selects it */
-function Cell({cell, index, rowSelected, onOpen, drag}: {cell: CellSnapshot; index: number; rowSelected: boolean; onOpen: () => void; drag?: DragProps}) {
+/**
+ * A column of a row square: its width, filled or empty. Dragged left or right, it changes place in
+ * its row (mouse or touch; at the keyboard, Alt + left / right arrow); a click selects it, a
+ * double click (or Enter) shows its content in the dialog's « Contenu » panel.
+ */
+function MiniCell({cell, index, current, onSelect, onOpen, onShift, drag}: {cell: CellSnapshot; index: number; current: boolean; onSelect: () => void; onOpen: () => void; onShift: (by: -1 | 1) => void; drag?: SortableHandle}) {
   const {t} = useAdminText();
   const empty = !cell.filled;
-  const onHandleKeyDown = drag?.listeners.onKeyDown;
+  const issue = cell.narrow ? t(T.builder.narrow, {min: cell.narrow}) : cell.wide ? t(T.builder.wide, {max: cell.wide}) : null;
+  const hint = empty ? t(T.builder.cellEmptyTitle) : t(T.builder.cellEditTitle, {contents: cell.contents.join(', ')});
+  // pointer listeners only (the keyboard has its own shortcut), kept from the square around: it would drag the row
+  const {onMouseDown, onTouchStart} = (drag?.listeners ?? {}) as {onMouseDown?: (e: React.MouseEvent) => void; onTouchStart?: (e: React.TouchEvent) => void};
   return (
-    <div
+    <button
       ref={drag?.setNodeRef}
-      role="button"
-      tabIndex={0}
-      onClick={(e) => {
+      type="button"
+      className="rows-builder__mini"
+      data-empty={empty ? 'true' : undefined}
+      data-issue={issue ? 'true' : undefined}
+      data-dragging={drag?.isDragging ? 'true' : undefined}
+      data-current={current ? 'true' : undefined}
+      aria-label={t(T.builder.cellAria, {n: index + 1, span: cell.span, contents: empty ? null : cell.contents.join(', ')})}
+      title={[issue, hint, drag ? t(T.builder.moveColumnTitle) : null].filter(Boolean).join(' · ')}
+      style={{transform: drag?.transform, transition: drag?.transition}}
+      onMouseDown={(e) => {
+        onMouseDown?.(e);
         e.stopPropagation();
-        onOpen();
+      }}
+      onTouchStart={(e) => {
+        onTouchStart?.(e);
+        e.stopPropagation();
       }}
       onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
+        if (drag && e.altKey && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
           e.preventDefault();
-          e.stopPropagation();
+          onShift(e.key === 'ArrowLeft' ? -1 : 1);
+        }
+        // Enter: the keyboard's double click (the button's own click, on Space, selects)
+        if (e.key === 'Enter') {
+          e.preventDefault();
           onOpen();
         }
+        e.stopPropagation();
       }}
-      aria-label={t(T.builder.cellAria, {n: index + 1, span: cell.span, contents: empty ? null : cell.contents.join(', ')})}
-      title={rowSelected ? (empty ? t(T.builder.cellEmptyTitle) : t(T.builder.cellEditTitle, {contents: cell.contents.join(', ')})) : t(T.builder.cellSelectTitle)}
-      style={{
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 2,
-        minWidth: 0,
-        minHeight: 72,
-        padding: '26px 8px 8px',
-        textAlign: 'center',
-        cursor: 'pointer',
-        borderRadius: 4,
-        border: cell.narrow || cell.wide ? '2px solid var(--theme-error-500)' : `1px ${empty ? 'dashed' : 'solid'} var(--theme-elevation-${empty ? '300' : '400'})`,
-        background: empty ? 'var(--theme-elevation-50)' : 'var(--theme-elevation-0)',
-        color: 'var(--theme-elevation-1000)',
-        transform: drag?.transform,
-        transition: drag?.transition,
-        zIndex: drag?.isDragging ? 2 : undefined,
-        boxShadow: drag?.isDragging ? '0 6px 20px rgba(0, 0, 0, 0.35)' : undefined,
-        ...text14,
+      onClick={(e) => {
+        e.stopPropagation();
+        onSelect();
+      }}
+      onDoubleClick={(e) => {
+        e.stopPropagation();
+        onOpen();
       }}>
-      {drag ? (
-        <button
-          type="button"
-          {...drag.attributes}
-          {...drag.listeners}
-          className="rows-builder__handle rows-builder__handle--cell"
-          aria-label={t(T.builder.moveColumnAria, {n: index + 1})}
-          title={t(T.builder.moveColumnTitle)}
-          onClick={(e) => e.stopPropagation()}
-          onKeyDown={(e) => {
-            onHandleKeyDown?.(e);
-            e.stopPropagation();
-          }}>
-          ⋮⋮
-        </button>
-      ) : null}
-      <span style={{position: 'absolute', top: 4, right: 8, ...dim}}>{cell.span}/12</span>
-      {empty ? (
-        <span style={{...dim, maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>{cell.contents.length ? cell.contents.join(', ') : t(T.builder.empty)}</span>
-      ) : (
-        cell.contents.map((label, k) => (
-          <span key={k} style={{maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
-            {label}
-          </span>
-        ))
-      )}
-      {cell.narrow ? <span style={{color: 'var(--theme-error-500)'}}>{t(T.builder.narrow, {min: cell.narrow})}</span> : null}
-      {cell.wide ? <span style={{color: 'var(--theme-error-500)'}}>{t(T.builder.wide, {max: cell.wide})}</span> : null}
+      {cell.span}
+    </button>
+  );
+}
+
+/**
+ * The name of a row square: its number until it is named. A click turns it into a text input
+ * (ROW_NAME_MAX characters at most); Enter or leaving the input keeps the name, Escape gives up.
+ */
+function RowName({index, name, readOnly, onChange}: {index: number; name: string; readOnly?: boolean; onChange: (name: string) => void}) {
+  const {t} = useAdminText();
+  const [draft, setDraft] = useState<string | null>(null);
+  // the square around drags the row and selects it: none of that from here
+  const quiet = {onMouseDown: (e: React.SyntheticEvent) => e.stopPropagation(), onTouchStart: (e: React.SyntheticEvent) => e.stopPropagation(), onClick: (e: React.SyntheticEvent) => e.stopPropagation()};
+  if (draft !== null) {
+    const keep = () => {
+      onChange(draft.trim().slice(0, ROW_NAME_MAX));
+      setDraft(null);
+    };
+    return (
+      <input
+        {...quiet}
+        className="rows-builder__square-input"
+        type="text"
+        autoFocus
+        value={draft}
+        maxLength={ROW_NAME_MAX}
+        placeholder={t(T.builder.rowNamePlaceholder)}
+        aria-label={t(T.builder.rowNameEdit, {n: index + 1})}
+        onChange={(e) => setDraft(e.target.value)}
+        onBlur={keep}
+        onKeyDown={(e) => {
+          e.stopPropagation();
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            keep();
+          } else if (e.key === 'Escape') {
+            e.preventDefault();
+            setDraft(null);
+          }
+        }}
+      />
+    );
+  }
+  if (readOnly) return <span className="rows-builder__square-name">{name || index + 1}</span>;
+  return (
+    <button
+      {...quiet}
+      type="button"
+      className="rows-builder__square-name"
+      aria-label={t(T.builder.rowNameEdit, {n: index + 1})}
+      title={t(T.builder.rowNameTitle, {max: ROW_NAME_MAX})}
+      onClick={(e) => {
+        e.stopPropagation();
+        setDraft(name);
+      }}
+      onKeyDown={(e) => e.stopPropagation()}>
+      {name || index + 1}
+    </button>
+  );
+}
+
+/**
+ * The layout panel while the rows are not available yet (the host shows them once a first setting
+ * is chosen): the same line of text, thumbnails and empty line of squares, disabled, so the panel
+ * (and the dialog's top part, which takes its height) is the same before and after.
+ */
+export function RowsBuilderGhost({presetRows = []}: {presetRows?: PresetRow[]}) {
+  const {t} = useAdminText();
+  const nothing = () => undefined;
+  return (
+    <div className={`${PAYLOAD_DOM.field} rows-builder`}>
+      <div className="rows-builder__top">
+        <PresetTiles disabled presetRows={presetRows} onAdd={nothing} />
+        <InfoBubble label={t(T.builder.helpLabel)} text={t(T.builder.helpUnavailable)} />
+      </div>
+      <div className="rows-builder__rows" />
     </div>
   );
 }
@@ -266,7 +280,7 @@ function Cell({cell, index, rowSelected, onOpen, drag}: {cell: CellSnapshot; ind
 export type RowsBuilderProps = ArrayFieldClientProps & {minSpans?: Record<string, number>; maxSpans?: Record<string, number>; presetRows?: PresetRow[]};
 
 export function RowsBuilder(props: RowsBuilderProps) {
-  const {field, path, permissions, readOnly, schemaPath: schemaPathFromProps, minSpans = {}, maxSpans = {}, presetRows = []} = props;
+  const {field, path, readOnly, schemaPath: schemaPathFromProps, minSpans = {}, maxSpans = {}, presetRows = []} = props;
   const schemaPath = schemaPathFromProps ?? field.name;
   const {t, language} = useAdminText();
   const {i18n} = useTranslation();
@@ -287,14 +301,11 @@ export function RowsBuilder(props: RowsBuilderProps) {
 
   const {addFieldRow, dispatchFields, getDataByPath, moveFieldRow, removeFieldRow, setModified} = useForm();
   const {rows = [], errorPaths, showError} = useField<unknown[]>({path});
-  const {openModal, closeModal} = useModal();
-  const drawerSlug = useDrawerSlug(`rows-builder-${path}`);
-  const [open, setOpen] = useState<{row: number; col: number} | null>(null);
-  // selected row: thumbnails act on it; with no selection, they add a row
-  const [selected, setSelected] = useState<number | null>(null);
-  // row from which the "mobile order" dialog was opened (highlighted in the list)
-  const [mobileRow, setMobileRow] = useState<number | null>(null);
-  const mobileSlug = `rows-mobile-${path}`;
+  const {openModal} = useModal();
+  const manager = useManager();
+  // a layout thumbnail being dragged over the line of rows: where it would go (`index`), or the row it would replace
+  const [drop, setDrop] = useState<{index: number; replace: boolean} | null>(null);
+  const line = useRef<HTMLDivElement>(null);
   // destructive action awaiting confirmation: replace the layout or delete a row
   const [pending, setPending] = useState<{kind: 'replace'; row: number; spans: readonly number[]} | {kind: 'remove'; row: number} | null>(null);
   const confirmSlug = `rows-confirm-${path}`;
@@ -309,6 +320,7 @@ export function RowsBuilder(props: RowsBuilderProps) {
       const i = Number(parts[0]);
       if (!Number.isInteger(i)) continue;
       out[i] ??= {columns: []};
+      if (parts[1] === 'name' && parts.length === 2) out[i].name = String(fields[key]?.value ?? '');
       if (parts[1] !== 'columns') continue;
       if (parts.length === 2) {
         out[i].ids = (fields[key]?.rows ?? []).map((row) => row.id);
@@ -329,18 +341,14 @@ export function RowsBuilder(props: RowsBuilderProps) {
         (out[i].columns[j].types ??= [])[k] = blockType;
         if (blockType && blockType !== EMPTY_SLUG) out[i].columns[j].filled = true;
       }
-      // display name chosen in the drawer (native blockName)
-      if (parts[3] === 'contents' && parts[5] === 'blockName' && parts.length === 6) {
-        (out[i].columns[j].names ??= [])[Number(parts[4])] = String(fields[key]?.value ?? '');
-      }
     }
-    return JSON.stringify(out.map((r) => ({ids: r?.ids ?? [], columns: (r?.columns ?? []).map((c) => {
+    return JSON.stringify(out.map((r) => ({ids: r?.ids ?? [], name: r?.name ?? '', columns: (r?.columns ?? []).map((c) => {
       const span = c?.span ?? 12;
       // width required by the column's component (span registry)
       const need = (c?.types ?? []).reduce((m, t) => Math.max(m, minSpans[t] ?? 0), 0);
       // narrowest maximum among the column's contents (12 when none declares one)
       const cap = (c?.types ?? []).reduce((m, t) => Math.min(m, maxSpans[t] ?? 12), 12);
-      return {span, types: (c?.types ?? []).filter(Boolean), contents: (c?.contents ?? []).map((label, k) => c?.names?.[k]?.trim() || label).filter(Boolean), filled: Boolean(c?.filled), narrow: need > span ? need : null, wide: need <= span && span > cap ? cap : null, mobileOrder: c?.mobileOrder ?? null};
+      return {span, types: (c?.types ?? []).filter(Boolean), contents: (c?.contents ?? []).filter(Boolean), filled: Boolean(c?.filled), narrow: need > span ? need : null, wide: need <= span && span > cap ? cap : null, mobileOrder: c?.mobileOrder ?? null};
     })})));
   });
   const snapshot = useMemo<RowSnapshot[]>(() => JSON.parse(snapshotJson) as RowSnapshot[], [snapshotJson]);
@@ -362,53 +370,91 @@ export function RowsBuilder(props: RowsBuilderProps) {
   );
 
   /**
-   * double click: adds a row below the selected row (otherwise at the bottom), which becomes selected.
-   * blocks[j]: slug of a block placed in column j (preset rows); Payload's form state completes its fields.
+   * Adds a row at `index`. blocks[j]: slug of a block placed in column j (preset rows); Payload's
+   * form state completes its fields.
    */
   const addRow = useCallback(
-    (spans: readonly number[], blocks: readonly (string | null)[] = []) => {
-      const index = selected !== null && selected < rows.length ? selected + 1 : rows.length;
+    (index: number, spans: readonly number[], blocks: readonly (string | null)[] = []) => {
       addFieldRow({path, rowIndex: index, schemaPath});
       spans.forEach((s, j) => addFieldRow({path: `${path}.${index}.columns`, rowIndex: j, schemaPath: columnsSchemaPath, subFieldState: {span: {value: String(s), initialValue: String(s), valid: true}}}));
       blocks.forEach((blockType, j) => {
         if (blockType) addFieldRow({path: `${path}.${index}.columns.${j}.contents`, rowIndex: 0, blockType, schemaPath: `${columnsSchemaPath}.contents`});
       });
       setModified(true);
-      setSelected(index);
     },
-    [addFieldRow, columnsSchemaPath, path, rows.length, schemaPath, selected, setModified],
+    [addFieldRow, columnsSchemaPath, path, schemaPath, setModified],
   );
 
-  /** click: replaces the selected row's layout; with no selection, adds a row */
+  /** a layout dropped on a row: replaces its layout, after confirmation (nothing to do if it already has it) */
   const replaceRow = useCallback(
-    (spans: readonly number[]) => {
-      if (selected !== null && selected < rows.length) {
-        const current = (snapshot[selected]?.columns ?? []).map((c) => c.span);
-        if (current.join('|') === spans.join('|')) return; // already this layout: nothing to do
-        setPending({kind: 'replace', row: selected, spans});
-        openModal(confirmSlug);
-      } else addRow(spans);
+    (row: number, spans: readonly number[]) => {
+      const current = (snapshot[row]?.columns ?? []).map((c) => c.span);
+      if (current.join('|') === spans.join('|')) return;
+      setPending({kind: 'replace', row, spans});
+      openModal(confirmSlug);
     },
-    [addRow, confirmSlug, openModal, rows.length, selected, snapshot],
+    [confirmSlug, openModal, snapshot],
   );
 
-  const move = (from: number, to: number) => {
-    moveFieldRow({path, moveFromIndex: from, moveToIndex: to});
-    setSelected(to);
+  /**
+   * Where a dragged layout would land, from the pointer's place over the line of squares: on the
+   * middle half of a square it replaces that row, on its edges or between two squares it is
+   * inserted there, after the last square it goes to the end.
+   */
+  const locate = (x: number): {index: number; replace: boolean} => {
+    const squares = [...(line.current?.querySelectorAll('.rows-builder__square') ?? [])];
+    for (let i = 0; i < squares.length; i++) {
+      const r = squares[i].getBoundingClientRect();
+      if (x < r.left) return {index: i, replace: false};
+      if (x <= r.right) {
+        const at = (x - r.left) / r.width;
+        return at < 0.25 ? {index: i, replace: false} : at > 0.75 ? {index: i + 1, replace: false} : {index: i, replace: true};
+      }
+    }
+    return {index: squares.length, replace: false};
   };
+  const onLayoutOver = (e: React.DragEvent) => {
+    if (readOnly || !e.dataTransfer.types.includes(LAYOUT_DRAG_TYPE)) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+    const next = locate(e.clientX);
+    setDrop((current) => (current && current.index === next.index && current.replace === next.replace ? current : next));
+  };
+  const onLayoutDrop = (e: React.DragEvent) => {
+    const raw = e.dataTransfer.getData(LAYOUT_DRAG_TYPE);
+    setDrop(null);
+    if (readOnly || !raw) return;
+    e.preventDefault();
+    let layout: DraggedLayout;
+    try {
+      layout = JSON.parse(raw) as DraggedLayout;
+    } catch {
+      return;
+    }
+    if (!Array.isArray(layout.spans) || rowTotalOf(layout.spans) !== 12) return;
+    const at = locate(e.clientX);
+    const blocks = Array.isArray(layout.blocks) ? layout.blocks : [];
+    // a preset row comes with its blocks: it is always a new row (after the square it was dropped on)
+    if (at.replace && !blocks.some(Boolean)) replaceRow(at.index, layout.spans);
+    else addRow(at.replace ? at.index + 1 : at.index, layout.spans, blocks);
+  };
+
+  const move = (from: number, to: number) => moveFieldRow({path, moveFromIndex: from, moveToIndex: to});
   const moveColumn = (row: number, from: number, to: number) => {
+    if (to < 0 || to >= (snapshot[row]?.columns.length ?? 0)) return;
     moveFieldRow({path: `${path}.${row}.columns`, moveFromIndex: from, moveToIndex: to});
+    setModified(true);
+  };
+  const renameRow = (i: number, name: string) => {
+    if (name === (snapshot[i]?.name ?? '')) return;
+    dispatchFields({type: 'UPDATE', path: `${path}.${i}.name`, value: name || null, valid: true});
     setModified(true);
   };
   const duplicate = (i: number) => {
     dispatchFields({type: 'DUPLICATE_ROW', path, rowIndex: i});
     setModified(true);
-    setSelected(i + 1);
   };
-  const remove = (i: number) => {
-    removeFieldRow({path, rowIndex: i});
-    setSelected(null);
-  };
+  const remove = (i: number) => removeFieldRow({path, rowIndex: i});
   const askRemove = (i: number) => {
     setPending({kind: 'remove', row: i});
     openModal(confirmSlug);
@@ -434,142 +480,85 @@ export function RowsBuilder(props: RowsBuilderProps) {
     setPending(null);
   };
 
-  /** the section's columns flattened, row by row, for the mobile order */
-  const flatColumns = useMemo(
-    () => snapshot.flatMap((r, row) => r.columns.map((c, col) => ({row, col, span: c.span, contents: c.contents, mobileOrder: c.mobileOrder, empty: !c.filled}))),
-    [snapshot],
-  );
-  /** writes the section's mobile order: position for listed columns, empty for the others */
-  const writeMobileOrder = (sequence: number[] | null) => {
-    flatColumns.forEach((c, k) => {
-      const pos = sequence ? sequence.indexOf(k) : -1;
-      dispatchFields({type: 'UPDATE', path: `${path}.${c.row}.columns.${c.col}.mobileOrder`, value: pos >= 0 ? pos : null, valid: true});
-    });
-    setModified(true);
-  };
-  const moveMobile = (from: number, to: number) => {
-    const sequence = mobileSequence(flatColumns);
-    if (to < 0 || to >= sequence.length) return;
-    const [moved] = sequence.splice(from, 1);
-    sequence.splice(to, 0, moved);
-    writeMobileOrder(sequence);
-  };
-  const openMobile = (row: number) => {
-    setMobileRow(row);
-    openModal(mobileSlug);
-  };
-
-  /** empties the column: removes its component (and its name); final once the page is saved */
-  const clearColumn = (row: number, col: number) => {
-    const contentsPath = `${path}.${row}.columns.${col}.contents`;
-    const existing = getDataByPath<unknown[]>(contentsPath);
-    for (let k = (Array.isArray(existing) ? existing.length : 0) - 1; k >= 0; k--) removeFieldRow({path: contentsPath, rowIndex: k});
-    setModified(true);
-  };
-
-  const openCell = (row: number, col: number) => {
-    setSelected(row);
-    setOpen({row, col});
-    openModal(drawerSlug);
-  };
-
-  // drawer permissions: those of a column's subfields (same rule as Payload's array)
-  const rowFieldsPerm: SanitizedFieldsPermissions | undefined = permissions === true ? true : permissions?.fields;
-  const columnsPerm: SanitizedFieldPermissions | undefined = rowFieldsPerm === true ? true : rowFieldsPerm?.columns;
-  const cellPerms = (columnsPerm === true ? true : columnsPerm?.fields) as SanitizedFieldsPermissions;
-
-  const openCellSnapshot = open ? snapshot[open.row]?.columns[open.col] : undefined;
-  const rawDescription = field.admin?.description;
-  // static description from the config: a string or a Text object (function descriptions are not rendered here)
-  const description = typeof rawDescription === 'string' || (rawDescription && typeof rawDescription === 'object') ? getTranslation(rawDescription as Record<string, string> | string, i18n) : undefined;
-  const selectedSpans = selected !== null ? spansKey((snapshot[selected]?.columns ?? []).map((c) => c.span)) : '';
-  const selectedTypes = selected !== null ? (snapshot[selected]?.columns ?? []).map((c) => c.types?.[0] ?? '') : [];
+  /** a click on a column of a square: the column is selected */
+  const selectCell = (row: number, col: number) => manager?.selectColumn({row, col});
+  /** a double click: its content shows in the dialog's panel (the components, if the column is empty) */
+  const openCell = (row: number, col: number) => manager?.openContent({row, col});
 
   return (
-    <div className="field-type rows-builder" style={{marginBottom: 'var(--base)'}}>
-      {description ? <p style={{...text14, ...dim, margin: '0 0 12px'}}>{description}</p> : null}
-      {!readOnly ? (
-        <div style={{marginBottom: 12}}>
-          <PresetTiles current={selectedSpans} currentTypes={selectedTypes} presetRows={presetRows} onReplace={replaceRow} onAdd={(spans) => addRow(spans)} onAddPreset={(p) => addRow(p.spans, p.blocks)} />
-          <p style={{...text14, ...dim, margin: '8px 0 0'}}>
-            {selected === null ? t(T.builder.helpNoSelection) : t(T.builder.helpSelected, {n: selected + 1})}
+    <div className={`${PAYLOAD_DOM.field} rows-builder`} style={{marginBottom: 'var(--base)'}}>
+      {/* the layouts, then (no line of help: the panel keeps its height for the squares) an error if any and the « i » that holds the instructions */}
+      <div className="rows-builder__top">
+        {!readOnly ? <PresetTiles presetRows={presetRows} onAdd={(layout) => addRow(rows.length, layout.spans, layout.blocks)} /> : null}
+        {showError && errorPaths?.length ? (
+          <p className="rows-builder__error" role="alert">
+            {t(T.builder.rowHasError)}
           </p>
-        </div>
-      ) : null}
-      {showError && errorPaths?.length ? <p style={{...text14, color: 'var(--theme-error-500)', margin: '0 0 12px'}}>{t(T.builder.rowHasError)}</p> : null}
+        ) : null}
+        {!readOnly ? <InfoBubble label={t(T.builder.helpLabel)} text={t(T.builder.help)} /> : null}
+      </div>
 
-      <SortableList ids={rows.map((r) => r.id)} axis="y" onMove={move} className="rows-builder__rows">
+      {/* the rows, from left to right = from top to bottom in the preview; the line is where the layouts are dropped */}
+      <div ref={line} className="rows-builder__drop" data-over={drop ? 'true' : undefined} onDragOver={onLayoutOver} onDragLeave={(e) => (e.currentTarget.contains(e.relatedTarget as Node | null) ? undefined : setDrop(null))} onDrop={onLayoutDrop}>
+      {!rows.length && !readOnly ? <p className="rows-builder__empty">{t(T.builder.dropHere)}</p> : null}
+      <SortableList ids={rows.map((r) => r.id)} axis="x" onMove={move} className="rows-builder__rows">
         {rows.map((row, i) => {
           const snap = snapshot[i] ?? {columns: []};
           const spans = snap.columns.map((c) => c.span);
           const rowError = row.isLoading ? null : rowWidthError(spans, language);
-          const isSelected = selected === i;
+          const mark = !drop ? undefined : drop.replace ? (drop.index === i ? 'replace' : undefined) : drop.index === i ? 'before' : drop.index === rows.length && i === rows.length - 1 ? 'after' : undefined;
           const colIds = snap.ids?.length === snap.columns.length ? (snap.ids as string[]) : snap.columns.map((_, j) => `${row.id}-${j}`);
           return (
             <SortableItem key={row.id} id={row.id} disabled={readOnly}>
               {({attributes, listeners, setNodeRef, transform, transition, isDragging}) => (
-                <div ref={setNodeRef} style={{display: 'flex', gap: 8, alignItems: 'center', transform, transition, zIndex: isDragging ? 1 : undefined, position: 'relative'}}>
-                  <div
-                    role="button"
-                    tabIndex={0}
-                    aria-label={t(T.builder.rowAria, {n: i + 1, selected: isSelected})}
-                    aria-pressed={isSelected}
-                    onClick={() => setSelected(isSelected ? null : i)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        setSelected(isSelected ? null : i);
-                      }
-                    }}
-                    style={{
-                      flex: 1,
-                      minWidth: 0,
-                      padding: 10,
-                      borderRadius: 4,
-                      border: `2px solid ${isSelected ? 'var(--theme-elevation-1000)' : 'var(--theme-elevation-200)'}`,
-                      background: 'var(--theme-elevation-50)',
-                      cursor: 'pointer',
-                    }}>
-                    {rowError ? <p style={{...text14, color: 'var(--theme-error-500)', margin: '0 0 8px'}}>{rowError}</p> : null}
-                    {row.isLoading ? (
-                      <p style={{...text14, ...dim, margin: 0}}>{t(T.builder.loading)}</p>
-                    ) : snap.columns.length ? (
-                      <div style={{'--rows-builder-cells': spans.map((s) => `${s}fr`).join(' ')} as React.CSSProperties}>
-                        <SortableList ids={colIds} axis="x" onMove={(from, to) => moveColumn(i, from, to)} className="rows-builder__cells">
-                          {snap.columns.map((cell, j) => (
-                            <SortableItem key={colIds[j]} id={colIds[j]} disabled={readOnly}>
-                              {(handle) => <Cell cell={cell} index={j} rowSelected={isSelected} onOpen={() => (isSelected ? openCell(i, j) : setSelected(i))} drag={readOnly ? undefined : handle} />}
-                            </SortableItem>
-                          ))}
-                        </SortableList>
+                <div
+                  ref={setNodeRef}
+                  {...(readOnly ? null : listeners)}
+                  className="rows-builder__square"
+                  aria-label={t(T.builder.rowAria, {n: i + 1, selected: false})}
+                  data-error={rowError ? 'true' : undefined}
+                  data-dragging={isDragging ? 'true' : undefined}
+                  data-drop={mark}
+                  title={rowError ?? undefined}
+                  style={{transform, transition}}>
+                  <div className="rows-builder__square-head">
+                    <RowName index={i} name={snap.name ?? ''} readOnly={readOnly} onChange={(name) => renameRow(i, name)} />
+                    {!readOnly ? (
+                      <div className="rows-builder__actions" onClick={(e) => e.stopPropagation()}>
+                        <button type="button" {...attributes} {...listeners} className="rows-builder__handle" aria-label={t(T.builder.moveRowAria, {n: i + 1})} title={t(T.builder.moveRowTitle)}>
+                          ⋮⋮
+                        </button>
+                        <Button size="small" buttonStyle="pill" onClick={() => duplicate(i)} aria-label={t(T.builder.duplicateAria, {n: i + 1})} tooltip={t(T.builder.duplicate)}>
+                          ⧉
+                        </Button>
+                        <Button size="small" buttonStyle="pill" onClick={() => askRemove(i)} aria-label={t(T.builder.removeAria, {n: i + 1})} tooltip={t(T.builder.remove)}>
+                          ✕
+                        </Button>
                       </div>
-                    ) : (
-                      <p style={{...text14, ...dim, margin: 0}}>{t(T.builder.emptyRow)}</p>
-                    )}
+                    ) : null}
                   </div>
-                  {!readOnly ? (
-                    <div className="rows-builder__actions">
-                      <button type="button" {...attributes} {...listeners} className="rows-builder__handle" aria-label={t(T.builder.moveRowAria, {n: i + 1})} title={t(T.builder.moveRowTitle)}>
-                        ⋮⋮
-                      </button>
-                      <Button size="small" buttonStyle="pill" onClick={() => duplicate(i)} aria-label={t(T.builder.duplicateAria, {n: i + 1})} tooltip={t(T.builder.duplicate)}>
-                        ⧉
-                      </Button>
-                      <Button size="small" buttonStyle="pill" onClick={() => openMobile(i)} aria-label={t(T.builder.mobileOrderAria, {n: i + 1})} tooltip={t(T.builder.mobileOrder)}>
-                        <PhoneGlyph />
-                      </Button>
-                      <Button size="small" buttonStyle="pill" onClick={() => askRemove(i)} aria-label={t(T.builder.removeAria, {n: i + 1})} tooltip={t(T.builder.remove)}>
-                        ✕
-                      </Button>
+                  {row.isLoading ? (
+                    <p style={{...text14, ...dim, margin: 0}}>{t(T.builder.loading)}</p>
+                  ) : snap.columns.length ? (
+                    <div className="rows-builder__square-body" style={{'--rows-builder-cells': spans.map((s) => `${s}fr`).join(' ')} as React.CSSProperties}>
+                      <SortableList ids={colIds} axis="x" onMove={(from, to) => moveColumn(i, from, to)} className="rows-builder__minis">
+                        {snap.columns.map((cell, j) => (
+                          <SortableItem key={colIds[j]} id={colIds[j]} disabled={readOnly}>
+                            {(handle) => <MiniCell cell={cell} index={j} current={manager?.column?.row === i && manager.column.col === j} onSelect={() => selectCell(i, j)} onOpen={() => openCell(i, j)} onShift={(by) => moveColumn(i, j, j + by)} drag={readOnly ? undefined : handle} />}
+                          </SortableItem>
+                        ))}
+                      </SortableList>
                     </div>
-                  ) : null}
+                  ) : (
+                    <p style={{...text14, ...dim, margin: 0}}>{t(T.builder.emptyRow)}</p>
+                  )}
                 </div>
               )}
             </SortableItem>
           );
         })}
       </SortableList>
-
+      </div>
 
       <ConfirmationModal
         modalSlug={confirmSlug}
@@ -580,98 +569,6 @@ export function RowsBuilder(props: RowsBuilderProps) {
         onConfirm={onConfirm}
         onCancel={() => setPending(null)}
       />
-
-      <Modal slug={mobileSlug} className="confirmation-modal rows-mobile">
-        {mobileRow !== null
-          ? (() => {
-              const sequence = mobileSequence(flatColumns);
-              const empties = flatColumns.filter((c) => c.empty);
-              const where = (c: {row: number; col: number; span: number}) => t(T.mobileOrder.where, {row: c.row + 1, col: c.col + 1, span: c.span});
-              return (
-                <div className="confirmation-modal__wrapper rows-mobile__wrapper">
-                  <div className="confirmation-modal__content">
-                    <h2 style={{margin: 0}}>{t(T.mobileOrder.heading)}</h2>
-                    <p style={{...text14, ...dim}}>{t(T.mobileOrder.intro, {n: mobileRow + 1})}</p>
-                  </div>
-                  <SortableList ids={sequence.map((k) => `${flatColumns[k].row}-${flatColumns[k].col}`)} axis="y" onMove={moveMobile} className="rows-mobile__list" role="list">
-                    {sequence.map((k, pos) => {
-                      const c = flatColumns[k];
-                      const id = `${c.row}-${c.col}`;
-                      return (
-                        <SortableItem key={id} id={id}>
-                          {(h) => (
-                            <div
-                              ref={h.setNodeRef}
-                              role="listitem"
-                              className="rows-mobile__item"
-                              data-current={c.row === mobileRow ? 'true' : undefined}
-                              style={{position: 'relative', transform: h.transform, transition: h.transition, zIndex: h.isDragging ? 2 : undefined, background: h.isDragging ? 'var(--theme-bg)' : undefined}}>
-                              <button type="button" {...h.attributes} {...h.listeners} className="rows-builder__handle rows-builder__handle--mobile" aria-label={t(T.mobileOrder.moveAria, {where: where(c)})} title={t(T.mobileOrder.moveTitle)}>
-                                ⋮⋮
-                              </button>
-                              <span style={{...text14, ...dim}}>{pos + 1}</span>
-                              <span style={{...text14, flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
-                                {c.contents.join(', ')}
-                                <span style={dim}> · {where(c)}</span>
-                              </span>
-                            </div>
-                          )}
-                        </SortableItem>
-                      );
-                    })}
-                  </SortableList>
-                  {!sequence.length ? <p style={{...text14, ...dim, margin: 0}}>{t(T.mobileOrder.nothing)}</p> : null}
-                  {empties.length ? (
-                    <ul className="rows-mobile__list">
-                      {empties.map((c) => (
-                        <li key={`${c.row}-${c.col}`} className="rows-mobile__item" style={dim}>
-                          <span style={{...text14, flex: 1}}>
-                            {where(c)} · {t(T.mobileOrder.hidden, {emptyCell: c.contents.length > 0})}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : null}
-                  <div className="confirmation-modal__controls">
-                    <Button size="small" buttonStyle="secondary" disabled={!hasMobileOrder(flatColumns)} onClick={() => writeMobileOrder(null)}>
-                      {t(T.mobileOrder.reset)}
-                    </Button>
-                    <Button size="small" buttonStyle="primary" onClick={() => closeModal(mobileSlug)}>
-                      {t(T.mobileOrder.close)}
-                    </Button>
-                  </div>
-                </div>
-              );
-            })()
-          : null}
-      </Modal>
-
-      {columnsField ? (
-        <Drawer slug={drawerSlug} title={open && openCellSnapshot ? t(T.drawer.title, {row: open.row + 1, col: open.col + 1, span: openCellSnapshot.span}) : t(T.drawer.fallbackTitle)}>
-          {open ? (
-            <div style={{paddingBottom: 'var(--base)'}}>
-              {openCellSnapshot && openCellSnapshot.contents.length > 0 && !readOnly ? (
-                <div style={{marginBottom: 'var(--base)'}}>
-                  <Button buttonStyle="secondary" onClick={() => clearColumn(open.row, open.col)}>
-                    {t(T.drawer.clear)}
-                  </Button>
-                </div>
-              ) : null}
-              <RenderFields
-                fields={columnsField.fields as ClientField[]}
-                parentIndexPath=""
-                parentPath={`${path}.${open.row}.columns.${open.col}`}
-                parentSchemaPath={columnsSchemaPath}
-                permissions={cellPerms}
-                readOnly={readOnly}
-              />
-              <Button buttonStyle="primary" onClick={() => closeModal(drawerSlug)}>
-                {t(T.drawer.close)}
-              </Button>
-            </div>
-          ) : null}
-        </Drawer>
-      ) : null}
     </div>
   );
 }

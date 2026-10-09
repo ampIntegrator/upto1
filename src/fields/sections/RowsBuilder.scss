@@ -1,26 +1,175 @@
-/* Section builder (RowsBuilder): rows, cells, handles and the mobile order dialog.
+@use './payload' as p;
+
+/* Section builder (RowsBuilder): the line of row squares, their buttons and their handle.
    Loaded by the component itself; Payload theme variables only. */
 
-/* Row builder: side buttons in two lines of two, 32 px squares, vertically centred
-   on the row; their height (2 × 32 + 4) stays below a row's height. */
+/* The rows: a line of squares, from left to right = from top to bottom in the preview;
+   scrolls sideways when there are many. */
+.rows-builder__rows {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  /* the height of a square, even before the first row: the panel looks the same before and after */
+  min-height: var(--sm-square-height);
+}
+.rows-builder__square {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 var(--sm-square-width);
+  box-sizing: border-box;
+  /* fixed size: nothing inside (the name being typed, its focus) may stretch the square */
+  width: var(--sm-square-width);
+  min-width: 0;
+  height: var(--sm-square-height);
+  padding: 8px;
+  border: 2px solid var(--theme-elevation-200);
+  border-radius: 4px;
+  background: var(--theme-elevation-50);
+  cursor: grab;
+  /* no text selection when a drag starts; touch drags instead of scrolling */
+  user-select: none;
+  touch-action: none;
+
+  &[data-error] {
+    border-color: var(--theme-error-500);
+  }
+  &[data-dragging] {
+    z-index: 2;
+    box-shadow: var(--sm-shadow-drag);
+    cursor: grabbing;
+  }
+  &:focus-visible {
+    outline: 2px solid var(--theme-elevation-1000);
+    outline-offset: 2px;
+  }
+}
+.rows-builder__square-head {
+  display: flex;
+  flex: 0 0 28px;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+/* the row's number, or its name: a click to type one */
+.rows-builder__square-name {
+  flex: 0 1 auto;
+  box-sizing: border-box;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 6px;
+  margin-left: -6px;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--theme-elevation-800);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+button.rows-builder__square-name {
+  cursor: text;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--theme-elevation-400);
+    background: var(--theme-elevation-0);
+    outline: none;
+  }
+}
+.rows-builder__square-input {
+  flex: 1 1 0;
+  box-sizing: border-box;
+  width: 0;
+  min-width: 0;
+  height: 28px;
+  /* the focus is the border itself: no ring, no shadow, same box as the name it replaces */
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 0 6px;
+  margin-left: -6px;
+  border: 1px solid var(--theme-elevation-1000);
+  border-radius: 4px;
+  background: var(--theme-elevation-0);
+  color: var(--theme-elevation-1000);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  user-select: text;
+}
+/* the three buttons of a square: move, duplicate, delete */
 .rows-builder__actions {
-  display: grid;
-  grid-template-columns: repeat(2, 32px);
-  grid-auto-rows: 32px;
+  display: flex;
+  flex: 0 0 auto;
   gap: 4px;
-  flex-shrink: 0;
 
   > *,
-  .btn {
-    width: 32px;
-    height: 32px;
+  #{p.$button} {
+    width: 28px;
+    height: 28px;
     margin: 0;
   }
-  .btn {
+  #{p.$button} {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 0;
+  }
+}
+/* the row's split: one small cell per column, in the width proportions */
+.rows-builder__minis {
+  display: grid;
+  grid-template-columns: var(--rows-builder-cells);
+  gap: 4px;
+  height: 100%;
+}
+/* the second line of a square: the split, filling the height left under the head */
+.rows-builder__square-body {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.rows-builder__mini {
+  min-width: 0;
+  padding: 0;
+  border: 1px solid var(--theme-elevation-700);
+  border-radius: 2px;
+  background: var(--theme-elevation-700);
+  color: var(--theme-elevation-0);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+
+  &[data-empty] {
+    border: 1px dashed var(--theme-elevation-400);
+    background: var(--theme-elevation-0);
+    color: var(--theme-elevation-800);
+  }
+  &[data-issue] {
+    border: 2px solid var(--theme-error-500);
+  }
+  /* the column shown in the content panel */
+  &[data-current] {
+    outline: 2px solid var(--theme-success-500);
+    outline-offset: 1px;
+  }
+  &[data-dragging] {
+    position: relative;
+    z-index: 2;
+    box-shadow: var(--sm-shadow-drag);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--theme-elevation-1000);
+    outline-offset: 2px;
   }
 }
 .rows-builder__handle {
@@ -36,65 +185,85 @@
   cursor: grab;
 }
 
-/* Cells of a row: grid with the column proportions (variable set by the row),
-   sortable left or right by their handle. */
-.rows-builder__cells {
-  display: grid;
-  grid-template-columns: var(--rows-builder-cells);
-  gap: 8px;
-}
-.rows-builder__handle--cell {
-  /* no text selection when a drag starts; touch drags instead of scrolling */
-  user-select: none;
-  touch-action: none;
-  position: absolute;
-  top: 4px;
-  left: 6px;
-  width: 24px;
-  height: 20px;
-}
-/* handle of a line in the mobile order dialog */
-.rows-builder__handle--mobile {
-  flex-shrink: 0;
-  width: 28px;
-  height: 26px;
-  user-select: none;
-  touch-action: none;
-}
-.rows-builder__rows {
+/* above the squares: the layouts, then at the right an error (if any) and the « i » of the instructions */
+.rows-builder__top {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
 
-/* "Mobile order" dialog of a section (based on Payload's confirmation modal). */
-.rows-mobile__wrapper {
-  width: min(520px, calc(100vw - 32px));
-  border: 1px solid var(--theme-elevation-150);
-  border-radius: 4px;
-  background: var(--theme-bg);
-}
-.rows-mobile__list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.rows-mobile__item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 8px;
-  border: 1px solid var(--theme-elevation-150);
-  border-radius: 4px;
+  > :first-child {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
 
-  .btn {
-    margin: 0;
+  > .info-bubble {
+    margin-left: auto;
   }
 }
-.rows-mobile__item[data-current] {
-  border-color: var(--theme-elevation-600);
-  background: var(--theme-elevation-100);
+
+.rows-builder__error {
+  flex: 0 0 auto;
+  margin: 0;
+  color: var(--theme-error-500);
+  font-size: 14px;
+  line-height: 24px;
+  white-space: nowrap;
+}
+
+/* a layout thumbnail: dragged onto the line of rows */
+.rows-builder__tile {
+  display: block;
+  user-select: none;
+
+  &:focus-visible {
+    outline: 2px solid var(--theme-elevation-1000);
+    outline-offset: 2px;
+  }
+}
+
+/* the line of rows as the place where layouts are dropped */
+.rows-builder__drop {
+  position: relative;
+  border-radius: 4px;
+
+  &[data-over] {
+    outline: 2px dashed var(--theme-success-500);
+    outline-offset: 2px;
+  }
+}
+/* no row yet: where the first layout goes */
+.rows-builder__empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  border: 1px dashed var(--theme-elevation-400);
+  border-radius: 4px;
+  color: var(--theme-elevation-600);
+  font-size: 14px;
+  pointer-events: none;
+}
+/* where the dragged layout would go: a bar before or after a square, or the square it would replace */
+.rows-builder__square[data-drop='before']::before,
+.rows-builder__square[data-drop='after']::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 2px;
+  background: var(--theme-success-500);
+}
+.rows-builder__square[data-drop='before']::before {
+  left: -8px;
+}
+.rows-builder__square[data-drop='after']::after {
+  right: -8px;
+}
+.rows-builder__square[data-drop='replace'] {
+  border-color: var(--theme-success-500);
+  background: color-mix(in srgb, var(--theme-success-500) 14%, var(--theme-elevation-50));
 }

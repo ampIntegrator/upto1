@@ -1,0 +1,194 @@
+@use './payload' as p;
+
+// The « Contenu » panel of the section manager (ColumnContent.tsx).
+
+// the content panel: the column's name and block, then its fields in columns
+.column-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.column-content__head {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+  font-size: 14px;
+
+  #{p.$button} {
+    margin: 0 0 0 auto;
+  }
+}
+
+// the block's fields, one per cell, on a grid of equal tracks that fills the width (the number of
+// lines is set by the component: 1 when every cell fits, 2 otherwise). A track is half a column
+// (96 px at least): a cell takes two, three (a textarea) or four of them; the grid scrolls
+// sideways beyond the panel's width
+.column-content__flow {
+  display: grid;
+  flex: 1 1 0;
+  // dense: on two lines, a short field goes under an earlier one rather than alone in a new column
+  grid-auto-flow: column dense;
+  // (200 px at most: a block with one or two fields does not stretch them across the panel)
+  grid-auto-columns: minmax(var(--sm-track-min), var(--sm-track-max));
+  align-content: start;
+  gap: 8px var(--sm-track-gap);
+  min-height: 0;
+}
+
+.column-content__cell {
+  grid-column: span 2;
+  min-width: 0;
+
+  // a field that needs the whole height: one column, a column and a half, or two
+  // (taller than the panel, it scrolls on its own: the other fields stay in view)
+  &[data-size='full'],
+  &[data-size='wide'],
+  &[data-size='double'] {
+    grid-row: 1 / -1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  &[data-size='wide'] {
+    grid-column: span 3;
+  }
+
+  &[data-size='double'] {
+    grid-column: span 4;
+  }
+
+  // a group under its heading: its fields one under the other, the column scrolling on its own
+  &[data-section] > #{p.$fields} + #{p.$fields} {
+    margin-top: 10px;
+  }
+
+  // a title and its tag, one under the other
+  &[data-stack] > #{p.$fields} + #{p.$fields} {
+    margin-top: 8px;
+  }
+
+  [data-group] > #{p.$fields} > #{p.$field} + #{p.$field} {
+    margin-top: 8px;
+  }
+
+  // a group (a link): its name, then its fields two per line
+  &[data-group] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-content: start;
+    gap: 8px var(--base);
+
+    > .column-content__title {
+      grid-column: 1 / -1;
+      margin: 0;
+    }
+
+    > #{p.$fields} {
+      min-width: 0;
+      margin: 0;
+    }
+
+    // a textarea takes a whole line of the group
+    > #{p.$fields}:has(textarea) {
+      grid-column: 1 / -1;
+    }
+
+    // a field of the group hidden by its condition leaves no hole
+    > #{p.$fields}:not(:has(#{p.$field})) {
+      display: none;
+    }
+
+    // a checkbox sits on the line of the field beside it
+    > #{p.$fields}:has(> #{p.$field}#{p.$field-checkbox}) {
+      align-self: end;
+      padding-bottom: 10px;
+    }
+  }
+
+  // a cell whose field is hidden by its condition
+  &:not(:has(#{p.$field}, p)) {
+    display: none;
+  }
+
+  // the field fills its cell, whatever width its row gave it
+  &:not([data-size='band']) #{p.$field} {
+    width: 100% !important;
+    margin-bottom: 0;
+  }
+
+  // a row kept as a row: two columns wide, its fields side by side, sharing the width
+  // (the widths their row gives them suit a wide form, not a third of two columns)
+  &[data-size='band'] {
+    grid-column: span 4;
+
+    #{p.$row-fields} {
+      flex-wrap: nowrap;
+      gap: 10px;
+    }
+
+    #{p.$field} {
+      flex: 1 1 0 !important;
+      width: auto !important;
+      min-width: 0;
+      margin-bottom: 0;
+    }
+
+    // beside choices, a typed text gets twice the room
+    #{p.$row-fields}:has(> #{p.$field}:not(#{p.$field-text})) > #{p.$field}#{p.$field-text} {
+      flex-grow: 2 !important;
+    }
+  }
+
+  // a label stays on one line (a second line would push the field under the panel's bottom edge):
+  // cut with an ellipsis when it is too long, whole in the browser's own tooltip
+  #{p.$field-label}:not(#{p.$checkbox-input} *, #{p.$radio-input} *) {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // a select keeps its arrow on the line of its value
+  #{p.$select-control} {
+    flex-wrap: nowrap;
+  }
+
+  #{p.$select-value} {
+    min-width: 0;
+  }
+
+  // the content's language after each label (« — Français »): it wraps the labels and tells
+  // nothing here, the site has one content language
+  #{p.$field-label} #{p.$label-locale} {
+    display: none;
+  }
+
+  // a group heading opening the cell: its rule is not needed here
+  #{p.$fields} > p:first-child {
+    margin-block-start: 0 !important;
+    padding-block-start: 0 !important;
+    border-block-start: 0 !important;
+  }
+
+  #{p.$select-clear} {
+    display: none;
+  }
+}
+
+// Payload's tooltips are laid out even when hidden: at the panel's right edge they would add a
+// sideways scroll for nothing
+.column-content #{p.$tooltip}:not(#{p.$tooltip-shown}) {
+  display: none;
+}
+
+// the label of a group whose fields were opened up into cells
+.column-content__title {
+  margin: 0 0 8px;
+  color: var(--theme-elevation-600);
+  font-size: 14px;
+  font-weight: 600;
+}

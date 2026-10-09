@@ -18,7 +18,7 @@ import {CONSENT_SLUG, HALF_BY_DEFAULT, STEP_SLUG, TEL_SLUG} from './slugs';
  *   - one title, shown on the site and in the list (a plain copy, `listTitle`, for the admin), its
  *     tag, an eyebrow as text or badge, a lead; three tabs (form, after sending, emails);
  *   - submissions: created by the site's server action only (local API), read by logged-in users.
- * Email sending and anti-spam services are the tech lead's (docs/forms.md). A factory: every call
+ * Email sending and anti-spam services are the tech lead's (docs/site-content.md). A factory: every call
  * builds fresh configs (Payload mutates them while sanitising).
  */
 type Sibling = Record<string, unknown>;

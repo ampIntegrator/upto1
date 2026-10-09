@@ -1,0 +1,14 @@
+// a field's label and its « i », the « i » right after the text (Payload pushes the label's
+// right margin to auto: no room is left between the text and the « i »)
+.help-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: calc(var(--base) * 0.3);
+
+  > label {
+    flex: 0 0 auto;
+    margin: 0 !important;
+    padding-bottom: 0;
+  }
+}

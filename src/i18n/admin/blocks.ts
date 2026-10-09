@@ -70,6 +70,10 @@ export const cardBlockText = texts({
     title: {fr: 'Titre', en: 'Title'},
     text: {fr: 'Texte', en: 'Text'},
     cta: {fr: "Bouton d'action", en: 'Action button'},
+    vAlign: {fr: 'Alignement vertical dans la rangée', en: 'Vertical alignment in the row'},
+    vAlignStart: {fr: 'Haut', en: 'Top'},
+    vAlignCenter: {fr: 'Centre', en: 'Centre'},
+    vAlignEnd: {fr: 'Bas', en: 'Bottom'},
   },
 });
 
@@ -133,9 +137,11 @@ const pricingShared = texts({
   featureLabel: {fr: 'Libellé', en: 'Label'},
   featureEnd: {fr: 'Valeur barrée en fin de ligne', en: 'Struck-through value at the end of the line'},
   price: {fr: 'Prix', en: 'Price'},
-  priceValue: {fr: 'Montant (tel qu’affiché : « 79 », « 1 490 »)', en: 'Amount as displayed (« 79 », « 1,490 »)'},
+  priceValue: {fr: 'Montant', en: 'Amount'},
+  priceValueDescription: {fr: 'Tel qu’affiché : « 79 », « 1 490 ».', en: 'As displayed: « 79 », « 1,490 ».'},
   priceCurrency: {fr: 'Devise', en: 'Currency'},
-  pricePeriod: {fr: 'Période (« / mois », « par mois · soit 2,60 € / jour »)', en: 'Period (« / month », « per month · 2.60 € / day »)'},
+  pricePeriod: {fr: 'Période', en: 'Period'},
+  pricePeriodDescription: {fr: '« / mois », « par mois · soit 2,60 € / jour ».', en: '« / month », « per month · 2.60 € / day ».'},
   cta: {fr: 'Bouton', en: 'Button'},
   mention: {fr: 'Mention sous le bouton', en: 'Note below the button'},
   guarantee: {fr: 'Garantie', en: 'Guarantee'},
@@ -160,8 +166,8 @@ export const planBlockText = texts({
   tagline: {fr: 'Accroche', en: 'Tagline'},
   featured: {fr: 'Palier mis en avant (cadre silo, chip)', en: 'Featured tier (silo frame, chip)'},
   badge: {fr: 'Texte du chip', en: 'Chip text'},
-  inherits: {fr: 'Nom du palier précédent (« Tout Solo, plus »)', en: 'Previous tier name (« Everything in Solo, plus »)'},
-  inheritsDescription: {fr: 'Vide : la liste porte le titre ci-dessus.', en: 'Empty: the list uses the title above.'},
+  inherits: {fr: 'Nom du palier précédent', en: 'Previous tier name'},
+  inheritsDescription: {fr: 'Par exemple « Tout Solo, plus ». Vide : la liste porte le titre ci-dessus.', en: 'For instance « Everything in Solo, plus ». Empty: the list uses the title above.'},
 });
 
 export const faqBlockText = texts({
@@ -188,7 +194,8 @@ export const testimonialBlockText = texts({
   plural: {fr: 'Témoignages', en: 'Testimonials'},
   quote: {fr: 'Citation', en: 'Quote'},
   personName: {fr: 'Nom', en: 'Name'},
-  role: {fr: 'Rôle et lieu (« Courtière · Lyon »)', en: 'Role and place (« Broker · Lyon »)'},
+  role: {fr: 'Rôle et lieu', en: 'Role and place'},
+  roleDescription: {fr: 'Par exemple « Courtière · Lyon ».', en: 'For instance « Broker · Lyon ».'},
   result: {fr: 'Résultat chiffré (chip)', en: 'Numeric result (chip)'},
 });
 
@@ -196,7 +203,8 @@ export const compareCardBlockText = texts({
   name: {fr: 'Carte comparative', en: 'Compare card'},
   plural: {fr: 'Cartes comparatives', en: 'Compare cards'},
   chip: {fr: 'Chip', en: 'Chip'},
-  chipLabel: {fr: 'Texte (« AVANT », « APRÈS »)', en: 'Text (« BEFORE », « AFTER »)'},
+  chipLabel: {fr: 'Texte', en: 'Text'},
+  chipLabelDescription: {fr: 'Par exemple « AVANT », « APRÈS ».', en: 'For instance « BEFORE », « AFTER ».'},
   chipTone: {fr: 'Couleur', en: 'Colour'},
   tones: {
     accent: {fr: 'Silo', en: 'Silo'},
@@ -243,10 +251,19 @@ export const collectionBlockText = texts({
   /** Label of the builder thumbnail that creates a full-width row holding a collection. */
   rowPreset: {fr: 'Carousel', en: 'Carousel'},
   plural: {fr: 'Collections', en: 'Collections'},
+  // headings of the field groups (one column each in the section manager's content panel)
+  groups: {
+    layout: {fr: 'Mise en page', en: 'Layout'},
+    items: {fr: 'Éléments', en: 'Items'},
+    more: {fr: 'Bouton « voir tout »', en: '« See all » button'},
+  },
   layout: {fr: 'Mise en page', en: 'Layout'},
   layoutSwipe: {fr: 'Côte à côte, glisser sur mobile', en: 'Side by side, swipe on mobile'},
   layoutCarousel: {fr: 'Carrousel (flèches, indicateur)', en: 'Carousel (arrows, indicator)'},
   perView: {fr: 'Éléments visibles', en: 'Items per view'},
+  itemGap: {fr: 'Écart entre les éléments', en: 'Gap between items'},
+  itemGapRow: {fr: 'Écart de la section', en: 'Section gap'},
+  itemGapDescription: {fr: 'Par défaut, l’écart entre colonnes de la section.', en: 'By default, the section’s gap between columns.'},
   perViewDescription: {fr: '3 au plus sur 8 ou 9 colonnes, 4 sur 12. Deux lignes = deux rangées.', en: '3 at most on 8 or 9 columns, 4 on 12. Two lines = two rows.'},
   step: {fr: 'Défilement', en: 'Scrolling'},
   stepPage: {fr: 'Une page (les éléments visibles)', en: 'One page (the visible items)'},

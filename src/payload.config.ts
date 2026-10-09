@@ -103,7 +103,7 @@ export default withoutCollapseMemoryAsync(buildConfig({
         access: { read: ({ req }) => Boolean(req.user) },
       },
     }),
-    // Forms: « Formulaires » group (forms, submissions), shaped for the site's SiteForm (docs/forms.md)
+    // Forms: « Formulaires » group (forms, submissions), shaped for the site's SiteForm (docs/site-content.md)
     formsPlugin(),
     // Basic SEO (title, description, share image, preview): « SEO » tab of pages, posts and case studies.
     seoPlugin({

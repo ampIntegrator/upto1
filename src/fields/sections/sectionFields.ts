@@ -5,11 +5,13 @@ import {type Text, tr} from '@/i18n/admin/languages';
 import {sectionsText as T} from '@/i18n/admin/sections';
 
 import {BLOCK_NAME_MAX} from './blockName';
-import {type ContentBlock, labelMap, maxSpanMap, minSpanMap} from './contentBlock';
+import {ROW_NAME_MAX} from './grid';
+import {type ContentBlock, labelMap, maxSpanMap, minSpanMap, partsMap, sampleMap} from './contentBlock';
 import {EMPTY_SLUG, emptyBlock} from './emptyBlock';
 import {SECTION_GAP_OPTIONS, SITE_GAP} from './gaps';
 import {sectionGroup} from './group';
 import {DEFAULT_SPACING, type PresetRow, SPACING_OPTIONS, SPAN_OPTIONS, toSpan} from './grid';
+import type {SectionPreviewOptions} from './preview';
 import {rowWidthError, tooNarrowError, tooWideError} from './validation';
 
 /**
@@ -21,7 +23,6 @@ import {rowWidthError, tooNarrowError, tooWideError} from './validation';
  */
 
 type Sibling = Record<string, unknown>;
-const whenChecked = (name: string) => (_d: unknown, s: Sibling) => Boolean(s?.[name]);
 
 export type SectionFieldsOptions = {
   /** Content blocks offered in a column (the empty cell is always there, first). */
@@ -29,9 +30,10 @@ export type SectionFieldsOptions = {
   /** Host fields shown at the top of « Section settings » (background, etc.). */
   settings?: Field[];
   /** Adds the « save to shared sections » checkbox (page block only). */
-  shareable?: boolean;
+  /** the shared sections' collection, when a page's section may be saved there */
+  shareable?: string | false;
   /**
-   * Shows spacing, gaps, sharing and the rows only when it holds (for instance once a host
+   * Shows the rows only when it holds; every setting is visible from the start (Nicolas, 1 Oct. 2026) (for instance once a host
    * setting is chosen). Note for the database: Payload makes the required fields of the rows
    * nullable when a condition exists above them, so adding or removing it changes the schema.
    */
@@ -40,6 +42,10 @@ export type SectionFieldsOptions = {
   presetRows?: PresetRow[];
   /** The host's group heading component (`path#Export`); without it, the neutral one. */
   groupHeading?: string;
+  /** The host's live preview page, shown in the « Gérer » dialog (see preview.ts). */
+  preview?: SectionPreviewOptions;
+  /** Top-level fields of the document shown in the dialog's header (the page's colour scheme…); skipped where the document has none. */
+  headerFields?: string[];
 };
 
 const getByPath = (data: unknown, path: (number | string)[]): unknown => path.reduce<unknown>((o, k) => (o && typeof o === 'object' ? (o as Record<string, unknown>)[String(k)] : undefined), data);
@@ -103,6 +109,8 @@ export function rowsField(blocks: ContentBlock[], condition?: Condition, presetR
       components: {Field: {path: '@/fields/sections/RowsBuilder#RowsBuilder', clientProps: {minSpans, maxSpans, presetRows}}},
     },
     fields: [
+      // name given to the row in the builder (its square), instead of its number; never shown on the site
+      {name: 'name', type: 'text', maxLength: ROW_NAME_MAX, admin: {hidden: true}},
       {
         name: 'columns',
         type: 'array',
@@ -114,8 +122,6 @@ export function rowsField(blocks: ContentBlock[], condition?: Condition, presetR
           spanField,
           // column position on mobile, set by the builder's "mobile order" dialog
           {name: 'mobileOrder', type: 'number', admin: {hidden: true}},
-          // content display name (native blockName), above the content in the drawer
-          {name: 'blockNameUi', type: 'ui', admin: {components: {Field: {path: '@/fields/sections/BlockNameField#BlockNameField', clientProps: {labels}}}}},
           // a single content per column: a block that stacks title, text and buttons is still one content
           {
             name: 'contents',
@@ -145,63 +151,80 @@ export function rowsField(blocks: ContentBlock[], condition?: Condition, presetR
 }
 
 /**
- * A section's fields, in two framed blocks: « Section settings », then the rows. The settings are
- * grouped, each group under a heading with a rule (`sectionGroup`, presentation only): the anchor
- * and the sharing, the host's settings (its own headings, options.settings), then the spacing and
- * the gaps. `groupHeading`: the host's heading component (an icon before the title).
+ * A section's fields, in two framed blocks: « Section settings », then the rows, both edited in the
+ * « Gérer » dialog (SectionManager). The settings are
+ * grouped, each group under a heading (`sectionGroup`, presentation only): the host's settings
+ * (its own headings, options.settings), then the spacing and the gaps. The anchor and the sharing
+ * stay in the document's form, under the « Gérer » button. `groupHeading`: the host's heading component (an icon before the title).
  */
-export function sectionFields({blocks, settings = [], shareable = false, condition, presetRows = [], groupHeading}: SectionFieldsOptions): Field[] {
-  const group = (o: {name: string; label: Text; icon?: string; first?: boolean}) => sectionGroup({...o, component: groupHeading, condition});
+export function sectionFields({blocks, settings = [], shareable = false, condition, presetRows = [], groupHeading, preview, headerFields}: SectionFieldsOptions): Field[] {
+  const group = (o: {name: string; label: Text; help?: Text; icon?: string; first?: boolean; always?: boolean}) => sectionGroup({name: o.name, label: o.label, help: o.help, icon: o.icon, first: o.first, component: groupHeading, condition: o.always ? undefined : condition});
   const anchorField: Field = {
     name: 'anchor',
     type: 'text',
     label: T.settings.anchor,
-    admin: {width: shareable ? '34%' : '100%', description: T.settings.anchorDescription},
+    admin: {description: T.settings.anchorDescription},
     validate: (value: unknown, {req}: {req: PayloadRequest}) => !value || (typeof value === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)) || tr(T.validation.anchor, req.i18n?.language),
   };
+  // on a page's section, the sharing: a box that can be checked once the section has a name (its
+  // header, Payload's blockName): the shared section takes that name (Nicolas, 6 Oct. 2026); checked
+  // without a name, or with the name of an existing shared section, the save is refused (the checks
+  // are in `shareSectionsHook`, which runs before Payload validates the fields)
+  const shareField: Field = {
+    name: 'saveAsShared',
+    type: 'checkbox',
+    label: T.settings.saveAsShared,
+    defaultValue: false,
+    admin: {components: {Field: {path: '@/fields/sections/ShareField#ShareField'}}},
+  };
   const common: Field[] = [
-    // the anchor and, on a page's section, the sharing
-    group({name: 'groupAnchor', label: T.settings.groupAnchor, icon: 'anchor', first: true}),
-    {
-      type: 'row',
-      admin: {condition},
-      fields: shareable
-        ? [
-            anchorField,
-            {name: 'saveAsShared', type: 'checkbox', label: T.settings.saveAsShared, defaultValue: false, admin: {width: '33%', description: T.settings.saveAsSharedDescription}},
-            {name: 'sharedTitle', type: 'text', label: T.settings.sharedTitle, admin: {width: '33%', condition: whenChecked('saveAsShared')}},
-          ]
-        : [anchorField],
-    },
     // the host's settings, with their own group headings (background, edge line…)
     ...settings,
     // inner spacing, above and below the section
-    group({name: 'groupSpacing', label: T.settings.groupSpacing, icon: 'obj-size-increase'}),
+    group({name: 'groupSpacing', label: T.settings.groupSpacing, help: T.settings.groupSpacingHelp, icon: 'obj-size-increase', always: true}),
     {
       type: 'row',
-      admin: {condition},
       fields: [
         {name: 'spacingTop', type: 'select', label: T.settings.spacingTop, defaultValue: DEFAULT_SPACING, options: SPACING_OPTIONS, admin: {width: '50%'}},
         {name: 'spacingBottom', type: 'select', label: T.settings.spacingBottom, defaultValue: DEFAULT_SPACING, options: SPACING_OPTIONS, admin: {width: '50%'}},
       ],
     },
     // grid gaps: inherited from the site setting, unless overridden
-    group({name: 'groupGaps', label: T.settings.groupGaps, icon: 'view-columns'}),
+    group({name: 'groupGaps', label: T.settings.groupGaps, help: T.settings.groupGapsHelp, icon: 'view-columns', always: true}),
     {
       type: 'row',
-      admin: {condition},
       fields: [
         {name: 'gapX', type: 'select', label: T.settings.gapX, defaultValue: SITE_GAP, options: SECTION_GAP_OPTIONS, admin: {width: '33%'}},
         {name: 'gapY', type: 'select', label: T.settings.gapY, defaultValue: SITE_GAP, options: SECTION_GAP_OPTIONS, admin: {width: '33%'}},
-        {name: 'gapYMobile', type: 'select', label: T.settings.gapYMobile, defaultValue: SITE_GAP, options: SECTION_GAP_OPTIONS, admin: {width: '33%', description: T.settings.gapYMobileDescription}},
+        {name: 'gapYMobile', type: 'select', label: T.settings.gapYMobile, defaultValue: SITE_GAP, options: SECTION_GAP_OPTIONS, admin: {width: '33%'}},
       ],
     },
   ];
+  // the settings' group headings: the dialog lays each group out as a column
+  const groups = common.flatMap((f) => (f.type === 'ui' ? [f.name] : []));
   return [
-    // section settings, framed and collapsible (presentation only: no extra data)
-    // closed by default (Nicolas, 17 Sept. 2026): the rows are what editors open a section for
-    {type: 'collapsible', label: T.settings.collapsible, admin: {initCollapsed: true}, fields: common},
-    // the rows, in their own collapsible block (RowsBuilder)
-    {type: 'collapsible', label: T.rows.collapsible, admin: {initCollapsed: false, condition}, fields: [rowsField(blocks, condition, presetRows)]},
+    // one line in the document's form (Nicolas, 6 Oct. 2026): the « Gérer » button, the anchor and,
+    // on a page's section, the sharing box; their explanations in « i » bubbles, no line of help
+    {
+      type: 'row',
+      admin: {className: 'section-identity'},
+      fields: [
+        // the « Gérer » dialog (SectionManager, 1 Oct. 2026): an unnamed collapsible wrapping the two framed
+        // blocks below, shown as a button in the page; presentation only, the data does not change
+        {
+          type: 'collapsible',
+          label: T.manager.title,
+          admin: {components: {Field: {path: '@/fields/sections/SectionManager#SectionManager', clientProps: {preview: preview ? {...preview, parts: partsMap(blocks)} : undefined, groups, headerFields, minSpans: minSpanMap(blocks), maxSpans: maxSpanMap(blocks), hiddenBlocks: blocks.filter((b) => b.hidden).map((b) => b.block.slug), samples: sampleMap(blocks), presetRows}}}},
+          fields: [
+            // section settings (the dialog's first panel)
+            {type: 'collapsible', label: T.settings.collapsible, fields: common},
+            // the rows (RowsBuilder, the dialog's second panel)
+            {type: 'collapsible', label: T.rows.collapsible, admin: {condition}, fields: [rowsField(blocks, condition, presetRows)]},
+          ],
+        },
+        anchorField,
+        ...(shareable ? [shareField] : []),
+      ],
+    },
   ];
 }

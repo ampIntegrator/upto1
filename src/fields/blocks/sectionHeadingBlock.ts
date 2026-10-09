@@ -1,6 +1,7 @@
 import type {Block} from 'payload';
 
 import type {ContentBlock} from '@/fields/sections/contentBlock';
+import {loremWords} from '../lorem/words';
 import {sectionHeadingBlockText as t} from '../../i18n/admin/blocks';
 
 /**
@@ -26,7 +27,7 @@ const block: Block = {
           label: t.tag,
           defaultValue: 'h2',
           options: (['h2', 'h3', 'h4'] as const).map((v) => ({label: v, value: v})),
-          admin: {width: '30%', description: t.tagDescription},
+          admin: {width: '30%', description: t.tagDescription, custom: {below: true}},
         },
       ],
     },
@@ -45,4 +46,4 @@ const block: Block = {
   ],
 };
 
-export const sectionHeadingBlock: ContentBlock = {block, minSpan: 6, maxSpan: 12};
+export const sectionHeadingBlock: ContentBlock = {block, minSpan: 6, maxSpan: 12, sample: {eyebrow: 'Lorem ipsum', title: 'Lorem ipsum dolor sit amet', lead: loremWords(20)}};

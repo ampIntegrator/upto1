@@ -19,7 +19,7 @@ const block: Block = {
   labels: {singular: t.name, plural: t.plural},
   imageURL: `/apercus/${PROCESS_STEPS_SLUG}.png`,
   fields: [
-    tagField({defaultValue: 'h3'}),
+    tagField({defaultValue: 'h3', below: false}),
     {
       name: 'steps',
       type: 'array',

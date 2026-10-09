@@ -40,7 +40,7 @@ export function ButtonGroup({buttons, mode = 'spaced', width = 'natural', align 
     <Button key={i} label={b.label} href={b.href} newTab={b.newTab} variant={b.variant ?? 'primary'} size={b.size ?? 'md'} arrow={b.arrow} iconKey={b.arrow ? undefined : b.iconKey} block={full} />
   );
   return (
-    <VStack className={styles.root} data-mode={mode} data-width={width} data-align={align} style={{'--buttons': items.length} as React.CSSProperties}>
+    <VStack className={styles.root} data-mode={mode} data-width={width} data-align={align} data-part="buttons" data-part-kind="link" style={{'--buttons': items.length} as React.CSSProperties}>
       {mode === 'attached' ? (
         <VStack className={styles.attached}>
           <AstryxButtonGroup label={label}>{items.map(render)}</AstryxButtonGroup>

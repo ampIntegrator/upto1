@@ -21,6 +21,18 @@ export type ContentBlock = {
    * a document still holding it can no longer be saved.
    */
   hidden?: boolean;
+  /**
+   * Values the block starts with when it is placed from the builder's library (placeholder texts,
+   * so that it shows at once in the preview), keyed by field path inside the block: `title`,
+   * `cta.label` for a field of a group. Scalars and rich text documents; no array rows.
+   */
+  sample?: Record<string, unknown>;
+  /**
+   * Parts of the host's component that the builder's preview edits in place → the block's field
+   * each one shows (`{title: 'title', action: 'cta.label'}`). The component marks its parts with
+   * `data-part` (its own vocabulary: it knows nothing of the block); this map is the link.
+   */
+  parts?: Record<string, string>;
 };
 
 /** Block slug → minimum span, for the admin builder (serialisable client props). */
@@ -49,3 +61,9 @@ export const staticLabel = (block: Block): string | Record<string, string> => {
 
 /** Block slug → singular label, for client components. */
 export const labelMap = (blocks: readonly ContentBlock[]): Record<string, string | Record<string, string>> => Object.fromEntries(blocks.map((b) => [b.block.slug, staticLabel(b.block)]));
+
+/** Block slug → starting values, for the admin builder (serialisable client props). */
+export const sampleMap = (blocks: readonly ContentBlock[]): Record<string, Record<string, unknown>> => Object.fromEntries(blocks.filter((b) => b.sample).map((b) => [b.block.slug, b.sample as Record<string, unknown>]));
+
+/** Block slug → part → field path, for the admin builder (serialisable client props). */
+export const partsMap = (blocks: readonly ContentBlock[]): Record<string, Record<string, string>> => Object.fromEntries(blocks.filter((b) => b.parts).map((b) => [b.block.slug, b.parts as Record<string, string>]));

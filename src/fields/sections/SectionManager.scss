@@ -1,0 +1,371 @@
+@use './payload' as p;
+
+// SectionManager (« Gérer » dialog): settings on top (280 px when it opens), live preview below.
+// Admin side: Payload's theme variables, and the builder's own (tokens.scss).
+
+.section-manager__summary {
+  display: flex;
+  flex-direction: column;
+}
+
+// a title with its « i » over the button, like a field's label (Payload's own spacing under it)
+.section-manager__summary-label,
+.section-share__label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 calc(var(--base) * 0.3);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.section-manager__summary-row {
+  display: flex;
+  align-items: center;
+  gap: var(--base);
+  // the button as tall as a text input beside it
+  min-height: calc(var(--base) * 2);
+}
+
+.section-share__error {
+  margin: 4px 0 0;
+  color: var(--theme-error-500);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.section-share #{p.$checkbox-input} {
+  min-height: calc(var(--base) * 2);
+  align-items: center;
+}
+
+// the section's line in the document's form: the button, the anchor, the sharing box, side by side,
+// each a title with its « i » over its field, aligned at the top
+.section-identity > #{p.$row-fields} {
+  align-items: flex-start;
+
+  > #{p.$field} {
+    flex: 1 1 0;
+    margin-bottom: 0;
+  }
+
+  // the collapsible that holds the dialog shows as the button alone; the sharing box is a box
+  > #{p.$field}:first-child,
+  > #{p.$field}:last-child:not(:first-child) {
+    flex: 0 0 auto;
+  }
+
+}
+
+.section-manager__errors {
+  font-size: 14px;
+  color: var(--theme-error-500);
+}
+
+// full screen, above the admin (Payload's drawers opened from inside stack on top of it)
+.section-manager__modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  background: var(--theme-bg);
+}
+
+// the box that lists the components for an empty column: over the dialog, the whole screen (as a
+// confirmation covers it), its list scrolling down
+.section-manager__picker {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  display: flex;
+  box-sizing: border-box;
+  width: 100vw;
+  max-width: none;
+  height: 100vh;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  background: var(--theme-bg);
+}
+
+// (as high as the screen and no more: the list below is what scrolls)
+.section-manager__picker-box {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  padding: var(--base);
+}
+
+.section-manager__picker-head {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: var(--base);
+  font-size: 14px;
+
+  #{p.$button} {
+    margin: 0 0 0 auto;
+  }
+}
+
+.section-manager__picker-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  // (room for the focus ring of the thumbnails at the list's edges)
+  padding: 4px;
+}
+
+// exactly the viewport: 35 % settings, 65 % preview (the handle between them changes the share), each scrolling on its own
+.section-manager__body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+}
+
+// title on the left, the document's fields in the middle, the close button on the right
+.section-manager__bar {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--base);
+  padding: calc(var(--base) / 2) var(--base);
+  border-bottom: 1px solid var(--theme-elevation-150);
+}
+
+.section-manager__title {
+  margin: 0;
+  font-size: 18px;
+}
+
+.section-manager__close {
+  display: flex;
+  justify-self: end;
+  gap: 8px;
+
+  #{p.$button} {
+    margin: 0;
+  }
+
+  // the icon before the label
+  #{p.$button-label} {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.section-manager__glyph {
+  flex: 0 0 auto;
+}
+
+// a document field in the header: on one line (label, control, value)
+.section-manager__fields {
+  #{p.$fields} {
+    display: flex;
+    align-items: center;
+    gap: var(--base);
+  }
+
+  #{p.$field} {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 !important;
+
+    > * {
+      margin: 0 !important;
+      padding-bottom: 0;
+    }
+  }
+}
+
+// the four horizontal accordions: the open one takes the room, the others are vertical strips;
+// a panel slides open sideways (its content keeps its full width, the panel uncovers it)
+$slide: 300ms;
+
+.section-manager__panels {
+  display: flex;
+  flex: 0 0 var(--section-manager-split, var(--sm-top-height));
+  overflow: hidden;
+  min-height: 0;
+  container-type: inline-size;
+}
+
+// the handle between the settings and the preview: drag it up or down
+.section-manager__handle {
+  position: relative;
+  flex: 0 0 10px;
+  background: var(--theme-elevation-150);
+  cursor: row-resize;
+  touch-action: none;
+
+  // a short grip in the middle
+  &::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: calc(50% - 20px);
+    width: 40px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--theme-elevation-500);
+  }
+
+  &:hover,
+  &:active {
+    background: var(--theme-elevation-250);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--theme-elevation-1000);
+    outline-offset: -2px;
+  }
+}
+
+.section-manager__panel {
+  display: flex;
+  flex: 0 0 var(--sm-tab-width);
+  min-width: 0;
+  overflow: hidden;
+  border-right: 1px solid var(--theme-elevation-150);
+  transition: flex-grow $slide ease;
+
+  &:last-child {
+    border-right: 0;
+  }
+}
+
+.section-manager__panel--open {
+  flex-grow: 1;
+}
+
+.section-manager__tab {
+  flex: 0 0 var(--sm-tab-width);
+  width: var(--sm-tab-width);
+  padding: var(--base) 0;
+  border: 0;
+  background: var(--theme-elevation-50);
+  color: var(--theme-elevation-800);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color $slide ease;
+
+  &:hover {
+    background: var(--theme-elevation-100);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--theme-elevation-1000);
+    outline-offset: -2px;
+  }
+
+  .section-manager__panel--open & {
+    background: var(--theme-elevation-150);
+    color: var(--theme-elevation-1000);
+    font-weight: 600;
+  }
+}
+
+.section-manager__tab-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+}
+
+// as wide as an open panel's room (the whole row less the four strips and the three borders), so
+// nothing reflows while the panel slides; a folded panel's content is hidden once it has closed
+.section-manager__content {
+  flex: 0 0 auto;
+  // (four strips and the three 1 px borders between the panels)
+  width: calc(100cqw - 4 * var(--sm-tab-width) - 3 * 1px);
+  overflow: auto;
+  // room under the content, before the preview
+  padding: var(--base) var(--base) var(--sm-panel-end);
+  visibility: hidden;
+  transition: visibility 0s linear $slide;
+
+  .section-manager__panel--open & {
+    visibility: visible;
+    transition-delay: 0s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-manager__panel,
+  .section-manager__tab,
+  .section-manager__content {
+    transition: none;
+  }
+}
+
+// first panel: one column per group of settings, side by side (scrolls sideways when they do not
+// all fit, rather than down)
+.section-manager__groups {
+  display: flex;
+  align-items: stretch;
+  min-height: 100%;
+}
+
+.section-manager__group {
+  flex: 1 1 0;
+  min-width: 300px;
+  padding: 0 var(--base);
+  border-right: 1px solid var(--theme-elevation-150);
+
+  &:first-child {
+    padding-left: 0;
+  }
+
+  &:last-child {
+    padding-right: 0;
+    border-right: 0;
+  }
+
+  // first panel: each group centred in the panel's height
+  .section-manager__groups--centred & {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  // a group whose fields are all hidden by their condition
+  &:not(:has(#{p.$fields} > *)) {
+    display: none;
+  }
+
+  // the group's heading: its rule is the column's border here
+  #{p.$fields} > :first-child {
+    margin-block-start: 0 !important;
+    padding-block-start: 0 !important;
+    border-block-start: 0 !important;
+  }
+
+  // fields of a row: side by side while they fit, wrapping in a narrow column
+  #{p.$field}#{p.$field-row} #{p.$row-fields} > * {
+    flex: 1 1 140px;
+  }
+
+  // selects with a default value: no « clear » cross, it would crowd a narrow column
+  #{p.$select-clear} {
+    display: none;
+  }
+}
+
+.section-manager__soon {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--theme-elevation-600);
+}
+

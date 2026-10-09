@@ -1,0 +1,115 @@
+/* InfoBubble: an « i » button and its bubble (Nicolas, 6 Oct. 2026: an 18 px disc with no border,
+   nothing changes on hover but the bubble; the bubble opens over the « i », which sits in one of
+   its corners). The colours are the theme's inverse: a white disc and a white bubble with black
+   text on the dark admin, black with white text on the light one (Payload's elevation scale). */
+.info-bubble {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+.info-bubble__button,
+.info-bubble__twin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--sm-info-size);
+  height: var(--sm-info-size);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--theme-elevation-1000);
+  color: var(--theme-elevation-0);
+  font: inherit;
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 600;
+  letter-spacing: normal;
+  line-height: 1;
+  text-transform: none;
+}
+
+.info-bubble__button {
+  cursor: help;
+
+  &:focus-visible {
+    outline: 2px solid var(--theme-elevation-1000);
+    outline-offset: 2px;
+  }
+}
+
+.info-bubble__text {
+  position: fixed;
+  top: 0;
+  left: 0;
+  // over the dialog (the bubble is drawn in the page's body)
+  z-index: 1000;
+  box-sizing: border-box;
+  width: max-content;
+  max-width: var(--sm-bubble-width);
+  padding: 10px 12px;
+  border-radius: 4px;
+  background: var(--theme-elevation-1000);
+  box-shadow: var(--sm-shadow);
+  color: var(--theme-elevation-0);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 20px;
+  text-align: left;
+  text-transform: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 120ms ease;
+  pointer-events: none;
+
+  &[data-shown] {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  // room for the « i » in the corner the bubble opens from
+  &[data-corner='top-start'] {
+    padding-left: calc(var(--sm-info-size) + 16px);
+  }
+
+  &[data-corner='top-end'] {
+    padding-right: calc(var(--sm-info-size) + 16px);
+  }
+
+  &[data-corner='bottom-start'] {
+    padding-left: calc(var(--sm-info-size) + 16px);
+  }
+
+  &[data-corner='bottom-end'] {
+    padding-right: calc(var(--sm-info-size) + 16px);
+  }
+}
+
+// the twin « i » in the corner: inverse of the bubble, like the real one on the page
+.info-bubble__twin {
+  position: absolute;
+  background: var(--theme-elevation-0);
+  color: var(--theme-elevation-1000);
+
+  [data-corner='top-start'] > & {
+    top: 8px;
+    left: 8px;
+  }
+
+  [data-corner='top-end'] > & {
+    top: 8px;
+    right: 8px;
+  }
+
+  [data-corner='bottom-start'] > & {
+    bottom: 8px;
+    left: 8px;
+  }
+
+  [data-corner='bottom-end'] > & {
+    right: 8px;
+    bottom: 8px;
+  }
+}

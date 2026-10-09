@@ -1,7 +1,8 @@
-import type {CollectionBeforeChangeHook, CollectionSlug, RequiredDataFromCollectionSlug} from 'payload';
+import {type CollectionBeforeChangeHook, type CollectionSlug, type RequiredDataFromCollectionSlug, ValidationError} from 'payload';
 
 import {tr} from '@/i18n/admin/languages';
 import {sectionsText} from '@/i18n/admin/sections';
+
 
 /**
  * « Save to shared sections » checkbox of a Section block: when the document is saved,
@@ -29,32 +30,38 @@ export type ShareSectionsOptions = {
   fieldName: string;
   /** Slug of the shared sections collection. */
   collection: string;
-  /** Document field used to name a section saved without a title. */
-  titleField?: string;
 };
 
-export function shareSectionsHook({fieldName, collection, titleField = 'title'}: ShareSectionsOptions): CollectionBeforeChangeHook {
-  return async ({data, req}) => {
+export function shareSectionsHook({fieldName, collection}: ShareSectionsOptions): CollectionBeforeChangeHook {
+  return async ({collection: collectionConfig, data, req}) => {
+    const collectionSlug = collectionConfig?.slug;
     const sections = data?.[fieldName];
     if (!Array.isArray(sections)) return data;
     const out: Block[] = [];
-    let n = 0;
-    for (const block of sections as Block[]) {
-      n += 1;
+    // the checks happen here, not in a field's `validate`: Payload validates the fields after this
+    // hook, when the section is already turned into a reference
+    const refuse = (index: number, message: string) => {
+      throw new ValidationError({collection: collectionSlug, errors: [{message, path: `${fieldName}.${index}.saveAsShared`}], req}, req.t);
+    };
+    for (const [index, block] of (sections as Block[]).entries()) {
       if (block?.blockType !== 'section' || !block.saveAsShared) {
         out.push(block);
         continue;
       }
-      const {saveAsShared: _s, sharedTitle, id: _id, blockName, blockType: _t, ...fields} = block;
-      const docTitle = data[titleField];
-      const title = typeof sharedTitle === 'string' && sharedTitle.trim() ? sharedTitle.trim() : tr(sectionsText.settings.sharedDefaultTitle, req.i18n?.language, {page: typeof docTitle === 'string' ? docTitle : null, n});
+      const {saveAsShared: _s, id: _id, blockName, blockType: _t, ...fields} = block;
+      // the shared section takes the section's name (its header): refused without one, or when a
+      // shared section has that name already
+      const title = typeof blockName === 'string' ? blockName.trim() : '';
+      if (!title) refuse(index, tr(sectionsText.validation.sharedNeedsName, req.i18n?.language));
+      const taken = await req.payload.count({collection: collection as CollectionSlug, where: {title: {equals: title}}, req});
+      if (taken.totalDocs > 0) refuse(index, tr(sectionsText.validation.sharedNameTaken, req.i18n?.language, {name: title}));
       const doc = await req.payload.create({
         collection: collection as CollectionSlug,
         data: {...stripIds(fields), title} as unknown as RequiredDataFromCollectionSlug<CollectionSlug>,
         req,
         locale: req.locale === 'all' ? undefined : req.locale,
       });
-      out.push({blockType: 'sharedSection', blockName: blockName ?? title, section: doc.id});
+      out.push({blockType: 'sharedSection', blockName: title, section: doc.id});
     }
     return {...data, [fieldName]: out};
   };

@@ -1,0 +1,39 @@
+/*
+ * The section builder's own variables: every measure and colour that the admin tool (the « Gérer »
+ * dialog, its rows builder, its component list, its content panel, its bubbles) does not take from
+ * Payload's theme. One place to change a size; the TypeScript that needs a measure reads it from
+ * here (`tokens.ts`), nothing is written twice. On `:root`: the bubbles are drawn in the page's
+ * body, outside the dialog. Even values only; no font under 14 px.
+ */
+:root {
+  // the dialog
+  --sm-top-height: 280px; // the top part (settings) when the dialog opens
+  --sm-tab-width: 44px; // a folded panel's vertical strip
+  --sm-panel-end: 16px; // room under a panel's content, above the preview
+
+  // the rows builder (« Découpage »)
+  --sm-layout-tile-height: 48px; // a layout thumbnail
+  --sm-square-width: 260px; // a row's square
+  --sm-square-height: 126px; // (its columns are 72 px high)
+
+  // the component list (« Composants » and the picker of an empty column)
+  --sm-thumb-height: 220px;
+  --sm-thumb-min-width: 120px;
+  --sm-thumb-gap: 12px;
+  --sm-guide-width: 240px; // the tile of instructions
+
+  // the content panel (« Contenu »): a track is half a column
+  --sm-track-min: 96px;
+  --sm-track-max: 200px;
+  --sm-track-gap: 20px;
+
+  // the « i » bubbles
+  --sm-info-size: 18px; // the « i » disc
+  --sm-bubble-width: 360px;
+
+  // colours Payload's theme has no variable for
+  --sm-veil: rgb(255 255 255 / 90%); // over a thumbnail on hover (white whatever the theme: Nicolas, 5 Oct. 2026)
+  --sm-veil-text: #000;
+  --sm-shadow: 0 6px 20px rgb(0 0 0 / 25%); // a bubble, a floating panel
+  --sm-shadow-drag: 0 6px 20px rgb(0 0 0 / 36%); // what is being dragged
+}

@@ -8,9 +8,12 @@
 import React from 'react';
 
 import type {Text} from '@/i18n/admin/languages';
+import {sectionsText as T} from '@/i18n/admin/sections';
 import {useAdminText} from '@/i18n/admin/useAdminText';
 
-export type GroupHeadingProps = {label: Text; icon?: string; first?: boolean};
+import {InfoBubble} from './InfoBubble';
+
+export type GroupHeadingProps = {label: Text; help?: Text; icon?: string; first?: boolean};
 
 /** shared by this heading and the host's own (same rule, same type) */
 export const groupHeadingStyle = (first?: boolean): React.CSSProperties => ({
@@ -30,7 +33,18 @@ export const groupHeadingStyle = (first?: boolean): React.CSSProperties => ({
   color: 'var(--theme-elevation-600)',
 });
 
-export function GroupHeading({label, first}: GroupHeadingProps) {
+/** the « i » beside a group's title: its help text in a bubble (shared with the host's heading) */
+export function GroupHelp({help}: {help?: Text}) {
   const {t} = useAdminText();
-  return <p style={groupHeadingStyle(first)}>{t(label)}</p>;
+  return help ? <InfoBubble label={t(T.builder.helpLabel)} text={t(help)} align="start" /> : null;
+}
+
+export function GroupHeading({label, help, first}: GroupHeadingProps) {
+  const {t} = useAdminText();
+  return (
+    <p style={groupHeadingStyle(first)}>
+      {t(label)}
+      <GroupHelp help={help} />
+    </p>
+  );
 }

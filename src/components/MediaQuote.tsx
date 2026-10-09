@@ -35,11 +35,11 @@ export function MediaQuote({text, tag = 'h2', size = 'display-3', ...media}: Med
   const level = LEVELS[tag];
   const phrase =
     level != null ? (
-      <Heading level={level} className={styles.quote} data-size={size}>
+      <Heading level={level} className={styles.quote} data-size={size} data-part="quote">
         {text}
       </Heading>
     ) : (
-      <Text as={tag === 'span' ? 'span' : 'p'} className={styles.quote} data-size={size}>
+      <Text as={tag === 'span' ? 'span' : 'p'} className={styles.quote} data-size={size} data-part="quote">
         {text}
       </Text>
     );
