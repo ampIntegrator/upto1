@@ -28,12 +28,12 @@ export function TestimonialCard({quote, name, role, result}: Testimonial) {
     <VStack as="figure" className={styles.card}>
       <Text type="serif-upright" className={styles.mark} aria-hidden="true">“</Text>
       <VStack className={styles.quote}>
-        <Blockquote>{quote}</Blockquote>
+        <Blockquote data-part="quote">{quote}</Blockquote>
       </VStack>
       <VStack as="figcaption" gap={0.5} className={styles.foot}>
-        <Text type="body" className={styles.name}>{name}</Text>
-        {role ? <Text type="tag" className={styles.role}>{role}</Text> : null}
-        {result ? <HStack className={styles.result}><Chip label={result} tone="high" /></HStack> : null}
+        <Text type="body" className={styles.name} data-part="name">{name}</Text>
+        {role ? <Text type="tag" className={styles.role} data-part="role">{role}</Text> : null}
+        {result ? <HStack className={styles.result} data-part="result"><Chip label={result} tone="high" /></HStack> : null}
       </VStack>
     </VStack>
   );

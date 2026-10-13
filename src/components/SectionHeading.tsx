@@ -37,11 +37,11 @@ export function SectionHeading({eyebrow, title, tag, level, size = 'display-2', 
   const center = align === 'center';
   return (
     <VStack gap={6} align={center ? 'center' : 'start'} className={styles.root} data-align={align}>
-      {eyebrow ? <Text type="eyebrow-lines">{eyebrow}</Text> : null}
-      <Title tag={tag ?? (level ? (`h${level}` as TitleTag) : 'h2')} type={size} className={styles.title}>
+      {eyebrow ? <Text type="eyebrow-lines" data-part="eyebrow">{eyebrow}</Text> : null}
+      <Title tag={tag ?? (level ? (`h${level}` as TitleTag) : 'h2')} type={size} className={styles.title} data-part="title" data-part-format="title">
         {renderTitle(title)}
       </Title>
-      {text ? <Text type="large" color="secondary" className={styles.text}>{text}</Text> : null}
+      {text ? <Text type="large" color="secondary" className={styles.text} data-part="lead">{text}</Text> : null}
       {cta ? (
         <HStack paddingBlockStart={4}>
           <Button variant="primary" size="lg" arrow label={cta.label} href={cta.href} iconKey={cta.iconKey} />
