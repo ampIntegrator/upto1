@@ -28,9 +28,11 @@ export type CheckListProps = {
   /** dense: divider below the last item (default: yes) */
   trailingDivider?: boolean;
   className?: string;
+  /** names the labels for the live preview: `<part>.<row>.label`, and `<part>.<row>.end` for the end value */
+  part?: string;
 };
 
-export function CheckList({items, tone = 'check', density = 'compact', trailingDivider = true, className}: CheckListProps) {
+export function CheckList({items, tone = 'check', density = 'compact', trailingDivider = true, className, part}: CheckListProps) {
   const compact = density === 'compact';
   return (
     <VStack as="ul" gap={compact ? 3 : 0} className={[styles.list, className].filter(Boolean).join(' ')} data-density={density} data-trailing={trailingDivider || undefined}>
@@ -43,9 +45,9 @@ export function CheckList({items, tone = 'check', density = 'compact', trailingD
               <i className={styles.dot} data-tone={t} aria-hidden="true">
                 {t === 'cross' ? <CloseIcon width={12} height={12} /> : <CheckIcon width={12} height={12} />}
               </i>
-              {item.label}
+              {part ? <span data-part={`${part}.${i}.label`}>{item.label}</span> : item.label}
             </HStack>
-            {item.end ? <s className={styles.end}>{item.end}</s> : null}
+            {item.end ? <s className={styles.end} data-part={part ? `${part}.${i}.end` : undefined}>{item.end}</s> : null}
           </HStack>
         );
       })}

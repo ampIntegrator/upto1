@@ -38,7 +38,7 @@ export function PriceCard({featuresLabel = 'Ce que vous obtenez', features, tota
       <VStack gap={5} className={styles.detail}>
         <Text type="eyebrow" data-part="featuresLabel">{featuresLabel}</Text>
         <VStack>
-          <CheckList items={features} density="dense" />
+          <CheckList items={features} density="dense" part="features" />
           {total ? (
             <HStack justify="between" vAlign="center" gap={3} className={styles.total}>
               <Text className={styles.totalLabel} data-part="totalLabel">{total.label}</Text>

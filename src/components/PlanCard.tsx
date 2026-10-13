@@ -54,7 +54,7 @@ export function PlanCard({name, nameTag = 'p', tagline, price, cta, featured, ba
       </VStack>
       <VStack gap={3} className={styles.body}>
         <Text type="eyebrow" data-part={inherits ? undefined : 'featuresLabel'}>{inherits ? `Tout ${inherits}, plus` : featuresLabel}</Text>
-        <CheckList items={features} density="dense" trailingDivider={false} />
+        <CheckList items={features} density="dense" trailingDivider={false} part="features" />
       </VStack>
       <VStack gap={3} className={styles.foot}>
         <VStack data-part="cta" data-part-kind="link"><Button variant="primary" size="lg" block arrow={featured} label={cta.label} href={cta.href} newTab={cta.newTab} className={featured ? undefined : styles.solid} /></VStack>

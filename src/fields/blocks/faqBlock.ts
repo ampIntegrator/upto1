@@ -63,4 +63,4 @@ const block: Block = {
 };
 
 /** Readable between 6 and 9 columns, never full width. */
-export const faqBlock: ContentBlock = {block, minSpan: minSpan({type: 'collapsibleGroup'}), maxSpan: maxSpan({type: 'collapsibleGroup'})};
+export const faqBlock: ContentBlock = {block, minSpan: minSpan({type: 'collapsibleGroup'}), maxSpan: maxSpan({type: 'collapsibleGroup'}), parts: {'items.*.question': 'items.*.question', 'items.*.answer': 'items.*.answer'}};

@@ -1,6 +1,6 @@
 /**
  * Static check of the blocks' `parts` maps (pnpm smoke:parts): every field path a part points to
- * exists in its block (a top-level field or a field of a group). No server, no database.
+ * exists in its block (a top-level field, a field of a group, or `list.*.field` for a list row). No server, no database.
  */
 import type {Field} from 'payload';
 
@@ -13,6 +13,8 @@ const flatten = (fields: readonly Field[], prefix = ''): Map<string, Field> => {
     else if ('name' in f && f.name) {
       out.set(prefix + f.name, f);
       if (f.type === 'group') flatten(f.fields, `${prefix}${f.name}.`).forEach((v, k) => out.set(k, v));
+      // a list row: `items.*.label`
+      if (f.type === 'array') flatten(f.fields, `${prefix}${f.name}.*.`).forEach((v, k) => out.set(k, v));
     }
   }
   return out;

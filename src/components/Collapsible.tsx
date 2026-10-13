@@ -40,12 +40,14 @@ export type CollapsibleProps = {
   isOpen?: boolean;
   onOpenChange?: (isOpen: boolean) => void;
   isDisabled?: boolean;
+  /** names the question and the answer for the live preview (a row of a list: `items.2.question`) */
+  part?: {question: string; answer: string};
 };
 
 type GroupContext = {isOpen: (value: string) => boolean; toggle: (value: string) => void} | null;
 const Group = createContext<GroupContext>(null);
 
-export function Collapsible({question, tag: Tag = 'h3', value, children, defaultIsOpen = false, isOpen, onOpenChange, isDisabled}: CollapsibleProps) {
+export function Collapsible({question, tag: Tag = 'h3', value, children, defaultIsOpen = false, isOpen, onOpenChange, isDisabled, part}: CollapsibleProps) {
   const group = useContext(Group);
   const [own, setOwn] = useState(defaultIsOpen);
   const id = useId();
@@ -61,13 +63,13 @@ export function Collapsible({question, tag: Tag = 'h3', value, children, default
       <Tag className={styles.heading}>
         <button type="button" className={styles.trigger} aria-expanded={open} aria-controls={`${id}-answer`} id={`${id}-trigger`} disabled={isDisabled} onClick={toggle}>
           <span className={styles.question}>
-            {question}
+            {part ? <span data-part={part.question}>{question}</span> : question}
             <i className={styles.icon} aria-hidden="true" />
           </span>
         </button>
       </Tag>
       <VStack as="section" id={`${id}-answer`} role="region" aria-labelledby={`${id}-trigger`} className={styles.content} aria-hidden={!open}>
-        <VStack className={styles.answer}>{children}</VStack>
+        <VStack className={styles.answer} data-part={part?.answer} data-part-format={part ? 'source' : undefined}>{children}</VStack>
       </VStack>
     </VStack>
   );

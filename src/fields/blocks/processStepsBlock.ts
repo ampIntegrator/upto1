@@ -57,4 +57,4 @@ const block: Block = {
 };
 
 /** From 4 columns (one step); the panel follows the width of its column and fills the row height. */
-export const processStepsBlock: ContentBlock = {block, minSpan: minSpan({type: 'processSteps', steps: 1}), fill: true};
+export const processStepsBlock: ContentBlock = {block, minSpan: minSpan({type: 'processSteps', steps: 1}), fill: true, parts: {'steps.*.title': 'steps.*.title', 'steps.*.duration': 'steps.*.duration', 'steps.*.text': 'steps.*.text', 'steps.*.checks.*.label': 'steps.*.checks.*.label'}};
