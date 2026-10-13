@@ -179,7 +179,12 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
 
   // typing a text in place
   const startEditing = useCallback(
-    (el: HTMLElement, at: PreviewColumn, field: string, x: number, y: number) => {
+    (el: HTMLElement, at: PreviewColumn, field: string, x: number, y: number, raw?: string) => {
+      // a title is typed as its source (line breaks and <span> accents), drawn back by the server afterwards
+      if (raw !== undefined) {
+        el.textContent = raw;
+        el.style.whiteSpace = 'pre-wrap';
+      }
       const original = el.textContent ?? '';
       const send = (value: string) => toParent({type: PREVIEW_EDIT, ...at, field, value});
       editing.current = el;
@@ -195,7 +200,7 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
       }
       const onInput = () => send(el.textContent ?? '');
       const onKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && !(raw !== undefined && e.shiftKey)) {
           e.preventDefault();
           el.blur();
         } else if (e.key === 'Escape') {
@@ -210,6 +215,7 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
         el.removeEventListener('keydown', onKeyDown);
         el.removeEventListener('blur', onBlur);
         el.removeAttribute('contenteditable');
+        if (raw !== undefined) el.style.whiteSpace = '';
         el.removeAttribute('data-preview-editing');
         editing.current = null;
         // what the server makes of the text, now that the caret is gone
@@ -256,6 +262,10 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
       if (kind === 'text' && typeof stored === 'string' && stored === part.textContent) {
         toParent({type: PREVIEW_SELECT, ...at});
         return startEditing(part, at, field, e.clientX, e.clientY);
+      }
+      if (kind === 'text' && typeof stored === 'string' && part.getAttribute('data-part-format') === 'title') {
+        toParent({type: PREVIEW_SELECT, ...at});
+        return startEditing(part, at, field, e.clientX, e.clientY, stored);
       }
       toParent({type: PREVIEW_OPEN, ...at, field});
     };

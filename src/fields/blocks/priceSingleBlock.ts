@@ -31,4 +31,4 @@ const block: Block = {
 };
 
 /** Between half and three quarters of the width: two columns inside, stacked when its column is narrow; fills the row height. */
-export const priceSingleBlock: ContentBlock = {block, minSpan: minSpan({type: 'priceList', variant: 'single'}), maxSpan: maxSpan({type: 'priceList', variant: 'single'}), fill: true};
+export const priceSingleBlock: ContentBlock = {block, minSpan: minSpan({type: 'priceList', variant: 'single'}), maxSpan: maxSpan({type: 'priceList', variant: 'single'}), fill: true, parts: {featuresLabel: 'featuresLabel', totalLabel: 'totalLabel', totalValue: 'totalValue', priceLabel: 'priceLabel', cta: 'cta', mention: 'mention'}};

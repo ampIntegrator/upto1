@@ -26,4 +26,4 @@ const block: Block = {
 };
 
 /** 3 or 4 columns; the testimonials of a row take the same height. */
-export const testimonialBlock: ContentBlock = {block, minSpan: minSpan({type: 'testimonialCard'}), maxSpan: maxSpan({type: 'testimonialCard'}), fill: true, sample: {quote: loremWords(20), name: 'Lorem Ipsum', role: 'Dolor sit amet'}};
+export const testimonialBlock: ContentBlock = {block, minSpan: minSpan({type: 'testimonialCard'}), maxSpan: maxSpan({type: 'testimonialCard'}), fill: true, sample: {quote: loremWords(20), name: 'Lorem Ipsum', role: 'Dolor sit amet'}, parts: {quote: 'quote', name: 'name', role: 'role', result: 'result'}};

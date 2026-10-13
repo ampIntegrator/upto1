@@ -150,10 +150,12 @@ export const orbitaSectionSettings: Field[] = [
   },
 ];
 
+/** The column components, in the order of the section manager's list: the cards first. */
+export const contentBlocks = [...CARD_BLOCKS, postCardBlock, caseCardBlock, testimonialBlock, compareCardBlock, planBlock, priceSingleBlock, sectionHeadingBlock, textBoxBlock, mediaBlock, mediaQuoteBlock, faqBlock, processStepsBlock, tabsBlock, buttonGroupBlock, ...FIGURE_BLOCKS, collectionBlock, formBlock];
+
 /** The site's section builder: pages get `sections.field` and `sections.beforeChange`, the shared collection `sections.sharedFields`. */
 export const sections = createSectionBuilder({
-  // the order of the component list in the section manager: the cards first
-  blocks: [...CARD_BLOCKS, postCardBlock, caseCardBlock, testimonialBlock, compareCardBlock, planBlock, priceSingleBlock, sectionHeadingBlock, textBoxBlock, mediaBlock, mediaQuoteBlock, faqBlock, processStepsBlock, tabsBlock, buttonGroupBlock, ...FIGURE_BLOCKS, collectionBlock, formBlock],
+  blocks: contentBlocks,
   settings: orbitaSectionSettings,
   fieldName: 'sections',
   shared: {collection: 'sections'},

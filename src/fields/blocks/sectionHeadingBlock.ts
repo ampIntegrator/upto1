@@ -46,4 +46,4 @@ const block: Block = {
   ],
 };
 
-export const sectionHeadingBlock: ContentBlock = {block, minSpan: 6, maxSpan: 12, sample: {eyebrow: 'Lorem ipsum', title: 'Lorem ipsum dolor sit amet', lead: loremWords(20)}};
+export const sectionHeadingBlock: ContentBlock = {block, minSpan: 6, maxSpan: 12, sample: {eyebrow: 'Lorem ipsum', title: 'Lorem ipsum dolor sit amet', lead: loremWords(20)}, parts: {eyebrow: 'eyebrow', title: 'title', lead: 'lead'}};

@@ -46,19 +46,19 @@ export function PlanCard({name, nameTag = 'p', tagline, price, cta, featured, ba
     <VStack as="article" className={styles.card} data-featured={featured || undefined}>
       {featured && badge ? <HStack className={styles.badge}><Chip label={badge} tone="cat" /></HStack> : null}
       <VStack gap={1} className={styles.head}>
-        <Title tag={nameTag} className={styles.name}>{name}</Title>
-        {tagline ? <Text className={styles.tagline}>{tagline}</Text> : null}
+        <Title tag={nameTag} className={styles.name} data-part="name">{name}</Title>
+        {tagline ? <Text className={styles.tagline} data-part="tagline">{tagline}</Text> : null}
         <HStack paddingBlockStart={3}>
           <Price value={price.value} currency={price.currency} period={price.period ?? '/ mois'} size="plan" />
         </HStack>
       </VStack>
       <VStack gap={3} className={styles.body}>
-        <Text type="eyebrow">{inherits ? `Tout ${inherits}, plus` : featuresLabel}</Text>
+        <Text type="eyebrow" data-part={inherits ? undefined : 'featuresLabel'}>{inherits ? `Tout ${inherits}, plus` : featuresLabel}</Text>
         <CheckList items={features} density="dense" trailingDivider={false} />
       </VStack>
       <VStack gap={3} className={styles.foot}>
-        <Button variant="primary" size="lg" block arrow={featured} label={cta.label} href={cta.href} newTab={cta.newTab} className={featured ? undefined : styles.solid} />
-        {mention ? <Text className={styles.mention}>{mention}</Text> : null}
+        <VStack data-part="cta" data-part-kind="link"><Button variant="primary" size="lg" block arrow={featured} label={cta.label} href={cta.href} newTab={cta.newTab} className={featured ? undefined : styles.solid} /></VStack>
+        {mention ? <Text className={styles.mention} data-part="mention">{mention}</Text> : null}
         {guarantee ? <Callout size="sm" title={guarantee.title} titleTag={guarantee.titleTag} text={guarantee.text} /> : null}
       </VStack>
     </VStack>

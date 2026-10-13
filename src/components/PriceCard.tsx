@@ -36,24 +36,24 @@ export function PriceCard({featuresLabel = 'Ce que vous obtenez', features, tota
     <VStack className={styles.host}>
     <VStack as="article" className={styles.card}>
       <VStack gap={5} className={styles.detail}>
-        <Text type="eyebrow">{featuresLabel}</Text>
+        <Text type="eyebrow" data-part="featuresLabel">{featuresLabel}</Text>
         <VStack>
           <CheckList items={features} density="dense" />
           {total ? (
             <HStack justify="between" vAlign="center" gap={3} className={styles.total}>
-              <Text className={styles.totalLabel}>{total.label}</Text>
-              <s className={styles.totalValue}>{total.value}</s>
+              <Text className={styles.totalLabel} data-part="totalLabel">{total.label}</Text>
+              <s className={styles.totalValue} data-part="totalValue">{total.value}</s>
             </HStack>
           ) : null}
         </VStack>
       </VStack>
       <VStack gap={3} className={styles.side}>
-        <Text type="eyebrow" className={styles.priceLabel}>{priceLabel}</Text>
+        <Text type="eyebrow" className={styles.priceLabel} data-part="priceLabel">{priceLabel}</Text>
         <Price value={price.value} currency={price.currency} size="single" />
         {price.period ? <Text className={styles.period}>{price.period}</Text> : null}
         <VStack gap={3} paddingBlockStart={4}>
-          <Button variant="primary" size="lg" block arrow label={cta.label} href={cta.href} newTab={cta.newTab} />
-          {mention ? <Text className={styles.mention}>{mention}</Text> : null}
+          <VStack data-part="cta" data-part-kind="link"><Button variant="primary" size="lg" block arrow label={cta.label} href={cta.href} newTab={cta.newTab} /></VStack>
+          {mention ? <Text className={styles.mention} data-part="mention">{mention}</Text> : null}
           {guarantee ? <Callout title={guarantee.title} titleTag={guarantee.titleTag} text={guarantee.text} /> : null}
         </VStack>
       </VStack>
