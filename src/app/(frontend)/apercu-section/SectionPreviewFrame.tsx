@@ -94,6 +94,21 @@ function partAt(x: number, y: number, column: Element): HTMLElement | null {
   return null;
 }
 
+/**
+ * The block's field for a part's name. A part of a list row carries its row numbers in its name
+ * (`items.2.question`); the block's map names it with a star (`items.*.question` → `items.*.question`),
+ * and the stars take the numbers back.
+ */
+function fieldOfPart(parts: Record<string, string> | undefined, name: string): string | undefined {
+  if (!parts) return undefined;
+  if (parts[name]) return parts[name];
+  const numbers: string[] = [];
+  const template = parts[name.replace(/(^|\.)(\d+)(?=\.|$)/g, (_m, dot: string, n: string) => (numbers.push(n), `${dot}*`))];
+  if (!template) return undefined;
+  let i = 0;
+  return template.replace(/\*/g, () => numbers[i++] ?? '0');
+}
+
 const noSubscription = () => () => {};
 const same = (a: PreviewColumn | null, b: PreviewColumn | null) => a?.row === b?.row && a?.col === b?.col;
 
@@ -250,7 +265,7 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
       const name = part ? part.getAttribute('data-part') : null;
       if (!part || !name) return toParent({type: PREVIEW_SELECT, ...at});
       const blockType = storedValue(latest.current?.section, at, 'blockType');
-      const field = typeof blockType === 'string' ? latest.current?.parts?.[blockType]?.[name] : undefined;
+      const field = typeof blockType === 'string' ? fieldOfPart(latest.current?.parts?.[blockType], name) : undefined;
       if (!field) return toParent({type: PREVIEW_OPEN, ...at});
       const kind = part.getAttribute('data-part-kind') ?? 'text';
       if (kind === 'image' || kind === 'icon' || kind === 'link') {
@@ -260,10 +275,13 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
       // typed in place only when what is shown is the stored text itself
       const stored = storedValue(latest.current?.section, at, field);
       if (kind === 'text' && typeof stored === 'string' && stored === part.textContent) {
+        // a text inside a button (a question) is typed, not pressed
+        e.stopPropagation();
         toParent({type: PREVIEW_SELECT, ...at});
         return startEditing(part, at, field, e.clientX, e.clientY);
       }
-      if (kind === 'text' && typeof stored === 'string' && part.getAttribute('data-part-format') === 'title') {
+      if (kind === 'text' && typeof stored === 'string' && part.hasAttribute('data-part-format')) {
+        e.stopPropagation();
         toParent({type: PREVIEW_SELECT, ...at});
         return startEditing(part, at, field, e.clientX, e.clientY, stored);
       }

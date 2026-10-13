@@ -40,17 +40,17 @@ export function ProcessSteps({steps, tag = 'h3'}: {steps: ProcessStep[]; tag?: T
         <VStack as="li" key={i} className={styles.step}>
           <HStack justify="between" vAlign="center" className={styles.head}>
             <Text type="serif-upright" className={styles.num}>{String(i + 1).padStart(2, '0')}</Text>
-            {s.duration ? <Chip label={s.duration} tone="high" iconKey="clock" /> : null}
+            {s.duration ? <HStack data-part={`steps.${i}.duration`}><Chip label={s.duration} tone="high" iconKey="clock" /></HStack> : null}
           </HStack>
           <Title tag={tag} className={styles.title}>
-            {s.title}
+            <span data-part={`steps.${i}.title`}>{s.title}</span>
             {s.asterisk ? <i className={styles.asterisk} aria-hidden="true">*</i> : null}
           </Title>
-          <Text type="body" color="secondary" className={styles.text}>{s.text}</Text>
+          <Text type="body" color="secondary" className={styles.text} data-part={`steps.${i}.text`}>{s.text}</Text>
           {s.checks?.length ? (
             <>
               <VStack className={styles.rule}><Divider /></VStack>
-              <CheckList items={s.checks} />
+              <CheckList items={s.checks} part={`steps.${i}.checks`} />
             </>
           ) : null}
         </VStack>

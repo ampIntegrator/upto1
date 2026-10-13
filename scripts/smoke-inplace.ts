@@ -23,9 +23,11 @@ const features = [{label: 'Un point'}, {label: 'Un autre'}];
 const CASES: Case[] = [
   {block: {blockType: 'sectionHeading', eyebrow: 'Sur-titre', title: 'Un titre\n<span>accentué</span>', tag: 'h2', lead: 'Une phrase d’accroche.'}, span: '12', parts: {eyebrow: 'text', title: 'text', lead: 'text'}},
   {block: {blockType: 'testimonial', quote: 'Une citation d’essai.', name: 'Jeanne Dupont', role: 'Courtière', result: '+ 28 %'}, span: '4', parts: {quote: 'text', name: 'text', role: 'text', result: 'text'}},
-  {block: {blockType: 'compareCard', chipLabel: 'Avant', chipTone: 'accent', meta: '3 semaines', quote: 'Une citation.', items: [{label: 'Un point'}]}, span: '6', parts: {meta: 'text', quote: 'text'}},
-  {block: {blockType: 'plan', name: 'Pro', nameTag: 'p', tagline: 'Pour démarrer', price, features, cta: link('Choisir'), mention: 'Sans engagement', featuresLabel: 'Inclus'}, span: '4', parts: {name: 'text', tagline: 'text', featuresLabel: 'text', cta: 'link', mention: 'text'}},
-  {block: {blockType: 'priceSingle', featuresLabel: 'Inclus', features, totalLabel: 'Total', totalValue: '120 €', priceLabel: 'Votre prix', price, cta: link('Commander'), mention: 'Sans engagement'}, span: '8', parts: {featuresLabel: 'text', totalLabel: 'text', totalValue: 'text', priceLabel: 'text', cta: 'link', mention: 'text'}},
+  {block: {blockType: 'compareCard', chipLabel: 'Avant', chipTone: 'accent', meta: '3 semaines', quote: 'Une citation.', items: [{label: 'Un point'}]}, span: '6', parts: {meta: 'text', quote: 'text', 'items.0.label': 'text'}},
+  {block: {blockType: 'plan', name: 'Pro', nameTag: 'p', tagline: 'Pour démarrer', price, features, cta: link('Choisir'), mention: 'Sans engagement', featuresLabel: 'Inclus'}, span: '4', parts: {name: 'text', tagline: 'text', featuresLabel: 'text', cta: 'link', mention: 'text', 'features.1.label': 'text'}},
+  {block: {blockType: 'priceSingle', featuresLabel: 'Inclus', features, totalLabel: 'Total', totalValue: '120 €', priceLabel: 'Votre prix', price, cta: link('Commander'), mention: 'Sans engagement'}, span: '8', parts: {featuresLabel: 'text', totalLabel: 'text', totalValue: 'text', priceLabel: 'text', cta: 'link', mention: 'text', 'features.0.label': 'text'}},
+  {block: {blockType: 'faq', mode: 'multiple', columns: '1', firstOpen: true, tag: 'h3', items: [{question: 'Première question ?', answer: 'Première réponse.\n\nUn second paragraphe.'}, {question: 'Deuxième question ?', answer: 'Deuxième réponse.'}]}, span: '8', parts: {'items.0.question': 'text', 'items.1.question': 'text', 'items.0.answer': 'text'}},
+  {block: {blockType: 'processSteps', tag: 'h3', steps: [{title: 'Étape un', duration: '2 jours', text: 'Un texte.', checks: [{label: 'Un contrôle'}]}, {title: 'Étape deux', text: 'Un autre texte.', checks: [{label: 'Un second contrôle'}]}]}, span: '8', parts: {'steps.0.title': 'text', 'steps.0.duration': 'text', 'steps.1.text': 'text', 'steps.1.checks.0.label': 'text'}},
 ];
 
 async function main() {
@@ -79,11 +81,21 @@ async function main() {
           const editable = (await el.getAttribute('contenteditable')) === 'plaintext-only';
           check(editable, `${slug}.${part}: a click types the text in place`);
           if (editable) {
-            await p.keyboard.press('End');
+            await el.evaluate((node) => {
+              const range = document.createRange();
+              range.selectNodeContents(node);
+              range.collapse(false);
+              const selection = window.getSelection();
+              selection?.removeAllRanges();
+              selection?.addRange(range);
+            });
             await p.keyboard.type('!');
             await p.waitForTimeout(300);
             await p.keyboard.press('Enter');
-            await p.waitForTimeout(300);
+            // the server draws the typed text back, in the same row
+            await p.waitForTimeout(1800);
+            const shown = (await el.innerText().catch(() => '')).trim();
+            check(shown.endsWith('!'), `${slug}.${part}: what is typed shows after the refresh, in the same place (${JSON.stringify(shown.slice(-24))})`);
           }
         } else {
           const popover = (await p.locator('.field-popover').count()) > 0;

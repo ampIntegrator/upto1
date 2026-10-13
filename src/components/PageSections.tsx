@@ -40,7 +40,7 @@ function Faq({faq, id}: {faq: FaqData; id: string}) {
   return (
     <CollapsibleGroup type={faq.mode} columns={faq.columns} defaultValue={faq.firstOpen ? (faq.mode === 'multiple' ? [first] : first) : undefined}>
       {faq.items.map((q, i) => (
-        <Collapsible key={i} value={`${id}-${i}`} question={q.question} tag={faq.tag}>
+        <Collapsible key={i} value={`${id}-${i}`} question={q.question} tag={faq.tag} part={{question: `items.${i}.question`, answer: `items.${i}.answer`}}>
           <FaqAnswer text={q.answer} />
         </Collapsible>
       ))}
