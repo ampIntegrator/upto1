@@ -23,8 +23,15 @@ const named = (fields: ClientField[]): ClientField[] => fields.flatMap((f) => ('
 /**
  * A field of a block by its path (`cta`, `buttons.1.iconKey`; row numbers are skipped): the field,
  * the list of fields it sits in, and the schema names of the lists above it (`['buttons']`).
+ * A path that ends with a row number (`buttons.1`) is a whole row: `row` is set, `field` is the list
+ * and `scope` the fields of its rows (all shown), `schema` ends with the list's name.
  */
-export function fieldAt(fields: ClientField[], path: string): {field: ClientField; scope: ClientField[]; schema: string[]} | undefined {
+export function fieldAt(fields: ClientField[], path: string): {field: ClientField; scope: ClientField[]; schema: string[]; row?: boolean} | undefined {
+  if (/\.\d+$/.test(path)) {
+    const list = fieldAt(fields, path.replace(/\.\d+$/, ''));
+    const inner = (list?.field as Container | undefined)?.fields;
+    return list && inner && list.field.type === 'array' ? {field: list.field, scope: inner, schema: [...list.schema, (list.field as {name: string}).name], row: true} : undefined;
+  }
   const names = path.split('.').filter((s) => !/^\d+$/.test(s));
   const schema: string[] = [];
   let scope = fields;

@@ -63,4 +63,4 @@ const block: Block = {
 };
 
 /** 3 to 6 columns; the cards of a row take the same height. */
-export const compareCardBlock: ContentBlock = {block, minSpan: minSpan({type: 'compareCard'}), maxSpan: maxSpan({type: 'compareCard'}), fill: true, parts: {meta: 'meta', quote: 'quote', 'items.*.label': 'items.*.label'}};
+export const compareCardBlock: ContentBlock = {block, minSpan: minSpan({type: 'compareCard'}), maxSpan: maxSpan({type: 'compareCard'}), fill: true, parts: {chipLabel: 'chipLabel', meta: 'meta', quote: 'quote', 'items.*.label': 'items.*.label'}};

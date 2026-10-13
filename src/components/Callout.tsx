@@ -21,11 +21,13 @@ export type CalloutProps = {
   text: string;
   /** padding: `sm` (14 px, pricing tier cards) or `md` (16 px, default) */
   size?: 'sm' | 'md';
+  /** names the callout for the live preview, which edits its fields in a popover */
+  part?: string;
 };
 
-export function Callout({eyebrow, title, titleTag = 'p', text, size = 'md'}: CalloutProps) {
+export function Callout({eyebrow, title, titleTag = 'p', text, size = 'md', part}: CalloutProps) {
   return (
-    <VStack as="aside" gap={1} className={styles.root} data-size={size}>
+    <VStack as="aside" gap={1} className={styles.root} data-size={size} data-part={part} data-part-kind={part ? 'field' : undefined}>
       {eyebrow ? <Text type="eyebrow-mono" className={styles.eyebrow}>{eyebrow}</Text> : null}
       {title ? <Title tag={titleTag} className={styles.title}>{title}</Title> : null}
       <Text className={styles.text}>{text}</Text>

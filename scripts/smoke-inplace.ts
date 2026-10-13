@@ -14,7 +14,7 @@ import {getPayload} from 'payload';
 const BASE = process.env.SMOKE_BASE ?? 'http://localhost:3000';
 const stamp = Date.now();
 
-type Kind = 'text' | 'link' | 'image' | 'icon';
+type Kind = 'text' | 'field' | 'link' | 'image' | 'icon';
 type Case = {block: Record<string, unknown>; span: string; parts: Record<string, Kind>};
 
 const link = (label: string) => ({label, href: '/'});
@@ -30,17 +30,36 @@ const RICH = lexical(paragraph(text('Un début, '), text('puis du gras', 1), tex
 
 const CASES: Case[] = [
   {block: {blockType: 'sectionHeading', eyebrow: 'Sur-titre', title: 'Un titre\n<span>accentué</span>', tag: 'h2', lead: 'Une phrase d’accroche.'}, span: '12', parts: {eyebrow: 'text', title: 'text', lead: 'text'}},
-  {block: {blockType: 'testimonial', quote: 'Une citation d’essai.', name: 'Jeanne Dupont', role: 'Courtière', result: '+ 28 %'}, span: '4', parts: {quote: 'text', name: 'text', role: 'text', result: 'text'}},
-  {block: {blockType: 'compareCard', chipLabel: 'Avant', chipTone: 'accent', meta: '3 semaines', quote: 'Une citation.', items: [{label: 'Un point'}]}, span: '6', parts: {meta: 'text', quote: 'text', 'items.0.label': 'text'}},
-  {block: {blockType: 'plan', name: 'Pro', nameTag: 'p', tagline: 'Pour démarrer', price, features, cta: link('Choisir'), mention: 'Sans engagement', featuresLabel: 'Inclus'}, span: '4', parts: {name: 'text', tagline: 'text', featuresLabel: 'text', cta: 'link', mention: 'text', 'features.1.label': 'text'}},
-  {block: {blockType: 'priceSingle', featuresLabel: 'Inclus', features, totalLabel: 'Total', totalValue: '120 €', priceLabel: 'Votre prix', price, cta: link('Commander'), mention: 'Sans engagement'}, span: '8', parts: {featuresLabel: 'text', totalLabel: 'text', totalValue: 'text', priceLabel: 'text', cta: 'link', mention: 'text', 'features.0.label': 'text'}},
+  {block: {blockType: 'testimonial', quote: 'Une citation d’essai.', name: 'Jeanne Dupont', role: 'Courtière', result: '+ 28 %'}, span: '4', parts: {quote: 'text', name: 'text', role: 'text', result: 'field'}},
+  {block: {blockType: 'compareCard', chipLabel: 'Avant', chipTone: 'accent', meta: '3 semaines', quote: 'Une citation.', items: [{label: 'Un point'}]}, span: '6', parts: {chipLabel: 'field', meta: 'text', quote: 'text', 'items.0.label': 'text'}},
+  {block: {blockType: 'plan', name: 'Pro', nameTag: 'p', tagline: 'Pour démarrer', price, features, cta: link('Choisir'), mention: 'Sans engagement', featuresLabel: 'Inclus', featured: true, badge: 'Populaire', guarantee: {title: 'Garantie', text: 'Satisfait ou remboursé.'}}, span: '4', parts: {name: 'text', tagline: 'text', featuresLabel: 'text', cta: 'link', mention: 'text', 'features.1.label': 'text', price: 'field', guarantee: 'field', badge: 'field'}},
+  {block: {blockType: 'plan', name: 'Solo', nameTag: 'p', price, features, cta: link('Choisir'), inherits: 'Solo'}, span: '4', parts: {inherits: 'text'}},
+  {block: {blockType: 'priceSingle', featuresLabel: 'Inclus', features, totalLabel: 'Total', totalValue: '120 €', priceLabel: 'Votre prix', price, cta: link('Commander'), mention: 'Sans engagement', guarantee: {title: 'Garantie', text: 'Satisfait ou remboursé.'}}, span: '8', parts: {featuresLabel: 'text', totalLabel: 'text', totalValue: 'text', priceLabel: 'text', cta: 'link', mention: 'text', 'features.0.label': 'text', price: 'field', guarantee: 'field'}},
   {block: {blockType: 'faq', mode: 'multiple', columns: '1', firstOpen: true, tag: 'h3', items: [{question: 'Première question ?', answer: 'Première réponse.\n\nUn second paragraphe.'}, {question: 'Deuxième question ?', answer: 'Deuxième réponse.'}]}, span: '8', parts: {'items.0.question': 'text', 'items.1.question': 'text', 'items.0.answer': 'text'}},
-  {block: {blockType: 'processSteps', tag: 'h3', steps: [{title: 'Étape un', duration: '2 jours', text: 'Un texte.', checks: [{label: 'Un contrôle'}]}, {title: 'Étape deux', text: 'Un autre texte.', checks: [{label: 'Un second contrôle'}]}]}, span: '8', parts: {'steps.0.title': 'text', 'steps.0.duration': 'text', 'steps.1.text': 'text', 'steps.1.checks.0.label': 'text'}},
+  {block: {blockType: 'processSteps', tag: 'h3', steps: [{title: 'Étape un', duration: '2 jours', text: 'Un texte.', checks: [{label: 'Un contrôle'}]}, {title: 'Étape deux', text: 'Un autre texte.', checks: [{label: 'Un second contrôle'}]}]}, span: '8', parts: {'steps.0.title': 'text', 'steps.0.duration': 'field', 'steps.1.text': 'text', 'steps.1.checks.0.label': 'text'}},
   {block: {blockType: 'textBox', title: 'Un titre', titleTag: 'h2', content: RICH}, span: '8', parts: {title: 'text', 'content#0': 'text', 'content#1': 'text', 'content#4': 'text'}},
-  {block: {blockType: 'tabs', items: [{label: 'Premier', content: RICH}, {label: 'Second', content: lexical(paragraph(text('Le texte du second onglet.')))}]}, span: '8', parts: {'items.0.content#0': 'text', 'items.0.content#3': 'text'}},
-  {block: {blockType: 'textBox', title: 'Un titre', titleTag: 'h2', content: RICH, buttons: [{label: 'Premier', href: '#', shape: 'simple', variant: 'primary', size: 'md', iconKey: 'shield'}, {label: 'Second', href: '#', shape: 'simple', variant: 'secondary', size: 'md', iconKey: 'calculator'}]}, span: '8', parts: {'buttons.0.iconKey': 'icon', 'buttons.1.iconKey': 'icon'}},
-  {block: {blockType: 'buttonGroup', mode: 'spaced', width: 'natural', align: 'start', buttons: [{label: 'Un', href: '#', shape: 'simple', variant: 'primary', size: 'md', iconKey: 'shield'}]}, span: '8', parts: {'buttons.0.iconKey': 'icon'}},
+  {block: {blockType: 'tabs', items: [{label: 'Premier', content: RICH}, {label: 'Second', content: lexical(paragraph(text('Le texte du second onglet.')))}]}, span: '8', parts: {'items.0.content#0': 'text', 'items.0.content#3': 'text', 'items.0.label': 'field', 'items.1.label': 'field'}},
+  {block: {blockType: 'textBox', title: 'Un titre', titleTag: 'h2', content: RICH, badges: [{label: 'Nouveau', tone: 'high'}], buttons: [{label: 'Premier', href: '#', shape: 'simple', variant: 'primary', size: 'md', iconKey: 'shield'}, {label: 'Second', href: '#', shape: 'simple', variant: 'secondary', size: 'md', iconKey: 'calculator'}]}, span: '8', parts: {'badges.0': 'field', 'buttons.0': 'field', 'buttons.1': 'field'}},
+  {block: {blockType: 'buttonGroup', mode: 'spaced', width: 'natural', align: 'start', buttons: [{label: 'Un', href: '#', shape: 'simple', variant: 'primary', size: 'md', iconKey: 'shield'}]}, span: '8', parts: {'buttons.0': 'field'}},
 ];
+
+/** what the popover of a part must show (the current values of its fields), by `block.part` */
+const SHOWS: Record<string, string[]> = {
+  'testimonial.result': ['+ 28 %'],
+  'compareCard.chipLabel': ['Avant'],
+  'plan.price': ['99', '€', '/ mois'],
+  'plan.guarantee': ['Garantie', 'Satisfait ou remboursé.'],
+  'plan.badge': ['Populaire'],
+  'priceSingle.price': ['99', '€', '/ mois'],
+  'priceSingle.guarantee': ['Garantie', 'Satisfait ou remboursé.'],
+  'processSteps.steps.0.duration': ['2 jours'],
+  'textBox.badges.0': ['Nouveau'],
+  'textBox.buttons.0': ['Premier', 'shield'],
+  'textBox.buttons.1': ['Second', 'calculator'],
+  'buttonGroup.buttons.0': ['Un', 'shield'],
+  'tabs.items.0.label': ['Premier'],
+  'tabs.items.1.label': ['Second'],
+};
 
 async function main() {
   const payload = await getPayload({config});
@@ -115,11 +134,10 @@ async function main() {
           const popover = (await p.locator('.field-popover').count()) > 0;
           check(popover, `${slug}.${part}: a click opens the ${kind} field`);
           // a field of a list row: the popover shows that row's value (its icon), not the whole list
-          if (popover && part.includes('.')) {
-            const row = Number(part.split('.')[1]);
-            const expected = String(((c.block.buttons as {iconKey?: string}[] | undefined)?.[row]?.iconKey) ?? '');
-            const shown = await p.locator('.field-popover').innerText();
-            check(shown.toLowerCase().includes(expected.toLowerCase()), `${slug}.${part}: the field shown is the one of row ${row} (${expected})`);
+          if (popover && SHOWS[`${slug}.${part}`]) {
+            const held = await p.locator('.field-popover').evaluate((el) => `${el.textContent} ${[...el.querySelectorAll('input, textarea')].map((i) => (i as HTMLInputElement).value).join(' ')}`.toLowerCase());
+            const missing = SHOWS[`${slug}.${part}`].filter((v) => !held.includes(v.toLowerCase()));
+            check(missing.length === 0, `${slug}.${part}: the popover shows its fields${missing.length ? ` (missing: ${missing.join(', ')})` : ''}`);
           }
           if (popover) {
             await p.keyboard.press('Escape');

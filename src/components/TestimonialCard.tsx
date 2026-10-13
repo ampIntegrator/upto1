@@ -33,7 +33,7 @@ export function TestimonialCard({quote, name, role, result}: Testimonial) {
       <VStack as="figcaption" gap={0.5} className={styles.foot}>
         <Text type="body" className={styles.name} data-part="name">{name}</Text>
         {role ? <Text type="tag" className={styles.role} data-part="role">{role}</Text> : null}
-        {result ? <HStack className={styles.result} data-part="result"><Chip label={result} tone="high" /></HStack> : null}
+        {result ? <HStack className={styles.result}><Chip label={result} tone="high" part="result" /></HStack> : null}
       </VStack>
     </VStack>
   );

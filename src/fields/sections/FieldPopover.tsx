@@ -10,9 +10,10 @@ import './FieldPopover.scss';
 
 /**
  * A single field of a block, shown next to what was clicked in the preview (an image, an icon, a link):
- * a small panel at the pointer, closed by its button, Escape or a click beside it.
+ * a small panel under it (above it when there is no room below), closed by its button, Escape or a click beside it.
+ * `y`: the bottom of what was clicked, `top`: its top.
  */
-export function FieldPopover({x, y, title, onClose, children}: {x: number; y: number; title: string; onClose: () => void; children: React.ReactNode}) {
+export function FieldPopover({x, y, top, title, onClose, children}: {x: number; y: number; top: number; title: string; onClose: () => void; children: React.ReactNode}) {
   const {t} = useAdminText();
   const panel = useRef<HTMLDivElement>(null);
   const [place, setPlace] = useState({left: x, top: y});
@@ -21,11 +22,17 @@ export function FieldPopover({x, y, title, onClose, children}: {x: number; y: nu
     const el = panel.current;
     if (!el) return;
     const margin = 12;
-    const fit = () => setPlace({left: Math.max(margin, Math.min(x, window.innerWidth - el.offsetWidth - margin)), top: Math.max(margin, Math.min(y + margin, window.innerHeight - el.offsetHeight - margin))});
+    const fit = () => {
+      const below = y + margin;
+      // under the part, or over it when the screen is too short below and tall enough above
+      const placed = below + el.offsetHeight > window.innerHeight - margin && top - margin - el.offsetHeight >= margin ? top - margin - el.offsetHeight : below;
+      setPlace({left: Math.max(margin, Math.min(x, window.innerWidth - el.offsetWidth - margin)), top: Math.max(margin, Math.min(placed, window.innerHeight - el.offsetHeight - margin))});
+    };
+    fit();
     const observer = new ResizeObserver(fit);
     observer.observe(el);
     return () => observer.disconnect();
-  }, [x, y]);
+  }, [x, y, top]);
   // the click was in the preview's frame: bring the keyboard back here (Escape, Tab)
   useEffect(() => {
     panel.current?.focus();

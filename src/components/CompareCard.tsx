@@ -32,7 +32,7 @@ export function CompareCard({chip, meta, quote, items, tone = 'check', featured}
   return (
     <VStack as="article" className={styles.card} data-featured={featured || undefined}>
       <HStack justify="between" vAlign="center" gap={2} className={styles.head}>
-        <Chip label={chip.label} tone={chip.tone ?? 'accent'} />
+        <Chip label={chip.label} tone={chip.tone ?? 'accent'} part="chipLabel" />
         {meta ? <Text type="tag" className={styles.meta} data-part="meta">{meta}</Text> : null}
       </HStack>
       <VStack className={styles.quote}>
