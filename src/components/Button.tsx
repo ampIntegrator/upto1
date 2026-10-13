@@ -38,9 +38,11 @@ export type ButtonProps = Omit<AstryxButtonProps, 'endContent' | 'width' | 'size
   iconKey?: NucleoIconKey;
   /** Opens `href` in a new tab (target _blank, rel noopener noreferrer). */
   newTab?: boolean;
+  /** names the leading icon for the live preview (`buttons.1.iconKey`); the arrow of a split button is the tool's own and is not */
+  iconPart?: string;
 };
 
-export function Button({arrow = false, block = false, iconKey, icon, className, variant = 'primary', size = 'md', newTab, ...rest}: ButtonProps) {
+export function Button({arrow = false, block = false, iconKey, icon, className, variant = 'primary', size = 'md', newTab, iconPart, ...rest}: ButtonProps) {
   const isSecondary = variant === 'secondary';
   const gradId = useId();
   const nucleoIcon = iconKey ? <Icon icon={NUCLEO_ICONS[iconKey]} /> : null;
@@ -68,6 +70,7 @@ export function Button({arrow = false, block = false, iconKey, icon, className, 
     ) : (
       nucleoIcon ?? icon
     );
+  const namedIcon = iconPart && nucleoIcon ? <span data-part={iconPart} data-part-kind="icon">{leadingIcon}</span> : leadingIcon;
   const classes = [
     className,
     arrow ? styles.arrow : null,
@@ -84,7 +87,7 @@ export function Button({arrow = false, block = false, iconKey, icon, className, 
       {...newTabProps(newTab)}
       variant={variant}
       size={size}
-      icon={leadingIcon}
+      icon={namedIcon}
       className={classes}
       // visible label overridden for the gradient; `label` remains the accessible name
       {...(isSecondary && !rest.children ? {children: <span className={styles.secondaryLabel}>{rest.label}</span>} : {})}
