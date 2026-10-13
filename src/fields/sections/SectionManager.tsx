@@ -26,7 +26,7 @@ import {useAdminText} from '@/i18n/admin/useAdminText';
 import {BLOCK_DRAG_TYPE, BlockLibrary, type LibraryBlock} from './BlockLibrary';
 import {ColumnContent} from './ColumnContent';
 import {EMPTY_SLUG} from './emptyBlock';
-import {byGroup, only} from './fieldGroups';
+import {byGroup, fieldAt, onlyDeep} from './fieldGroups';
 import {withLeafText} from './richTextLeaf';
 import type {PresetRow} from './grid';
 import {ManagerContext} from './managerContext';
@@ -366,14 +366,15 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
       setColumn(at);
     }
     if (event.type === PREVIEW_PICK) {
-      if (readOnly || !block?.fields.some((f) => 'name' in f && f.name === event.field)) return openContent(at);
+      if (readOnly || !block || !fieldAt(block.fields as ClientField[], event.field)) return openContent(at);
       const box = toScreen(event.box);
       setColumn(at);
       setPicking({at, field: event.field, x: box.x, y: box.y + box.height});
     }
   };
   const pickedBlock = picking ? blocks.find((b) => b.slug === columnState(picking.at)?.blockType) : undefined;
-  const pickedField = pickedBlock?.fields.find((f) => 'name' in f && f.name === picking?.field);
+  const picked = pickedBlock && picking ? fieldAt(pickedBlock.fields as ClientField[], picking.field) : undefined;
+  const pickedField = picked?.field;
   /**
    * The permissions of a block's fields. Not found (a shape Payload may change): the fields are
    * shown but read-only, as Payload's own block row does, never editable by default (tech lead,
@@ -499,14 +500,14 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
         />
       ) : null}
       {preview ? <LivePreview parentPath={parentPath} preview={preview} onEvent={onPreviewEvent} overlay={dropZones} /> : null}
-      {picking && pickedBlock && pickedField ? (
+      {picking && pickedBlock && picked && pickedField ? (
         <FieldPopover x={picking.x} y={picking.y} title={String(getTranslation(('label' in pickedField && pickedField.label) || picking.field, i18n))} onClose={() => setPicking(null)}>
           <RenderFields
-            fields={only(pickedBlock.fields as ClientField[], (f) => f === pickedField)}
+            fields={onlyDeep(picked.scope, pickedField)}
             forceRender
             parentIndexPath=""
-            parentPath={`${columnPath(picking.at)}.contents.0`}
-            parentSchemaPath={`${rowsSchemaPath}.columns.contents.${pickedBlock.slug}`}
+            parentPath={[`${columnPath(picking.at)}.contents.0`, ...picking.field.split('.').slice(0, -1)].join('.')}
+            parentSchemaPath={[`${rowsSchemaPath}.columns.contents.${pickedBlock.slug}`, ...picked.schema].join('.')}
             permissions={blockPermissions(pickedBlock.slug).fields}
             readOnly={blockPermissions(pickedBlock.slug).readOnly}
           />

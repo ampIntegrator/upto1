@@ -16,3 +16,32 @@ export function byGroup(fields: ClientField[], starts: (f: ClientField) => boole
 
 /** The list with every field left out but those `keep` accepts (same positions, same paths). */
 export const only = (fields: ClientField[], keep: (f: ClientField) => boolean): ClientField[] => fields.map((f) => (keep(f) ? f : (null as unknown as ClientField)));
+
+type Container = ClientField & {fields?: ClientField[]};
+const named = (fields: ClientField[]): ClientField[] => fields.flatMap((f) => ('name' in f && f.name ? [f] : (f as Container).fields ? named((f as Container).fields as ClientField[]) : []));
+
+/**
+ * A field of a block by its path (`cta`, `buttons.1.iconKey`; row numbers are skipped): the field,
+ * the list of fields it sits in, and the schema names of the lists above it (`['buttons']`).
+ */
+export function fieldAt(fields: ClientField[], path: string): {field: ClientField; scope: ClientField[]; schema: string[]} | undefined {
+  const names = path.split('.').filter((s) => !/^\d+$/.test(s));
+  const schema: string[] = [];
+  let scope = fields;
+  for (const [i, name] of names.entries()) {
+    const field = named(scope).find((f) => 'name' in f && f.name === name);
+    if (!field) return undefined;
+    if (i === names.length - 1) return {field, scope, schema};
+    const inner = (field as Container).fields;
+    if (!inner) return undefined;
+    schema.push(name);
+    scope = inner;
+  }
+  return undefined;
+}
+
+/** `scope` with every field left out but `target` (rows and collapsibles are kept around it): same positions, same paths. */
+export function onlyDeep(scope: ClientField[], target: ClientField): ClientField[] {
+  const holds = (f: ClientField): boolean => f === target || Boolean(!('name' in f && f.name) && (f as Container).fields?.some(holds));
+  return scope.map((f) => (f === target ? f : !('name' in f && f.name) && holds(f) ? ({...f, fields: onlyDeep((f as Container).fields as ClientField[], target)} as ClientField) : (null as unknown as ClientField)));
+}

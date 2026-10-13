@@ -38,6 +38,8 @@ const CASES: Case[] = [
   {block: {blockType: 'processSteps', tag: 'h3', steps: [{title: 'Étape un', duration: '2 jours', text: 'Un texte.', checks: [{label: 'Un contrôle'}]}, {title: 'Étape deux', text: 'Un autre texte.', checks: [{label: 'Un second contrôle'}]}]}, span: '8', parts: {'steps.0.title': 'text', 'steps.0.duration': 'text', 'steps.1.text': 'text', 'steps.1.checks.0.label': 'text'}},
   {block: {blockType: 'textBox', title: 'Un titre', titleTag: 'h2', content: RICH}, span: '8', parts: {title: 'text', 'content#0': 'text', 'content#1': 'text', 'content#4': 'text'}},
   {block: {blockType: 'tabs', items: [{label: 'Premier', content: RICH}, {label: 'Second', content: lexical(paragraph(text('Le texte du second onglet.')))}]}, span: '8', parts: {'items.0.content#0': 'text', 'items.0.content#3': 'text'}},
+  {block: {blockType: 'textBox', title: 'Un titre', titleTag: 'h2', content: RICH, buttons: [{label: 'Premier', href: '#', shape: 'simple', variant: 'primary', size: 'md', iconKey: 'shield'}, {label: 'Second', href: '#', shape: 'simple', variant: 'secondary', size: 'md', iconKey: 'calculator'}]}, span: '8', parts: {'buttons.0.iconKey': 'icon', 'buttons.1.iconKey': 'icon'}},
+  {block: {blockType: 'buttonGroup', mode: 'spaced', width: 'natural', align: 'start', buttons: [{label: 'Un', href: '#', shape: 'simple', variant: 'primary', size: 'md', iconKey: 'shield'}]}, span: '8', parts: {'buttons.0.iconKey': 'icon'}},
 ];
 
 async function main() {
@@ -60,11 +62,11 @@ async function main() {
     const errors: string[] = [];
     p.on('pageerror', (e) => errors.push(e.message));
     await p.request.post(`${BASE}/api/users/login`, {data: {email, password}});
-    for (const c of CASES) {
+    for (const [n, c] of CASES.entries()) {
       const slug = String(c.block.blockType);
       const section = {blockType: 'section', mode: 'light', tint: 'light', texture: 'grid', rows: [{columns: [{span: c.span, contents: [c.block]}, ...(c.span === '12' ? [] : [{span: String(12 - Number(c.span)), contents: []}])]}]};
-      const page = (await payload.create({collection: 'pages', data: {title: `ZZ smoke en place ${slug}`, slug: `zz-smoke-inplace-${slug.toLowerCase()}-${stamp}`, hero: {variant: 'page-glow', title: 'Smoke'}, sections: [section]} as never}).catch((e: Error) => {
-        check(false, `${slug}: the throwaway page could not be created (${e.message.slice(0, 160)})`);
+      const page = (await payload.create({collection: 'pages', data: {title: `ZZ smoke en place ${slug}`, slug: `zz-smoke-inplace-${n}-${slug.toLowerCase()}-${stamp}`, hero: {variant: 'page-glow', title: 'Smoke'}, sections: [section]} as never}).catch((e: Error) => {
+        check(false, `${slug}: the throwaway page could not be created (${e.message.slice(0, 160)} ${JSON.stringify((e as {data?: unknown}).data ?? '').slice(0, 300)})`);
         return null;
       })) as {id: number} | null;
       if (!page) continue;
@@ -112,6 +114,13 @@ async function main() {
         } else {
           const popover = (await p.locator('.field-popover').count()) > 0;
           check(popover, `${slug}.${part}: a click opens the ${kind} field`);
+          // a field of a list row: the popover shows that row's value (its icon), not the whole list
+          if (popover && part.includes('.')) {
+            const row = Number(part.split('.')[1]);
+            const expected = String(((c.block.buttons as {iconKey?: string}[] | undefined)?.[row]?.iconKey) ?? '');
+            const shown = await p.locator('.field-popover').innerText();
+            check(shown.toLowerCase().includes(expected.toLowerCase()), `${slug}.${part}: the field shown is the one of row ${row} (${expected})`);
+          }
           if (popover) {
             await p.keyboard.press('Escape');
             await p.waitForTimeout(200);
