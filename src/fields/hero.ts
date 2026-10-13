@@ -145,3 +145,20 @@ export const heroField: GroupField = {
     },
   ] satisfies Field[],
 }
+
+/**
+ * Parts of the Hero component that the page top's live preview edits in place (`data-part` in
+ * Hero.tsx) → the hero's field each one shows. Text typed in place, anything else in a popover.
+ * Not the breadcrumb (centrally managed). The background image and the overlay stay in the settings.
+ */
+export const heroParts: Record<string, string> = {
+  title: 'title',
+  lead: 'lead',
+  eyebrow: 'eyebrow',
+  primary: 'primary',
+  secondary: 'secondary',
+  scrollHint: 'scrollHint',
+  'reassurance.*.text': 'reassurance.*.text',
+  'badges.*': 'badges.*',
+  media: 'media',
+}

@@ -113,7 +113,7 @@ function fieldOfPart(parts: Record<string, string> | undefined, name: string): s
 const noSubscription = () => () => {};
 const same = (a: PreviewColumn | null, b: PreviewColumn | null) => a?.row === b?.row && a?.col === b?.col;
 
-export function SectionPreviewFrame({frame, children}: {frame: string; children: React.ReactNode}) {
+export function SectionPreviewFrame({frame, children, bare = false}: {frame: string; children: React.ReactNode; /** the page top's preview: one « column », no outline and no pencil around it */ bare?: boolean}) {
   const router = useRouter();
   const last = useRef(0);
   const latest = useRef<Omit<PreviewDataMessage, 'type'> | null>(null);
@@ -344,8 +344,8 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
             </VStack>
           ) : null}
           {/* the hovered column, lightly outlined; no outline on the selected one (it spoiled the design, Nicolas, 1 Oct. 2026) */}
-          {hoverBox ? <i aria-hidden="true" style={{position: 'absolute', left: hoverBox.x, top: hoverBox.y, width: hoverBox.width, height: hoverBox.height, pointerEvents: 'none', outline: 'var(--border-width) dashed var(--color-accent)'}} /> : null}
-          {hoverBox && hover && filled.includes(`${hover.row}-${hover.col}`) ? (
+          {hoverBox && !bare ? <i aria-hidden="true" style={{position: 'absolute', left: hoverBox.x, top: hoverBox.y, width: hoverBox.width, height: hoverBox.height, pointerEvents: 'none', outline: 'var(--border-width) dashed var(--color-accent)'}} /> : null}
+          {hoverBox && !bare && hover && filled.includes(`${hover.row}-${hover.col}`) ? (
             <VStack data-preview-tool="true" style={{position: 'absolute', left: hoverBox.x + hoverBox.width, top: hoverBox.y, transform: 'translate(-100%, 0)', padding: 'var(--spacing-1)'}}>
               <IconButton label={tr(T.preview.editColumn, language)} tooltip={tr(T.preview.editColumnShort, language)} icon={<EditIcon />} variant="primary" size="sm" elevation="low" onClick={() => toParent({type: PREVIEW_OPEN, ...hover})} />
             </VStack>

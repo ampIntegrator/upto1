@@ -1,5 +1,6 @@
 import { SectionGroupHeading as SectionGroupHeading_516db130f92e5851f578df53b6aaa2cf } from '@/fields/SectionGroupHeading'
 import { IconPicker as IconPicker_8bfb3e3bce55055cefcbdba58b426cf6 } from '@/fields/IconPicker'
+import { HeroManager as HeroManager_2289a3a64fc448c33778637f201f13b5 } from '@/fields/HeroManager'
 import { BackgroundComposer as BackgroundComposer_184663dbb823c9178f52bc18003617b9 } from '@/fields/BackgroundComposer'
 import { HelpLabel as HelpLabel_45e070fcef391b8b4f9d96a82fb78b6e } from '@/fields/sections/HelpLabel'
 import { NoDescription as NoDescription_45e070fcef391b8b4f9d96a82fb78b6e } from '@/fields/sections/HelpLabel'
@@ -54,6 +55,7 @@ import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } f
 export const importMap = {
   "@/fields/SectionGroupHeading#SectionGroupHeading": SectionGroupHeading_516db130f92e5851f578df53b6aaa2cf,
   "@/fields/IconPicker#IconPicker": IconPicker_8bfb3e3bce55055cefcbdba58b426cf6,
+  "@/fields/HeroManager#HeroManager": HeroManager_2289a3a64fc448c33778637f201f13b5,
   "@/fields/BackgroundComposer#BackgroundComposer": BackgroundComposer_184663dbb823c9178f52bc18003617b9,
   "@/fields/sections/HelpLabel#HelpLabel": HelpLabel_45e070fcef391b8b4f9d96a82fb78b6e,
   "@/fields/sections/HelpLabel#NoDescription": NoDescription_45e070fcef391b8b4f9d96a82fb78b6e,

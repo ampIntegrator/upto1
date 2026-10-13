@@ -60,9 +60,13 @@ type Props = {
   onEvent?: (event: PreviewEvent, toScreen: (box: PreviewBox) => PreviewBox) => void;
   /** drawn over the frame, in the frame's own pixels (drop zones while a block is dragged); null: nothing */
   overlay?: (columns: PreviewColumnBox[]) => React.ReactNode;
+  /** the frame's height, in its own pixels, whatever it shows (the page top: 800, its full-screen layouts fill it, the panel scrolls); by default as tall as the section */
+  fixedHeight?: number;
+  /** where the chosen width is remembered (Payload preference); one per kind of preview */
+  preference?: string;
 };
 
-export function SectionPreview({url, breakpoints, message, onEvent, overlay}: Props) {
+export function SectionPreview({url, breakpoints, message, onEvent, overlay, fixedHeight, preference = PREFERENCE}: Props) {
   const {t} = useAdminText();
   const frame = useRef<HTMLIFrameElement>(null);
   const stage = useRef<HTMLDivElement>(null);
@@ -78,7 +82,7 @@ export function SectionPreview({url, breakpoints, message, onEvent, overlay}: Pr
   const {getPreference, setPreference} = usePreferences();
   useEffect(() => {
     let live = true;
-    getPreference<string | undefined>(PREFERENCE)
+    getPreference<string | undefined>(preference)
       .then((saved) => {
         if (live && saved && (saved === FULL || breakpoints.some((b) => b.name === saved))) setBp(saved);
       })
@@ -86,10 +90,10 @@ export function SectionPreview({url, breakpoints, message, onEvent, overlay}: Pr
     return () => {
       live = false;
     };
-  }, [getPreference, breakpoints]);
+  }, [getPreference, breakpoints, preference]);
   const choose = (name: string) => {
     setBp(name);
-    void setPreference(PREFERENCE, name);
+    void setPreference(preference, name);
   };
   const origin = typeof window === 'undefined' ? '' : new URL(url, window.location.href).origin;
   // one key per frame, in its address (`frame`): the host keeps what each frame was sent apart
@@ -156,7 +160,7 @@ export function SectionPreview({url, breakpoints, message, onEvent, overlay}: Pr
 
   const scale = box.width > 0 ? Math.min(1, box.width / width) : 1;
   // until the frame reports a height: the panel's
-  const height = content > 0 ? content : box.height / scale;
+  const height = fixedHeight ?? (content > 0 ? content : box.height / scale);
 
   const zones = overlay?.(columns) ?? null;
 

@@ -28,6 +28,7 @@
     "smoke:sections": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/smoke-sections.ts",
     "smoke:parts": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/smoke-parts.ts",
     "smoke:inplace": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/smoke-inplace.ts",
+    "smoke:hero": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/smoke-hero.ts",
     "smoke:manager": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/smoke-manager.ts",
     "shots:content": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/shots-content.ts",
     "seed:demo": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env scripts/seed-demo.ts",

@@ -44,6 +44,14 @@ export const heroText = texts({
     show: {fr: 'Afficher', en: 'Show'},
     hide: {fr: 'Masquer', en: 'Hide'},
   },
+  /** The « Gérer » dialog of the page top (HeroManager). */
+  manager: {
+    open: {fr: 'Gérer', en: 'Manage'},
+    openDescription: {fr: 'Modèle, textes, boutons et fond du haut de page, avec l’aperçu en direct.', en: 'Layout, texts, buttons and background of the page top, with the live preview.'},
+    title: {fr: 'Gérer le haut de page', en: 'Manage the page top'},
+    settings: {fr: 'Réglages du haut de page', en: 'Page top settings'},
+    preview: {fr: 'Aperçu en direct (800 px de haut, le modèle plein écran remplit ce cadre)', en: 'Live preview (800 px high, a full-screen layout fills this frame)'},
+  },
 });
 
 /** Admin texts of the eight « Carte » blocks. */
