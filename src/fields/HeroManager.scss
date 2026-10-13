@@ -1,0 +1,18 @@
+@use './sections/payload' as p;
+
+// HeroManager (« Gérer le haut de page »): the hero's fields on top, the live preview below.
+// It borrows the section manager's dialog (full screen, header bar, buttons): section-manager.scss.
+
+.hero-manager__settings {
+  flex: 0 0 40%;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--base);
+  border-bottom: 1px solid var(--theme-elevation-150);
+}
+
+// the fields side by side where the form has the room (the dialog is as wide as the screen)
+.hero-manager__settings > #{p.$fields} {
+  max-width: 1100px;
+  margin: 0 auto;
+}

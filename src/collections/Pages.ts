@@ -1,6 +1,7 @@
 import type {CollectionConfig, Field} from 'payload';
 
-import {heroField} from '@/fields/hero';
+import {heroField, heroParts} from '@/fields/hero';
+import {heroText} from '@/i18n/admin/blocks';
 import {computePagePath, pageTreeFields, redirectOldPath} from '@/fields/pageTree';
 import {siloField} from '@/fields/siloField';
 import {pageSlugValidate} from '@/fields/listingSlug';
@@ -33,7 +34,19 @@ export const Pages: CollectionConfig = {
     {
       type: 'tabs',
       tabs: [
-        {label: ct.pages.tabs.pageTop, fields: [{name: 'title', type: 'text', label: ct.pages.fields.title, required: true, localized: true}, heroField]},
+        {
+          label: ct.pages.tabs.pageTop,
+          fields: [
+            {name: 'title', type: 'text', label: ct.pages.fields.title, required: true, localized: true},
+            // the « Gérer » dialog of the page top (HeroManager): an unnamed collapsible wrapping the hero group, shown as a button; the data does not change
+            {
+              type: 'collapsible',
+              label: heroText.manager.title,
+              admin: {components: {Field: {path: '@/fields/HeroManager#HeroManager', clientProps: {preview: {url: '/apercu-hero', documentFields: ['silo'], parts: heroParts}}}}},
+              fields: [heroField],
+            },
+          ],
+        },
         {
           label: ct.pages.tabs.content,
           description: ct.pages.tabs.contentDescription,

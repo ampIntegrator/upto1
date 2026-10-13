@@ -67,7 +67,7 @@ export type HeroProps = {
 
 function Title({title, level = 1, type}: {title: HeroProps['title']; level?: 1 | 2; type: 'display-1' | 'display-3'}) {
   return (
-    <Heading level={level} type={type} className={styles.title}>
+    <Heading level={level} type={type} className={styles.title} data-part="title" data-part-format="title">
       {renderTitle(title)}
     </Heading>
   );
@@ -77,8 +77,8 @@ function Actions({primary, secondary, center}: {primary?: HeroAction; secondary?
   if (!primary && !secondary) return null;
   return (
     <HStack gap={3} wrap="wrap" hAlign={center ? 'center' : 'start'}>
-      {primary ? <Button variant="primary" size="lg" arrow label={primary.label} href={primary.href} newTab={primary.newTab} /> : null}
-      {secondary ? <Button variant="ghost" size="lg" label={secondary.label} href={secondary.href} newTab={secondary.newTab} iconKey={secondary.iconKey} /> : null}
+      {primary ? <Button variant="primary" size="lg" arrow label={primary.label} href={primary.href} newTab={primary.newTab} part="primary" /> : null}
+      {secondary ? <Button variant="ghost" size="lg" label={secondary.label} href={secondary.href} newTab={secondary.newTab} iconKey={secondary.iconKey} part="secondary" /> : null}
     </HStack>
   );
 }
@@ -99,7 +99,7 @@ export function Hero(props: HeroProps) {
         foot={
           scrollHint ? (
             <a href="#contenu" className={styles.scrollHint}>
-              <Text type="tag" className={styles.scrollLabel}>{scrollHint}</Text>
+              <Text type="tag" className={styles.scrollLabel} data-part="scrollHint">{scrollHint}</Text>
               <ChevronDownIcon width={16} height={16} />
             </a>
           ) : null
@@ -108,9 +108,9 @@ export function Hero(props: HeroProps) {
           <Grid columns={12} gap={6} className="page-grid">
             <GridSpan style={{gridColumn: '3 / span 8'}}>
               <VStack gap={5} align="center" className={styles.center} style={{'--serif-color': 'var(--color-editorial)'} as React.CSSProperties}>
-                {eyebrow ? <Chip label={eyebrow} tone="live-dark" /> : null}
+                {eyebrow ? <Chip label={eyebrow} tone="live-dark" part="eyebrow" /> : null}
                 <Title title={title} type="display-3" />
-                {lead ? <Text type="large" color="secondary" className={styles.lead}>{lead}</Text> : null}
+                {lead ? <Text type="large" color="secondary" className={styles.lead} data-part="lead">{lead}</Text> : null}
                 <Actions primary={primary} secondary={secondary} center />
               </VStack>
             </GridSpan>
@@ -127,16 +127,16 @@ export function Hero(props: HeroProps) {
           <Grid columns={12} gap={8} className="page-grid" align="center">
             <GridSpan columns={7}>
               <VStack gap={6} align="start">
-                {eyebrow ? <Chip label={eyebrow} tone="live" /> : null}
+                {eyebrow ? <Chip label={eyebrow} tone="live" part="eyebrow" /> : null}
                 <Title title={title} type="display-1" />
-                {lead ? <Text type="large" color="secondary" className={styles.paragraph}>{lead}</Text> : null}
+                {lead ? <Text type="large" color="secondary" className={styles.paragraph} data-part="lead">{lead}</Text> : null}
                 <Actions primary={primary} secondary={secondary} />
                 {reassurance?.length ? (
                   <HStack gap={6} wrap="wrap" className={styles.reassurance}>
-                    {reassurance.map((r) => (
+                    {reassurance.map((r, i) => (
                       <HStack key={r} gap={1.5} vAlign="center">
                         <CheckIcon width={18} height={18} className={styles.check} />
-                        <Text size="sm" color="secondary">{r}</Text>
+                        <Text size="sm" color="secondary" data-part={`reassurance.${i}.text`}>{r}</Text>
                       </HStack>
                     ))}
                   </HStack>
@@ -147,9 +147,9 @@ export function Hero(props: HeroProps) {
               {media ? (
                 <VStack className={styles.mediaBox}>
                   {/* eslint-disable-next-line @next/next/no-img-element -- free remote source (next/image will come with Payload) */}
-                  <img className={styles.mediaImg} src={media.src} alt={media.alt ?? ''} />
+                  <img className={styles.mediaImg} src={media.src} alt={media.alt ?? ''} data-part="media" data-part-kind="image" />
                   {media.badges?.map((b, i) => (
-                    <Text key={b.label} type="tag" className={styles.mediaBadge} data-tone={b.tone} data-corner={i === 0 ? 'top-right' : 'bottom-left'}>
+                    <Text key={b.label} type="tag" className={styles.mediaBadge} data-tone={b.tone} data-corner={i === 0 ? 'top-right' : 'bottom-left'} data-part={`badges.${i}`} data-part-kind="field">
                       {b.label}
                     </Text>
                   ))}
@@ -171,9 +171,9 @@ export function Hero(props: HeroProps) {
           <Grid columns={12} gap={6} className="page-grid">
             <GridSpan style={{gridColumn: '3 / span 8'}}>
               <VStack gap={5} align="center" className={`${styles.center} ${compact ? styles.pageCompact : styles.pageInner}`}>
-                {eyebrow ? <Text type="eyebrow-lines">{eyebrow}</Text> : null}
+                {eyebrow ? <Text type="eyebrow-lines" data-part="eyebrow">{eyebrow}</Text> : null}
                 <Title title={title} type="display-3" />
-                {lead ? <Text type="large" color="secondary" className={styles.lead}>{lead}</Text> : null}
+                {lead ? <Text type="large" color="secondary" className={styles.lead} data-part="lead">{lead}</Text> : null}
                 <Actions primary={primary} secondary={secondary} center />
               </VStack>
             </GridSpan>
