@@ -4,6 +4,7 @@
  * (`text`) or open the field's popover (`link`, `image`, `icon`). A throwaway page and user, deleted
  * at the end. Never touches a real page. The dev server must be running (pnpm dev).
  *   SMOKE_BASE: server address (default http://localhost:3000)
+ * A part `name#n` is the n-th element of that name (a rich text has one per text).
  * Add a block here when its parts are marked (a `data-part` in the component, `parts` in the block).
  */
 import config from '@payload-config';
@@ -20,6 +21,13 @@ const link = (label: string) => ({label, href: '/'});
 const price = {value: '99', currency: '€', period: '/ mois'};
 const features = [{label: 'Un point'}, {label: 'Un autre'}];
 
+const lexical = (...blocks: unknown[]) => ({root: {type: 'root', format: '', indent: 0, version: 1, direction: 'ltr', children: blocks}});
+const text = (t: string, format = 0) => ({type: 'text', text: t, format, detail: 0, mode: 'normal', style: '', version: 1});
+const paragraph = (...children: unknown[]) => ({type: 'paragraph', format: '', indent: 0, version: 1, direction: 'ltr', textFormat: 0, children});
+const listItem = (value: number, t: string) => ({type: 'listitem', format: '', indent: 0, version: 1, direction: 'ltr', value, children: [text(t)]});
+const bulletList = (...items: unknown[]) => ({type: 'list', listType: 'bullet', start: 1, tag: 'ul', format: '', indent: 0, version: 1, direction: 'ltr', children: items});
+const RICH = lexical(paragraph(text('Un début, '), text('puis du gras', 1), text(' et la fin.')), bulletList(listItem(1, 'Premier point'), listItem(2, 'Second point')));
+
 const CASES: Case[] = [
   {block: {blockType: 'sectionHeading', eyebrow: 'Sur-titre', title: 'Un titre\n<span>accentué</span>', tag: 'h2', lead: 'Une phrase d’accroche.'}, span: '12', parts: {eyebrow: 'text', title: 'text', lead: 'text'}},
   {block: {blockType: 'testimonial', quote: 'Une citation d’essai.', name: 'Jeanne Dupont', role: 'Courtière', result: '+ 28 %'}, span: '4', parts: {quote: 'text', name: 'text', role: 'text', result: 'text'}},
@@ -28,6 +36,8 @@ const CASES: Case[] = [
   {block: {blockType: 'priceSingle', featuresLabel: 'Inclus', features, totalLabel: 'Total', totalValue: '120 €', priceLabel: 'Votre prix', price, cta: link('Commander'), mention: 'Sans engagement'}, span: '8', parts: {featuresLabel: 'text', totalLabel: 'text', totalValue: 'text', priceLabel: 'text', cta: 'link', mention: 'text', 'features.0.label': 'text'}},
   {block: {blockType: 'faq', mode: 'multiple', columns: '1', firstOpen: true, tag: 'h3', items: [{question: 'Première question ?', answer: 'Première réponse.\n\nUn second paragraphe.'}, {question: 'Deuxième question ?', answer: 'Deuxième réponse.'}]}, span: '8', parts: {'items.0.question': 'text', 'items.1.question': 'text', 'items.0.answer': 'text'}},
   {block: {blockType: 'processSteps', tag: 'h3', steps: [{title: 'Étape un', duration: '2 jours', text: 'Un texte.', checks: [{label: 'Un contrôle'}]}, {title: 'Étape deux', text: 'Un autre texte.', checks: [{label: 'Un second contrôle'}]}]}, span: '8', parts: {'steps.0.title': 'text', 'steps.0.duration': 'text', 'steps.1.text': 'text', 'steps.1.checks.0.label': 'text'}},
+  {block: {blockType: 'textBox', title: 'Un titre', titleTag: 'h2', content: RICH}, span: '8', parts: {title: 'text', 'content#0': 'text', 'content#1': 'text', 'content#4': 'text'}},
+  {block: {blockType: 'tabs', items: [{label: 'Premier', content: RICH}, {label: 'Second', content: lexical(paragraph(text('Le texte du second onglet.')))}]}, span: '8', parts: {'items.0.content#0': 'text', 'items.0.content#3': 'text'}},
 ];
 
 async function main() {
@@ -68,8 +78,10 @@ async function main() {
       await frame.locator('[data-preview-column]').first().waitFor({timeout: 20000});
       await p.getByRole('radio', {name: /Ordinateur|Desktop/}).click();
       await p.waitForTimeout(800);
-      for (const [part, kind] of Object.entries(c.parts)) {
-        const el = frame.locator(`[data-preview-column] [data-part="${part}"]`).first();
+      for (const [key, kind] of Object.entries(c.parts)) {
+        // `name#2`: the third element of that name (the texts of a rich text)
+        const [part, nth] = key.split('#');
+        const el = frame.locator(`[data-preview-column] [data-part="${part}"]`).nth(Number(nth ?? 0));
         if (!(await el.count())) {
           check(false, `${slug}.${part}: no element marked data-part="${part}" in the preview`);
           continue;

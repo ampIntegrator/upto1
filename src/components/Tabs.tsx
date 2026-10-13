@@ -28,11 +28,13 @@ export type TabsProps = {
   defaultIndex?: number;
   /** accessible name of the tab list */
   label?: string;
+  /** the section manager's preview types the panels' texts in place (never set on the site) */
+  edit?: boolean;
 };
 
 const isDocument = (c: TabsItem['content']): c is RichTextDocument => Boolean(c && typeof c === 'object' && 'root' in (c as object));
 
-export function Tabs({items, defaultIndex = 0, label = 'Onglets'}: TabsProps) {
+export function Tabs({items, defaultIndex = 0, label = 'Onglets', edit = false}: TabsProps) {
   const id = useId();
   const [value, setValue] = useState(String(Math.min(Math.max(defaultIndex, 0), Math.max(items.length - 1, 0))));
   if (!items.length) return null;
@@ -48,7 +50,7 @@ export function Tabs({items, defaultIndex = 0, label = 'Onglets'}: TabsProps) {
           const active = String(i) === value;
           return (
             <VStack key={i} id={`${id}-panel-${i}`} role="tabpanel" className="orbita-tab-panel" data-active={active || undefined} aria-hidden={!active} inert={!active}>
-              {isDocument(item.content) ? <RichText content={item.content} /> : <VStack gap={4}>{item.content}</VStack>}
+              {isDocument(item.content) ? <RichText content={item.content} edit={edit ? `items.${i}.content` : undefined} /> : <VStack gap={4}>{item.content}</VStack>}
             </VStack>
           );
         })}

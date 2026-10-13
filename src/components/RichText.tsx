@@ -34,9 +34,25 @@ export type RichTextProps = {
   /** an internal link → its URL (relationTo « pages », « posts »…); undefined keeps the default */
   resolveLink?: (link: {relationTo?: string; value: unknown}) => string | undefined;
   className?: string;
+  /**
+   * The live preview of the section manager types the text of this document in place: each text
+   * is marked `data-part=<edit>` with its place in the document (`data-rt`). Never set on the site.
+   */
+  edit?: string;
 };
 
-type Ctx = Omit<RichTextProps, 'content' | 'className'> & {anchors: Map<RichTextNode, string>};
+type Ctx = Omit<RichTextProps, 'content' | 'className'> & {anchors: Map<RichTextNode, string>; paths?: Map<RichTextNode, string>};
+
+/** The text leaves of a document → their path of child indexes from the root (`2.0.1`). Inserted blocks are not walked. */
+function textPaths(content: RichTextDocument): Map<RichTextNode, string> {
+  const out = new Map<RichTextNode, string>();
+  const walk = (node: RichTextNode, path: number[]) => {
+    if (node.type === 'text' && node.text) out.set(node, path.join('.'));
+    if (node.type !== 'block') (node.children ?? []).forEach((c, i) => walk(c, [...path, i]));
+  };
+  (content.root?.children ?? []).forEach((c, i) => walk(c, [i]));
+  return out;
+}
 
 const BOLD = 1;
 const ITALIC = 2;
@@ -63,6 +79,8 @@ function inline(node: RichTextNode, key: number, ctx: Ctx): React.ReactNode {
   if (node.type === 'text') {
     const format = typeof node.format === 'number' ? node.format : 0;
     let out: React.ReactNode = node.text ?? '';
+    const at = ctx.paths?.get(node);
+    if (at !== undefined) out = <span data-part={ctx.edit} data-part-kind="richtext" data-rt={at}>{out}</span>;
     if (format & BOLD) out = <strong>{out}</strong>;
     if (format & ITALIC) out = <em>{out}</em>;
     return <React.Fragment key={key}>{out}</React.Fragment>;
@@ -203,10 +221,10 @@ function block(node: RichTextNode, key: number, ctx: Ctx): React.ReactNode {
   }
 }
 
-export function RichText({content, size = 'body', renderBlock, resolveLink, className}: RichTextProps) {
+export function RichText({content, size = 'body', renderBlock, resolveLink, className, edit}: RichTextProps) {
   const nodes = content?.root?.children ?? [];
   if (!nodes.length) return null;
-  const ctx: Ctx = {size, renderBlock, resolveLink, anchors: headingAnchors(content)};
+  const ctx: Ctx = {size, renderBlock, resolveLink, anchors: headingAnchors(content), edit, paths: edit && content ? textPaths(content) : undefined};
   return (
     <VStack gap={size === 'prose' ? 0 : 3} className={[styles.root, className].filter(Boolean).join(' ')} data-size={size}>
       {nodes.map((n, i) => block(n, i, ctx))}

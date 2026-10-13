@@ -33,11 +33,13 @@ export type TextBoxProps = {
   framed?: boolean;
   center?: boolean;
   vAlign?: 'start' | 'center' | 'end';
+  /** the section manager's preview types the rich text in place (never set on the site) */
+  editContent?: boolean;
 };
 
 const isDocument = (c: TextBoxProps['content']): c is RichTextDocument => Boolean(c && typeof c === 'object' && 'root' in (c as object));
 
-export function TextBox({badges = [], title, titleTag = 'h2', titleSize = 'heading-1', content, buttons = [], framed = false, center = false, vAlign = 'start'}: TextBoxProps) {
+export function TextBox({badges = [], title, titleTag = 'h2', titleSize = 'heading-1', content, buttons = [], framed = false, center = false, vAlign = 'start', editContent = false}: TextBoxProps) {
   const align = center ? 'center' : 'start';
   return (
     <VStack className={styles.root} data-framed={framed || undefined} data-center={center || undefined} data-valign={vAlign} vAlign={vAlign}>
@@ -59,7 +61,7 @@ export function TextBox({badges = [], title, titleTag = 'h2', titleSize = 'headi
             </VStack>
           </VStack>
         ) : null}
-        {isDocument(content) ? <RichText content={content} className={styles.prose} /> : content ? <VStack className={styles.prose}>{content}</VStack> : null}
+        {isDocument(content) ? <RichText content={content} className={styles.prose} edit={editContent ? 'content' : undefined} /> : content ? <VStack className={styles.prose}>{content}</VStack> : null}
         {buttons.length ? (
           <HStack gap={3} wrap="wrap" hAlign={align} className={styles.buttons} data-part="buttons" data-part-kind="link">
             {buttons.slice(0, 2).map((b, i) => (

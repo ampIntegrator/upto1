@@ -46,4 +46,4 @@ const block: Block = {
 };
 
 /** 6 to 12 columns; fills the row height. */
-export const tabsBlock: ContentBlock = {block, minSpan: 6, maxSpan: 12, fill: true};
+export const tabsBlock: ContentBlock = {block, minSpan: 6, maxSpan: 12, fill: true, parts: {'items.*.content': 'items.*.content'}};
