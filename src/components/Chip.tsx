@@ -19,6 +19,6 @@ const VARIANT: Record<ChipTone, 'chip' | 'chip-high' | 'chip-accent' | 'chip-cat
   'live-dark': 'chip-live-dark',
 };
 
-export function Chip({label, tone = 'line', iconKey}: {label: string; tone?: ChipTone; /** Nucleo icon left of the label (e.g. clock) */ iconKey?: NucleoIconKey}) {
-  return <Badge label={label} variant={VARIANT[tone]} icon={iconKey ? <Icon icon={NUCLEO_ICONS[iconKey]} /> : undefined} />;
+export function Chip({label, tone = 'line', iconKey, part}: {label: string; tone?: ChipTone; /** Nucleo icon left of the label (e.g. clock) */ iconKey?: NucleoIconKey; /** names the chip for the live preview, which edits its field in a popover */ part?: string}) {
+  return <Badge label={label} variant={VARIANT[tone]} icon={iconKey ? <Icon icon={NUCLEO_ICONS[iconKey]} /> : undefined} {...(part ? {'data-part': part, 'data-part-kind': 'field'} : null)} />;
 }

@@ -47,7 +47,7 @@ export function TextBox({badges = [], title, titleTag = 'h2', titleSize = 'headi
         {badges.length ? (
           <HStack gap={2} wrap="wrap" hAlign={align}>
             {badges.slice(0, 2).map((b, i) => (
-              <Chip key={i} label={b.label} tone={b.tone ?? 'high'} />
+              <Chip key={i} label={b.label} tone={b.tone ?? 'high'} part={`badges.${i}`} />
             ))}
           </HStack>
         ) : null}
@@ -63,9 +63,9 @@ export function TextBox({badges = [], title, titleTag = 'h2', titleSize = 'headi
         ) : null}
         {isDocument(content) ? <RichText content={content} className={styles.prose} edit={editContent ? 'content' : undefined} /> : content ? <VStack className={styles.prose}>{content}</VStack> : null}
         {buttons.length ? (
-          <HStack gap={3} wrap="wrap" hAlign={align} className={styles.buttons} data-part="buttons" data-part-kind="link">
+          <HStack gap={3} wrap="wrap" hAlign={align} className={styles.buttons}>
             {buttons.slice(0, 2).map((b, i) => (
-              <Button key={i} label={b.label} href={b.href} newTab={b.newTab} variant={b.variant ?? 'primary'} size={b.size ?? 'md'} arrow={b.arrow} iconKey={b.iconKey} iconPart={`buttons.${i}.iconKey`} />
+              <Button key={i} label={b.label} href={b.href} newTab={b.newTab} variant={b.variant ?? 'primary'} size={b.size ?? 'md'} arrow={b.arrow} iconKey={b.iconKey} part={`buttons.${i}`} />
             ))}
           </HStack>
         ) : null}

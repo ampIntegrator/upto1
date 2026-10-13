@@ -274,7 +274,7 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
       const field = typeof blockType === 'string' ? fieldOfPart(latest.current?.parts?.[blockType], name) : undefined;
       if (!field) return toParent({type: PREVIEW_OPEN, ...at});
       const kind = part.getAttribute('data-part-kind') ?? 'text';
-      if (kind === 'image' || kind === 'icon' || kind === 'link') {
+      if (kind === 'image' || kind === 'icon' || kind === 'link' || kind === 'field') {
         const r = part.getBoundingClientRect();
         return toParent({type: PREVIEW_PICK, ...at, field, box: {x: r.left, y: r.top, width: r.width, height: r.height}});
       }

@@ -346,7 +346,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
   };
 
   // an image, an icon or a link clicked in the preview: its own field (the link's group: label and target), shown next to it
-  const [picking, setPicking] = useState<{at: PreviewColumn; field: string; x: number; y: number} | null>(null);
+  const [picking, setPicking] = useState<{at: PreviewColumn; field: string; x: number; y: number; top: number} | null>(null);
   const onPreviewEvent = (event: PreviewEvent, toScreen: (box: PreviewBox) => PreviewBox) => {
     const at = {row: event.row, col: event.col};
     const state = columnState(at);
@@ -369,7 +369,7 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
       if (readOnly || !block || !fieldAt(block.fields as ClientField[], event.field)) return openContent(at);
       const box = toScreen(event.box);
       setColumn(at);
-      setPicking({at, field: event.field, x: box.x, y: box.y + box.height});
+      setPicking({at, field: event.field, x: box.x, y: box.y + box.height, top: box.y});
     }
   };
   const pickedBlock = picking ? blocks.find((b) => b.slug === columnState(picking.at)?.blockType) : undefined;
@@ -501,12 +501,12 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
       ) : null}
       {preview ? <LivePreview parentPath={parentPath} preview={preview} onEvent={onPreviewEvent} overlay={dropZones} /> : null}
       {picking && pickedBlock && picked && pickedField ? (
-        <FieldPopover x={picking.x} y={picking.y} title={String(getTranslation(('label' in pickedField && pickedField.label) || picking.field, i18n))} onClose={() => setPicking(null)}>
+        <FieldPopover x={picking.x} y={picking.y} top={picking.top} title={String(getTranslation((picked.row && 'labels' in pickedField && pickedField.labels?.singular) || ('label' in pickedField && pickedField.label) || picking.field, i18n))} onClose={() => setPicking(null)}>
           <RenderFields
-            fields={onlyDeep(picked.scope, pickedField)}
+            fields={picked.row ? picked.scope : onlyDeep(picked.scope, pickedField)}
             forceRender
             parentIndexPath=""
-            parentPath={[`${columnPath(picking.at)}.contents.0`, ...picking.field.split('.').slice(0, -1)].join('.')}
+            parentPath={[`${columnPath(picking.at)}.contents.0`, ...picking.field.split('.').slice(0, picked.row ? undefined : -1)].join('.')}
             parentSchemaPath={[`${rowsSchemaPath}.columns.contents.${pickedBlock.slug}`, ...picked.schema].join('.')}
             permissions={blockPermissions(pickedBlock.slug).fields}
             readOnly={blockPermissions(pickedBlock.slug).readOnly}

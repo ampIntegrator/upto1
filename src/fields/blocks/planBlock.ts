@@ -45,4 +45,4 @@ const block: Block = {
 };
 
 /** 3 or 4 columns; the tiers of a row take the same height. */
-export const planBlock: ContentBlock = {block, minSpan: minSpan({type: 'plan'}), maxSpan: maxSpan({type: 'plan'}), fill: true, parts: {name: 'name', tagline: 'tagline', featuresLabel: 'featuresLabel', cta: 'cta', mention: 'mention', 'features.*.label': 'features.*.label', 'features.*.end': 'features.*.end'}};
+export const planBlock: ContentBlock = {block, minSpan: minSpan({type: 'plan'}), maxSpan: maxSpan({type: 'plan'}), fill: true, parts: {price: 'price', guarantee: 'guarantee', badge: 'badge', inherits: 'inherits', name: 'name', tagline: 'tagline', featuresLabel: 'featuresLabel', cta: 'cta', mention: 'mention', 'features.*.label': 'features.*.label', 'features.*.end': 'features.*.end'}};

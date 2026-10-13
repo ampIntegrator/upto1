@@ -49,12 +49,12 @@ export function PriceCard({featuresLabel = 'Ce que vous obtenez', features, tota
       </VStack>
       <VStack gap={3} className={styles.side}>
         <Text type="eyebrow" className={styles.priceLabel} data-part="priceLabel">{priceLabel}</Text>
-        <Price value={price.value} currency={price.currency} size="single" />
-        {price.period ? <Text className={styles.period}>{price.period}</Text> : null}
+        <Price value={price.value} currency={price.currency} size="single" part="price" />
+        {price.period ? <Text className={styles.period} data-part="price" data-part-kind="field">{price.period}</Text> : null}
         <VStack gap={3} paddingBlockStart={4}>
           <VStack data-part="cta" data-part-kind="link"><Button variant="primary" size="lg" block arrow label={cta.label} href={cta.href} newTab={cta.newTab} /></VStack>
           {mention ? <Text className={styles.mention} data-part="mention">{mention}</Text> : null}
-          {guarantee ? <Callout title={guarantee.title} titleTag={guarantee.titleTag} text={guarantee.text} /> : null}
+          {guarantee ? <Callout part="guarantee" title={guarantee.title} titleTag={guarantee.titleTag} text={guarantee.text} /> : null}
         </VStack>
       </VStack>
     </VStack>

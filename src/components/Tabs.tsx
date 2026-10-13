@@ -42,7 +42,7 @@ export function Tabs({items, defaultIndex = 0, label = 'Onglets', edit = false}:
     <VStack className={styles.root}>
       <TabList value={value} onChange={setValue} layout="fill" role="tablist" overflow="scroll" aria-label={label}>
         {items.map((item, i) => (
-          <Tab key={i} value={String(i)} label={item.label} panelId={`${id}-panel-${i}`} />
+          <Tab key={i} value={String(i)} label={item.label} panelId={`${id}-panel-${i}`} {...(edit ? {'data-part': `items.${i}.label`, 'data-part-kind': 'field'} : null)} />
         ))}
       </TabList>
       <VStack className="orbita-tab-stack">

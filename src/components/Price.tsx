@@ -21,11 +21,13 @@ export type PriceProps = {
   period?: string;
   size?: 'plan' | 'single';
   align?: 'start' | 'center';
+  /** names the price for the live preview, which edits its three fields in a popover */
+  part?: string;
 };
 
-export function Price({value, currency = '€', period, size = 'plan', align = 'start'}: PriceProps) {
+export function Price({value, currency = '€', period, size = 'plan', align = 'start', part}: PriceProps) {
   return (
-    <HStack gap={1.5} hAlign={align} wrap="wrap" className={styles.price} data-size={size}>
+    <HStack gap={1.5} hAlign={align} wrap="wrap" className={styles.price} data-size={size} data-part={part} data-part-kind={part ? 'field' : undefined}>
       <Text className={styles.value}>{value}</Text>
       <Text className={styles.currency}>{currency}</Text>
       {period ? <Text className={styles.period}>{period}</Text> : null}

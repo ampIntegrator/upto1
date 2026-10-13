@@ -44,22 +44,22 @@ export type PlanCardProps = {
 export function PlanCard({name, nameTag = 'p', tagline, price, cta, featured, badge = 'Populaire', inherits, featuresLabel = 'Ce que vous obtenez', features, mention, guarantee}: PlanCardProps) {
   return (
     <VStack as="article" className={styles.card} data-featured={featured || undefined}>
-      {featured && badge ? <HStack className={styles.badge}><Chip label={badge} tone="cat" /></HStack> : null}
+      {featured && badge ? <HStack className={styles.badge}><Chip label={badge} tone="cat" part="badge" /></HStack> : null}
       <VStack gap={1} className={styles.head}>
         <Title tag={nameTag} className={styles.name} data-part="name">{name}</Title>
         {tagline ? <Text className={styles.tagline} data-part="tagline">{tagline}</Text> : null}
         <HStack paddingBlockStart={3}>
-          <Price value={price.value} currency={price.currency} period={price.period ?? '/ mois'} size="plan" />
+          <Price value={price.value} currency={price.currency} period={price.period ?? '/ mois'} size="plan" part="price" />
         </HStack>
       </VStack>
       <VStack gap={3} className={styles.body}>
-        <Text type="eyebrow" data-part={inherits ? undefined : 'featuresLabel'}>{inherits ? `Tout ${inherits}, plus` : featuresLabel}</Text>
+        <Text type="eyebrow" data-part={inherits ? undefined : 'featuresLabel'}>{inherits ? <>Tout <span data-part="inherits">{inherits}</span>, plus</> : featuresLabel}</Text>
         <CheckList items={features} density="dense" trailingDivider={false} part="features" />
       </VStack>
       <VStack gap={3} className={styles.foot}>
         <VStack data-part="cta" data-part-kind="link"><Button variant="primary" size="lg" block arrow={featured} label={cta.label} href={cta.href} newTab={cta.newTab} className={featured ? undefined : styles.solid} /></VStack>
         {mention ? <Text className={styles.mention} data-part="mention">{mention}</Text> : null}
-        {guarantee ? <Callout size="sm" title={guarantee.title} titleTag={guarantee.titleTag} text={guarantee.text} /> : null}
+        {guarantee ? <Callout size="sm" part="guarantee" title={guarantee.title} titleTag={guarantee.titleTag} text={guarantee.text} /> : null}
       </VStack>
     </VStack>
   );
