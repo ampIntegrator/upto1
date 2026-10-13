@@ -15,12 +15,13 @@
 import {getTranslation} from '@payloadcms/translations';
 import {Button, Modal, RenderFields, useDocumentInfo, useForm, useFormFields, useFormModified, useLocale, useModal, useTranslation} from '@payloadcms/ui';
 import type {ClientField, CollapsibleFieldClient, SanitizedFieldPermissions, SanitizedFieldsPermissions} from 'payload';
-import React, {useMemo, useState} from 'react';
+import React, {useMemo, useRef, useState} from 'react';
 
 import {FieldPopover} from '@/fields/sections/FieldPopover';
-import {fieldAt, onlyDeep} from '@/fields/sections/fieldGroups';
+import {byGroup, fieldAt, only, onlyDeep} from '@/fields/sections/fieldGroups';
 import {DEFAULT_BREAKPOINTS, PREVIEW_EDIT, PREVIEW_PICK, type PreviewBox, type PreviewEvent} from '@/fields/sections/preview';
 import {SectionPreview} from '@/fields/sections/SectionPreview';
+import {useSelectMenus} from '@/fields/sections/useSelectMenus';
 import {heroText as H} from '@/i18n/admin/blocks';
 import {sectionsText as T} from '@/i18n/admin/sections';
 import {useAdminText} from '@/i18n/admin/useAdminText';
@@ -34,6 +35,8 @@ const FRAME_HEIGHT = 800;
 /** what the frame's in-place editing knows the hero as: the block type of its one block */
 const BLOCK = 'hero';
 const WIDTH_PREFERENCE = 'hero-preview-width';
+/** the text fields that make a column of their own (the long ones), apart from the rest of the text group */
+const LONG_TEXTS = ['title', 'lead'];
 
 type Props = {
   field: CollapsibleFieldClient;
@@ -51,7 +54,7 @@ const join = (...parts: string[]) => parts.filter(Boolean).join('.');
 /** the path without the `_index-…` Payload adds for a field inside unnamed tabs and collapsibles */
 const plainPath = (path: string): string => path.replace(/(^|\.)_index-[\d-]+/g, '');
 
-export function HeroManager({field, path, indexPath, parentPath: givenParentPath, parentSchemaPath, permissions, readOnly, preview}: Props) {
+export function HeroManager({field, path, parentPath: givenParentPath, parentSchemaPath, permissions, readOnly, preview}: Props) {
   const parentPath = plainPath(givenParentPath);
   const {t} = useAdminText();
   const {openModal, closeModal, isModalOpen} = useModal();
@@ -72,13 +75,13 @@ export function HeroManager({field, path, indexPath, parentPath: givenParentPath
         </div>
       </div>
       <Modal slug={slug} className="section-manager__modal" closeOnBlur={false}>
-        {open ? <HeroBody field={field} indexPath={indexPath} parentPath={parentPath} parentSchemaPath={parentSchemaPath} permissions={permissions} readOnly={readOnly} preview={preview} onClose={() => closeModal(slug)} /> : null}
+        {open ? <HeroBody field={field} parentPath={parentPath} parentSchemaPath={parentSchemaPath} permissions={permissions} readOnly={readOnly} preview={preview} onClose={() => closeModal(slug)} /> : null}
       </Modal>
     </div>
   );
 }
 
-function HeroBody({field, indexPath, parentPath, parentSchemaPath, permissions, readOnly, preview, onClose}: Omit<Props, 'path'> & {onClose: () => void}) {
+function HeroBody({field, parentPath, parentSchemaPath, permissions, readOnly, preview, onClose}: Omit<Props, 'path' | 'indexPath'> & {onClose: () => void}) {
   const {t} = useAdminText();
   const {i18n} = useTranslation();
   const {submit, getFields, getData, getDataByPath, dispatchFields, setModified} = useForm();
@@ -88,7 +91,12 @@ function HeroBody({field, indexPath, parentPath, parentSchemaPath, permissions, 
   const [saving, setSaving] = useState(false);
   const heroPath = join(parentPath, 'hero');
   const heroField = field.fields[0] as {fields?: ClientField[]} | undefined;
-  const heroFields = heroField?.fields ?? [];
+  const heroFields = useMemo(() => heroField?.fields ?? [], [heroField]);
+  // the group's fields cut at each group heading, one list each: layout, text, buttons, background, breadcrumb
+  const lists = useMemo(() => byGroup(heroFields, (f) => f.type === 'ui'), [heroFields]);
+  const panelsRef = useRef<HTMLDivElement>(null);
+  useSelectMenus(panelsRef);
+  const heroPermissions = permissions === true || permissions === undefined ? true : ((permissions as Record<string, {fields?: SanitizedFieldsPermissions}>).hero?.fields ?? true);
 
   /** saves the document; true when no field was refused */
   const save = async (): Promise<boolean> => {
@@ -152,6 +160,16 @@ function HeroBody({field, indexPath, parentPath, parentSchemaPath, permissions, 
   };
   const picked = picking ? fieldAt(heroFields, picking.field) : undefined;
 
+  // the text group in two: the short fields (with the layout choice), the long ones
+  const textShort = useMemo(() => (lists[1] ? only(lists[1], (f) => Boolean(f) && !('name' in f && LONG_TEXTS.includes(f.name))) : []), [lists]);
+  const textLong = useMemo(() => (lists[1] ? only(lists[1], (f) => Boolean(f) && 'name' in f && LONG_TEXTS.includes(f.name)) : []), [lists]);
+  /** one column: the lists of fields it holds, one under the other */
+  const column = (...fieldLists: ClientField[][]) => (
+    <div className="section-manager__group">
+      {fieldLists.map((l, i) => (l.length ? <RenderFields key={i} fields={l} forceRender parentIndexPath="" parentPath={heroPath} parentSchemaPath={join(parentSchemaPath, 'hero')} permissions={heroPermissions} readOnly={readOnly} /> : null))}
+    </div>
+  );
+
   return (
     <div className="section-manager__body">
       <header className="section-manager__bar">
@@ -173,8 +191,14 @@ function HeroBody({field, indexPath, parentPath, parentSchemaPath, permissions, 
           </Button>
         </div>
       </header>
-      <div className="hero-manager__settings" aria-label={t(H.manager.settings)}>
-        <RenderFields fields={field.fields} forceRender parentIndexPath={indexPath} parentPath={parentPath} parentSchemaPath={parentSchemaPath} permissions={permissions as SanitizedFieldsPermissions} readOnly={readOnly} />
+      {/* the settings in columns: layout, short texts and breadcrumb, title and lead, buttons, background (a column with nothing to show hides itself) */}
+      <div ref={panelsRef} className="hero-manager__top">
+        <div className="section-manager__groups">
+          {column(lists[0] ?? [], textShort, lists[4] ?? [])}
+          {column(textLong)}
+          {column(lists[2] ?? [])}
+          {column(lists[3] ?? [])}
+        </div>
       </div>
       <SectionPreview url={preview.url} breakpoints={DEFAULT_BREAKPOINTS} message={message} onEvent={onEvent} fixedHeight={FRAME_HEIGHT} preference={WIDTH_PREFERENCE} />
       {picking && picked ? (
