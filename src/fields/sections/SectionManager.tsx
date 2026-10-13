@@ -27,6 +27,7 @@ import {BLOCK_DRAG_TYPE, BlockLibrary, type LibraryBlock} from './BlockLibrary';
 import {ColumnContent} from './ColumnContent';
 import {EMPTY_SLUG} from './emptyBlock';
 import {byGroup, only} from './fieldGroups';
+import {withLeafText} from './richTextLeaf';
 import type {PresetRow} from './grid';
 import {ManagerContext} from './managerContext';
 import {PREVIEW_EDIT, PREVIEW_OPEN, PREVIEW_PICK, PREVIEW_SELECT, type PreviewBox, type PreviewColumn, type PreviewColumnBox, type PreviewEvent, type SectionPreviewOptions} from './preview';
@@ -357,7 +358,10 @@ function ManagerBody({field, indexPath, parentPath, parentSchemaPath, permission
     if (event.type === PREVIEW_EDIT) {
       // only a text field the form knows; anything else is edited in the content panel
       if (readOnly || !getFields()[path]) return openContent(at);
-      dispatchFields({type: 'UPDATE', path, value: event.value, valid: true});
+      // a text of a rich text: the document with that one text replaced
+      const value = event.rt ? withLeafText(getFields()[path].value, event.rt, event.value) : event.value;
+      if (value === undefined) return openContent(at);
+      dispatchFields({type: 'UPDATE', path, value, valid: true});
       setModified(true);
       setColumn(at);
     }

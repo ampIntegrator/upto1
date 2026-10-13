@@ -48,16 +48,16 @@ function Faq({faq, id}: {faq: FaqData; id: string}) {
   );
 }
 
-function Content({content, id}: {content: ContentData; id: string}) {
+function Content({content, id, inPlace}: {content: ContentData; id: string; inPlace?: boolean}) {
   switch (content.type) {
     case 'textBox':
-      return <TextBox {...content.textBox} />;
+      return <TextBox {...content.textBox} editContent={inPlace} />;
     case 'sectionHeading':
       return <SectionHeading {...content.heading} />;
     case 'figure':
       return renderProseBlock({type: 'block', fields: content.fields});
     case 'tabs':
-      return <Tabs items={content.items} />;
+      return <Tabs items={content.items} edit={inPlace} />;
     case 'buttonGroup':
       return <ButtonGroup {...content.buttonGroup} />;
     case 'collection':
@@ -134,7 +134,7 @@ export function PageSections({sections, preview}: {sections: SectionData[]; prev
                         {c.contents.length ? (
                           <VStack gap={6} style={c.stretch ? {height: '100%'} : undefined}>
                             {c.contents.map((content, j) => (
-                              <Content key={j} content={content} id={`${s.key}-${r}-${i}-${j}`} />
+                              <Content key={j} content={content} id={`${s.key}-${r}-${i}-${j}`} inPlace={Boolean(preview)} />
                             ))}
                           </VStack>
                         ) : (

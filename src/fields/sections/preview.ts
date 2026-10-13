@@ -40,7 +40,8 @@ export type PreviewColumnBox = PreviewColumn & PreviewBox;
 export type PreviewEvent =
   | ({type: typeof PREVIEW_SELECT} & PreviewColumn)
   | ({type: typeof PREVIEW_OPEN; field?: string} & PreviewColumn)
-  | ({type: typeof PREVIEW_EDIT; field: string; value: string} & PreviewColumn)
+  // `rt`: the text is a leaf of the field's rich text document, at this path of child indexes (`2.0.1`)
+  | ({type: typeof PREVIEW_EDIT; field: string; value: string; rt?: string} & PreviewColumn)
   | ({type: typeof PREVIEW_PICK; field: string; box: PreviewBox} & PreviewColumn);
 
 export type PreviewBreakpoint = {name: string; label: Text; width: number; icon?: 'desktop' | 'tablet' | 'mobile'};
@@ -101,12 +102,12 @@ export const previewLayout = (x: unknown): PreviewColumnBox[] | null => {
 /** a checked PreviewEvent, or null */
 export const previewEvent = (x: unknown): PreviewEvent | null => {
   if (!x || typeof x !== 'object') return null;
-  const e = x as {type?: unknown; row?: unknown; col?: unknown; field?: unknown; value?: unknown; box?: unknown};
+  const e = x as {type?: unknown; row?: unknown; col?: unknown; field?: unknown; value?: unknown; rt?: unknown; box?: unknown};
   if (!isIndex(e.row) || !isIndex(e.col)) return null;
   const at = {row: e.row, col: e.col};
   if (e.type === PREVIEW_SELECT) return {type: PREVIEW_SELECT, ...at};
   if (e.type === PREVIEW_OPEN) return {type: PREVIEW_OPEN, ...at, field: typeof e.field === 'string' ? e.field : undefined};
-  if (e.type === PREVIEW_EDIT && typeof e.field === 'string' && typeof e.value === 'string') return {type: PREVIEW_EDIT, ...at, field: e.field, value: e.value};
+  if (e.type === PREVIEW_EDIT && typeof e.field === 'string' && typeof e.value === 'string') return {type: PREVIEW_EDIT, ...at, field: e.field, value: e.value, rt: typeof e.rt === 'string' && /^\d+(\.\d+)*$/.test(e.rt) ? e.rt : undefined};
   if (e.type === PREVIEW_PICK && typeof e.field === 'string' && isBox(e.box)) return {type: PREVIEW_PICK, ...at, field: e.field, box: e.box};
   return null;
 };

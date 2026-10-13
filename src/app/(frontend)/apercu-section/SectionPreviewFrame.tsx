@@ -44,6 +44,7 @@ import {
 import {tr} from '@/i18n/admin/languages';
 import {sectionsText as T} from '@/i18n/admin/sections';
 import {EMPTY_SLUG} from '@/fields/sections/emptyBlock';
+import {leafAt} from '@/fields/sections/richTextLeaf';
 import {EditIcon} from '@/theme/icons/nucleo';
 import {sendSectionPreview} from './actions';
 
@@ -194,14 +195,14 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
 
   // typing a text in place
   const startEditing = useCallback(
-    (el: HTMLElement, at: PreviewColumn, field: string, x: number, y: number, raw?: string) => {
+    (el: HTMLElement, at: PreviewColumn, field: string, x: number, y: number, raw?: string, rt?: string) => {
       // a title is typed as its source (line breaks and <span> accents), drawn back by the server afterwards
       if (raw !== undefined) {
         el.textContent = raw;
         el.style.whiteSpace = 'pre-wrap';
       }
       const original = el.textContent ?? '';
-      const send = (value: string) => toParent({type: PREVIEW_EDIT, ...at, field, value});
+      const send = (value: string) => toParent({type: PREVIEW_EDIT, ...at, field, value, rt});
       editing.current = el;
       el.setAttribute('contenteditable', 'plaintext-only');
       el.setAttribute('data-preview-editing', 'true');
@@ -230,6 +231,11 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
         el.removeEventListener('keydown', onKeyDown);
         el.removeEventListener('blur', onBlur);
         el.removeAttribute('contenteditable');
+        // a text of a rich text is never removed from here: emptied, it comes back
+        if (rt && !(el.textContent ?? '').length) {
+          el.textContent = original;
+          send(original);
+        }
         if (raw !== undefined) el.style.whiteSpace = '';
         el.removeAttribute('data-preview-editing');
         editing.current = null;
@@ -271,6 +277,16 @@ export function SectionPreviewFrame({frame, children}: {frame: string; children:
       if (kind === 'image' || kind === 'icon' || kind === 'link') {
         const r = part.getBoundingClientRect();
         return toParent({type: PREVIEW_PICK, ...at, field, box: {x: r.left, y: r.top, width: r.width, height: r.height}});
+      }
+      if (kind === 'richtext') {
+        const rt = part.getAttribute('data-rt');
+        const leaf = rt ? leafAt(storedValue(latest.current?.section, at, field), rt) : undefined;
+        if (rt && leaf?.text !== undefined && leaf.text === part.textContent) {
+          e.stopPropagation();
+          toParent({type: PREVIEW_SELECT, ...at});
+          return startEditing(part, at, field, e.clientX, e.clientY, undefined, rt);
+        }
+        return toParent({type: PREVIEW_OPEN, ...at, field});
       }
       // typed in place only when what is shown is the stored text itself
       const stored = storedValue(latest.current?.section, at, field);
